@@ -1,0 +1,28 @@
+@import "../../../../styles/general-styles";
+
+.mat-dialog-container {
+  margin: 2px;
+}
+
+.mat-dialog-title {
+  border-bottom: 2px solid $primary-color;
+  color: $primary-color;
+  font-size: 12pt;
+  font-weight: 600;
+  margin-bottom: 16pt;
+}
+
+.mat-dialog-content {
+  font-size: 10pt;
+}
+
+.mat-dialog-actions {
+  border-bottom: 1px solid $secondary-color;
+  justify-content: flex-end;
+  vertical-align: bottom;
+  margin-top: 16px;
+
+  button {
+    margin-left: 24px;
+  }
+}

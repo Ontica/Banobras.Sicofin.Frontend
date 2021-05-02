@@ -1,0 +1,17 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+.container {
+  min-width: 240px;
+  position: relative;
+}
+
+.container input {
+  padding-left: 8px;
+  transition: 0.5s ease-out;
+  height: 30px;
+}
