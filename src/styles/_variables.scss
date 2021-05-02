@@ -1,0 +1,116 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+$white: #fff !default;
+
+$primary-color: #235B4E !default;
+$primary-color-light: #235B4E !default;
+$primary-color-dark: #10312B!default;
+
+$secondary-color: #98989A !default;
+$secondary-color-light: #98989A !default;
+$secondary-color-semi-light:#808080 !default;
+$secondary-color-dark: #4D4D4D !default;
+
+$warning-color: #9F2241 !default;
+$warning-color-light: $warning-color;
+$warning-color-dark: #691C32 !default;
+
+$title-color: $primary-color !default;
+$text-color: $secondary-color !default;
+$text-color-light: $secondary-color-light !default;
+$text-color-dark: $secondary-color-dark !default;
+
+$background-color: #fff !default;
+
+$border-color: #e8e8e8 !default;
+$border-color-light: #edeef0 !default;
+$border-color-dark: #909090 !default;
+
+$disabled-color: #edeef0 !default;
+
+$secondary-text-color: $white !default;
+$action-color: $primary-color;
+$action-selected-color: $primary-color-dark;
+
+$icon-color: #909090 !default;
+$icon-color-light: #e8e8e8 !default;
+$icon-color-dark: #606060 !default;
+
+//
+// Typography
+//
+$font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-size-root: 8pt !default;
+$font-size-base: 1rem !default;
+$font-weight-base: 200 !default;
+//
+$font-size-title: $font-size-base * 1.25;
+$font-weight-title: 500;
+//
+$font-size-command: $font-size-base * 0.85;
+$font-weight-command: 300;
+//
+$font-size-hint: $font-size-base * 0.75;
+$font-weight-hint: 300;
+$text-bold: lighten($text-color, 3%);
+$text-italic: italic;
+
+//
+// Elements colors
+//
+$selected-item-text-color: $text-color;
+$link-color: $text-color;
+
+//
+// icons
+//
+$primary-icon-size: 16pt;
+
+//
+// form
+//
+$form-color: #6a6a6a;
+$form-title-border: 1px dotted $border-color-dark;
+$form-font-weight: 300;
+$form-border-bottom: 1px solid $icon-color-light;
+$form-title-color: $border-color-dark;
+
+//
+// html controls
+//
+$control-font: 9.5pt $font-family;
+$control-small-font: 8.5pt $font-family;
+
+$control-color: $secondary-color;
+$control-background-color: #fdfdfd;
+$control-border: 1px solid #dfdfdf;
+
+$selected-control-background-color: #fafafa;
+$selected-control-color: $secondary-color;
+$selected-control-border: 1px solid #bababa;
+
+$control-disabled-background: #f0f0f0;
+$control-disabled-color: $secondary-color;
+
+$control-width: calc(100% - 10px);
+$control-height: 28px;
+
+$button-color: #f8f8f8;
+$button-selected-color: #e6e6e6;
+
+$button-border: 0 solid #cecece;
+$button-height: 28px;
+
+//
+// grid
+//
+$grid-border: 0;
+$grid-even-background-color: $white;
+$grid-odd-background-color: #f4f4f4 !default;
+$grid-selected-background-color: $disabled-color;
+$grid-hover-background-color: $disabled-color;

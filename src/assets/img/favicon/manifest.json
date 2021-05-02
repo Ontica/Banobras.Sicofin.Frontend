@@ -1,0 +1,16 @@
+{
+  "name": "Empiria Financial Accounting Intranet Application",
+  "description": "Sistema de Contabilidad Financiera.",
+  "lang": "es-MX",
+  "dir": "ltr",
+  "display": "standalone",
+  "orientation": "portrait",
+  "icons": [{
+        "src": "/android-chrome-144x144.png",
+        "sizes": "144x144",
+        "type": "image/png"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
+}

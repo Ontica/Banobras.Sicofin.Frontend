@@ -1,0 +1,426 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+@import "variables";
+@import "responsive";
+
+table {
+  border: 0;
+  font-size: 10pt;
+  font-weight: normal;
+  margin-left: 1em;
+}
+
+table td {
+  white-space: normal;
+  padding: 4pt;
+}
+
+table td:last-child {
+  width: 100%;
+}
+
+@mixin input-button-settings {
+  font: $control-font;
+  text-transform: uppercase;
+  border: $button-border;
+  height: $button-height;
+  min-width: 88px;
+  padding: 4pt 8pt;
+  white-space: nowrap;
+}
+
+.circled {
+  border-radius: 50% !important;
+  height: 2em !important;
+  width: 2em !important;
+  font-size: 1.25em !important;
+  box-shadow: 1px 2px 2px $icon-color;
+}
+
+button:focus {
+  outline: 0;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button.btn {
+  @include input-button-settings;
+
+  background-color: $button-color;
+  border: $control-border;
+  color: $text-color;
+}
+
+button.btn:hover {
+  background-color: $button-selected-color;
+  color: $text-color;
+  transition: 0.3s ease-out;
+}
+
+button.btn-primary {
+  @include input-button-settings;
+
+  background-color: $primary-color;
+  color: $white;
+}
+
+button.btn-primary:hover {
+  background-color: $secondary-color;
+  transition: 0.3s ease-out;
+}
+
+button.btn-action {
+  @include input-button-settings;
+
+  background-color: $action-color;
+  color: $white;
+}
+
+button.btn-action:hover {
+  background-color: $action-selected-color;
+  transition: 0.3s ease-out;
+}
+
+button.btn-warning {
+  @include input-button-settings;
+
+  background-color: $warning-color;
+  color: $white;
+}
+
+button.btn-warning:hover {
+  background-color: $warning-color-dark;
+  transition: 0.3s ease-out;
+}
+
+button.btn-margin-right {
+  margin-right: 32px;
+}
+
+@mixin input-settings {
+  background-color: $control-background-color;
+  border-top: $control-border;
+  border-bottom: $control-border;
+  border-left: $control-border;
+  border-right: $control-border;
+  color: $control-color;
+  font: $control-font;
+  font-weight: normal;
+  margin: 2px 8px 2px 0;
+  padding: 2px 2px 2px 6px;
+  vertical-align: middle;
+  height: $control-height;
+  width: $control-width;
+  border-radius: 2px;
+  transition: 0.3s ease-out;
+}
+
+@mixin disabled-element {
+  color: $control-disabled-color;
+  background: $control-disabled-background;
+}
+
+select.select-box {
+  @include input-settings;
+}
+
+select.select-warning {
+  @include input-settings;
+
+  background-color: $warning-color;
+}
+
+select:focus {
+  outline: none;
+  color: $selected-control-color;
+  background-color: $selected-control-background-color;
+  border: $selected-control-border;
+}
+
+input.search-box {
+  @include input-settings;
+}
+
+input.text-box {
+  @include input-settings;
+}
+
+div.text-box {
+  @include input-settings;
+}
+
+input:focus {
+  outline: none;
+  color: $selected-control-color;
+  background-color: $selected-control-background-color;
+  border: $selected-control-border;
+}
+
+.input-icon {
+  position: absolute;
+  right: 14px;
+  top: calc(50% - 0.4em);
+  color: $icon-color;
+}
+
+.input-icon:hover {
+  color: $icon-color-dark;
+  cursor: pointer;
+}
+
+.text-area {
+  background-color: $control-background-color;
+  border: $control-border;
+  color: $control-color;
+  font: $control-font;
+  font-weight: normal;
+  margin: 2px 8px 2px 0;
+  padding: 2px 2px 2px 6px;
+  vertical-align: middle;
+  min-height: $control-height;
+  width: $control-width;
+  border-radius: 2px;
+  transition: 0.3s ease-out;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: none;
+  color: $selected-control-color;
+  background-color: $selected-control-background-color;
+  border: $selected-control-border;
+  box-shadow: inset 0 0 2px $selected-control-border;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-not-found {
+  text-align: center;
+  padding: 1rem;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.align-top {
+  vertical-align: top !important;
+}
+
+.wrap {
+  word-wrap: break-word;
+  white-space: normal !important;
+}
+
+.warning-text {
+  color: $warning-color;
+  font-weight: 600;
+}
+
+.remove-min-width {
+  min-width: 0;
+}
+
+.hint {
+  color: $border-color-dark;
+  font-size: 8pt;
+  font-weight: 400;
+}
+
+.ghost-icon {
+  color: transparent;
+}
+
+.ghost-icon:hover {
+  color: $icon-color-dark;
+}
+
+@mixin raised-header {
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.28);
+}
+
+.small-italic-notification {
+  font: $control-small-font;
+  font-weight: $text-bold;
+  font-style: $text-italic;
+}
+
+a {
+  color: $link-color;
+}
+
+.link {
+  color: $link-color;
+  text-decoration: underline;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: $selected-item-text-color;
+}
+
+a:hover {
+  color: $selected-item-text-color;
+  cursor: pointer;
+}
+
+.popup {
+  z-index: 1;
+}
+
+textarea:disabled {
+  @include disabled-element;
+}
+
+input[type="text"]:disabled {
+  @include disabled-element;
+}
+
+input[type="number"]:disabled {
+  @include disabled-element;
+}
+
+.primary-text {
+  color: $primary-color;
+}
+
+.label {
+  opacity: 0.4;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+select:disabled {
+  @include disabled-element;
+}
+
+button:disabled button:hover:disabled {
+  @include disabled-element();
+
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.7;
+}
+
+i.disabled {
+  opacity: 0.25;
+}
+
+.main-icon a {
+  color: $primary-color-light;
+  font-size: $primary-icon-size;
+  padding-right: 6pt;
+}
+
+.main-icon a:hover {
+  color: $selected-item-text-color;
+}
+
+.term-definition {
+  border-bottom: 1px double $primary-color-light;
+  cursor: pointer;
+}
+
+// tags
+
+.tag {
+  background-color: $primary-color-light;
+  border-radius: 8px;
+  color: white;
+  padding: 4px 4px 4px 8px;
+}
+
+.tag i {
+  padding-left: 4px;
+  color: white;
+  padding-right: 4px;
+}
+
+.tag i:hover {
+  color: $primary-color;
+}
+
+// blink
+
+@keyframes blinker {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.15;
+  }
+}
+
+.blink {
+  text-decoration: blink;
+  animation-name: blinker;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in;
+  animation-direction: alternate;
+}
+
+// menu component
+
+.menu-trigger-icon {
+  margin-top: -4px;
+  margin-left: -6px;
+}
+
+// skeleton
+
+@keyframes skeleton-opacity {
+  0% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0.1;
+  }
+}
+
+.skeleton {
+  opacity: 0.8;
+  animation: skeleton-opacity 1s infinite linear;
+}
+
+pre {
+  display: block;
+  font-family: $font-family;
+  white-space: pre;
+  margin: 0.5em 0;
+}
