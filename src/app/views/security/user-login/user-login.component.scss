@@ -1,0 +1,90 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+@import "../../../../styles/variables";
+
+.outer {
+  align-items: center;
+  background: url('../../../../assets/img/customer/background.png') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100%;
+  color: $primary-color;
+}
+
+.login-div {
+  display: flex;
+  height: 340px;
+  margin-top: -20vh;
+  width: 780px;
+}
+
+.left-column {
+  height: 300px;
+  width: 260px;
+  font-size: 12pt;
+}
+
+.logo {
+  padding-top: 24px;
+  width: 220px;
+}
+
+.central-column {
+  height: 340px;
+  width: 16px;
+  background-color: $warning-color-dark;
+}
+
+.right-column {
+  height: 340px;
+  width: 460px;
+  margin-left: 30px;
+}
+
+.authentication-section-welcome {
+  padding-top: 30px;
+  padding-left: 12px;
+  font-size: 14.5pt;
+  text-transform: uppercase;
+  color: $primary-color-dark;
+  line-height: 16pt;
+}
+
+.authentication-section-form {
+  padding-left: 12px;
+  padding-top: 12px;
+  width: 75%;
+}
+
+.authentication-section-form input {
+  margin-bottom: 20px;
+}
+
+.authentication-section-footer {
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 10pt;
+}
+
+label {
+  font-size: 10pt;
+  font-weight: 500;
+  padding-top: 12px;
+}
+
+.hint {
+  font-size: 10pt;
+  white-space: nowrap;
+}
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0 32px $control-background-color inset;
+  -webkit-box-shadow: 0 0 0 32px $control-background-color inset;
+}
