@@ -1,0 +1,105 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+@import "../../../styles/general-styles";
+
+.main-layout {
+  @include column;
+
+  height: 100%;
+  margin: 0;
+}
+
+.mat-sidenav-container,
+.mat-sidenav-content,
+.mat-sidenav {
+  @include expand;
+
+  overflow: hidden;
+}
+
+.top-bar {
+  display: none;
+  color: $text-color-dark;
+  padding: $margin-size;
+  height: 35px;
+}
+
+.nav-bar {
+  @include row;
+
+  min-height: 68px;
+  overflow: visible;
+  justify-content: space-between;
+  align-items: center;
+  color: $text-color-dark;
+
+  .left-section {
+    @include row;
+
+    width: auto;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .search-and-settings {
+    @include row;
+
+    width: auto;
+    align-items: center;
+
+    > * {
+      margin-left: 32px;
+    }
+  }
+
+  .logo {
+    max-height: 46px;
+    margin-left: 8px;
+  }
+
+  .main-menu {
+    margin-left: 16px;
+  }
+}
+
+.content {
+  @include column;
+}
+
+.workarea {
+  @include expand;
+}
+
+.side-bar {
+  background-color: $secondary-color;
+  color: $white;
+  font-size: 10pt;
+  padding: 20px 12px;
+  width: 300px;
+}
+
+.sidenav-toggle {
+  background-color: #edeef0;
+  height: 52px;
+  margin: 0;
+  padding: 8px;
+  padding-top: 12px;
+}
+
+.right-bar {
+  display: none;
+  background-color: $primary-color;
+  width: 200px;
+}
+
+.footer {
+  display: none;
+  height: 40px;
+  padding: $margin-size;
+  border-top: 1px inset $border-color-light;
+}

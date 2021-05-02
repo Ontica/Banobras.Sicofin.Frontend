@@ -1,0 +1,63 @@
+<div class="main-layout">
+
+  <emp-ng-spinner [service]="spinnerService" overlay='FullScreen'></emp-ng-spinner>
+
+  <div class="top-bar"></div>
+
+  <div class="nav-bar">
+
+    <div class="left-section">
+
+      <!-- <div class="sidenav-toggle">
+        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+      </div> -->
+
+      <img class="logo" src="assets/img/customer/main-page.logo.png" alt="Banco Nacional de Obras y Servicios Públicos" />
+
+    </div>
+
+
+    <emp-ng-main-menu class="main-menu"></emp-ng-main-menu>
+
+
+    <div class="search-and-settings">
+
+      <emp-ng-search-box fxHide.lt-md="true" (searchBoxChange)="search($event)" style="width:100%"></emp-ng-search-box>
+
+      <!-- <div>
+        <i class="fa fa-bell disabled" aria-hidden="true"></i>
+      </div> -->
+
+    </div>
+
+    <div></div>
+
+    <div></div>
+
+  </div>
+
+  <mat-sidenav-container>
+
+    <mat-sidenav class="side-bar" mode="side" #sidenav disableClose="true">
+    </mat-sidenav>
+
+    <mat-sidenav class="right-bar" mode="side" #rightSidenav position="end">
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content">
+      <div [style.margin-left.px]="sidenav.opened ? 6 : 0">
+        <div>
+          <emp-ng-navigation-header (action)="onAction($event)"></emp-ng-navigation-header>
+        </div>
+
+        <div class="workarea">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+  <footer class="footer"></footer>
+
+</div>
