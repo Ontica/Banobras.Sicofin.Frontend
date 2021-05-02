@@ -1,6 +1,6 @@
 # Empiria Financial Accounting Intranet Web Application
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/5264fb58587946059c0fcad765464448)](https://www.codacy.com/gh/Ontica/Empiria.FinancialAccounting.Intranet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Ontica/Empiria.FinancialAccounting.Intranet&amp;utm_campaign=Badge_Grade) &nbsp; &nbsp; [![Maintainability](https://api.codeclimate.com/v1/badges/bf530f3408fc6c028329/maintainability)](https://codeclimate.com/github/Ontica/Empiria.FinancialAccounting.Intranet/maintainability)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b746ceddd9f45c0bcba7e7f434ba095)](https://www.codacy.com/gh/Ontica/Empiria.FinancialAccounting.Intranet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Ontica/Empiria.FinancialAccounting.Intranet&amp;utm_campaign=Badge_Grade) &nbsp; &nbsp; [![Maintainability](https://api.codeclimate.com/v1/badges/7adf0aa9f29c28a33951/maintainability)](https://codeclimate.com/github/Ontica/Empiria.FinancialAccounting.Intranet/maintainability)
 
 ## Overview
 
