@@ -43,7 +43,7 @@ const DefaultSelectBoxConfig: SelectBoxConfig = {
   appendTo: 'body',
   autoSelect: false,
   bindByValue: true,
-  clearable: true,
+  clearable: false,
   closeOnSelect: true,
   dropdownPosition: 'auto',
   groupBy: null,
@@ -190,7 +190,9 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
   private onScroll = (event: any) => {
     const autoscroll = event.srcElement.classList.contains('ng-dropdown-panel-items');
 
-    if (this.select && this.select.isOpen && !autoscroll) {
+    const inputOverflow = event.srcElement.offsetParent.classList.contains('ng-input');
+
+    if (this.select && this.select.isOpen && !autoscroll && !inputOverflow) {
       this.select.close();
     }
   }
