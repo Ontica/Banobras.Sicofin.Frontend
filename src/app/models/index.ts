@@ -17,3 +17,5 @@
 // responsible of internally convert them to any appropiate data structure
 // needed for external services interaction.
 //
+
+export * from './accounts-chart';
