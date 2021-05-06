@@ -57,7 +57,7 @@
     "@angular/platform-browser": "~11.2.12",
     "@angular/platform-browser-dynamic": "~11.2.12",
     "@angular/router": "~11.2.12",
-    "@ng-select/ng-select": "^5.0.9",
+    "@ng-select/ng-select": "^6.1.0",
     "crypto-js": "^4.0.0",
     "moment": "^2.29.1",
     "ngx-quill": "^13.0.1",
