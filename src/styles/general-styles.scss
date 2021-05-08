@@ -100,6 +100,24 @@ button.btn-warning:hover {
   transition: 0.3s ease-out;
 }
 
+button.btn-secondary {
+  @include input-button-settings;
+
+  background-color: $secondary-color;
+  color: $white;
+}
+
+button.btn-secondary:hover {
+  background-color: $secondary-color-dark;
+  transition: 0.3s ease-out;
+}
+
+button.btn-icon {
+  min-width: $button-height;
+  padding: 2px;
+  border: none;
+}
+
 button.btn-margin-right {
   margin-right: 32px;
 }

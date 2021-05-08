@@ -1,0 +1,27 @@
+<div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="32px">
+
+  <div fxFlex="15%">
+    <div class="list-item-name">
+      <strong>
+        <a>{{account.number}}</a>
+      </strong>
+    </div>
+  </div>
+
+  <div fxFlex="55%">
+    <div>{{account.name}}</div>
+  </div>
+
+  <div fxFlex="10%">
+    <div class="nowrap">{{getAccountRoleNameFromAccountRole(account.role)}}</div>
+  </div>
+
+  <div fxFlex="15%">
+    <div>{{account.type}}</div>
+  </div>
+
+  <div fxFlex="10%">
+    <div class="nowrap">{{getTypeNameFromDebtorCreditorType(account.debtorCreditor)}}</div>
+  </div>
+
+</div>

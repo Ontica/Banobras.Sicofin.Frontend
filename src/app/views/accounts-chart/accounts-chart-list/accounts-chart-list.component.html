@@ -1,0 +1,58 @@
+
+<ng-container *ngIf="displayAccountsChartList">
+
+  <mat-divider [style.marginBottom.rem]="0.5">
+
+  </mat-divider>
+
+  <emp-fa-accounts-chart-controls [accountsChart]="accountsChart">
+
+  </emp-fa-accounts-chart-controls>
+
+</ng-container>
+
+<div class="list-header" style="padding: 4pt 24pt 4pt 8pt;">
+
+  <div class="list-item-container" style="padding-top: 8pt;">
+
+    <div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="32px">
+
+      <div fxFlex="15%"> Número de cuenta </div>
+
+      <div fxFlex="55%"> Nombre </div>
+
+      <div fxFlex="10%"> Rol </div>
+
+      <div fxFlex="15%"> Tipo</div>
+
+      <div fxFlex="10%"> Naturaleza </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<cdk-virtual-scroll-viewport itemSize="50" style="height: calc(100% - 96px)">
+
+  <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item">
+
+    <div class="list-item-container" style="padding: 0 8pt 0 8pt;">
+
+      <emp-fa-accounts-chart-list-entry [account]="account">
+
+      </emp-fa-accounts-chart-list-entry>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="!displayAccountsChartList" class="text-not-found">
+    Selecciona los filtros.
+  </div>
+
+  <div *ngIf="displayAccountsChartList && accountsChart.accounts.length === 0" class="text-not-found">
+    No encontre cuentas.
+  </div>
+
+</cdk-virtual-scroll-viewport>

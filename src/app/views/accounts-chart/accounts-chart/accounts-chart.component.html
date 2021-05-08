@@ -1,0 +1,38 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Catálogo de cuentas
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando cuentas"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner" style="overflow-y: hidden;">
+
+    <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+    <emp-fa-accounts-chart-filter
+      [(showFilters)]="showFilters"
+      (accountsChartFilterEvent)="onAccountsChartFilterEvent($event)">
+
+    </emp-fa-accounts-chart-filter>
+
+    <div [ngStyle]="{'height': 'calc(100% - ' + ( showFilters ? 222 : 59 ) + 'px)' }">
+
+      <emp-fa-accounts-chart-list [accountsChart]="accountsChart">
+
+      </emp-fa-accounts-chart-list>
+
+    </div>
+
+  </div>
+
+</div>
