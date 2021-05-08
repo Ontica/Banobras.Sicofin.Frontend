@@ -70,7 +70,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "financial-accounting-intranet:build"
+            "browserTarget": "financial-accounting-intranet:build",
+            "port": 2021
           },
           "configurations": {
             "production": {
