@@ -7,6 +7,8 @@
 
 import { NgModule } from '@angular/core';
 
+import { AccountsChartDataService } from './accounts-chart.data.service';
+
 import { FileDownloadService } from './file-services/file-download.service';
 
 import { getSaver, SAVER } from './file-services/saver.provider';
@@ -16,6 +18,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
 
   providers: [
     FileDownloadService,
+    AccountsChartDataService,
 
     { provide: SAVER, useFactory: getSaver }
   ]
