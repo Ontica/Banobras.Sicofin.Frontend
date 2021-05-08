@@ -5,7 +5,22 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
+
+
+export interface AccountsChartMasterData {
+  uid: string;
+  name: string;
+  accountsPattern: string;
+  accountNumberSeparator: string;
+  maxAccountLevel: number;
+  startDate: string;
+  endDate: string;
+  accountRoles: AccountRole[];
+  accountTypes: Identifiable[];
+  currencies: Currency[];
+  sectors: Sector[];
+}
 
 
 export enum AccountRole {
@@ -32,6 +47,7 @@ export enum DebtorCreditorType {
 
   // Creditor account (cuenta de naturaleza acreedora)
   Acreedora = 'Acreedora'
+
 }
 
 
@@ -57,7 +73,8 @@ export interface AccountDescriptor {
   name: string;
   type: string;
   role: AccountRole;
-  debtorCreditor: DebtorCreditorType;
+  debtorCreditor: DebtorCreditorType;   // naturaleza
+  level: number;
 }
 
 
@@ -85,3 +102,19 @@ export const EmptyAccountsSearchCommand: AccountsSearchCommand = {
   sectors: [],
   currencies: [],
 };
+
+
+export interface Currency {
+  uid: string;
+  name: string;
+  code: string;
+  abbrev: string;
+  symbol: string;
+}
+
+
+export interface Sector {
+  uid: string;
+  name: string;
+  code: string;
+}
