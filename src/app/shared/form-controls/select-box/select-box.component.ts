@@ -32,6 +32,7 @@ export interface SelectBoxConfig {
   multiple?: boolean;
   notFoundText?: string;
   searchable?: boolean;
+  selectFirst?: boolean;
   typeToSearchText?: string;
   virtualScroll?: boolean;
 }
@@ -52,6 +53,7 @@ const DefaultSelectBoxConfig: SelectBoxConfig = {
   multiple: false,
   notFoundText: 'No se encontraron registros',
   searchable: true,
+  selectFirst: false,
   typeToSearchText: 'Por favor ingrese 5 o mas caracteres',
   virtualScroll: false,
 };
@@ -111,8 +113,13 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.items && this.selectBoxConfig.autoSelect) {
-      this.selectItemIfUnique();
+    if (changes.items) {
+      if (this.selectBoxConfig.autoSelect) {
+        this.selectItemIfUnique();
+      }
+      if (this.selectBoxConfig.selectFirst) {
+        this.selectFirstItem();
+      }
     }
   }
 
@@ -167,11 +174,15 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
     this.blur.emit(event);
   }
 
-  selectItemIfUnique() {
+  private selectItemIfUnique() {
     if (this.items.length !== 1 || this.value !== null) {
       return;
     }
 
+    this.selectFirstItem();
+  }
+
+  private selectFirstItem() {
     setTimeout(() => {
       this.onChangedEvent(this.items[0]);
       this.writeValue(this.selectBoxConfig.bindByValue && this.bindValue ?
@@ -179,13 +190,11 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
     }, 100);
   }
 
-
   private onResize = (event: any) => {
     if (this.select && this.select.isOpen) {
       this.select.close();
     }
   }
-
 
   private onScroll = (event: any) => {
     const autoscroll = event.srcElement.classList.contains('ng-dropdown-panel-items');
