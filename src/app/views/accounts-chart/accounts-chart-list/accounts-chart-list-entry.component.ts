@@ -7,8 +7,8 @@
 
 import { Component, Input } from '@angular/core';
 
-import { AccountDescriptor, AccountRole, DebtorCreditorType, getAccountRoleNameFromAccountRole,
-         getTypeNameFromDebtorCreditorType } from '@app/models';
+import { AccountDescriptor } from '@app/models';
+
 
 @Component({
   selector: 'emp-fa-accounts-chart-list-entry',
@@ -17,14 +17,5 @@ import { AccountDescriptor, AccountRole, DebtorCreditorType, getAccountRoleNameF
 export class AccountsChartListEntryComponent {
 
   @Input() account: AccountDescriptor;
-
-
-  getAccountRoleNameFromAccountRole(role: AccountRole) {
-    return getAccountRoleNameFromAccountRole(role);
-  }
-
-  getTypeNameFromDebtorCreditorType(debtorCreditorType: DebtorCreditorType) {
-    return getTypeNameFromDebtorCreditorType(debtorCreditorType);
-  }
 
 }
