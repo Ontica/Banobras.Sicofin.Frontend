@@ -7,6 +7,7 @@
 
 import { NgModule } from '@angular/core';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -84,6 +85,7 @@ export const DATE_FORMATS = {
 
   imports: [
     ClipboardModule,
+    ScrollingModule,
     MatButtonModule,
     MatDatepickerModule,
     MatDialogModule,
@@ -111,6 +113,7 @@ export const DATE_FORMATS = {
 
   exports: [
     ClipboardModule,
+    ScrollingModule,
     MatButtonModule,
     MatDatepickerModule,
     MatDialogModule,
