@@ -15,6 +15,7 @@ import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart } from '@app/m
 
 import { RecordingBookSelectorEventType } from '../accounts-chart-filter/accounts-chart-filter.component';
 
+
 @Component({
   selector: 'emp-fa-accounts-chart',
   templateUrl: './accounts-chart.component.html',

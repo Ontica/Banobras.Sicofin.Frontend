@@ -8,6 +8,7 @@
 import { Component, Input } from '@angular/core';
 import { AccountsChart, EmptyAccountsChart } from '@app/models';
 
+
 @Component({
   selector: 'emp-fa-accounts-chart-controls',
   templateUrl: './accounts-chart-controls.component.html',

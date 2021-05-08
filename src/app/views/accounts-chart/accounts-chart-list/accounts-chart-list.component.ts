@@ -13,6 +13,7 @@ import { isEmpty } from '@app/core';
 
 import { AccountsChart, EmptyAccountsChart } from '@app/models';
 
+
 @Component({
   selector: 'emp-fa-accounts-chart-list',
   templateUrl: './accounts-chart-list.component.html',

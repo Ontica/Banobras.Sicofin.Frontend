@@ -15,14 +15,16 @@ import { AccountsSearchCommand, EmptyAccountsSearchCommand } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
+
 export enum RecordingBookSelectorEventType {
   SEARCH_ACCOUNTS_CHART_CLICKED = 'AccountsChartFilterComponent.Event.SearchAccountsChartClicked',
 }
 
+
 @Component({
   selector: 'emp-fa-accounts-chart-filter',
   templateUrl: './accounts-chart-filter.component.html',
-  animations: [ expandCollapse ],
+  animations: [expandCollapse],
 })
 export class AccountsChartFilterComponent implements OnInit {
 
@@ -34,7 +36,7 @@ export class AccountsChartFilterComponent implements OnInit {
 
   accountsChart = null;
 
-  accountsSearch: AccountsSearchCommand = Object.assign(EmptyAccountsSearchCommand, {date: new Date()});
+  accountsSearch: AccountsSearchCommand = Object.assign(EmptyAccountsSearchCommand, { date: new Date() });
 
   accountsChartList: Identifiable[] = [];
 
@@ -55,7 +57,7 @@ export class AccountsChartFilterComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getAccountsCharts();
+    this.loadAccountsCharts();
   }
 
 
@@ -75,7 +77,7 @@ export class AccountsChartFilterComponent implements OnInit {
   }
 
 
-  private getAccountsCharts(){
+  private loadAccountsCharts() {
     this.isLoading = true;
     this.accountsChartData.getAccountsCharts()
       .subscribe(x => {

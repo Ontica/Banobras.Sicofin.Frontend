@@ -7,6 +7,7 @@
 
 import { Component } from '@angular/core';
 
+
 @Component({
   selector: 'emp-fa-accounts-chart-main-page',
   templateUrl: './accounts-chart-main-page.component.html',
