@@ -24,6 +24,7 @@ export interface SelectBoxConfig {
   autoSelect?: boolean;
   bindByValue?: boolean;
   clearable?: boolean;
+  clearAllText?: string;
   closeOnSelect?: boolean;
   dropdownPosition?: DropdownPosition;
   groupBy?: string;
@@ -45,6 +46,7 @@ const DefaultSelectBoxConfig: SelectBoxConfig = {
   autoSelect: false,
   bindByValue: true,
   clearable: false,
+  clearAllText: 'Limpiar todo',
   closeOnSelect: true,
   dropdownPosition: 'auto',
   groupBy: null,

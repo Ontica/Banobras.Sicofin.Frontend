@@ -7,6 +7,8 @@
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
+@import "variables";
+
 .ng-select {
   margin-right: 8px;
   min-width: 75px;
@@ -21,7 +23,7 @@
 }
 
 .ng-select .ng-select-container {
-  min-height: $control-height !important;
+  min-height: $control-height;
   margin: 2px 8px 2px 0;
   padding: 2px 2px 2px 6px;
   border-radius: 2px;
@@ -49,15 +51,39 @@
   padding-left: 0;
 }
 
-.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-placeholder {
   padding-bottom: 0;
 }
 
-.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value {
   font-size: 0.9em;
-  margin-bottom: 0 !important;
+  margin-bottom: 1px;
   background-color: $control-disabled-background;
-  height: $control-height - 5px;
+  height: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value
+  .ng-value-icon.left {
+  border-right: 1px solid $primary-color;
+}
+
+.ng-select.ng-select-multiple
+  .ng-select-container
+  .ng-value-container
+  .ng-value
+  .ng-value-icon.left:hover {
+  background-color: rgba($primary-color, 0.2);
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
@@ -74,24 +100,21 @@
   color: $selected-control-color;
   background-color: $selected-control-background-color;
   border: $selected-control-border;
-  box-shadow:
-    inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 0 3px rgba(186, 186, 186, 0.1);
-}
-
-.ng-select .ng-clear-wrapper .ng-clear {
-  line-height: 1rem !important;
+  box-shadow: inset 0 1px 1px rgba($border-color-dark, 0.25),
+    0 0 0 3px rgba($border-color-light, 0.5);
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
-.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
-  color: #333;
-  background-color: #f0f0f0;
+.ng-dropdown-panel
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-selected.ng-option-marked {
+  color: $text-color-dark;
+  background-color: $control-disabled-background;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-  color: #333;
-  background-color: #fafafa;
+  color: $text-color-dark;
+  background-color: $selected-control-background-color;
 
   .item-template {
     background-color: inherit;
