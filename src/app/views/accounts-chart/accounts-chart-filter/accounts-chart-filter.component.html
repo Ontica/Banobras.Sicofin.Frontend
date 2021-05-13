@@ -9,10 +9,11 @@
         <label>Catálogo:</label>
 
         <emp-ng-select
-          [config]="{bindByValue: false, selectFirst: true}"
-          [(ngModel)]="accountsChart" name="accountsChartUID"
-          [items]="accountsChartList"
+          [config]="{bindByValue: false}"
+          [(ngModel)]="accountChartSelected" name="accountsChartUID"
+          [items]="accountsChartMasterDataList"
           [loading]="isLoading"
+          (changes)="onAccountChartChanges($event)"
           required>
         </emp-ng-select>
 
@@ -71,22 +72,25 @@
 
         </div>
 
-        <div fxFlex="25">
+        <div fxFlex>
 
           <label>Nivel:</label>
 
           <emp-ng-select
+            [config]="{clearable: true}"
             [(ngModel)]="accountsSearch.level" name="level"
-            [items]="levelsList">
+            [items]="levelsList"
+            placeholder="Todos">
           </emp-ng-select>
 
         </div>
 
-        <div fxFlex="25">
+        <div fxFlex="126px">
 
           <label>Al día:</label>
 
-          <emp-ng-datepicker [(ngModel)]="accountsSearch.date" name="date" required>
+          <emp-ng-datepicker name="date"
+            [(ngModel)]="accountsSearch.date">
 
           </emp-ng-datepicker>
 
@@ -101,8 +105,10 @@
           <label>Tipo de cuenta:</label>
 
           <emp-ng-select
+            [config]="{clearable: true, multiple: true}"
             [(ngModel)]="accountsSearch.types" name="types"
-            [items]="accountTypesList">
+            [items]="accountChartSelected?.accountTypes"
+            placeholder="Todas">
           </emp-ng-select>
 
         </div>
@@ -112,8 +118,11 @@
           <label>Rol:</label>
 
           <emp-ng-select
+            [config]="{bindByValue: false, clearable: true, multiple: true}"
+            [bindLabel]="null"
             [(ngModel)]="accountsSearch.roles" name="roles"
-            [items]="rolesList">
+            [items]="accountChartSelected?.accountRoles"
+            placeholder="Todos">
           </emp-ng-select>
 
         </div>
@@ -127,8 +136,10 @@
           <label>Sector:</label>
 
           <emp-ng-select
+            [config]="{clearable: true, multiple: true}"
             [(ngModel)]="accountsSearch.sectors" name="sectors"
-            [items]="sectorsList">
+            [items]="accountChartSelected?.sectors"
+            placeholder="Todos">
           </emp-ng-select>
 
         </div>
@@ -138,8 +149,10 @@
           <label>Moneda:</label>
 
           <emp-ng-select
+            [config]="{clearable: true, multiple: true}"
             [(ngModel)]="accountsSearch.currencies" name="currencies"
-            [items]="currenciesList">
+            [items]="accountChartSelected?.currencies"
+            placeholder="Todas">
           </emp-ng-select>
 
         </div>

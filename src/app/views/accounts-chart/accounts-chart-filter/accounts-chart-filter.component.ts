@@ -7,11 +7,11 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EventInfo } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services/accounts-chart.data.service';
 
-import { AccountsSearchCommand, EmptyAccountsSearchCommand } from '@app/models';
+import { AccountsChartMasterData, AccountsSearchCommand, EmptyAccountsSearchCommand } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
@@ -28,27 +28,19 @@ export enum RecordingBookSelectorEventType {
 })
 export class AccountsChartFilterComponent implements OnInit {
 
-  @Output() accountsChartFilterEvent = new EventEmitter<EventInfo>();
-
   @Input() showFilters = false;
 
   @Output() showFiltersChange = new EventEmitter<boolean>();
 
-  accountsChart = null;
+  @Output() accountsChartFilterEvent = new EventEmitter<EventInfo>();
 
-  accountsSearch: AccountsSearchCommand = Object.assign(EmptyAccountsSearchCommand, { date: new Date() });
+  accountChartSelected: AccountsChartMasterData = null;
 
-  accountsChartList: Identifiable[] = [];
+  accountsSearch: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand);
+
+  accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
   levelsList: any[] = [];
-
-  accountTypesList: any[] = [];
-
-  rolesList: any[] = [];
-
-  sectorsList: any[] = [];
-
-  currenciesList: any[] = [];
 
   isLoading = false;
 
@@ -67,9 +59,16 @@ export class AccountsChartFilterComponent implements OnInit {
   }
 
 
+  onAccountChartChanges(accountChart: AccountsChartMasterData) {
+    this.setLevelsList();
+    this.accountsSearch =
+      Object.assign({}, EmptyAccountsSearchCommand, {keywords: this.accountsSearch.keywords});
+  }
+
+
   onSearchAccountsChartClicked() {
     const payload: any = {
-      accountsChart: this.accountsChart,
+      accountsChart: this.accountChartSelected,
       accountsSearchCommand: this.accountsSearch
     };
 
@@ -79,11 +78,27 @@ export class AccountsChartFilterComponent implements OnInit {
 
   private loadAccountsCharts() {
     this.isLoading = true;
-    this.accountsChartData.getAccountsCharts()
+    this.accountsChartData.getAccountsChartsMasterData()
       .subscribe(x => {
-        this.accountsChartList = x;
+        this.accountsChartMasterDataList = x;
       })
       .add(() => this.isLoading = false);
+  }
+
+
+  private setLevelsList() {
+    this.levelsList = Array.from({length: this.accountChartSelected.maxAccountLevel}, (value, key) => key + 1)
+                        .map(level => ({
+                          uid: level,
+                          name: `Nivel ${level}: ${this.getAccountPatternFromLevel(level)}`,
+                        }));
+  }
+
+
+  private getAccountPatternFromLevel(level: number){
+    return this.accountChartSelected.accountsPattern
+      .split(this.accountChartSelected.accountNumberSeparator, level)
+      .join(this.accountChartSelected.accountNumberSeparator);
   }
 
 

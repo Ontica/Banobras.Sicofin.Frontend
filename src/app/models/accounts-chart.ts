@@ -26,16 +26,16 @@ export interface AccountsChartMasterData {
 export enum AccountRole {
 
   // Summary account (cuenta sumaria)
-  Sumaria = 'Sumaria',
+  Sumaria,
 
   // Posting account (cuenta de detalle)
-  Detalle = 'Detalle',
+  Detalle,
 
   // Control account (cuenta de control que se maneja a nivel auxiliar)
-  Control = 'Control',
+  Control,
 
   // Sectorized account (cuenta que maneja sector, con o sin auxiliares)
-  Sectorizada = 'Sectorizada'
+  Sectorizada,
 
 }
 
@@ -43,10 +43,10 @@ export enum AccountRole {
 export enum DebtorCreditorType {
 
   // Debtor account (cuenta de naturaleza deudora)
-  Deudora = 'Deudora',
+  Deudora,
 
   // Creditor account (cuenta de naturaleza acreedora)
-  Acreedora = 'Acreedora'
+  Acreedora,
 
 }
 
@@ -79,11 +79,11 @@ export interface AccountDescriptor {
 
 
 export interface AccountsSearchCommand {
-  date: DateString;
+  date?: DateString;
   keywords?: string;
-  fromAccount: string;
-  toAccount: string;
-  level: number;
+  fromAccount?: string;
+  toAccount?: string;
+  level?: number;
   types?: string[];
   roles?: AccountRole[];
   sectors?: string[];
