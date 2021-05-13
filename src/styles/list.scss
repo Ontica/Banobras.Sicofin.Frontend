@@ -24,6 +24,13 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
   border-bottom: 1pt solid $primary-color-light;
 }
 
+.list-header-container {
+  margin-left: 4pt;
+  padding: 4pt 8pt 8pt 8pt;
+  width: 100%;
+  font-size: 8pt;
+}
+
 .list-selection-header {
   padding: 5px;
   margin: 3px;
@@ -36,7 +43,7 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
 }
 
 .list-container {
-  background: #fafafa;
+  background: $selected-control-background-color;
   margin-right: 8px;
   padding: 2px;
   max-height: 400px;
@@ -50,7 +57,7 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
   align-items: flex-start;
   background-color: $grid-even-background-color;
   border-bottom: 1px $border-color solid;
-  min-height: 38px;
+  min-height: 32px;
   padding: 8px;
   font-size: 8pt;
 }
