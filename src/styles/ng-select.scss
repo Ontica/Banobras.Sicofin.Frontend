@@ -6,7 +6,6 @@
  */
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
-
 @import "variables";
 
 .ng-select {
@@ -51,17 +50,11 @@
   padding-left: 0;
 }
 
-.ng-select.ng-select-multiple
-  .ng-select-container
-  .ng-value-container
-  .ng-placeholder {
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
   padding-bottom: 0;
 }
 
-.ng-select.ng-select-multiple
-  .ng-select-container
-  .ng-value-container
-  .ng-value {
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
   font-size: 0.9em;
   margin-bottom: 1px;
   background-color: $control-disabled-background;
@@ -70,19 +63,11 @@
   text-overflow: ellipsis;
 }
 
-.ng-select.ng-select-multiple
-  .ng-select-container
-  .ng-value-container
-  .ng-value
-  .ng-value-icon.left {
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left {
   border-right: 1px solid $primary-color;
 }
 
-.ng-select.ng-select-multiple
-  .ng-select-container
-  .ng-value-container
-  .ng-value
-  .ng-value-icon.left:hover {
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left:hover {
   background-color: rgba($primary-color, 0.2);
 }
 
@@ -105,9 +90,7 @@
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
-.ng-dropdown-panel
-  .ng-dropdown-panel-items
-  .ng-option.ng-option-selected.ng-option-marked {
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
   color: $text-color-dark;
   background-color: $control-disabled-background;
 }
