@@ -87,6 +87,11 @@ export class AccountsChartFilterComponent implements OnInit {
 
 
   private setLevelsList() {
+    if (!this.accountChartSelected) {
+      this.levelsList = [];
+      return;
+    }
+
     this.levelsList = Array.from({length: this.accountChartSelected.maxAccountLevel}, (value, key) => key + 1)
                         .map(level => ({
                           uid: level,
