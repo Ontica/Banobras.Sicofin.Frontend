@@ -18,6 +18,8 @@ import { AuthenticationService } from '@app/core';
 })
 export class UserLoginComponent implements OnInit {
 
+  submitted = false;
+
   form = new FormGroup({
     userID: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required)
@@ -35,7 +37,7 @@ export class UserLoginComponent implements OnInit {
   }
 
   login() {
-    if (this.form.valid) {
+    if (this.form.valid && !this.submitted) {
       this.authenticate();
     }
   }
@@ -43,11 +45,13 @@ export class UserLoginComponent implements OnInit {
   // private methods
 
   private authenticate(): Promise<boolean> {
+    this.submitted = true;
     return this.authenticationService.login(this.form.value.userID, this.form.value.password)
       .then(
-        () => this.router.navigate(['/operacion-contable']),
+        () => this.router.navigate(['/reglas-y-catalogos']),
         err => this.exceptionMsg = err
-      );
+      )
+      .finally(() => this.submitted = false);
   }
 
 
