@@ -36,7 +36,8 @@
 <cdk-virtual-scroll-viewport itemSize="25" style="height: calc(100% - 87px)">
 
   <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item"
-    [ngClass]="{'list-item-border-level-1': account.level === 1}">
+    [ngClass]="{'list-item-border-level-1': account.level === 1}"
+    [style.borderLeft]="getBorderColorByLevel(account.level)">
 
     <div class="list-item-container">
 
