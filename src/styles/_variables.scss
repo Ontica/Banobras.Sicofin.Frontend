@@ -20,7 +20,9 @@ $warning-color: #9f2241 !default;
 $warning-color-light: $warning-color;
 $warning-color-dark: #691c32 !default;
 
-$title-color: $primary-color !default;
+$title-color: #bc955c !default;
+$border-color-title: #ddc9a3 !default;
+
 $text-color: $secondary-color !default;
 $text-color-light: $secondary-color-light !default;
 $text-color-dark: $secondary-color-dark !default;
@@ -45,6 +47,7 @@ $icon-color-dark: #606060 !default;
 // Typography
 //
 $font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-secondary: "Inconsolata", monospace !default;
 $font-size-root: 8pt !default;
 $font-size-base: 1rem !default;
 $font-weight-base: 200 !default;
@@ -63,8 +66,8 @@ $text-italic: italic;
 //
 // Elements colors
 //
-$selected-item-text-color: $text-color;
-$link-color: $text-color;
+$selected-item-text-color: $text-color-dark;
+$link-color: $text-color-dark;
 
 //
 // icons
