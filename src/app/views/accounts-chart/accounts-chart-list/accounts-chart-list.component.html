@@ -11,9 +11,9 @@
 
 </ng-container>
 
-<div class="list-header" style="padding: 4pt 24pt 4pt 8pt;">
+<div class="list-header">
 
-  <div class="list-header-container" style="padding-top: 8pt;">
+  <div class="list-header-container">
 
     <div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="32px">
 
@@ -33,11 +33,12 @@
 
 </div>
 
-<cdk-virtual-scroll-viewport itemSize="25" style="height: calc(100% - 96px)">
+<cdk-virtual-scroll-viewport itemSize="25" style="height: calc(100% - 87px)">
 
-  <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item">
+  <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item"
+    [ngClass]="{'list-item-border-level-1': account.level === 1}">
 
-    <div class="list-item-container" style="padding: 0 8pt 0 8pt;">
+    <div class="list-item-container">
 
       <emp-fa-accounts-chart-list-entry [account]="account">
 
