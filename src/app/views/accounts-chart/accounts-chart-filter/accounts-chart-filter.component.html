@@ -139,6 +139,7 @@
             [config]="{clearable: true, multiple: true}"
             [(ngModel)]="accountsSearch.sectors" name="sectors"
             [items]="accountChartSelected?.sectors"
+            bindLabel="fullName"
             placeholder="Todos">
           </emp-ng-select>
 
@@ -152,6 +153,7 @@
             [config]="{clearable: true, multiple: true}"
             [(ngModel)]="accountsSearch.currencies" name="currencies"
             [items]="accountChartSelected?.currencies"
+            bindLabel="fullName"
             placeholder="Todas">
           </emp-ng-select>
 

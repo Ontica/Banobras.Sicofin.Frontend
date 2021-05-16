@@ -78,6 +78,14 @@ export interface AccountDescriptor {
 }
 
 
+export interface Account extends AccountDescriptor {
+  accountsChart: Identifiable;
+  currenciesRules: CurrencyRule[];
+  sectorsRules: SectorRule[];
+  ledgersRules: LedgerRule[];
+}
+
+
 export interface AccountsSearchCommand {
   date?: DateString;
   keywords?: string;
@@ -107,6 +115,7 @@ export const EmptyAccountsSearchCommand: AccountsSearchCommand = {
 export interface Currency {
   uid: string;
   name: string;
+  fullName: string;
   code: string;
   abbrev: string;
   symbol: string;
@@ -116,5 +125,31 @@ export interface Currency {
 export interface Sector {
   uid: string;
   name: string;
+  fullName: string;
   code: string;
+}
+
+
+export interface CurrencyRule {
+  uid: string;
+  currency: Currency;
+  startDate: string;
+  endDate: string;
+}
+
+
+export interface LedgerRule {
+  uid: string;
+  ledger: Identifiable;
+  startDate: string;
+  endDate: string;
+}
+
+
+export interface SectorRule {
+  uid: string;
+  sector: Sector;
+  sectorRole: AccountRole;
+  startDate: string;
+  endDate: string;
 }
