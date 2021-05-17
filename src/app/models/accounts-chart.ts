@@ -40,6 +40,17 @@ export enum AccountRole {
 }
 
 
+export enum SectorRole {
+
+  // Sectorized Posting account (cuenta sectorizada de detalle, sin auxiliares)
+  Detalle,
+
+  // Sectorized Control account (cuenta sectorizada con auxiliares)
+  Control,
+
+}
+
+
 export enum DebtorCreditorType {
 
   // Debtor account (cuenta de naturaleza deudora)
@@ -80,9 +91,10 @@ export interface AccountDescriptor {
 
 export interface Account extends AccountDescriptor {
   accountsChart: Identifiable;
-  currenciesRules: CurrencyRule[];
-  sectorsRules: SectorRule[];
-  ledgersRules: LedgerRule[];
+  areaRules: AreaRule[];
+  currencyRules: CurrencyRule[];
+  sectorRules: SectorRule[];
+  ledgerRules: LedgerRule[];
 }
 
 
@@ -130,26 +142,34 @@ export interface Sector {
 }
 
 
+export interface AreaRule {
+  uID: string;
+  areaCodePattern: string;
+  startDate: DateString;
+  endDate: DateString;
+}
+
+
 export interface CurrencyRule {
   uid: string;
   currency: Currency;
-  startDate: string;
-  endDate: string;
+  startDate: DateString;
+  endDate: DateString;
 }
 
 
 export interface LedgerRule {
   uid: string;
   ledger: Identifiable;
-  startDate: string;
-  endDate: string;
+  startDate: DateString;
+  endDate: DateString;
 }
 
 
 export interface SectorRule {
   uid: string;
   sector: Sector;
-  sectorRole: AccountRole;
-  startDate: string;
-  endDate: string;
+  sectorRole: SectorRole;
+  startDate: DateString;
+  endDate: DateString;
 }
