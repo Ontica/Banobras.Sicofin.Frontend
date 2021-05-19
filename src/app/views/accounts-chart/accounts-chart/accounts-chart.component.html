@@ -27,7 +27,9 @@
 
     <div [ngStyle]="{'height': 'calc(100% - ' + ( showFilters ? 222 : 59 ) + 'px)' }">
 
-      <emp-fa-accounts-chart-list [accountsChart]="accountsChart">
+      <emp-fa-accounts-chart-list
+        [accountsChart]="accountsChart"
+        (accountsChartListEvent)="onAccountsChartListEvent($event)">
 
       </emp-fa-accounts-chart-list>
 

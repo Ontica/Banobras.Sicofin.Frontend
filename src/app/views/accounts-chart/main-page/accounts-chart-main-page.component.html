@@ -2,13 +2,19 @@
 
   <div class="primary">
 
-    <emp-fa-accounts-chart>
+    <emp-fa-accounts-chart (accountsChartEvent)="onAccountsChartEvent($event)">
 
     </emp-fa-accounts-chart>
 
   </div>
 
   <div class="secondary" *ngIf="displayAccountChartTabbed">
+
+    <emp-fa-account-tabbed-view
+      [account]="selectedAccount"
+      (closeEvent)="onCloseAccountTabbedView()">
+
+    </emp-fa-account-tabbed-view>
 
   </div>
 
