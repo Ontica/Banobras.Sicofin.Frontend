@@ -7,12 +7,16 @@
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { ChangeDetectionStrategy, Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output,
+         ViewChild } from '@angular/core';
 
-import { isEmpty } from '@app/core';
+import { EventInfo, isEmpty } from '@app/core';
 
-import { AccountsChart, EmptyAccountsChart } from '@app/models';
+import { AccountDescriptor, AccountsChart, EmptyAccountsChart } from '@app/models';
 
+export enum AccountsChartListEventType {
+  ACCOUNT_CLICKED = 'AccountsChartList.Event.AccountClicked',
+}
 
 @Component({
   selector: 'emp-fa-accounts-chart-list',
@@ -25,6 +29,8 @@ export class AccountsChartListComponent implements OnChanges {
 
   @Input() accountsChart: AccountsChart = EmptyAccountsChart;
 
+  @Output()  accountsChartListEvent = new EventEmitter<EventInfo>();
+
   maxLevel = 11;
 
   ngOnChanges(): void {
@@ -32,7 +38,7 @@ export class AccountsChartListComponent implements OnChanges {
       this.virtualScroll.scrollToIndex(0);
     }
 
-    if (this.displayAccountsChartList) {
+    if (this.displayAccountsChartList && this.accountsChart.accounts.length > 0) {
       this.maxLevel = this.accountsChart.accounts
                       .reduce((prev, current) => (prev.level > current.level) ? prev : current).level;
     }
@@ -43,40 +49,18 @@ export class AccountsChartListComponent implements OnChanges {
   }
 
 
-  getBorderColorByLevel(level) {
-    return '3px solid ' + colorGradient((1 / this.maxLevel) * (this.maxLevel / level),
-                                        {red: 255, green: 255, blue: 255},
-                                        {red: 35, green: 91, blue: 78},
-                                        {red: 16, green: 49, blue: 43});
+  onAccountClicked(account: AccountDescriptor) {
+    this.sendEvent(AccountsChartListEventType.ACCOUNT_CLICKED, { account });
   }
 
-}
 
+  private sendEvent(eventType: AccountsChartListEventType, payload?: any) {
+    const event: EventInfo = {
+      type: eventType,
+      payload
+    };
 
-function colorGradient(fadeFraction, rgbColor1, rgbColor2, rgbColor3) {
-  let color1 = rgbColor1;
-  let color2 = rgbColor2;
-  let fade = fadeFraction;
-
-  if (rgbColor3) {
-    fade = fade * 2;
-
-    if (fade >= 1) {
-      fade -= 1;
-      color1 = rgbColor2;
-      color2 = rgbColor3;
-    }
+    this.accountsChartListEvent.emit(event);
   }
 
-  const diffRed = color2.red - color1.red;
-  const diffGreen = color2.green - color1.green;
-  const diffBlue = color2.blue - color1.blue;
-
-  const gradient = {
-    red: parseInt(Math.floor(color1.red + (diffRed * fade)).toString(), 10),
-    green: parseInt(Math.floor(color1.green + (diffGreen * fade)).toString(), 10),
-    blue: parseInt(Math.floor(color1.blue + (diffBlue * fade)).toString(), 10),
-  };
-
-  return 'rgb(' + gradient.red + ',' + gradient.green + ',' + gradient.blue + ')';
 }

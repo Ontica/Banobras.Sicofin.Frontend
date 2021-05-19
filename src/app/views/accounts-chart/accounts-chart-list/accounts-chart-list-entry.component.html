@@ -1,11 +1,36 @@
-<div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="32px">
+<div class="list-header" *ngIf="displayHeader">
 
-  <div fxFlex="170px">
-    <div class="list-item-name nowrap"><a>{{account.number}}</a></div>
+  <div class="list-header-container">
+
+    <div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="8px">
+
+      <div [fxFlex]="widthByMaxLevel + 'px'"> Número de cuenta </div>
+
+      <div fxFlex class="list-header-column-border-shadow"> Nombre </div>
+
+      <div fxFlex="10%"> Rol </div>
+
+      <div fxFlex="10%"> Tipo</div>
+
+      <div fxFlex="10%"> Naturaleza </div>
+
+    </div>
+
   </div>
 
-  <div fxFlex>
-    <div>{{account.name}}</div>
+</div>
+
+<div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="8px" *ngIf="!displayHeader">
+
+  <div [fxFlex]="widthByMaxLevel + 'px'">
+    <div class="list-item-name nowrap" (click)="onAccountClicked()">
+      <a>{{account.number}}</a>
+    </div>
+  </div>
+
+  <div fxFlex class="list-item-column-border-shadow">
+    <div class="border-left"></div>
+    <div [style.marginLeft.px]="marginLeftByLevel">{{account.name}}</div>
   </div>
 
   <div fxFlex="10%">

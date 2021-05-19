@@ -62,6 +62,9 @@ $font-size-hint: $font-size-base * 0.75;
 $font-weight-hint: 300;
 $text-bold: lighten($text-color, 3%);
 $text-italic: italic;
+//
+$font-size-grid-header: $font-size-base * 0.65;
+$font-size-grid: 9pt;
 
 //
 // Elements colors
@@ -112,6 +115,7 @@ $button-height: 28px;
 //
 // grid
 //
+$grid-header-background-color: #f5efe7 !default;
 $grid-border: 0;
 $grid-even-background-color: $white;
 $grid-odd-background-color: #f4f4f4 !default;

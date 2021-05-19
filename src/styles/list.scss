@@ -13,19 +13,17 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
 .list-header {
   @include row;
 
-  text-transform: uppercase;
   justify-content: space-between;
-  font-size: 9pt;
+  font-size: $font-size-grid-header;
   font-weight: 700;
-  background-color: $disabled-color;
-  color: $primary-color-light;
+  background-color: $grid-header-background-color;
+  color: $primary-color;
   width: 100%;
-  padding: 4pt 24pt 4pt 8pt;
-  border-bottom: 1pt solid $primary-color-light;
+  padding: 12px 24px 12px 8px;
+  border-bottom: 2pt solid $title-color;
 }
 
 .list-header-container {
-  padding: 4pt 0;
   width: 100%;
 }
 
@@ -49,7 +47,7 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
   border-bottom: 1px $border-color solid;
   min-height: 32px;
   padding: 8px;
-  font-size: 9pt;
+  font-size: $font-size-grid;
 }
 
 .list-item:hover {
@@ -117,7 +115,37 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
   text-decoration: underline;
 }
 
-.list-item-border-level-1 {
+.list-item-highlight {
   font-weight: 600;
   font-size: 11pt;
+}
+
+.list-header-column-border-shadow {
+  padding-left: 10px;
+}
+
+.list-item-column-border-shadow {
+  display: inline-flex;
+
+  > .border-left {
+    position: relative;
+    width: 2px;
+    margin: -10px 0px -10px 0;
+    height: calc(100% + 20px);
+  }
+
+  > :not(.border-left) {
+    padding-left: 8px;
+  }
+}
+
+$border-shadow-width: 5px;
+
+.list-item-column-border-shadow > .border-left:after {
+  margin: 0 -2px 0 0;
+  padding-right: $border-shadow-width;
+  position: absolute;
+  content: "";
+  height: 100%;
+  background: linear-gradient(90deg, rgba($secondary-color, 0.25), transparent);
 }
