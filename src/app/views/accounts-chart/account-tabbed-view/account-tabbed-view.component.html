@@ -1,0 +1,143 @@
+<emp-ng-card [title]="title" [hint]="hint" (cardClose)="onClose()">
+
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+    <mat-tab label="Información">
+
+      <emp-fa-account-view [account]="account">
+
+      </emp-fa-account-view>
+
+    </mat-tab>
+
+    <mat-tab label="Sectores">
+
+      <div class="scrollable-container mat-elevation-z1">
+        <table mat-table [dataSource]="sectorRulesDS">
+
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef> Sector </th>
+            <td mat-cell *matCellDef="let row">{{ row.sector.fullName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="sectorRole">
+            <th mat-header-cell *matHeaderCellDef> Rol </th>
+            <td mat-cell *matCellDef="let row">{{ row.sectorRole }}</td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha inicio </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.startDate | dateTimeFormat }}</td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha fin </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.endDate | dateTimeFormat }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['fullName', 'sectorRole', 'startDate', 'endDate']; sticky: true;"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['fullName', 'sectorRole', 'startDate', 'endDate'];"></tr>
+        </table>
+
+        <div *ngIf="sectorRulesDS.data.length == 0" class="text-not-found">
+          <p>No se han encontrado registros.</p>
+        </div>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Monedas">
+
+      <div class="scrollable-container mat-elevation-z1">
+        <table mat-table [dataSource]="currencyRulesDS">
+
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef> Moneda </th>
+            <td mat-cell *matCellDef="let row">{{ row.currency.fullName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha inicio </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.startDate | dateTimeFormat }}</td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha fin </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.endDate | dateTimeFormat }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['fullName', 'startDate', 'endDate']; sticky: true;"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['fullName', 'startDate', 'endDate'];"></tr>
+        </table>
+
+        <div *ngIf="currencyRulesDS.data.length == 0" class="text-not-found">
+          <p>No se han encontrado registros.</p>
+        </div>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Contabilidades">
+
+      <div class="scrollable-container mat-elevation-z1">
+        <table mat-table [dataSource]="ledgerRulesDS">
+
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef> Contabilidad </th>
+            <td mat-cell *matCellDef="let row"> {{ row.ledger.name }} </td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha inicio </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.startDate | dateTimeFormat }}</td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha fin </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.endDate | dateTimeFormat }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['fullName', 'startDate', 'endDate']; sticky: true;"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['fullName', 'startDate', 'endDate'];"></tr>
+        </table>
+
+        <div *ngIf="ledgerRulesDS.data.length == 0" class="text-not-found">
+          <p>No se han encontrado registros.</p>
+        </div>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Areas">
+
+      <div class="scrollable-container mat-elevation-z1">
+        <table mat-table [dataSource]="areaRulesDS">
+
+          <ng-container matColumnDef="areaCodePattern">
+            <th mat-header-cell *matHeaderCellDef> Area </th>
+            <td mat-cell *matCellDef="let row"> {{ row.areaCodePattern }} </td>
+          </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha inicio </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.startDate | dateTimeFormat }}</td>
+          </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef> Fecha fin </th>
+            <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.endDate | dateTimeFormat }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['areaCodePattern', 'startDate', 'endDate']; sticky: true;"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['areaCodePattern', 'startDate', 'endDate'];"></tr>
+        </table>
+
+        <div *ngIf="areaRulesDS.data.length == 0" class="text-not-found">
+          <p>No se han encontrado registros.</p>
+        </div>
+      </div>
+
+    </mat-tab>
+
+    <mat-tab label="Saldos" disabled>
+
+    </mat-tab>
+
+    <mat-tab label="Historia" disabled>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

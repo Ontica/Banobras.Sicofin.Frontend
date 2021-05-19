@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from '@app/core';
+import { DateString, Empty, Identifiable } from '@app/core';
 
 
 export interface AccountsChartMasterData {
@@ -89,6 +89,17 @@ export interface AccountDescriptor {
 }
 
 
+export const EmptyAccountDescriptor: AccountDescriptor = {
+  uid: 'Empty',
+  number: '',
+  name: '',
+  type: '',
+  role: null,
+  debtorCreditor: null,
+  level: 0,
+};
+
+
 export interface Account extends AccountDescriptor {
   accountsChart: Identifiable;
   areaRules: AreaRule[];
@@ -96,6 +107,22 @@ export interface Account extends AccountDescriptor {
   sectorRules: SectorRule[];
   ledgerRules: LedgerRule[];
 }
+
+
+export const EmptyAccount: Account = {
+  uid: 'Empty',
+  number: '',
+  name: '',
+  type: '',
+  role: null,
+  debtorCreditor: null,
+  level: 0,
+  accountsChart: Empty,
+  areaRules: [],
+  currencyRules: [],
+  sectorRules: [],
+  ledgerRules: [],
+};
 
 
 export interface AccountsSearchCommand {

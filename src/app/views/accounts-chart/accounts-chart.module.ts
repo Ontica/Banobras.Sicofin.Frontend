@@ -8,16 +8,20 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AccountsChartMainPageComponent } from './main-page/accounts-chart-main-page.component';
-import { AccountsChartComponent } from './accounts-chart/accounts-chart.component';
-import { SharedModule } from '@app/shared/shared.module';
-import { AccountsChartFilterComponent } from './accounts-chart-filter/accounts-chart-filter.component';
-import { AccountsChartListComponent } from './accounts-chart-list/accounts-chart-list.component';
-import { AccountsChartControlsComponent } from './accounts-chart-list/accounts-chart-controls.component';
-import { AccountsChartListEntryComponent } from './accounts-chart-list/accounts-chart-list-entry.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
+import { SharedModule } from '@app/shared/shared.module';
+
+import { AccountsChartComponent } from './accounts-chart/accounts-chart.component';
+import { AccountsChartControlsComponent } from './accounts-chart-list/accounts-chart-controls.component';
+import { AccountsChartFilterComponent } from './accounts-chart-filter/accounts-chart-filter.component';
+import { AccountsChartListComponent } from './accounts-chart-list/accounts-chart-list.component';
+import { AccountsChartListEntryComponent } from './accounts-chart-list/accounts-chart-list-entry.component';
+import { AccountsChartMainPageComponent } from './main-page/accounts-chart-main-page.component';
+import { AccountTabbedViewComponent } from './account-tabbed-view/account-tabbed-view.component';
+import { AccountViewComponent } from './account-view/account-view.component';
 
 
 @NgModule({
@@ -30,12 +34,14 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
     SharedModule,
   ],
   declarations: [
-    AccountsChartMainPageComponent,
     AccountsChartComponent,
+    AccountsChartControlsComponent,
     AccountsChartFilterComponent,
     AccountsChartListComponent,
-    AccountsChartControlsComponent,
     AccountsChartListEntryComponent,
+    AccountsChartMainPageComponent,
+    AccountTabbedViewComponent,
+    AccountViewComponent,
   ],
   exports: [
     AccountsChartMainPageComponent,
