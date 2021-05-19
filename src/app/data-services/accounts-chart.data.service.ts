@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { AccountsChart, AccountsChartMasterData, AccountsSearchCommand } from '@app/models';
+import { Account, AccountsChart, AccountsChartMasterData, AccountsSearchCommand } from '@app/models';
 
 @Injectable()
 export class AccountsChartDataService {
@@ -19,7 +19,15 @@ export class AccountsChartDataService {
   constructor(private http: HttpService) { }
 
 
-  getAccountsCharts(): Observable<Identifiable[]> {
+  getAccount(accountsChartUID: string,
+             accountUID: string): Observable<Account> {
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
+
+    return this.http.get<Account>(path);
+  }
+
+
+  getAccountsChartsList(): Observable<Identifiable[]> {
     const path = `v2/financial-accounting/accounts-charts`;
 
     return this.http.get<Identifiable[]>(path);
