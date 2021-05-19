@@ -63,7 +63,7 @@ a > .mat-icon:hover {
 }
 
 .mat-tab-group .mat-tab-body {
-  padding: 16px 24px 16px !important;
+  padding: 16px 20px;
 }
 
 //
@@ -146,12 +146,17 @@ a > .mat-icon:hover {
 table.mat-table {
   width: 100%;
   margin: 0.5rem 0;
-  font-family: $font-family;
-  font-size: $font-size-hint !important;
+  font-family: $font-family-secondary;
 
   th {
     font-weight: 500;
-    padding: 10px 10px 10px 0;
+    padding: 12px 10px 12px 0;
+
+    &.mat-header-cell {
+      border-bottom: 2pt solid $title-color;
+      font-size: $font-size-grid-header;
+      font-family: $font-family;
+    }
 
     &.text-align-right {
       text-align: right;
@@ -169,7 +174,8 @@ table.mat-table {
 
   td {
     vertical-align: top;
-    padding: 10px 10px 10px 0;
+    padding: 8px 10px 8px 0;
+    font-size: $font-size-grid;
 
     .mat-icon {
       cursor: pointer;
@@ -201,8 +207,8 @@ table.mat-table {
     &.column-action {
       text-align: center;
       width: 32px !important;
-      padding-top: 4px;
-      padding-bottom: 4px;
+      padding-top: 2px;
+      padding-bottom: 2px;
     }
 
     &.padding-icon {
@@ -212,14 +218,15 @@ table.mat-table {
   }
 
   tr {
-    height: 35px;
+    height: 32px;
 
     &.mat-header-row,
     &.mat-footer-row {
       height: 30px;
 
       th {
-        color: $secondary-text-color;
+        color: $primary-color;
+        font-weight: 700;
       }
 
       td {
@@ -228,7 +235,7 @@ table.mat-table {
     }
 
     &.mat-header-row {
-      background-color: $primary-color;
+      background-color: $grid-header-background-color;
     }
 
     &.mat-footer-row {
@@ -255,7 +262,8 @@ table.mat-table {
 
 .scrollable-container {
   overflow-y: auto;
-  max-height: 25%;
+  max-height: calc(100% - 2px);
+  margin: 1px;
 
   table.mat-table {
     margin: 0;
