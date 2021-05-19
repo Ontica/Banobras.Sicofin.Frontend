@@ -6,6 +6,7 @@
  */
 
 import { Directive, HostListener, ElementRef, OnInit, Renderer2, Input } from '@angular/core';
+
 import { FormatLibrary } from '../utils';
 
 
@@ -16,14 +17,28 @@ export class EmpTextareaAutoresizeDirective implements OnInit {
 
   @Input() maxHeightTextarea = 75;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
+  constructor(private elementRef: ElementRef,
+              private renderer: Renderer2) { }
+
+
+  ngOnInit() {
+    this.validateResize();
+  }
+
+
+  @HostListener('ngModelChange', ['$event'])
+  ngModelChange() {
+    this.validateResize();
+  }
+
 
   @HostListener(':input')
   onInput() {
     this.resize();
   }
 
-  ngOnInit() {
+
+  private validateResize() {
     this.renderer.setStyle(this.elementRef.nativeElement, 'max-height', this.maxHeightTextarea + 'px');
 
     if (this.elementRef.nativeElement.scrollHeight) {
@@ -31,7 +46,8 @@ export class EmpTextareaAutoresizeDirective implements OnInit {
     }
   }
 
-  resize() {
+
+  private resize() {
     const currentHeight = FormatLibrary.stringToNumber(this.elementRef.nativeElement.style.height);
     if (currentHeight >= this.maxHeightTextarea) {
       this.renderer.setStyle(this.elementRef.nativeElement, 'overflow', 'auto');
