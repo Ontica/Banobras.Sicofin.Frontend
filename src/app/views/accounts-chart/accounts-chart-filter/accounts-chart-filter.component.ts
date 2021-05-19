@@ -36,7 +36,7 @@ export class AccountsChartFilterComponent implements OnInit {
 
   accountChartSelected: AccountsChartMasterData = null;
 
-  accountsSearch: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand, {date: new Date()});
+  accountsSearch: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand);
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
@@ -62,7 +62,7 @@ export class AccountsChartFilterComponent implements OnInit {
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.setLevelsList();
     this.accountsSearch = Object.assign({}, EmptyAccountsSearchCommand,
-      {keywords: this.accountsSearch.keywords, date: this.accountsSearch.date});
+      {keywords: this.accountsSearch.keywords});
   }
 
 
@@ -81,10 +81,15 @@ export class AccountsChartFilterComponent implements OnInit {
     this.accountsChartData.getAccountsChartsMasterData()
       .subscribe(x => {
         this.accountsChartMasterDataList = x;
-        this.accountChartSelected =
-          this.accountsChartMasterDataList[this.accountsChartMasterDataList.length - 1];
+        this.setDefaultAccountChartSelected();
       })
       .add(() => this.isLoading = false);
+  }
+
+
+  private setDefaultAccountChartSelected() {
+    this.accountChartSelected = this.accountsChartMasterDataList[this.accountsChartMasterDataList.length - 1];
+    this.setLevelsList();
   }
 
 
