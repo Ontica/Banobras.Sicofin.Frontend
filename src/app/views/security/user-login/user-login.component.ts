@@ -11,12 +11,18 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from '@app/core';
 
+type ShowPasswordMode = 'icon' | 'check';
+
 @Component({
   selector: 'emp-ng-user-login',
   templateUrl: './user-login.component.html',
   styleUrls: ['./user-login.component.scss'],
 })
 export class UserLoginComponent implements OnInit {
+
+  showPasswordModeSelected: ShowPasswordMode = 'check';
+
+  showPassword = false;
 
   submitted = false;
 
@@ -30,23 +36,28 @@ export class UserLoginComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService,
               private router: Router) { }
 
-
   ngOnInit() {
     this.authenticationService.logout()
         .then((x: boolean) => this.reloadPage(x));
   }
 
-  login() {
-    if (this.form.valid && !this.submitted) {
-      this.authenticate();
-    }
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
   }
 
-  // private methods
+  login() {
+    if (this.form.invalid || this.submitted) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-  private authenticate(): Promise<boolean> {
+    this.authenticate();
+  }
+
+  private authenticate() {
     this.submitted = true;
-    return this.authenticationService.login(this.form.value.userID, this.form.value.password)
+
+    this.authenticationService.login(this.form.value.userID, this.form.value.password)
       .then(
         () => this.router.navigate(['/reglas-y-catalogos']),
         err => this.exceptionMsg = err

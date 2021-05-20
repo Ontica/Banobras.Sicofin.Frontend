@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { SecurityUIRoutingModule } from './security-ui-routing.module';
 import { UserLoginComponent } from './user-login/user-login.component';
+import { AngularMaterialModule } from '@app/shared/angular-material.module';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { UserLoginComponent } from './user-login/user-login.component';
     ReactiveFormsModule,
 
     SecurityUIRoutingModule,
+    AngularMaterialModule,
   ],
 
   declarations: [
