@@ -380,3 +380,28 @@ table.mat-table {
     font-size: 8pt;
   }
 }
+
+//
+// checkbox
+//
+
+.mat-checkbox-layout .mat-checkbox-label {
+  color: $white;
+  font-size: 9pt;
+}
+
+.mat-checkbox-frame {
+  background: $white !important;
+}
+
+.mat-checkbox-checked .mat-checkbox-background {
+  background-color: $warning-color !important;
+}
+
+.mat-checkbox-indeterminate .mat-checkbox-background {
+  background-color: $warning-color !important;
+}
+
+.mat-checkbox-ripple .mat-ripple-element {
+  background: $warning-color !important;
+}
