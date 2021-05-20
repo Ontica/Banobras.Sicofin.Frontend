@@ -52,6 +52,7 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
 
 .list-item:hover {
   background: $selected-control-background-color;
+
   .ghost-icon {
     color: $icon-color;
   }
@@ -130,7 +131,7 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
   > .border-left {
     position: relative;
     width: 2px;
-    margin: -10px 0px -10px 0;
+    margin: -10px 0 -10px 0;
     height: calc(100% + 20px);
   }
 
@@ -141,7 +142,7 @@ $box-shadow: 0 3px 1px -2px rgba(44, 57, 66, 0.1),
 
 $border-shadow-width: 5px;
 
-.list-item-column-border-shadow > .border-left:after {
+.list-item-column-border-shadow > .border-left::after {
   margin: 0 -2px 0 0;
   padding-right: $border-shadow-width;
   position: absolute;
