@@ -76,6 +76,11 @@ export class AccountsChartFilterComponent implements OnInit {
   }
 
 
+  onClearKeyword() {
+    this.accountsSearch.keywords = '';
+  }
+
+
   private loadAccountsCharts() {
     this.isLoading = true;
     this.accountsChartData.getAccountsChartsMasterData()

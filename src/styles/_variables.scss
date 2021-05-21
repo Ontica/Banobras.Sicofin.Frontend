@@ -12,7 +12,7 @@ $primary-color-light: #235b4e !default;
 $primary-color-dark: #10312b !default;
 
 $secondary-color: #98989a !default;
-$secondary-color-light: #98989a !default;
+$secondary-color-light: #afafaf !default;
 $secondary-color-semi-light: #808080 !default;
 $secondary-color-dark: #4d4d4d !default;
 
@@ -23,7 +23,7 @@ $warning-color-dark: #691c32 !default;
 $title-color: #bc955c !default;
 $border-color-title: #ddc9a3 !default;
 
-$text-color: $secondary-color !default;
+$text-color: $secondary-color-semi-light !default;
 $text-color-light: $secondary-color-light !default;
 $text-color-dark: $secondary-color-dark !default;
 
@@ -89,15 +89,18 @@ $form-title-color: $border-color-dark;
 //
 // html controls
 //
-$control-font: 9.5pt $font-family;
-$control-small-font: 8.5pt $font-family;
+$button-font: 9.5pt $font-family;
 
-$control-color: $secondary-color;
+$control-font: 9.5pt $font-family-secondary;
+$control-small-font: 8.5pt $font-family-secondary;
+
+$control-color: $secondary-color-dark;
+$control-label-color: $secondary-color-dark;
 $control-background-color: #fdfdfd;
 $control-border: 1px solid #dfdfdf;
 
 $selected-control-background-color: #fafafa;
-$selected-control-color: $secondary-color;
+$selected-control-color: #343434;
 $selected-control-border: 1px solid #bababa;
 
 $control-disabled-background: #f0f0f0;

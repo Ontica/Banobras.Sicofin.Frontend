@@ -19,26 +19,29 @@
 
       </div>
 
-      <div fxFlex>
+      <div fxFlex fxLayoutAlign="start end">
 
-        <label>Buscar:</label>
+        <div class="input-icon-container" [style.width.%]="100" [style.marginBottom.px]="4">
 
-        <input type="text" class="text-box" [(ngModel)]="accountsSearch.keywords" name="keywords">
+          <input type="text" class="text-box" name="keywords"
+          placeholder="Buscar cuentas..."
+          [(ngModel)]="accountsSearch.keywords"
+          (keyup.enter)="onSearchAccountsChartClicked()"
+          (keyup.escape)="onClearKeyword()">
+
+          <mat-icon class="input-icon" (click)="onSearchAccountsChartClicked()">search</mat-icon>
+
+        </div>
 
       </div>
 
-      <div fxFlex="60px" fxLayoutAlign="center end" [style.padding.px]="2">
+      <div fxFlex="38px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
 
-        <button class="btn-action btn-icon" title="Buscar"
-          [disabled]="form.invalid" (click)="onSearchAccountsChartClicked()">
+        <button class="btn-icon"
+          [title]="showFilters ? 'Ocultar filtros' :'Mostrar filtros'"
+          (click)="toggleFilters()">
 
-          <mat-icon>search</mat-icon>
-
-        </button>
-
-        <button class="btn-secondary btn-icon" [title]="showFilters ? 'Ocultar filtros' :'Mostrar filtros'">
-
-          <mat-icon (click)="toggleFilters()">
+          <mat-icon >
             {{showFilters ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
           </mat-icon>
 
@@ -50,11 +53,11 @@
 
     <div *ngIf="showFilters" [@expandCollapse]>
 
-      <mat-divider [style.marginBottom.rem]="0.5">
+      <mat-divider [style.marginBottom.px]="8" [style.marginRight.px]="8">
 
       </mat-divider>
 
-      <div fxLayout="row" [style.marginBottom.rem]="0.5">
+      <div fxLayout="row" [style.marginBottom.px]="8">
 
         <div fxFlex="25">
 
@@ -98,7 +101,7 @@
 
       </div>
 
-      <div fxLayout="row" [style.marginBottom.rem]="0.5">
+      <div fxLayout="row" [style.marginBottom.px]="8">
 
         <div fxFlex="50">
 
@@ -108,7 +111,7 @@
             [config]="{clearable: true, multiple: true}"
             [(ngModel)]="accountsSearch.types" name="types"
             [items]="accountChartSelected?.accountTypes"
-            placeholder="Todas">
+            placeholder="Todos">
           </emp-ng-select>
 
         </div>

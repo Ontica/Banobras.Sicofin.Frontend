@@ -12,7 +12,7 @@ table {
   border: 0;
   font-size: 10pt;
   font-weight: normal;
-  margin-left: 1em;
+  margin-left: 0;
 }
 
 table td {
@@ -25,7 +25,7 @@ table td:last-child {
 }
 
 @mixin input-button-settings {
-  font: $control-font;
+  font: $button-font;
   text-transform: uppercase;
   border: $button-border;
   height: $button-height;
@@ -113,9 +113,26 @@ button.btn-secondary:hover {
 }
 
 button.btn-icon {
-  min-width: $button-height;
-  padding: 2px;
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $button-color;
+  border: $control-border;
+  width: $button-height;
+  height: $button-height;
+
+  .mat-icon {
+    color: $icon-color;
+  }
+}
+
+button.btn-icon:hover {
+  background-color: $selected-control-background-color;
+  transition: 0.3s ease-out;
+
+  .mat-icon {
+    color: $icon-color-dark;
+  }
 }
 
 button.btn-margin-right {
@@ -179,6 +196,19 @@ input:focus {
   color: $selected-control-color;
   background-color: $selected-control-background-color;
   border: $selected-control-border;
+}
+
+input::placeholder {
+  color: $control-disabled-color;
+}
+
+.input-icon-container {
+  position: relative;
+  height: 28px;
+
+  input {
+    padding-right: 30px;
+  }
 }
 
 .input-icon {

@@ -36,7 +36,7 @@ a > .mat-icon:hover {
   height: 42px !important;
   min-width: 120px !important;
   padding: 0 20px !important;
-  color: $secondary-color;
+  color: $secondary-color-dark;
   font-size: 10pt;
   text-transform: uppercase;
   opacity: 1 !important;
@@ -47,6 +47,7 @@ a > .mat-icon:hover {
 }
 
 .mat-tab-label-active {
+  color: $primary-color-dark;
   font-weight: 600 !important;
 }
 
@@ -59,7 +60,7 @@ a > .mat-icon:hover {
 }
 
 .mat-ink-bar {
-  background-color: $secondary-color !important;
+  background-color: $title-color !important;
 }
 
 .mat-tab-group .mat-tab-body {
@@ -107,6 +108,10 @@ a > .mat-icon:hover {
 //
 // sidebar components
 //
+
+.mat-drawer-container {
+  color: $selected-control-color;
+}
 
 .mat-drawer-inner-container::-webkit-scrollbar {
   height: 6px;
@@ -326,8 +331,21 @@ table.mat-table {
     line-height: 24px;
     border: $control-border;
     border-radius: 2px;
-    background-color: #edeef0;
+    background-color: $button-color;
     margin: 2px 0;
+
+    .mat-datepicker-toggle-default-icon {
+      color: $icon-color;
+    }
+  }
+
+  .mat-icon-button:hover {
+    background-color: $selected-control-background-color;
+    transition: 0.3s ease-out;
+
+    .mat-datepicker-toggle-default-icon {
+      color: $icon-color-dark;
+    }
   }
 }
 

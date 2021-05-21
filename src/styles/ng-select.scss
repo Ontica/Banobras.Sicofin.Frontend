@@ -8,6 +8,10 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
 @import "variables";
 
+$primary-font-family: $font-family-secondary;
+$font-size: 11pt;
+$font-size-small: 10pt;
+
 .ng-select {
   margin-right: 8px;
   min-width: 75px;
@@ -16,7 +20,7 @@
 .ng-dropdown-panel-items,
 .ng-select-container {
   .item-text-sm {
-    font-size: 0.75rem;
+    font-size: $font-size-small;
     text-overflow: ellipsis;
   }
 }
@@ -26,7 +30,7 @@
   margin: 2px 8px 2px 0;
   padding: 2px 2px 2px 6px;
   border-radius: 2px;
-  font-family: $font-family;
+  font-family: $primary-font-family;
   border: $control-border;
   outline: none;
   color: $selected-control-color;
@@ -52,12 +56,13 @@
 
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
   padding-bottom: 0;
+  top: auto;
 }
 
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
-  font-size: 0.9em;
+  font-size: $font-size-small;
   margin-bottom: 1px;
-  background-color: $control-disabled-background;
+  background-color: rgba($primary-color-light, 0.15);
   height: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -72,8 +77,10 @@
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  color: $control-color;
+  font-family: $primary-font-family;
+  font-size: $font-size;
   padding: 2px 2px 2px 6px;
-  font-size: 0.9em;
 }
 
 .ng-select.ng-select-disabled > .ng-select-container {

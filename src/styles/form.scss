@@ -109,10 +109,10 @@ form.form-section {
     display: block;
     width: 100%;
     margin: auto;
-    line-height: 8.5pt;
-    color: #2c3942;
-    font-size: 8.5pt;
-    font-weight: 700;
+    line-height: 8pt;
+    color: $control-label-color;
+    font-size: 8pt;
+    font-weight: 600;
   }
 
   button {
