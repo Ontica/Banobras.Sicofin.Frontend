@@ -32,6 +32,11 @@ a > .mat-icon:hover {
 // tabs component
 //
 
+.tab-container {
+  margin: auto 8px 8px auto;
+  width: calc(100% - 9px);
+}
+
 .mat-tab-label {
   height: 42px !important;
   min-width: 120px !important;

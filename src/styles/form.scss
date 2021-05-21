@@ -11,99 +11,6 @@ fieldset {
   border: 0;
 }
 
-.disabled {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.7;
-}
-
-.form-container {
-  padding: 0 10px 0 10px;
-}
-
-.form-footer {
-  margin-top: 14px;
-  border-top: 1px solid $border-color;
-}
-
-.form-errors {
-  color: $warning-color;
-  font-size: 10pt;
-  padding: 8pt;
-}
-
-form.submitted input.ng-invalid,
-form.submitted textarea.ng-invalid,
-form.submitted select.ng-invalid {
-  border-left: 5px solid $warning-color;
-}
-
-.invalid-control {
-  border-left: 5px solid $warning-color !important;
-}
-
-form.submitted .inline-error {
-  color: $warning-color;
-  font-size: 10pt;
-  font-weight: 400;
-  padding: 8pt;
-}
-
-.border-bottom {
-  border-bottom: $form-border-bottom;
-}
-
-.border-top > td {
-  border-top: 1px solid $border-color;
-}
-
-// ToDo: to be deprecated
-
-table.form-section {
-  margin-bottom: 12pt;
-}
-
-table.form-section td {
-  color: $text-color;
-  white-space: nowrap;
-  vertical-align: text-top;
-  font-size: 9pt;
-}
-
-table.form-section .top {
-  vertical-align: top;
-}
-
-.form-container-text {
-  color: $form-color;
-  font-weight: $font-weight-command;
-}
-
-table.form-section .form-section-title {
-  color: $form-title-color;
-  border-bottom: $form-title-border;
-  font: $control-font;
-}
-
-.pr-1 {
-  padding-right: 0.5rem;
-}
-
-.pl-1 {
-  padding-left: 0.5rem;
-}
-
-.grid-text-item {
-  padding-left: 1rem;
-  font-size: 8pt;
-}
-
-.section-title {
-  color: $form-title-color;
-  border-bottom: $form-title-border;
-  margin: 0.5rem 8px 0.5rem 0;
-}
-
 form.form-section {
   label {
     display: block;
@@ -120,7 +27,53 @@ form.form-section {
   }
 }
 
-.tab-container {
-  margin: auto 8px 8px auto;
-  width: calc(100% - 9px);
+form.submitted input.ng-invalid,
+form.submitted textarea.ng-invalid,
+form.submitted select.ng-invalid {
+  border-left: 5px solid $warning-color;
+}
+
+form.submitted .inline-error {
+  color: $warning-color;
+  font-size: 10pt;
+  font-weight: 400;
+  padding: 8pt;
+}
+
+.border-bottom {
+  border-bottom: $form-border-bottom;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.7;
+}
+
+.form-container {
+  padding: 5px;
+  margin: 3px;
+  top: 0;
+  z-index: 105;
+}
+
+.form-footer {
+  margin-top: 14px;
+  border-top: 1px solid $border-color;
+}
+
+.form-errors {
+  color: $warning-color;
+  font-size: 10pt;
+  padding: 8pt;
+}
+
+.invalid-control {
+  border-left: 5px solid $warning-color !important;
+}
+
+.title-section {
+  color: $form-title-color;
+  border-bottom: $form-title-border;
+  margin: 0.5rem 8px 0.5rem 0;
 }
