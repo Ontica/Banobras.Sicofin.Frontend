@@ -6,10 +6,16 @@
  */
 
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AccountsChartMainPageComponent } from '@app/views/accounts-chart/main-page/accounts-chart-main-page.component';
 
-import { AccountingCataloguesAndRulesWorkspaceComponent } from './accounting-catalogues-and-rules-workspace.component';
+import { RouterModule, Routes } from '@angular/router';
+
+import {
+  AccountingCataloguesAndRulesWorkspaceComponent
+} from './accounting-catalogues-and-rules-workspace.component';
+
+import {
+  AccountsChartMainPageComponent
+} from './accounts-chart-main-page/accounts-chart-main-page.component';
 
 
 const routes: Routes = [

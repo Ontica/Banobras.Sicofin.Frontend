@@ -11,7 +11,7 @@ import { isEmpty } from '@app/core';
 
 import { Account, EmptyAccount } from '@app/models';
 
-import { AccountsChartEventType } from '../accounts-chart/accounts-chart.component';
+import { AccountsChartEventType } from '@app/views/accounts-chart/accounts-chart/accounts-chart.component';
 
 
 @Component({
@@ -30,8 +30,6 @@ export class AccountsChartMainPageComponent {
       case AccountsChartEventType.ACCOUNT_SELECTED:
         this.selectedAccount = isEmpty(event.payload.account) ? EmptyAccount : event.payload.account;
         this.displayAccountChartTabbed = !isEmpty(this.selectedAccount);
-
-        console.log(this.selectedAccount);
 
         break;
 

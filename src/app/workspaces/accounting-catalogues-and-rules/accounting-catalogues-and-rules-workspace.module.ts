@@ -27,6 +27,10 @@ import {
 
 import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
 
+import {
+  AccountsChartMainPageComponent
+} from './accounts-chart-main-page/accounts-chart-main-page.component';
+
 
 @NgModule({
 
@@ -43,7 +47,8 @@ import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.mo
   ],
 
   declarations: [
-    AccountingCataloguesAndRulesWorkspaceComponent
+    AccountingCataloguesAndRulesWorkspaceComponent,
+    AccountsChartMainPageComponent,
   ],
 
   exports: [

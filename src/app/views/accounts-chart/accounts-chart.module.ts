@@ -19,7 +19,6 @@ import { AccountsChartControlsComponent } from './accounts-chart-list/accounts-c
 import { AccountsChartFilterComponent } from './accounts-chart-filter/accounts-chart-filter.component';
 import { AccountsChartListComponent } from './accounts-chart-list/accounts-chart-list.component';
 import { AccountsChartListEntryComponent } from './accounts-chart-list/accounts-chart-list-entry.component';
-import { AccountsChartMainPageComponent } from './main-page/accounts-chart-main-page.component';
 import { AccountTabbedViewComponent } from './account-tabbed-view/account-tabbed-view.component';
 import { AccountViewComponent } from './account-view/account-view.component';
 
@@ -39,12 +38,12 @@ import { AccountViewComponent } from './account-view/account-view.component';
     AccountsChartFilterComponent,
     AccountsChartListComponent,
     AccountsChartListEntryComponent,
-    AccountsChartMainPageComponent,
     AccountTabbedViewComponent,
     AccountViewComponent,
   ],
   exports: [
-    AccountsChartMainPageComponent,
+    AccountsChartComponent,
+    AccountTabbedViewComponent,
   ]
 })
 export class AccountsChartModule { }
