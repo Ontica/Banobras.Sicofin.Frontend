@@ -1,4 +1,5 @@
-<form #form="ngForm" autocomplete="off" class="form-section list-selection-header">
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  (keydown.enter)="$event.preventDefault()">
 
   <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
 
