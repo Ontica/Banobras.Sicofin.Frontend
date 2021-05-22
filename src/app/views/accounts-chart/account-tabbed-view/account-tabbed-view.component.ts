@@ -9,7 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Account, AreaRule, CurrencyRule, EmptyAccount, LedgerRule, SectorRule } from '@app/models';
+import { Account, AreaRule, CurrencyRule,
+         EmptyAccount, LedgerRule, SectorRule } from '@app/models';
 
 @Component({
   selector: 'emp-fa-account-tabbed-view',

@@ -20,6 +20,7 @@ export interface AccountsChartMasterData {
   accountTypes: Identifiable[];
   currencies: Currency[];
   sectors: Sector[];
+  ledgers: Ledger[];
 }
 
 
@@ -199,6 +200,18 @@ export interface SectorRule {
   sectorRole: SectorRole;
   startDate: DateString;
   endDate: DateString;
+}
+
+
+export interface Ledger {
+  uID: string;
+  name: string;
+  fullName: string;
+  number: string;
+  subnumber: string;
+  subsidiaryAccountsPrefix: string;
+  accountsChart: Identifiable;
+  baseCurrency: Identifiable;
 }
 
 
