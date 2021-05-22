@@ -11,12 +11,13 @@ import { EventInfo } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services/accounts-chart.data.service';
 
-import { AccountsChartMasterData, AccountsSearchCommand, EmptyAccountsSearchCommand } from '@app/models';
+import { AccountsChartMasterData, AccountsSearchCommand, EmptyAccountsSearchCommand,
+         getLevelsListFromPattern } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
 
-export enum RecordingBookSelectorEventType {
+export enum AccountsChartFilterEventType {
   SEARCH_ACCOUNTS_CHART_CLICKED = 'AccountsChartFilterComponent.Event.SearchAccountsChartClicked',
 }
 
@@ -72,7 +73,7 @@ export class AccountsChartFilterComponent implements OnInit {
       accountsSearchCommand: this.accountsSearch
     };
 
-    this.sendEvent(RecordingBookSelectorEventType.SEARCH_ACCOUNTS_CHART_CLICKED, payload);
+    this.sendEvent(AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED, payload);
   }
 
 
@@ -92,34 +93,24 @@ export class AccountsChartFilterComponent implements OnInit {
   }
 
 
+  private setLevelsList(){
+    if (!this.accountChartSelected) {
+      this.levelsList =  [];
+    }
+
+    this.levelsList = getLevelsListFromPattern(this.accountChartSelected.accountsPattern,
+                                               this.accountChartSelected.accountNumberSeparator,
+                                               this.accountChartSelected.maxAccountLevel);
+  }
+
+
   private setDefaultAccountChartSelected() {
     this.accountChartSelected = this.accountsChartMasterDataList[this.accountsChartMasterDataList.length - 1];
     this.setLevelsList();
   }
 
 
-  private setLevelsList() {
-    if (!this.accountChartSelected) {
-      this.levelsList = [];
-      return;
-    }
-
-    this.levelsList = Array.from({length: this.accountChartSelected.maxAccountLevel}, (value, key) => key + 1)
-                        .map(level => ({
-                          uid: level,
-                          name: `Nivel ${level}: ${this.getAccountPatternFromLevel(level)}`,
-                        }));
-  }
-
-
-  private getAccountPatternFromLevel(level: number){
-    return this.accountChartSelected.accountsPattern
-      .split(this.accountChartSelected.accountNumberSeparator, level)
-      .join(this.accountChartSelected.accountNumberSeparator);
-  }
-
-
-  private sendEvent(eventType: RecordingBookSelectorEventType, payload?: any) {
+  private sendEvent(eventType: AccountsChartFilterEventType, payload?: any) {
     const event: EventInfo = {
       type: eventType,
       payload

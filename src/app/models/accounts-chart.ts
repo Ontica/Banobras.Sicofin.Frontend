@@ -200,3 +200,27 @@ export interface SectorRule {
   startDate: DateString;
   endDate: DateString;
 }
+
+
+export function getLevelsListFromPattern(accountsPattern: string,
+                                         accountNumberSeparator: string,
+                                         maxAccountLevel: number) {
+  if (!accountsPattern || !accountNumberSeparator || !maxAccountLevel) {
+    return [];
+  }
+
+  return Array.from({length: maxAccountLevel}, (value, key) => key + 1)
+              .map(level => ({
+                uid: level,
+                name: `Nivel ${level}: ${getAccountPatternFromLevel(accountsPattern,
+                                                                    accountNumberSeparator,
+                                                                    level)}`,
+              }));
+}
+
+
+function getAccountPatternFromLevel(accountsPattern: string,
+                                    accountNumberSeparator: string,
+                                    level: number){
+  return accountsPattern.split(accountNumberSeparator, level).join(accountNumberSeparator);
+}

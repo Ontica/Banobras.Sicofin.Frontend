@@ -13,7 +13,7 @@ import { AccountsChartDataService } from '@app/data-services/accounts-chart.data
 
 import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart } from '@app/models';
 
-import { RecordingBookSelectorEventType } from '../accounts-chart-filter/accounts-chart-filter.component';
+import { AccountsChartFilterEventType } from '../accounts-chart-filter/accounts-chart-filter.component';
 
 import { AccountsChartListEventType } from '../accounts-chart-list/accounts-chart-list.component';
 
@@ -45,9 +45,9 @@ export class AccountsChartComponent {
 
 
   onAccountsChartFilterEvent(event) {
-    switch (event.type as RecordingBookSelectorEventType) {
+    switch (event.type as AccountsChartFilterEventType) {
 
-      case RecordingBookSelectorEventType.SEARCH_ACCOUNTS_CHART_CLICKED:
+      case AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED:
         Assertion.assertValue(event.payload.accountsChart, 'event.payload.accountsChart');
         Assertion.assertValue(event.payload.accountsSearchCommand, 'event.payload.accountsSearchCommand');
 
