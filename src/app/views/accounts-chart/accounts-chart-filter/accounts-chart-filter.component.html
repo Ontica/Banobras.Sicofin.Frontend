@@ -58,6 +58,25 @@
 
       </mat-divider>
 
+      <div fxLayout="row">
+
+        <div fxFlex="50">
+
+          <label>Contabilidad:</label>
+
+          <emp-ng-select
+            [config]="{clearable: true, multiple: false}"
+            [(ngModel)]="accountsSearch.ledger" name="ledger"
+            [items]="accountChartSelected?.ledgers"
+            bindLabel="fullName"
+            placeholder="Todos">
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+
       <div fxLayout="row" [style.marginBottom.px]="8">
 
         <div fxFlex="25">

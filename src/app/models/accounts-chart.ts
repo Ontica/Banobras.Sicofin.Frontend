@@ -129,6 +129,7 @@ export const EmptyAccount: Account = {
 export interface AccountsSearchCommand {
   date?: DateString;
   keywords?: string;
+  ledger?: string;
   fromAccount?: string;
   toAccount?: string;
   level?: number;

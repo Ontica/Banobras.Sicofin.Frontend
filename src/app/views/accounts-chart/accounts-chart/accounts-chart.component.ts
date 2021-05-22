@@ -29,7 +29,7 @@ export class AccountsChartComponent {
 
   @Output() accountsChartEvent = new EventEmitter<EventInfo>();
 
-  cardHint = 'Selecciona los filtros';
+  cardHint = 'Editor y visualizador de los catálogos de cuentas';
 
   isLoading = false;
 
@@ -104,7 +104,7 @@ export class AccountsChartComponent {
 
 
   private setText(accountsChartName) {
-    this.cardHint = accountsChartName ?? 'Selecciona los filtro';
+    this.cardHint = accountsChartName ?? 'Filtro no seleccionado';
   }
 
 

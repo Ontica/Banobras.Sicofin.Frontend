@@ -105,7 +105,7 @@ export class AccountsChartFilterComponent implements OnInit {
 
 
   private setDefaultAccountChartSelected() {
-    this.accountChartSelected = this.accountsChartMasterDataList[this.accountsChartMasterDataList.length - 1];
+    this.accountChartSelected = this.accountsChartMasterDataList[0];
     this.setLevelsList();
   }
 
