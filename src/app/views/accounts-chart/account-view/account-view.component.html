@@ -12,8 +12,14 @@
       <div fxFlex fxLayoutAlign="end">
         <div fxFlex="100px">
           <label>Fecha de alta:</label>
-          <input type="text" class="text-box" [formControlName]="controls.date">
+          <input type="text" class="text-box" [formControlName]="controls.startDate">
         </div>
+
+        <div fxFlex="100px">
+          <label>Fecha de baja:</label>
+          <input type="text" class="text-box" [formControlName]="controls.endDate">
+        </div>
+
       </div>
 
     </div>
@@ -46,8 +52,8 @@
       <div [fxFlex]="100">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize rows="1"
-          [formControlName]="controls.notes"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.notes)">
+          [formControlName]="controls.description"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
 
         </textarea>
       </div>

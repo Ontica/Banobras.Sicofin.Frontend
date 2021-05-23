@@ -5,6 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { FlexAlignStyleBuilder } from '@angular/flex-layout';
 import { DateString, Empty, Identifiable } from '@app/core';
 
 
@@ -83,10 +84,12 @@ export interface AccountDescriptor {
   uid: string;
   number: string;
   name: string;
+  description: string;
   type: string;
   role: AccountRole;
   debtorCreditor: DebtorCreditorType;   // naturaleza
   level: number;
+  obsolete: boolean;
 }
 
 
@@ -94,14 +97,18 @@ export const EmptyAccountDescriptor: AccountDescriptor = {
   uid: 'Empty',
   number: '',
   name: '',
+  description: '',
   type: '',
   role: null,
   debtorCreditor: null,
   level: 0,
+  obsolete: false
 };
 
 
 export interface Account extends AccountDescriptor {
+  startDate: DateString;
+  endDate: DateString;
   accountsChart: Identifiable;
   areaRules: AreaRule[];
   currencyRules: CurrencyRule[];
@@ -114,15 +121,19 @@ export const EmptyAccount: Account = {
   uid: 'Empty',
   number: '',
   name: '',
+  description: '',
   type: '',
   role: null,
   debtorCreditor: null,
   level: 0,
+  obsolete: false,
+  startDate: '',
+  endDate: '',
   accountsChart: Empty,
   areaRules: [],
   currencyRules: [],
   sectorRules: [],
-  ledgerRules: [],
+  ledgerRules: []
 };
 
 

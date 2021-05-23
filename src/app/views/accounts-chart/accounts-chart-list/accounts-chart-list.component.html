@@ -21,7 +21,8 @@
 <cdk-virtual-scroll-viewport itemSize="25" style="height: calc(100% - 87px)">
 
   <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item"
-    [ngClass]="{'list-item-highlight': account.role !== 'Sumaria'}">
+    [ngClass]="{'list-item-highlight': account.role !== 'Sumaria'}"
+    [ngClass]="{'list-item-deleted': account.obsolete}">
 
     <div class="list-item-container">
 

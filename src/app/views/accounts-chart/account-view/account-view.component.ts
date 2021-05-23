@@ -8,21 +8,26 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
 import { FormControl, FormGroup } from '@angular/forms';
+import { DateStringLibrary } from '@app/core';
 
 import { Account, EmptyAccount } from '@app/models';
 
+
 import { FormHandler } from '@app/shared/utils';
+
 
 enum AccountViewFormControls {
   accountsChart = 'accountsChart',
-  date = 'date',
+  startDate = 'startDate',
+  endDate = 'endDate',
   number = 'number',
   name = 'name',
+  description = 'description',
   role = 'role',
   type = 'type',
   debtorCreditor = 'debtorCreditor',
-  notes = 'notes',
 }
+
 
 @Component({
   selector: 'emp-fa-account-view',
@@ -67,13 +72,14 @@ export class AccountViewComponent implements OnChanges {
     this.formHandler = new FormHandler(
       new FormGroup({
         accountsChart: new FormControl(''),
-        date: new FormControl(''),
+        startDate: new FormControl(''),
+        endDate: new FormControl(''),
         number: new FormControl(''),
         name: new FormControl(''),
+        description: new FormControl(''),
         role: new FormControl(''),
         type: new FormControl(''),
-        debtorCreditor: new FormControl(''),
-        notes: new FormControl(''),
+        debtorCreditor: new FormControl('')
       })
     );
   }
@@ -82,13 +88,14 @@ export class AccountViewComponent implements OnChanges {
   private setFormModel() {
     this.formHandler.form.reset({
       accountsChart: this.account.accountsChart.name,
-      date: '', // this.account.date,
+      startDate: DateStringLibrary.format(this.account.startDate),
+      endDate: DateStringLibrary.format(this.account.endDate),
       number: this.account.number,
       name: this.account.name,
+      description: this.account.description,
       role: this.account.role,
       type: this.account.type,
       debtorCreditor: this.account.debtorCreditor,
-      notes: '', // this.account.notes,
     });
   }
 
