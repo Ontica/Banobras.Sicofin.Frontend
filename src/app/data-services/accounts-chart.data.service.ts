@@ -13,6 +13,7 @@ import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { Account, AccountsChart, AccountsChartMasterData, AccountsSearchCommand } from '@app/models';
 
+
 @Injectable()
 export class AccountsChartDataService {
 

@@ -7,10 +7,13 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
+import { BalancesDataService } from '@app/data-services';
+
+import { Account, AccountBalance, AccountHistory, AccountRole, AreaRule,
+         CurrencyRule, EmptyAccount, LedgerRule, SectorRule } from '@app/models';
+
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Account, AccountHistory, AccountRole, AreaRule, CurrencyRule,
-         EmptyAccount, LedgerRule, SectorRule } from '@app/models';
 
 @Component({
   selector: 'emp-fa-account-tabbed-view',
@@ -31,6 +34,9 @@ export class AccountTabbedViewComponent implements OnChanges {
   sectorRulesDS: MatTableDataSource<SectorRule>;
   ledgerRulesDS: MatTableDataSource<LedgerRule>;
   accountHistoryDS: MatTableDataSource<AccountHistory>;
+  accountBalancesDS: MatTableDataSource<AccountBalance>;
+
+  constructor(private balancesDataService: BalancesDataService) { }
 
   ngOnChanges() {
     this.setTitle();
@@ -42,6 +48,12 @@ export class AccountTabbedViewComponent implements OnChanges {
     this.closeEvent.emit();
   }
 
+
+  calculateBalances() {
+    this.balancesDataService.getLedgersAccountsBalances(this.account.uid)
+                            .toPromise()
+                            .then(x => this.accountBalancesDS = new MatTableDataSource(x));
+  }
 
   showSectors() {
     return this.account.role === AccountRole.Sectorizada ||

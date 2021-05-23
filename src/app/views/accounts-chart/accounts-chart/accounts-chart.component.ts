@@ -9,7 +9,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { AccountsChartDataService } from '@app/data-services/accounts-chart.data.service';
+import { AccountsChartDataService } from '@app/data-services';
 
 import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart } from '@app/models';
 

@@ -19,3 +19,4 @@
 //
 
 export * from './accounts-chart';
+export * from './balances';

@@ -5,6 +5,10 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { AccountDescriptor, Ledger } from './accounts-chart';
 
-export * from './accounts-chart.data.service';
-export * from './balances.data.service';
+export interface AccountBalance {
+  ledger: Ledger;
+  account: AccountDescriptor;
+  currentBalance: number;
+}
