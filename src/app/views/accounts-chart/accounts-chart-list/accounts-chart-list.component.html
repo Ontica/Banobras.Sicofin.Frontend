@@ -38,11 +38,11 @@
   </div>
 
   <div *ngIf="!displayAccountsChartList" class="text-not-found">
-    Selecciona los filtros.
+    No se ha invocado la búsqueda de cuentas.
   </div>
 
   <div *ngIf="displayAccountsChartList && accountsChart.accounts.length === 0" class="text-not-found">
-    No se encontraron cuentas.
+    No se encontraron cuentas con el filtro proporcionado.
   </div>
 
 </cdk-virtual-scroll-viewport>

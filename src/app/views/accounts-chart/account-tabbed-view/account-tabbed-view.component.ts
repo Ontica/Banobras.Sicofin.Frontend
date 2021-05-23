@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Account, AreaRule, CurrencyRule,
+import { Account, AccountHistory, AccountRole, AreaRule, CurrencyRule,
          EmptyAccount, LedgerRule, SectorRule } from '@app/models';
 
 @Component({
@@ -30,7 +30,7 @@ export class AccountTabbedViewComponent implements OnChanges {
   currencyRulesDS: MatTableDataSource<CurrencyRule>;
   sectorRulesDS: MatTableDataSource<SectorRule>;
   ledgerRulesDS: MatTableDataSource<LedgerRule>;
-
+  accountHistoryDS: MatTableDataSource<AccountHistory>;
 
   ngOnChanges() {
     this.setTitle();
@@ -40,6 +40,12 @@ export class AccountTabbedViewComponent implements OnChanges {
 
   onClose() {
     this.closeEvent.emit();
+  }
+
+
+  showSectors() {
+    return this.account.role === AccountRole.Sectorizada ||
+           this.account.sectorRules.length !== 0;
   }
 
 
@@ -54,6 +60,7 @@ export class AccountTabbedViewComponent implements OnChanges {
     this.currencyRulesDS = new MatTableDataSource(this.account.currencyRules);
     this.sectorRulesDS = new MatTableDataSource(this.account.sectorRules);
     this.ledgerRulesDS = new MatTableDataSource(this.account.ledgerRules);
+    this.accountHistoryDS = new MatTableDataSource(this.account.history);
   }
 
 

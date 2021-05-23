@@ -260,8 +260,13 @@ textarea:focus {
 }
 
 .text-not-found {
+  font-size: 0.75em;
   text-align: center;
   padding: 0.5rem;
+}
+
+.text-small-text {
+  font-size: 0.75em;
 }
 
 .left {

@@ -5,7 +5,6 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { FlexAlignStyleBuilder } from '@angular/flex-layout';
 import { DateString, Empty, Identifiable } from '@app/core';
 
 
@@ -28,16 +27,16 @@ export interface AccountsChartMasterData {
 export enum AccountRole {
 
   // Summary account (cuenta sumaria)
-  Sumaria,
+  Sumaria = 'Sumaria',
 
   // Posting account (cuenta de detalle)
-  Detalle,
+  Detalle = 'Detalle',
 
   // Control account (cuenta de control que se maneja a nivel auxiliar)
-  Control,
+  Control = 'Control',
 
   // Sectorized account (cuenta que maneja sector, con o sin auxiliares)
-  Sectorizada,
+  Sectorizada = 'Sectorizada',
 
 }
 
@@ -45,10 +44,10 @@ export enum AccountRole {
 export enum SectorRole {
 
   // Sectorized Posting account (cuenta sectorizada de detalle, sin auxiliares)
-  Detalle,
+  Detalle = 'Detalle',
 
   // Sectorized Control account (cuenta sectorizada con auxiliares)
-  Control,
+  Control = 'Control',
 
 }
 
@@ -56,10 +55,10 @@ export enum SectorRole {
 export enum DebtorCreditorType {
 
   // Debtor account (cuenta de naturaleza deudora)
-  Deudora,
+  Deudora = 'Deudora',
 
   // Creditor account (cuenta de naturaleza acreedora)
-  Acreedora,
+  Acreedora = 'Acreedora',
 
 }
 
@@ -114,6 +113,7 @@ export interface Account extends AccountDescriptor {
   currencyRules: CurrencyRule[];
   sectorRules: SectorRule[];
   ledgerRules: LedgerRule[];
+  history: AccountHistory[];
 }
 
 
@@ -133,7 +133,8 @@ export const EmptyAccount: Account = {
   areaRules: [],
   currencyRules: [],
   sectorRules: [],
-  ledgerRules: []
+  ledgerRules: [],
+  history: [],
 };
 
 
@@ -163,6 +164,17 @@ export const EmptyAccountsSearchCommand: AccountsSearchCommand = {
   currencies: [],
 };
 
+export interface AccountHistory {
+  uID: string;
+  number: string;
+  name: string;
+  description: string;
+  type: string;
+  role: AccountRole;
+  debtorCreditor: DebtorCreditorType;
+  startDate: string;
+  endDate: string;
+}
 
 export interface Currency {
   uid: string;
