@@ -142,6 +142,7 @@ export interface AccountsSearchCommand {
   date?: DateString;
   keywords?: string;
   ledger?: string;
+  ledgerGroup?: string;
   fromAccount?: string;
   toAccount?: string;
   level?: number;
@@ -241,14 +242,14 @@ export interface Ledger {
 
 export function getLevelsListFromPattern(accountsPattern: string,
                                          accountNumberSeparator: string,
-                                         maxAccountLevel: number) {
+                                         maxAccountLevel: number): Identifiable[] {
   if (!accountsPattern || !accountNumberSeparator || !maxAccountLevel) {
     return [];
   }
 
   return Array.from({length: maxAccountLevel}, (value, key) => key + 1)
-              .map(level => ({
-                uid: level,
+              .map<Identifiable>(level => ({
+                uid: level.toString(),
                 name: `Nivel ${level}: ${getAccountPatternFromLevel(accountsPattern,
                                                                     accountNumberSeparator,
                                                                     level)}`,
