@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { EventInfo, Identifiable } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services';
 
@@ -41,7 +41,7 @@ export class AccountsChartFilterComponent implements OnInit {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  levelsList: any[] = [];
+  levelsList: Identifiable[] = [];
 
   isLoading = false;
 
@@ -62,6 +62,11 @@ export class AccountsChartFilterComponent implements OnInit {
 
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.setLevelsList();
+    this.validateFieldToClear();
+  }
+
+
+  onClearFilters() {
     this.accountsSearch = Object.assign({}, EmptyAccountsSearchCommand,
       {keywords: this.accountsSearch.keywords});
   }
@@ -101,6 +106,31 @@ export class AccountsChartFilterComponent implements OnInit {
     this.levelsList = getLevelsListFromPattern(this.accountChartSelected.accountsPattern,
                                                this.accountChartSelected.accountNumberSeparator,
                                                this.accountChartSelected.maxAccountLevel);
+  }
+
+
+  private validateFieldToClear() {
+    this.accountsSearch.ledger = this.accountChartSelected.ledgers
+      .filter(x => this.accountsSearch.ledger === x.uID).length > 0 ? this.accountsSearch.ledger : '';
+
+    this.accountsSearch.level =
+      this.levelsList.filter(x => this.accountsSearch.level.toString() === x.uid).length > 0 ?
+      this.accountsSearch.level : null;
+
+    this.accountsSearch.types = this.accountChartSelected.accountTypes
+      .filter(x => this.accountsSearch.types.includes(x.uid))
+      .map(x => x.uid);
+
+    this.accountsSearch.roles = this.accountChartSelected.accountRoles
+      .filter(x => this.accountsSearch.roles.includes(x));
+
+    this.accountsSearch.sectors = this.accountChartSelected.sectors
+      .filter(x => this.accountsSearch.sectors.includes(x.uid))
+      .map(x => x.uid);
+
+    this.accountsSearch.currencies = this.accountChartSelected.currencies
+      .filter(x => this.accountsSearch.currencies.includes(x.uid))
+      .map(x => x.uid);
   }
 
 

@@ -112,6 +112,32 @@ button.btn-secondary:hover {
   transition: 0.3s ease-out;
 }
 
+button.btn-base {
+  @include input-button-settings;
+
+  text-transform: none;
+  background-color: transparent;
+  color: $text-color;
+  min-width: $button-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .mat-icon {
+    color: $icon-color;
+  }
+}
+
+button.btn-base:hover {
+  background-color: $button-selected-color;
+  color: $text-color-dark;
+  transition: 0.3s ease-out;
+
+  .mat-icon {
+    color: $icon-color-dark;
+  }
+}
+
 button.btn-icon {
   display: flex;
   align-items: center;
@@ -132,6 +158,29 @@ button.btn-icon:hover {
 
   .mat-icon {
     color: $icon-color-dark;
+  }
+}
+
+button.btn-icon-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $action-color;
+  width: $button-height;
+  height: $button-height;
+  min-width: $button-height;
+
+  .mat-icon {
+    color: $white;
+  }
+}
+
+button.btn-icon-action:hover {
+  background-color: $action-selected-color;
+  transition: 0.3s ease-out;
+
+  .mat-icon {
+    color: $white;
   }
 }
 
@@ -262,7 +311,7 @@ textarea:focus {
 .text-not-found {
   font-size: 0.75em;
   text-align: center;
-  padding: 0.5rem;
+  padding: 1rem;
 }
 
 .text-small-text {

@@ -30,35 +30,62 @@
           (keyup.enter)="onSearchAccountsChartClicked()"
           (keyup.escape)="onClearKeyword()">
 
-          <mat-icon class="input-icon" (click)="onSearchAccountsChartClicked()">search</mat-icon>
-
         </div>
 
       </div>
 
-      <div fxFlex="38px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+      <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
 
-        <button class="btn-icon"
-          [title]="showFilters ? 'Ocultar filtros' :'Mostrar filtros'"
-          (click)="toggleFilters()">
-
-          <mat-icon >
-            {{showFilters ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-          </mat-icon>
+        <button class="btn-icon-action" title="Buscar"
+          [disabled]="form.invalid"
+          (click)="onSearchAccountsChartClicked()">
+          <mat-icon>search</mat-icon>
 
         </button>
 
       </div>
 
+      <div #filterOptionsSection>
+
+        <mat-divider vertical="true" [style.marginTop.px]="12"
+          [style.marginRight.px]="8" [style.height.px]="28">
+
+        </mat-divider>
+
+        <div fxFlex="126px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+          <button class="btn-base" (click)="toggleFilters()" fxFlex="100%">
+            {{showFilters ? 'Ocultar' :'Mostrar'}}
+            <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+          </button>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <div *ngIf="showFilters" [@expandCollapse]>
+    <div #filterSection *ngIf="showFilters" [@expandCollapse]>
 
       <mat-divider [style.marginBottom.px]="8" [style.marginRight.px]="8">
 
       </mat-divider>
 
-      <div fxLayout="row">
+      <div fxLayout="row" [style.marginBottom.px]="8">
+
+        <div fxFlex="50">
+
+          <label>Grupo de contabilidades:</label>
+
+          <emp-ng-select
+            [config]="{clearable: true}"
+            [(ngModel)]="accountsSearch.ledgerGroup" name="ledger"
+            name="ledgerGroup"
+            [items]="[]"
+            placeholder="Todos">
+          </emp-ng-select>
+
+        </div>
 
         <div fxFlex="50">
 
@@ -179,6 +206,24 @@
             bindLabel="fullName"
             placeholder="Todas">
           </emp-ng-select>
+
+        </div>
+
+        <div #filterOptionsSection>
+
+          <mat-divider vertical="true" [style.marginTop.px]="12"
+            [style.marginRight.px]="8" [style.height.px]="28">
+
+          </mat-divider>
+
+          <div fxFlex="126px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+            <button class="btn-base" (click)="onClearFilters()" fxFlex="100%">
+              Limpiar
+              <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+            </button>
+
+          </div>
 
         </div>
 
