@@ -133,13 +133,11 @@
 
     <mat-tab label="Saldos">
 
-      <div>
-        <p>
-          <button type="submit" class="btn-action"
+      <div class="text-align-right" [style.paddingBottom.px]="8">
+        <button type="submit" class="btn-action"
           (click)="calculateBalances()">
           Calcular saldos
         </button>
-        </p>
       </div>
 
       <div class="scrollable-container mat-elevation-z1">
@@ -165,6 +163,9 @@
           <tr mat-header-row *matHeaderRowDef="['fullName', 'number', 'name', 'currentBalance']; sticky: true;"></tr>
           <tr mat-row *matRowDef="let row; columns: ['fullName', 'number', 'name', 'currentBalance'];"></tr>
         </table>
+
+        <div *ngIf="!accountBalancesDS" class="text-not-found">No se ha invocado el calculo de saldos.</div>
+        <div *ngIf="accountBalancesDS?.data?.length == 0" class="text-not-found">Esta cuenta no tiene saldos.</div>
       </div>
 
     </mat-tab>
