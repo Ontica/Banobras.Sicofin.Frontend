@@ -45,7 +45,8 @@
               <mat-checkbox *ngIf="showPasswordModeSelected === 'check'"
                 [checked]="showPassword"
                 (click)="$event.stopPropagation"
-                (change)="toggleShowPassword()">
+                (change)="toggleShowPassword()"
+                class="mat-checkbox-text-light">
                 Mostrar contraseña
               </mat-checkbox>
 

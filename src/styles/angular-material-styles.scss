@@ -333,7 +333,7 @@ table.mat-table {
   .mat-icon-button {
     width: 28px;
     height: 28px;
-    line-height: 24px;
+    line-height: 22px;
     border: $control-border;
     border-radius: 2px;
     background-color: $button-color;
@@ -409,8 +409,11 @@ table.mat-table {
 //
 
 .mat-checkbox-layout .mat-checkbox-label {
-  color: $white;
   font-size: 9pt;
+}
+
+.mat-checkbox-text-light .mat-checkbox-layout .mat-checkbox-label {
+  color: $white;
 }
 
 .mat-checkbox-frame {
