@@ -45,7 +45,7 @@
 
       </div>
 
-      <div #filterOptionsSection>
+      <ng-container #filterOptionsSection>
 
         <mat-divider vertical="true" [style.marginTop.px]="12"
           [style.marginRight.px]="8" [style.height.px]="28">
@@ -61,7 +61,7 @@
 
         </div>
 
-      </div>
+      </ng-container>
 
     </div>
 
@@ -87,7 +87,7 @@
 
         </div>
 
-        <div fxFlex="50">
+        <div fxFlex>
 
           <label>Contabilidad:</label>
 
@@ -102,7 +102,6 @@
         </div>
 
       </div>
-
 
       <div fxLayout="row" [style.marginBottom.px]="8">
 
@@ -209,7 +208,7 @@
 
         </div>
 
-        <div #filterOptionsSection>
+        <ng-container #clearFilterSection>
 
           <mat-divider vertical="true" [style.marginTop.px]="12"
             [style.marginRight.px]="8" [style.height.px]="28">
@@ -225,7 +224,7 @@
 
           </div>
 
-        </div>
+        </ng-container>
 
       </div>
 
