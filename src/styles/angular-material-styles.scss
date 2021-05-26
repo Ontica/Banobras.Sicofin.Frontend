@@ -335,7 +335,8 @@ table.mat-table {
     height: 28px;
     line-height: 22px;
     border: $control-border;
-    border-radius: 2px;
+    border-left: none;
+    border-radius: 0 2px 2px 0;
     background-color: $button-color;
     margin: 2px 0;
 
