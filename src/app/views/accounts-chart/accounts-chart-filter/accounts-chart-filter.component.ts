@@ -113,8 +113,8 @@ export class AccountsChartFilterComponent implements OnInit {
     this.accountsSearch.ledger = this.accountChartSelected.ledgers
       .filter(x => this.accountsSearch.ledger === x.uID).length > 0 ? this.accountsSearch.ledger : '';
 
-    this.accountsSearch.level =
-      this.levelsList.filter(x => this.accountsSearch.level.toString() === x.uid).length > 0 ?
+   this.accountsSearch.level =
+      this.levelsList.filter(x => this.accountsSearch.level + '' === x.uid).length > 0 ?
       this.accountsSearch.level : null;
 
     this.accountsSearch.types = this.accountChartSelected.accountTypes
