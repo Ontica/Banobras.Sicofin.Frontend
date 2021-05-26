@@ -178,10 +178,6 @@ button.btn-icon-action {
 button.btn-icon-action:hover {
   background-color: $action-selected-color;
   transition: 0.3s ease-out;
-
-  .mat-icon {
-    color: $white;
-  }
 }
 
 button.btn-margin-right {
