@@ -20,3 +20,4 @@
 
 export * from './accounts-chart';
 export * from './balances';
+export * from './trial-balances';

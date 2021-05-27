@@ -6,6 +6,7 @@
  */
 
 import { Identifiable } from '@app/core';
+import { AccountDescriptor } from './accounts-chart';
 
 
 export const TrialBalanceType: Identifiable[] = [
@@ -46,9 +47,7 @@ export interface TrialBalance {
 export interface TrialBalanceEntry {
   ledger: Identifiable;
   currency: Identifiable;
-  accountUID: string;
-  accountNumber: string;
-  accountName: string;
+  account: AccountDescriptor;
   ledgerAccountId?: number;
   sector: Identifiable;
   initialBalance: number;
