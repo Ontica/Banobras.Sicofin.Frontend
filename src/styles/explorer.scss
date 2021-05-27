@@ -21,16 +21,16 @@
   height: calc(100vh - 196px + 68px);
 
   .primary {
-    flex: 1 1 600px;
+    flex: 3 1 600px;
     min-width: 400px;
-    max-width: 960px;
+    max-width: 1085px;
   }
 
   .primary-resizable {
     position: relative;
     min-width: 600px;
     max-width: calc(100% - 600px);
-    width: 960px;
+    width: 1085px;
   }
 
   .primary-resizable::after {
@@ -50,9 +50,9 @@
   }
 
   .primary-resizable-disable {
-    flex: 1 1 600px;
+    flex: 3 1 600px;
     min-width: 400px;
-    max-width: 960px;
+    max-width: 1085px;
   }
 
   .primary-resizable-disable::after {
@@ -60,7 +60,7 @@
   }
 
   .secondary {
-    flex: 3 1 600px;
+    flex: 1 1 600px;
     min-width: 400px;
     max-width: 960px;
   }

@@ -1,6 +1,6 @@
 <div class="explorer" fxLayoutGap="32px">
 
-  <div class="primary">
+  <div class="primary" [fxHide.lt-lg]="displayAccountChartTabbed">
 
     <emp-fa-accounts-chart (accountsChartEvent)="onAccountsChartEvent($event)">
 
