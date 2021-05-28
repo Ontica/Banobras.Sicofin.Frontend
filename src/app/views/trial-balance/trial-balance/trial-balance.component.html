@@ -1,0 +1,30 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Balanzas de comprobación
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner" style="overflow-y: hidden;">
+
+    <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+    <emp-fa-trial-balance-filter
+      [(showFilters)]="showFilters"
+      (accountsChartFilterEvent)="onAccountsChartFilterEvent($event)">
+
+    </emp-fa-trial-balance-filter>
+
+  </div>
+
+</div>

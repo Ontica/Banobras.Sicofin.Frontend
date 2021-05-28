@@ -101,6 +101,7 @@ export class AccountsChartFilterComponent implements OnInit {
   private setLevelsList(){
     if (!this.accountChartSelected) {
       this.levelsList =  [];
+      return;
     }
 
     this.levelsList = getLevelsListFromPattern(this.accountChartSelected.accountsPattern,
@@ -113,7 +114,7 @@ export class AccountsChartFilterComponent implements OnInit {
     this.accountsSearch.ledger = this.accountChartSelected.ledgers
       .filter(x => this.accountsSearch.ledger === x.uID).length > 0 ? this.accountsSearch.ledger : '';
 
-   this.accountsSearch.level =
+    this.accountsSearch.level =
       this.levelsList.filter(x => this.accountsSearch.level + '' === x.uid).length > 0 ?
       this.accountsSearch.level : null;
 

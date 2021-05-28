@@ -38,6 +38,21 @@ export interface TrialBalanceCommand {
 }
 
 
+export const EmptyTrialBalanceCommand: TrialBalanceCommand = {
+  trialBalanceType: '',
+  accountsChartUID: '',
+  fromDate: '',
+  toDate: '',
+  consolidated: false,
+  ledgers: [],
+  sectors: [],
+  fromAccount: '',
+  toAccount: '',
+  level: null,
+  balancesType: '',
+};
+
+
 export interface TrialBalance {
   command: TrialBalanceCommand;
   entries: TrialBalanceEntry[];
