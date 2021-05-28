@@ -186,9 +186,11 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
 
   private selectFirstItem() {
     setTimeout(() => {
-      this.onChangedEvent(this.items[0]);
-      this.writeValue(this.selectBoxConfig.bindByValue && this.bindValue ?
-                      this.items[0][this.bindValue] : this.items[0]);
+      if (this.items.length > 0) {
+        this.onChangedEvent(this.items[0]);
+        this.writeValue(this.selectBoxConfig.bindByValue && this.bindValue ?
+                        this.items[0][this.bindValue] : this.items[0]);
+      }
     }, 100);
   }
 
