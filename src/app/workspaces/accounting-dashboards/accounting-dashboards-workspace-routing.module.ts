@@ -6,14 +6,17 @@
  */
 
 import { NgModule } from '@angular/core';
+
 import { RouterModule, Routes } from '@angular/router';
 
 import { AccountingDashboardsWorkspaceComponent } from './accounting-dashboards-workspace.component';
 
+import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-balance-main-page.component';
+
 
 const routes: Routes = [
   { path: 'saldos', component: AccountingDashboardsWorkspaceComponent },
-  { path: 'balanzas', component: AccountingDashboardsWorkspaceComponent },
+  { path: 'balanzas', component: TrialBalanceMainPageComponent },
   { path: 'calculo-de-agrupaciones', component: AccountingDashboardsWorkspaceComponent },
   { path: 'indicadores-financieros', component: AccountingDashboardsWorkspaceComponent },
   { path: 'alertas', component: AccountingDashboardsWorkspaceComponent },

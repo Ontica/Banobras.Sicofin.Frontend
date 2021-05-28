@@ -6,10 +6,13 @@
  */
 
 import { NgModule } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
+
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 
 import { SharedModule } from '@app/shared/shared.module';
@@ -18,6 +21,9 @@ import { AccountingDashboardsWorkspaceComponent } from './accounting-dashboards-
 
 import { AccountingDashboardsWorkspaceRoutingModule } from './accounting-dashboards-workspace-routing.module';
 
+import { TrialBalanceModule } from '@app/views/trial-balance/trial-balance.module';
+
+import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-balance-main-page.component';
 
 @NgModule({
 
@@ -30,10 +36,12 @@ import { AccountingDashboardsWorkspaceRoutingModule } from './accounting-dashboa
     SharedModule,
 
     AccountingDashboardsWorkspaceRoutingModule,
+    TrialBalanceModule,
   ],
 
   declarations: [
-    AccountingDashboardsWorkspaceComponent
+    AccountingDashboardsWorkspaceComponent,
+    TrialBalanceMainPageComponent,
   ],
 
   exports: [
