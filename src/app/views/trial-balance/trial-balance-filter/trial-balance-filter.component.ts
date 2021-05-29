@@ -52,6 +52,7 @@ export class TrialBalanceFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAccountsCharts();
+    this.trialBalanceCommand.balancesType = this.balancesTypeList[0].uid;
   }
 
 
@@ -74,13 +75,14 @@ export class TrialBalanceFilterComponent implements OnInit {
         fromDate: this.trialBalanceCommand.fromDate,
         toDate: this.trialBalanceCommand.toDate,
         accountsChartUID: this.trialBalanceCommand.accountsChartUID,
-        ledgers: this.trialBalanceCommand.ledgers
+        ledgers: this.trialBalanceCommand.ledgers,
+        balancesType: this.balancesTypeList[0].uid,
       });
   }
 
 
   onBuildTrialBalanceClicked() {
-    const payload: any = {
+    const payload = {
       trialBalanceCommand: this.trialBalanceCommand
     };
 

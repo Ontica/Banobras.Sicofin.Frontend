@@ -168,11 +168,9 @@
 
           <label>Incluir:</label>
 
-          <emp-ng-select name="balancesType"
-            [config]="{clearable: true}"
+          <emp-ng-select name="balancesType" required
             [(ngModel)]="trialBalanceCommand.balancesType"
-            [items]="balancesTypeList"
-            placeholder="Todas">
+            [items]="balancesTypeList">
           </emp-ng-select>
 
         </div>
