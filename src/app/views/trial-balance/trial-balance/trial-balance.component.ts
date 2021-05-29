@@ -9,6 +9,11 @@ import { Component } from '@angular/core';
 
 import { Assertion } from '@app/core';
 
+import { BalancesDataService } from '@app/data-services';
+
+import { EmptyTrialBalance, getTrialBalanceTypeNameFromUid, TrialBalance,
+         TrialBalanceCommand } from '@app/models';
+
 import { TrialBalanceFilterEventType } from '../trial-balance-filter/trial-balance-filter.component';
 
 @Component({
@@ -25,6 +30,10 @@ export class TrialBalanceComponent {
 
   showFilters = false;
 
+  trialBalance: TrialBalance = EmptyTrialBalance;
+
+  constructor(private balancesDataService: BalancesDataService) { }
+
 
   onAccountsChartFilterEvent(event) {
     switch (event.type as TrialBalanceFilterEventType) {
@@ -32,7 +41,7 @@ export class TrialBalanceComponent {
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
         Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
 
-        console.log('BUILD_TRIAL_BALANCE_CLICKED: ', event.payload.trialBalanceCommand);
+        this.getTrialBalance(event.payload.trialBalanceCommand as TrialBalanceCommand);
 
         return;
 
@@ -40,6 +49,19 @@ export class TrialBalanceComponent {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private getTrialBalance(trialBalanceCommand: TrialBalanceCommand) {
+    this.setSubmitted(true);
+
+    this.balancesDataService.getTrialBalance(trialBalanceCommand)
+      .toPromise()
+      .then(x => {
+        this.trialBalance = x;
+        this.setText(getTrialBalanceTypeNameFromUid(this.trialBalance.command.trialBalanceType));
+      })
+      .finally(() => this.setSubmitted(false));
   }
 
 

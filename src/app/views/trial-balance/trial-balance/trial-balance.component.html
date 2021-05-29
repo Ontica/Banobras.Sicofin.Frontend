@@ -25,6 +25,14 @@
 
     </emp-fa-trial-balance-filter>
 
+    <div [ngStyle]="{'height': 'calc(100% - ' + ( showFilters ? 225 : 110 ) + 'px)' }">
+
+      <emp-fa-trial-balance-table [trialBalance]="trialBalance">
+
+      </emp-fa-trial-balance-table>
+
+    </div>
+
   </div>
 
 </div>

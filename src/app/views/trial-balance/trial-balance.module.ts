@@ -14,7 +14,9 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { TrialBalanceComponent } from './trial-balance/trial-balance.component';
+import { TrialBalanceControlsComponent } from './trial-balance-table/trial-balance-controls.component';
 import { TrialBalanceFilterComponent } from './trial-balance-filter/trial-balance-filter.component';
+import { TrialBalanceTableComponent } from './trial-balance-table/trial-balance-table.component';
 
 @NgModule({
   imports: [
@@ -27,7 +29,9 @@ import { TrialBalanceFilterComponent } from './trial-balance-filter/trial-balanc
   ],
   declarations: [
     TrialBalanceComponent,
+    TrialBalanceControlsComponent,
     TrialBalanceFilterComponent,
+    TrialBalanceTableComponent,
   ],
   exports: [
     TrialBalanceComponent,
