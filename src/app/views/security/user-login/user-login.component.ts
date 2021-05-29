@@ -59,7 +59,7 @@ export class UserLoginComponent implements OnInit {
 
     this.authenticationService.login(this.form.value.userID, this.form.value.password)
       .then(
-        () => this.router.navigate(['/reglas-y-catalogos']),
+        () => this.router.navigate(['/tableros/balanzas']),
         err => this.exceptionMsg = err
       )
       .finally(() => this.submitted = false);
