@@ -5,14 +5,25 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Identifiable } from '@app/core';
-import { AccountDescriptor } from './accounts-chart';
+import { Assertion, Identifiable } from '@app/core';
+
+import { AccountRole } from './accounts-chart';
 
 
 export const TrialBalanceType: Identifiable[] = [
   {uid: 'Traditional', name: 'Balanza tradicional'},
   {uid: 'Valued', name: 'Balanza valorizada'}
 ];
+
+
+export function getTrialBalanceTypeNameFromUid(trialBalanceTypeUid: string): string {
+  const trialBalanceType = TrialBalanceType.filter(x => x.uid === trialBalanceTypeUid);
+  if (trialBalanceType && trialBalanceType.length > 0) {
+    return trialBalanceType[0].name;
+  }
+
+  throw Assertion.assertNoReachThisCode(`Unhandled trial balance type for uid '${trialBalanceTypeUid}'.`);
+}
 
 
 export const BalancesType: Identifiable[] = [
@@ -48,7 +59,7 @@ export const EmptyTrialBalanceCommand: TrialBalanceCommand = {
   sectors: [],
   fromAccount: '',
   toAccount: '',
-  level: null,
+  level: 0,
   balancesType: '',
 };
 
@@ -60,13 +71,23 @@ export interface TrialBalance {
 
 
 export interface TrialBalanceEntry {
-  ledger: Identifiable;
-  currency: Identifiable;
-  account: AccountDescriptor;
-  ledgerAccountId?: number;
-  sector: Identifiable;
+  itemType: string;
+  ledgerUID: string;
+  currencyUID: string;
+  ledgerAccountId: number;
+  accountNumber: string;
+  accountName: string;
+  accountRole: AccountRole;
+  accountLevel: number;
+  sectorCode: string;
   initialBalance: number;
   debit: number;
   credit: number;
   currentBalance: number;
 }
+
+
+export const EmptyTrialBalance: TrialBalance = {
+  command: EmptyTrialBalanceCommand,
+  entries: [],
+};
