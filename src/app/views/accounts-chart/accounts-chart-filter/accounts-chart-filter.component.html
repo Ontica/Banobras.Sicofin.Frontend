@@ -54,7 +54,7 @@
 
         <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
 
-          <button class="btn-base" (click)="toggleFilters()" fxFlex="100%">
+          <button class="btn-base" (click)="showFilters = !showFilters" fxFlex="100%">
             {{showFilters ? 'Ocultar' :'Mostrar'}}
             <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
           </button>

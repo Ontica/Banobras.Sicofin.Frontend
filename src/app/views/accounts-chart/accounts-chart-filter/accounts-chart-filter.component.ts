@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { EventInfo, Identifiable } from '@app/core';
 
@@ -29,10 +29,6 @@ export enum AccountsChartFilterEventType {
 })
 export class AccountsChartFilterComponent implements OnInit {
 
-  @Input() showFilters = false;
-
-  @Output() showFiltersChange = new EventEmitter<boolean>();
-
   @Output() accountsChartFilterEvent = new EventEmitter<EventInfo>();
 
   accountChartSelected: AccountsChartMasterData = null;
@@ -45,18 +41,13 @@ export class AccountsChartFilterComponent implements OnInit {
 
   isLoading = false;
 
+  showFilters = false;
 
   constructor(private accountsChartData: AccountsChartDataService) { }
 
 
   ngOnInit(): void {
     this.loadAccountsCharts();
-  }
-
-
-  toggleFilters() {
-    this.showFilters = !this.showFilters;
-    this.showFiltersChange.emit(this.showFilters);
   }
 
 

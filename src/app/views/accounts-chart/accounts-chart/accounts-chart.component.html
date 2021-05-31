@@ -15,19 +15,20 @@
 
   </div>
 
-  <div class="card-body" [empNgSpinnerHost]="spinner" style="overflow-y: hidden;">
+  <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+    <div fxLayout="column" fxFlexFill>
 
-    <emp-fa-accounts-chart-filter
-      [(showFilters)]="showFilters"
-      (accountsChartFilterEvent)="onAccountsChartFilterEvent($event)">
+      <emp-ng-spinner #spinner [visible]="isLoading">
 
-    </emp-fa-accounts-chart-filter>
+      </emp-ng-spinner>
 
-    <div [ngStyle]="{'height': 'calc(100% - ' + ( showFilters ? 270 : 59 ) + 'px)' }">
+      <emp-fa-accounts-chart-filter fxFlex="none"
+        (accountsChartFilterEvent)="onAccountsChartFilterEvent($event)">
 
-      <emp-fa-accounts-chart-list
+      </emp-fa-accounts-chart-filter>
+
+      <emp-fa-accounts-chart-list fxFlex
         [accountsChart]="accountsChart"
         (accountsChartListEvent)="onAccountsChartListEvent($event)">
 

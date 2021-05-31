@@ -28,8 +28,6 @@ export class TrialBalanceComponent {
 
   submitted = false;
 
-  showFilters = false;
-
   trialBalance: TrialBalance = EmptyTrialBalance;
 
   constructor(private balancesDataService: BalancesDataService) { }

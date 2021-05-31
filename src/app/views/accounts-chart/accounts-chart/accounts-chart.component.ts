@@ -35,8 +35,6 @@ export class AccountsChartComponent {
 
   submitted = false;
 
-  showFilters = false;
-
   accountsChart: AccountsChart = EmptyAccountsChart;
 
   selectedAccountChartUID = '';
