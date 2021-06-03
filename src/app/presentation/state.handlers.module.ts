@@ -11,12 +11,20 @@ import { STATE_HANDLERS } from '@app/core/presentation/presentation.state';
 
 import { MainLayoutPresentationHandler } from './main-layout/main-layout.presentation.handler';
 
+import { AccountChartPresentationHandler } from './financial-accounting/account-chart.presentation.handler';
+
+import { VoucherPresentationHandler } from './financial-accounting/voucher.presentation.handler';
+
 @NgModule({
 
   providers: [
     MainLayoutPresentationHandler,
+    AccountChartPresentationHandler,
+    VoucherPresentationHandler,
 
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: AccountChartPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: VoucherPresentationHandler, multi: true },
   ]
 
 })
