@@ -1,0 +1,71 @@
+<div class="list-header" *ngIf="displayHeader">
+
+  <div class="list-header-container">
+
+    <div fxLayout="row" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px">
+      <div fxflex="20px">
+        <div *ngIf="voucherList.length > 0">
+
+          <emp-ng-check-box-all
+            [(selection)]="selection"
+            [values]="voucherList">
+          </emp-ng-check-box-all>
+
+        </div>
+      </div>
+
+      <div fxFlex="15%"> No. Póliza </div>
+
+      <div fxFlex="15%"> Transacción </div>
+
+      <div fxFlex="15%"> Póliza </div>
+
+      <div fxFlex> Concepto</div>
+
+      <div fxFlex="80px"> Estado </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" *ngIf="!displayHeader">
+
+  <div fxflex="20px">
+    <mat-checkbox
+      [checked]="selected"
+      (click)="$event.stopPropagation()"
+      (change)="onClickVoucherCheck()">
+    </mat-checkbox>
+  </div>
+
+  <div fxFlex="15%">
+    <div class="list-item-text-highlight nowrap" (click)="onVoucherClicked()">
+      <strong><a>{{voucher.number}}</a></strong>
+    </div>
+    <div><strong>{{voucher.ledgerName}}</strong></div>
+    <div>{{voucher.sourceName}}</div>
+  </div>
+
+  <div fxFlex="15%">
+    <div class="list-item-text-highlight nowrap">{{voucher?.transactionTypeName}}</div>
+    <div><strong>{{voucher?.recordingDate | dateTimeFormat}}</strong></div>
+    <div>{{voucher.elaboratedBy}}</div>
+  </div>
+
+  <div fxFlex="15%">
+    <div class="list-item-text-highlight nowrap">{{voucher.voucherTypeName}}</div>
+    <div><strong>{{voucher?.accountingDate | dateTimeFormat}}</strong></div>
+    <div>{{voucher.authorizedBy}}</div>
+  </div>
+
+  <div fxFlex>
+    <div>{{voucher.concept}}</div>
+  </div>
+
+  <div fxFlex="80px">
+    <div>{{voucher.status}}</div>
+  </div>
+
+</div>

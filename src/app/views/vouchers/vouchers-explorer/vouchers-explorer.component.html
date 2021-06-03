@@ -1,0 +1,55 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      {{title}}
+      <div class="card-hint" empNgProgressText
+           loadingText="Cargando pólizas"
+           [finalText]="hintText"
+           [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+    <div class="card-header-options">
+
+      <button class="btn"
+        (click)="onClickImportVouchers()">
+        Importar pólizas
+      </button>
+
+      <button class="btn-action" fxFlexOffset="1.5rem"
+        (click)="onClickCreateVoucher()">
+        Crear pólizas
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div fxLayout="column" fxFlexFill>
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <emp-fa-voucher-filter fxFlex="none"
+        [voucherFilter]="filter"
+        (voucherFilterEvent)="onChangeFilter($event)">
+
+      </emp-fa-voucher-filter>
+
+
+      <emp-fa-voucher-list fxFlex
+        [voucherList]="voucherList"
+        [selectedVoucher]="selectedVoucher"
+        (voucherListEvent)="onVoucherListEvent($event)">
+
+      </emp-fa-voucher-list>
+
+  </div>
+
+</div>

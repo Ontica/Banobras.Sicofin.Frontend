@@ -1,0 +1,84 @@
+
+<div fxLayout="column" fxFlexFill>
+
+  <div #voucherControlsContainer *ngIf="voucherList.length > 0" fxFlex="none">
+
+    <mat-divider>
+
+    </mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="list-selection-header">
+
+      <ng-container *ngIf="selection.selected.length > 0">
+
+        <div fxFlex="none">
+
+          <span class="text-small-text">
+
+            ¿Qué debo hacer con
+            <span *ngIf="selection.selected.length === 1">la póliza?</span>
+            <span *ngIf="selection.selected.length > 1">las {{selection.selected.length}} pólizas?</span>
+
+          </span>
+
+        </div>
+
+        <div fxFlex>
+
+          <button class="btn" (click)="onClickVouchersSelectedOptions()">
+            Cambiar estado
+          </button>
+
+        </div>
+
+      </ng-container>
+
+      <div fxFlex fxLayoutAlign="end">
+
+        <button class="btn"> Exportar </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div #voucherHeaderContainer fxFlex="none">
+
+    <emp-fa-voucher-list-item
+      [displayHeader]="true"
+      [selection]="selection"
+      [voucherList]="voucherList">
+
+    </emp-fa-voucher-list-item>
+
+  </div>
+
+  <div #voucherListContainer fxFlex>
+
+    <cdk-virtual-scroll-viewport itemSize="25" style="height: 100%">
+
+        <div *ngFor="let voucher of voucherList"
+          class="list-item" [class.list-item-selected]="isSelected(voucher)">
+
+          <div class="list-item-container">
+
+            <emp-fa-voucher-list-item
+              [voucher]="voucher"
+              [selected]="selection.isSelected(voucher)"
+              (voucherListItemEvent)="onVoucherListItemEvent($event)">
+            </emp-fa-voucher-list-item>
+
+          </div>
+
+        </div>
+
+        <div *ngIf="voucherList.length === 0" class="text-not-found">
+          {{textNotFound}}
+        </div>
+
+    </cdk-virtual-scroll-viewport>
+
+  </div>
+
+</div>

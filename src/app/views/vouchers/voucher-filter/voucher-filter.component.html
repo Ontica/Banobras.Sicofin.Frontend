@@ -1,0 +1,218 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  (keydown.enter)="$event.preventDefault()">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+
+    <div fxLayout="row">
+
+      <div fxFlex="50">
+
+        <label>Catálogo:</label>
+
+        <emp-ng-select name="accountsChartUID" required
+          [config]="{selectFirst: true}"
+          [(ngModel)]="voucherFilter.accountsChartUID"
+          [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
+          (changes)="onAccountChartChanges($event)">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="start end">
+
+        <div class="input-icon-container" [style.width.%]="100" [style.marginBottom.px]="4">
+
+          <input type="text" class="text-box" name="keywords"
+          placeholder="Buscar pólizas..."
+          [(ngModel)]="voucherFilter.keywords"
+          (keyup.enter)="onSearchVoucherClicked()"
+          (keyup.escape)="voucherFilter.keywords = ''">
+
+        </div>
+
+      </div>
+
+      <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+        <button class="btn-icon-action" title="Buscar"
+          [disabled]="form.invalid"
+          (click)="onSearchVoucherClicked()">
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+      <ng-container #filterOptionsSection>
+
+        <mat-divider vertical="true" [style.marginTop.px]="12"
+          [style.marginRight.px]="8" [style.height.px]="28">
+
+        </mat-divider>
+
+        <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+          <button class="btn-base" (click)="showFilters = !showFilters" fxFlex="100%">
+            {{showFilters ? 'Ocultar' :'Mostrar'}}
+            <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+          </button>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+
+      <div fxLayout="row" [style.marginBottom.px]="8">
+
+        <div fxFlex="50">
+
+          <label>Grupo de contabilidades:</label>
+
+          <emp-ng-select name="ledgerGroup"
+            [config]="{clearable: true}"
+            [(ngModel)]="voucherFilter.ledgersGroupUID"
+            [items]="[]"
+            placeholder="Todos">
+          </emp-ng-select>
+
+        </div>
+
+        <div fxFlex="50">
+
+          <label>Contabilidad:</label>
+
+          <emp-ng-select name="ledger"
+            [config]="{clearable: true}"
+            [(ngModel)]="voucherFilter.ledgerUID"
+            [items]="accountChartSelected?.ledgers"
+            bindLabel="fullName"
+            placeholder="Todas">
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+    <div #filterSection *ngIf="showFilters" [@expandCollapse]>
+
+      <mat-divider [style.marginBottom.px]="8" [style.marginRight.px]="8">
+
+      </mat-divider>
+
+      <div fxLayout="row" [style.marginBottom.px]="8">
+
+        <div fxFlex="25">
+
+          <label>Con la cuenta:</label>
+
+          <input type="text" class="text-box" name="accountKeywords"
+            [(ngModel)]="voucherFilter.accountKeywords"
+            (keyup.escape)="voucherFilter.accountKeywords = ''">
+
+        </div>
+
+        <div fxFlex="25">
+
+          <label>Con el auxiliar:</label>
+
+          <input type="text" class="text-box" name="subledgerAccountKeywords"
+            [(ngModel)]="voucherFilter.subledgerAccountKeywords"
+            (keyup.escape)="voucherFilter.subledgerAccountKeywords = ''">
+
+        </div>
+
+        <ng-container #initialPeriodSection>
+
+          <div fxFlex="126px">
+
+            <label>Del día:</label>
+
+            <emp-ng-datepicker name="fromDate"
+              [(ngModel)]="voucherFilter.fromDate">
+
+            </emp-ng-datepicker>
+
+          </div>
+
+          <div fxFlex="126px">
+
+            <label>Al día:</label>
+
+            <emp-ng-datepicker name="toDate"
+              [(ngModel)]="voucherFilter.toDate">
+
+            </emp-ng-datepicker>
+
+          </div>
+
+          <div fxFlex fxLayoutAlign="start end">
+
+            <emp-ng-select name="dateSearchField"
+              [config]="{clearable: true}"
+              [(ngModel)]="voucherFilter.dateSearchField"
+              [items]="dateSearchFieldList"
+              [fxFlex]="100">
+            </emp-ng-select>
+
+          </div>
+
+        </ng-container>
+
+      </div>
+
+      <div fxLayout="row" [style.marginBottom.px]="8">
+
+        <div fxFlex="50">
+
+          <label>Tipo de transacción:</label>
+
+          <emp-ng-select name="transactionTypeUID"
+            [config]="{clearable: true}"
+            [(ngModel)]="voucherFilter.transactionTypeUID"
+            [items]="transactionTypesList"
+            placeholder="Todos">
+          </emp-ng-select>
+
+        </div>
+
+        <div fxFlex>
+
+          <label>Tipo de póliza:</label>
+
+          <emp-ng-select  name="voucherTypeUID"
+            [config]="{clearable: true}"
+            [(ngModel)]="voucherFilter.voucherTypeUID"
+            [items]="voucherTypesList"
+            placeholder="Todos">
+          </emp-ng-select>
+
+        </div>
+
+        <ng-container #clearFilterSection>
+
+          <mat-divider vertical="true" [style.marginTop.px]="12"
+            [style.marginRight.px]="8" [style.height.px]="28">
+
+          </mat-divider>
+
+          <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+            <button class="btn-base" (click)="onClearFilters()" fxFlex="100%">
+              Limpiar
+              <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+            </button>
+
+          </div>
+
+        </ng-container>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
