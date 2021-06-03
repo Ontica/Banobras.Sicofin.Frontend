@@ -15,8 +15,8 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedModule } from '@app/shared/shared.module';
 
 import { AccountingOperationsWorkspaceComponent } from './accounting-operations-workspace.component';
-
 import { AccountingOperationsWorkspaceRoutingModule } from './accounting-operations-workspace-routing.module';
+import { VouchersModule } from '@app/views/vouchers/vouchers.module';
 
 
 @NgModule({
@@ -30,6 +30,7 @@ import { AccountingOperationsWorkspaceRoutingModule } from './accounting-operati
     SharedModule,
 
     AccountingOperationsWorkspaceRoutingModule,
+    VouchersModule,
   ],
 
   declarations: [

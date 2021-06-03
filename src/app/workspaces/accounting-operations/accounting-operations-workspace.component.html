@@ -1,13 +1,39 @@
-<emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+<emp-ng-spinner #spinner [visible]="isLoadingVoucher"></emp-ng-spinner>
 
 <div class="explorer" fxLayoutGap="32px">
 
   <div class="primary">
 
+    <emp-fa-vouchers-explorer
+      title="Explorador de pólizas"
+      [filter]="filter"
+      [voucherList]="voucherList"
+      [selectedVoucher]="selectedVoucher"
+      [isLoading]="isLoading"
+      (vouchersExplorerEvent)="onVouchersExplorerEvent($event)">
+    </emp-fa-vouchers-explorer>
+
   </div>
 
-  <div class="secondary">
+  <div class="secondary" *ngIf="displayVoucherTabbedView">
 
   </div>
 
 </div>
+
+<emp-ng-modal-window *ngIf="displayOptionModalSelected"
+                     [config]="{width:'920px'}">
+
+  <ng-container [ngSwitch]="displayOptionModalSelected">
+
+    <div *ngSwitchCase="'VoucherCreator'">
+
+    </div>
+
+    <div *ngSwitchCase="'VouchersImporter'">
+
+    </div>
+
+  </ng-container>
+
+</emp-ng-modal-window>
