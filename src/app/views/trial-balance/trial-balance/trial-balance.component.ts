@@ -33,7 +33,7 @@ export class TrialBalanceComponent {
   constructor(private balancesDataService: BalancesDataService) { }
 
 
-  onAccountsChartFilterEvent(event) {
+  onTrialBalanceFilterEvent(event) {
     switch (event.type as TrialBalanceFilterEventType) {
 
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:

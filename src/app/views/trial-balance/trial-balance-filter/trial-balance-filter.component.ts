@@ -5,14 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { AccountsChartDataService } from '@app/data-services/accounts-chart.data.service';
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountsChartMasterData, BalancesType, EmptyTrialBalanceCommand, getLevelsListFromPattern,
          TrialBalanceCommand, TrialBalanceType} from '@app/models';
+
+import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
@@ -25,9 +27,9 @@ export enum TrialBalanceFilterEventType {
   templateUrl: './trial-balance-filter.component.html',
   animations: [expandCollapse],
 })
-export class TrialBalanceFilterComponent implements OnInit {
+export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
-  @Output() accountsChartFilterEvent = new EventEmitter<EventInfo>();
+  @Output() trialBalanceFilterEvent = new EventEmitter<EventInfo>();
 
   accountChartSelected: AccountsChartMasterData = null;
 
@@ -45,12 +47,21 @@ export class TrialBalanceFilterComponent implements OnInit {
 
   showFilters = false;
 
-  constructor(private accountsChartData: AccountsChartDataService) { }
+  helper: SubscriptionHelper;
+
+  constructor(private uiLayer: PresentationLayer) {
+    this.helper = uiLayer.createSubscriptionHelper();
+  }
 
 
   ngOnInit(): void {
     this.loadAccountsCharts();
     this.trialBalanceCommand.balancesType = this.balancesTypeList[0].uid;
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -84,12 +95,13 @@ export class TrialBalanceFilterComponent implements OnInit {
 
   private loadAccountsCharts() {
     this.isLoading = true;
-    this.accountsChartData.getAccountsChartsMasterData()
+
+    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
       .subscribe(x => {
         this.accountsChartMasterDataList = x;
         this.setLevelsList();
-      })
-      .add(() => this.isLoading = false);
+        this.isLoading = false;
+      });
   }
 
 
@@ -122,7 +134,7 @@ export class TrialBalanceFilterComponent implements OnInit {
       payload
     };
 
-    this.accountsChartFilterEvent.emit(event);
+    this.trialBalanceFilterEvent.emit(event);
   }
 
 }

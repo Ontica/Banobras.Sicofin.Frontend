@@ -5,14 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { AccountsChartDataService } from '@app/data-services';
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountsChartMasterData, AccountsSearchCommand, EmptyAccountsSearchCommand,
          getLevelsListFromPattern } from '@app/models';
+
+import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
@@ -27,7 +29,7 @@ export enum AccountsChartFilterEventType {
   templateUrl: './accounts-chart-filter.component.html',
   animations: [expandCollapse],
 })
-export class AccountsChartFilterComponent implements OnInit {
+export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
   @Output() accountsChartFilterEvent = new EventEmitter<EventInfo>();
 
@@ -43,11 +45,20 @@ export class AccountsChartFilterComponent implements OnInit {
 
   showFilters = false;
 
-  constructor(private accountsChartData: AccountsChartDataService) { }
+  helper: SubscriptionHelper;
+
+  constructor(private uiLayer: PresentationLayer) {
+    this.helper = uiLayer.createSubscriptionHelper();
+  }
 
 
   ngOnInit(): void {
     this.loadAccountsCharts();
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -80,12 +91,13 @@ export class AccountsChartFilterComponent implements OnInit {
 
   private loadAccountsCharts() {
     this.isLoading = true;
-    this.accountsChartData.getAccountsChartsMasterData()
+
+    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
       .subscribe(x => {
         this.accountsChartMasterDataList = x;
         this.setDefaultAccountChartSelected();
-      })
-      .add(() => this.isLoading = false);
+        this.isLoading = false;
+      });
   }
 
 
