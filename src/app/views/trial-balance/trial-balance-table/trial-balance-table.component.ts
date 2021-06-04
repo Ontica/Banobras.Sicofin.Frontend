@@ -52,16 +52,22 @@ export class TrialBalanceTableComponent implements OnChanges {
     this.filter = '';
     this.indexSelected = '';
 
-    this.dataSource = new TableVirtualScrollDataSource(this.trialBalance.entries);
-    this.dataSource.filterPredicate = this.getFilterPredicate();
+    this.initDataSource();
 
     this.scrollToTop();
-    this.emitItemsDisplayed()
+    this.emitItemsDisplayed();
   }
 
 
   get displayTrialBalanceTable() {
     return !!this.trialBalance.command.trialBalanceType;
+  }
+
+
+  initDataSource() {
+    this.dataSource = new TableVirtualScrollDataSource(this.trialBalance.entries);
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+    // TODO: set titles of columns
   }
 
 
@@ -100,7 +106,7 @@ export class TrialBalanceTableComponent implements OnChanges {
   private applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
     this.scrollToTop();
-    this.emitItemsDisplayed()
+    this.emitItemsDisplayed();
   }
 
 

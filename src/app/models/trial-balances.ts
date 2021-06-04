@@ -10,14 +10,15 @@ import { Assertion, Identifiable } from '@app/core';
 import { AccountRole } from './accounts-chart';
 
 
-export const TrialBalanceType: Identifiable[] = [
+export const TrialBalanceTypeList: Identifiable[] = [
   {uid: 'Traditional', name: 'Balanza tradicional'},
-  {uid: 'Valued', name: 'Balanza valorizada'}
+  {uid: 'BalancesByAccount', name: 'Saldo por cuenta'},
+  {uid: 'BalancesBySubledgerAccount', name: 'Saldo por auxiliar'},
 ];
 
 
 export function getTrialBalanceTypeNameFromUid(trialBalanceTypeUid: string): string {
-  const trialBalanceType = TrialBalanceType.filter(x => x.uid === trialBalanceTypeUid);
+  const trialBalanceType = TrialBalanceTypeList.filter(x => x.uid === trialBalanceTypeUid);
   if (trialBalanceType && trialBalanceType.length > 0) {
     return trialBalanceType[0].name;
   }
@@ -46,6 +47,10 @@ export interface TrialBalanceCommand {
   toAccount?: string;
   level?: number;
   balancesType?: string;
+  subledgerAccount?: string;
+  exchangeRateDate?: string;
+  exchangeRateTypeUID?: string;
+  valuateToCurrrencyUID?: string;
 }
 
 
@@ -61,6 +66,10 @@ export const EmptyTrialBalanceCommand: TrialBalanceCommand = {
   toAccount: '',
   level: 0,
   balancesType: '',
+  subledgerAccount: '',
+  exchangeRateDate: '',
+  exchangeRateTypeUID: '',
+  valuateToCurrrencyUID: '',
 };
 
 

@@ -42,16 +42,17 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          [ngClass]="{'item-summary': row['itemType'] === 'BalanceSummary'}"></tr>
 
       </table>
 
       <div *ngIf="!displayTrialBalanceTable" class="text-not-found">
-        No se ha invocado la búsqueda de cuentas.
+        No se ha invocado la consulta.
       </div>
 
       <div *ngIf="displayTrialBalanceTable && trialBalance.entries.length === 0" class="text-not-found">
-        No se encontraron cuentas con el filtro proporcionado.
+        No se encontraron registros con el filtro proporcionado.
       </div>
 
     </cdk-virtual-scroll-viewport>

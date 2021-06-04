@@ -7,7 +7,7 @@
 
       <div fxFlex="50">
 
-        <label>Tipo de balanza:</label>
+        <label>Tipo de consulta:</label>
 
         <emp-ng-select name="trialBalanceType" required
           [config]="{selectFirst: true}"
@@ -18,13 +18,6 @@
       </div>
 
       <ng-container #initialPeriodSection>
-
-        <!-- <div fxFlex="85px" fxLayoutAlign="end center" [style.marginTop.px]="12" [style.height.px]="28">
-
-          <label>Periodo inicial:</label>
-
-        </div> -->
-
 
         <div fxFlex="126px">
 
@@ -125,85 +118,129 @@
 
       </mat-divider>
 
-      <div fxLayout="row" [style.marginBottom.px]="8">
+      <ng-container *ngIf="isTrialBalance">
 
-        <div fxFlex="25">
+        <div fxLayout="row" [style.marginBottom.px]="8">
 
-          <label>De la cuenta:</label>
+          <div fxFlex="25">
 
-          <input type="text" class="text-box" name="fromAccount"
-            [(ngModel)]="trialBalanceCommand.fromAccount"
-            (keyup.escape)="trialBalanceCommand.fromAccount = ''">
+            <label>De la cuenta:</label>
 
-        </div>
+            <input type="text" class="text-box" name="fromAccount"
+              [(ngModel)]="trialBalanceCommand.fromAccount"
+              (keyup.escape)="trialBalanceCommand.fromAccount = ''">
 
-        <div fxFlex="25">
+          </div>
 
-          <label>A la cuenta:</label>
+          <div fxFlex="25">
 
-          <input type="text" class="text-box" name="toAccount"
-            [(ngModel)]="trialBalanceCommand.toAccount"
-            (keyup.escape)="trialBalanceCommand.toAccount = ''">
+            <label>A la cuenta:</label>
 
-        </div>
+            <input type="text" class="text-box" name="toAccount"
+              [(ngModel)]="trialBalanceCommand.toAccount"
+              (keyup.escape)="trialBalanceCommand.toAccount = ''">
 
-        <div fxFlex="50">
+          </div>
 
-          <label>Nivel:</label>
+          <div fxFlex="50">
 
-          <emp-ng-select name="level"
-            [config]="{clearable: true}"
-            [(ngModel)]="trialBalanceCommand.level"
-            [items]="levelsList"
-            placeholder="Todos">
-          </emp-ng-select>
+            <label>Nivel:</label>
 
-        </div>
-
-      </div>
-
-      <div fxLayout="row" [style.marginBottom.px]="8">
-
-        <div fxFlex="50">
-
-          <label>Incluir:</label>
-
-          <emp-ng-select name="balancesType" required
-            [(ngModel)]="trialBalanceCommand.balancesType"
-            [items]="balancesTypeList">
-          </emp-ng-select>
-
-        </div>
-
-        <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
-
-          <mat-checkbox name="consolidated"
-            [(ngModel)]="trialBalanceCommand.consolidated"
-            (click)="$event.stopPropagation">
-            Imprimir en cascada (sin consolidar)
-          </mat-checkbox>
-
-        </div>
-
-        <div #clearFilterSection>
-
-          <mat-divider vertical="true" [style.marginTop.px]="12"
-            [style.marginRight.px]="8" [style.height.px]="28">
-
-          </mat-divider>
-
-          <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
-
-            <button class="btn-base" fxFlex="100%" (click)="onClearFilters()">
-              Limpiar
-              <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
-            </button>
+            <emp-ng-select name="level"
+              [config]="{clearable: true}"
+              [(ngModel)]="trialBalanceCommand.level"
+              [items]="levelsList"
+              placeholder="Todos">
+            </emp-ng-select>
 
           </div>
 
         </div>
 
-      </div>
+        <div fxLayout="row" [style.marginBottom.px]="8">
+
+          <div fxFlex="50">
+
+            <label>Incluir:</label>
+
+            <emp-ng-select name="balancesType" required
+              [(ngModel)]="trialBalanceCommand.balancesType"
+              [items]="balancesTypeList">
+            </emp-ng-select>
+
+          </div>
+
+          <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+
+            <mat-checkbox name="consolidated"
+              [(ngModel)]="trialBalanceCommand.consolidated"
+              (click)="$event.stopPropagation">
+              Imprimir en cascada (sin consolidar)
+            </mat-checkbox>
+
+          </div>
+
+          <div #clearFilterSection>
+
+            <mat-divider vertical="true" [style.marginTop.px]="12"
+              [style.marginRight.px]="8" [style.height.px]="28">
+
+            </mat-divider>
+
+            <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+              <button class="btn-base" fxFlex="100%" (click)="onClearFilters()">
+                Limpiar
+                <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+
+      <ng-container *ngIf="isBalancesByAccount">
+
+        <div fxLayout="row" [style.marginBottom.px]="8">
+
+          <div fxFlex="25">
+
+            <label>Con la cuenta:</label>
+
+            <input type="text" class="text-box" name="withAccount"
+              [(ngModel)]="trialBalanceCommand.fromAccount"
+              (keyup.escape)="trialBalanceCommand.fromAccount = ''">
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+
+      <ng-container *ngIf="isBalancesBySubledgerAccount">
+
+        <div fxLayout="row" [style.marginBottom.px]="8">
+
+          <div fxFlex="25">
+
+            <label>Con el auxiliar:</label>
+
+            <input type="text" class="text-box" name="withSubledgerAccount"
+              [(ngModel)]="trialBalanceCommand.subledgerAccount"
+              (keyup.escape)="trialBalanceCommand.subledgerAccount = ''">
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+      <!-- TODO: add exchange-rate component for all balance types -->
 
     </div>
 

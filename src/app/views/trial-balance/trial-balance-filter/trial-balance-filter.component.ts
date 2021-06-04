@@ -12,7 +12,7 @@ import { EventInfo, Identifiable } from '@app/core';
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountsChartMasterData, BalancesType, EmptyTrialBalanceCommand, getLevelsListFromPattern,
-         TrialBalanceCommand, TrialBalanceType} from '@app/models';
+         TrialBalanceCommand, TrialBalanceTypeList} from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -37,7 +37,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   trialBalanceCommand: TrialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand);
 
-  trialBalanceTypeList: Identifiable[] = TrialBalanceType;
+  trialBalanceTypeList: Identifiable[] = TrialBalanceTypeList;
 
   levelsList: Identifiable[] = [];
 
@@ -51,6 +51,19 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   constructor(private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
+  }
+
+
+  get isTrialBalance() {
+    return ['Traditional'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+  get isBalancesByAccount() {
+    return ['BalancesByAccount'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+  get isBalancesBySubledgerAccount() {
+    return['BalancesBySubledgerAccount'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -86,10 +99,33 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   onBuildTrialBalanceClicked() {
     const payload = {
-      trialBalanceCommand: this.trialBalanceCommand
+      trialBalanceCommand: this.getTrialBalanceCommand()
     };
 
     this.sendEvent(TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED, payload);
+  }
+
+
+  private getTrialBalanceCommand(): TrialBalanceCommand {
+
+    const data: TrialBalanceCommand = {
+      balancesType: this.trialBalanceCommand.balancesType,
+      trialBalanceType: this.trialBalanceCommand.trialBalanceType,
+      accountsChartUID: this.trialBalanceCommand.accountsChartUID,
+      fromDate: this.trialBalanceCommand.fromDate,
+      toDate: this.trialBalanceCommand.toDate,
+      consolidated: this.isTrialBalance ? this.trialBalanceCommand.consolidated : false,
+      ledgers: this.isTrialBalance ? this.trialBalanceCommand.ledgers : [],
+      sectors: this.isTrialBalance ? this.trialBalanceCommand.sectors : [],
+      fromAccount: this.isTrialBalance || this.isBalancesByAccount ?
+        this.trialBalanceCommand.fromAccount : '',
+      toAccount: this.isTrialBalance ? this.trialBalanceCommand.toAccount : '',
+      level: this.isTrialBalance ? this.trialBalanceCommand.level : 0,
+      subledgerAccount: this.isBalancesBySubledgerAccount ?
+        this.trialBalanceCommand.subledgerAccount : '',
+    };
+
+    return data;
   }
 
 

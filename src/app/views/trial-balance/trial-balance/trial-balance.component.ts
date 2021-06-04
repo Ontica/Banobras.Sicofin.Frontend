@@ -70,7 +70,7 @@ export class TrialBalanceComponent {
 
   private setText(itemsDisplayed?: number) {
 
-    if(!this.trialBalance.command.trialBalanceType) {
+    if (!this.trialBalance.command.trialBalanceType) {
       this.cardHint =  'Selecciona los filtros';
       return;
     }
