@@ -270,6 +270,10 @@ table.mat-table {
   }
 }
 
+.mat-table-sticky {
+  transform: translateZ(0);
+}
+
 .scrollable-container {
   overflow-y: auto;
   max-height: calc(100% - 2px);
@@ -280,6 +284,11 @@ table.mat-table {
     width: 100%;
     max-width: 100%;
   }
+}
+
+cdk-virtual-scroll-viewport {
+  height: 100%;
+  width: 100%;
 }
 
 //
