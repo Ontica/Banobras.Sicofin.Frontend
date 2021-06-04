@@ -15,12 +15,11 @@ import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-b
 
 
 const routes: Routes = [
-  { path: 'saldos', component: AccountingDashboardsWorkspaceComponent },
-  { path: 'balanzas', component: TrialBalanceMainPageComponent },
+  { path: 'saldos-y-balanzas', component: TrialBalanceMainPageComponent },
   { path: 'calculo-de-agrupaciones', component: AccountingDashboardsWorkspaceComponent },
   { path: 'indicadores-financieros', component: AccountingDashboardsWorkspaceComponent },
   { path: 'alertas', component: AccountingDashboardsWorkspaceComponent },
-  { path: '', redirectTo: 'saldos', pathMatch: 'full' }
+  { path: '', redirectTo: 'saldos-y-balanzas', pathMatch: 'full' }
 ];
 
 

@@ -59,7 +59,7 @@ export class UserLoginComponent implements OnInit {
 
     this.authenticationService.login(this.form.value.userID, this.form.value.password)
       .then(
-        () => this.router.navigate(['/operacion-contable/mis-volantes-pendientes']),
+        () => this.router.navigate(['/tableros/saldos-y-balanzas']),
         err => this.exceptionMsg = err
       )
       .finally(() => this.submitted = false);
