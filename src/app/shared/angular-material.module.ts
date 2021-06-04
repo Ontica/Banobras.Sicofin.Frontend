@@ -31,6 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 
 import {
   MomentDateAdapter,
@@ -46,7 +47,6 @@ import {
 
 
 import * as moment from 'moment';
-
 
 const APP_DEFAULT_DATE_LOCAL = 'es-MX';
 
@@ -109,6 +109,7 @@ export const DATE_FORMATS = {
     MatProgressBarModule,
     MatSliderModule,
     MatSnackBarModule,
+    TableVirtualScrollModule,
   ],
 
   exports: [
@@ -137,6 +138,7 @@ export const DATE_FORMATS = {
     MatProgressBarModule,
     MatSliderModule,
     MatSnackBarModule,
+    TableVirtualScrollModule,
   ],
 
   providers: [
