@@ -29,7 +29,8 @@
       </emp-fa-trial-balance-filter>
 
       <emp-fa-trial-balance-table fxFlex
-        [trialBalance]="trialBalance">
+        [trialBalance]="trialBalance"
+        (itemsDisplayed)="onItemsDisplayedChanged($event)">
 
       </emp-fa-trial-balance-table>
 

@@ -7,11 +7,15 @@
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { ChangeDetectionStrategy, Component, Input, OnChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 
-import { MatTableDataSource } from '@angular/material/table';
+import { EventInfo } from '@app/core';
 
 import { EmptyTrialBalance, TrialBalance, TrialBalanceEntry } from '@app/models';
+
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+
+import { TrialBalanceControlsEventType } from './trial-balance-controls.component';
 
 @Component({
   selector: 'emp-fa-trial-balance-table',
@@ -23,6 +27,8 @@ export class TrialBalanceTableComponent implements OnChanges {
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   @Input() trialBalance: TrialBalance = EmptyTrialBalance;
+
+  @Output() itemsDisplayed = new EventEmitter<number>();
 
   columns = [
     {field: 'accountNumber',  title: 'Cuenta',         type: 'text-nowrap'},
@@ -36,11 +42,21 @@ export class TrialBalanceTableComponent implements OnChanges {
 
   displayedColumns = this.columns.map(column => column.field);
 
-  dataSource: MatTableDataSource<TrialBalanceEntry>;
+  dataSource: TableVirtualScrollDataSource<TrialBalanceEntry>;
+
+  filter = '';
+
+  indexSelected = '';
 
   ngOnChanges(): void {
+    this.filter = '';
+    this.indexSelected = '';
+
+    this.dataSource = new TableVirtualScrollDataSource(this.trialBalance.entries);
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+
     this.scrollToTop();
-    this.dataSource = new MatTableDataSource(this.trialBalance.entries);
+    this.emitItemsDisplayed()
   }
 
 
@@ -49,10 +65,54 @@ export class TrialBalanceTableComponent implements OnChanges {
   }
 
 
+  onTrialBalanceControlsEvent(event: EventInfo) {
+   switch (event.type as TrialBalanceControlsEventType) {
+
+      case TrialBalanceControlsEventType.FILTER_CHANGED:
+
+        this.filter = event.payload.filter as string;
+
+        this.applyFilter(this.filter);
+
+        return;
+
+      case TrialBalanceControlsEventType.EXPORT_BUTTON_CLICKED:
+
+        console.log('EXPORT_BUTTON_CLICKED');
+
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  private getFilterPredicate() {
+    return (row: TrialBalanceEntry, filters: string) => (
+      this.columns.filter(x => x.type !== 'decimal' &&
+                               row[x.field].toLowerCase().includes(filters)).length > 0
+    );
+  }
+
+
+  private applyFilter(value: string) {
+    this.dataSource.filter = value.trim().toLowerCase();
+    this.scrollToTop();
+    this.emitItemsDisplayed()
+  }
+
+
   private scrollToTop() {
     if (this.virtualScroll) {
-      this.virtualScroll.scrollToIndex(0);
+      this.virtualScroll.scrollToIndex(-1);
     }
+  }
+
+
+  private emitItemsDisplayed() {
+    this.itemsDisplayed.emit(this.dataSource.filteredData.length);
   }
 
 }

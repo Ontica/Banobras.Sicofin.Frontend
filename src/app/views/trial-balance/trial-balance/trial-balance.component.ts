@@ -50,6 +50,11 @@ export class TrialBalanceComponent {
   }
 
 
+  onItemsDisplayedChanged(items) {
+    setTimeout(() => this.setText(items));
+  }
+
+
   private getTrialBalance(trialBalanceCommand: TrialBalanceCommand) {
     this.setSubmitted(true);
 
@@ -57,14 +62,26 @@ export class TrialBalanceComponent {
       .toPromise()
       .then(x => {
         this.trialBalance = x;
-        this.setText(getTrialBalanceTypeNameFromUid(this.trialBalance.command.trialBalanceType));
+        this.setText();
       })
       .finally(() => this.setSubmitted(false));
   }
 
 
-  private setText(trialBalanceTypeName) {
-    this.cardHint = trialBalanceTypeName ?? 'Selecciona los filtros';
+  private setText(itemsDisplayed?: number) {
+
+    if(!this.trialBalance.command.trialBalanceType) {
+      this.cardHint =  'Selecciona los filtros';
+      return;
+    }
+
+    const trialBalanceTypeName = getTrialBalanceTypeNameFromUid(this.trialBalance.command.trialBalanceType);
+
+    this.cardHint = trialBalanceTypeName;
+
+    this.cardHint += itemsDisplayed >= 0 ?
+      ` - ${itemsDisplayed} de ${this.trialBalance.entries.length} registros mostrados` :
+      ` - ${this.trialBalance.entries.length} registros encontrados`;
   }
 
 
