@@ -1,7 +1,7 @@
 
 <div fxLayout="column" fxFlexFill>
 
-  <div #voucherControlsContainer *ngIf="voucherList.length > 0" fxFlex="none">
+  <div #controlsContainer *ngIf="voucherList.length > 0" fxFlex="none">
 
     <mat-divider>
 
@@ -43,7 +43,7 @@
 
   </div>
 
-  <div #voucherHeaderContainer fxFlex="none">
+  <div #headerContainer fxFlex="none">
 
     <emp-fa-voucher-list-item
       [displayHeader]="true"
@@ -54,9 +54,9 @@
 
   </div>
 
-  <div #voucherListContainer fxFlex>
+  <div #listContainer fxFlex>
 
-    <cdk-virtual-scroll-viewport itemSize="25" style="height: 100%">
+    <cdk-virtual-scroll-viewport itemSize="25">
 
         <div *ngFor="let voucher of voucherList"
           class="list-item" [class.list-item-selected]="isSelected(voucher)">

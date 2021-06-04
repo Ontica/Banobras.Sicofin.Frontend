@@ -6,8 +6,9 @@
  */
 
 import { SelectionModel } from '@angular/cdk/collections';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -32,6 +33,8 @@ export enum VoucherListEventType {
 })
 export class VoucherListComponent implements OnInit, OnChanges {
 
+  @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
+
   @Input() voucherList: VoucherDescriptor[] = [];
 
   @Input() selectedVoucher: VoucherDescriptor = EmptyVoucherDescriptor;
@@ -49,6 +52,7 @@ export class VoucherListComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.voucherList) {
+      this.scrollToTop();
       this.selection.clear();
       this.textNotFound = 'No se encontraron pólizas con el filtro proporcionado.';
     }
@@ -91,6 +95,13 @@ export class VoucherListComponent implements OnInit, OnChanges {
   onClickVouchersSelectedOptions() {
     this.sendEvent(VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED,
       { vouchers: this.selection.selected });
+  }
+
+
+  private scrollToTop() {
+    if (this.virtualScroll) {
+      this.virtualScroll.scrollToIndex(0);
+    }
   }
 
 
