@@ -249,7 +249,7 @@ table.mat-table {
     }
 
     &.mat-footer-row {
-      background-color: $disabled-color;
+      background-color: $grid-footer-background-color;
     }
 
     &.mat-row {
@@ -258,10 +258,33 @@ table.mat-table {
       &.row-selected {
         background-color: $selected-control-background-color;
       }
+
+      &.item-summary {
+        font-weight: 600;
+      }
+
+      &.item-group-summary {
+        td.mat-cell {
+          font-weight: 600;
+          border-top: 1px solid $secondary-color-semi-light;
+          border-bottom: 1px solid $secondary-color-semi-light;
+        }
+        // background-color: lighten($grid-footer-background-color, 2%);
+      }
+
+      &.item-total-summary {
+        background-color: lighten($grid-footer-background-color, 2%);
+        font-weight: 600;
+      }
     }
 
-    &:hover .mat-cell {
-      background: $selected-control-background-color;
+    &.mat-row:hover {
+      background-color: lighten($grid-footer-background-color, 5%);
+
+      // &.item-group-summary,
+      &.item-total-summary {
+        background-color: $grid-footer-background-color;
+      }
     }
 
     &.selectable-row:hover {
