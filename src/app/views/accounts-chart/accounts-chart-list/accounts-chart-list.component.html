@@ -1,48 +1,60 @@
 
-<ng-container *ngIf="displayAccountsChartList">
+<div fxLayout="column" fxFlexFill>
 
-  <mat-divider [style.marginBottom.px]="8">
+  <div #controlsContainer *ngIf="displayAccountsChartList" fxFlex="none">
 
-  </mat-divider>
+    <mat-divider [style.marginBottom.px]="8">
 
-  <emp-fa-accounts-chart-controls [accountsChart]="accountsChart">
+    </mat-divider>
 
-  </emp-fa-accounts-chart-controls>
+    <emp-fa-accounts-chart-controls
+      [accountsChart]="accountsChart">
 
-</ng-container>
-
-
-<emp-fa-accounts-chart-list-entry
-  [displayHeader]="true"
-  [maxLevel]="maxLevel">
-
-</emp-fa-accounts-chart-list-entry>
-
-<cdk-virtual-scroll-viewport itemSize="25" style="height: calc(100% - 90px)">
-
-  <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item"
-    [ngClass]="{'list-item-highlight': account.role !== 'Sumaria'}"
-    [ngClass]="{'list-item-deleted': account.obsolete}">
-
-    <div class="list-item-container">
-
-      <emp-fa-accounts-chart-list-entry
-        [account]="account"
-        [maxLevel]="maxLevel"
-        (accountClicked)="onAccountClicked($event)">
-
-      </emp-fa-accounts-chart-list-entry>
-
-    </div>
+    </emp-fa-accounts-chart-controls>
 
   </div>
 
-  <div *ngIf="!displayAccountsChartList" class="text-not-found">
-    No se ha invocado la búsqueda de cuentas.
+  <div #headerContainer fxFlex="none">
+
+    <emp-fa-accounts-chart-list-entry
+      [displayHeader]="true"
+      [maxLevel]="maxLevel">
+
+    </emp-fa-accounts-chart-list-entry>
+
   </div>
 
-  <div *ngIf="displayAccountsChartList && accountsChart.accounts.length === 0" class="text-not-found">
-    No se encontraron cuentas con el filtro proporcionado.
+  <div #listContainer fxFlex>
+
+    <cdk-virtual-scroll-viewport itemSize="25">
+
+      <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item"
+        [ngClass]="{'list-item-highlight': account.role !== 'Sumaria'}"
+        [ngClass]="{'list-item-deleted': account.obsolete}">
+
+        <div class="list-item-container">
+
+          <emp-fa-accounts-chart-list-entry
+            [account]="account"
+            [maxLevel]="maxLevel"
+            (accountClicked)="onAccountClicked($event)">
+
+          </emp-fa-accounts-chart-list-entry>
+
+        </div>
+
+      </div>
+
+      <div *ngIf="!displayAccountsChartList" class="text-not-found">
+        No se ha invocado la búsqueda de cuentas.
+      </div>
+
+      <div *ngIf="displayAccountsChartList && accountsChart.accounts.length === 0" class="text-not-found">
+        No se encontraron cuentas con el filtro proporcionado.
+      </div>
+
+    </cdk-virtual-scroll-viewport>
+
   </div>
 
-</cdk-virtual-scroll-viewport>
+</div>
