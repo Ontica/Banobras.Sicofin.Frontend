@@ -13,6 +13,7 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
+import { ExchangeRateSelectorComponent } from './exchange-rate-selector/exchange-rate-selector.component';
 import { TrialBalanceComponent } from './trial-balance/trial-balance.component';
 import { TrialBalanceControlsComponent } from './trial-balance-table/trial-balance-controls.component';
 import { TrialBalanceFilterComponent } from './trial-balance-filter/trial-balance-filter.component';
@@ -28,6 +29,7 @@ import { TrialBalanceTableComponent } from './trial-balance-table/trial-balance-
     SharedModule,
   ],
   declarations: [
+    ExchangeRateSelectorComponent,
     TrialBalanceComponent,
     TrialBalanceControlsComponent,
     TrialBalanceFilterComponent,

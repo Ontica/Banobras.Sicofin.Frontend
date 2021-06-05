@@ -1,0 +1,84 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  (keydown.enter)="$event.preventDefault()" style="margin: 0; padding: 0;">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+
+      <div fxLayout="row">
+
+        <div fxFlex>
+
+          <label>Fecha del tipo de cambio:</label>
+
+          <div fxLayout="row">
+
+            <emp-ng-datepicker fxFlex="126px" name="exchangeRateDate" required
+              [(ngModel)]="exchangeRateDate"
+              [showError]="!exchangeRateDate"
+              (valueChange)="emitExchangeRateDate($event)">
+
+            </emp-ng-datepicker>
+
+            <div fxFlex fxLayoutAlign="start center" [style.marginRight.px]="8">
+
+              <button class="btn" (click)="onSearchExchangeRatesListClicked()">
+                Buscar
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div [fxFlex]="100/3">
+
+          <label>Tipo de cambio:</label>
+
+          <emp-ng-select name="exchangeRateTypeUID" required
+            [config]="{clearable: true}"
+            [(ngModel)]="exchangeRateTypeUID"
+            [items]="exchangeRateTypeList"
+            [loading]="isLoading"
+            [showError]="!exchangeRateTypeUID"
+            [placeholder]="exchangeRateTypePlaceholder"
+            (changes)="emitExchangeRateTypeUID(); onExchangeRateTypeChange()"
+            (clear)="onExchangeRateTypeClear()">
+          </emp-ng-select>
+
+        </div>
+
+        <div [fxFlex]="100/3">
+
+          <label>Valorizar a:</label>
+
+          <emp-ng-select name="valuateToCurrrencyUID" required
+            [config]="{clearable: true}"
+            [(ngModel)]="valuateToCurrrencyUID"
+            [items]="toCurrencyList"
+            [showError]="!valuateToCurrrencyUID"
+            [placeholder]="exchangeRateTypeUID ? 'Seleccionar' :  'Seleccione el tipo de cambio'"
+            (changes)="emitValuateToCurrrencyUID()">
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+      <div fxLayout="row">
+
+        <div [fxFlexOffset]="100/3" fxFlex fxLayoutAlign="start center">
+
+          <mat-checkbox name="consolidateBalancesToTargetCurrency"
+            [(ngModel)]="consolidateBalancesToTargetCurrency"
+            (click)="$event.stopPropagation"
+            (change)="emitConsolidateBalancesToTargetCurrency()">
+            Consolidar saldos en la moneda del tipo de cambio
+          </mat-checkbox>
+
+        </div>
+
+      </div>
+
+  </div>
+
+</form>
