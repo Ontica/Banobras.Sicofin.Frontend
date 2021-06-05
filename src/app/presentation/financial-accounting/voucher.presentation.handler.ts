@@ -15,7 +15,7 @@ import { AbstractPresentationHandler, StateValues } from '@app/core/presentation
 
 import { EmptySearchVouchersCommand } from '@app/models';
 
-import { VouchersDataService } from '@app/data-services/vouchers.data.service';
+import { VouchersDataService } from '@app/data-services';
 
 
 export enum ActionType {

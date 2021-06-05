@@ -36,39 +36,41 @@ export const BalancesType: Identifiable[] = [
 
 
 export interface TrialBalanceCommand {
-  trialBalanceType: string;
   accountsChartUID: string;
-  fromDate: string;
-  toDate: string;
-  consolidated: boolean;
-  ledgers?: string[];
-  sectors?: string[];
-  fromAccount?: string;
-  toAccount?: string;
-  level?: number;
   balancesType?: string;
-  subledgerAccount?: string;
+  consolidateBalancesToTargetCurrency?: boolean;
+  showCascadeBalances: boolean;
   exchangeRateDate?: string;
   exchangeRateTypeUID?: string;
+  fromAccount?: string;
+  fromDate: string;
+  ledgers?: string[];
+  level?: number;
+  sectors?: string[];
+  subledgerAccount?: string;
+  toAccount?: string;
+  toDate: string;
+  trialBalanceType: string;
   valuateToCurrrencyUID?: string;
 }
 
 
 export const EmptyTrialBalanceCommand: TrialBalanceCommand = {
-  trialBalanceType: '',
   accountsChartUID: '',
-  fromDate: '',
-  toDate: '',
-  consolidated: false,
-  ledgers: [],
-  sectors: [],
-  fromAccount: '',
-  toAccount: '',
-  level: 0,
   balancesType: '',
-  subledgerAccount: '',
+  consolidateBalancesToTargetCurrency: false,
+  showCascadeBalances: false,
   exchangeRateDate: '',
   exchangeRateTypeUID: '',
+  fromAccount: '',
+  fromDate: '',
+  ledgers: [],
+  level: 0,
+  sectors: [],
+  subledgerAccount: '',
+  toAccount: '',
+  toDate: '',
+  trialBalanceType: '',
   valuateToCurrrencyUID: '',
 };
 

@@ -19,7 +19,7 @@ import { EmptySearchVouchersCommand, EmptyVoucherDescriptor, mapVoucherStageFrom
 
 import { View } from '../main-layout';
 
-import { VouchersDataService } from '@app/data-services/vouchers.data.service';
+import { VouchersDataService } from '@app/data-services';
 
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
 

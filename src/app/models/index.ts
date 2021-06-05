@@ -20,5 +20,6 @@
 
 export * from './accounts-chart';
 export * from './balances';
+export * from './exchange-rates';
 export * from './trial-balances';
 export * from './vouchers';
