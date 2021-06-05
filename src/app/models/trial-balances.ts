@@ -12,8 +12,9 @@ import { AccountRole } from './accounts-chart';
 
 export const TrialBalanceTypeList: Identifiable[] = [
   {uid: 'Traditional', name: 'Balanza tradicional'},
-  {uid: 'BalancesByAccount', name: 'Saldo por cuenta'},
-  {uid: 'BalancesBySubledgerAccount', name: 'Saldo por auxiliar'},
+  {uid: 'TraditionalWithSubledgerAccounts', name: 'Balanza tradicional con auxiliares'},
+  {uid: 'BalancesByAccount', name: 'Saldos por cuenta y auxiliar'},
+  {uid: 'BalancesBySubledgerAccount', name: 'Saldos por auxiliar'},
 ];
 
 

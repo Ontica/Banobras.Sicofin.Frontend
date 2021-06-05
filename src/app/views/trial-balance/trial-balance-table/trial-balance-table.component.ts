@@ -31,8 +31,10 @@ export class TrialBalanceTableComponent implements OnChanges {
   @Output() itemsDisplayed = new EventEmitter<number>();
 
   columns = [
+    {field: 'ledgerNumber',   title: 'Cont',           type: 'text'},
+    {field: 'currencyCode',   title: 'Mon',            type: 'text'},
     {field: 'accountNumber',  title: 'Cuenta',         type: 'text-nowrap'},
-    {field: 'sectorCode',     title: '',               type: 'text'},
+    {field: 'sectorCode',     title: 'Sct',            type: 'text'},
     {field: 'accountName',    title: 'Nombre',         type: 'text'},
     {field: 'initialBalance', title: 'Saldo anterior', type: 'decimal'},
     {field: 'debit',          title: 'Cargos',         type: 'decimal'},

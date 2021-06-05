@@ -95,7 +95,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get isTrialBalance(): boolean {
-    return ['Traditional'].includes(this.trialBalanceCommand.trialBalanceType);
+    return ['Traditional', 'TraditionalWithSubledgerAccounts']
+              .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
