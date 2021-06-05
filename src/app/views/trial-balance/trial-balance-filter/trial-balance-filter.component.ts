@@ -7,20 +7,25 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalancesType, EmptyTrialBalanceCommand, getLevelsListFromPattern,
-         TrialBalanceCommand, TrialBalanceTypeList} from '@app/models';
+import { ExchangeRatesDataService } from '@app/data-services';
+
+import { AccountsChartMasterData, BalancesType, EmptyTrialBalanceCommand, ExchangeRate,
+         getLevelsListFromPattern, TrialBalanceCommand, TrialBalanceTypeList} from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
+import { ExchangeRateSelectorEventType } from '../exchange-rate-selector/exchange-rate-selector.component';
+
 export enum TrialBalanceFilterEventType {
   BUILD_TRIAL_BALANCE_CLICKED = 'TrialBalanceFilterComponent.Event.BuildTrialBalanceClicked',
 }
+
 
 @Component({
   selector: 'emp-fa-trial-balance-filter',
@@ -49,21 +54,13 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer) {
+  displayExchangeRates = false;
+
+  exchangeRatesList: ExchangeRate[] = [];
+
+  constructor(private uiLayer: PresentationLayer,
+              private exchangeRatesData: ExchangeRatesDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
-  }
-
-
-  get isTrialBalance() {
-    return ['Traditional'].includes(this.trialBalanceCommand.trialBalanceType);
-  }
-
-  get isBalancesByAccount() {
-    return ['BalancesByAccount'].includes(this.trialBalanceCommand.trialBalanceType);
-  }
-
-  get isBalancesBySubledgerAccount() {
-    return['BalancesBySubledgerAccount'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -77,6 +74,40 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.helper.destroy();
   }
 
+  get trialBalanceFormFieldsValid(): boolean {
+    return !!this.trialBalanceCommand.trialBalanceType &&
+           !!this.trialBalanceCommand.accountsChartUID &&
+           !!this.trialBalanceCommand.fromDate &&
+           !!this.trialBalanceCommand.toDate &&
+           !!this.trialBalanceCommand.balancesType;
+  }
+
+
+  get exchangeRateFormFieldsValid(): boolean {
+    if (!this.displayExchangeRates) {
+      return true;
+    }
+
+    return !!this.trialBalanceCommand.exchangeRateDate &&
+           !!this.trialBalanceCommand.exchangeRateTypeUID &&
+           !!this.trialBalanceCommand.valuateToCurrrencyUID;
+  }
+
+
+  get isTrialBalance(): boolean {
+    return ['Traditional'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get isBalancesByAccount(): boolean {
+    return ['BalancesByAccount'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get isBalancesBySubledgerAccount(): boolean {
+    return['BalancesBySubledgerAccount'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
 
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
@@ -85,13 +116,28 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onExchangeRateDateChanged(value) {
+    this.trialBalanceCommand.exchangeRateDate = value;
+    this.exchangeRatesList = [];
+  }
+
+
+  onExchangeRateSelectorEvent(event) {
+    if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type) {
+      this.getExchangeRatesForDate();
+    }
+  }
+
+
   onClearFilters() {
+    this.exchangeRatesList = [];
+
     this.trialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand, {
         trialBalanceType: this.trialBalanceCommand.trialBalanceType,
-        fromDate: this.trialBalanceCommand.fromDate,
-        toDate: this.trialBalanceCommand.toDate,
         accountsChartUID: this.trialBalanceCommand.accountsChartUID,
         ledgers: this.trialBalanceCommand.ledgers,
+        fromDate: this.trialBalanceCommand.fromDate,
+        toDate: this.trialBalanceCommand.toDate,
         balancesType: this.balancesTypeList[0].uid,
       });
   }
@@ -99,33 +145,54 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   onBuildTrialBalanceClicked() {
     const payload = {
-      trialBalanceCommand: this.getTrialBalanceCommand()
+      trialBalanceCommand: this.getTrialBalanceCommandValidData()
     };
 
     this.sendEvent(TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED, payload);
   }
 
 
-  private getTrialBalanceCommand(): TrialBalanceCommand {
+  private getTrialBalanceCommandValidData(): TrialBalanceCommand {
+    Assertion.assert(this.trialBalanceFormFieldsValid,
+      'Programming error: form must be validated before command execution.');
 
-    const data: TrialBalanceCommand = {
-      balancesType: this.trialBalanceCommand.balancesType,
+    let data: TrialBalanceCommand = {
       trialBalanceType: this.trialBalanceCommand.trialBalanceType,
       accountsChartUID: this.trialBalanceCommand.accountsChartUID,
+      ledgers: this.trialBalanceCommand.ledgers,
       fromDate: this.trialBalanceCommand.fromDate,
       toDate: this.trialBalanceCommand.toDate,
-      consolidated: this.isTrialBalance ? this.trialBalanceCommand.consolidated : false,
-      ledgers: this.isTrialBalance ? this.trialBalanceCommand.ledgers : [],
-      sectors: this.isTrialBalance ? this.trialBalanceCommand.sectors : [],
-      fromAccount: this.isTrialBalance || this.isBalancesByAccount ?
-        this.trialBalanceCommand.fromAccount : '',
-      toAccount: this.isTrialBalance ? this.trialBalanceCommand.toAccount : '',
-      level: this.isTrialBalance ? this.trialBalanceCommand.level : 0,
-      subledgerAccount: this.isBalancesBySubledgerAccount ?
-        this.trialBalanceCommand.subledgerAccount : '',
+      showCascadeBalances: this.trialBalanceCommand.showCascadeBalances,
+      balancesType: this.trialBalanceCommand.balancesType,
+      level: this.trialBalanceCommand.level,
     };
 
+    this.validateCommandFieldsByBalanceType(data);
+
     return data;
+  }
+
+
+  validateCommandFieldsByBalanceType(data: TrialBalanceCommand) {
+    if (this.isTrialBalance) {
+      data.fromAccount = this.trialBalanceCommand.fromAccount;
+      data.toAccount = this.trialBalanceCommand.toAccount;
+    }
+
+    if (this.isBalancesByAccount || this.isBalancesBySubledgerAccount) {
+      data.fromAccount = this.trialBalanceCommand.fromAccount;
+      data.subledgerAccount = this.trialBalanceCommand.subledgerAccount;
+    }
+
+    if (this.displayExchangeRates) {
+      Assertion.assert(this.exchangeRateFormFieldsValid,
+        'Programming error: form must be validated before command execution.');
+
+      data.exchangeRateDate = this.trialBalanceCommand.exchangeRateDate;
+      data.exchangeRateTypeUID = this.trialBalanceCommand.exchangeRateTypeUID;
+      data.valuateToCurrrencyUID = this.trialBalanceCommand.valuateToCurrrencyUID;
+      data.consolidateBalancesToTargetCurrency = this.trialBalanceCommand.consolidateBalancesToTargetCurrency;
+    }
   }
 
 
@@ -138,6 +205,16 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         this.setLevelsList();
         this.isLoading = false;
       });
+  }
+
+
+  private getExchangeRatesForDate() {
+    if (!this.trialBalanceCommand.exchangeRateDate) {
+      return;
+    }
+
+    this.exchangeRatesData.getExchangeRatesForDate(this.trialBalanceCommand.exchangeRateDate)
+      .subscribe(x => this.exchangeRatesList = x ?? []);
   }
 
 

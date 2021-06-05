@@ -11,6 +11,12 @@ fieldset {
   border: 0;
 }
 
+.section-title {
+  color: $form-title-color;
+  border-bottom: $form-title-border;
+  margin: 0.5rem 8px 0.5rem 0;
+}
+
 form.form-section {
   label {
     display: block;
