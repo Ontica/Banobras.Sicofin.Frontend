@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 
 import { EventInfo } from '@app/core';
 
-import { EmptyTrialBalance, TrialBalance, TrialBalanceEntry } from '@app/models';
+import { EmptyTrialBalance, DataTableColumn, TrialBalance, TrialBalanceEntry } from '@app/models';
 
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
@@ -30,19 +30,9 @@ export class TrialBalanceTableComponent implements OnChanges {
 
   @Output() itemsDisplayed = new EventEmitter<number>();
 
-  columns = [
-    {field: 'ledgerNumber',   title: 'Cont',           type: 'text'},
-    {field: 'currencyCode',   title: 'Mon',            type: 'text'},
-    {field: 'accountNumber',  title: 'Cuenta',         type: 'text-nowrap'},
-    {field: 'sectorCode',     title: 'Sct',            type: 'text'},
-    {field: 'accountName',    title: 'Nombre',         type: 'text'},
-    {field: 'initialBalance', title: 'Saldo anterior', type: 'decimal'},
-    {field: 'debit',          title: 'Cargos',         type: 'decimal'},
-    {field: 'credit',         title: 'Abonos',         type: 'decimal'},
-    {field: 'currentBalance', title: 'Saldo actual',   type: 'decimal'},
-  ];
+  columns: DataTableColumn[] = [];
 
-  displayedColumns = this.columns.map(column => column.field);
+  displayedColumns: string[] = [];
 
   dataSource: TableVirtualScrollDataSource<TrialBalanceEntry>;
 
@@ -67,6 +57,9 @@ export class TrialBalanceTableComponent implements OnChanges {
 
 
   initDataSource() {
+    this.columns = this.trialBalance.columns;
+    this.displayedColumns = this.columns.map(column => column.field);
+
     this.dataSource = new TableVirtualScrollDataSource(this.trialBalance.entries);
     this.dataSource.filterPredicate = this.getFilterPredicate();
     // TODO: set titles of columns

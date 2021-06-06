@@ -76,8 +76,16 @@ export const EmptyTrialBalanceCommand: TrialBalanceCommand = {
 };
 
 
+export interface DataTableColumn {
+  field: string;
+  title: string;
+  type: string;
+}
+
+
 export interface TrialBalance {
   command: TrialBalanceCommand;
+  columns: DataTableColumn[];
   entries: TrialBalanceEntry[];
 }
 
@@ -101,5 +109,6 @@ export interface TrialBalanceEntry {
 
 export const EmptyTrialBalance: TrialBalance = {
   command: EmptyTrialBalanceCommand,
+  columns: [],
   entries: [],
 };
