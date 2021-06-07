@@ -95,18 +95,17 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get isTrialBalance(): boolean {
-    return ['Traditional', 'TraditionalWithSubledgerAccounts']
-              .includes(this.trialBalanceCommand.trialBalanceType);
+    return ['Balanza', 'BalanzaConAuxiliares'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get isBalancesByAccount(): boolean {
-    return ['BalancesByAccount'].includes(this.trialBalanceCommand.trialBalanceType);
+    return ['SaldosPorCuenta'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get isBalancesBySubledgerAccount(): boolean {
-    return['BalancesBySubledgerAccount'].includes(this.trialBalanceCommand.trialBalanceType);
+    return['SaldosPorAuxiliar'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -157,7 +156,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     Assertion.assert(this.trialBalanceFormFieldsValid,
       'Programming error: form must be validated before command execution.');
 
-    let data: TrialBalanceCommand = {
+    const data: TrialBalanceCommand = {
       trialBalanceType: this.trialBalanceCommand.trialBalanceType,
       accountsChartUID: this.trialBalanceCommand.accountsChartUID,
       ledgers: this.trialBalanceCommand.ledgers,
