@@ -1,0 +1,145 @@
+<form [formGroup]="formHandler.form" autocomplete="off" class="form-section">
+
+  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+
+      <div [fxFlex]="100/3">
+        <label>Tipo de póliza:</label>
+        <emp-ng-select
+          [formControlName]="controls.voucherType"
+          [items]="voucherTypesList"
+          [loading]="isLoading"
+          [showError]="formHandler.showInvalidControl(controls.voucherType)">
+        </emp-ng-select>
+      </div>
+
+      <div [fxFlex]="100/3">
+
+      </div>
+
+      <div fxFlex="126px" fxFlex.lt-md="none" *ngIf="hasValueDate">
+        <label>Fecha valor:</label>
+        <emp-ng-datepicker
+          [formControlName]="controls.valueDate"
+          [showError]="formHandler.showInvalidControl(controls.valueDate)">
+
+        </emp-ng-datepicker>
+      </div>
+
+      <div fxFlex="126px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
+        <label>Fecha de afectación:</label>
+        <emp-ng-select
+          [formControlName]="controls.accountingDate"
+          [items]="accountingDatesList"
+          [config]="{bindByValue: false}"
+          [bindLabel]="null"
+          [showError]="formHandler.showInvalidControl(controls.accountingDate)">
+
+          <ng-template #labelTemplate let-item="item">
+            {{item | dateTimeFormat}}
+          </ng-template>
+
+          <ng-template #optionTemplate let-item="item">
+            {{item | dateTimeFormat}}
+          </ng-template>
+
+        </emp-ng-select>
+      </div>
+
+      <div fxFlex="none" fxLayoutAlign="end center"
+        [style.height.px]="28" [style.marginTop.px]="12" [style.paddingRight.px]="8">
+        <mat-checkbox
+          [(ngModel)]="hasValueDate" [ngModelOptions]="{standalone: true}"
+          [disabled]="!editionMode"
+          (click)="$event.stopPropagation"
+          (change)="onHasValueDateChange()">
+          Tiene fecha valor
+        </mat-checkbox>
+      </div>
+
+    </div>
+
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+
+      <div [fxFlex]="100">
+        <label>Concepto de la póliza:</label>
+        <textarea class="text-area" empNgTextareaAutoresize rows="1"
+          [formControlName]="controls.concept"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.concept)">
+
+        </textarea>
+      </div>
+
+    </div>
+
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+
+      <div [fxFlex]="100/3">
+        <label>Tipo de contabilidad:</label>
+        <emp-ng-select
+          [formControlName]="controls.ledgerGroup"
+          [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
+          [showError]="formHandler.showInvalidControl(controls.ledgerGroup)"
+          (changes)="onAccountChartChanges($event)">
+        </emp-ng-select>
+      </div>
+
+      <div [fxFlex]="100/3">
+        <label>Contabilidad:</label>
+        <emp-ng-select
+          [formControlName]="controls.ledger"
+          [items]="accountChartSelected?.ledgers"
+          [placeholder]="accountChartSelected ? 'Seleccionar' : 'Seleccione el tipo de contabilidad'"
+          [showError]="formHandler.showInvalidControl(controls.ledger)">
+        </emp-ng-select>
+      </div>
+
+      <div [fxFlex]="100/3">
+        <label>Origen de la transacción:</label>
+        <emp-ng-select
+          [formControlName]="controls.source"
+          [items]="sourcesList"
+          [showError]="formHandler.showInvalidControl(controls.source)">
+        </emp-ng-select>
+      </div>
+
+    </div>
+
+
+    <mat-divider class="divider-padding"></mat-divider>
+
+
+    <div fxLayout="row">
+
+      <div fxFlex fxLayoutAlign="start center">
+
+        <button *ngIf="showEnableEditor && editionMode" class="btn-base uppercase"
+          (click)="enableEditor(false)">
+          Descartar Cambios
+        </button>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button *ngIf="showEnableEditor &&!readonly && !editionMode" (click)="enableEditor(true)"
+          class="btn-action">
+          Editar
+        </button>
+
+        <button *ngIf="editionMode" (click)="submitForm()" [class.btn]="!formHandler.isValid"
+          [class.btn-action]="formHandler.isValid">
+          Guardar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

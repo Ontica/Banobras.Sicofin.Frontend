@@ -13,7 +13,9 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
+import { VoucherCreatorComponent } from './voucher-creator/voucher-creator.component';
 import { VoucherFilterComponent } from './voucher-filter/voucher-filter.component';
+import { VoucherHeaderComponent } from './voucher-header/voucher-header.component';
 import { VoucherListComponent } from './voucher-list/voucher-list.component';
 import { VoucherListItemComponent } from './voucher-list/voucher-list-item.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
@@ -29,12 +31,15 @@ import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer
     SharedModule,
   ],
   declarations: [
+    VoucherCreatorComponent,
     VoucherFilterComponent,
+    VoucherHeaderComponent,
     VoucherListComponent,
     VoucherListItemComponent,
     VouchersExplorerComponent,
   ],
   exports: [
+    VoucherCreatorComponent,
     VouchersExplorerComponent,
   ]
 })
