@@ -43,7 +43,13 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-          [ngClass]="{'item-summary': row['itemType'] === 'BalanceSummary'}"></tr>
+          [ngClass]="{'item-type-summary': row['itemType'] === 'BalanceSummary',
+                      'item-type-group': row['itemType'] === 'BalanceTotalGroup',
+                      'item-type-total': ['BalanceTotalDeptor',
+                                          'BalanceTotalCreditor',
+                                          'BalanceTotalCurrency',
+                                          'BalanceTotalConsolidated'].includes(row['itemType'])}">
+        </tr>
 
       </table>
 

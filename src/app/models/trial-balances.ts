@@ -91,8 +91,12 @@ export interface TrialBalance {
 }
 
 
+export type TrialBalanceItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalGroup' |
+  'BalanceTotalDeptor' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' | 'BalanceTotalConsolidated';
+
+
 export interface TrialBalanceEntry {
-  itemType: string;
+  itemType: TrialBalanceItemType;
   ledgerUID: string;
   currencyUID: string;
   ledgerAccountId: number;

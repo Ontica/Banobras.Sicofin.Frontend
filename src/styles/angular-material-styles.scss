@@ -259,20 +259,19 @@ table.mat-table {
         background-color: $selected-control-background-color;
       }
 
-      &.item-summary {
+      &.item-type-summary {
         font-weight: 600;
       }
 
-      &.item-group-summary {
+      &.item-type-group {
         td.mat-cell {
           font-weight: 600;
-          border-top: 1px solid $secondary-color-semi-light;
-          border-bottom: 1px solid $secondary-color-semi-light;
+          border-top: 1px solid rgba(0, 0, 0, 0.25);
+          border-bottom: 1px solid rgba(0, 0, 0, 0.25);
         }
-        // background-color: lighten($grid-footer-background-color, 2%);
       }
 
-      &.item-total-summary {
+      &.item-type-total {
         background-color: lighten($grid-footer-background-color, 2%);
         font-weight: 600;
       }
@@ -281,8 +280,7 @@ table.mat-table {
     &.mat-row:hover {
       background-color: lighten($grid-footer-background-color, 5%);
 
-      // &.item-group-summary,
-      &.item-total-summary {
+      &.item-type-total {
         background-color: $grid-footer-background-color;
       }
     }
