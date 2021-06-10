@@ -2,7 +2,7 @@
 
 <div class="explorer" fxLayoutGap="32px">
 
-  <div class="primary">
+  <div class="primary" [fxHide.lt-lg]="displayVoucherTabbedView">
 
     <emp-fa-vouchers-explorer
       title="Explorador de pólizas"
@@ -15,7 +15,13 @@
 
   </div>
 
-  <div class="secondary" *ngIf="displayVoucherTabbedView">
+  <div class="secondary priority" *ngIf="displayVoucherTabbedView">
+
+    <emp-fa-voucher-tabbed-view
+      [voucher]="selectedVoucher"
+      (closeEvent)="onCloseVoucherTabbedView()">
+
+    </emp-fa-voucher-tabbed-view>
 
   </div>
 
@@ -26,9 +32,10 @@
 
   <ng-container [ngSwitch]="displayOptionModalSelected">
 
-    <div *ngSwitchCase="'VoucherCreator'">
+    <emp-fa-voucher-creator *ngSwitchCase="'VoucherCreator'"
+      (closeEvent)="onOptionModalClosed()">
 
-    </div>
+    </emp-fa-voucher-creator>
 
     <div *ngSwitchCase="'VouchersImporter'">
 

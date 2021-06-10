@@ -83,17 +83,14 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VouchersExplorerEventType.SELECT_VOUCHER:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         this.selectedVoucher = event.payload.voucher;
-        console.log('SELECT_VOUCHER', this.selectedVoucher);
-
+        this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
         // TODO: get complete model of voucher and pass to the editor
         // this.isLoadingVoucher = true;
 
         return;
 
       case VouchersExplorerEventType.CREATE_VOUCHER_CLICKED:
-        console.log('CREATE_VOUCHER_CLICKED');
-        // TODO: open the voucher creator
-        // this.displayOptionModalSelected = 'VoucherCreator';
+        this.displayOptionModalSelected = 'VoucherCreator';
         return;
 
       case VouchersExplorerEventType.IMPORT_VOUCHERS_CLICKED:
@@ -113,6 +110,17 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  onOptionModalClosed() {
+    this.displayOptionModalSelected = null;
+  }
+
+
+  onCloseVoucherTabbedView() {
+    this.selectedVoucher = EmptyVoucherDescriptor;
+    this.displayVoucherTabbedView = false;
   }
 
 
