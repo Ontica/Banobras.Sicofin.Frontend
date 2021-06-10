@@ -7,6 +7,8 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
+import { combineLatest } from 'rxjs';
+
 import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
@@ -90,26 +92,20 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
   private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
-      .subscribe(x => {
-        this.accountsChartMasterDataList = x;
-        this.setDefaultAccountChartSelected();
-        this.isLoading = false;
-      });
-
-    setTimeout(() => {
-      this.helper.select<Identifiable[]>(VoucherStateSelector.TRANSACTION_TYPES_LIST)
-        .subscribe(x => {
-          this.transactionTypesList = x;
-        });
-    }, 100);
-
-    setTimeout(() => {
+    combineLatest([
+      this.helper.select<AccountsChartMasterData[]>
+        (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
+      this.helper.select<Identifiable[]>(VoucherStateSelector.TRANSACTION_TYPES_LIST),
       this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST)
-        .subscribe(x => {
-          this.voucherTypesList = x;
-        });
-    }, 200);
+    ])
+    .subscribe(([x, y, z]) => {
+      this.accountsChartMasterDataList = x;
+      this.transactionTypesList = y;
+      this.voucherTypesList = z;
+
+      this.setDefaultAccountChartSelected();
+      this.isLoading = false;
+    });
   }
 
 

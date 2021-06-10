@@ -173,6 +173,7 @@
             [config]="{clearable: true}"
             [(ngModel)]="voucherFilter.transactionTypeUID"
             [items]="transactionTypesList"
+            [loading]="isLoading"
             placeholder="Todos">
           </emp-ng-select>
 
@@ -186,6 +187,7 @@
             [config]="{clearable: true}"
             [(ngModel)]="voucherFilter.voucherTypeUID"
             [items]="voucherTypesList"
+            [loading]="isLoading"
             placeholder="Todos">
           </emp-ng-select>
 
