@@ -1,0 +1,17 @@
+<emp-ng-card [title]="title"
+             [hint]="hint"
+             (cardClose)="onClose()">
+
+<mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+    <mat-tab label="Información">
+
+      <emp-fa-voucher-editor [voucher]="voucher">
+
+      </emp-fa-voucher-editor>
+
+    </mat-tab>
+
+</mat-tab-group>
+
+</emp-ng-card>
