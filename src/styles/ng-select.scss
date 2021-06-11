@@ -85,6 +85,7 @@ $font-size-small: 10pt;
 
 .ng-select.ng-select-disabled > .ng-select-container {
   background-color: $control-disabled-background;
+  color: $control-disabled-color;
 }
 
 .ng-select.ng-select-focused:not(.ng-select-open) > .ng-select-container {
