@@ -60,7 +60,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   accountChartSelected: AccountsChartMasterData = null;
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
   voucherTypesList: Identifiable[] = [];
-  sourcesList: Identifiable[] = [];
+  functionalAreasList: Identifiable[] = [];
   accountingDatesList: string[] = [];
 
   helper: SubscriptionHelper;
@@ -140,11 +140,13 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     combineLatest([
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
-      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST)
+      this.helper.select<Identifiable[]>(VoucherStateSelector.FUNCTIONAL_AREAS_LIST),
+      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
     ])
-    .subscribe(([x, y]) => {
+    .subscribe(([x, y, z]) => {
       this.accountsChartMasterDataList = x;
-      this.voucherTypesList = y;
+      this.functionalAreasList = y;
+      this.voucherTypesList = z;
 
       this.isLoading = false;
     });

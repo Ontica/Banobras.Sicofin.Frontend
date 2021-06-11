@@ -20,6 +20,13 @@ export class VouchersDataService {
   constructor(private http: HttpService) { }
 
 
+  getFunctionalAreas(): Observable<Identifiable[]> {
+    const path = `v2/financial-accounting/vouchers/functional-areas`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   getTransactionTypes(): Observable<Identifiable[]> {
     const path = `v2/financial-accounting/vouchers/transaction-types`;
 
