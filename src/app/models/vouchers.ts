@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Assertion, DateString, Identifiable } from '@app/core';
+import { Assertion, DateString, Empty, Identifiable } from '@app/core';
 
 
 export enum VoucherStage {
@@ -111,6 +111,7 @@ export enum VoucherEntryType {
 export interface Voucher {
   id: number;
   number: string;
+  accountsChart: Identifiable;
   ledger: Identifiable;
   concept: string;
   transactionType: Identifiable;
@@ -123,6 +124,24 @@ export interface Voucher {
   status: string;
   entries: VoucherEntry[];
 }
+
+
+export const EmptyVoucher: Voucher = {
+  id: 0,
+  number: '',
+  accountsChart: Empty,
+  ledger: Empty,
+  concept: '',
+  transactionType: Empty,
+  voucherType: Empty,
+  functionalArea: Empty,
+  accountingDate: '',
+  recordingDate: '',
+  elaboratedBy: '',
+  authorizedBy: '',
+  status: '',
+  entries: [],
+};
 
 
 export interface VoucherEntry {

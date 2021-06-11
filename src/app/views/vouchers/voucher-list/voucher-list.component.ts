@@ -6,13 +6,15 @@
  */
 
 import { SelectionModel } from '@angular/cdk/collections';
+
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit,
+         ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyVoucherDescriptor, VoucherDescriptor } from '@app/models';
+import { EmptyVoucher, Voucher, VoucherDescriptor } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
@@ -37,7 +39,7 @@ export class VoucherListComponent implements OnInit, OnChanges {
 
   @Input() voucherList: VoucherDescriptor[] = [];
 
-  @Input() selectedVoucher: VoucherDescriptor = EmptyVoucherDescriptor;
+  @Input() selectedVoucher: Voucher = EmptyVoucher;
 
   @Output() voucherListEvent = new EventEmitter<EventInfo>();
 

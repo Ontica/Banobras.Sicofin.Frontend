@@ -9,7 +9,7 @@ import { Component, Input } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
-import { EmptyVoucherDescriptor, VoucherDescriptor } from '@app/models';
+import { EmptyVoucher, Voucher } from '@app/models';
 
 import { VoucherHeaderComponentEventType } from '../voucher-header/voucher-header.component';
 
@@ -19,7 +19,7 @@ import { VoucherHeaderComponentEventType } from '../voucher-header/voucher-heade
 })
 export class VoucherEditorComponent {
 
-  @Input() voucher: VoucherDescriptor = EmptyVoucherDescriptor;
+  @Input() voucher: Voucher = EmptyVoucher;
 
   submitted = false;
 

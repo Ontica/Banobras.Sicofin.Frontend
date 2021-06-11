@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { SearchVouchersCommand, VoucherDescriptor } from '@app/models';
+import { SearchVouchersCommand, Voucher, VoucherDescriptor } from '@app/models';
 
 
 @Injectable()
@@ -38,6 +38,13 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/voucher-types`;
 
     return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getVoucher(idVoucher: number): Observable<Voucher> {
+    const path = `v2/financial-accounting/vouchers/${idVoucher}`;
+
+    return this.http.get<Voucher>(path);
   }
 
 

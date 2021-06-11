@@ -14,8 +14,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { MainUIStateSelector, VoucherAction,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptySearchVouchersCommand, EmptyVoucherDescriptor, mapVoucherStageFromViewName,
-        SearchVouchersCommand, VoucherDescriptor, VoucherStage} from '@app/models';
+import { EmptySearchVouchersCommand, EmptyVoucher, EmptyVoucherDescriptor, mapVoucherStageFromViewName,
+        SearchVouchersCommand, Voucher, VoucherDescriptor, VoucherStage} from '@app/models';
 
 import { View } from '../main-layout';
 
@@ -37,7 +37,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   voucherList: VoucherDescriptor[] = [];
   filter: SearchVouchersCommand = EmptySearchVouchersCommand;
 
-  selectedVoucher: VoucherDescriptor = EmptyVoucherDescriptor;
+  selectedVoucher: Voucher = EmptyVoucher;
 
   displayVoucherTabbedView = false;
   displayOptionModalSelected: AccountingOperationModalOptions = null;
@@ -82,10 +82,9 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
       case VouchersExplorerEventType.SELECT_VOUCHER:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
-        this.selectedVoucher = event.payload.voucher;
-        this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
-        // TODO: get complete model of voucher and pass to the editor
-        // this.isLoadingVoucher = true;
+        Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
+
+        this.getVoucher(event.payload.voucher.id);
 
         return;
 
@@ -119,7 +118,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
 
   onCloseVoucherTabbedView() {
-    this.selectedVoucher = EmptyVoucherDescriptor;
+    this.selectedVoucher = EmptyVoucher;
     this.displayVoucherTabbedView = false;
   }
 
@@ -153,6 +152,19 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         this.voucherList = x;
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private getVoucher(idVoucher: number) {
+    this.isLoadingVoucher = true;
+
+    this.vouchersData.getVoucher(idVoucher)
+      .toPromise()
+      .then(x => {
+        this.selectedVoucher = x;
+        this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
+      })
+      .finally(() => this.isLoadingVoucher = false);
   }
 
 }

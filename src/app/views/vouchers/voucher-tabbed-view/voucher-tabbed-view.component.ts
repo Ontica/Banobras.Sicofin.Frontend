@@ -5,17 +5,17 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { EmptyVoucherDescriptor, VoucherDescriptor } from '@app/models';
+import { EmptyVoucher, Voucher } from '@app/models';
 
 @Component({
   selector: 'emp-fa-voucher-tabbed-view',
   templateUrl: './voucher-tabbed-view.component.html',
 })
-export class VoucherTabbedViewComponent implements OnInit, OnChanges {
+export class VoucherTabbedViewComponent implements OnChanges {
 
-  @Input() voucher: VoucherDescriptor = EmptyVoucherDescriptor;
+  @Input() voucher: Voucher = EmptyVoucher;
 
   @Output() closeEvent = new EventEmitter<void>();
 
@@ -23,13 +23,8 @@ export class VoucherTabbedViewComponent implements OnInit, OnChanges {
   hint = '';
   selectedTabIndex = 0;
 
-  constructor() { }
-
   ngOnChanges() {
     this.setTitle();
-  }
-
-  ngOnInit(): void {
   }
 
 
@@ -39,8 +34,8 @@ export class VoucherTabbedViewComponent implements OnInit, OnChanges {
 
 
   private setTitle() {
-    this.title = `${this.voucher.number}: ${this.voucher.voucherTypeName}`;
-    this.hint = this.voucher.ledgerName;
+    this.title = `${this.voucher.number}: ${this.voucher.voucherType.name}`;
+    this.hint = this.voucher.ledger.name;
   }
 
 }

@@ -12,12 +12,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest } from 'rxjs';
 
-
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData } from '@app/models';
+import { AccountsChartMasterData, EmptyVoucher, Voucher } from '@app/models';
 
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
@@ -32,9 +31,9 @@ export enum VoucherHeaderComponentEventType {
 enum VoucherHeaderFormControls {
   voucherType = 'voucherType',
   concept = 'concept',
-  ledgerGroup = 'ledgerGroup',
+  accountsChart = 'accountsChart',
   ledger = 'ledger',
-  source = 'source',
+  functionalArea = 'functionalArea',
   accountingDate = 'accountingDate',
   valueDate = 'valueDate',
 }
@@ -45,7 +44,7 @@ enum VoucherHeaderFormControls {
 })
 export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() voucher: any = null;
+  @Input() voucher: Voucher = EmptyVoucher;
 
   @Input() readonly = false;
 
@@ -84,13 +83,14 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+
   ngOnDestroy() {
     this.helper.destroy();
   }
 
 
   get showEnableEditor() {
-    return this.voucher;
+    return this.voucher && this.voucher.id > 0;
   }
 
 
@@ -148,6 +148,8 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       this.functionalAreasList = y;
       this.voucherTypesList = z;
 
+      this.setAccountChartSelected();
+
       this.isLoading = false;
     });
   }
@@ -162,9 +164,9 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       new FormGroup({
         voucherType: new FormControl('', Validators.required),
         concept: new FormControl('', Validators.required),
-        ledgerGroup: new FormControl('', Validators.required),
+        accountsChart: new FormControl('', Validators.required),
         ledger: new FormControl('', Validators.required),
-        source: new FormControl('', Validators.required),
+        functionalArea: new FormControl('', Validators.required),
         accountingDate: new FormControl(''),
         valueDate: new FormControl(''),
       })
@@ -181,22 +183,37 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.formHandler.form.reset({
-      voucherType: this.voucher.voucherType || '',
+      voucherType: this.voucher.voucherType.uid || '',
       concept: this.voucher.concept || '',
-      ledgerGroup: this.voucher.ledgerGroup || '',
-      ledger: this.voucher.ledger || '',
-      source: this.voucher.source || '',
+      accountsChart: this.voucher.accountsChart.uid || '',
+      ledger: this.voucher.ledger.uid || '',
+      functionalArea: this.voucher.functionalArea.uid || '',
       accountingDate: this.voucher.accountingDate || '',
-      valueDate: this.voucher.valueDate || '',
+      valueDate: '', // this.voucher.valueDate || '',
     });
 
-    this.hasValueDate = !!this.voucher.valueDate;
+    this.hasValueDate = false; // !!this.voucher.valueDate;
+    this.setAccountChartSelected();
     this.setRequiredFormFields();
   }
 
 
   private disableForm(disable) {
     this.formHandler.disableForm(disable);
+  }
+
+
+  private setAccountChartSelected() {
+    if (this.accountsChartMasterDataList.length === 0 || isEmpty(this.voucher.accountsChart)) {
+      return;
+    }
+
+    const accountChart =
+      this.accountsChartMasterDataList.filter(x => x.uid === this.voucher.accountsChart.uid);
+
+    if (accountChart.length > 0) {
+      this.accountChartSelected = accountChart[0];
+    }
   }
 
 
@@ -220,9 +237,9 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     const data: any = {
       voucherType: formModel.voucherType ?? '',
       concept: formModel.concept ?? '',
-      ledgerGroup: formModel.ledgerGroup ?? '',
+      accountsChart: formModel.accountsChart ?? '',
       ledger: formModel.ledger ?? '',
-      source: formModel.source ?? '',
+      functionalArea: formModel.functionalArea ?? '',
       accountingDate: formModel.accountingDate ?? '',
       valueDate: formModel.valueDate ?? '',
     };

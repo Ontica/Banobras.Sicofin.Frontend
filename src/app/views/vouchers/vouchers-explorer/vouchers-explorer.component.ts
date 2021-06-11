@@ -9,7 +9,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnIni
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptySearchVouchersCommand, EmptyVoucherDescriptor, SearchVouchersCommand,
+import { EmptySearchVouchersCommand, EmptyVoucher, SearchVouchersCommand, Voucher,
          VoucherDescriptor } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
@@ -36,7 +36,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
   @Input() voucherList: VoucherDescriptor[] = [];
 
-  @Input() selectedVoucher: VoucherDescriptor = EmptyVoucherDescriptor;
+  @Input() selectedVoucher: Voucher = EmptyVoucher;
 
   @Input() filter: SearchVouchersCommand = EmptySearchVouchersCommand;
 

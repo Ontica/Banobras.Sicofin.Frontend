@@ -80,10 +80,10 @@
       <div [fxFlex]="100/3">
         <label>Tipo de contabilidad:</label>
         <emp-ng-select
-          [formControlName]="controls.ledgerGroup"
+          [formControlName]="controls.accountsChart"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [showError]="formHandler.showInvalidControl(controls.ledgerGroup)"
+          [showError]="formHandler.showInvalidControl(controls.accountsChart)"
           (changes)="onAccountChartChanges($event)">
         </emp-ng-select>
       </div>
@@ -101,9 +101,9 @@
       <div [fxFlex]="100/3">
         <label>Origen de la transacción:</label>
         <emp-ng-select
-          [formControlName]="controls.source"
+          [formControlName]="controls.functionalArea"
           [items]="functionalAreasList"
-          [showError]="formHandler.showInvalidControl(controls.source)">
+          [showError]="formHandler.showInvalidControl(controls.functionalArea)">
         </emp-ng-select>
       </div>
 
