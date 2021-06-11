@@ -91,8 +91,9 @@ export interface TrialBalance {
 }
 
 
-export type TrialBalanceItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalGroup' |
-  'BalanceTotalDeptor' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' | 'BalanceTotalConsolidated';
+export type TrialBalanceItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalGroupDeptor' |
+  'BalanceTotalGroupCreditor' | 'BalanceTotalDeptor' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' |
+  'BalanceTotalConsolidated';
 
 
 export interface TrialBalanceEntry {
