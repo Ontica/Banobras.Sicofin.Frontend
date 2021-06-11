@@ -102,6 +102,59 @@ export const EmptyVoucherDescriptor: VoucherDescriptor = {
 };
 
 
+export enum VoucherEntryType {
+  Debit = 'D',
+  Credit = 'H'
+}
+
+
+export interface Voucher {
+  id: number;
+  number: string;
+  ledger: Identifiable;
+  concept: string;
+  transactionType: Identifiable;
+  voucherType: Identifiable;
+  functionalArea: Identifiable;
+  accountingDate: string;
+  recordingDate: string;
+  elaboratedBy: string;
+  authorizedBy: string;
+  status: string;
+  entries: VoucherEntry[];
+}
+
+
+export interface VoucherEntry {
+  id: number;
+  voucherEntryType: VoucherEntryType;
+  ledgerAccount: NumberedNamedEntity;
+  sector: Identifiable;
+  subledgerAccount: NumberedNamedEntity;
+  concept: string;
+  date: string;
+  responsibilityArea: Identifiable;
+  budgetConcept: string;
+  availabilityCode: string;
+  eventType: Identifiable;
+  verificationNumber: string;
+  debit: number;
+  credit: number;
+  currency: Identifiable;
+  amount: number;
+  exchangeRate: number;
+  baseCurrencyAmount: number;
+}
+
+
+export interface NumberedNamedEntity {
+  uid: string;
+  number: string;
+  name: string;
+  fullName: string;
+}
+
+
 export function mapVoucherStageFromViewName(viewName: string): VoucherStage {
   switch (viewName) {
     case 'AccountingOperation.MyInbox':
