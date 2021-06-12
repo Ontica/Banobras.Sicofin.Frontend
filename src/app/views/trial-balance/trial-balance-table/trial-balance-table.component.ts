@@ -7,7 +7,8 @@
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output,
+         ViewChild } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
@@ -16,6 +17,11 @@ import { EmptyTrialBalance, DataTableColumn, TrialBalance, TrialBalanceEntry } f
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
 import { TrialBalanceControlsEventType } from './trial-balance-controls.component';
+
+export enum TrialBalanceTableEventType {
+  COUNT_ITEMS_DISPLAYED = 'TrialBalanceTableComponent.Event.CountItemsDisplayed',
+  EXPORT_BALANCE        = 'TrialBalanceTableComponent.Event.ExportBalance',
+}
 
 @Component({
   selector: 'emp-fa-trial-balance-table',
@@ -28,7 +34,7 @@ export class TrialBalanceTableComponent implements OnChanges {
 
   @Input() trialBalance: TrialBalance = EmptyTrialBalance;
 
-  @Output() itemsDisplayed = new EventEmitter<number>();
+  @Output() trialBalanceTableEvent = new EventEmitter<EventInfo>();
 
   columns: DataTableColumn[] = [];
 
@@ -62,7 +68,6 @@ export class TrialBalanceTableComponent implements OnChanges {
 
     this.dataSource = new TableVirtualScrollDataSource(this.trialBalance.entries);
     this.dataSource.filterPredicate = this.getFilterPredicate();
-    // TODO: set titles of columns
   }
 
 
@@ -79,7 +84,7 @@ export class TrialBalanceTableComponent implements OnChanges {
 
       case TrialBalanceControlsEventType.EXPORT_BUTTON_CLICKED:
 
-        console.log('EXPORT_BUTTON_CLICKED');
+        this.sendEvent(TrialBalanceTableEventType.EXPORT_BALANCE);
 
         return;
 
@@ -113,7 +118,17 @@ export class TrialBalanceTableComponent implements OnChanges {
 
 
   private emitItemsDisplayed() {
-    this.itemsDisplayed.emit(this.dataSource.filteredData.length);
+    this.sendEvent(TrialBalanceTableEventType.COUNT_ITEMS_DISPLAYED, this.dataSource.filteredData.length);
+  }
+
+
+  private sendEvent(eventType: TrialBalanceTableEventType, payload?: any) {
+    const event: EventInfo = {
+      type: eventType,
+      payload
+    };
+
+    this.trialBalanceTableEvent.emit(event);
   }
 
 }

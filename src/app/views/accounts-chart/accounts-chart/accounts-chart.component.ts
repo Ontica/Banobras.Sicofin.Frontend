@@ -11,7 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services';
 
-import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart } from '@app/models';
+import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart,
+         EmptyAccountsSearchCommand } from '@app/models';
 
 import { AccountsChartFilterEventType } from '../accounts-chart-filter/accounts-chart-filter.component';
 
@@ -37,6 +38,8 @@ export class AccountsChartComponent {
 
   accountsChart: AccountsChart = EmptyAccountsChart;
 
+  dataDisplayedFilter: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand);
+
   selectedAccountChartUID = '';
 
   constructor(private accountsChartData: AccountsChartDataService) { }
@@ -51,7 +54,9 @@ export class AccountsChartComponent {
 
         this.selectedAccountChartUID = event.payload.accountsChart.uid;
 
-        this.searchAccounts(this.selectedAccountChartUID, event.payload.accountsSearchCommand);
+        this.dataDisplayedFilter = event.payload.accountsSearchCommand as AccountsSearchCommand;
+
+        this.searchAccounts(this.selectedAccountChartUID, this.dataDisplayedFilter);
 
         return;
 
@@ -69,6 +74,11 @@ export class AccountsChartComponent {
 
         this.getAccount(this.selectedAccountChartUID, event.payload.account.uid);
 
+        break;
+
+      case AccountsChartListEventType.EXPORT_ACCOUNTS:
+        console.log('EXPORT_ACCOUNTS', {accountsChartUID: this.selectedAccountChartUID,
+                                        searchCommand: this.dataDisplayedFilter });
         break;
 
       default:

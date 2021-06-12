@@ -21,8 +21,9 @@ import { expandCollapse } from '@app/shared/animations/animations';
 import { VoucherListItemEventType } from './voucher-list-item.component';
 
 export enum VoucherListEventType {
-  VOUCHER_CLICKED = 'VoucherListComponent.Event.VoucherClicked',
+  VOUCHER_CLICKED                   = 'VoucherListComponent.Event.VoucherClicked',
   VOUCHERS_SELECTED_OPTIONS_CLICKED = 'VoucherListComponent.Event.VouchersSelectedOptionsClicked',
+  EXPORT_BUTTON_CLICKED             = 'VoucherListComponent.Event.ExportButtonClicked',
 }
 
 
@@ -97,6 +98,11 @@ export class VoucherListComponent implements OnInit, OnChanges {
   onClickVouchersSelectedOptions() {
     this.sendEvent(VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED,
       { vouchers: this.selection.selected });
+  }
+
+
+  onExportButtonClicked() {
+    this.sendEvent(VoucherListEventType.EXPORT_BUTTON_CLICKED);
   }
 
 

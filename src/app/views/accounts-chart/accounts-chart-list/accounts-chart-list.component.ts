@@ -14,8 +14,11 @@ import { EventInfo, isEmpty } from '@app/core';
 
 import { AccountDescriptor, AccountsChart, EmptyAccountsChart } from '@app/models';
 
+import { AccountsChartControlsEventType } from './accounts-chart-controls.component';
+
 export enum AccountsChartListEventType {
   ACCOUNT_CLICKED = 'AccountsChartList.Event.AccountClicked',
+  EXPORT_ACCOUNTS = 'AccountsChartList.Event.ExportAccounts',
 }
 
 @Component({
@@ -29,7 +32,7 @@ export class AccountsChartListComponent implements OnChanges {
 
   @Input() accountsChart: AccountsChart = EmptyAccountsChart;
 
-  @Output()  accountsChartListEvent = new EventEmitter<EventInfo>();
+  @Output() accountsChartListEvent = new EventEmitter<EventInfo>();
 
   maxLevel = 11;
 
@@ -51,6 +54,22 @@ export class AccountsChartListComponent implements OnChanges {
 
   onAccountClicked(account: AccountDescriptor) {
     this.sendEvent(AccountsChartListEventType.ACCOUNT_CLICKED, { account });
+  }
+
+
+  onAccountsChartControlsEvent(event: EventInfo) {
+   switch (event.type as AccountsChartControlsEventType) {
+
+      case AccountsChartControlsEventType.EXPORT_BUTTON_CLICKED:
+
+        this.sendEvent(AccountsChartListEventType.EXPORT_ACCOUNTS);
+
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 

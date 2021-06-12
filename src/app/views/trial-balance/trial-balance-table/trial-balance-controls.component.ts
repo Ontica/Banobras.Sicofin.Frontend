@@ -39,6 +39,11 @@ export class TrialBalanceControlsComponent {
   }
 
 
+  onExportButtonClicked() {
+    this.sendEvent(TrialBalanceControlsEventType.EXPORT_BUTTON_CLICKED);
+  }
+
+
   private sendEvent(eventType: TrialBalanceControlsEventType, payload?: any) {
     const event: EventInfo = {
       type: eventType,

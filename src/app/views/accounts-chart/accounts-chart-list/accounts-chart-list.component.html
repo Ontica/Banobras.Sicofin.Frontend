@@ -8,7 +8,8 @@
     </mat-divider>
 
     <emp-fa-accounts-chart-controls
-      [accountsChart]="accountsChart">
+      [accountsChart]="accountsChart"
+      (accountsChartControlsEvent)="onAccountsChartControlsEvent($event)">
 
     </emp-fa-accounts-chart-controls>
 

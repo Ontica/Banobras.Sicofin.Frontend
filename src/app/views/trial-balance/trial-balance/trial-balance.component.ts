@@ -11,10 +11,12 @@ import { Assertion } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { EmptyTrialBalance, getTrialBalanceTypeNameFromUid, TrialBalance,
+import { EmptyTrialBalance, EmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, TrialBalance,
          TrialBalanceCommand } from '@app/models';
 
 import { TrialBalanceFilterEventType } from '../trial-balance-filter/trial-balance-filter.component';
+
+import { TrialBalanceTableEventType } from '../trial-balance-table/trial-balance-table.component';
 
 @Component({
   selector: 'emp-fa-trial-balance',
@@ -30,6 +32,8 @@ export class TrialBalanceComponent {
 
   trialBalance: TrialBalance = EmptyTrialBalance;
 
+  dataDisplayedFilter: TrialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand);
+
   constructor(private balancesDataService: BalancesDataService) { }
 
 
@@ -39,7 +43,9 @@ export class TrialBalanceComponent {
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
         Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
 
-        this.getTrialBalance(event.payload.trialBalanceCommand as TrialBalanceCommand);
+        this.dataDisplayedFilter = event.payload.trialBalanceCommand as TrialBalanceCommand;
+
+        this.getTrialBalance(this.dataDisplayedFilter);
 
         return;
 
@@ -50,8 +56,22 @@ export class TrialBalanceComponent {
   }
 
 
-  onItemsDisplayedChanged(items) {
-    setTimeout(() => this.setText(items));
+  onTrialBalanceTableEvent(event) {
+    switch (event.type as TrialBalanceTableEventType) {
+
+      case TrialBalanceTableEventType.COUNT_ITEMS_DISPLAYED:
+        Assertion.assertValue(event.payload, 'event.payload');
+        setTimeout(() => this.setText(event.payload));
+        return;
+
+      case TrialBalanceTableEventType.EXPORT_BALANCE:
+        console.log('EXPORT_BALANCE', this.dataDisplayedFilter)
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
