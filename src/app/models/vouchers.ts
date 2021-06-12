@@ -107,7 +107,6 @@ export enum VoucherEntryType {
   Credit = 'H'
 }
 
-
 export interface Voucher {
   id: number;
   number: string;
@@ -122,7 +121,7 @@ export interface Voucher {
   elaboratedBy: string;
   authorizedBy: string;
   status: string;
-  entries: VoucherEntry[];
+  entries: VoucherEntryDescriptor[];
 }
 
 
@@ -165,6 +164,29 @@ export interface VoucherEntry {
   baseCurrencyAmount: number;
 }
 
+
+export enum VoucherEntryItemType {
+  AccountEntry,
+  PartialEntry,
+  TotalsEntry
+}
+
+
+export interface VoucherEntryDescriptor {
+  id: number;
+  voucherEntryType: VoucherEntryType;
+  accountNumber: string;
+  accountName: string;
+  sector: string;
+  verificationNumber: string;
+  responsibilityArea: string;
+  currency: string;
+  exchangeRate: number;
+  partial: number;
+  debit: number;
+  credit: number;
+  itemType: VoucherEntryItemType;
+}
 
 export interface NumberedNamedEntity {
   uid: string;
