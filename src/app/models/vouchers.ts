@@ -168,9 +168,9 @@ export interface VoucherEntry {
 
 
 export enum VoucherEntryItemType {
-  AccountEntry,
-  PartialEntry,
-  TotalsEntry
+  AccountEntry = 'AccountEntry',
+  PartialEntry = 'PartialEntry',
+  TotalsEntry = 'TotalsEntry',
 }
 
 

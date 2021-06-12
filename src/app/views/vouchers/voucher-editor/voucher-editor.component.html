@@ -1,7 +1,20 @@
-<div class="section-title"> Información general de la póliza </div>
+<div fxLayout="column" fxFlexFill>
 
-<emp-fa-voucher-header
-  [voucher]="voucher"
-  (voucherHeaderEvent)="onVoucherHeaderEvent($event)">
+    <div class="section-title"> Información general de la póliza </div>
 
-</emp-fa-voucher-header>
+    <emp-fa-voucher-header fxFlex="none"
+      [voucher]="voucher"
+      (voucherHeaderEvent)="onVoucherHeaderEvent($event)">
+
+    </emp-fa-voucher-header>
+
+    <br>
+
+    <div class="section-title"> Movimientos </div>
+
+    <emp-fa-voucher-entry-table fxFlex
+      [voucherEntryList]="voucher.entries">
+
+    </emp-fa-voucher-entry-table>
+
+</div>

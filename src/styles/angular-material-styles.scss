@@ -160,7 +160,7 @@ table.mat-table {
 
   th {
     font-weight: 500;
-    padding: 12px 10px 12px 0;
+    padding: 12px 15px 12px 0;
 
     &.mat-header-cell {
       border-bottom: 2pt solid $title-color;
@@ -299,6 +299,19 @@ table.mat-table {
   overflow-y: auto;
   max-height: calc(100% - 2px);
   margin: 1px;
+
+  table.mat-table {
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.fill-table-container {
+  overflow: auto;
+  contain: strict;
+  height: calc(100% - 2px);
+  width: calc(100% - 8px);
 
   table.mat-table {
     margin: 0;

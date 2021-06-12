@@ -15,6 +15,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { VoucherCreatorComponent } from './voucher-creator/voucher-creator.component';
 import { VoucherEditorComponent } from './voucher-editor/voucher-editor.component';
+import { VoucherEntryTableComponent } from './voucher-entry-table/voucher-entry-table.component';
 import { VoucherFilterComponent } from './voucher-filter/voucher-filter.component';
 import { VoucherHeaderComponent } from './voucher-header/voucher-header.component';
 import { VoucherListComponent } from './voucher-list/voucher-list.component';
@@ -35,6 +36,7 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
   declarations: [
     VoucherCreatorComponent,
     VoucherEditorComponent,
+    VoucherEntryTableComponent,
     VoucherFilterComponent,
     VoucherHeaderComponent,
     VoucherListComponent,

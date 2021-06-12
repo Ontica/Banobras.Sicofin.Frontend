@@ -65,7 +65,7 @@ export class TrialBalanceComponent {
         return;
 
       case TrialBalanceTableEventType.EXPORT_BALANCE:
-        console.log('EXPORT_BALANCE', this.dataDisplayedFilter)
+        console.log('EXPORT_BALANCE', this.dataDisplayedFilter);
         return;
 
       default:

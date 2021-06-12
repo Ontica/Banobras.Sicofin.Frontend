@@ -145,13 +145,13 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
       voucherTypeUID: this.voucherFilter.voucherTypeUID ?? '',
     };
 
-     if (this.voucherFilter.fromDate) {
-       searchVouchersCommand.fromDate = this.voucherFilter.fromDate;
-     }
+    if (this.voucherFilter.fromDate) {
+      searchVouchersCommand.fromDate = this.voucherFilter.fromDate;
+    }
 
-     if (this.voucherFilter.toDate) {
-       searchVouchersCommand.toDate = this.voucherFilter.toDate;
-     }
+    if (this.voucherFilter.toDate) {
+      searchVouchersCommand.toDate = this.voucherFilter.toDate;
+    }
 
     return searchVouchersCommand;
   }
