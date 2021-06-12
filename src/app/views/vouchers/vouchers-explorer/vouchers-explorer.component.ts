@@ -20,8 +20,9 @@ export enum VouchersExplorerEventType {
   FILTER_CHANGED = 'VouchersExplorerComponent.Event.FilterChanged',
   SELECT_VOUCHER = 'VouchersExplorerComponent.Event.SelectVoucher',
   SELECT_VOUCHERS_OPTION = 'VouchersExplorerComponent.Event.SelectVouchersOption',
-  CREATE_VOUCHER_CLICKED = 'VouchersExplorerComponent.Event.CreateVoucherClicked',
-  IMPORT_VOUCHERS_CLICKED = 'VouchersExplorerComponent.Event.ImportVouchersClicked',
+  CREATE_VOUCHER = 'VouchersExplorerComponent.Event.CreateVoucher',
+  IMPORT_VOUCHERS = 'VouchersExplorerComponent.Event.ImportVouchers',
+  EXPORT_VOUCHERS = 'VouchersExplorerComponent.Event.ExportVouchers',
 }
 
 
@@ -38,7 +39,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
   @Input() selectedVoucher: Voucher = EmptyVoucher;
 
-  @Input() filter: SearchVouchersCommand = EmptySearchVouchersCommand;
+  @Input() filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
 
   @Input() title = 'Pólizas';
 
@@ -72,12 +73,12 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
 
   onClickCreateVoucher() {
-    this.sendEvent(VouchersExplorerEventType.CREATE_VOUCHER_CLICKED);
+    this.sendEvent(VouchersExplorerEventType.CREATE_VOUCHER);
   }
 
 
   onClickImportVouchers() {
-    this.sendEvent(VouchersExplorerEventType.IMPORT_VOUCHERS_CLICKED);
+    this.sendEvent(VouchersExplorerEventType.IMPORT_VOUCHERS);
   }
 
 
@@ -95,6 +96,12 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
 
         this.sendEvent(VouchersExplorerEventType.SELECT_VOUCHERS_OPTION, event.payload);
+
+        return;
+
+      case VoucherListEventType.EXPORT_BUTTON_CLICKED:
+
+        this.sendEvent(VouchersExplorerEventType.EXPORT_VOUCHERS);
 
         return;
 

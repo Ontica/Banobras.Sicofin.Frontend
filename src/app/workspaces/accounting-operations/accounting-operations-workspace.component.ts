@@ -14,8 +14,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { MainUIStateSelector, VoucherAction,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptySearchVouchersCommand, EmptyVoucher, EmptyVoucherDescriptor, mapVoucherStageFromViewName,
-        SearchVouchersCommand, Voucher, VoucherDescriptor, VoucherStage} from '@app/models';
+import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherStageFromViewName,
+        SearchVouchersCommand, Voucher, VoucherDescriptor} from '@app/models';
 
 import { View } from '../main-layout';
 
@@ -35,7 +35,8 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   currentView: View;
 
   voucherList: VoucherDescriptor[] = [];
-  filter: SearchVouchersCommand = EmptySearchVouchersCommand;
+  filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
+  dataDisplayedFilter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
 
   selectedVoucher: Voucher = EmptyVoucher;
 
@@ -88,12 +89,18 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
         return;
 
-      case VouchersExplorerEventType.CREATE_VOUCHER_CLICKED:
+      case VouchersExplorerEventType.CREATE_VOUCHER:
         this.displayOptionModalSelected = 'VoucherCreator';
         return;
 
-      case VouchersExplorerEventType.IMPORT_VOUCHERS_CLICKED:
-        console.log('IMPORT_VOUCHERS_CLICKED');
+      case VouchersExplorerEventType.IMPORT_VOUCHERS:
+        console.log('IMPORT_VOUCHERS');
+        // TODO: open the voucher importer
+        // this.displayOptionModalSelected = 'VouchersImporter';
+        return;
+
+      case VouchersExplorerEventType.EXPORT_VOUCHERS:
+        console.log('EXPORT_VOUCHERS', this.dataDisplayedFilter);
         // TODO: open the voucher importer
         // this.displayOptionModalSelected = 'VouchersImporter';
         return;
@@ -125,15 +132,17 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   private onCurrentViewChanged(newView: View) {
     this.currentView = newView;
-    this.applyVoucherFilter({ stage: mapVoucherStageFromViewName(this.currentView.name)});
-  }
 
-
-  private applyVoucherFilter(data?: { keywords?: string, stage?: VoucherStage }) {
     const currentFilter =
       this.uiLayer.selectValue<SearchVouchersCommand>(VoucherStateSelector.LIST_FILTER);
 
-    const filter: SearchVouchersCommand = Object.assign({}, currentFilter, data);
+    this.applyVoucherFilter(currentFilter);
+  }
+
+
+  private applyVoucherFilter(newFilter: SearchVouchersCommand) {
+    const filter: SearchVouchersCommand =
+      Object.assign({}, newFilter, { stage: mapVoucherStageFromViewName(this.currentView.name)});
 
     this.uiLayer.dispatch(VoucherAction.SET_LIST_FILTER, { filter });
   }
@@ -149,6 +158,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
     this.vouchersData.searchVouchers(this.filter)
       .toPromise()
       .then(x => {
+        this.dataDisplayedFilter = Object.assign({}, this.filter);
         this.voucherList = x;
       })
       .finally(() => this.isLoading = false);

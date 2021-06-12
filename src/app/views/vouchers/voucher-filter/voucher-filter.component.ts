@@ -13,10 +13,11 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, DateSearchFieldList, EmptySearchVouchersCommand,
-         SearchVouchersCommand } from '@app/models';
+import { AccountsChartMasterData, DateSearchFieldList, EmptySearchVouchersCommand, SearchVouchersCommand,
+         VoucherStage} from '@app/models';
 
-import { AccountChartStateSelector, VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector,
+         VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
@@ -85,7 +86,7 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
 
   onSearchVoucherClicked() {
-    this.sendEvent(VoucherFilterEventType.SEARCH_VOUCHER_CLICKED, this.voucherFilter);
+    this.sendEvent(VoucherFilterEventType.SEARCH_VOUCHER_CLICKED, this.getSearchVoucherCommand());
   }
 
 
@@ -110,10 +111,8 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
 
   private validateFieldToClear() {
-
     this.voucherFilter.ledgerUID = this.accountChartSelected.ledgers
-      .filter(x => this.voucherFilter.ledgerUID === x.uID).length > 0 ? this.voucherFilter.ledgerUID : '';
-
+      .filter(x => this.voucherFilter.ledgerUID === x.uid).length > 0 ? this.voucherFilter.ledgerUID : '';
   }
 
 
@@ -129,6 +128,32 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
     };
 
     this.voucherFilterEvent.emit(event);
+  }
+
+
+  private getSearchVoucherCommand(): SearchVouchersCommand {
+    let searchVouchersCommand: SearchVouchersCommand = {
+      stage: this.voucherFilter.stage ?? VoucherStage.All,
+      accountsChartUID: this.voucherFilter.accountsChartUID ?? '',
+      keywords: this.voucherFilter.keywords ?? '',
+      ledgersGroupUID: this.voucherFilter.ledgersGroupUID ?? '',
+      ledgerUID: this.voucherFilter.ledgerUID ?? '',
+      accountKeywords: this.voucherFilter.accountKeywords ?? '',
+      subledgerAccountKeywords: this.voucherFilter.subledgerAccountKeywords ?? '',
+      dateSearchField: this.voucherFilter.dateSearchField ?? null,
+      transactionTypeUID: this.voucherFilter.transactionTypeUID ?? '',
+      voucherTypeUID: this.voucherFilter.voucherTypeUID ?? '',
+    };
+
+     if (this.voucherFilter.fromDate) {
+       searchVouchersCommand.fromDate = this.voucherFilter.fromDate;
+     }
+
+     if (this.voucherFilter.toDate) {
+       searchVouchersCommand.toDate = this.voucherFilter.toDate;
+     }
+
+    return searchVouchersCommand;
   }
 
 }
