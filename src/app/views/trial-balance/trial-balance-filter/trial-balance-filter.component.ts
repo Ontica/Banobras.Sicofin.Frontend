@@ -232,8 +232,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   private validateFieldToClear() {
     this.trialBalanceCommand.ledgers = this.accountChartSelected.ledgers
-      .filter(x => this.trialBalanceCommand.ledgers.includes(x.uID))
-      .map(x => x.uID);
+      .filter(x => this.trialBalanceCommand.ledgers.includes(x.uid))
+      .map(x => x.uid);
 
     this.trialBalanceCommand.level =
       this.levelsList.filter(x => this.trialBalanceCommand.level + '' === x.uid).length > 0 ?

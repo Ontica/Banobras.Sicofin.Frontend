@@ -67,6 +67,8 @@ export const EmptySearchVouchersCommand: SearchVouchersCommand = {
   stage: VoucherStage.All,
   accountsChartUID: '',
   keywords: '',
+  ledgersGroupUID: '',
+  ledgerUID: '',
 };
 
 

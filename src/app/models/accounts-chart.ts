@@ -229,7 +229,7 @@ export interface SectorRule {
 
 
 export interface Ledger {
-  uID: string;
+  uid: string;
   name: string;
   fullName: string;
   number: string;

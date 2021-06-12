@@ -115,7 +115,7 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
   private validateFieldToClear() {
     this.accountsSearch.ledger = this.accountChartSelected.ledgers
-      .filter(x => this.accountsSearch.ledger === x.uID).length > 0 ? this.accountsSearch.ledger : '';
+      .filter(x => this.accountsSearch.ledger === x.uid).length > 0 ? this.accountsSearch.ledger : '';
 
     this.accountsSearch.level =
       this.levelsList.filter(x => this.accountsSearch.level + '' === x.uid).length > 0 ?
