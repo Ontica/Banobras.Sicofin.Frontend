@@ -21,6 +21,8 @@ export class CardComponent {
 
   @Input() disableClose = false;
 
+  @Input() showCardHeaderFlat = false;
+
   @Output() cardClose = new EventEmitter<void>();
 
   @Output() cardScroll = new EventEmitter<void>();
