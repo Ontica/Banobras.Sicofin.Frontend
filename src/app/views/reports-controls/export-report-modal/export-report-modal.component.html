@@ -1,0 +1,49 @@
+<emp-ng-modal-window [config]="{width:'542px'}">
+
+  <emp-ng-card
+    [title]="title"
+    hint='Proceso de exportación a Excel.'
+    [showCardHeaderFlat]="true"
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <div [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
+        Se generará la exportación a Excel con el último filtro consultado.
+      </div>
+
+      <mat-divider class="divider-padding">
+
+      </mat-divider>
+
+      <div fxLayout="row">
+
+        <div fxFlex="none" fxLayoutAlign="start center">
+
+          <button [class.btn]="hasExcelFileUrl"
+            [class.btn-action]="!hasExcelFileUrl"
+            [disabled]="hasExcelFileUrl"
+            (click)="onExportButtonClicked()">Exportar</button>
+
+        </div>
+
+        <div fxFlex fxLayoutAlign="end center" [style.marginRight.px]="8">
+
+          <a *ngIf="excelFileUrl" [href]="excelFileUrl" target="_blank">
+            El archivo Excel esta listo. Haga clic para descargarlo.</a>
+
+          <div *ngIf="working" [style.width.px]="242"
+            empNgProgressText
+            loadingText="Generando el archivo solicitado"
+            [isLoading]="working">
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>
