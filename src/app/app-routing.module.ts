@@ -36,6 +36,12 @@ const routes: Routes = [
     loadChildren: () => import('./workspaces/accounting-catalogues-and-rules/accounting-catalogues-and-rules-workspace.module')
                                .then((m) => m.AccountingCataloguesAndRulesWorkplaceModule)
   },
+  { path: 'administracion',
+    component: MainLayoutComponent,
+    canActivate: [SecurityGuardService],
+    loadChildren: () => import('./workspaces/system-management/system-management-workspace.module')
+                             .then((m) => m.SystemManagementWorkspaceModule)
+  },
   { path: 'security',
     loadChildren: () => import('./views/security/security-ui.module')
                               .then(m => m.SecurityUIModule)

@@ -105,3 +105,12 @@ export const AccountingCataloguesAndRulesViews: View[] = [
     url: '/reglas-y-catalogos/disenador-de-reportes'
   }
 ];
+
+
+export const AccountingSystemManagementViews: View[] = [
+  {
+    name: 'AccountingSystemManagementViews.BalanceGeneration',
+    title: 'Generación de saldos',
+    url: '/administracion/generacion-de-saldos'
+  }
+];

@@ -11,17 +11,19 @@ import {
   AccountingOperationViews,
   AccountingDashboardsViews,
   AccountingReportsViews,
-  AccountingCataloguesAndRulesViews
+  AccountingCataloguesAndRulesViews,
+  AccountingSystemManagementViews
 } from './views.config';
 
 
 export type LayoutType = 'AccountingOperation' | 'AccountingDashboards' |
-                         'AccountingReports' | 'AccountingCataloguesAndRules';
+                         'AccountingReports' | 'AccountingCataloguesAndRules' | 'Management';
 
 
 export const APP_VIEWS: View[] = AccountingOperationViews.concat(AccountingDashboardsViews,
                                                                  AccountingReportsViews,
-                                                                 AccountingCataloguesAndRulesViews);
+                                                                 AccountingCataloguesAndRulesViews,
+                                                                 AccountingSystemManagementViews);
 
 
 export const APP_LAYOUTS: Layout[] = [
@@ -46,7 +48,13 @@ export const APP_LAYOUTS: Layout[] = [
   {
     name: 'AccountingCataloguesAndRules',
     views: AccountingCataloguesAndRulesViews,
-    hint: 'Administación de reglas contabilizadoras, fiancieras, y catálogos de cuentas',
+    hint: 'Administración de reglas contabilizadoras, financieras, y catálogos de cuentas',
     defaultTitle: 'Reglas contabilizadoras y catálogos de cuentas'
+  },
+  {
+    name: 'Management',
+    views: AccountingSystemManagementViews,
+    hint: 'Herramientas de administración del sistema',
+    defaultTitle: 'Administración del sistema'
   }
 ];
