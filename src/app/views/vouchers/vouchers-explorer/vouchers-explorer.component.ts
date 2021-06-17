@@ -41,8 +41,6 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
   @Input() filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
 
-  @Input() title = 'Pólizas';
-
   @Input() isLoading = false;
 
   @Output() vouchersExplorerEvent = new EventEmitter<EventInfo>();
@@ -68,7 +66,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
   onChangeFilter(event) {
     Assertion.assertValue(event.payload, 'event.payload');
 
-    this.sendEvent(VouchersExplorerEventType.FILTER_CHANGED, event.payload);
+    this.sendEvent(VouchersExplorerEventType.FILTER_CHANGED, event.payload as SearchVouchersCommand);
   }
 
 

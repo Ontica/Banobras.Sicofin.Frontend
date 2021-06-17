@@ -5,7 +5,6 @@
   <div class="primary" [fxHide.lt-lg]="displayVoucherTabbedView">
 
     <emp-fa-vouchers-explorer
-      title="Explorador de pólizas"
       [filter]="filter"
       [voucherList]="voucherList"
       [selectedVoucher]="selectedVoucher"
@@ -44,3 +43,11 @@
   </ng-container>
 
 </emp-ng-modal-window>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  title="Exportar pólizas"
+  [excelFileUrl]="excelFileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

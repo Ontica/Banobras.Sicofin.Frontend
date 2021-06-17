@@ -23,6 +23,10 @@ import { VouchersDataService } from '@app/data-services';
 
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
 
+import {
+  ExportReportModalEventType
+} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+
 type AccountingOperationModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
 
@@ -36,7 +40,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   voucherList: VoucherDescriptor[] = [];
   filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
-  dataDisplayedFilter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
+  searchVouchersCommand: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
 
   selectedVoucher: Voucher = EmptyVoucher;
 
@@ -47,6 +51,9 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   isLoadingVoucher = false;
 
   subscriptionHelper: SubscriptionHelper;
+
+  displayExportModal = false;
+  excelFileUrl = '';
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService) {
@@ -79,6 +86,12 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VouchersExplorerEventType.FILTER_CHANGED:
         this.applyVoucherFilter(event.payload);
         this.searchVouchers();
+        this.excelFileUrl = '';
+        return;
+
+      case VouchersExplorerEventType.EXPORT_VOUCHERS:
+        this.displayExportModal = true;
+
         return;
 
       case VouchersExplorerEventType.SELECT_VOUCHER:
@@ -99,17 +112,33 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         // this.displayOptionModalSelected = 'VouchersImporter';
         return;
 
-      case VouchersExplorerEventType.EXPORT_VOUCHERS:
-        console.log('EXPORT_VOUCHERS', this.dataDisplayedFilter);
-        // TODO: open the voucher importer
-        // this.displayOptionModalSelected = 'VouchersImporter';
-        return;
-
       case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         console.log('SELECT_VOUCHERS_OPTION', event.payload.vouchers);
         // TODO: validate the option and open the corresponding editor
 
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExportReportModalEvent(event) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.displayExportModal = false;
+        return;
+
+      case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
+        if (!this.searchVouchersCommand.accountsChartUID ) {
+          return;
+        }
+
+        this.exportVouchersToExcel();
         return;
 
       default:
@@ -158,10 +187,19 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
     this.vouchersData.searchVouchers(this.filter)
       .toPromise()
       .then(x => {
-        this.dataDisplayedFilter = Object.assign({}, this.filter);
+        this.searchVouchersCommand = Object.assign({}, this.filter);
         this.voucherList = x;
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private exportVouchersToExcel() {
+    console.log('EXPORT_VOUCHERS', this.searchVouchersCommand);
+
+    setTimeout(() => {
+      this.excelFileUrl = 'data-dummy';
+    }, 1000);
   }
 
 

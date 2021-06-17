@@ -39,3 +39,11 @@
   </div>
 
 </div>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  [title]="'Exportar ' + balanceTypeName.toLowerCase()"
+  [excelFileUrl]="excelFileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

@@ -14,6 +14,10 @@ import { AccountsChartDataService } from '@app/data-services';
 import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart,
          EmptyAccountsSearchCommand } from '@app/models';
 
+import {
+  ExportReportModalEventType
+} from '../../reports-controls/export-report-modal/export-report-modal.component';
+
 import { AccountsChartFilterEventType } from '../accounts-chart-filter/accounts-chart-filter.component';
 
 import { AccountsChartListEventType } from '../accounts-chart-list/accounts-chart-list.component';
@@ -38,9 +42,14 @@ export class AccountsChartComponent {
 
   accountsChart: AccountsChart = EmptyAccountsChart;
 
-  dataDisplayedFilter: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand);
+  accountsSearchCommand: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand);
 
   selectedAccountChartUID = '';
+
+  displayExportModal = false;
+
+  excelFileUrl = '';
+
 
   constructor(private accountsChartData: AccountsChartDataService) { }
 
@@ -54,9 +63,11 @@ export class AccountsChartComponent {
 
         this.selectedAccountChartUID = event.payload.accountsChart.uid;
 
-        this.dataDisplayedFilter = event.payload.accountsSearchCommand as AccountsSearchCommand;
+        this.accountsSearchCommand = event.payload.accountsSearchCommand as AccountsSearchCommand;
 
-        this.searchAccounts(this.selectedAccountChartUID, this.dataDisplayedFilter);
+        this.excelFileUrl = '';
+
+        this.searchAccounts(this.selectedAccountChartUID, this.accountsSearchCommand);
 
         return;
 
@@ -77,9 +88,32 @@ export class AccountsChartComponent {
         break;
 
       case AccountsChartListEventType.EXPORT_ACCOUNTS:
-        console.log('EXPORT_ACCOUNTS', {accountsChartUID: this.selectedAccountChartUID,
-                                        searchCommand: this.dataDisplayedFilter });
+        this.displayExportModal = true;
+
         break;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExportReportModalEvent(event) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.displayExportModal = false;
+        return;
+
+      case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
+        if (this.submitted || !this.accountsSearchCommand ) {
+          return;
+        }
+
+        this.exportAccountsToExcel();
+
+        return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -98,6 +132,16 @@ export class AccountsChartComponent {
         this.setText(this.accountsChart.name);
       })
       .finally(() => this.setSubmitted(false));
+  }
+
+
+  private exportAccountsToExcel() {
+    console.log('EXPORT_ACCOUNTS', {accountsChartUID: this.selectedAccountChartUID,
+                                    searchCommand: this.accountsSearchCommand });
+
+    setTimeout(() => {
+      this.excelFileUrl = 'data-dummy';
+    }, 1000);
   }
 
 

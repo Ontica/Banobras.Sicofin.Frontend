@@ -77,7 +77,7 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
   onSearchAccountsChartClicked() {
     const payload: any = {
       accountsChart: this.accountChartSelected,
-      accountsSearchCommand: this.accountsSearch
+      accountsSearchCommand: Object.assign({}, this.accountsSearch),
     };
 
     this.sendEvent(AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED, payload);

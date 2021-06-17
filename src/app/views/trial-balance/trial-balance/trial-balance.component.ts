@@ -13,6 +13,7 @@ import { BalancesDataService } from '@app/data-services';
 
 import { EmptyTrialBalance, EmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, TrialBalance,
          TrialBalanceCommand } from '@app/models';
+import { ExportReportModalEventType } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { TrialBalanceFilterEventType } from '../trial-balance-filter/trial-balance-filter.component';
 
@@ -24,6 +25,8 @@ import { TrialBalanceTableEventType } from '../trial-balance-table/trial-balance
 })
 export class TrialBalanceComponent {
 
+  balanceTypeName = '';
+
   cardHint = 'Selecciona los filtros';
 
   isLoading = false;
@@ -32,20 +35,31 @@ export class TrialBalanceComponent {
 
   trialBalance: TrialBalance = EmptyTrialBalance;
 
-  dataDisplayedFilter: TrialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand);
+  trialBalanceCommand: TrialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand);
+
+  displayExportModal = false;
+
+  excelFileUrl = '';
+
 
   constructor(private balancesDataService: BalancesDataService) { }
 
 
   onTrialBalanceFilterEvent(event) {
+    if (this.submitted) {
+      return;
+    }
+
     switch (event.type as TrialBalanceFilterEventType) {
 
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
         Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
 
-        this.dataDisplayedFilter = event.payload.trialBalanceCommand as TrialBalanceCommand;
+        this.trialBalanceCommand = event.payload.trialBalanceCommand as TrialBalanceCommand;
 
-        this.getTrialBalance(this.dataDisplayedFilter);
+        this.excelFileUrl = '';
+
+        this.getTrialBalance(this.trialBalanceCommand);
 
         return;
 
@@ -65,7 +79,29 @@ export class TrialBalanceComponent {
         return;
 
       case TrialBalanceTableEventType.EXPORT_BALANCE:
-        console.log('EXPORT_BALANCE', this.dataDisplayedFilter);
+        this.displayExportModal = true;
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExportReportModalEvent(event) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.displayExportModal = false;
+        return;
+
+      case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
+        if (this.submitted || !this.trialBalanceCommand.accountsChartUID ) {
+          return;
+        }
+
+        this.exportTrialBalanceToExcel();
         return;
 
       default:
@@ -88,6 +124,15 @@ export class TrialBalanceComponent {
   }
 
 
+  private exportTrialBalanceToExcel() {
+    this.balancesDataService.exportTrialBalanceToExcel(this.trialBalanceCommand)
+      .toPromise()
+      .then(x => {
+        this.excelFileUrl = !x ? x : 'data-dummy';
+      });
+  }
+
+
   private setText(itemsDisplayed?: number) {
 
     if (!this.trialBalance.command.trialBalanceType) {
@@ -95,9 +140,9 @@ export class TrialBalanceComponent {
       return;
     }
 
-    const trialBalanceTypeName = getTrialBalanceTypeNameFromUid(this.trialBalance.command.trialBalanceType);
+    this.balanceTypeName = getTrialBalanceTypeNameFromUid(this.trialBalance.command.trialBalanceType);
 
-    this.cardHint = trialBalanceTypeName;
+    this.cardHint = this.balanceTypeName;
 
     this.cardHint += itemsDisplayed >= 0 ?
       ` - ${itemsDisplayed} de ${this.trialBalance.entries.length} registros mostrados` :
