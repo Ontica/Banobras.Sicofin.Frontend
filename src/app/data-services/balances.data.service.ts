@@ -20,6 +20,15 @@ export class BalancesDataService {
   constructor(private http: HttpService) { }
 
 
+  exportTrialBalanceToExcel(trialBalanceCommand: TrialBalanceCommand): Observable<any> {
+    Assertion.assertValue(trialBalanceCommand, 'trialBalanceCommand');
+
+    const path = `v2/financial-accounting/trial-balance/excel`;
+
+    return this.http.post<any>(path, trialBalanceCommand);
+  }
+
+
   getLedgersAccountsBalances(standardAccountUID: string): Observable<AccountBalance[]> {
     Assertion.assertValue(standardAccountUID, 'standardAccountUID');
 
