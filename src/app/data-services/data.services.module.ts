@@ -8,6 +8,7 @@
 import { NgModule } from '@angular/core';
 
 import { AccountsChartDataService } from './accounts-chart.data.service';
+import { BalancesStoreDataService } from './balances-store.data.service';
 import { BalancesDataService } from './balances.data.service';
 import { ExchangeRatesDataService } from './exchange-rates.data.service';
 import { VouchersDataService } from './vouchers.data.service';
@@ -22,6 +23,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
   providers: [
     FileDownloadService,
     AccountsChartDataService,
+    BalancesStoreDataService,
     BalancesDataService,
     ExchangeRatesDataService,
     VouchersDataService,
