@@ -11,36 +11,33 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
-
 import { SharedModule } from '@app/shared/shared.module';
 
-import { SystemManagementWorkspaceComponent } from './system-management-workspace.component';
-
-import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
-import { BalancesGenerationModule } from '@app/views/balances-generation/balances-generation.module';
+import {
+  StoredBalanceSetsTableComponent
+} from './stored-balance-sets-table/stored-balance-sets-table.component';
+import {
+  StoredBalanceSetTabbedViewComponent
+} from './stored-balance-set-tabbed-view/stored-balance-set-tabbed-view.component';
 
 
 @NgModule({
-
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+
     AngularMaterialModule,
     AngularFlexLayoutModule,
     SharedModule,
-
-    SystemManagementWorkspaceRoutingModule,
-    BalancesGenerationModule,
   ],
-
   declarations: [
-    SystemManagementWorkspaceComponent
+    StoredBalanceSetsTableComponent,
+    StoredBalanceSetTabbedViewComponent,
   ],
-
   exports: [
-
-  ]
-
+    StoredBalanceSetsTableComponent,
+    StoredBalanceSetTabbedViewComponent,
+  ],
 })
-export class SystemManagementWorkspaceModule { }
+export class BalancesGenerationModule { }

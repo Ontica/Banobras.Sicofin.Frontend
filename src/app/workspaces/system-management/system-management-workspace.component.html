@@ -2,11 +2,24 @@
 
 <div class="explorer" fxLayoutGap="32px">
 
-  <div class="primary">
+  <div class="primary" [fxHide.lt-lg]="displayBalanceSetTabbedView">
+
+    <emp-fa-stored-balance-sets-table
+      [storedBalanceSetList]="storedBalanceSetList"
+      [selectedStoredBalanceSet]="selectedStoredBalanceSet"
+      (storedBalanceSetsTableEvent)="onStoredBalanceSetsTableEvent($event)">
+
+    </emp-fa-stored-balance-sets-table>
 
   </div>
 
-  <div class="secondary">
+  <div class="secondary priority" *ngIf="displayBalanceSetTabbedView">
+
+    <emp-fa-stored-balance-set-tabbed-view
+      [storedBalanceSet]="selectedStoredBalanceSet"
+      (closeEvent)="onCloseStoredBalanceSetTabbedView()">
+
+    </emp-fa-stored-balance-set-tabbed-view>
 
   </div>
 
