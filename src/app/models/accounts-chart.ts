@@ -67,6 +67,7 @@ export interface AccountsChart {
   uid: string;
   name: string;
   accountsPattern: string;
+  withSectors: boolean;
   accounts: AccountDescriptor[];
 }
 
@@ -75,6 +76,7 @@ export const EmptyAccountsChart: AccountsChart = {
   uid: 'Empty',
   name: '',
   accountsPattern: '',
+  withSectors: false,
   accounts: [],
 };
 
@@ -83,10 +85,11 @@ export interface AccountDescriptor {
   uid: string;
   number: string;
   name: string;
-  description: string;
+  sector?: string;
   type: string;
   role: AccountRole;
   debtorCreditor: DebtorCreditorType;   // naturaleza
+  startDate: DateString;
   level: number;
   obsolete: boolean;
 }
@@ -96,16 +99,18 @@ export const EmptyAccountDescriptor: AccountDescriptor = {
   uid: 'Empty',
   number: '',
   name: '',
-  description: '',
+  sector: '',
   type: '',
   role: null,
   debtorCreditor: null,
   level: 0,
+  startDate: '',
   obsolete: false
 };
 
 
 export interface Account extends AccountDescriptor {
+  description: string;
   startDate: DateString;
   endDate: DateString;
   accountsChart: Identifiable;
@@ -150,6 +155,7 @@ export interface AccountsSearchCommand {
   roles?: AccountRole[];
   sectors?: string[];
   currencies?: string[];
+  withSectors?: boolean;
 }
 
 
@@ -163,6 +169,7 @@ export const EmptyAccountsSearchCommand: AccountsSearchCommand = {
   roles: [],
   sectors: [],
   currencies: [],
+  withSectors: false
 };
 
 export interface AccountHistory {

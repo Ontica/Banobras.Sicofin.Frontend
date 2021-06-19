@@ -5,7 +5,7 @@
 
     <div fxLayout="row">
 
-      <div fxFlex="50">
+      <div fxFlex="35">
 
         <label>Catálogo:</label>
 
@@ -17,6 +17,17 @@
           (changes)="onAccountChartChanges($event)"
           required>
         </emp-ng-select>
+
+      </div>
+
+
+      <div fxFlex="15" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+
+        <mat-checkbox name="withSectors"
+          [(ngModel)]="accountsSearch.withSectors"
+          (click)="$event.stopPropagation">
+          Mostrar sectores
+        </mat-checkbox>
 
       </div>
 

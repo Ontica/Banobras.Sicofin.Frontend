@@ -17,6 +17,8 @@ export class AccountsChartListEntryComponent {
 
   @Input() account: AccountDescriptor;
 
+  @Input() showSectors = false;
+
   @Input() maxLevel = 11;
 
   @Input() displayHeader = false;
@@ -29,7 +31,7 @@ export class AccountsChartListEntryComponent {
 
 
   get widthByMaxLevel() {
-    return this.maxLevel >= 5 ? 22 * this.maxLevel : 110;
+    return (this.maxLevel >= 5 ? 22 * this.maxLevel : 110) + 8;
   }
 
 
