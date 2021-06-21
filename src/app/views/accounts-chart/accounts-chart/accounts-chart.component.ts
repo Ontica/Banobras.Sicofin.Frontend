@@ -136,12 +136,12 @@ export class AccountsChartComponent {
 
 
   private exportAccountsToExcel() {
-    console.log('EXPORT_ACCOUNTS', {accountsChartUID: this.selectedAccountChartUID,
-                                    searchCommand: this.accountsSearchCommand });
-
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy';
-    }, 1000);
+    this.accountsChartData.exportAccountsToExcel(this.selectedAccountChartUID,
+                                                 this.accountsSearchCommand)
+      .toPromise()
+      .then(x => {
+        this.excelFileUrl = x.url;
+      });
   }
 
 

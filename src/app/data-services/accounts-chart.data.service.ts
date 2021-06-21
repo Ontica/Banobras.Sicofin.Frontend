@@ -17,6 +17,7 @@ import { Account, AccountsChart, AccountsChartMasterData, AccountsSearchCommand 
 @Injectable()
 export class AccountsChartDataService {
 
+
   constructor(private http: HttpService) { }
 
 
@@ -39,6 +40,17 @@ export class AccountsChartDataService {
     const path = `v2/financial-accounting/accounts-charts-master-data`;
 
     return this.http.get<AccountsChartMasterData[]>(path);
+  }
+
+
+  exportAccountsToExcel(accountsChartUID: string,
+                        searchCommand: AccountsSearchCommand) {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(searchCommand, 'searchCommand');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/excel`;
+
+    return this.http.post<any>(path, searchCommand);
   }
 
 

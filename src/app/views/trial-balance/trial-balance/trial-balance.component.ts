@@ -128,7 +128,7 @@ export class TrialBalanceComponent {
     this.balancesDataService.exportTrialBalanceToExcel(this.trialBalanceCommand)
       .toPromise()
       .then(x => {
-        this.excelFileUrl = !x ? x : 'data-dummy';
+        this.excelFileUrl = x.url;
       });
   }
 
