@@ -1,0 +1,62 @@
+<emp-ng-modal-window [config]="{width:'920px'}">
+
+  <emp-ng-card
+    title="Nuevo grupo de saldos"
+    hint='Información general del grupo de saldos.'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <form [formGroup]="formHandler.form" autocomplete="off" class="form-section">
+
+        <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+
+          <div fxLayout="row" fxLayout.lt-md="column">
+
+            <div fxFlex="50">
+              <label>Catálogo:</label>
+              <emp-ng-select
+                [config]="{selectFirst: !accountsChartDefault?.uid}"
+                [formControlName]="controls.accountsChart"
+                [items]="accountsChartMasterDataList"
+                [loading]="isLoading"
+                [showError]="formHandler.showInvalidControl(controls.accountsChart)">
+              </emp-ng-select>
+            </div>
+
+            <div fxFlex="126px" fxFlex.lt-md="none">
+              <label>Saldos al día:</label>
+              <emp-ng-datepicker
+                [formControlName]="controls.balancesDate"
+                [showError]="formHandler.showInvalidControl(controls.balancesDate)">
+
+              </emp-ng-datepicker>
+            </div>
+
+          </div>
+
+          <mat-divider class="divider-padding"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button (click)="onCreateStoredBalanceSetClicked()"
+                [class.btn]="!formHandler.isValid"
+                [class.btn-action]="formHandler.isValid">
+                Guardar
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

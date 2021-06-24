@@ -21,6 +21,7 @@ import { AccountChartStateSelector } from '@app/presentation/exported.presentati
 export enum StoredBalanceSetsTableEventType {
   SEARCH_BALANCES_SET = 'StoredBalanceSetsTableComponent.Event.SearchBalancesSet',
   SELECT_BALANCES_SET = 'StoredBalanceSetsTableComponent.Event.SelectBalancesSet',
+  CREATE_BALANCE_SET = 'StoredBalanceSetsTableComponent.Event.CreateBalancesSet',
 }
 
 @Component({
@@ -86,6 +87,11 @@ export class StoredBalanceSetsTableComponent implements OnChanges, OnInit, OnDes
 
   onSelectStoredBalanceSetClicked(storedBalanceSet: StoredBalanceSet) {
     this.sendEvent(StoredBalanceSetsTableEventType.SELECT_BALANCES_SET, {storedBalanceSet});
+  }
+
+
+  onClickCreateBalanceSet() {
+    this.sendEvent(StoredBalanceSetsTableEventType.CREATE_BALANCE_SET);
   }
 
 

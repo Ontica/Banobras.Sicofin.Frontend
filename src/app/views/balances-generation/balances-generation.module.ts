@@ -14,8 +14,13 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedModule } from '@app/shared/shared.module';
 
 import {
+  StoredBalanceSetCreatorComponent
+} from './stored-balance-set-creator/stored-balance-set-creator.component';
+
+import {
   StoredBalanceSetsTableComponent
 } from './stored-balance-sets-table/stored-balance-sets-table.component';
+
 import {
   StoredBalanceSetTabbedViewComponent
 } from './stored-balance-set-tabbed-view/stored-balance-set-tabbed-view.component';
@@ -32,10 +37,12 @@ import {
     SharedModule,
   ],
   declarations: [
+    StoredBalanceSetCreatorComponent,
     StoredBalanceSetsTableComponent,
     StoredBalanceSetTabbedViewComponent,
   ],
   exports: [
+    StoredBalanceSetCreatorComponent,
     StoredBalanceSetsTableComponent,
     StoredBalanceSetTabbedViewComponent,
   ],

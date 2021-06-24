@@ -13,6 +13,14 @@
 
     </div>
 
+    <div class="card-header-options">
+
+      <button class="btn-action" (click)="onClickCreateBalanceSet()">
+        Crear grupo de saldos
+      </button>
+
+    </div>
+
   </div>
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
@@ -68,7 +76,7 @@
 
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="accountsChart">
-            <th mat-header-cell *matHeaderCellDef> Cátalogo </th>
+            <th mat-header-cell *matHeaderCellDef> Catálogo </th>
             <td mat-cell *matCellDef="let row"> {{ row.accountsChart.name }} </td>
           </ng-container>
           <ng-container matColumnDef="name">
