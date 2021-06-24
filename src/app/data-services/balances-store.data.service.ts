@@ -37,4 +37,28 @@ export class BalancesStoreDataService {
     return this.http.get<StoredBalanceSet>(path);
   }
 
+
+  createStoredBalancesSet(accountsChartUID: string, balanceSet: any): Observable<StoredBalanceSet> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(balanceSet, 'balanceSet');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/balance-store`;
+
+    return this.http.post<StoredBalanceSet>(path, balanceSet);
+  }
+
+
+  calculateStoredBalancesSet(accountsChartUID: string,
+                             balanceSetUID: string,
+                             balanceSet: any): Observable<StoredBalanceSet> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(balanceSetUID, 'balanceSetUID');
+    Assertion.assertValue(balanceSet, 'balanceSet');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}` +
+      `/balance-store/${balanceSetUID}/calculate`;
+
+    return this.http.post<StoredBalanceSet>(path, balanceSet);
+  }
+
 }

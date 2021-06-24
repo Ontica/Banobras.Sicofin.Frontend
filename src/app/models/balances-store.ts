@@ -8,10 +8,8 @@
 import { Empty, Identifiable } from '@app/core';
 
 
-export interface StoredBalanceSet {
-  uid: string;
+export interface StoredBalanceSet extends Identifiable {
   accountsChart: Identifiable;
-  name: string;
   balancesDate: string;
   calculated: boolean;
   calculationTime: string;
