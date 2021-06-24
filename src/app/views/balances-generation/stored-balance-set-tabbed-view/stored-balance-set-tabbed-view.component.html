@@ -4,112 +4,160 @@
 
     <mat-tab label="Saldos">
 
-      <div fxLayout="column" fxFlexFill>
+      <ng-template matTabContent>
 
-        <form #filterForm="ngForm" fxFlex="none"
-          [style.padding]="0" [style.margin]="0" [style.paddingBottom.px]="8"
-          autocomplete="off" class="form-section form-container"
-          (keydown.enter)="$event.preventDefault()">
+        <div fxLayout="column" fxFlexFill>
 
-          <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+          <form #filterForm="ngForm" fxFlex="none"
+            [style.padding]="0" [style.margin]="0" [style.paddingBottom.px]="8"
+            autocomplete="off" class="form-section form-container"
+            (keydown.enter)="$event.preventDefault()">
 
-            <div fxLayout="row">
+            <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
 
-              <div fxFlex="50">
+              <div fxLayout="row">
 
-                <label>Consultar por:</label>
+                <div fxFlex="50">
 
-                <emp-ng-select
-                  [(ngModel)]="queryBy" name="queryBy" required
-                  [config]="{bindByValue: false}"
-                  [bindLabel]="null"
-                  [items]="queryByList">
-                </emp-ng-select>
+                  <label>Contabilidad:</label>
 
-              </div>
+                  <emp-ng-select
+                    [(ngModel)]="selectedLedger" name="ledger"
+                    [config]="{bindByValue: false, clearable: true}"
+                    [items]="ledgerList"
+                    placeholder="Todas">
+                  </emp-ng-select>
 
-              <div fxFlex fxLayoutAlign="start end">
+                </div>
 
-                <div class="input-icon-container" [style.width.%]="100" [style.marginBottom.px]="4">
+                <div fxFlex="none" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
 
-                  <input type="text" class="text-box" name="keywords" placeholder="Buscar..."
-                    [(ngModel)]="keywords"
-                    (keyup.escape)="keywords = null"
-                    required>
+                  <mat-checkbox name="subsidiaryAccount"
+                    [(ngModel)]="showSubsidiaryAccount"
+                    (click)="$event.stopPropagation">
+                    Consultar auxiliar
+                  </mat-checkbox>
+
+                </div>
+
+                <div fxFlex fxLayoutAlign="start end">
+
+                  <div class="input-icon-container" [style.width.%]="100" [style.marginBottom.px]="4">
+
+                    <input type="text" class="text-box" name="keywords" placeholder="Buscar..."
+                      [(ngModel)]="keywords"
+                      (keyup.escape)="keywords = null">
+
+                  </div>
+
+                </div>
+
+                <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+                  <button title="Buscar"
+                    [class.btn-icon-action]="filterForm.valid"
+                    [class.btn-icon]="filterForm.invalid"
+                    [disabled]="filterForm.invalid"
+                    [style.margin]="0"
+                    (click)="onFilterDataClicked()">
+                    <mat-icon>search</mat-icon>
+
+                  </button>
 
                 </div>
 
               </div>
 
-              <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+            </div>
 
-                <button title="Buscar"
-                  [class.btn-icon-action]="filterForm.valid"
-                  [class.btn-icon]="filterForm.invalid"
-                  [disabled]="filterForm.invalid"
-                  [style.margin]="0">
-                  <mat-icon>search</mat-icon>
+          </form>
 
-                </button>
+          <div #tableContainer fxFlex [style.padding.px]="2">
 
+            <cdk-virtual-scroll-viewport tvsItemSize="25" headerHeight="40" [bufferMultiplier]="0"
+              [ngClass]="{'mat-elevation-z1': storedBalanceListDS.data.length !== 0}">
+
+              <table mat-table [dataSource]="storedBalanceListDS">
+
+                <ng-container matColumnDef="ledger">
+                  <th mat-header-cell *matHeaderCellDef> Contabilidad </th>
+                  <td mat-cell *matCellDef="let row" class="nowrap">{{ row.ledger.name }}</td>
+                </ng-container>
+                <ng-container matColumnDef="sectorCode">
+                  <th mat-header-cell *matHeaderCellDef> Sct </th>
+                  <td mat-cell *matCellDef="let row" [style.width.px]="50">{{ row.sectorCode }}</td>
+                </ng-container>
+                <ng-container matColumnDef="accountNumber">
+                  <th mat-header-cell *matHeaderCellDef> Cuenta </th>
+                  <td mat-cell *matCellDef="let row" class="nowrap">{{ row.accountNumber }}</td>
+                </ng-container>
+                <ng-container matColumnDef="accountName">
+                  <th mat-header-cell *matHeaderCellDef> Nombre de la cuenta </th>
+                  <td mat-cell *matCellDef="let row">{{ row.accountName }}</td>
+                </ng-container>
+                <ng-container matColumnDef="subsidiaryAccountNumber">
+                  <th mat-header-cell *matHeaderCellDef> Auxiliar </th>
+                  <td mat-cell *matCellDef="let row" class="nowrap">{{ row.subsidiaryAccountNumber }}</td>
+                </ng-container>
+                <ng-container matColumnDef="subsidiaryAccountName">
+                  <th mat-header-cell *matHeaderCellDef> Nombre del auxiliar </th>
+                  <td mat-cell *matCellDef="let row">{{ row.subsidiaryAccountName }}</td>
+                </ng-container>
+                <ng-container matColumnDef="balance">
+                  <th mat-header-cell *matHeaderCellDef class="text-align-right"> Saldo </th>
+                  <td mat-cell *matCellDef="let row" class="text-align-right">
+                    {{ row.balance | number : '1.2-2' }}
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="storedBalanceDisplayedColumns; sticky: true;"></tr>
+                <tr mat-row *matRowDef="let row; columns: storedBalanceDisplayedColumns;"></tr>
+              </table>
+
+              <div *ngIf="storedBalanceListDS.data.length === 0" class="text-not-found">
+                <p>A este grupo no se le han generado saldos.</p>
               </div>
 
-            </div>
+            </cdk-virtual-scroll-viewport>
 
           </div>
 
-        </form>
+        </div>
 
-        <div #tableContainer fxFlex>
+      </ng-template>
+    </mat-tab>
 
-          <cdk-virtual-scroll-viewport tvsItemSize="25" headerHeight="40" [bufferMultiplier]="0">
+    <mat-tab label="Recalcular">
 
-            <table mat-table [dataSource]="storedBalanceListDS">
+      <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
 
-              <ng-container matColumnDef="accountNumber">
-                <th mat-header-cell *matHeaderCellDef> Cuenta </th>
-                <td mat-cell *matCellDef="let row" class="nowrap">{{ row.accountNumber }}</td>
-              </ng-container>
+        <div fxLayout="row">
 
-              <ng-container matColumnDef="sectorCode">
-                <th mat-header-cell *matHeaderCellDef> Sector </th>
-                <td mat-cell *matCellDef="let row" [style.width.px]="50">{{ row.sectorCode }}</td>
-              </ng-container>
-              <ng-container matColumnDef="accountName">
-                <th mat-header-cell *matHeaderCellDef> Nombre de la cuenta </th>
-                <td mat-cell *matCellDef="let row">{{ row.accountName }}</td>
-              </ng-container>
-              <ng-container matColumnDef="partial">
-                <th mat-header-cell *matHeaderCellDef class="text-align-right"> Parcial </th>
-                <td mat-cell *matCellDef="let row" class="text-align-right">
-                  {{ row.partial | number : '1.2-2' }}
-                </td>
-              </ng-container>
+          <div fxFlex fxLayoutAlign="start center">
 
-              <ng-container matColumnDef="balance">
-                <th mat-header-cell *matHeaderCellDef class="text-align-right"> Saldo </th>
-                <td mat-cell *matCellDef="let row" class="text-align-right">
-                  {{ row.balance | number : '1.2-2' }}
-                </td>
-              </ng-container>
+            <span *ngIf="storedBalanceSet.calculated">
+              Saldos generados el:
+              <strong>{{storedBalanceSet.calculationTime | dateTimeFormat: 'DMY HH:mm'}}</strong>
+            </span>
 
-              <tr mat-header-row *matHeaderRowDef="storedBalanceDisplayedColumns; sticky: true;"></tr>
-              <tr mat-row *matRowDef="let row; columns: storedBalanceDisplayedColumns;"></tr>
-            </table>
+            <span *ngIf="!storedBalanceSet.calculated">
+              Saldos no generados.
+            </span>
 
-            <div *ngIf="storedBalanceListDS.data.length == 0" class="text-not-found">
-              <p>A este grupo no se le han generado saldos.</p>
-            </div>
+          </div>
 
-          </cdk-virtual-scroll-viewport>
+          <div fxFlex="none" fxLayoutAlign="end center">
+
+            <button type="submit" class="btn-action"
+              (click)="onCalculateStoredBalanceSetClicked()">
+              {{storedBalanceSet.calculated ? 'Recalcular saldos' : 'Calcular saldos'}}
+            </button>
+
+          </div>
 
         </div>
 
       </div>
-
-    </mat-tab>
-
-    <mat-tab label="Recalcular" disabled>
 
     </mat-tab>
 
