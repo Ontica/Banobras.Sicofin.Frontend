@@ -17,10 +17,16 @@
 
     <emp-fa-stored-balance-set-tabbed-view
       [storedBalanceSet]="selectedStoredBalanceSet"
-      (closeEvent)="onCloseStoredBalanceSetTabbedView()">
+      (storedBalanceSetTabbedViewEvent)="onStoredBalanceSetTabbedViewEvent($event)">
 
     </emp-fa-stored-balance-set-tabbed-view>
 
   </div>
 
 </div>
+
+<emp-fa-stored-balance-set-creator *ngIf="displayBalanceSetCreator"
+  [accountsChartDefault]="selectedAccountChart"
+  (storedBalanceSetCreatorEvent)="onStoredBalanceSetCreatorEvent($event)">
+
+</emp-fa-stored-balance-set-creator>

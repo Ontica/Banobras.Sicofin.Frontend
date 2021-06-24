@@ -7,11 +7,21 @@
 
 import { Component } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty } from '@app/core';
+import { Assertion, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
 
 import { BalancesStoreDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet } from '@app/models';
+import { AccountsChartMasterData, EmptyStoredBalanceSet, StoredBalanceSet } from '@app/models';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
+import {
+  StoredBalanceSetCreatorEventType
+} from '@app/views/balances-generation/stored-balance-set-creator/stored-balance-set-creator.component';
+
+import {
+  StoredBalanceSetTabbedViewEventType
+} from '@app/views/balances-generation/stored-balance-set-tabbed-view/stored-balance-set-tabbed-view.component';
 
 import {
   StoredBalanceSetsTableEventType
@@ -24,18 +34,22 @@ import {
 })
 export class SystemManagementWorkspaceComponent {
 
+  displayBalanceSetCreator = false;
+
+  displayBalanceSetTabbedView = false;
+
+  isLoading = false;
+
+  submitted = false;
+
   storedBalanceSetList: StoredBalanceSet[] = [];
 
   selectedStoredBalanceSet: StoredBalanceSet = EmptyStoredBalanceSet;
 
-  isLoading = false;
+  selectedAccountChart: AccountsChartMasterData = null;
 
-  displayBalanceSetTabbedView = false;
-
-  accountChartSelected: AccountsChartMasterData = null;
-
-
-  constructor(private balancesStoreData: BalancesStoreDataService) {
+  constructor(private balancesStoreData: BalancesStoreDataService,
+              private messageBox: MessageBoxService) {
 
   }
 
@@ -46,7 +60,7 @@ export class SystemManagementWorkspaceComponent {
 
       case StoredBalanceSetsTableEventType.SEARCH_BALANCES_SET:
         Assertion.assertValue(event.payload.accountsChart, 'event.payload.accountsChart');
-        this.accountChartSelected = event.payload.accountsChart as AccountsChartMasterData;
+        this.selectedAccountChart = event.payload.accountsChart as AccountsChartMasterData;
         this.getBalancesSetsList();
         return;
 
@@ -58,6 +72,11 @@ export class SystemManagementWorkspaceComponent {
 
         return;
 
+      case StoredBalanceSetsTableEventType.CREATE_BALANCE_SET:
+        this.displayBalanceSetCreator = true;
+
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -65,18 +84,73 @@ export class SystemManagementWorkspaceComponent {
   }
 
 
-  onCloseStoredBalanceSetTabbedView() {
-    this.displayBalanceSetTabbedView = false;
-    this.selectedStoredBalanceSet = EmptyStoredBalanceSet;
+  onStoredBalanceSetCreatorEvent(event: EventInfo): void {
+
+    if (this.submitted) {
+      return;
+    }
+
+    switch (event.type as StoredBalanceSetCreatorEventType) {
+
+      case StoredBalanceSetCreatorEventType.CLOSE_MODAL_CLICKED:
+
+        this.displayBalanceSetCreator = false;
+
+        return;
+
+      case StoredBalanceSetCreatorEventType.CREATE_STORED_BALANCE_SET:
+        Assertion.assertValue(event.payload.accountsChartUID, 'event.payload.accountsChartUID');
+        Assertion.assertValue(event.payload.storedBalanceSet, 'event.payload.storedBalanceSet');
+
+        this.createStoredBalancesSet(event.payload.accountsChartUID, event.payload.storedBalanceSet);
+
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+
+  onStoredBalanceSetTabbedViewEvent(event: EventInfo): void {
+    if (this.submitted) {
+      return;
+    }
+
+    switch (event.type as StoredBalanceSetTabbedViewEventType) {
+
+      case StoredBalanceSetTabbedViewEventType.CLOSE_MODAL_CLICKED:
+
+        this.setSelectedStoredBalanceSet(EmptyStoredBalanceSet);
+
+        return;
+
+      case StoredBalanceSetTabbedViewEventType.CALCULATE_STORED_BALANCE_SET:
+        Assertion.assertValue(event.payload.accountsChartUID, 'event.payload.accountsChartUID');
+        Assertion.assertValue(event.payload.balanceSetUID, 'event.payload.balanceSetUID');
+        Assertion.assertValue(event.payload.storedBalanceSet, 'event.payload.storedBalanceSet');
+
+        this.calculateStoredBalancesSet(event.payload.accountsChartUID,
+                                        event.payload.balanceSetUID,
+                                        event.payload.storedBalanceSet);
+
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
   private getBalancesSetsList() {
-    if (isEmpty(this.accountChartSelected)) {
+    if (isEmpty(this.selectedAccountChart)) {
       return;
     }
 
-    this.balancesStoreData.getBalancesSetsList(this.accountChartSelected.uid)
+    this.balancesStoreData.getBalancesSetsList(this.selectedAccountChart.uid)
       .toPromise()
       .then(x => {
         this.storedBalanceSetList = x;
@@ -85,19 +159,68 @@ export class SystemManagementWorkspaceComponent {
 
 
   private getStoredBalanceSet(balanceSetUID: string) {
-    if (isEmpty(this.accountChartSelected) || !balanceSetUID) {
+    if (isEmpty(this.selectedAccountChart) || !balanceSetUID) {
       return;
     }
 
     this.isLoading = true;
 
-    this.balancesStoreData.getStoredBalanceSet(this.accountChartSelected.uid, balanceSetUID)
+    this.balancesStoreData.getStoredBalanceSet(this.selectedAccountChart.uid, balanceSetUID)
       .toPromise()
       .then(x => {
-        this.selectedStoredBalanceSet = x;
-        this.displayBalanceSetTabbedView = true;
+        this.setSelectedStoredBalanceSet(x);
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private createStoredBalancesSet(accountsChartUID: string, balanceSet: any) {
+    this.setSubmitted(true);
+
+    this.balancesStoreData.createStoredBalancesSet(accountsChartUID, balanceSet)
+      .toPromise()
+      .then(x => {
+        this.displayBalanceSetCreator = false;
+        this.setSelectedStoredBalanceSet(x);
+
+        if (this.selectedAccountChart?.uid === accountsChartUID) {
+          this.getBalancesSetsList();
+        }
+      })
+      .finally(() => this.setSubmitted(false));
+  }
+
+
+
+  private calculateStoredBalancesSet(accountsChartUID: string, balanceSetUID: string, balanceSet: any) {
+    this.setSubmitted(true);
+
+    this.balancesStoreData.calculateStoredBalancesSet(accountsChartUID, balanceSetUID, balanceSet)
+      .toPromise()
+      .then(x => {
+        this.setSelectedStoredBalanceSet(x);
+
+        this.messageBox.show(`Se han generado los saldos acumulados al día
+          ${DateStringLibrary.format(this.selectedStoredBalanceSet.calculationTime)}.`,
+          'Saldos generados');
+
+        if (this.selectedAccountChart?.uid === accountsChartUID) {
+          this.getBalancesSetsList();
+        }
+      })
+      .finally(() => this.setSubmitted(false));
+  }
+
+
+  private setSelectedStoredBalanceSet(storedBalanceSet: StoredBalanceSet) {
+    this.selectedStoredBalanceSet = storedBalanceSet;
+    this.displayBalanceSetTabbedView = !isEmpty(this.selectedStoredBalanceSet);
+  }
+
+
+  private setSubmitted(submitted: boolean) {
+    this.isLoading = submitted;
+    this.submitted = submitted;
   }
 
 }
