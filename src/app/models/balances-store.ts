@@ -5,6 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { formatNumber } from '@angular/common';
+
 import { Empty, Identifiable } from '@app/core';
 
 
@@ -41,4 +43,9 @@ export interface StoredBalance {
   subsidiaryAccountNumber: string;
   subsidiaryAccountName: string;
   balance: number;
+}
+
+
+export function numberWithCommas(num: number) {
+  return formatNumber(Number(num ?? 0), 'en-US');
 }

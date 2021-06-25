@@ -5,11 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
-import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet } from '@app/models';
+import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet, numberWithCommas } from '@app/models';
 
 import { EventInfo, Identifiable } from '@app/core';
 
@@ -18,6 +18,12 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 export enum StoredBalanceSetTabbedViewEventType {
   CLOSE_MODAL_CLICKED = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',
   CALCULATE_STORED_BALANCE_SET = 'StoredBalanceSetTabbedViewComponent.Event.CalculateStoredBalanceSetClicked',
+}
+
+interface FilterDef {
+  field: string;
+  value: string;
+  secondaryField?: string;
 }
 
 @Component({
@@ -30,6 +36,8 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
   @Input() storedBalanceSet: StoredBalanceSet = EmptyStoredBalanceSet;
 
+  @Input() ledgerList: Identifiable[] = [];
+
   @Output() storedBalanceSetTabbedViewEvent = new EventEmitter<EventInfo>();
 
   title = 'Saldos acumulados';
@@ -37,8 +45,6 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
   hint = '';
 
   selectedTabIndex = 0;
-
-  ledgerList: Identifiable[] = [];
 
   selectedLedger: Identifiable = null;
 
@@ -51,12 +57,17 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
   storedBalanceListDS: TableVirtualScrollDataSource<StoredBalance>;
 
+  displayedItemsText = '';
 
-  ngOnChanges() {
-    this.setTitle();
-    this.clearFilters();
-    this.initDataSource();
-    this.scrollToTop();
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.storedBalanceSet) {
+      this.setTitle();
+      this.clearFilters();
+      this.initDataSource();
+      this.setDisplayedItemsText();
+      this.scrollToTop();
+    }
   }
 
 
@@ -67,6 +78,8 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
   onFilterDataClicked() {
     this.setDisplayedColumns();
+    this.applyFilter();
+    this.setDisplayedItemsText();
     this.scrollToTop();
   }
 
@@ -88,6 +101,18 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
   }
 
 
+  private setDisplayedItemsText() {
+    if (this.storedBalanceListDS.filteredData.length === this.storedBalanceListDS.data.length ) {
+      this.displayedItemsText = numberWithCommas(this.storedBalanceListDS.data.length) +
+                                ' registros encontrados';
+    } else {
+      this.displayedItemsText = numberWithCommas(this.storedBalanceListDS.filteredData.length) + ' de ' +
+                                numberWithCommas(this.storedBalanceListDS.data.length) +
+                                ' registros mostrados';
+    }
+  }
+
+
   private clearFilters() {
     this.selectedLedger = null;
     this.keywords = '';
@@ -95,8 +120,9 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
 
   private initDataSource() {
-    this.storedBalanceListDS = new TableVirtualScrollDataSource(this.storedBalanceSet.balances ?? []);
     this.setDisplayedColumns();
+    this.storedBalanceListDS = new TableVirtualScrollDataSource(this.storedBalanceSet.balances ?? []);
+    this.storedBalanceListDS.filterPredicate = this.getFilterPredicate();
   }
 
 
@@ -108,6 +134,49 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
       this.storedBalanceDisplayedColumns =
         ['ledger', 'sectorCode', 'accountNumber', 'accountName', 'balance'];
     }
+  }
+
+
+  private getFilterPredicate() {
+    return (row: StoredBalance, filtersJson: string) => {
+      const matchFilter = [];
+      const filters = JSON.parse(filtersJson) as FilterDef[];
+
+      filters.forEach(filter => {
+        switch (filter.field) {
+          case 'ledger':
+            const fieldValue = row[filter.field][filter.secondaryField] ?? '';
+            matchFilter.push(fieldValue.toLowerCase().includes(filter.value.toLowerCase()));
+            break;
+
+          case 'keywords':
+            const match = this.storedBalanceDisplayedColumns.filter(column =>
+              !['balance', 'ledger'].includes(column) && row[column] &&
+              row[column].toLowerCase().includes(filter.value.toLowerCase())).length > 0;
+            matchFilter.push(match);
+            break;
+        }
+      });
+
+      return matchFilter.every(Boolean);
+    };
+  }
+
+
+  private applyFilter() {
+    const filtersList: FilterDef[] = [
+      {
+        field: 'ledger',
+        value: this.selectedLedger?.uid ?? '',
+        secondaryField: 'uid',
+      },
+      {
+        field: 'keywords',
+        value: this.keywords ?? '',
+      }
+    ];
+
+    this.storedBalanceListDS.filter = JSON.stringify(filtersList);
   }
 
 

@@ -40,15 +40,16 @@
 
                 </div>
 
-                <div fxFlex fxLayoutAlign="start end">
+                <div fxFlex>
 
-                  <div class="input-icon-container" [style.width.%]="100" [style.marginBottom.px]="4">
+                  <label>
+                    {{ displayedItemsText }}
+                  </label>
 
-                    <input type="text" class="text-box" name="keywords" placeholder="Buscar..."
-                      [(ngModel)]="keywords"
-                      (keyup.escape)="keywords = null">
-
-                  </div>
+                  <input type="text" class="text-box" name="keywords" placeholder="Buscar..."
+                    [(ngModel)]="keywords"
+                    (keyup.escape)="keywords = null"
+                    (keyup.enter)="onFilterDataClicked()">
 
                 </div>
 
@@ -114,8 +115,13 @@
                 <tr mat-row *matRowDef="let row; columns: storedBalanceDisplayedColumns;"></tr>
               </table>
 
-              <div *ngIf="storedBalanceListDS.data.length === 0" class="text-not-found">
+              <div class="text-not-found" *ngIf="storedBalanceListDS.data.length === 0">
                 <p>A este grupo no se le han generado saldos.</p>
+              </div>
+
+              <div class="text-not-found" *ngIf="storedBalanceListDS.data.length > 0 &&
+                                                 storedBalanceListDS.filteredData.length === 0">
+                <p>No se encontraron saldos con el filtro proporcionado.</p>
               </div>
 
             </cdk-virtual-scroll-viewport>
