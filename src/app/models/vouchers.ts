@@ -109,6 +109,19 @@ export enum VoucherEntryType {
   Credit = 'H'
 }
 
+
+export const VoucherEntryTypeList: Identifiable[] = [
+  {
+    uid: 'Debit',
+    name: 'Cargo',
+  },
+  {
+    uid: 'Credit',
+    name: 'Abono',
+  },
+];
+
+
 export interface Voucher {
   id: number;
   number: string;
@@ -145,6 +158,22 @@ export const EmptyVoucher: Voucher = {
 };
 
 
+export interface NumberedNamedEntity {
+  uid: string;
+  number: string;
+  name: string;
+  fullName: string;
+}
+
+
+export const EmptyNumberedNamedEntity: NumberedNamedEntity = {
+  uid: '',
+  number: '',
+  name: '',
+  fullName: '',
+};
+
+
 export interface VoucherEntry {
   id: number;
   voucherEntryType: VoucherEntryType;
@@ -165,6 +194,28 @@ export interface VoucherEntry {
   exchangeRate: number;
   baseCurrencyAmount: number;
 }
+
+
+export const EmptyVoucherEntry: VoucherEntry = {
+  id: 0,
+  voucherEntryType: VoucherEntryType.Debit,
+  ledgerAccount: EmptyNumberedNamedEntity,
+  sector: Empty,
+  subledgerAccount: EmptyNumberedNamedEntity,
+  concept: '',
+  date: '',
+  responsibilityArea: Empty,
+  budgetConcept: '',
+  availabilityCode: '',
+  eventType: Empty,
+  verificationNumber: '',
+  debit: 0,
+  credit: 0,
+  currency: Empty,
+  amount: 0,
+  exchangeRate: 0,
+  baseCurrencyAmount: 0,
+};
 
 
 export enum VoucherEntryItemType {
@@ -188,13 +239,6 @@ export interface VoucherEntryDescriptor {
   debit: number;
   credit: number;
   itemType: VoucherEntryItemType;
-}
-
-export interface NumberedNamedEntity {
-  uid: string;
-  number: string;
-  name: string;
-  fullName: string;
 }
 
 
