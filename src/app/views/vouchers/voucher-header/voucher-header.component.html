@@ -126,10 +126,16 @@
 
       <div fxFlex fxLayoutAlign="end center">
 
-        <button *ngIf="showEnableEditor &&!readonly && !editionMode" (click)="enableEditor(true)"
-          class="btn-action">
-          Editar
-        </button>
+        <ng-container *ngIf="showEnableEditor &&!readonly && !editionMode">
+          <button (click)="onAddVoucherEntryClicked()"
+            class="btn-action">
+            Agregar movimiento
+          </button>
+          <button (click)="enableEditor(true)"
+            class="btn-action">
+            Editar
+          </button>
+        </ng-container>
 
         <button *ngIf="editionMode" (click)="submitForm()" [class.btn]="!formHandler.isValid"
           [class.btn-action]="formHandler.isValid">

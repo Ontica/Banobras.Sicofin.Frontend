@@ -19,3 +19,9 @@
     </emp-fa-voucher-entry-table>
 
 </div>
+
+<emp-fa-voucher-entry-editor *ngIf="displayVoucherEntryEditor"
+  [voucherEntry]="selectedVoucherEntry"
+  (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
+
+</emp-fa-voucher-entry-editor>

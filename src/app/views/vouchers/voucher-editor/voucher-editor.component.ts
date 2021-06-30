@@ -11,6 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { EmptyVoucher, EmptyVoucherEntry, Voucher, VoucherEntry } from '@app/models';
 
+import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-entry-editor.component';
+
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
 
 import { VoucherHeaderComponentEventType } from '../voucher-header/voucher-header.component';
@@ -42,6 +44,11 @@ export class VoucherEditorComponent {
         console.log('UPDATE_VOUCHER', event.payload);
         return;
 
+      case VoucherHeaderComponentEventType.ADD_VOUCHER_ENTRY_CLICKED:
+        this.displayVoucherEntryEditor = true;
+        this.selectedVoucherEntry = EmptyVoucherEntry;
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -68,6 +75,35 @@ export class VoucherEditorComponent {
 
       case VoucherEntryTableEventType.REMOVE_VOUCHER_ENTRY_CLICKED:
         console.log('REMOVE_VOUCHER_ENTRY_CLICKED', event.payload.voucherEntry);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onVoucherEntryEditorEvent(event: EventInfo): void {
+
+    if (this.submitted) {
+      return;
+    }
+
+    switch (event.type as VoucherEntryEditorEventType) {
+
+      case VoucherEntryEditorEventType.CLOSE_MODAL_CLICKED:
+        this.displayVoucherEntryEditor = false;
+        this.selectedVoucherEntry = EmptyVoucherEntry;
+
+        return;
+
+      case VoucherEntryEditorEventType.CREATE_VOUCHER_ENTRY:
+        console.log('CREATE_VOUCHER_ENTRY', event.payload);
+        return;
+
+      case VoucherEntryEditorEventType.UPDATE_VOUCHER_ENTRY:
+        console.log('UPDATE_VOUCHER_ENTRY', event.payload);
         return;
 
       default:

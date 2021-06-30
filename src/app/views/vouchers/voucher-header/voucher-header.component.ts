@@ -26,6 +26,7 @@ import { FormHandler } from '@app/shared/utils';
 export enum VoucherHeaderComponentEventType {
   CREATE_VOUCHER = 'VoucherHeaderFormControls.Event.CreateVoucher',
   UPDATE_VOUCHER = 'VoucherHeaderFormControls.Event.UpdateVoucher',
+  ADD_VOUCHER_ENTRY_CLICKED = 'VoucherHeaderFormControls.Event.AddVoucherEntryClicked',
 }
 
 enum VoucherHeaderFormControls {
@@ -131,6 +132,11 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.sendEvent(eventType, {voucher: this.getFormData()});
+  }
+
+
+  onAddVoucherEntryClicked() {
+    this.sendEvent(VoucherHeaderComponentEventType.ADD_VOUCHER_ENTRY_CLICKED);
   }
 
 
