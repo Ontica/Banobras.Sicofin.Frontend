@@ -9,11 +9,13 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewC
 
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
-import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet, numberWithCommas } from '@app/models';
+import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet } from '@app/models';
 
 import { EventInfo, Identifiable } from '@app/core';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+
+import { FormatLibrary } from '@app/shared/utils';
 
 export enum StoredBalanceSetTabbedViewEventType {
   CLOSE_MODAL_CLICKED = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',
@@ -103,12 +105,12 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
   private setDisplayedItemsText() {
     if (this.storedBalanceListDS.filteredData.length === this.storedBalanceListDS.data.length ) {
-      this.displayedItemsText = numberWithCommas(this.storedBalanceListDS.data.length) +
-                                ' registros encontrados';
+      this.displayedItemsText = FormatLibrary.numberWithCommas(this.storedBalanceListDS.data.length) +
+        ' registros encontrados';
     } else {
-      this.displayedItemsText = numberWithCommas(this.storedBalanceListDS.filteredData.length) + ' de ' +
-                                numberWithCommas(this.storedBalanceListDS.data.length) +
-                                ' registros mostrados';
+      this.displayedItemsText = FormatLibrary.numberWithCommas(this.storedBalanceListDS.filteredData.length) +
+        ' de ' + FormatLibrary.numberWithCommas(this.storedBalanceListDS.data.length) +
+        ' registros mostrados';
     }
   }
 

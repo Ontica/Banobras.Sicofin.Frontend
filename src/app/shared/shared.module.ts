@@ -6,7 +6,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 
 import { SharedContainersModule } from './containers/shared-containers.module';
 import { SharedDirectivesModule } from './directives/shared-directives.module';
@@ -40,7 +40,8 @@ import { PrinterService } from './utils/printer.service';
 
   providers: [
     CurrencyPipe,
-    PrinterService
+    DecimalPipe,
+    PrinterService,
   ]
 
 })

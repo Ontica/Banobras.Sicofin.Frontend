@@ -5,6 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { formatNumber } from '@angular/common';
+
 export class FormatLibrary {
 
   static stringToNumber(value: string): number {
@@ -20,6 +22,11 @@ export class FormatLibrary {
   }
 
 
+  static numberWithCommas(num: number, digits = '1.0-0') {
+    return formatNumber(Number(num ?? 0), 'en-US', digits);
+  }
+
+
   static removeEmptyValuesFrom(obj) {
     return Object
       .entries({ ...obj })
@@ -27,12 +34,14 @@ export class FormatLibrary {
       .reduce((prev, curr) => ({ ...prev, [curr[0]]: curr[1] }), {});
   }
 
+
   static firstLetterToLowerCase = (s) => {
     if (typeof s !== 'string') {
       return '';
     }
     return s.charAt(0).toLowerCase() + s.slice(1);
   }
+
 
   static formatBytes(bytes, decimals = 2, binaryUnits = false): string {
     if (bytes === 0) {
