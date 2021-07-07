@@ -52,7 +52,9 @@
 
               <div></div>
 
-              <button type="sumbit" class="btn-warning" [style.marginRight.px]="10"
+              <button type="sumbit" class="btn-warning"
+                [class.spinner]="submitted"
+                [style.marginRight.px]="10"
                 (click)="login()">
                 Ingresar
               </button>
