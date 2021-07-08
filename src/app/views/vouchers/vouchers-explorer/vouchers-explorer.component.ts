@@ -13,11 +13,13 @@ import { EmptySearchVouchersCommand, EmptyVoucher, SearchVouchersCommand, Vouche
          VoucherDescriptor } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
+import { VoucherFilterEventType } from '../voucher-filter/voucher-filter.component';
 
 import { VoucherListEventType } from '../voucher-list/voucher-list.component';
 
 export enum VouchersExplorerEventType {
   FILTER_CHANGED = 'VouchersExplorerComponent.Event.FilterChanged',
+  FILTER_CLEARED = 'VouchersExplorerComponent.Event.FilterCleared',
   SELECT_VOUCHER = 'VouchersExplorerComponent.Event.SelectVoucher',
   SELECT_VOUCHERS_OPTION = 'VouchersExplorerComponent.Event.SelectVouchersOption',
   CREATE_VOUCHER = 'VouchersExplorerComponent.Event.CreateVoucher',
@@ -47,26 +49,56 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
   hintText = '';
 
-  textNotFound = 'No se ha invocado la búsqueda de pólizas.';
+  textNotFound = '';
+
+  showFilters = false;
+
+  searching = false;
 
   ngOnInit(): void {
-    this.hintText = 'Selecciona los filtros';
-    this.textNotFound = 'No se ha invocado la búsqueda de pólizas.';
+    this.setInitTexts();
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.voucherList) {
-      this.hintText = this.voucherList.length + ' pólizas encontradas';
-      this.textNotFound = 'No se encontraron pólizas con el filtro proporcionado.';
+      if (this.searching) {
+        this.hintText = this.voucherList.length + ' pólizas encontradas';
+        this.textNotFound = 'No se encontraron pólizas con el filtro proporcionado.';
+        this.searching = false;
+        this.showFilters = false;
+      } else {
+        this.setInitTexts();
+      }
     }
   }
 
 
   onChangeFilter(event) {
-    Assertion.assertValue(event.payload, 'event.payload');
+    switch (event.type as VoucherFilterEventType) {
 
-    this.sendEvent(VouchersExplorerEventType.FILTER_CHANGED, event.payload as SearchVouchersCommand);
+      case VoucherFilterEventType.SEARCH_VOUCHERS_CLICKED:
+        Assertion.assertValue(event.payload, 'event.payload');
+
+        this.searching = true;
+
+        this.sendEvent(VouchersExplorerEventType.FILTER_CHANGED, event.payload as SearchVouchersCommand);
+
+        return;
+
+      case VoucherFilterEventType.CLEAR_VOUCHERS_CLICKED:
+        Assertion.assertValue(event.payload, 'event.payload');
+
+        this.searching = false;
+
+        this.sendEvent(VouchersExplorerEventType.FILTER_CLEARED, event.payload as SearchVouchersCommand);
+
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -107,6 +139,12 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private setInitTexts() {
+    this.hintText = 'Selecciona los filtros';
+    this.textNotFound = 'No se ha invocado la búsqueda de pólizas.';
   }
 
 

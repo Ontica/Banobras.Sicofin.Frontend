@@ -38,6 +38,7 @@
 
       <emp-fa-voucher-filter fxFlex="none"
         [voucherFilter]="filter"
+        [(showFilters)]="showFilters"
         (voucherFilterEvent)="onChangeFilter($event)">
 
       </emp-fa-voucher-filter>
@@ -46,6 +47,7 @@
       <emp-fa-voucher-list fxFlex
         [voucherList]="voucherList"
         [selectedVoucher]="selectedVoucher"
+        [textNotFound]="textNotFound"
         (voucherListEvent)="onVoucherListEvent($event)">
 
       </emp-fa-voucher-list>

@@ -22,7 +22,8 @@ import { AccountChartStateSelector,
 import { expandCollapse } from '@app/shared/animations/animations';
 
 export enum VoucherFilterEventType {
-  SEARCH_VOUCHER_CLICKED = 'VoucherFilterComponent.Event.SearchVoucherClicked',
+  SEARCH_VOUCHERS_CLICKED = 'VoucherFilterComponent.Event.SearchVouchersClicked',
+  CLEAR_VOUCHERS_CLICKED = 'VoucherFilterComponent.Event.ClearVouchersClicked',
 }
 
 
@@ -34,6 +35,10 @@ export enum VoucherFilterEventType {
 export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   @Input() voucherFilter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
+
+  @Input() showFilters = false;
+
+  @Output() showFiltersChange = new EventEmitter<boolean>();
 
   @Output() voucherFilterEvent = new EventEmitter<EventInfo>();
 
@@ -48,8 +53,6 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
   voucherTypesList: Identifiable[] = [];
 
   isLoading = false;
-
-  showFilters = false;
 
   helper: SubscriptionHelper;
 
@@ -68,6 +71,12 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onShowFiltersClicked(){
+    this.showFilters = !this.showFilters;
+    this.showFiltersChange.emit(this.showFilters);
+  }
+
+
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
     this.validateFieldToClear();
@@ -76,17 +85,14 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   onClearFilters() {
     this.voucherFilter = Object.assign({}, EmptySearchVouchersCommand,
-      {
-        accountsChartUID: this.voucherFilter.accountsChartUID,
-        keywords: this.voucherFilter.keywords,
-        ledgersGroupUID: this.voucherFilter.ledgersGroupUID,
-        ledgerUID: this.voucherFilter.ledgerUID,
-      });
+      { accountsChartUID: this.voucherFilter.accountsChartUID });
+
+    this.sendEvent(VoucherFilterEventType.CLEAR_VOUCHERS_CLICKED, this.getSearchVoucherCommand());
   }
 
 
   onSearchVoucherClicked() {
-    this.sendEvent(VoucherFilterEventType.SEARCH_VOUCHER_CLICKED, this.getSearchVoucherCommand());
+    this.sendEvent(VoucherFilterEventType.SEARCH_VOUCHERS_CLICKED, this.getSearchVoucherCommand());
   }
 
 

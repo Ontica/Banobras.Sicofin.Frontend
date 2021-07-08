@@ -9,8 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit,
-         ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -34,7 +33,7 @@ export enum VoucherListEventType {
     expandCollapse
   ],
 })
-export class VoucherListComponent implements OnInit, OnChanges {
+export class VoucherListComponent implements OnChanges {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
@@ -42,22 +41,17 @@ export class VoucherListComponent implements OnInit, OnChanges {
 
   @Input() selectedVoucher: Voucher = EmptyVoucher;
 
+  @Input() textNotFound = 'No se ha invocado la búsqueda de pólizas.';
+
   @Output() voucherListEvent = new EventEmitter<EventInfo>();
 
   selection = new SelectionModel<VoucherDescriptor>(true, []);
-
-  textNotFound = 'No se ha invocado la búsqueda de pólizas.';
-
-  ngOnInit(): void {
-    this.textNotFound = 'No se ha invocado la búsqueda de pólizas.';
-  }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.voucherList) {
       this.scrollToTop();
       this.selection.clear();
-      this.textNotFound = 'No se encontraron pólizas con el filtro proporcionado.';
     }
   }
 

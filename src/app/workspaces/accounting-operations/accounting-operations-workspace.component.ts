@@ -80,6 +80,11 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         this.searchVouchers();
         return;
 
+      case VouchersExplorerEventType.FILTER_CLEARED:
+        this.applyVoucherFilter(event.payload);
+        this.setVoucherListData([]);
+        return;
+
       case VouchersExplorerEventType.EXPORT_VOUCHERS:
         this.displayExportModal = true;
 
