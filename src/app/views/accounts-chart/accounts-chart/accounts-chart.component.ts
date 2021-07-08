@@ -50,12 +50,25 @@ export class AccountsChartComponent {
 
   excelFileUrl = '';
 
+  showFilters = false;
 
   constructor(private accountsChartData: AccountsChartDataService) { }
 
 
   onAccountsChartFilterEvent(event) {
     switch (event.type as AccountsChartFilterEventType) {
+
+      case AccountsChartFilterEventType.CLEAR_ACCOUNTS_CHART_CLICKED:
+        Assertion.assertValue(event.payload.accountsChart, 'event.payload.accountsChart');
+        Assertion.assertValue(event.payload.accountsSearchCommand, 'event.payload.accountsSearchCommand');
+
+        this.selectedAccountChartUID = event.payload.accountsChart.uid;
+
+        this.accountsSearchCommand = event.payload.accountsSearchCommand as AccountsSearchCommand;
+
+        this.setAccountData(EmptyAccountsChart);
+
+        return;
 
       case AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED:
         Assertion.assertValue(event.payload.accountsChart, 'event.payload.accountsChart');
@@ -64,8 +77,6 @@ export class AccountsChartComponent {
         this.selectedAccountChartUID = event.payload.accountsChart.uid;
 
         this.accountsSearchCommand = event.payload.accountsSearchCommand as AccountsSearchCommand;
-
-        this.excelFileUrl = '';
 
         this.searchAccounts(this.selectedAccountChartUID, this.accountsSearchCommand);
 
@@ -128,8 +139,8 @@ export class AccountsChartComponent {
     this.accountsChartData.searchAccounts(accountsChartUID, searchCommand)
       .toPromise()
       .then(x => {
-        this.accountsChart = x;
-        this.setText(this.accountsChart.name);
+        this.setAccountData(x);
+        this.showFilters = false;
       })
       .finally(() => this.setSubmitted(false));
   }
@@ -152,6 +163,13 @@ export class AccountsChartComponent {
       .toPromise()
       .then(account => this.sendEvent(AccountsChartEventType.ACCOUNT_SELECTED, { account }))
       .finally(() => this.setSubmitted(false));
+  }
+
+
+  private setAccountData(accountsChart: AccountsChart) {
+    this.accountsChart = accountsChart;
+    this.excelFileUrl = '';
+    this.setText(this.accountsChart.name);
   }
 
 

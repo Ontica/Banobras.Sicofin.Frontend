@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { EventInfo, Identifiable } from '@app/core';
 
@@ -21,6 +21,7 @@ import { expandCollapse } from '@app/shared/animations/animations';
 
 export enum AccountsChartFilterEventType {
   SEARCH_ACCOUNTS_CHART_CLICKED = 'AccountsChartFilterComponent.Event.SearchAccountsChartClicked',
+  CLEAR_ACCOUNTS_CHART_CLICKED = 'AccountsChartFilterComponent.Event.ClearAccountsChartClicked',
 }
 
 
@@ -30,6 +31,10 @@ export enum AccountsChartFilterEventType {
   animations: [expandCollapse],
 })
 export class AccountsChartFilterComponent implements OnInit, OnDestroy {
+
+  @Input() showFilters = false;
+
+  @Output() showFiltersChange = new EventEmitter<boolean>();
 
   @Output() accountsChartFilterEvent = new EventEmitter<EventInfo>();
 
@@ -42,8 +47,6 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
   levelsList: Identifiable[] = [];
 
   isLoading = false;
-
-  showFilters = false;
 
   helper: SubscriptionHelper;
 
@@ -62,6 +65,12 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onShowFiltersClicked(){
+    this.showFilters = !this.showFilters;
+    this.showFiltersChange.emit(this.showFilters);
+  }
+
+
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.setLevelsList();
     this.validateFieldToClear();
@@ -69,8 +78,17 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
 
   onClearFilters() {
-    this.accountsSearch = Object.assign({}, EmptyAccountsSearchCommand,
-      {keywords: this.accountsSearch.keywords});
+    this.accountsSearch = Object.assign({}, EmptyAccountsSearchCommand, {
+        keywords: this.accountsSearch.keywords,
+        withSectors: this.accountsSearch.withSectors
+      });
+
+    const payload: any = {
+      accountsChart: this.accountChartSelected,
+      accountsSearchCommand: Object.assign({}, this.accountsSearch),
+    };
+
+    this.sendEvent(AccountsChartFilterEventType.CLEAR_ACCOUNTS_CHART_CLICKED, payload);
   }
 
 
