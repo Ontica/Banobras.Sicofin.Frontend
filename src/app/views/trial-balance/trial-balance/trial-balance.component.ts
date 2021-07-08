@@ -41,6 +41,7 @@ export class TrialBalanceComponent {
 
   excelFileUrl = '';
 
+  showFilters = false;
 
   constructor(private balancesDataService: BalancesDataService) { }
 
@@ -57,9 +58,16 @@ export class TrialBalanceComponent {
 
         this.trialBalanceCommand = event.payload.trialBalanceCommand as TrialBalanceCommand;
 
-        this.excelFileUrl = '';
-
         this.getTrialBalance(this.trialBalanceCommand);
+
+        return;
+
+      case TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED:
+        Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
+
+        this.trialBalanceCommand = event.payload.trialBalanceCommand as TrialBalanceCommand;
+
+        this.setTrialBalanceData(EmptyTrialBalance);
 
         return;
 
@@ -117,8 +125,8 @@ export class TrialBalanceComponent {
     this.balancesDataService.getTrialBalance(trialBalanceCommand)
       .toPromise()
       .then(x => {
-        this.trialBalance = x;
-        this.setText();
+        this.setTrialBalanceData(x);
+        this.showFilters = false;
       })
       .finally(() => this.setSubmitted(false));
   }
@@ -130,6 +138,13 @@ export class TrialBalanceComponent {
       .then(x => {
         this.excelFileUrl = x.url;
       });
+  }
+
+
+  private setTrialBalanceData(trialBalance: TrialBalance) {
+    this.trialBalance = trialBalance;
+    this.excelFileUrl = '';
+    this.setText();
   }
 
 

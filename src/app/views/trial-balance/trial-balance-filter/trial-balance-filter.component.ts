@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
@@ -24,6 +24,7 @@ import { ExchangeRateSelectorEventType } from '../exchange-rate-selector/exchang
 
 export enum TrialBalanceFilterEventType {
   BUILD_TRIAL_BALANCE_CLICKED = 'TrialBalanceFilterComponent.Event.BuildTrialBalanceClicked',
+  CLEAR_TRIAL_BALANCE_CLICKED = 'TrialBalanceFilterComponent.Event.ClearTrialBalanceClicked',
 }
 
 
@@ -33,6 +34,10 @@ export enum TrialBalanceFilterEventType {
   animations: [expandCollapse],
 })
 export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
+
+  @Input() showFilters = false;
+
+  @Output() showFiltersChange = new EventEmitter<boolean>();
 
   @Output() trialBalanceFilterEvent = new EventEmitter<EventInfo>();
 
@@ -49,8 +54,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   balancesTypeList: Identifiable[] = BalancesType;
 
   isLoading = false;
-
-  showFilters = false;
 
   helper: SubscriptionHelper;
 
@@ -119,6 +122,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onShowFiltersClicked(){
+    this.showFilters = !this.showFilters;
+    this.showFiltersChange.emit(this.showFilters);
+  }
+
+
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
     this.setLevelsList();
@@ -140,6 +149,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onClearFilters() {
+    this.displayExchangeRates = false;
     this.exchangeRatesList = [];
 
     this.trialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand, {
@@ -150,15 +160,15 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         toDate: this.trialBalanceCommand.toDate,
         balancesType: this.balancesTypeList[0].uid,
       });
+
+    this.sendEvent(TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED,
+                   {trialBalanceCommand: this.getTrialBalanceCommandValidData()});
   }
 
 
   onBuildTrialBalanceClicked() {
-    const payload = {
-      trialBalanceCommand: this.getTrialBalanceCommandValidData()
-    };
-
-    this.sendEvent(TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED, payload);
+    this.sendEvent(TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
+                   {trialBalanceCommand: this.getTrialBalanceCommandValidData()});
   }
 
 

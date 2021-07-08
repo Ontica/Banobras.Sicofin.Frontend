@@ -24,6 +24,7 @@
       </emp-ng-spinner>
 
       <emp-fa-trial-balance-filter fxFlex="none"
+        [(showFilters)]="showFilters"
         (trialBalanceFilterEvent)="onTrialBalanceFilterEvent($event)">
 
       </emp-fa-trial-balance-filter>
