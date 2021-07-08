@@ -131,9 +131,13 @@
 
           <div fxFlex="25">
 
-            <label *ngIf="isTrialBalance">De la cuenta:</label>
+            <label *ngIf="isTrialBalance || isBalancesByAccountWithLedgers || isAnalyticalAccounts">
+              De la cuenta:
+            </label>
 
-            <label *ngIf="!isTrialBalance">Con la cuenta:</label>
+            <label *ngIf="!(isTrialBalance || isBalancesByAccountWithLedgers || isAnalyticalAccounts)">
+              Con la cuenta:
+            </label>
 
             <input type="text" class="text-box" name="fromAccount"
               [(ngModel)]="trialBalanceCommand.fromAccount"
@@ -141,23 +145,27 @@
 
           </div>
 
-          <div fxFlex="25" *ngIf="isBalancesByAccount || isBalancesBySubledgerAccount">
+          <div fxFlex="25">
 
-            <label>Con el auxiliar:</label>
+            <ng-container *ngIf="isBalancesByAccount || isBalancesBySubledgerAccount">
 
-            <input type="text" class="text-box" name="withSubledgerAccount"
-              [(ngModel)]="trialBalanceCommand.subledgerAccount"
-              (keyup.escape)="trialBalanceCommand.subledgerAccount = ''">
+              <label>Con el auxiliar:</label>
 
-          </div>
+              <input type="text" class="text-box" name="withSubledgerAccount"
+                [(ngModel)]="trialBalanceCommand.subledgerAccount"
+                (keyup.escape)="trialBalanceCommand.subledgerAccount = ''">
 
-          <div fxFlex="25" *ngIf="isTrialBalance">
+            </ng-container>
 
-            <label>A la cuenta:</label>
+            <ng-container *ngIf="isTrialBalance || isBalancesByAccountWithLedgers || isAnalyticalAccounts">
 
-            <input type="text" class="text-box" name="toAccount"
-              [(ngModel)]="trialBalanceCommand.toAccount"
-              (keyup.escape)="trialBalanceCommand.toAccount = ''">
+              <label>A la cuenta:</label>
+
+              <input type="text" class="text-box" name="toAccount"
+                [(ngModel)]="trialBalanceCommand.toAccount"
+                (keyup.escape)="trialBalanceCommand.toAccount = ''">
+
+            </ng-container>
 
           </div>
 
@@ -250,7 +258,7 @@
 
         </mat-divider>
 
-        <div fxLayout="row" [style.marginBottom.px]="8" fxLayoutAlign="end end">
+        <div fxLayout="row" fxLayoutAlign="end end">
 
           <mat-divider fxFlex="none" vertical="true" [style.marginBottom.px]="2"
             [style.marginRight.px]="8" [style.height.px]="28">

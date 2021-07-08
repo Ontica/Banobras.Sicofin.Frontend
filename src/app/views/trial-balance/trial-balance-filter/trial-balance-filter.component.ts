@@ -109,6 +109,16 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get isBalancesByAccountWithLedgers(): boolean {
+    return['SaldosPorCuentaConDelegaciones'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get isAnalyticalAccounts(): boolean {
+    return['AnaliticoDeCuentas'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
     this.setLevelsList();
