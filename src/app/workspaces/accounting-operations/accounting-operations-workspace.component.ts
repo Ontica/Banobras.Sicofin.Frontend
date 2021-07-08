@@ -11,8 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { MainUIStateSelector, VoucherAction,
-         VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherStageFromViewName,
         SearchVouchersCommand, Voucher, VoucherDescriptor} from '@app/models';
@@ -62,15 +61,8 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
 
   ngOnInit() {
-
     this.subscriptionHelper.select<View>(MainUIStateSelector.CURRENT_VIEW)
       .subscribe(x => this.onCurrentViewChanged(x));
-
-    this.subscriptionHelper.select<SearchVouchersCommand>(VoucherStateSelector.LIST_FILTER)
-      .subscribe(x => {
-        this.filter = x;
-      });
-
   }
 
 
@@ -86,7 +78,6 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VouchersExplorerEventType.FILTER_CHANGED:
         this.applyVoucherFilter(event.payload);
         this.searchVouchers();
-        this.excelFileUrl = '';
         return;
 
       case VouchersExplorerEventType.EXPORT_VOUCHERS:
@@ -161,19 +152,12 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   private onCurrentViewChanged(newView: View) {
     this.currentView = newView;
-
-    const currentFilter =
-      this.uiLayer.selectValue<SearchVouchersCommand>(VoucherStateSelector.LIST_FILTER);
-
-    this.applyVoucherFilter(currentFilter);
+    this.applyVoucherFilter(this.filter);
   }
 
 
   private applyVoucherFilter(newFilter: SearchVouchersCommand) {
-    const filter: SearchVouchersCommand =
-      Object.assign({}, newFilter, { stage: mapVoucherStageFromViewName(this.currentView.name)});
-
-    this.uiLayer.dispatch(VoucherAction.SET_LIST_FILTER, { filter });
+    this.filter =  Object.assign({}, newFilter, { stage: mapVoucherStageFromViewName(this.currentView.name)});
   }
 
 
@@ -187,10 +171,16 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
     this.vouchersData.searchVouchers(this.filter)
       .toPromise()
       .then(x => {
-        this.searchVouchersCommand = Object.assign({}, this.filter);
-        this.voucherList = x;
+        this.setVoucherListData(x);
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private setVoucherListData(voucherList: VoucherDescriptor[]) {
+    this.voucherList = voucherList;
+    this.searchVouchersCommand = Object.assign({}, this.filter);
+    this.excelFileUrl = '';
   }
 
 
