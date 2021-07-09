@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit,
+         Output } from '@angular/core';
 
 import { combineLatest } from 'rxjs';
 
@@ -32,7 +33,7 @@ export enum VoucherFilterEventType {
   templateUrl: './voucher-filter.component.html',
   animations: [expandCollapse],
 })
-export class VoucherFilterComponent implements OnInit, OnDestroy {
+export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   @Input() voucherFilter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
 
@@ -56,7 +57,7 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer) {
+  constructor(private uiLayer: PresentationLayer,private cdRef: ChangeDetectorRef) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -66,8 +67,24 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  ngAfterViewChecked()
+  {
+    this.cdRef.detectChanges();
+  }
+
+
   ngOnDestroy() {
     this.helper.destroy();
+  }
+
+
+  get isDateSearchFieldRequired () {
+    return !!this.voucherFilter.toDate || !!this.voucherFilter.fromDate;
+  }
+
+
+  get isDateSearchFieldValid () {
+    return this.isDateSearchFieldRequired ? !!this.voucherFilter.dateSearchField : true;
   }
 
 

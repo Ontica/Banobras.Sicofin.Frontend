@@ -9,11 +9,12 @@
 
         <label>Catálogo:</label>
 
-        <emp-ng-select name="accountsChartUID" required
+        <emp-ng-select name="accountsChartUID" #accountsChartUID="ngModel" required
           [config]="{selectFirst: true}"
           [(ngModel)]="voucherFilter.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
+          [showError]="accountsChartUID.invalid"
           (changes)="onAccountChartChanges($event)">
         </emp-ng-select>
 
@@ -35,8 +36,10 @@
 
       <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
 
-        <button class="btn-icon-action" title="Buscar"
-          [disabled]="form.invalid"
+        <button title="Buscar"
+          [class.btn-icon-action]="form.valid && isDateSearchFieldValid"
+          [class.btn-icon]="form.invalid || !isDateSearchFieldValid"
+          [disabled]="form.invalid || !isDateSearchFieldValid"
           (click)="onSearchVoucherClicked()">
           <mat-icon>search</mat-icon>
 
@@ -150,11 +153,12 @@
 
           <div fxFlex fxLayoutAlign="start end">
 
-            <emp-ng-select name="dateSearchField"
-              [config]="{clearable: true}"
+            <emp-ng-select name="dateSearchField"  #dateSearchField="ngModel" [fxFlex]="100"
               [(ngModel)]="voucherFilter.dateSearchField"
+              [config]="{clearable: true}"
               [items]="dateSearchFieldList"
-              [fxFlex]="100">
+              [required]="isDateSearchFieldRequired"
+              [showError]="dateSearchField.invalid">
             </emp-ng-select>
 
           </div>
