@@ -1,8 +1,8 @@
-<div class="list-header" *ngIf="displayHeader">
+<div class="list-header" *ngIf="displayHeader" style="padding: 6px 24px 6px 8px;">
 
   <div class="list-header-container">
 
-    <div fxLayout="row" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px">
+    <div fxLayout="row" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" fxLayoutAlign="start center">
       <div fxflex="20px">
         <div *ngIf="voucherList.length > 0">
 
@@ -14,13 +14,13 @@
         </div>
       </div>
 
-      <div fxFlex="15%"> No. Póliza </div>
+      <div fxFlex="15%" class="nowrap"> No. Póliza <br> Contabilidad <br> Origen </div>
 
-      <div fxFlex="15%"> Transacción </div>
+      <div fxFlex="15%"> Transacción <br> Registro <br> Elaboró </div>
 
-      <div fxFlex="15%"> Póliza </div>
+      <div fxFlex="15%"> Póliza <br> Afectación <br> Autorizó </div>
 
-      <div fxFlex> Concepto</div>
+      <div fxFlex> Concepto </div>
 
       <div fxFlex="80px"> Estado </div>
 
