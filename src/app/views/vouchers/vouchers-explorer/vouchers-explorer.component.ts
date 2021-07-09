@@ -124,6 +124,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
       case VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
+        Assertion.assertValue(event.payload.option, 'event.payload.option');
 
         this.sendEvent(VouchersExplorerEventType.SELECT_VOUCHERS_OPTION, event.payload);
 

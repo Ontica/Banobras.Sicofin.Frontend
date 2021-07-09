@@ -57,7 +57,7 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer,private cdRef: ChangeDetectorRef) {
+  constructor(private uiLayer: PresentationLayer, private cdRef: ChangeDetectorRef) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -78,12 +78,12 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
   }
 
 
-  get isDateSearchFieldRequired () {
+  get isDateSearchFieldRequired() {
     return !!this.voucherFilter.toDate || !!this.voucherFilter.fromDate;
   }
 
 
-  get isDateSearchFieldValid () {
+  get isDateSearchFieldValid() {
     return this.isDateSearchFieldRequired ? !!this.voucherFilter.dateSearchField : true;
   }
 
@@ -155,7 +155,7 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
 
 
   private getSearchVoucherCommand(): SearchVouchersCommand {
-    let searchVouchersCommand: SearchVouchersCommand = {
+    const searchVouchersCommand: SearchVouchersCommand = {
       stage: this.voucherFilter.stage ?? VoucherStage.All,
       accountsChartUID: this.voucherFilter.accountsChartUID ?? '',
       keywords: this.voucherFilter.keywords ?? '',

@@ -110,7 +110,9 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
       case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
-        console.log('SELECT_VOUCHERS_OPTION', event.payload.vouchers);
+        Assertion.assertValue(event.payload.option, 'event.payload.option');
+
+        console.log('SELECT_VOUCHERS_OPTION: ', event.payload.option, event.payload.vouchers);
         // TODO: validate the option and open the corresponding editor
 
         return;

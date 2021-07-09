@@ -47,6 +47,16 @@ export class VoucherListComponent implements OnChanges {
 
   selection = new SelectionModel<VoucherDescriptor>(true, []);
 
+  optionSelected = null;
+
+  optionList = [
+    {uid: 'PRINT', name: 'Imprimir'},
+    {uid: 'STATUS_1', name: 'Enviar al diario'},
+    {uid: 'STATUS_2', name: 'Enviar a otro participante'},
+    {uid: 'EXPORT', name: 'Exportar'},
+    {uid: 'DELETE', name: 'Eliminar'}
+  ];
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.voucherList) {
@@ -91,7 +101,7 @@ export class VoucherListComponent implements OnChanges {
 
   onClickVouchersSelectedOptions() {
     this.sendEvent(VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED,
-      { vouchers: this.selection.selected });
+      { vouchers: this.selection.selected, option: this.optionSelected });
   }
 
 

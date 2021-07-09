@@ -23,10 +23,20 @@
 
         </div>
 
-        <div fxFlex>
+        <div fxFlex="220px">
+
+          <emp-ng-select name="options"
+            [config]="{selectFirst: true}"
+            [(ngModel)]="optionSelected"
+            [items]="optionList">
+          </emp-ng-select>
+
+        </div>
+
+        <div fxFlex="none">
 
           <button class="btn" (click)="onClickVouchersSelectedOptions()">
-            Cambiar estado
+            Ejecutar
           </button>
 
         </div>
