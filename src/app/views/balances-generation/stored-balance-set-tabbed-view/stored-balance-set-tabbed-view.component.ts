@@ -20,6 +20,7 @@ import { FormatLibrary } from '@app/shared/utils';
 export enum StoredBalanceSetTabbedViewEventType {
   CLOSE_MODAL_CLICKED = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',
   CALCULATE_STORED_BALANCE_SET = 'StoredBalanceSetTabbedViewComponent.Event.CalculateStoredBalanceSetClicked',
+  EXPORT_STORED_BALANCE_SET = 'StoredBalanceSetTabbedViewComponent.Event.ExportStoredBalanceSetClicked',
 }
 
 interface FilterDef {
@@ -83,6 +84,11 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
     this.applyFilter();
     this.setDisplayedItemsText();
     this.scrollToTop();
+  }
+
+
+  onExportButtonClicked() {
+    this.sendEvent(StoredBalanceSetTabbedViewEventType.EXPORT_STORED_BALANCE_SET);
   }
 
 

@@ -22,6 +22,8 @@ export class ExportReportModalComponent implements OnChanges {
 
   @Input() title = 'Exportar';
 
+  @Input() message = 'Se generará la exportación a Excel con el último filtro consultado.';
+
   @Input() excelFileUrl = '';
 
   @Output() exportReportModalEvent = new EventEmitter<EventInfo>();

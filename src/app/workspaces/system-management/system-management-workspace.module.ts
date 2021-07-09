@@ -18,6 +18,7 @@ import { SystemManagementWorkspaceComponent } from './system-management-workspac
 
 import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
 import { BalancesGenerationModule } from '@app/views/balances-generation/balances-generation.module';
+import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { BalancesGenerationModule } from '@app/views/balances-generation/balance
 
     SystemManagementWorkspaceRoutingModule,
     BalancesGenerationModule,
+    ReportsControlsModule,
   ],
 
   declarations: [

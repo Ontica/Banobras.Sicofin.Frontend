@@ -31,3 +31,11 @@
   (storedBalanceSetCreatorEvent)="onStoredBalanceSetCreatorEvent($event)">
 
 </emp-fa-stored-balance-set-creator>
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  title="Exportar saldos"
+  [message]="'Se generará la exportación a Excel para ' + ( selectedStoredBalanceSet.name | lowercase )"
+  [excelFileUrl]="excelFileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>
