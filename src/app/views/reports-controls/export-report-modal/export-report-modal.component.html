@@ -29,7 +29,7 @@
 
         <div fxFlex fxLayoutAlign="end center" [style.marginRight.px]="8">
 
-          <a *ngIf="excelFileUrl" [href]="excelFileUrl">
+          <a *ngIf="excelFileUrl" [href]="excelFileUrl" target="_blank">
             El archivo Excel esta listo. Haga clic para descargarlo.</a>
 
           <div *ngIf="working" [style.width.px]="242"
