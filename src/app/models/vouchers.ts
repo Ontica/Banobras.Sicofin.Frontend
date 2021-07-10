@@ -35,15 +35,31 @@ export enum DateSearchField {
 }
 
 
+export enum VoucherUserType {
+  ElaboratedBy = 'ElaboratedBy',
+  AuthorizedBy = 'AuthorizedBy',
+  PostedBy = 'PostedBy',
+}
+
+
 export const DateSearchFieldList: Identifiable[] = [
   {uid: 'AccountingDate', name: 'Fecha de afectación'},
   {uid: 'RecordingDate', name: 'Fecha de elaboración'}
 ];
 
 
+export const VoucherUserTypeList: Identifiable[] = [
+  {uid: 'ElaboratedBy', name: 'Elaborada por'},
+  {uid: 'AuthorizedBy', name: 'Autorizada por'},
+  {uid: 'PostedBy', name: 'Enviada a diario por'},
+];
+
+
 export interface SearchVouchersCommand {
   accountsChartUID: string;
   keywords: string;
+  number?: string;
+  concept?: string;
   ledgersGroupUID?: string;
   ledgerUID?: string;
 
@@ -54,6 +70,9 @@ export interface SearchVouchersCommand {
   subledgerAccountKeywords?: string;
   transactionTypeUID?: string;
   voucherTypeUID?: string;
+  elaboratedByUID?: string;
+  authorizedByUID?: string;
+  postedByUID?: string;
 
   stage: VoucherStage;
   status?: VoucherStatus;

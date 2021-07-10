@@ -76,16 +76,23 @@
 
       <div fxLayout="row" [style.marginBottom.px]="8">
 
-        <div fxFlex="50">
+        <div fxFlex="25">
 
-          <label>Grupo de contabilidades:</label>
+          <label>No. póliza:</label>
 
-          <emp-ng-select name="ledgerGroup"
-            [config]="{clearable: true}"
-            [(ngModel)]="voucherFilter.ledgersGroupUID"
-            [items]="[]"
-            placeholder="Todos">
-          </emp-ng-select>
+          <input type="text" class="text-box" name="number"
+            [(ngModel)]="voucherFilter.number"
+            (keyup.escape)="voucherFilter.number = ''">
+
+        </div>
+
+        <div fxFlex="25">
+
+          <label>Concepto:</label>
+
+          <input type="text" class="text-box" name="concept"
+            [(ngModel)]="voucherFilter.concept"
+            (keyup.escape)="voucherFilter.concept = ''">
 
         </div>
 
@@ -183,7 +190,7 @@
 
         </div>
 
-        <div fxFlex>
+        <div fxFlex="50">
 
           <label>Tipo de póliza:</label>
 
@@ -193,6 +200,40 @@
             [items]="voucherTypesList"
             [loading]="isLoading"
             placeholder="Todos">
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+
+      <div fxLayout="row" [style.marginBottom.px]="8">
+
+        <div fxFlex="25" fxLayoutAlign="start end">
+
+          <emp-ng-select name="voucherUserType" [fxFlex]="100"
+            [config]="{bindByValue: false}"
+            [(ngModel)]="voucherUserTypeSelected"
+            [items]="voucherUserTypeList">
+          </emp-ng-select>
+
+        </div>
+
+        <div fxFlex="calc(75% - 145px)">
+
+          <label>Usuario:</label>
+
+          <emp-ng-select name="voucherUserUID"
+            [config]="{clearable: true,
+                       bindByValue: false,
+                       hideSelected: true,
+                       minTermLength: minTermLength}"
+            [(ngModel)]="voucherUserSelected"
+            [items]="voucherUserList$ | async"
+            [typeahead]="voucherUserInput$"
+            [loading]="voucherUserLoading"
+            placeholder="Todos">
+
           </emp-ng-select>
 
         </div>
