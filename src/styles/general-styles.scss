@@ -42,6 +42,34 @@ table td:last-child {
   box-shadow: 1px 2px 2px $icon-color;
 }
 
+button {
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  &.spinner {
+    filter: brightness(60%);
+  }
+
+  &.spinner::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    border-top-color: #000;
+    animation: spinner 0.8s linear infinite;
+  }
+}
+
 button:focus {
   outline: 0;
 }
@@ -128,16 +156,6 @@ button.btn-base {
   }
 }
 
-button.btn-base:hover {
-  background-color: $button-selected-color;
-  color: $text-color-dark;
-  transition: 0.3s ease-out;
-
-  .mat-icon {
-    color: $icon-color-dark;
-  }
-}
-
 button.btn-icon {
   display: flex;
   align-items: center;
@@ -149,15 +167,6 @@ button.btn-icon {
 
   .mat-icon {
     color: $icon-color;
-  }
-}
-
-button.btn-icon:hover {
-  background-color: $selected-control-background-color;
-  transition: 0.3s ease-out;
-
-  .mat-icon {
-    color: $icon-color-dark;
   }
 }
 
@@ -175,6 +184,25 @@ button.btn-icon-action {
   }
 }
 
+button.btn-base:hover {
+  background-color: $button-selected-color;
+  color: $text-color-dark;
+  transition: 0.3s ease-out;
+
+  .mat-icon {
+    color: $icon-color-dark;
+  }
+}
+
+button.btn-icon:hover {
+  background-color: $selected-control-background-color;
+  transition: 0.3s ease-out;
+
+  .mat-icon {
+    color: $icon-color-dark;
+  }
+}
+
 button.btn-icon-action:hover {
   background-color: $action-selected-color;
   transition: 0.3s ease-out;
@@ -182,34 +210,6 @@ button.btn-icon-action:hover {
 
 button.btn-margin-right {
   margin-right: 32px;
-}
-
-button {
-  @keyframes spinner {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  &.spinner {
-    filter: brightness(60%);
-  }
-
-  &.spinner:before {
-    content: "";
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin-top: -10px;
-    margin-left: -10px;
-    border-radius: 50%;
-    border: 2px solid #ffffff;
-    border-top-color: #000000;
-    animation: spinner 0.8s linear infinite;
-  }
 }
 
 @mixin input-settings {
