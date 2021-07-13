@@ -72,7 +72,6 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
 
   onVouchersExplorerEvent(event: EventInfo): void {
-
     switch (event.type as VouchersExplorerEventType) {
 
       case VouchersExplorerEventType.FILTER_CHANGED:
@@ -87,15 +86,12 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
       case VouchersExplorerEventType.EXPORT_VOUCHERS:
         this.displayExportModal = true;
-
         return;
 
       case VouchersExplorerEventType.SELECT_VOUCHER:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
-
         this.getVoucher(event.payload.voucher.id);
-
         return;
 
       case VouchersExplorerEventType.CREATE_VOUCHER:
@@ -103,18 +99,13 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         return;
 
       case VouchersExplorerEventType.IMPORT_VOUCHERS:
-        console.log('IMPORT_VOUCHERS');
-        // TODO: open the voucher importer
-        // this.displayOptionModalSelected = 'VouchersImporter';
+        console.log('IMPORT_VOUCHERS'); // this.displayOptionModalSelected = 'VouchersImporter';
         return;
 
       case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.option, 'event.payload.option');
-
         console.log('SELECT_VOUCHERS_OPTION: ', event.payload.option, event.payload.vouchers);
-        // TODO: validate the option and open the corresponding editor
-
         return;
 
       default:

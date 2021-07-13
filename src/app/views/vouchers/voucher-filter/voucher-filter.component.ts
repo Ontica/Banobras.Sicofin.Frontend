@@ -167,7 +167,7 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
           debounceTime(800),
           tap(() => this.voucherUserLoading = true),
           switchMap(keyword =>
-            of([{uid: 'sasa', name: 'María Luisa de Jesus Jiménez Montanero'}]).pipe(
+            of([]).pipe(
               delay(2000),
               catchError(() => of([])),
               tap(() => this.voucherUserLoading = false)
