@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-$white: #fff !default;
+$white: #fdfdfd !default;
 
 $primary-color: #235b4e !default;
 $primary-color-light: #235b4e !default;
@@ -27,7 +27,8 @@ $text-color: $secondary-color-semi-light !default;
 $text-color-light: $secondary-color-light !default;
 $text-color-dark: $secondary-color-dark !default;
 
-$background-color: #fff !default;
+$background-color-work-area: #f4f6f6 !default;
+$background-color: $white !default;
 
 $border-color: #e8e8e8 !default;
 $border-color-light: #edeef0 !default;
@@ -103,8 +104,8 @@ $selected-control-background-color: #fafafa;
 $selected-control-color: #343434;
 $selected-control-border: 1px solid #bababa;
 
-$control-disabled-background: #f0f0f0;
-$control-disabled-color: $secondary-color;
+$control-disabled-background: #f6f6f6;
+$control-disabled-color: $secondary-color-semi-light;
 
 $control-width: calc(100% - 8px);
 $control-height: 28px;
