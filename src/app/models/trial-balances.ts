@@ -30,10 +30,18 @@ export function getTrialBalanceTypeNameFromUid(trialBalanceTypeUid: string): str
 }
 
 
-export const BalancesType: Identifiable[] = [
+export enum BalancesType {
+  AllAccounts = 'AllAccounts',
+  WithCurrentBalance = 'WithCurrentBalance',
+  WithCurrentBalanceOrMovements = 'WithCurrentBalanceOrMovements',
+  WithMovements = 'WithMovements'
+}
+
+
+export const BalancesTypeList: Identifiable[] = [
   {uid: 'AllAccounts', name: 'Todas las cuentas'},
   {uid: 'WithCurrentBalance', name: 'Cuentas con saldo actual'},
-  {uid: 'WithCurrenBalanceOrMovements', name: 'Cuentas con saldo actual o movimientos'},
+  {uid: 'WithCurrentBalanceOrMovements', name: 'Cuentas con saldo actual o movimientos'},
   {uid: 'WithMovements', name: 'Cuentas con movimientos'}
 ];
 

@@ -13,7 +13,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { ExchangeRatesDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, BalancesType, EmptyTrialBalanceCommand, ExchangeRate,
+import { AccountsChartMasterData, BalancesTypeList, EmptyTrialBalanceCommand, ExchangeRate,
          getLevelsListFromPattern, TrialBalanceCommand, TrialBalanceTypeList} from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
@@ -51,7 +51,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   levelsList: Identifiable[] = [];
 
-  balancesTypeList: Identifiable[] = BalancesType;
+  balancesTypeList: Identifiable[] = BalancesTypeList;
 
   isLoading = false;
 
