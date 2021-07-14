@@ -20,10 +20,15 @@
 
         <div fxFlex="none" fxLayoutAlign="start center">
 
-          <button [class.btn]="hasExcelFileUrl"
-            [class.btn-action]="!hasExcelFileUrl"
-            [disabled]="hasExcelFileUrl"
-            (click)="onExportButtonClicked()">Exportar</button>
+          <button *ngIf="!working && !hasExcelFileUrl" class="btn-action"
+            (click)="onExportButtonClicked()">
+            Exportar
+          </button>
+
+          <button *ngIf="working || hasExcelFileUrl" class="btn"
+            (click)="onClose()">
+            Cancelar
+          </button>
 
         </div>
 

@@ -127,7 +127,7 @@ export class SystemManagementWorkspaceComponent {
         return;
 
       case StoredBalanceSetTabbedViewEventType.EXPORT_STORED_BALANCE_SET:
-        this.displayExportModal = true;
+        this.setDisplayExportModal(true);
         return;
 
       default:
@@ -141,7 +141,7 @@ export class SystemManagementWorkspaceComponent {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
-        this.displayExportModal = false;
+        this.setDisplayExportModal(false);
         return;
 
       case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
@@ -225,7 +225,6 @@ export class SystemManagementWorkspaceComponent {
   private setSelectedStoredBalanceSet(storedBalanceSet: StoredBalanceSet) {
     this.selectedStoredBalanceSet = storedBalanceSet;
     this.displayBalanceSetTabbedView = !isEmpty(this.selectedStoredBalanceSet);
-    this.excelFileUrl = '';
   }
 
 
@@ -243,6 +242,12 @@ export class SystemManagementWorkspaceComponent {
   private setSubmitted(submitted: boolean) {
     this.isLoading = submitted;
     this.submitted = submitted;
+  }
+
+
+  private setDisplayExportModal(display) {
+    this.displayExportModal = display;
+    this.excelFileUrl = '';
   }
 
 }

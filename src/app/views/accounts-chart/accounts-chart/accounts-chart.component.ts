@@ -93,14 +93,11 @@ export class AccountsChartComponent {
     switch (event.type as AccountsChartListEventType) {
       case AccountsChartListEventType.ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.account, 'event.payload.account');
-
         this.getAccount(this.selectedAccountChartUID, event.payload.account.uid);
-
         break;
 
       case AccountsChartListEventType.EXPORT_ACCOUNTS:
-        this.displayExportModal = true;
-
+        this.setDisplayExportModal(true);
         break;
 
       default:
@@ -114,7 +111,7 @@ export class AccountsChartComponent {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
-        this.displayExportModal = false;
+        this.setDisplayExportModal(false);
         return;
 
       case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
@@ -123,7 +120,6 @@ export class AccountsChartComponent {
         }
 
         this.exportAccountsToExcel();
-
         return;
 
       default:
@@ -168,7 +164,6 @@ export class AccountsChartComponent {
 
   private setAccountData(accountsChart: AccountsChart) {
     this.accountsChart = accountsChart;
-    this.excelFileUrl = '';
     this.setText(this.accountsChart.name);
   }
 
@@ -181,6 +176,12 @@ export class AccountsChartComponent {
   private setSubmitted(submitted: boolean) {
     this.isLoading = submitted;
     this.submitted = submitted;
+  }
+
+
+  private setDisplayExportModal(display) {
+    this.displayExportModal = display;
+    this.excelFileUrl = '';
   }
 
 

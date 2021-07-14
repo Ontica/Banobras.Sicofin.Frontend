@@ -85,7 +85,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         return;
 
       case VouchersExplorerEventType.EXPORT_VOUCHERS:
-        this.displayExportModal = true;
+        this.setDisplayExportModal(true);
         return;
 
       case VouchersExplorerEventType.SELECT_VOUCHER:
@@ -119,7 +119,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
-        this.displayExportModal = false;
+        this.setDisplayExportModal(false);
         return;
 
       case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
@@ -178,7 +178,6 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   private setVoucherListData(voucherList: VoucherDescriptor[]) {
     this.voucherList = voucherList;
     this.searchVouchersCommand = Object.assign({}, this.filter);
-    this.excelFileUrl = '';
   }
 
 
@@ -201,6 +200,12 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
       })
       .finally(() => this.isLoadingVoucher = false);
+  }
+
+
+  private setDisplayExportModal(display) {
+    this.displayExportModal = display;
+    this.excelFileUrl = '';
   }
 
 }

@@ -87,7 +87,7 @@ export class TrialBalanceComponent {
         return;
 
       case TrialBalanceTableEventType.EXPORT_BALANCE:
-        this.displayExportModal = true;
+        this.setDisplayExportModal(true);
         return;
 
       default:
@@ -101,7 +101,7 @@ export class TrialBalanceComponent {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
-        this.displayExportModal = false;
+        this.setDisplayExportModal(false);
         return;
 
       case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
@@ -143,7 +143,6 @@ export class TrialBalanceComponent {
 
   private setTrialBalanceData(trialBalance: TrialBalance) {
     this.trialBalance = trialBalance;
-    this.excelFileUrl = '';
     this.setText();
   }
 
@@ -168,6 +167,12 @@ export class TrialBalanceComponent {
   private setSubmitted(submitted: boolean) {
     this.isLoading = submitted;
     this.submitted = submitted;
+  }
+
+
+  private setDisplayExportModal(display) {
+    this.displayExportModal = display;
+    this.excelFileUrl = '';
   }
 
 }
