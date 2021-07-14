@@ -466,12 +466,21 @@ table.mat-table {
   background: $white !important;
 }
 
-.mat-checkbox-checked .mat-checkbox-background {
-  background-color: $warning-color !important;
-}
+.mat-checkbox-checked,
+.mat-checkbox-indeterminate {
+  .mat-checkbox-background {
+    background-color: $warning-color !important;
+  }
 
-.mat-checkbox-indeterminate .mat-checkbox-background {
-  background-color: $warning-color !important;
+  &.mat-checkbox-disabled {
+    .mat-checkbox-background {
+      background-color: lighten($control-disabled-color, 20%) !important;
+    }
+
+    .mat-checkbox-label {
+      color: lighten($control-disabled-color, 20%) !important;
+    }
+  }
 }
 
 .mat-checkbox-ripple .mat-ripple-element {
