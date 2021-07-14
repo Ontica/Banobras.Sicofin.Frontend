@@ -284,7 +284,7 @@ export class DateStringLibrary {
     dateParts[yearIndex] = this.getYearAsString(+dateParts[yearIndex]);
 
 
-    let dayIndex = dateParts.findIndex(x => x.includes('T'));
+    let dayIndex = dateParts.findIndex(x => x && x.includes('T'));
     if (dayIndex !== -1) {
       dateParts[dayIndex] = dateParts[dayIndex].substr(0, 2);
     } else {
