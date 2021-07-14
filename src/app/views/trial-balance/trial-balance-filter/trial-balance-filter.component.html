@@ -15,7 +15,8 @@
             [config]="{selectFirst: true}"
             [(ngModel)]="trialBalanceCommand.trialBalanceType"
             [items]="trialBalanceTypeList"
-            [showError]="!trialBalanceCommand.trialBalanceType">
+            [showError]="!trialBalanceCommand.trialBalanceType"
+            (changes)="onTrialBalanceTypeChange()">
           </emp-ng-select>
 
         </div>
@@ -181,7 +182,7 @@
 
           <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
 
-            <mat-checkbox name="displayExchangeRates"
+            <mat-checkbox name="displayExchangeRates" [disabled]="isExchangeRatesRequired"
               [(ngModel)]="displayExchangeRates"
               (click)="$event.stopPropagation">
               Valorizar saldos

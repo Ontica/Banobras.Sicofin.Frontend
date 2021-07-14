@@ -77,25 +77,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.helper.destroy();
   }
 
-  get trialBalanceFormFieldsValid(): boolean {
-    return !!this.trialBalanceCommand.trialBalanceType &&
-           !!this.trialBalanceCommand.accountsChartUID &&
-           !!this.trialBalanceCommand.fromDate &&
-           !!this.trialBalanceCommand.toDate &&
-           !!this.trialBalanceCommand.balancesType;
-  }
-
-
-  get exchangeRateFormFieldsValid(): boolean {
-    if (!this.displayExchangeRates) {
-      return true;
-    }
-
-    return !!this.trialBalanceCommand.exchangeRateDate &&
-           !!this.trialBalanceCommand.exchangeRateTypeUID &&
-           !!this.trialBalanceCommand.valuateToCurrrencyUID;
-  }
-
 
   get isTrialBalance(): boolean {
     return ['Balanza', 'BalanzaConAuxiliares'].includes(this.trialBalanceCommand.trialBalanceType);
@@ -119,6 +100,36 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get isAnalyticalAccounts(): boolean {
     return['AnaliticoDeCuentas'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get trialBalanceFormFieldsValid(): boolean {
+    return !!this.trialBalanceCommand.trialBalanceType &&
+           !!this.trialBalanceCommand.accountsChartUID &&
+           !!this.trialBalanceCommand.fromDate &&
+           !!this.trialBalanceCommand.toDate &&
+           !!this.trialBalanceCommand.balancesType;
+  }
+
+
+  get exchangeRateFormFieldsValid(): boolean {
+    if (!this.displayExchangeRates) {
+      return true;
+    }
+
+    return !!this.trialBalanceCommand.exchangeRateDate &&
+           !!this.trialBalanceCommand.exchangeRateTypeUID &&
+           !!this.trialBalanceCommand.valuateToCurrrencyUID;
+  }
+
+
+  get isExchangeRatesRequired(): boolean {
+    return this.isAnalyticalAccounts;
+  }
+
+
+  onTrialBalanceTypeChange() {
+    this.displayExchangeRates = this.isExchangeRatesRequired || !!this.trialBalanceCommand.exchangeRateDate;
   }
 
 
@@ -149,7 +160,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onClearFilters() {
-    this.displayExchangeRates = false;
+    this.displayExchangeRates = this.isExchangeRatesRequired;
     this.exchangeRatesList = [];
 
     this.trialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand, {
@@ -162,20 +173,25 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       });
 
     this.sendEvent(TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED,
-                   {trialBalanceCommand: this.getTrialBalanceCommandValidData()});
+                   {trialBalanceCommand: this.getTrialBalanceCommandData()});
   }
 
 
   onBuildTrialBalanceClicked() {
-    this.sendEvent(TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
-                   {trialBalanceCommand: this.getTrialBalanceCommandValidData()});
-  }
-
-
-  private getTrialBalanceCommandValidData(): TrialBalanceCommand {
     Assertion.assert(this.trialBalanceFormFieldsValid,
       'Programming error: form must be validated before command execution.');
 
+    if (this.displayExchangeRates) {
+      Assertion.assert(this.exchangeRateFormFieldsValid,
+        'Programming error: form must be validated before command execution.');
+    }
+
+    this.sendEvent(TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
+                   {trialBalanceCommand: this.getTrialBalanceCommandData()});
+  }
+
+
+  private getTrialBalanceCommandData(): TrialBalanceCommand {
     const data: TrialBalanceCommand = {
       trialBalanceType: this.trialBalanceCommand.trialBalanceType,
       accountsChartUID: this.trialBalanceCommand.accountsChartUID,
@@ -193,7 +209,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  validateCommandFieldsByBalanceType(data: TrialBalanceCommand) {
+  private validateCommandFieldsByBalanceType(data: TrialBalanceCommand) {
     if (this.isTrialBalance) {
       data.fromAccount = this.trialBalanceCommand.fromAccount;
       data.toAccount = this.trialBalanceCommand.toAccount;
@@ -205,9 +221,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     }
 
     if (this.displayExchangeRates) {
-      Assertion.assert(this.exchangeRateFormFieldsValid,
-        'Programming error: form must be validated before command execution.');
-
       data.exchangeRateDate = this.trialBalanceCommand.exchangeRateDate;
       data.exchangeRateTypeUID = this.trialBalanceCommand.exchangeRateTypeUID;
       data.valuateToCurrrencyUID = this.trialBalanceCommand.valuateToCurrrencyUID;
