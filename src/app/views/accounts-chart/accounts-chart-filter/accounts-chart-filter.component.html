@@ -5,7 +5,7 @@
 
     <div fxLayout="row">
 
-      <div fxFlex="35">
+      <div fxFlex="50">
 
         <label>Catálogo:</label>
 
@@ -17,17 +17,6 @@
           (changes)="onAccountChartChanges($event)"
           required>
         </emp-ng-select>
-
-      </div>
-
-
-      <div fxFlex="15" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
-
-        <mat-checkbox name="withSectors"
-          [(ngModel)]="accountsSearch.withSectors"
-          (click)="$event.stopPropagation">
-          Mostrar sectores
-        </mat-checkbox>
 
       </div>
 
@@ -173,16 +162,16 @@
 
         </div>
 
-        <div fxFlex>
+        <div fxFlex="50">
 
-          <label>Rol:</label>
+          <label>Moneda:</label>
 
           <emp-ng-select
-            [config]="{bindByValue: false, clearable: true, multiple: true}"
-            [bindLabel]="null"
-            [(ngModel)]="accountsSearch.roles" name="roles"
-            [items]="accountChartSelected?.accountRoles"
-            placeholder="Todos">
+            [config]="{clearable: true, multiple: true}"
+            [(ngModel)]="accountsSearch.currencies" name="currencies"
+            [items]="accountChartSelected?.currencies"
+            bindLabel="fullName"
+            placeholder="Todas">
           </emp-ng-select>
 
         </div>
@@ -205,17 +194,13 @@
 
         </div>
 
-        <div fxFlex>
+        <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
 
-          <label>Moneda:</label>
-
-          <emp-ng-select
-            [config]="{clearable: true, multiple: true}"
-            [(ngModel)]="accountsSearch.currencies" name="currencies"
-            [items]="accountChartSelected?.currencies"
-            bindLabel="fullName"
-            placeholder="Todas">
-          </emp-ng-select>
+          <mat-checkbox name="withSectors"
+            [(ngModel)]="accountsSearch.withSectors"
+            (click)="$event.stopPropagation">
+            Mostrar sectores
+          </mat-checkbox>
 
         </div>
 
@@ -226,7 +211,7 @@
 
           </mat-divider>
 
-          <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+          <div fxFlex="117px" [style.marginTop.px]="12" [style.marginBottom.px]="2">
 
             <button class="btn-base" (click)="onClearFilters()" fxFlex="100%">
               Limpiar

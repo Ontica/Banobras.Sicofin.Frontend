@@ -152,7 +152,6 @@ export interface AccountsSearchCommand {
   toAccount?: string;
   level?: number;
   types?: string[];
-  roles?: AccountRole[];
   sectors?: string[];
   currencies?: string[];
   withSectors?: boolean;
@@ -166,7 +165,6 @@ export const EmptyAccountsSearchCommand: AccountsSearchCommand = {
   toAccount: '',
   level: null,
   types: [],
-  roles: [],
   sectors: [],
   currencies: [],
   withSectors: false

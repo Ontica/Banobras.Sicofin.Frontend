@@ -79,8 +79,7 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
   onClearFilters() {
     this.accountsSearch = Object.assign({}, EmptyAccountsSearchCommand, {
-        keywords: this.accountsSearch.keywords,
-        withSectors: this.accountsSearch.withSectors
+        keywords: this.accountsSearch.keywords
       });
 
     const payload: any = {
@@ -142,9 +141,6 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
     this.accountsSearch.types = this.accountChartSelected.accountTypes
       .filter(x => this.accountsSearch.types.includes(x.uid))
       .map(x => x.uid);
-
-    this.accountsSearch.roles = this.accountChartSelected.accountRoles
-      .filter(x => this.accountsSearch.roles.includes(x));
 
     this.accountsSearch.sectors = this.accountChartSelected.sectors
       .filter(x => this.accountsSearch.sectors.includes(x.uid))
