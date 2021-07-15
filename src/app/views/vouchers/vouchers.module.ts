@@ -23,6 +23,7 @@ import { VoucherListComponent } from './voucher-list/voucher-list.component';
 import { VoucherListItemComponent } from './voucher-list/voucher-list-item.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
 import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';
+import { VouchersUploaderComponent } from './vouchers-uploader/vouchers-uploader.component';
 
 
 @NgModule({
@@ -44,11 +45,13 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     VoucherListComponent,
     VoucherListItemComponent,
     VouchersExplorerComponent,
+    VouchersUploaderComponent,
     VoucherTabbedViewComponent,
   ],
   exports: [
     VoucherCreatorComponent,
     VouchersExplorerComponent,
+    VouchersUploaderComponent,
     VoucherTabbedViewComponent,
   ]
 })

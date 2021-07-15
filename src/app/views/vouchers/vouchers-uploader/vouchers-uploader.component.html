@@ -1,0 +1,138 @@
+<emp-ng-card
+  title='Importador de pólizas'
+  hint='Se importarán las pólizas contenidas en el archivo a SICOFIN'
+  (cardClose)="onClose()">
+
+  <div class="card-body-padding">
+
+    <form [formGroup]="formHandler.form" autocomplete="off" class="form-section">
+
+      <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+        <div fxLayout="row" fxLayout.lt-md="column">
+
+          <div fxFlex="100">
+            <label>Archivo:</label>
+            <emp-ng-file-control
+              [(fileControl)]="file"
+              [showError]="showFileError "
+              [config]="{filesTypes: ['excel', 'txt'], autoUpload: true,
+                         placeholder: 'Elija o arrastre el archivo de texto o Excel.'}">
+
+            </emp-ng-file-control>
+          </div>
+
+        </div>
+
+        <br>
+
+        <div class="section-title"> Información sobre las pólizas y parámetros de importación </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0" fxLayoutGap.lt-md="0.75rem">
+
+          <div fxFlex="126px" fxFlex.lt-md="none">
+            <label>Fecha de elaboración:</label>
+            <emp-ng-datepicker
+              [formControlName]="controls.recordingDate"
+              [showError]="formHandler.showInvalidControl(controls.recordingDate)">
+
+            </emp-ng-datepicker>
+          </div>
+
+          <div fxFlex="calc((100% - 126px) / 2)">
+
+            <label>Catálogo:</label>
+
+            <emp-ng-select
+              [config]="{selectFirst: true}"
+              [formControlName]="controls.accountsChartUID"
+              [items]="accountsChartMasterDataList"
+              [loading]="isLoading"
+              [showError]="formHandler.showInvalidControl(controls.accountsChartUID)">
+            </emp-ng-select>
+
+          </div>
+
+          <div fxFlex="calc((100% - 126px) / 2)">
+
+            <label>Tipo de transacción:</label>
+
+            <emp-ng-select
+              [formControlName]="controls.transactionTypeUID"
+              [items]="transactionTypesList"
+              [loading]="isLoading"
+              [showError]="formHandler.showInvalidControl(controls.transactionTypeUID)">
+            </emp-ng-select>
+
+          </div>
+
+        </div>
+
+        <mat-divider class="divider-padding"></mat-divider>
+
+        <div fxLayout="row" fxLayout.lt-md="column">
+
+          <div fxFlex="none" fxLayoutAlign="start center">
+
+            <mat-checkbox
+              [formControlName]="controls.distributeVouchers"
+              (click)="$event.stopPropagation">
+              Distribuir las pólizas hacia los grupos de trabajo correspondientes.
+            </mat-checkbox>
+
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column">
+
+          <div fxFlex="none" fxLayoutAlign="start center">
+
+            <mat-checkbox
+              [formControlName]="controls.generateSubledgerAccount"
+              (click)="$event.stopPropagation">
+              Generar cuentas auxiliares que no existen.
+            </mat-checkbox>
+
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column">
+
+          <div fxFlex="none" fxLayoutAlign="start center">
+
+            <mat-checkbox
+              [formControlName]="controls.canEditVoucherEntries"
+              (click)="$event.stopPropagation">
+              Habilitar edición de movimientos.
+            </mat-checkbox>
+
+          </div>
+
+        </div>
+
+        <mat-divider class="divider-padding"></mat-divider>
+
+
+        <div fxLayout="row">
+
+          <div fxFlex fxLayoutAlign="end center">
+
+            <button (click)="onSubmitForm()"
+              [class.btn]="!formHandler.isValid || !file"
+              [class.btn-action]="formHandler.isValid && file">
+              Importar pólizas
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</emp-ng-card>

@@ -36,9 +36,10 @@
 
     </emp-fa-voucher-creator>
 
-    <div *ngSwitchCase="'VouchersImporter'">
+    <emp-fa-vouchers-uploader *ngSwitchCase="'VouchersImporter'"
+      (vouchersUploaderEvent)="onVouchersUploaderEvent($event)">
 
-    </div>
+    </emp-fa-vouchers-uploader>
 
   </ng-container>
 

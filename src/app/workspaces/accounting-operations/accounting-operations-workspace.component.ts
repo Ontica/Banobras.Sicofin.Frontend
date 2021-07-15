@@ -26,6 +26,8 @@ import {
   ExportReportModalEventType
 } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
+import { VouchersUploaderEventType } from '@app/views/vouchers/vouchers-uploader/vouchers-uploader.component';
+
 type AccountingOperationModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
 
@@ -99,7 +101,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         return;
 
       case VouchersExplorerEventType.IMPORT_VOUCHERS:
-        console.log('IMPORT_VOUCHERS'); // this.displayOptionModalSelected = 'VouchersImporter';
+        this.displayOptionModalSelected = 'VouchersImporter';
         return;
 
       case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION:
@@ -145,6 +147,24 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   onCloseVoucherTabbedView() {
     this.selectedVoucher = EmptyVoucher;
     this.displayVoucherTabbedView = false;
+  }
+
+
+  onVouchersUploaderEvent(event: EventInfo) {
+    switch (event.type as VouchersUploaderEventType) {
+
+      case VouchersUploaderEventType.CLOSE_MODAL_CLICKED:
+        this.onOptionModalClosed();
+        return;
+
+      case VouchersUploaderEventType.IMPORT_VOUCHERS:
+        console.log('IMPORT_VOUCHERS', event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
