@@ -80,7 +80,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get isTrialBalance(): boolean {
     return ['Balanza', 'BalanzaConAuxiliares',
-            'SaldosPorCuentaConDelegaciones'].includes(this.trialBalanceCommand.trialBalanceType);
+            'SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -95,7 +95,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get isBalancesByAccountWithLedgers(): boolean {
-    return['SaldosPorCuentaConDelegaciones'].includes(this.trialBalanceCommand.trialBalanceType);
+    return['SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 

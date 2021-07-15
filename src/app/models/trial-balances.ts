@@ -14,7 +14,7 @@ export const TrialBalanceTypeList: Identifiable[] = [
   {uid: 'AnaliticoDeCuentas', name: 'Analítico de cuentas'},
   {uid: 'Balanza', name: 'Balanza tradicional'},
   {uid: 'BalanzaConAuxiliares', name: 'Balanza tradicional con auxiliares'},
-  {uid: 'SaldosPorCuentaConDelegaciones', name: 'Balanza consolidada con cuentas en cascada'},
+  {uid: 'SaldosPorCuentaYMayor', name: 'Balanza consolidada con cuentas en cascada'},
   {uid: 'SaldosPorCuenta', name: 'Saldos por cuenta y auxiliar'},
   {uid: 'SaldosPorAuxiliar', name: 'Saldos por auxiliar'},
 ];
