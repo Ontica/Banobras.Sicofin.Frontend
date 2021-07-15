@@ -10,11 +10,15 @@
 
       <div fxFlex class="list-header-column-border-shadow"> Nombre </div>
 
-      <div fxFlex="10%"> Rol </div>
+      <div fxFlex="7%"> Rol </div>
 
-      <div fxFlex="10%"> Tipo</div>
+      <div fxFlex="5%"> Sector </div>
 
-      <div fxFlex="10%"> Naturaleza </div>
+      <div fxFlex="5%"> Auxiliar </div>
+
+      <div fxFlex="7%"> Tipo</div>
+
+      <div fxFlex="7%"> Naturaleza </div>
 
       <div fxFlex="10%"> Fecha alta </div>
 
@@ -43,15 +47,23 @@
     <div [style.marginLeft.px]="marginLeftByLevel">{{account.name}}</div>
   </div>
 
-  <div fxFlex="10%">
+  <div fxFlex="7%">
     <div class="nowrap">{{account.role}}</div>
   </div>
 
-  <div fxFlex="10%">
+  <div fxFlex="5%">
+    <div>{{account.usesSector ? "Sí": "No"}}</div>
+  </div>
+
+  <div fxFlex="5%">
+    <div>{{account.usesSubledger ? "Sí": "No"}}</div>
+  </div>
+
+  <div fxFlex="7%">
     <div>{{account.type}}</div>
   </div>
 
-  <div fxFlex="10%">
+  <div fxFlex="7%">
     <div class="nowrap">{{account.debtorCreditor}}</div>
   </div>
 

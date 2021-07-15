@@ -88,6 +88,8 @@ export interface AccountDescriptor {
   sector?: string;
   type: string;
   role: AccountRole;
+  usesSubledger: boolean;
+  usesSector: boolean;
   debtorCreditor: DebtorCreditorType;   // naturaleza
   startDate: DateString;
   level: number;
@@ -101,6 +103,8 @@ export const EmptyAccountDescriptor: AccountDescriptor = {
   name: '',
   sector: '',
   type: '',
+  usesSubledger: false,
+  usesSector: false,
   role: null,
   debtorCreditor: null,
   level: 0,
@@ -134,6 +138,8 @@ export const EmptyAccount: Account = {
   obsolete: false,
   startDate: '',
   endDate: '',
+  usesSubledger: false,
+  usesSector: false,
   accountsChart: Empty,
   areaRules: [],
   currencyRules: [],
@@ -252,18 +258,18 @@ export function getLevelsListFromPattern(accountsPattern: string,
     return [];
   }
 
-  return Array.from({length: maxAccountLevel}, (value, key) => key + 1)
-              .map<Identifiable>(level => ({
-                uid: level.toString(),
-                name: `Nivel ${level}: ${getAccountPatternFromLevel(accountsPattern,
-                                                                    accountNumberSeparator,
-                                                                    level)}`,
-              }));
+  return Array.from({ length: maxAccountLevel }, (value, key) => key + 1)
+    .map<Identifiable>(level => ({
+      uid: level.toString(),
+      name: `Nivel ${level}: ${getAccountPatternFromLevel(accountsPattern,
+        accountNumberSeparator,
+        level)}`,
+    }));
 }
 
 
 function getAccountPatternFromLevel(accountsPattern: string,
                                     accountNumberSeparator: string,
-                                    level: number){
+                                    level: number) {
   return accountsPattern.split(accountNumberSeparator, level).join(accountNumberSeparator);
 }
