@@ -7,13 +7,13 @@
 
 @import "../../../../styles/general-styles";
 
-$area-height: 36px;
-$area-width: 36px;
+$area-height: 30px;
+$area-width: 30px;
 $line-height: 24px;
-$space: 5px;
+$space: 4px;
 $border-radius: 3px;
 
-input[type=file] {
+input[type="file"] {
   display: none;
 }
 
@@ -49,16 +49,16 @@ input[type=file] {
 .file-menu-btn {
   width: $area-width;
   height: $area-height;
-  padding: calc(( #{$area-width} - #{$line-height} ) / 2);
+  padding: calc((#{$area-width} - #{$line-height}) / 2);
 }
 
 .file-drop-area {
   display: flex;
   flex-wrap: wrap;
-  padding: $space 10px !important;
+  padding: $space $space * 2;
   border-radius: $border-radius;
-  margin-right: 8px;
-  border: dashed 1px $border-color-dark !important;
+  margin: 2px 8px 2px 0;
+  border: dashed 1px $border-color-dark;
   min-height: $area-height + 4 * $space + 2;
 
   .file-area {
@@ -112,11 +112,11 @@ input[type=file] {
   }
 
   .file-add {
-    border: solid 1px $border-color-dark !important;
+    border: solid 1px $border-color-dark;
     border-radius: $border-radius;
     width: $area-width;
     height: $area-height;
-    padding: calc(( #{$area-width} - #{$line-height} ) / 2 - 1px);
+    padding: calc((#{$area-width} - #{$line-height}) / 2 - 1px);
     margin: $space 0;
 
     label {

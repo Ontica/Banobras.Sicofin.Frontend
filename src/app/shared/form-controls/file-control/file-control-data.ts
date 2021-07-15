@@ -6,24 +6,25 @@
  */
 
 import { Progress } from '@app/data-services/file-services/http-progress';
-import { Observable } from 'rxjs';
 
+import { Observable } from 'rxjs';
 
 export enum FileTypeAccepted {
   all = '*',
   pdf = 'application/pdf',
   excel = '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
   image = 'image/*',
+  txt = 'text/plain',
 }
 
 
-export type FileType = 'all' | 'pdf' | 'excel' | 'image';
+export type FileType = 'all' | 'pdf' | 'excel' | 'txt' | 'image';
 
 
 export interface FileControlConfig {
   autoUpload?: boolean;
   fileName?: string;
-  fileTypes?: FileType;
+  filesTypes?: FileType[];
   maxFiles?: number;
   placeholder?: string;
   placeholderReadonly?: string;
@@ -36,13 +37,13 @@ export interface FileControlConfig {
 export const DefaultFileControlConfig: FileControlConfig = {
   autoUpload: false,
   fileName: null,
-  fileTypes: 'all',
+  filesTypes: ['all'],
   maxFiles: 1,
   placeholder: 'Elija un archivo o arrástrelo y suéltelo aquí.',
   placeholderReadonly: 'No se han agregado archivos.',
   showFileInfo: true,
-  textAccion: 'Agregar Archivo',
-  textSave: 'Guardar Archivo',
+  textAccion: 'Agregar archivo',
+  textSave: 'Guardar archivo',
 };
 
 

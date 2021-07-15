@@ -1,4 +1,4 @@
-<div class="file-drop-area" [class.disabled]="disabled"
+<div class="file-drop-area" [class.disabled]="disabled" [class.invalid-control]="showError"
   (drop)="onDropFile($event)" (dragover)="onDragOver($event)">
 
   <div class="file-area" *ngFor="let file of filesToUpload" [title]="file.name"
@@ -81,5 +81,5 @@
 </div>
 
 <input type="file" [id]="idFileControl" #fileControl
-  [multiple]="fileControlConfig.maxFiles > 1" [accept]="acceptedFileTypes" [disabled]="disabled"
+  [multiple]="fileControlConfig.maxFiles > 1" [accept]="acceptedFileString" [disabled]="disabled"
   (change)="handleFileInput(fileControl);">
