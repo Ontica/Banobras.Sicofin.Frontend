@@ -15,7 +15,7 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { FormatLibrary } from '@app/shared/utils';
+import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
 export enum StoredBalanceSetTabbedViewEventType {
   CLOSE_MODAL_CLICKED = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',
@@ -75,7 +75,7 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
 
   onClose() {
-    this.sendEvent(StoredBalanceSetTabbedViewEventType.CLOSE_MODAL_CLICKED);
+    sendEvent(this.storedBalanceSetTabbedViewEvent, StoredBalanceSetTabbedViewEventType.CLOSE_MODAL_CLICKED);
   }
 
 
@@ -88,7 +88,8 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
 
   onExportButtonClicked() {
-    this.sendEvent(StoredBalanceSetTabbedViewEventType.EXPORT_STORED_BALANCE_SET);
+    sendEvent(this.storedBalanceSetTabbedViewEvent,
+      StoredBalanceSetTabbedViewEventType.EXPORT_STORED_BALANCE_SET);
   }
 
 
@@ -99,7 +100,8 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
       storedBalanceSet: {balancesDate: this.storedBalanceSet.balancesDate},
     };
 
-    this.sendEvent(StoredBalanceSetTabbedViewEventType.CALCULATE_STORED_BALANCE_SET, payload);
+    sendEvent(this.storedBalanceSetTabbedViewEvent,
+      StoredBalanceSetTabbedViewEventType.CALCULATE_STORED_BALANCE_SET, payload);
   }
 
 
@@ -192,16 +194,6 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(-1);
     }
-  }
-
-
-  private sendEvent(eventType: StoredBalanceSetTabbedViewEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.storedBalanceSetTabbedViewEvent.emit(event);
   }
 
 }

@@ -20,6 +20,8 @@ import { AccountChartStateSelector } from '@app/presentation/exported.presentati
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
+import { sendEvent } from '@app/shared/utils';
+
 import { ExchangeRateSelectorEventType } from '../exchange-rate-selector/exchange-rate-selector.component';
 
 export enum TrialBalanceFilterEventType {
@@ -173,8 +175,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         balancesType: this.balancesTypeList[0].uid,
       });
 
-    this.sendEvent(TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED,
-                   {trialBalanceCommand: this.getTrialBalanceCommandData()});
+    sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED,
+      {trialBalanceCommand: this.getTrialBalanceCommandData()});
   }
 
 
@@ -187,8 +189,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         'Programming error: form must be validated before command execution.');
     }
 
-    this.sendEvent(TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
-                   {trialBalanceCommand: this.getTrialBalanceCommandData()});
+    sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
+      {trialBalanceCommand: this.getTrialBalanceCommandData()});
   }
 
 
@@ -272,16 +274,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.trialBalanceCommand.level =
       this.levelsList.filter(x => this.trialBalanceCommand.level + '' === x.uid).length > 0 ?
       this.trialBalanceCommand.level : null;
-  }
-
-
-  private sendEvent(eventType: TrialBalanceFilterEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.trialBalanceFilterEvent.emit(event);
   }
 
 }

@@ -21,7 +21,7 @@ import { AccountsChartMasterData, EmptyVoucher, Voucher } from '@app/models';
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { FormHandler } from '@app/shared/utils';
+import { FormHandler, sendEvent } from '@app/shared/utils';
 
 export enum VoucherHeaderComponentEventType {
   CREATE_VOUCHER = 'VoucherHeaderFormControls.Event.CreateVoucher',
@@ -131,12 +131,12 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       eventType = VoucherHeaderComponentEventType.UPDATE_VOUCHER;
     }
 
-    this.sendEvent(eventType, {voucher: this.getFormData()});
+    sendEvent(this.voucherHeaderEvent, eventType, {voucher: this.getFormData()});
   }
 
 
   onAddVoucherEntryClicked() {
-    this.sendEvent(VoucherHeaderComponentEventType.ADD_VOUCHER_ENTRY_CLICKED);
+    sendEvent(this.voucherHeaderEvent, VoucherHeaderComponentEventType.ADD_VOUCHER_ENTRY_CLICKED);
   }
 
 
@@ -251,16 +251,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     return data;
-  }
-
-
-  private sendEvent(eventType: VoucherHeaderComponentEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.voucherHeaderEvent.emit(event);
   }
 
 }

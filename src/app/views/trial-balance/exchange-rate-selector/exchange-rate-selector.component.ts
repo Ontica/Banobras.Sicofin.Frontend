@@ -11,7 +11,7 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { ExchangeRate } from '@app/models';
 
-import { ArrayLibrary } from '@app/shared/utils';
+import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
 export enum ExchangeRateSelectorEventType {
   SEARCH_EXCHANGE_RATES_CLICKED = 'ExchangeRateSelectorComponent.Event.SearchExchangeRatesClicked',
@@ -112,7 +112,8 @@ export class ExchangeRateSelectorComponent implements OnChanges {
     this.clearFieldExchangeRateType();
     this.clearFieldToCurrency();
 
-    this.sendEvent(ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED, this.exchangeRateDate);
+    sendEvent(this.exchangeRateSelectorEvent, ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED,
+      this.exchangeRateDate);
   }
 
 
@@ -158,16 +159,6 @@ export class ExchangeRateSelectorComponent implements OnChanges {
   private clearFieldToCurrency() {
     this.valuateToCurrrencyUID = '';
     this.emitValuateToCurrrencyUID();
-  }
-
-
-  private sendEvent(eventType: ExchangeRateSelectorEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.exchangeRateSelectorEvent.emit(event);
   }
 
 }

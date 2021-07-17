@@ -15,6 +15,8 @@ import { VoucherEntryDescriptor } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
+import { sendEvent } from '@app/shared/utils';
+
 export enum VoucherEntryTableEventType {
   UPDATE_VOUCHER_ENTRY_CLICKED = 'VoucherEntryTableComponent.Event.UpdateVoucherEntryClicked',
   REMOVE_VOUCHER_ENTRY_CLICKED = 'VoucherEntryTableComponent.Event.RemoveVoucherEntryClicked',
@@ -45,7 +47,8 @@ export class VoucherEntryTableComponent implements OnChanges {
 
   onUpdateVoucherEntryClicked(voucherEntry: VoucherEntryDescriptor) {
     if (!(window.getSelection().toString().length > 0)) {
-      this.sendEvent(VoucherEntryTableEventType.UPDATE_VOUCHER_ENTRY_CLICKED, {voucherEntry});
+      sendEvent(this.voucherEntryTableEvent, VoucherEntryTableEventType.UPDATE_VOUCHER_ENTRY_CLICKED,
+        {voucherEntry});
     }
   }
 
@@ -58,7 +61,8 @@ export class VoucherEntryTableComponent implements OnChanges {
       .toPromise()
       .then(x => {
         if (x) {
-          this.sendEvent(VoucherEntryTableEventType.REMOVE_VOUCHER_ENTRY_CLICKED, {voucherEntry});
+          sendEvent(this.voucherEntryTableEvent, VoucherEntryTableEventType.REMOVE_VOUCHER_ENTRY_CLICKED,
+            {voucherEntry});
         }
       });
   }
@@ -81,16 +85,6 @@ export class VoucherEntryTableComponent implements OnChanges {
       </table>
 
      <br>¿Elimino el movimiento?`;
-  }
-
-
-  private sendEvent(eventType: VoucherEntryTableEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.voucherEntryTableEvent.emit(event);
   }
 
 }

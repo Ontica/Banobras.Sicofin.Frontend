@@ -9,6 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { EventInfo } from '@app/core';
 
+import { sendEvent } from '@app/shared/utils';
+
 export enum ExportReportModalEventType {
   CLOSE_MODAL_CLICKED = 'ExportReportModalComponent.Event.CloseModalClicked',
   EXPORT_EXCEL_CLICKED = 'ExportReportModalComponent.Event.ExportExcelClicked',
@@ -44,23 +46,13 @@ export class ExportReportModalComponent implements OnChanges {
 
 
   onClose() {
-    this.sendEvent(ExportReportModalEventType.CLOSE_MODAL_CLICKED);
+    sendEvent(this.exportReportModalEvent, ExportReportModalEventType.CLOSE_MODAL_CLICKED);
   }
 
 
   onExportButtonClicked() {
     this.working = true;
-    this.sendEvent(ExportReportModalEventType.EXPORT_EXCEL_CLICKED);
-  }
-
-
-  private sendEvent(eventType: ExportReportModalEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.exportReportModalEvent.emit(event);
+    sendEvent(this.exportReportModalEvent, ExportReportModalEventType.EXPORT_EXCEL_CLICKED);
   }
 
 }

@@ -13,6 +13,8 @@ import { EventInfo } from '@app/core';
 
 import { VoucherDescriptor } from '@app/models';
 
+import { sendEvent } from '@app/shared/utils';
+
 export enum VoucherListItemEventType {
   VOUCHER_CLICKED = 'VoucherListItemComponent.Event.VoucherClicked',
   CHECK_CLICKED = 'VoucherListItemComponent.Event.CheckClicked',
@@ -43,22 +45,12 @@ export class VoucherListItemComponent {
 
 
   onVoucherClicked(){
-    this.sendEvent(VoucherListItemEventType.VOUCHER_CLICKED, {voucher: this.voucher});
+    sendEvent(this.voucherListItemEvent, VoucherListItemEventType.VOUCHER_CLICKED, {voucher: this.voucher});
   }
 
 
   onClickVoucherCheck() {
-    this.sendEvent(VoucherListItemEventType.CHECK_CLICKED, {voucher: this.voucher});
-  }
-
-
-  private sendEvent(eventType: VoucherListItemEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.voucherListItemEvent.emit(event);
+    sendEvent(this.voucherListItemEvent, VoucherListItemEventType.CHECK_CLICKED, {voucher: this.voucher});
   }
 
 }

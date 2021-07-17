@@ -13,6 +13,9 @@ import { EmptySearchVouchersCommand, EmptyVoucher, SearchVouchersCommand, Vouche
          VoucherDescriptor } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
+
+import { sendEvent } from '@app/shared/utils';
+
 import { VoucherFilterEventType } from '../voucher-filter/voucher-filter.component';
 
 import { VoucherListEventType } from '../voucher-list/voucher-list.component';
@@ -82,7 +85,8 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
         this.searching = true;
 
-        this.sendEvent(VouchersExplorerEventType.FILTER_CHANGED, event.payload as SearchVouchersCommand);
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.FILTER_CHANGED,
+          event.payload as SearchVouchersCommand);
 
         return;
 
@@ -91,7 +95,8 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
         this.searching = false;
 
-        this.sendEvent(VouchersExplorerEventType.FILTER_CLEARED, event.payload as SearchVouchersCommand);
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.FILTER_CLEARED,
+          event.payload as SearchVouchersCommand);
 
         return;
 
@@ -103,12 +108,12 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
 
   onClickCreateVoucher() {
-    this.sendEvent(VouchersExplorerEventType.CREATE_VOUCHER);
+    sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.CREATE_VOUCHER);
   }
 
 
   onClickImportVouchers() {
-    this.sendEvent(VouchersExplorerEventType.IMPORT_VOUCHERS);
+    sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.IMPORT_VOUCHERS);
   }
 
 
@@ -118,7 +123,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
       case VoucherListEventType.VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
 
-        this.sendEvent(VouchersExplorerEventType.SELECT_VOUCHER, event.payload);
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.SELECT_VOUCHER, event.payload);
 
         return;
 
@@ -126,13 +131,14 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.option, 'event.payload.option');
 
-        this.sendEvent(VouchersExplorerEventType.SELECT_VOUCHERS_OPTION, event.payload);
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.SELECT_VOUCHERS_OPTION,
+          event.payload);
 
         return;
 
       case VoucherListEventType.EXPORT_BUTTON_CLICKED:
 
-        this.sendEvent(VouchersExplorerEventType.EXPORT_VOUCHERS);
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXPORT_VOUCHERS);
 
         return;
 
@@ -146,16 +152,6 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
   private setInitTexts() {
     this.hintText = 'Selecciona los filtros';
     this.textNotFound = 'No se ha invocado la búsqueda de pólizas.';
-  }
-
-
-  private sendEvent(eventType: VouchersExplorerEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.vouchersExplorerEvent.emit(event);
   }
 
 }

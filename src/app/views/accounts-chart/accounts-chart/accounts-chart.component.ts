@@ -14,6 +14,8 @@ import { AccountsChartDataService } from '@app/data-services';
 import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart,
          EmptyAccountsSearchCommand } from '@app/models';
 
+import { sendEvent } from '@app/shared/utils';
+
 import {
   ExportReportModalEventType
 } from '../../reports-controls/export-report-modal/export-report-modal.component';
@@ -157,7 +159,8 @@ export class AccountsChartComponent {
 
     this.accountsChartData.getAccount(accountsChartUID, accountUID)
       .toPromise()
-      .then(account => this.sendEvent(AccountsChartEventType.ACCOUNT_SELECTED, { account }))
+      .then(account => sendEvent(this.accountsChartEvent, AccountsChartEventType.ACCOUNT_SELECTED,
+                        { account }))
       .finally(() => this.setSubmitted(false));
   }
 
@@ -182,16 +185,6 @@ export class AccountsChartComponent {
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
-  }
-
-
-  private sendEvent(eventType: AccountsChartEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.accountsChartEvent.emit(event);
   }
 
 }

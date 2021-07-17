@@ -18,6 +18,8 @@ import { AccountsChartMasterData, EmptyStoredBalanceSet, StoredBalanceSet } from
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
+import { sendEvent } from '@app/shared/utils';
+
 export enum StoredBalanceSetsTableEventType {
   SEARCH_BALANCES_SET = 'StoredBalanceSetsTableComponent.Event.SearchBalancesSet',
   SELECT_BALANCES_SET = 'StoredBalanceSetsTableComponent.Event.SelectBalancesSet',
@@ -80,18 +82,19 @@ export class StoredBalanceSetsTableComponent implements OnChanges, OnInit, OnDes
 
   onSearchBalancesSetClicked() {
     this.isLoading = true;
-    this.sendEvent(StoredBalanceSetsTableEventType.SEARCH_BALANCES_SET,
-                   {accountsChart: this.accountChartSelected});
+    sendEvent(this.storedBalanceSetsTableEvent, StoredBalanceSetsTableEventType.SEARCH_BALANCES_SET,
+      {accountsChart: this.accountChartSelected});
   }
 
 
   onSelectStoredBalanceSetClicked(storedBalanceSet: StoredBalanceSet) {
-    this.sendEvent(StoredBalanceSetsTableEventType.SELECT_BALANCES_SET, {storedBalanceSet});
+    sendEvent(this.storedBalanceSetsTableEvent, StoredBalanceSetsTableEventType.SELECT_BALANCES_SET,
+      {storedBalanceSet});
   }
 
 
   onClickCreateBalanceSet() {
-    this.sendEvent(StoredBalanceSetsTableEventType.CREATE_BALANCE_SET);
+    sendEvent(this.storedBalanceSetsTableEvent, StoredBalanceSetsTableEventType.CREATE_BALANCE_SET);
   }
 
 
@@ -110,16 +113,6 @@ export class StoredBalanceSetsTableComponent implements OnChanges, OnInit, OnDes
     this.cardHint = accountsChartName ?? 'Filtro no seleccionado';
     this.textNotFound = isEmpty(this.accountChartSelected) ? 'No se ha invocado la consulta.' :
       'No se encontraron registros con el filtro proporcionado.';
-  }
-
-
-  private sendEvent(eventType: StoredBalanceSetsTableEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.storedBalanceSetsTableEvent.emit(event);
   }
 
 }

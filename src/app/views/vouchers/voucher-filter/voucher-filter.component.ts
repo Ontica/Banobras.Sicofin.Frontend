@@ -25,6 +25,8 @@ import { expandCollapse } from '@app/shared/animations/animations';
 import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
          tap } from 'rxjs/operators';
 
+import { sendEvent } from '@app/shared/utils';
+
 export enum VoucherFilterEventType {
   SEARCH_VOUCHERS_CLICKED = 'VoucherFilterComponent.Event.SearchVouchersClicked',
   CLEAR_VOUCHERS_CLICKED = 'VoucherFilterComponent.Event.ClearVouchersClicked',
@@ -115,12 +117,14 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
     this.voucherFilter = Object.assign({}, EmptySearchVouchersCommand,
       { accountsChartUID: this.voucherFilter.accountsChartUID });
 
-    this.sendEvent(VoucherFilterEventType.CLEAR_VOUCHERS_CLICKED, this.getSearchVoucherCommand());
+    sendEvent(this.voucherFilterEvent, VoucherFilterEventType.CLEAR_VOUCHERS_CLICKED,
+      this.getSearchVoucherCommand());
   }
 
 
   onSearchVoucherClicked() {
-    this.sendEvent(VoucherFilterEventType.SEARCH_VOUCHERS_CLICKED, this.getSearchVoucherCommand());
+    sendEvent(this.voucherFilterEvent, VoucherFilterEventType.SEARCH_VOUCHERS_CLICKED,
+      this.getSearchVoucherCommand());
   }
 
 
@@ -226,16 +230,6 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
     if (this.voucherUserTypeSelected.uid === VoucherUserType.PostedBy && this.voucherUserSelected?.uid) {
       command.postedByUID = this.voucherUserSelected.uid;
     }
-  }
-
-
-  private sendEvent(eventType: VoucherFilterEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.voucherFilterEvent.emit(event);
   }
 
 }

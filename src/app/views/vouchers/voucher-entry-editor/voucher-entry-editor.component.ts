@@ -21,7 +21,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { EmptyVoucherEntry, VoucherEntry, VoucherEntryTypeList } from '@app/models';
 
-import { FormatLibrary, FormHandler } from '@app/shared/utils';
+import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
 
 export enum VoucherEntryEditorEventType {
@@ -99,7 +99,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
 
   onClose() {
-    this.sendEvent(VoucherEntryEditorEventType.CLOSE_MODAL_CLICKED);
+    sendEvent(this.voucherEntryEditorEvent, VoucherEntryEditorEventType.CLOSE_MODAL_CLICKED);
   }
 
 
@@ -144,7 +144,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       eventType = VoucherEntryEditorEventType.UPDATE_VOUCHER_ENTRY;
     }
 
-    this.sendEvent(eventType, {voucher: this.getFormData()});
+    sendEvent(this.voucherEntryEditorEvent, eventType, {voucher: this.getFormData()});
   }
 
 
@@ -251,16 +251,6 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     };
 
     return ledgerAccountFilter;
-  }
-
-
-  private sendEvent(eventType: VoucherEntryEditorEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.voucherEntryEditorEvent.emit(event);
   }
 
 }

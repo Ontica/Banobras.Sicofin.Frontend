@@ -17,6 +17,8 @@ import { EmptyVoucher, Voucher, VoucherDescriptor } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
+import { sendEvent } from '@app/shared/utils';
+
 import { VoucherListItemEventType } from './voucher-list-item.component';
 
 export enum VoucherListEventType {
@@ -78,7 +80,7 @@ export class VoucherListComponent implements OnChanges {
       case VoucherListItemEventType.VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
 
-        this.sendEvent(VoucherListEventType.VOUCHER_CLICKED, event.payload);
+        sendEvent(this.voucherListEvent, VoucherListEventType.VOUCHER_CLICKED, event.payload);
 
         return;
 
@@ -100,13 +102,13 @@ export class VoucherListComponent implements OnChanges {
 
 
   onClickVouchersSelectedOptions() {
-    this.sendEvent(VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED,
+    sendEvent(this.voucherListEvent, VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED,
       { vouchers: this.selection.selected, option: this.optionSelected });
   }
 
 
   onExportButtonClicked() {
-    this.sendEvent(VoucherListEventType.EXPORT_BUTTON_CLICKED);
+    sendEvent(this.voucherListEvent, VoucherListEventType.EXPORT_BUTTON_CLICKED);
   }
 
 
@@ -114,16 +116,6 @@ export class VoucherListComponent implements OnChanges {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(0);
     }
-  }
-
-
-  private sendEvent(eventType: VoucherListEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.voucherListEvent.emit(event);
   }
 
 }

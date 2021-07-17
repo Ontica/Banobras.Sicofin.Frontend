@@ -18,7 +18,7 @@ import { AccountsChartMasterData } from '@app/models';
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { FormHandler } from '@app/shared/utils';
+import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { combineLatest } from 'rxjs';
 
@@ -82,7 +82,7 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
 
 
   onClose() {
-    this.sendEvent(VouchersUploaderEventType.CLOSE_MODAL_CLICKED);
+    sendEvent(this.vouchersUploaderEvent, VouchersUploaderEventType.CLOSE_MODAL_CLICKED);
   }
 
 
@@ -94,7 +94,7 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.sendEvent(VouchersUploaderEventType.IMPORT_VOUCHERS, this.getFormData());
+    sendEvent(this.vouchersUploaderEvent, VouchersUploaderEventType.IMPORT_VOUCHERS, this.getFormData());
   }
 
 
@@ -149,16 +149,6 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
     };
 
     return data;
-  }
-
-
-  private sendEvent(eventType: VouchersUploaderEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.vouchersUploaderEvent.emit(event);
   }
 
 }

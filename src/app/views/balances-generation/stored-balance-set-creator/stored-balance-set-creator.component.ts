@@ -13,7 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { FormHandler } from '@app/shared/utils';
+import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -73,7 +73,7 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
 
 
   onClose() {
-    this.sendEvent(StoredBalanceSetCreatorEventType.CLOSE_MODAL_CLICKED);
+    sendEvent(this.storedBalanceSetCreatorEvent, StoredBalanceSetCreatorEventType.CLOSE_MODAL_CLICKED);
   }
 
 
@@ -83,9 +83,10 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
       return;
     }
 
-    this.sendEvent(StoredBalanceSetCreatorEventType.CREATE_STORED_BALANCE_SET,
-                  {accountsChartUID: this.formHandler.getControl(this.controls.accountsChart).value ?? '',
-                   storedBalanceSet: this.getFormData()});
+    sendEvent(this.storedBalanceSetCreatorEvent, StoredBalanceSetCreatorEventType.CREATE_STORED_BALANCE_SET, {
+      accountsChartUID: this.formHandler.getControl(this.controls.accountsChart).value ?? '',
+      storedBalanceSet: this.getFormData()
+    });
   }
 
 
@@ -125,16 +126,6 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
     };
 
     return data;
-  }
-
-
-  private sendEvent(eventType: StoredBalanceSetCreatorEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.storedBalanceSetCreatorEvent.emit(event);
   }
 
 }

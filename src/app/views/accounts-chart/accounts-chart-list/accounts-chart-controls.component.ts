@@ -11,6 +11,8 @@ import { EventInfo } from '@app/core';
 
 import { AccountsChart, EmptyAccountsChart } from '@app/models';
 
+import { sendEvent } from '@app/shared/utils';
+
 export enum AccountsChartControlsEventType {
   EXPORT_BUTTON_CLICKED = 'AccountsChartControlsComponent.Event.ExportButtonClicked',
 }
@@ -27,17 +29,7 @@ export class AccountsChartControlsComponent{
 
 
   onExportButtonClicked() {
-    this.sendEvent(AccountsChartControlsEventType.EXPORT_BUTTON_CLICKED);
-  }
-
-
-  private sendEvent(eventType: AccountsChartControlsEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.accountsChartControlsEvent.emit(event);
+    sendEvent(this.accountsChartControlsEvent, AccountsChartControlsEventType.EXPORT_BUTTON_CLICKED);
   }
 
 }

@@ -14,6 +14,8 @@ import { EventInfo } from '@app/core';
 
 import { EmptyTrialBalance, DataTableColumn, TrialBalance, TrialBalanceEntry } from '@app/models';
 
+import { sendEvent } from '@app/shared/utils';
+
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
 import { TrialBalanceControlsEventType } from './trial-balance-controls.component';
@@ -84,7 +86,7 @@ export class TrialBalanceTableComponent implements OnChanges {
 
       case TrialBalanceControlsEventType.EXPORT_BUTTON_CLICKED:
 
-        this.sendEvent(TrialBalanceTableEventType.EXPORT_BALANCE);
+        sendEvent(this.trialBalanceTableEvent, TrialBalanceTableEventType.EXPORT_BALANCE);
 
         return;
 
@@ -118,17 +120,8 @@ export class TrialBalanceTableComponent implements OnChanges {
 
 
   private emitItemsDisplayed() {
-    this.sendEvent(TrialBalanceTableEventType.COUNT_ITEMS_DISPLAYED, this.dataSource.filteredData.length);
-  }
-
-
-  private sendEvent(eventType: TrialBalanceTableEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.trialBalanceTableEvent.emit(event);
+    sendEvent(this.trialBalanceTableEvent,
+      TrialBalanceTableEventType.COUNT_ITEMS_DISPLAYED, this.dataSource.filteredData.length);
   }
 
 }

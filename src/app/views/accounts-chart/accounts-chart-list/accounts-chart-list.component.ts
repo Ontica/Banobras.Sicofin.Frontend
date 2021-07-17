@@ -14,6 +14,8 @@ import { EventInfo, isEmpty } from '@app/core';
 
 import { AccountDescriptor, AccountsChart, EmptyAccountsChart } from '@app/models';
 
+import { sendEvent } from '@app/shared/utils';
+
 import { AccountsChartControlsEventType } from './accounts-chart-controls.component';
 
 export enum AccountsChartListEventType {
@@ -53,7 +55,7 @@ export class AccountsChartListComponent implements OnChanges {
 
 
   onAccountClicked(account: AccountDescriptor) {
-    this.sendEvent(AccountsChartListEventType.ACCOUNT_CLICKED, { account });
+    sendEvent(this.accountsChartListEvent, AccountsChartListEventType.ACCOUNT_CLICKED, { account });
   }
 
 
@@ -62,7 +64,7 @@ export class AccountsChartListComponent implements OnChanges {
 
       case AccountsChartControlsEventType.EXPORT_BUTTON_CLICKED:
 
-        this.sendEvent(AccountsChartListEventType.EXPORT_ACCOUNTS);
+        sendEvent(this.accountsChartListEvent, AccountsChartListEventType.EXPORT_ACCOUNTS);
 
         return;
 
@@ -70,16 +72,6 @@ export class AccountsChartListComponent implements OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-  }
-
-
-  private sendEvent(eventType: AccountsChartListEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.accountsChartListEvent.emit(event);
   }
 
 }

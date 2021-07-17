@@ -18,6 +18,7 @@ import { AccountChartStateSelector } from '@app/presentation/exported.presentati
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
+import { sendEvent } from '@app/shared/utils';
 
 export enum AccountsChartFilterEventType {
   SEARCH_ACCOUNTS_CHART_CLICKED = 'AccountsChartFilterComponent.Event.SearchAccountsChartClicked',
@@ -87,7 +88,8 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
       accountsSearchCommand: Object.assign({}, this.accountsSearch),
     };
 
-    this.sendEvent(AccountsChartFilterEventType.CLEAR_ACCOUNTS_CHART_CLICKED, payload);
+    sendEvent(this.accountsChartFilterEvent, AccountsChartFilterEventType.CLEAR_ACCOUNTS_CHART_CLICKED,
+      payload);
   }
 
 
@@ -97,7 +99,8 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
       accountsSearchCommand: Object.assign({}, this.accountsSearch),
     };
 
-    this.sendEvent(AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED, payload);
+    sendEvent(this.accountsChartFilterEvent, AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED,
+      payload);
   }
 
 
@@ -155,16 +158,6 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
   private setDefaultAccountChartSelected() {
     this.accountChartSelected = this.accountsChartMasterDataList[0];
     this.setLevelsList();
-  }
-
-
-  private sendEvent(eventType: AccountsChartFilterEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.accountsChartFilterEvent.emit(event);
   }
 
 }

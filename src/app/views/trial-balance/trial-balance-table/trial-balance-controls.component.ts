@@ -9,6 +9,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
+import { sendEvent } from '@app/shared/utils';
+
 export enum TrialBalanceControlsEventType {
   FILTER_CHANGED        = 'TrialBalanceControlsComponent.Event.FilterChanged',
   EXPORT_BUTTON_CLICKED = 'TrialBalanceControlsComponent.Event.ExportButtonClicked',
@@ -34,23 +36,13 @@ export class TrialBalanceControlsComponent {
 
 
   onFilterData() {
-    this.sendEvent(TrialBalanceControlsEventType.FILTER_CHANGED,
-                  {filter: this.filter, index: this.indexSelected});
+    sendEvent(this.trialBalanceControlsEvent, TrialBalanceControlsEventType.FILTER_CHANGED,
+      {filter: this.filter, index: this.indexSelected});
   }
 
 
   onExportButtonClicked() {
-    this.sendEvent(TrialBalanceControlsEventType.EXPORT_BUTTON_CLICKED);
-  }
-
-
-  private sendEvent(eventType: TrialBalanceControlsEventType, payload?: any) {
-    const event: EventInfo = {
-      type: eventType,
-      payload
-    };
-
-    this.trialBalanceControlsEvent.emit(event);
+    sendEvent(this.trialBalanceControlsEvent, TrialBalanceControlsEventType.EXPORT_BUTTON_CLICKED);
   }
 
 }
