@@ -1,4 +1,4 @@
-<emp-ng-modal-window [config]="{width:'920px'}">
+<emp-ng-modal-window [config]="{width:'750px'}">
 
   <emp-ng-card
     [title]="editionMode ? 'Editar movimiento' : 'Agregar movimiento'"
@@ -9,9 +9,10 @@
 
       <form [formGroup]="formHandler.form" autocomplete="off" class="form-section">
 
-        <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+        <div fxLayout="column">
 
-          <div fxLayout="row" fxLayoutAlign="end" *ngIf="!editionMode">
+          <div #rowCopyButton *ngIf="!editionMode" fxLayout="row" fxLayoutAlign="end"
+            [style.marginBottom.rem]="1.25">
 
             <div fxFlex="none">
 
@@ -23,159 +24,204 @@
 
           </div>
 
-          <div fxLayout="row">
+          <div #rowFields fxLayout="row" fxFlex="100" >
 
-            <div [fxFlex]="100/3">
-              <label>Movimiento:</label>
-              <emp-ng-select
-                [formControlName]="controls.voucherEntryType"
-                [items]="voucherEntryTypeList"
-                [showError]="formHandler.showInvalidControl(controls.voucherEntryType)">
-              </emp-ng-select>
+            <div #column1 fxLayout="column" fxFlex="50" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+              <div fxLayout="row">
+
+                <div [fxFlex]="100">
+                  <label>Movimiento:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.voucherEntryType"
+                    [items]="voucherEntryTypeList"
+                    [showError]="formHandler.showInvalidControl(controls.voucherEntryType)">
+                  </emp-ng-select>
+                </div>
+
+              </div>
+
+              <div fxLayout="row">
+
+                <div fxFlex>
+                  <label>Cuenta:</label>
+                  <emp-ng-select
+                    [config]="{ hideSelected: true, minTermLength: minTermLength }"
+                    [formControlName]="controls.ledgerAccount"
+                    [items]="ledgerAccountList$ | async"
+                    [typeahead]="ledgerAccountInput$"
+                    [loading]="ledgerAccountLoading"
+                    placeholder="Buscar cuenta"
+                    [showError]="formHandler.showInvalidControl(controls.ledgerAccount)">
+                    <ng-template #labelTemplate let-item="item">
+                      {{item.name}}
+                    </ng-template>
+                    <ng-template #optionTemplate let-item="item">
+                      {{item.name}}
+                    </ng-template>
+                  </emp-ng-select>
+                </div>
+
+                <div fxFlex="50px">
+                  <label>Sector:</label>
+                  <input type="text" class="text-box"
+                    [formControlName]="controls.sector"
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.sector)">
+                </div>
+
+              </div>
+
+              <div fxLayout="row">
+
+                <div [fxFlex]="100">
+                  <label>Auxiliar:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.subledgerAccount"
+                    [items]="[]"
+                    [showError]="formHandler.showInvalidControl(controls.subledgerAccount)">
+                  </emp-ng-select>
+                </div>
+
+              </div>
+
+              <div fxLayout="row">
+
+                <div [fxFlex]="100">
+                  <label>Moneda:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.currency"
+                    [items]="[]"
+                    [showError]="formHandler.showInvalidControl(controls.currency)">
+                  </emp-ng-select>
+                </div>
+
+              </div>
+
+              <div fxLayout="row">
+
+                <div [fxFlex]="100">
+                  <label>Monto de la operación:</label>
+                  <input type="text" class="text-box text-align-right" empNgCurrency
+                    empNgCurrencyDisplaySymbol=""
+                    [formControlName]="controls.amount"
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.amount)">
+                </div>
+
+              </div>
+
+              <div fxLayout="row">
+
+                <div [fxFlex]="100">
+                  <label><a class="link" (click)="onExchangeRateClicked()">Tipo de cambio:</a></label>
+                  <input type="text" class="text-box text-align-right" empNgCurrency
+                    empNgCurrencyDisplaySymbol=""
+                    [formControlName]="controls.exchangeRate"
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.exchangeRate)">
+                </div>
+
+              </div>
+
+              <div fxLayout="row">
+
+                <div [fxFlex]="100">
+                  <label>
+                    <span [fxFlex]="50">Monto en moneda base:</span>
+                    <a class="link" (click)="onCalculateBaseCurrencyAmountClicked()"
+                      [fxFlex]="50" fxLayoutAlign="end" [style.marginRight.px]="8">
+                      ( Calcular monto )
+                    </a>
+                  </label>
+                  <input type="text" class="text-box text-align-right" empNgCurrency
+                    empNgCurrencyDisplaySymbol=""
+                    [formControlName]="controls.baseCurrencyAmount"
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.baseCurrencyAmount)">
+                </div>
+
+              </div>
+
             </div>
 
-            <div fxFlex>
-              <label>Cuenta:</label>
-              <emp-ng-select
-                [config]="{ hideSelected: true, minTermLength: minTermLength }"
-                [formControlName]="controls.ledgerAccount"
-                [items]="ledgerAccountList$ | async"
-                [typeahead]="ledgerAccountInput$"
-                [loading]="ledgerAccountLoading"
-                placeholder="Buscar cuenta"
-                [showError]="formHandler.showInvalidControl(controls.ledgerAccount)">
-                <ng-template #labelTemplate let-item="item">
-                  {{item.name}}
-                </ng-template>
-                <ng-template #optionTemplate let-item="item">
-                  {{item.name}}
-                </ng-template>
-              </emp-ng-select>
-            </div>
+            <div #column2 fxLayout="column" fxFlex="50" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
-            <div fxFlex="50px">
-              <label>Sector:</label>
-              <input type="text" class="text-box"
-                [formControlName]="controls.sector"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.sector)">
-            </div>
+              <div fxLayout="row">
 
-            <div [fxFlex]="100/3">
-              <label>Auxiliar:</label>
-              <emp-ng-select
-                [formControlName]="controls.subledgerAccount"
-                [items]="[]"
-                [showError]="formHandler.showInvalidControl(controls.subledgerAccount)">
-              </emp-ng-select>
-            </div>
+                <div [fxFlex]="100">
+                  <label>Area de responsabilidad:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.responsibilityArea"
+                    [items]="[]"
+                    [showError]="formHandler.showInvalidControl(controls.responsibilityArea)">
+                  </emp-ng-select>
+                </div>
 
-          </div>
+              </div>
 
-          <div fxLayout="row">
+              <div fxLayout="row">
 
-            <div [fxFlex]="100/3">
-              <label>Area de responsabilidad:</label>
-              <emp-ng-select
-                [formControlName]="controls.responsibilityArea"
-                [items]="[]"
-                [showError]="formHandler.showInvalidControl(controls.responsibilityArea)">
-              </emp-ng-select>
-            </div>
+                <div [fxFlex]="100">
+                  <label>Concepto presupuestal:</label>
+                  <input type="text" class="text-box"
+                    [formControlName]="controls.budgetConcept"
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.budgetConcept)">
+                </div>
 
-            <div [fxFlex]="100/3">
-              <label>Concepto presupuestal:</label>
-              <input type="text" class="text-box"
-                [formControlName]="controls.budgetConcept"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.budgetConcept)">
-            </div>
+              </div>
 
-            <div [fxFlex]="100/3">
-              <label>Tipo de evento:</label>
-              <emp-ng-select
-                [formControlName]="controls.eventType"
-                [items]="[]"
-                [showError]="formHandler.showInvalidControl(controls.eventType)">
-              </emp-ng-select>
-            </div>
+              <div fxLayout="row">
 
-          </div>
+                <div [fxFlex]="100">
+                  <label>Tipo de evento:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.eventType"
+                    [items]="[]"
+                    [showError]="formHandler.showInvalidControl(controls.eventType)">
+                  </emp-ng-select>
+                </div>
 
-          <div fxLayout="row">
+              </div>
 
-            <div [fxFlex]="100/3">
-              <label>Número de verificación:</label>
-              <input type="text" class="text-box"
-                [formControlName]="controls.verificationNumber"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.verificationNumber)">
-            </div>
+              <div fxLayout="row">
 
-            <div [fxFlex]="100/3">
-              <label>Fecha:</label>
-              <emp-ng-datepicker
-                [formControlName]="controls.date"
-                [showError]="formHandler.showInvalidControl(controls.date)">
+                <div fxFlex>
+                  <label>Número de verificación:</label>
+                  <input type="text" class="text-box"
+                    [formControlName]="controls.verificationNumber"
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.verificationNumber)">
+                </div>
 
-              </emp-ng-datepicker>
-            </div>
+              </div>
 
-          </div>
+              <div fxLayout="row">
 
-          <div fxLayout="row">
+                <div fxFlex="none">
+                  <label>Fecha:</label>
+                  <emp-ng-datepicker
+                    [formControlName]="controls.date"
+                    [showError]="formHandler.showInvalidControl(controls.date)">
+                  </emp-ng-datepicker>
+                </div>
 
-            <div [fxFlex]="100/3">
-              <label>Moneda:</label>
-              <emp-ng-select
-                [formControlName]="controls.currency"
-                [items]="[]"
-                [showError]="formHandler.showInvalidControl(controls.currency)">
-              </emp-ng-select>
-            </div>
+              </div>
 
-            <div [fxFlex]="100/6">
-              <label>Monto de la operación:</label>
-              <input type="text" class="text-box text-align-right" empNgCurrency
-                empNgCurrencyDisplaySymbol=""
-                [formControlName]="controls.amount"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.amount)">
-            </div>
+              <div fxLayout="row" fxFlex="108px">
 
-            <div [fxFlex]="100/6">
-              <label><a class="link" (click)="onExchangeRateClicked()">Tipo de cambio:</a></label>
-              <input type="text" class="text-box text-align-right" empNgCurrency
-                empNgCurrencyDisplaySymbol=""
-                [formControlName]="controls.exchangeRate"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.exchangeRate)">
-            </div>
+                <div [fxFlex]="100">
+                  <label>Concepto:</label>
+                  <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
+                    [formControlName]="controls.concept"
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.concept)">
+                  </textarea>
+                </div>
 
-            <div fxFlex>
-              <label>Monto en moneda base:</label>
-              <input type="text" class="text-box text-align-right" empNgCurrency
-                empNgCurrencyDisplaySymbol=""
-                [formControlName]="controls.baseCurrencyAmount"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.baseCurrencyAmount)">
-            </div>
+              </div>
 
-            <div fxFlex="none" fxLayoutAlign="end end" [style.paddingBottom.px]="2">
-              <button class="btn" (click)="onCalculateBaseCurrencyAmountClicked()"> Calcular </button>
-            </div>
-
-          </div>
-
-          <div fxLayout="row">
-
-            <div fxFlex>
-              <label>Concepto:</label>
-              <textarea class="text-area" empNgTextareaAutoresize rows="1"
-                [formControlName]="controls.concept"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.concept)">
-              </textarea>
             </div>
 
           </div>
 
           <mat-divider class="divider-padding"></mat-divider>
 
-          <div fxLayout="row">
+          <div #rowFooter fxLayout="row">
 
             <div fxFlex fxLayoutAlign="end center">
 
