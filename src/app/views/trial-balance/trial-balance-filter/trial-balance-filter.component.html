@@ -132,13 +132,7 @@
 
           <div fxFlex="25">
 
-            <label *ngIf="isTrialBalance || isBalancesByAccountWithLedgers || isAnalyticalAccounts">
-              De la cuenta:
-            </label>
-
-            <label *ngIf="!(isTrialBalance || isBalancesByAccountWithLedgers || isAnalyticalAccounts)">
-              Con la cuenta:
-            </label>
+            <label>{{displayToAccount ? 'De la cuenta:' : 'Con la cuenta:'}}</label>
 
             <input type="text" class="text-box" name="fromAccount"
               [(ngModel)]="trialBalanceCommand.fromAccount"
@@ -148,17 +142,17 @@
 
           <div fxFlex="25">
 
-            <ng-container *ngIf="isBalancesByAccount || isBalancesBySubledgerAccount">
+            <ng-container *ngIf="displaySubledgerAccount">
 
               <label>Con el auxiliar:</label>
 
-              <input type="text" class="text-box" name="withSubledgerAccount"
+              <input type="text" class="text-box" name="subledgerAccount"
                 [(ngModel)]="trialBalanceCommand.subledgerAccount"
                 (keyup.escape)="trialBalanceCommand.subledgerAccount = ''">
 
             </ng-container>
 
-            <ng-container *ngIf="isTrialBalance || isBalancesByAccountWithLedgers || isAnalyticalAccounts">
+            <ng-container *ngIf="displayToAccount">
 
               <label>A la cuenta:</label>
 

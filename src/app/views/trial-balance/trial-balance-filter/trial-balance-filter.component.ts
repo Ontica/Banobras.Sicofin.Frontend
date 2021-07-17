@@ -106,6 +106,21 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get isExchangeRatesRequired(): boolean {
+    return this.isAnalyticalAccounts;
+  }
+
+
+  get displaySubledgerAccount() {
+    return this.isBalancesByAccount || this.isBalancesBySubledgerAccount;
+  }
+
+
+  get displayToAccount() {
+    return this.isTrialBalance || this.isBalancesByAccountWithLedgers || this.isAnalyticalAccounts;
+  }
+
+
   get trialBalanceFormFieldsValid(): boolean {
     return !!this.trialBalanceCommand.trialBalanceType &&
            !!this.trialBalanceCommand.accountsChartUID &&
@@ -123,11 +138,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     return !!this.trialBalanceCommand.exchangeRateDate &&
            !!this.trialBalanceCommand.exchangeRateTypeUID &&
            !!this.trialBalanceCommand.valuateToCurrrencyUID;
-  }
-
-
-  get isExchangeRatesRequired(): boolean {
-    return this.isAnalyticalAccounts;
   }
 
 
@@ -213,13 +223,13 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   private validateCommandFieldsByBalanceType(data: TrialBalanceCommand) {
-    if (this.isTrialBalance) {
-      data.fromAccount = this.trialBalanceCommand.fromAccount;
+    data.fromAccount = this.trialBalanceCommand.fromAccount;
+
+    if (this.displayToAccount) {
       data.toAccount = this.trialBalanceCommand.toAccount;
     }
 
-    if (this.isBalancesByAccount || this.isBalancesBySubledgerAccount) {
-      data.fromAccount = this.trialBalanceCommand.fromAccount;
+    if (this.displaySubledgerAccount) {
       data.subledgerAccount = this.trialBalanceCommand.subledgerAccount;
     }
 
