@@ -15,7 +15,7 @@ import { FormatLibrary } from '../utils';
 })
 export class EmpTextareaAutoresizeDirective implements OnInit {
 
-  @Input() maxHeightTextarea = 75;
+  @Input() maxHeightTextarea = 68;
 
   constructor(private elementRef: ElementRef,
               private renderer: Renderer2) { }
