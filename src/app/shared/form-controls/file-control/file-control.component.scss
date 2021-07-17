@@ -52,6 +52,10 @@ input[type="file"] {
   padding: calc((#{$area-width} - #{$line-height}) / 2);
 }
 
+.file-menu-btn-right {
+  margin-right: 8px;
+}
+
 .file-drop-area {
   display: flex;
   flex-wrap: wrap;
@@ -94,7 +98,7 @@ input[type="file"] {
 
     .file-info {
       margin: auto 0;
-      width: calc(100% - 2 * #{$area-width} - #{$space});
+      width: calc(100% - 2 * #{$area-width} - 3 * #{$space});
 
       p {
         width: auto;

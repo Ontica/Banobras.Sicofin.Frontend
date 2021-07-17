@@ -109,27 +109,29 @@ export class FileControlComponent implements OnChanges {
   private setAcceptedFilesTypes() {
     this.acceptedFilesTypes = [];
 
-    if (this.fileControlConfig.filesTypes.filter(x => x === 'all').length > 0) {
-      this.acceptedFilesTypes = [...this.acceptedFilesTypes, ...[FileTypeAccepted.all]];
+    if (this.isFileTypeInConfig('all')) {
+      this.validateAndSetAcceptedFileType('all', FileTypeAccepted.all);
     } else {
-      if (this.fileControlConfig.filesTypes.filter(x => x === 'pdf').length > 0) {
-        this.acceptedFilesTypes = [...this.acceptedFilesTypes, ...[FileTypeAccepted.pdf]];
-      }
-
-      if (this.fileControlConfig.filesTypes.filter(x => x === 'excel').length > 0) {
-        this.acceptedFilesTypes = [...this.acceptedFilesTypes, ...[FileTypeAccepted.excel]];
-      }
-
-      if (this.fileControlConfig.filesTypes.filter(x => x === 'image').length > 0) {
-        this.acceptedFilesTypes = [...this.acceptedFilesTypes, ...[FileTypeAccepted.image]];
-      }
-
-      if (this.fileControlConfig.filesTypes.filter(x => x === 'txt').length > 0) {
-        this.acceptedFilesTypes = [...this.acceptedFilesTypes, ...[FileTypeAccepted.txt]];
-      }
+      this.validateAndSetAcceptedFileType('pdf', FileTypeAccepted.pdf);
+      this.validateAndSetAcceptedFileType('excel', FileTypeAccepted.excel);
+      this.validateAndSetAcceptedFileType('image', FileTypeAccepted.image);
+      this.validateAndSetAcceptedFileType('txt', FileTypeAccepted.txt);
     }
 
     this.acceptedFileString = this.acceptedFilesTypes.toString();
+  }
+
+  private isFileTypeInConfig(type: FileType): boolean {
+    if (this.fileControlConfig.filesTypes.filter(x => x === type).length > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  private validateAndSetAcceptedFileType(type: FileType, accepted: FileTypeAccepted) {
+    if (this.isFileTypeInConfig(type)) {
+      this.acceptedFilesTypes = [...this.acceptedFilesTypes, ...[accepted]];
+    }
   }
 
   private setFilesSaved() {
@@ -188,8 +190,8 @@ export class FileControlComponent implements OnChanges {
   }
 
   private validateFileType(file: File) {
-    if (this.fileControlConfig.filesTypes.filter(x => x === 'all').length > 0) {
-        return true;
+    if (this.isFileTypeInConfig('all')) {
+      return true;
     }
 
     if (file.type === FileTypeAccepted.pdf) {
@@ -212,7 +214,7 @@ export class FileControlComponent implements OnChanges {
   }
 
   private isValidFileType(type: FileType, file: File) {
-    if (this.fileControlConfig.filesTypes.filter(x => x === type).length > 0) {
+    if (this.isFileTypeInConfig(type)) {
       return true;
     }
 

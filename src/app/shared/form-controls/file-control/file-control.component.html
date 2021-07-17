@@ -51,7 +51,7 @@
         </ng-container>
       </div>
 
-      <div *ngIf="!file.uid && !fileControlConfig.autoUpload" class="file-menu-btn"
+      <div *ngIf="!file.uid && !fileControlConfig.autoUpload" class="file-menu-btn file-menu-btn-right"
         (click)="onClickFileOptions(file, 'SAVE')" [title]="fileControlConfig.textSave">
         <mat-icon>cloud_upload</mat-icon>
       </div>
