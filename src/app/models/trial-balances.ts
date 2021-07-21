@@ -102,7 +102,7 @@ export interface TrialBalance {
 
 export type TrialBalanceItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalGroupDebtor' |
   'BalanceTotalGroupCreditor' | 'BalanceTotalDebtor' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' |
-  'BalanceTotalConsolidated';
+  'BalanceTotalConsolidatedByLedger' | 'BalanceTotalConsolidated';
 
 
 export interface TrialBalanceEntry {
