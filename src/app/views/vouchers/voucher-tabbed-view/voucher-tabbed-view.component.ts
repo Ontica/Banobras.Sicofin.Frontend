@@ -7,7 +7,19 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
+import { EventInfo } from '@app/core';
+
 import { EmptyVoucher, Voucher } from '@app/models';
+
+import { sendEvent } from '@app/shared/utils';
+
+import { VoucherEditorEventType } from '../voucher-editor/voucher-editor.component';
+
+export enum VoucherTabbedViewEventType {
+  CLOSE_BUTTON_CLICKED = 'VoucherTabbedViewComponent.Event.CloseButtonClicked',
+  VOUCHER_UPDATED = 'VoucherTabbedViewComponent.Event.VoucherUpdated',
+  VOUCHER_DELETED = 'VoucherTabbedViewComponent.Event.VoucherDeleted',
+}
 
 @Component({
   selector: 'emp-fa-voucher-tabbed-view',
@@ -17,7 +29,7 @@ export class VoucherTabbedViewComponent implements OnChanges {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
-  @Output() closeEvent = new EventEmitter<void>();
+  @Output() voucherTabbedViewEvent = new EventEmitter<EventInfo>();
 
   title = '';
   hint = '';
@@ -29,7 +41,27 @@ export class VoucherTabbedViewComponent implements OnChanges {
 
 
   onClose() {
-    this.closeEvent.emit();
+    sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.CLOSE_BUTTON_CLICKED);
+  }
+
+
+  onVoucherEditorEvent(event: EventInfo) {
+    switch (event.type as VoucherEditorEventType) {
+
+      case VoucherEditorEventType.VOUCHER_UPDATED:
+        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_UPDATED,
+          event.payload);
+        return;
+
+      case VoucherEditorEventType.VOUCHER_DELETED:
+        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_DELETED,
+          event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 

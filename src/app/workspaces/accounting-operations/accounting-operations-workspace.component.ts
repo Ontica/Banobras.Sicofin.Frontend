@@ -32,6 +32,8 @@ import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/vou
 
 import { ArrayLibrary } from '@app/shared/utils';
 
+import { VoucherTabbedViewEventType } from '@app/views/vouchers/voucher-tabbed-view/voucher-tabbed-view.component';
+
 type AccountingOperationModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
 
@@ -88,6 +90,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VouchersExplorerEventType.FILTER_CLEARED:
         this.applyVoucherFilter(event.payload);
         this.setVoucherListData([]);
+        this.setSelectedVoucher(EmptyVoucher);
         return;
 
       case VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED:
@@ -152,8 +155,8 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
       case VoucherCreatorEventType.VOUCHER_CREATED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
+        this.insertVoucherToList(event.payload.voucher);
         this.setSelectedVoucher(event.payload.voucher);
-        this.insertVoucherToList(this.selectedVoucher);
         return;
 
       default:
@@ -163,8 +166,29 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   }
 
 
-  onCloseVoucherTabbedView() {
-    this.setSelectedVoucher(EmptyVoucher);
+  onVoucherTabbedViewEvent(event: EventInfo) {
+    switch (event.type as VoucherTabbedViewEventType) {
+
+      case VoucherTabbedViewEventType.CLOSE_BUTTON_CLICKED:
+        this.setSelectedVoucher(EmptyVoucher);
+        return;
+
+      case VoucherTabbedViewEventType.VOUCHER_UPDATED:
+        Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
+        this.insertVoucherToList(event.payload.voucher);
+        this.setSelectedVoucher(event.payload.voucher);
+        return;
+
+      case VoucherTabbedViewEventType.VOUCHER_DELETED:
+        Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
+        this.removeVoucherFromList(event.payload.voucher);
+        this.setSelectedVoucher(EmptyVoucher);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -208,6 +232,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       .toPromise()
       .then(x => {
         this.setVoucherListData(x);
+        this.setSelectedVoucher(EmptyVoucher);
       })
       .finally(() => this.isLoading = false);
   }
@@ -231,6 +256,12 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   private insertVoucherToList(voucherSelected: Voucher) {
     const voucherToInsert = mapVoucherDescriptorFromVoucher(voucherSelected);
     const voucherListNew = ArrayLibrary.insertItemTop(this.voucherList, voucherToInsert, 'id');
+    this.setVoucherListData(voucherListNew);
+  }
+
+
+  private removeVoucherFromList(voucherDeleted: Voucher) {
+    const voucherListNew = this.voucherList.filter(x => x.id !== voucherDeleted.id);
     this.setVoucherListData(voucherListNew);
   }
 

@@ -5,17 +5,26 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyVoucher, EmptyVoucherEntry, Voucher, VoucherEntry } from '@app/models';
+import { VouchersDataService } from '@app/data-services';
+
+import { EmptyVoucher, EmptyVoucherEntry, Voucher, VoucherEntry, VoucherFields } from '@app/models';
+
+import { sendEvent } from '@app/shared/utils';
 
 import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-entry-editor.component';
 
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
 
 import { VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
+
+export enum VoucherEditorEventType {
+  VOUCHER_UPDATED = 'VoucherEditorComponent.Event.VoucherUpdated',
+  VOUCHER_DELETED = 'VoucherEditorComponent.Event.VoucherDeleted',
+}
 
 @Component({
   selector: 'emp-fa-voucher-editor',
@@ -25,12 +34,15 @@ export class VoucherEditorComponent {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
+  @Output() voucherEditorEvent = new EventEmitter<EventInfo>();
+
   submitted = false;
 
   displayVoucherEntryEditor = false;
 
   selectedVoucherEntry: VoucherEntry = EmptyVoucherEntry;
 
+  constructor(private vouchersData: VouchersDataService) {}
 
   onVoucherHeaderEvent(event: EventInfo): void {
 
@@ -42,13 +54,12 @@ export class VoucherEditorComponent {
 
       case VoucherHeaderEventType.UPDATE_VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
-        console.log('UPDATE_VOUCHER_CLICKED', event.payload.voucher);
+        this.updateVoucher(event.payload.voucher as VoucherFields);
         return;
 
       case VoucherHeaderEventType.DELETE_VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
-
-        console.log('DELETE_VOUCHER_CLICKED', event.payload.voucher.id);
+        this.deleteVoucher();
         return;
 
       case VoucherHeaderEventType.ADD_VOUCHER_ENTRY_CLICKED:
@@ -113,6 +124,30 @@ export class VoucherEditorComponent {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private updateVoucher(voucherFields: VoucherFields) {
+    this.submitted = true;
+
+    this.vouchersData.updateVoucher(this.voucher.id, voucherFields)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private deleteVoucher() {
+    this.submitted = true;
+
+    this.vouchersData.deleteVoucher(this.voucher.id)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_DELETED, {voucher: this.voucher});
+      })
+      .finally(() => this.submitted = false);
   }
 
 

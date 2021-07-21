@@ -72,4 +72,23 @@ export class VouchersDataService {
     return this.http.post<Voucher>(path, voucherFields);
   }
 
+
+  updateVoucher(voucherId: number, voucherFields: VoucherFields): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+    Assertion.assertValue(voucherFields, 'voucherFields');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}`;
+
+    return this.http.put<Voucher>(path, voucherFields);
+  }
+
+
+  deleteVoucher(voucherId: number): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}`;
+
+    return this.http.delete<Voucher>(path);
+  }
+
 }
