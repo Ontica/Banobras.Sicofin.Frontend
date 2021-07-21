@@ -20,6 +20,8 @@ import { View } from '../main-layout';
 
 import { VouchersDataService } from '@app/data-services';
 
+import { ArrayLibrary } from '@app/shared/utils';
+
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
 
 import {
@@ -29,8 +31,6 @@ import {
 import { VouchersUploaderEventType } from '@app/views/vouchers/vouchers-uploader/vouchers-uploader.component';
 
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
-
-import { ArrayLibrary } from '@app/shared/utils';
 
 import { VoucherTabbedViewEventType } from '@app/views/vouchers/voucher-tabbed-view/voucher-tabbed-view.component';
 
@@ -156,7 +156,6 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VoucherCreatorEventType.VOUCHER_CREATED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         this.insertVoucherToList(event.payload.voucher);
-        this.setSelectedVoucher(event.payload.voucher);
         return;
 
       default:
@@ -176,13 +175,11 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VoucherTabbedViewEventType.VOUCHER_UPDATED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         this.insertVoucherToList(event.payload.voucher);
-        this.setSelectedVoucher(event.payload.voucher);
         return;
 
       case VoucherTabbedViewEventType.VOUCHER_DELETED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         this.removeVoucherFromList(event.payload.voucher);
-        this.setSelectedVoucher(EmptyVoucher);
         return;
 
       default:
@@ -257,12 +254,14 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
     const voucherToInsert = mapVoucherDescriptorFromVoucher(voucherSelected);
     const voucherListNew = ArrayLibrary.insertItemTop(this.voucherList, voucherToInsert, 'id');
     this.setVoucherListData(voucherListNew);
+    this.setSelectedVoucher(voucherSelected);
   }
 
 
   private removeVoucherFromList(voucherDeleted: Voucher) {
     const voucherListNew = this.voucherList.filter(x => x.id !== voucherDeleted.id);
     this.setVoucherListData(voucherListNew);
+    this.setSelectedVoucher(EmptyVoucher);
   }
 
 
