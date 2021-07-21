@@ -15,7 +15,7 @@ import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-ent
 
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
 
-import { VoucherHeaderComponentEventType } from '../voucher-header/voucher-header.component';
+import { VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
 
 @Component({
   selector: 'emp-fa-voucher-editor',
@@ -38,15 +38,21 @@ export class VoucherEditorComponent {
       return;
     }
 
-    switch (event.type as VoucherHeaderComponentEventType) {
+    switch (event.type as VoucherHeaderEventType) {
 
-      case VoucherHeaderComponentEventType.UPDATE_VOUCHER:
-        console.log('UPDATE_VOUCHER', event.payload);
+      case VoucherHeaderEventType.UPDATE_VOUCHER_CLICKED:
+        Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
+        console.log('UPDATE_VOUCHER_CLICKED', event.payload.voucher);
         return;
 
-      case VoucherHeaderComponentEventType.ADD_VOUCHER_ENTRY_CLICKED:
-        this.displayVoucherEntryEditor = true;
-        this.selectedVoucherEntry = EmptyVoucherEntry;
+      case VoucherHeaderEventType.DELETE_VOUCHER_CLICKED:
+        Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
+
+        console.log('DELETE_VOUCHER_CLICKED', event.payload.voucher.id);
+        return;
+
+      case VoucherHeaderEventType.ADD_VOUCHER_ENTRY_CLICKED:
+        this.setSelectedVoucherEntry(EmptyVoucherEntry, true);
         return;
 
       default:
@@ -67,9 +73,7 @@ export class VoucherEditorComponent {
       case VoucherEntryTableEventType.UPDATE_VOUCHER_ENTRY_CLICKED:
         Assertion.assertValue(event.payload.voucherEntry, 'event.payload.voucherEntry');
 
-        // TODO: call getVoucherEntry WS
-        this.displayVoucherEntryEditor = true;
-        this.selectedVoucherEntry = event.payload.voucherEntry as VoucherEntry;
+        this.setSelectedVoucherEntry(event.payload.voucherEntry as VoucherEntry);
 
         return;
 
@@ -93,8 +97,7 @@ export class VoucherEditorComponent {
     switch (event.type as VoucherEntryEditorEventType) {
 
       case VoucherEntryEditorEventType.CLOSE_MODAL_CLICKED:
-        this.displayVoucherEntryEditor = false;
-        this.selectedVoucherEntry = EmptyVoucherEntry;
+        this.setSelectedVoucherEntry(EmptyVoucherEntry);
 
         return;
 
@@ -110,6 +113,12 @@ export class VoucherEditorComponent {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private setSelectedVoucherEntry(voucherEntry: VoucherEntry, display?: boolean) {
+    this.selectedVoucherEntry = voucherEntry;
+    this.displayVoucherEntryEditor = display ?? this.selectedVoucherEntry.id > 0;
   }
 
 }

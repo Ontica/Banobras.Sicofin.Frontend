@@ -13,8 +13,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherStageFromViewName,
-        SearchVouchersCommand, Voucher, VoucherDescriptor} from '@app/models';
+import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherDescriptorFromVoucher,
+         mapVoucherStageFromViewName, SearchVouchersCommand, Voucher, VoucherDescriptor } from '@app/models';
 
 import { View } from '../main-layout';
 
@@ -27,6 +27,10 @@ import {
 } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { VouchersUploaderEventType } from '@app/views/vouchers/vouchers-uploader/vouchers-uploader.component';
+
+import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
+
+import { ArrayLibrary } from '@app/shared/utils';
 
 type AccountingOperationModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
@@ -86,28 +90,28 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         this.setVoucherListData([]);
         return;
 
-      case VouchersExplorerEventType.EXPORT_VOUCHERS:
+      case VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED:
         this.setDisplayExportModal(true);
         return;
 
-      case VouchersExplorerEventType.SELECT_VOUCHER:
+      case VouchersExplorerEventType.SELECT_VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
         this.getVoucher(event.payload.voucher.id);
         return;
 
-      case VouchersExplorerEventType.CREATE_VOUCHER:
+      case VouchersExplorerEventType.CREATE_VOUCHER_BUTTON_CLICKED:
         this.displayOptionModalSelected = 'VoucherCreator';
         return;
 
-      case VouchersExplorerEventType.IMPORT_VOUCHERS:
+      case VouchersExplorerEventType.IMPORT_VOUCHERS_BUTTON_CLICKED:
         this.displayOptionModalSelected = 'VouchersImporter';
         return;
 
-      case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION:
+      case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION_CLICKED:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.option, 'event.payload.option');
-        console.log('SELECT_VOUCHERS_OPTION: ', event.payload.option, event.payload.vouchers);
+        console.log('SELECT_VOUCHERS_OPTION_CLICKED: ', event.payload.option, event.payload.vouchers);
         return;
 
       default:
@@ -139,14 +143,28 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   }
 
 
-  onOptionModalClosed() {
-    this.displayOptionModalSelected = null;
+  onVoucherCreatorEvent(event: EventInfo) {
+    switch (event.type as VoucherCreatorEventType) {
+
+      case VoucherCreatorEventType.CLOSE_MODAL_CLICKED:
+        this.onOptionModalClosed();
+        return;
+
+      case VoucherCreatorEventType.VOUCHER_CREATED:
+        Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
+        this.setSelectedVoucher(event.payload.voucher);
+        this.insertVoucherToList(this.selectedVoucher);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
   onCloseVoucherTabbedView() {
-    this.selectedVoucher = EmptyVoucher;
-    this.displayVoucherTabbedView = false;
+    this.setSelectedVoucher(EmptyVoucher);
   }
 
 
@@ -210,22 +228,39 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   }
 
 
+  private insertVoucherToList(voucherSelected: Voucher) {
+    const voucherToInsert = mapVoucherDescriptorFromVoucher(voucherSelected);
+    const voucherListNew = ArrayLibrary.insertItemTop(this.voucherList, voucherToInsert, 'id');
+    this.setVoucherListData(voucherListNew);
+  }
+
+
   private getVoucher(idVoucher: number) {
     this.isLoadingVoucher = true;
 
     this.vouchersData.getVoucher(idVoucher)
       .toPromise()
       .then(x => {
-        this.selectedVoucher = x;
-        this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
+        this.setSelectedVoucher(x);
       })
       .finally(() => this.isLoadingVoucher = false);
+  }
+
+
+  private setSelectedVoucher(voucher: Voucher) {
+    this.selectedVoucher = voucher;
+    this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
   }
 
 
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
+  }
+
+
+  private onOptionModalClosed() {
+    this.displayOptionModalSelected = null;
   }
 
 }

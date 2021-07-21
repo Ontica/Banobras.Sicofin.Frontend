@@ -32,7 +32,7 @@
   <ng-container [ngSwitch]="displayOptionModalSelected">
 
     <emp-fa-voucher-creator *ngSwitchCase="'VoucherCreator'"
-      (closeEvent)="onOptionModalClosed()">
+      (voucherCreatorEvent)="onVoucherCreatorEvent($event)">
 
     </emp-fa-voucher-creator>
 

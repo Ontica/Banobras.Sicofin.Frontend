@@ -177,6 +177,34 @@ export const EmptyVoucher: Voucher = {
 };
 
 
+export function mapVoucherDescriptorFromVoucher(voucher: Voucher): VoucherDescriptor {
+  return {
+    id: voucher.id,
+    number: voucher.number,
+    ledgerName: voucher.ledger.name,
+    concept: voucher.concept,
+    transactionTypeName: voucher.transactionType.name,
+    voucherTypeName: voucher.voucherType.name,
+    sourceName: voucher.functionalArea.name,
+    accountingDate: voucher.accountingDate,
+    recordingDate: voucher.recordingDate,
+    elaboratedBy: voucher.elaboratedBy,
+    authorizedBy: voucher.authorizedBy,
+    status: voucher.status,
+  };
+}
+
+
+export interface VoucherFields {
+  voucherTypeUID: string;
+  concept: string;
+  ledgerUID: string;
+  functionalAreaId: number;
+  transactionTypeUID: string;
+  accountingDate: string;
+}
+
+
 export interface NumberedNamedEntity {
   uid: string;
   number: string;

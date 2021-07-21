@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { SearchVouchersCommand, Voucher, VoucherDescriptor } from '@app/models';
+import { SearchVouchersCommand, Voucher, VoucherDescriptor, VoucherFields } from '@app/models';
 
 
 @Injectable()
@@ -24,6 +24,13 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/functional-areas`;
 
     return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getOpenedAccountingDates(ledgerUID: string): Observable<string[]> {
+    const path = `v2/financial-accounting/vouchers/opened-accounting-dates/${ledgerUID}`;
+
+    return this.http.get<string[]>(path);
   }
 
 
@@ -54,6 +61,15 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers`;
 
     return this.http.post<VoucherDescriptor[]>(path, searchVouchersCommand);
+  }
+
+
+  createVoucher(voucherFields: VoucherFields): Observable<Voucher> {
+    Assertion.assertValue(voucherFields, 'voucherFields');
+
+    const path = `v2/financial-accounting/vouchers/create-voucher`;
+
+    return this.http.post<Voucher>(path, voucherFields);
   }
 
 }

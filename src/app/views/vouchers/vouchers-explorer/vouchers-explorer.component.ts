@@ -23,11 +23,11 @@ import { VoucherListEventType } from '../voucher-list/voucher-list.component';
 export enum VouchersExplorerEventType {
   FILTER_CHANGED = 'VouchersExplorerComponent.Event.FilterChanged',
   FILTER_CLEARED = 'VouchersExplorerComponent.Event.FilterCleared',
-  SELECT_VOUCHER = 'VouchersExplorerComponent.Event.SelectVoucher',
-  SELECT_VOUCHERS_OPTION = 'VouchersExplorerComponent.Event.SelectVouchersOption',
-  CREATE_VOUCHER = 'VouchersExplorerComponent.Event.CreateVoucher',
-  IMPORT_VOUCHERS = 'VouchersExplorerComponent.Event.ImportVouchers',
-  EXPORT_VOUCHERS = 'VouchersExplorerComponent.Event.ExportVouchers',
+  SELECT_VOUCHER_CLICKED = 'VouchersExplorerComponent.Event.SelectVoucherClicked',
+  SELECT_VOUCHERS_OPTION_CLICKED = 'VouchersExplorerComponent.Event.SelectVouchersOptionClicked',
+  CREATE_VOUCHER_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.CreateVoucherButtonClicked',
+  IMPORT_VOUCHERS_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.ImportVouchersButtonClicked',
+  EXPORT_VOUCHERS_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.ExportVouchersButtonClicked',
 }
 
 
@@ -65,13 +65,11 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.voucherList) {
+      this.setInitTexts();
+
       if (this.searching) {
-        this.hintText = this.voucherList.length + ' pólizas encontradas';
-        this.textNotFound = 'No se encontraron pólizas con el filtro proporcionado.';
         this.searching = false;
         this.showFilters = false;
-      } else {
-        this.setInitTexts();
       }
     }
   }
@@ -108,12 +106,12 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
 
   onClickCreateVoucher() {
-    sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.CREATE_VOUCHER);
+    sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.CREATE_VOUCHER_BUTTON_CLICKED);
   }
 
 
   onClickImportVouchers() {
-    sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.IMPORT_VOUCHERS);
+    sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.IMPORT_VOUCHERS_BUTTON_CLICKED);
   }
 
 
@@ -123,7 +121,8 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
       case VoucherListEventType.VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
 
-        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.SELECT_VOUCHER, event.payload);
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.SELECT_VOUCHER_CLICKED,
+          event.payload);
 
         return;
 
@@ -131,14 +130,14 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.option, 'event.payload.option');
 
-        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.SELECT_VOUCHERS_OPTION,
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.SELECT_VOUCHERS_OPTION_CLICKED,
           event.payload);
 
         return;
 
       case VoucherListEventType.EXPORT_BUTTON_CLICKED:
 
-        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXPORT_VOUCHERS);
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED);
 
         return;
 
@@ -150,8 +149,11 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
 
   private setInitTexts() {
-    this.hintText = 'Selecciona los filtros';
-    this.textNotFound = 'No se ha invocado la búsqueda de pólizas.';
+    this.hintText = this.searching || this.voucherList.length > 0 ?
+      this.voucherList.length + ' pólizas encontradas' : 'Selecciona los filtros';
+
+    this.textNotFound = this.searching ?
+      'No se encontraron pólizas con el filtro proporcionado.' : 'No se ha invocado la búsqueda de pólizas.';
   }
 
 }

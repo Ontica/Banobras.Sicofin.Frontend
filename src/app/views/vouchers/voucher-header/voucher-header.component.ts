@@ -16,38 +16,44 @@ import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyVoucher, Voucher } from '@app/models';
+import { AccountsChartMasterData, EmptyVoucher, Ledger, Voucher, VoucherFields } from '@app/models';
 
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
-export enum VoucherHeaderComponentEventType {
-  CREATE_VOUCHER = 'VoucherHeaderFormControls.Event.CreateVoucher',
-  UPDATE_VOUCHER = 'VoucherHeaderFormControls.Event.UpdateVoucher',
-  ADD_VOUCHER_ENTRY_CLICKED = 'VoucherHeaderFormControls.Event.AddVoucherEntryClicked',
+import { VouchersDataService } from '@app/data-services';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
+import { DateTimeFormatPipe } from '@app/shared/pipes/date-time-format.pipe';
+
+export enum VoucherHeaderEventType {
+  CREATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.CreateVoucherClicked',
+  UPDATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.UpdateVoucherClicked',
+  DELETE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.DeleteVoucherClicked',
+  ADD_VOUCHER_ENTRY_CLICKED = 'VoucherHeaderComponent.Event.AddVoucherEntryClicked',
 }
 
 enum VoucherHeaderFormControls {
-  voucherType = 'voucherType',
-  concept = 'concept',
+  voucherTypeUID = 'voucherTypeUID',
   accountsChart = 'accountsChart',
-  ledger = 'ledger',
-  functionalArea = 'functionalArea',
+  ledgerUID = 'ledgerUID',
+  concept = 'concept',
+  functionalAreaId = 'functionalAreaId',
+  transactionTypeUID = 'transactionTypeUID',
   accountingDate = 'accountingDate',
-  valueDate = 'valueDate',
 }
 
 @Component({
   selector: 'emp-fa-voucher-header',
   templateUrl: './voucher-header.component.html',
+  providers: [DateTimeFormatPipe]
 })
 export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() voucher: Voucher = EmptyVoucher;
-
-  @Input() readonly = false;
 
   @Output() voucherHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -55,19 +61,24 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   controls = VoucherHeaderFormControls;
   editionMode = false;
   isLoading = false;
+  isLoadingAccountingDates = false;
 
   hasValueDate = false;
   accountChartSelected: AccountsChartMasterData = null;
+
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
   voucherTypesList: Identifiable[] = [];
   functionalAreasList: Identifiable[] = [];
-  accountingDatesList: string[] = [];
+  transactionTypesList: Identifiable[] = [];
+  accountingDatesList: Identifiable[] = [];
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer) {
+  constructor(private uiLayer: PresentationLayer,
+              private vouchersData: VouchersDataService,
+              private messageBox: MessageBoxService,
+              private dateTimeFormat: DateTimeFormatPipe) {
     this.helper = uiLayer.createSubscriptionHelper();
-
     this.initForm();
     this.enableEditor(true);
   }
@@ -108,14 +119,19 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
-    this.formHandler.getControl(this.controls.ledger).reset();
+    this.formHandler.getControl(this.controls.ledgerUID).reset();
+  }
+
+
+  onLedgerChanges(ledger: Ledger) {
+    if (!!ledger.uid) {
+      this.getOpenedAccountingDates(ledger.uid);
+    }
   }
 
 
   onHasValueDateChange() {
     this.formHandler.getControl(this.controls.accountingDate).reset();
-    this.formHandler.getControl(this.controls.valueDate).reset();
-    this.setRequiredFormFields();
   }
 
 
@@ -125,10 +141,10 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    let eventType = VoucherHeaderComponentEventType.CREATE_VOUCHER;
+    let eventType = VoucherHeaderEventType.CREATE_VOUCHER_CLICKED;
 
     if (this.showEnableEditor) {
-      eventType = VoucherHeaderComponentEventType.UPDATE_VOUCHER;
+      eventType = VoucherHeaderEventType.UPDATE_VOUCHER_CLICKED;
     }
 
     sendEvent(this.voucherHeaderEvent, eventType, {voucher: this.getFormData()});
@@ -136,7 +152,23 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   onAddVoucherEntryClicked() {
-    sendEvent(this.voucherHeaderEvent, VoucherHeaderComponentEventType.ADD_VOUCHER_ENTRY_CLICKED);
+    sendEvent(this.voucherHeaderEvent, VoucherHeaderEventType.ADD_VOUCHER_ENTRY_CLICKED);
+  }
+
+
+  onDeleteClicked() {
+    const message = `Esta operación eliminará la póliza
+      <strong> ${this.voucher.number}: ${this.voucher.voucherType.name}</strong>.
+      <br><br>¿Elimino la póliza?`;
+
+    this.messageBox.confirm(message, 'Eliminar póliza', 'DeleteCancel')
+      .toPromise()
+      .then(x => {
+        if (x) {
+          sendEvent(this.voucherHeaderEvent, VoucherHeaderEventType.DELETE_VOUCHER_CLICKED,
+            {voucher: this.voucher});
+        }
+      });
   }
 
 
@@ -144,20 +176,36 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoading = true;
 
     combineLatest([
+      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
+      this.helper.select<Identifiable[]>(VoucherStateSelector.TRANSACTION_TYPES_LIST),
+      this.helper.select<Identifiable[]>(VoucherStateSelector.FUNCTIONAL_AREAS_LIST),
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
-      this.helper.select<Identifiable[]>(VoucherStateSelector.FUNCTIONAL_AREAS_LIST),
-      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
     ])
-    .subscribe(([x, y, z]) => {
-      this.accountsChartMasterDataList = x;
-      this.functionalAreasList = y;
-      this.voucherTypesList = z;
+    .subscribe(([a, b, c, d]) => {
+      this.voucherTypesList = a;
+      this.transactionTypesList = b;
+      this.functionalAreasList = c;
+      this.accountsChartMasterDataList = d;
 
       this.setAccountChartSelected();
-
       this.isLoading = false;
     });
+  }
+
+
+  private getOpenedAccountingDates(ledgerUID: string) {
+    this.isLoadingAccountingDates = true;
+
+    this.vouchersData.getOpenedAccountingDates(ledgerUID)
+      .toPromise()
+      .then(x => {
+        this.accountingDatesList =
+          x.map(item => Object.create({ uid: item, name: this.dateTimeFormat.transform(item) }));
+        this.hasValueDate = this.voucher.id > 0 ?
+          !x.includes(this.voucher.accountingDate) : false;
+      })
+      .finally(() => this.isLoadingAccountingDates = false);
   }
 
 
@@ -168,17 +216,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     this.formHandler = new FormHandler(
       new FormGroup({
-        voucherType: new FormControl('', Validators.required),
-        concept: new FormControl('', Validators.required),
+        voucherTypeUID: new FormControl('', Validators.required),
         accountsChart: new FormControl('', Validators.required),
-        ledger: new FormControl('', Validators.required),
-        functionalArea: new FormControl('', Validators.required),
-        accountingDate: new FormControl(''),
-        valueDate: new FormControl(''),
+        ledgerUID: new FormControl('', Validators.required),
+        concept: new FormControl('', Validators.required),
+        functionalAreaId: new FormControl('', Validators.required),
+        transactionTypeUID: new FormControl('', Validators.required),
+        accountingDate: new FormControl('', Validators.required),
       })
     );
-
-    this.setRequiredFormFields();
   }
 
 
@@ -189,18 +235,17 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.formHandler.form.reset({
-      voucherType: this.voucher.voucherType.uid || '',
-      concept: this.voucher.concept || '',
+      voucherTypeUID: this.voucher.voucherType.uid || '',
       accountsChart: this.voucher.accountsChart.uid || '',
-      ledger: this.voucher.ledger.uid || '',
-      functionalArea: this.voucher.functionalArea.uid || '',
+      ledgerUID: this.voucher.ledger.uid || '',
+      concept: this.voucher.concept || '',
+      functionalAreaId: this.voucher.functionalArea.uid || '',
+      transactionTypeUID: this.voucher.transactionType.uid || '',
       accountingDate: this.voucher.accountingDate || '',
-      valueDate: '', // this.voucher.valueDate || '',
     });
 
-    this.hasValueDate = false; // !!this.voucher.valueDate;
     this.setAccountChartSelected();
-    this.setRequiredFormFields();
+    this.getOpenedAccountingDates(this.voucher.ledger.uid);
   }
 
 
@@ -223,31 +268,19 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  private setRequiredFormFields() {
-    if (this.hasValueDate) {
-      this.formHandler.clearControlValidators(this.controls.accountingDate);
-      this.formHandler.setControlValidators(this.controls.valueDate, Validators.required);
-    } else {
-      this.formHandler.clearControlValidators(this.controls.valueDate);
-      this.formHandler.setControlValidators(this.controls.accountingDate, Validators.required);
-    }
-  }
-
-
   private getFormData(): any {
     Assertion.assert(this.formHandler.form.valid,
       'Programming error: form must be validated before command execution.');
 
     const formModel = this.formHandler.form.getRawValue();
 
-    const data: any = {
-      voucherType: formModel.voucherType ?? '',
+    const data: VoucherFields = {
+      voucherTypeUID: formModel.voucherTypeUID ?? '',
+      ledgerUID: formModel.ledgerUID ?? '',
       concept: formModel.concept ?? '',
-      accountsChart: formModel.accountsChart ?? '',
-      ledger: formModel.ledger ?? '',
-      functionalArea: formModel.functionalArea ?? '',
+      functionalAreaId: formModel.functionalAreaId ?? '',
+      transactionTypeUID: formModel.transactionTypeUID ?? '',
       accountingDate: formModel.accountingDate ?? '',
-      valueDate: formModel.valueDate ?? '',
     };
 
     return data;

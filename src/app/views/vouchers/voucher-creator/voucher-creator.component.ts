@@ -7,9 +7,20 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
-import { VoucherHeaderComponentEventType } from '../voucher-header/voucher-header.component';
+import { VouchersDataService } from '@app/data-services';
+
+import { VoucherFields } from '@app/models';
+
+import { sendEvent } from '@app/shared/utils';
+
+import { VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
+
+export enum VoucherCreatorEventType {
+  CLOSE_MODAL_CLICKED = 'VoucherCreatorComponent.Event.CloseModalClicked',
+  VOUCHER_CREATED = 'VoucherCreatorComponent.Event.VoucherCreated',
+}
 
 @Component({
   selector: 'emp-fa-voucher-creator',
@@ -17,12 +28,14 @@ import { VoucherHeaderComponentEventType } from '../voucher-header/voucher-heade
 })
 export class VoucherCreatorComponent {
 
-  @Output() closeEvent = new EventEmitter<void>();
+  @Output() voucherCreatorEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
 
+  constructor(private vouchersData: VouchersDataService) {}
+
   onClose() {
-    this.closeEvent.emit();
+    sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.CLOSE_MODAL_CLICKED);
   }
 
 
@@ -32,16 +45,30 @@ export class VoucherCreatorComponent {
       return;
     }
 
-    switch (event.type as VoucherHeaderComponentEventType) {
+    switch (event.type as VoucherHeaderEventType) {
 
-      case VoucherHeaderComponentEventType.CREATE_VOUCHER:
-        console.log('CREATE_VOUCHER', event.payload);
+      case VoucherHeaderEventType.CREATE_VOUCHER_CLICKED:
+        Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
+        this.createVoucher(event.payload.voucher as VoucherFields);
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private createVoucher(voucherFields: VoucherFields) {
+    this.submitted = true;
+
+    this.vouchersData.createVoucher(voucherFields)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.VOUCHER_CREATED, {voucher: x});
+        this.onClose();
+      })
+      .finally(() => this.submitted = false);
   }
 
 }
