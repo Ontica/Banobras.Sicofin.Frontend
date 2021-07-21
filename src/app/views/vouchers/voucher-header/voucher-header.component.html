@@ -75,7 +75,7 @@
 
       <ng-container #accountingDateField>
 
-        <div fxFlex="126px" fxFlex.lt-md="none" *ngIf="hasValueDate">
+        <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">
           <label>Fecha valor:</label>
           <emp-ng-datepicker
             [formControlName]="controls.accountingDate"
@@ -84,7 +84,7 @@
           </emp-ng-datepicker>
         </div>
 
-        <div fxFlex="126px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
+        <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
           <label>Fecha de afectación:</label>
           <emp-ng-select
             [formControlName]="controls.accountingDate"
