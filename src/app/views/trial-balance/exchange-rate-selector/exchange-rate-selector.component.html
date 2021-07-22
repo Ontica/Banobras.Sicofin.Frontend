@@ -5,37 +5,25 @@
 
       <div fxLayout="row">
 
-        <div fxFlex>
+        <div fxFlex="120px">
 
-          <label>Fecha del tipo de cambio:</label>
+          <label>Fecha del TC:</label>
 
-          <div fxLayout="row">
+          <emp-ng-datepicker name="exchangeRateDate" required
+            [(ngModel)]="exchangeRateDate"
+            [showError]="!exchangeRateDate"
+            (valueChange)="emitExchangeRateDate($event)">
 
-            <emp-ng-datepicker fxFlex="none" name="exchangeRateDate" required
-              [(ngModel)]="exchangeRateDate"
-              [showError]="!exchangeRateDate"
-              (valueChange)="emitExchangeRateDate($event)">
+          </emp-ng-datepicker>
 
-            </emp-ng-datepicker>
-
-            <div fxFlex fxLayoutAlign="start center" [style.marginRight.px]="8">
-
-              <button class="btn" (click)="onSearchExchangeRatesListClicked()">
-                Buscar
-              </button>
-
-            </div>
-
-          </div>
 
         </div>
 
-        <div [fxFlex]="100/3">
+        <div fxFlex="calc((100% - 120px) / 2)">
 
           <label>Tipo de cambio:</label>
 
           <emp-ng-select name="exchangeRateTypeUID" required
-            [config]="{clearable: true}"
             [(ngModel)]="exchangeRateTypeUID"
             [items]="exchangeRateTypeList"
             [loading]="isLoading"
@@ -47,12 +35,11 @@
 
         </div>
 
-        <div [fxFlex]="100/3">
+        <div fxFlex="calc((100% - 120px) / 2)">
 
           <label>Valorizar a:</label>
 
           <emp-ng-select name="valuateToCurrrencyUID" required
-            [config]="{clearable: true}"
             [(ngModel)]="valuateToCurrrencyUID"
             [items]="toCurrencyList"
             [showError]="!valuateToCurrrencyUID"
@@ -66,7 +53,8 @@
 
       <div fxLayout="row">
 
-        <div [fxFlexOffset]="100/3" fxFlex fxLayoutAlign="start center">
+        <div fxFlex="calc(100% - 120px)" fxLayoutAlign="start center"
+          fxFlexOffset="120px" fxFlexOffset.lt-md="0" >
 
           <mat-checkbox name="consolidateBalancesToTargetCurrency"
             [(ngModel)]="consolidateBalancesToTargetCurrency"

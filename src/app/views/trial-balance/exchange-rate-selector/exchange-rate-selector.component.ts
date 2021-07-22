@@ -50,14 +50,16 @@ export class ExchangeRateSelectorComponent implements OnChanges {
 
   isLoading = false;
 
-  searchClicked = false;
-
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.exchangeRatesList) {
       this.setExchangeRateTypeList();
       this.setToCurrencyList();
       this.isLoading = false;
+    }
+
+    if (changes.exchangeRateDate && this.exchangeRatesList.length === 0) {
+      setTimeout(() => this.searchExchangeRatesList());
     }
   }
 
@@ -67,22 +69,15 @@ export class ExchangeRateSelectorComponent implements OnChanges {
       return 'Seleccione la fecha';
     }
 
-    if (this.searchClicked) {
-      return 'Seleccionar';
-    }
-
-    return 'De click en buscar';
+    return 'Seleccionar';
   }
 
 
   emitExchangeRateDate(value) {
-    this.searchClicked = false;
-
     this.exchangeRateDate = value;
     this.exchangeRateDateChange.emit(this.exchangeRateDate);
 
-    this.clearFieldExchangeRateType();
-    this.clearFieldToCurrency();
+    this.searchExchangeRatesList();
   }
 
 
@@ -101,16 +96,15 @@ export class ExchangeRateSelectorComponent implements OnChanges {
   }
 
 
-  onSearchExchangeRatesListClicked() {
+  searchExchangeRatesList() {
+    this.clearFieldExchangeRateType();
+    this.clearFieldToCurrency();
+
     if (!this.exchangeRateDate) {
       return;
     }
 
     this.isLoading = true;
-    this.searchClicked = true;
-
-    this.clearFieldExchangeRateType();
-    this.clearFieldToCurrency();
 
     sendEvent(this.exchangeRateSelectorEvent, ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED,
       this.exchangeRateDate);
