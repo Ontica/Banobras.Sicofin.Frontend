@@ -34,6 +34,8 @@ export class ExchangeRateSelectorComponent implements OnChanges {
 
   @Input() consolidateBalancesToTargetCurrency = false;
 
+  @Input() showConsolidateBalancesToTargetCurrency = true;
+
   @Output() exchangeRateDateChange = new EventEmitter<string>();
 
   @Output() exchangeRateTypeUIDChange = new EventEmitter<string>();
