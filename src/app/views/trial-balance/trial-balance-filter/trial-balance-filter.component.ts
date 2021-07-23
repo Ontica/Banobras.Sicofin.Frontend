@@ -293,7 +293,10 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       trialBalanceType: this.trialBalanceCommand.trialBalanceType,
       accountsChartUID: this.trialBalanceCommand.accountsChartUID,
       ledgers: this.trialBalanceCommand.ledgers,
-      initialPeriod : this.trialBalanceCommand.initialPeriod,
+      initialPeriod: {
+        fromDate: this.trialBalanceCommand.initialPeriod.fromDate,
+        toDate: this.trialBalanceCommand.initialPeriod.toDate,
+      },
       fromAccount: this.trialBalanceCommand.fromAccount,
       showCascadeBalances: this.trialBalanceCommand.showCascadeBalances,
       balancesType: this.trialBalanceCommand.balancesType,
