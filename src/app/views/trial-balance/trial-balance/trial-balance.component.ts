@@ -11,9 +11,12 @@ import { Assertion } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { EmptyTrialBalance, EmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, TrialBalance,
+import { EmptyTrialBalance, getEmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, TrialBalance,
          TrialBalanceCommand } from '@app/models';
-import { ExportReportModalEventType } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+
+import {
+  ExportReportModalEventType
+} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { TrialBalanceFilterEventType } from '../trial-balance-filter/trial-balance-filter.component';
 
@@ -35,7 +38,7 @@ export class TrialBalanceComponent {
 
   trialBalance: TrialBalance = EmptyTrialBalance;
 
-  trialBalanceCommand: TrialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand);
+  trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
 
   displayExportModal = false;
 

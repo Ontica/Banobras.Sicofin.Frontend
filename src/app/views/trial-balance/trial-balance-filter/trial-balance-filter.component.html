@@ -1,11 +1,11 @@
 <form #form="ngForm" autocomplete="off" class="form-section form-container"
   (keydown.enter)="$event.preventDefault()">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
 
     <ng-container #generalFieldsContainer>
 
-      <div fxLayout="row">
+      <div fxLayout="row" fxLayout.lt-sm="column">
 
         <div fxFlex="50">
 
@@ -21,67 +21,113 @@
 
         </div>
 
-        <ng-container #initialPeriodSection>
+        <div fxFlex="none" #periodSection>
 
-          <div fxFlex="none">
+          <div fxLayout="row" #initialPeriodSection>
 
-            <label>Fecha inicial:</label>
+            <div fxFlex="50px" fxLayoutAlign="start end" *ngIf="periodsRequired"
+              [style.paddingTop.px]="12" [style.paddingRight.px]="8">
 
-            <emp-ng-datepicker name="fromDate" required
-              [(ngModel)]="trialBalanceCommand.fromDate"
-              [showError]="!trialBalanceCommand.fromDate">
+              <label>Periodo <br>inicial:</label>
 
-            </emp-ng-datepicker>
+            </div>
+
+            <div fxFlex="none">
+
+              <label>Fecha inicial:</label>
+
+              <emp-ng-datepicker name="initialPeriodFromDate" required
+                [(ngModel)]="trialBalanceCommand.initialPeriod.fromDate"
+                [showError]="!trialBalanceCommand.initialPeriod.fromDate">
+
+              </emp-ng-datepicker>
+
+            </div>
+
+            <div fxFlex="none">
+
+              <label>Fecha final:</label>
+
+              <emp-ng-datepicker name="initialPeriodToDate" required
+                [(ngModel)]="trialBalanceCommand.initialPeriod.toDate"
+                [showError]="!trialBalanceCommand.initialPeriod.toDate"
+                (valueChange)="onInitialPeriodToDateChange($event)">
+
+              </emp-ng-datepicker>
+
+            </div>
 
           </div>
 
-          <div fxFlex="none">
+          <div fxLayout="row" *ngIf="periodsRequired" #finalPeriodSection>
 
-            <label>Fecha final:</label>
+            <div fxFlex="50px" fxLayoutAlign="start end" *ngIf="periodsRequired" [style.paddingRight.px]="8">
 
-            <emp-ng-datepicker name="toDate" required
-              [(ngModel)]="trialBalanceCommand.toDate"
-              [showError]="!trialBalanceCommand.toDate">
+              <label>Periodo <br>final:</label>
 
-            </emp-ng-datepicker>
+            </div>
+
+            <div fxFlex="none">
+
+              <emp-ng-datepicker name="finalPeriodFromDate" required
+                [(ngModel)]="trialBalanceCommand.finalPeriod.fromDate"
+                [showError]="!trialBalanceCommand.finalPeriod.fromDate">
+
+              </emp-ng-datepicker>
+
+            </div>
+
+            <div fxFlex="none">
+
+              <emp-ng-datepicker name="finalPeriodToDate" required
+                [(ngModel)]="trialBalanceCommand.finalPeriod.toDate"
+                [showError]="!trialBalanceCommand.finalPeriod.toDate"
+                (valueChange)="onFinalPeriodToDateChange($event)">
+
+              </emp-ng-datepicker>
+
+            </div>
 
           </div>
-
-          <div fxFlex></div>
-
-        </ng-container>
-
-        <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
-
-          <button [class.btn-icon-action]="form.valid && exchangeRateFormFieldsValid"
-            [class.btn-icon]="form.invalid || !exchangeRateFormFieldsValid"
-            [disabled]="form.invalid || !exchangeRateFormFieldsValid"
-            (click)="onBuildTrialBalanceClicked()"
-            title="Generar balanza">
-
-            <mat-icon>search</mat-icon>
-
-          </button>
 
         </div>
 
-        <ng-container #filterOptionsSection>
+        <div fxFlex></div>
 
-          <mat-divider vertical="true" [style.marginTop.px]="12"
-            [style.marginRight.px]="8" [style.height.px]="28">
+        <div fxFlex="none" #buttonsSection>
 
-          </mat-divider>
+          <div fxLayout="row" #initialPeriodSection [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
-          <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+            <div fxFlex="36px" fxFlex.lt-md="none">
 
-            <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="100%">
-              {{showFilters ? 'Ocultar' :'Mostrar'}}
-              <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
-            </button>
+              <button [class.btn-icon-action]="form.valid && exchangeRateFormFieldsValid"
+                [class.btn-icon]="form.invalid || !exchangeRateFormFieldsValid"
+                [disabled]="form.invalid || !exchangeRateFormFieldsValid"
+                (click)="onBuildTrialBalanceClicked()"
+                title="Generar balanza">
+
+                <mat-icon>search</mat-icon>
+
+              </button>
+
+            </div>
+
+            <mat-divider vertical="true" [style.marginRight.px]="8" [style.height.px]="28">
+
+            </mat-divider>
+
+            <div fxFlex="117px" fxFlex.lt-md="none">
+
+              <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="100%">
+                {{showFilters ? 'Ocultar' :'Mostrar'}}
+                <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+              </button>
+
+            </div>
 
           </div>
 
-        </ng-container>
+        </div>
 
       </div>
 
@@ -164,23 +210,16 @@
 
           </div>
 
-          <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+          <div fxFlex="50">
 
-            <mat-checkbox name="showCascadeBalances"
-              [(ngModel)]="trialBalanceCommand.showCascadeBalances"
-              (click)="$event.stopPropagation">
-              Imprimir en cascada
-            </mat-checkbox>
+            <label>Nivel:</label>
 
-          </div>
-
-          <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
-
-            <mat-checkbox name="displayExchangeRates" [disabled]="isExchangeRatesRequired"
-              [(ngModel)]="displayExchangeRates"
-              (click)="$event.stopPropagation">
-              Valorizar saldos
-            </mat-checkbox>
+            <emp-ng-select name="level"
+              [config]="{clearable: true}"
+              [(ngModel)]="trialBalanceCommand.level"
+              [items]="levelsList"
+              placeholder="Todos">
+            </emp-ng-select>
 
           </div>
 
@@ -200,16 +239,24 @@
 
           </div>
 
-          <div fxFlex="50">
+          <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
 
-            <label>Nivel:</label>
+            <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesRequired"
+              [(ngModel)]="trialBalanceCommand.showCascadeBalances"
+              (click)="$event.stopPropagation">
+              Imprimir en cascada
+            </mat-checkbox>
 
-            <emp-ng-select name="level"
-              [config]="{clearable: true}"
-              [(ngModel)]="trialBalanceCommand.level"
-              [items]="levelsList"
-              placeholder="Todos">
-            </emp-ng-select>
+          </div>
+
+          <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+
+            <mat-checkbox name="displayExchangeRates" [disabled]="exchangeRatesRequired"
+              [(ngModel)]="displayExchangeRates"
+              (click)="$event.stopPropagation"
+              (change)="onDisplayExchangeRatesChange()">
+              Valorizar saldos
+            </mat-checkbox>
 
           </div>
 
@@ -225,18 +272,38 @@
 
         </mat-divider>
 
-        <div fxLayout="row" [style.marginBottom.px]="8" fxLayoutAlign="end start">
+        <div fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.px]="8"
+          [fxLayoutAlign]="periodsRequired ? 'start start' : 'end start'">
 
-          <div fxFlex="75">
+          <div fxFlex="50" fxFlex.lt-md="none" [style.width.%]="100">
+
+            <div class="section-title" *ngIf="periodsRequired"> Periodo inicial </div>
 
             <emp-fa-exchange-rate-selector
-              [exchangeRatesList]="exchangeRatesList"
-              [exchangeRateDate]="trialBalanceCommand.exchangeRateDate"
-              [(exchangeRateTypeUID)]="trialBalanceCommand.exchangeRateTypeUID"
-              [(valuateToCurrrencyUID)]="trialBalanceCommand.valuateToCurrrencyUID"
+              [exchangeRatesList]="initialPeriodExchangeRatesList"
+              [exchangeRateDate]="trialBalanceCommand.initialPeriod.exchangeRateDate"
+              [(exchangeRateTypeUID)]="trialBalanceCommand.initialPeriod.exchangeRateTypeUID"
+              [(valuateToCurrrencyUID)]="trialBalanceCommand.initialPeriod.valuateToCurrrencyUID"
               [(consolidateBalancesToTargetCurrency)]="trialBalanceCommand.consolidateBalancesToTargetCurrency"
-              (exchangeRateDateChange)="onExchangeRateDateChanged($event)"
-              (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event)">
+              (exchangeRateDateChange)="onInitialPeriodExchangeRateDateChanged($event)"
+              (exchangeRateSelectorEvent)="onInitialPeriodExchangeRateSelectorEvent($event)">
+
+            </emp-fa-exchange-rate-selector>
+
+          </div>
+
+          <div fxFlex="50" fxFlex.lt-md="none" [style.width.%]="100" *ngIf="periodsRequired">
+
+            <div class="section-title"> Periodo final </div>
+
+            <emp-fa-exchange-rate-selector
+              [exchangeRatesList]="finalPeriodExchangeRatesList"
+              [exchangeRateDate]="trialBalanceCommand.finalPeriod.exchangeRateDate"
+              [(exchangeRateTypeUID)]="trialBalanceCommand.finalPeriod.exchangeRateTypeUID"
+              [(valuateToCurrrencyUID)]="trialBalanceCommand.finalPeriod.valuateToCurrrencyUID"
+              [showConsolidateBalancesToTargetCurrency]="false"
+              (exchangeRateDateChange)="onFinalPeriodExchangeRateDateChanged($event)"
+              (exchangeRateSelectorEvent)="onFinalPeriodExchangeRateSelectorEvent($event)">
 
             </emp-fa-exchange-rate-selector>
 

@@ -13,7 +13,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { ExchangeRatesDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, BalancesTypeList, EmptyTrialBalanceCommand, ExchangeRate,
+import { AccountsChartMasterData, BalancesTypeList, ExchangeRate,
+         getEmptyTrialBalanceCommand,
          getLevelsListFromPattern, TrialBalanceCommand, TrialBalanceTypeList} from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
@@ -47,7 +48,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  trialBalanceCommand: TrialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand);
+  trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
 
   trialBalanceTypeList: Identifiable[] = TrialBalanceTypeList;
 
@@ -61,7 +62,14 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   displayExchangeRates = false;
 
-  exchangeRatesList: ExchangeRate[] = [];
+  autoInitialPeriodExchangeRatesFromDate = false;
+
+  autoFinalPeriodExchangeRatesFromDate = false;
+
+  initialPeriodExchangeRatesList: ExchangeRate[] = [];
+
+  finalPeriodExchangeRatesList: ExchangeRate[] = [];
+
 
   constructor(private uiLayer: PresentationLayer,
               private exchangeRatesData: ExchangeRatesDataService) {
@@ -79,54 +87,37 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.helper.destroy();
   }
 
-
-  get isTrialBalance(): boolean {
-    return ['Balanza', 'BalanzaConAuxiliares',
-            'SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
+  get exchangeRatesRequired(): boolean {
+    return ['AnaliticoDeCuentas',
+            'BalanzaValorizadaComparativa'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
-  get isBalancesByAccount(): boolean {
-    return ['SaldosPorCuenta'].includes(this.trialBalanceCommand.trialBalanceType);
+  get showCascadeBalancesRequired(): boolean {
+    return ['SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
-  get isBalancesBySubledgerAccount(): boolean {
-    return['SaldosPorAuxiliar'].includes(this.trialBalanceCommand.trialBalanceType);
-  }
-
-
-  get isBalancesByAccountWithLedgers(): boolean {
-    return['SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
-  }
-
-
-  get isAnalyticalAccounts(): boolean {
-    return['AnaliticoDeCuentas'].includes(this.trialBalanceCommand.trialBalanceType);
-  }
-
-
-  get isExchangeRatesRequired(): boolean {
-    return this.isAnalyticalAccounts;
+  get periodsRequired(): boolean {
+    return ['BalanzaValorizadaComparativa'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displaySubledgerAccount() {
-    return this.isBalancesByAccount || this.isBalancesBySubledgerAccount;
+    return ['SaldosPorCuenta', 'SaldosPorAuxiliar'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayToAccount() {
-    return this.isTrialBalance || this.isBalancesByAccountWithLedgers || this.isAnalyticalAccounts;
+    return ['Balanza', 'BalanzaConAuxiliares', 'SaldosPorCuentaYMayor', 'AnaliticoDeCuentas',
+            'BalanzaValorizadaComparativa'].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get trialBalanceFormFieldsValid(): boolean {
-    return !!this.trialBalanceCommand.trialBalanceType &&
-           !!this.trialBalanceCommand.accountsChartUID &&
-           !!this.trialBalanceCommand.fromDate &&
-           !!this.trialBalanceCommand.toDate &&
-           !!this.trialBalanceCommand.balancesType;
+    return !!this.trialBalanceCommand.trialBalanceType && !!this.trialBalanceCommand.accountsChartUID &&
+           !!this.trialBalanceCommand.initialPeriod.fromDate &&
+           !!this.trialBalanceCommand.initialPeriod.toDate && !!this.trialBalanceCommand.balancesType;
   }
 
 
@@ -135,14 +126,25 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    return !!this.trialBalanceCommand.exchangeRateDate &&
-           !!this.trialBalanceCommand.exchangeRateTypeUID &&
-           !!this.trialBalanceCommand.valuateToCurrrencyUID;
+    if (this.periodsRequired) {
+      return !!this.trialBalanceCommand.initialPeriod.exchangeRateDate &&
+             !!this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID &&
+             !!this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID &&
+             !!this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID &&
+             !!this.trialBalanceCommand.finalPeriod.exchangeRateDate &&
+             !!this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID;
+    }
+
+    return !!this.trialBalanceCommand.initialPeriod.exchangeRateDate &&
+           !!this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID &&
+           !!this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID;
   }
 
 
   onTrialBalanceTypeChange() {
-    this.displayExchangeRates = this.isExchangeRatesRequired || !!this.trialBalanceCommand.exchangeRateDate;
+    this.displayExchangeRates = this.exchangeRatesRequired ? true : this.displayExchangeRates;
+    this.trialBalanceCommand.showCascadeBalances = this.showCascadeBalancesRequired ?
+      true : this.trialBalanceCommand.showCascadeBalances;
   }
 
 
@@ -159,29 +161,111 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onExchangeRateDateChanged(value) {
-    this.trialBalanceCommand.exchangeRateDate = value;
-    this.exchangeRatesList = [];
+  onDisplayExchangeRatesChange() {
+    this.trialBalanceCommand.initialPeriod.exchangeRateDate = '';
+    this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID = '';
+    this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID = '';
+
+    this.trialBalanceCommand.finalPeriod.exchangeRateDate = '';
+    this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID = '';
+    this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID = '';
+
+    if (this.trialBalanceCommand.initialPeriod.toDate) {
+      this.onInitialPeriodToDateChange(this.trialBalanceCommand.initialPeriod.toDate);
+    }
+
+    if (this.trialBalanceCommand.finalPeriod.toDate) {
+      this.onFinalPeriodToDateChange(this.trialBalanceCommand.finalPeriod.toDate);
+    }
   }
 
 
-  onExchangeRateSelectorEvent(event) {
+  onInitialPeriodToDateChange(toDate){
+    if (this.displayExchangeRates && toDate && !this.trialBalanceCommand.initialPeriod.exchangeRateDate) {
+      this.autoInitialPeriodExchangeRatesFromDate = true;
+      this.initialPeriodExchangeRatesList = [];
+      this.trialBalanceCommand.initialPeriod.exchangeRateDate = toDate;
+    }
+  }
+
+
+  onFinalPeriodToDateChange(toDate){
+    if (this.displayExchangeRates && toDate && !this.trialBalanceCommand.finalPeriod.exchangeRateDate) {
+      this.autoFinalPeriodExchangeRatesFromDate = true;
+      this.finalPeriodExchangeRatesList = [];
+      this.trialBalanceCommand.finalPeriod.exchangeRateDate = toDate;
+    }
+  }
+
+
+  onInitialPeriodExchangeRateDateChanged(value) {
+    this.autoInitialPeriodExchangeRatesFromDate = false;
+    this.trialBalanceCommand.initialPeriod.exchangeRateDate = value;
+    this.initialPeriodExchangeRatesList = [];
+  }
+
+
+  onInitialPeriodExchangeRateSelectorEvent(event) {
     if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type) {
-      this.getExchangeRatesForDate();
+      this.initialPeriodExchangeRatesList = [];
+
+      if (!this.trialBalanceCommand.initialPeriod.exchangeRateDate) {
+        return;
+      }
+
+      this.exchangeRatesData.getExchangeRatesForDate(this.trialBalanceCommand.initialPeriod.exchangeRateDate)
+        .subscribe(x => {
+          this.initialPeriodExchangeRatesList = x;
+          if (this.autoInitialPeriodExchangeRatesFromDate && this.initialPeriodExchangeRatesList.length > 0) {
+            this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID =
+              this.initialPeriodExchangeRatesList[0].exchangeRateType.uid;
+            this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID =
+              this.initialPeriodExchangeRatesList[0].toCurrency.uid;
+            this.autoInitialPeriodExchangeRatesFromDate = false;
+          }
+        });
+    }
+  }
+
+
+  onFinalPeriodExchangeRateDateChanged(value) {
+    this.autoFinalPeriodExchangeRatesFromDate = false;
+    this.trialBalanceCommand.finalPeriod.exchangeRateDate = value;
+    this.finalPeriodExchangeRatesList = [];
+  }
+
+
+  onFinalPeriodExchangeRateSelectorEvent(event) {
+    if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type) {
+      this.finalPeriodExchangeRatesList = [];
+
+      if (!this.trialBalanceCommand.finalPeriod.exchangeRateDate) {
+        return;
+      }
+
+      this.exchangeRatesData.getExchangeRatesForDate(this.trialBalanceCommand.finalPeriod.exchangeRateDate)
+        .subscribe(x => {
+          this.finalPeriodExchangeRatesList = x;
+          if (this.autoFinalPeriodExchangeRatesFromDate && this.finalPeriodExchangeRatesList.length > 0) {
+            this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID =
+              this.finalPeriodExchangeRatesList[0].exchangeRateType.uid;
+            this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID =
+              this.finalPeriodExchangeRatesList[0].toCurrency.uid;
+            this.autoFinalPeriodExchangeRatesFromDate = false;
+          }
+        });
     }
   }
 
 
   onClearFilters() {
-    this.displayExchangeRates = this.isExchangeRatesRequired;
-    this.exchangeRatesList = [];
+    this.displayExchangeRates = this.exchangeRatesRequired;
+    this.initialPeriodExchangeRatesList = [];
+    this.finalPeriodExchangeRatesList = [];
 
-    this.trialBalanceCommand = Object.assign({}, EmptyTrialBalanceCommand, {
+    this.trialBalanceCommand = Object.assign({}, getEmptyTrialBalanceCommand(), {
         trialBalanceType: this.trialBalanceCommand.trialBalanceType,
         accountsChartUID: this.trialBalanceCommand.accountsChartUID,
-        ledgers: this.trialBalanceCommand.ledgers,
-        fromDate: this.trialBalanceCommand.fromDate,
-        toDate: this.trialBalanceCommand.toDate,
         balancesType: this.balancesTypeList[0].uid,
       });
 
@@ -209,8 +293,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       trialBalanceType: this.trialBalanceCommand.trialBalanceType,
       accountsChartUID: this.trialBalanceCommand.accountsChartUID,
       ledgers: this.trialBalanceCommand.ledgers,
-      fromDate: this.trialBalanceCommand.fromDate,
-      toDate: this.trialBalanceCommand.toDate,
+      initialPeriod : this.trialBalanceCommand.initialPeriod,
+      fromAccount: this.trialBalanceCommand.fromAccount,
       showCascadeBalances: this.trialBalanceCommand.showCascadeBalances,
       balancesType: this.trialBalanceCommand.balancesType,
       level: this.trialBalanceCommand.level,
@@ -223,8 +307,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   private validateCommandFieldsByBalanceType(data: TrialBalanceCommand) {
-    data.fromAccount = this.trialBalanceCommand.fromAccount;
-
     if (this.displayToAccount) {
       data.toAccount = this.trialBalanceCommand.toAccount;
     }
@@ -234,10 +316,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     }
 
     if (this.displayExchangeRates) {
-      data.exchangeRateDate = this.trialBalanceCommand.exchangeRateDate;
-      data.exchangeRateTypeUID = this.trialBalanceCommand.exchangeRateTypeUID;
-      data.valuateToCurrrencyUID = this.trialBalanceCommand.valuateToCurrrencyUID;
+      data.initialPeriod = this.trialBalanceCommand.initialPeriod;
       data.consolidateBalancesToTargetCurrency = this.trialBalanceCommand.consolidateBalancesToTargetCurrency;
+
+      if (this.periodsRequired) {
+        data.finalPeriod = this.trialBalanceCommand.finalPeriod;
+      }
     }
   }
 
@@ -251,16 +335,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         this.setLevelsList();
         this.isLoading = false;
       });
-  }
-
-
-  private getExchangeRatesForDate() {
-    if (!this.trialBalanceCommand.exchangeRateDate) {
-      return;
-    }
-
-    this.exchangeRatesData.getExchangeRatesForDate(this.trialBalanceCommand.exchangeRateDate)
-      .subscribe(x => this.exchangeRatesList = x ?? []);
   }
 
 

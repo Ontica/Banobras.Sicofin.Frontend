@@ -11,6 +11,7 @@ import { AccountRole } from './accounts-chart';
 
 
 export const TrialBalanceTypeList: Identifiable[] = [
+  {uid: 'BalanzaValorizadaComparativa', name: 'Balanza de comparación entre periodos'},
   {uid: 'AnaliticoDeCuentas', name: 'Analítico de cuentas'},
   {uid: 'Balanza', name: 'Balanza tradicional'},
   {uid: 'BalanzaConAuxiliares', name: 'Balanza tradicional con auxiliares'},
@@ -50,40 +51,54 @@ export interface TrialBalanceCommand {
   accountsChartUID: string;
   balancesType?: string;
   consolidateBalancesToTargetCurrency?: boolean;
-  showCascadeBalances: boolean;
-  exchangeRateDate?: string;
-  exchangeRateTypeUID?: string;
+  finalPeriod?: TrialBalanceCommandPeriod;
   fromAccount?: string;
-  fromDate: string;
+  initialPeriod?: TrialBalanceCommandPeriod;
   ledgers?: string[];
   level?: number;
   sectors?: string[];
+  showCascadeBalances: boolean;
   subledgerAccount?: string;
   toAccount?: string;
-  toDate: string;
   trialBalanceType: string;
+}
+
+
+export interface TrialBalanceCommandPeriod {
+  exchangeRateDate?: string;
+  exchangeRateTypeUID?: string;
+  fromDate?: string;
+  toDate?: string;
   valuateToCurrrencyUID?: string;
 }
 
 
-export const EmptyTrialBalanceCommand: TrialBalanceCommand = {
-  accountsChartUID: '',
-  balancesType: '',
-  consolidateBalancesToTargetCurrency: false,
-  showCascadeBalances: false,
+export const EmptyTrialBalanceCommandPeriod: TrialBalanceCommandPeriod = {
+  fromDate: '',
+  toDate: '',
   exchangeRateDate: '',
   exchangeRateTypeUID: '',
-  fromAccount: '',
-  fromDate: '',
-  ledgers: [],
-  level: 0,
-  sectors: [],
-  subledgerAccount: '',
-  toAccount: '',
-  toDate: '',
-  trialBalanceType: '',
   valuateToCurrrencyUID: '',
 };
+
+
+export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
+  return {
+    accountsChartUID: '',
+    balancesType: '',
+    consolidateBalancesToTargetCurrency: false,
+    finalPeriod: Object.assign({}, EmptyTrialBalanceCommandPeriod),
+    fromAccount: '',
+    initialPeriod: Object.assign({}, EmptyTrialBalanceCommandPeriod),
+    ledgers: [],
+    level: 0,
+    sectors: [],
+    showCascadeBalances: false,
+    subledgerAccount: '',
+    toAccount: '',
+    trialBalanceType: '',
+  };
+}
 
 
 export interface DataTableColumn {
@@ -123,7 +138,7 @@ export interface TrialBalanceEntry {
 
 
 export const EmptyTrialBalance: TrialBalance = {
-  command: EmptyTrialBalanceCommand,
+  command: getEmptyTrialBalanceCommand(),
   columns: [],
   entries: [],
 };
