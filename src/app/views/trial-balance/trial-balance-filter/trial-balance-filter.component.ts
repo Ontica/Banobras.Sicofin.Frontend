@@ -105,6 +105,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get displayLevel(): boolean {
+    return !['SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
   get trialBalanceFormFieldsValid(): boolean {
     return !!this.trialBalanceCommand.trialBalanceType && !!this.trialBalanceCommand.accountsChartUID &&
            !!this.trialBalanceCommand.initialPeriod.fromDate &&
@@ -254,7 +259,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       fromAccount: this.trialBalanceCommand.fromAccount,
       showCascadeBalances: this.trialBalanceCommand.showCascadeBalances,
       balancesType: this.trialBalanceCommand.balancesType,
-      level: this.trialBalanceCommand.level,
     };
 
     this.validateCommandFieldsByBalanceType(data);
@@ -269,6 +273,10 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
     if (this.displaySubledgerAccount) {
       data.subledgerAccount = this.trialBalanceCommand.subledgerAccount;
+    }
+
+    if (this.displayLevel) {
+      data.level = this.trialBalanceCommand.level;
     }
 
     if (this.displayExchangeRates) {
