@@ -5,9 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Assertion, Identifiable } from '@app/core';
+import { Assertion, DateString, Identifiable } from '@app/core';
 
 import { AccountRole } from './accounts-chart';
+
+import { ExchangeRate } from './exchange-rates';
 
 
 export const TrialBalanceTypeList: Identifiable[] = [
@@ -65,11 +67,14 @@ export interface TrialBalanceCommand {
 
 
 export interface TrialBalanceCommandPeriod {
-  exchangeRateDate?: string;
+  exchangeRateDate?: DateString;
   exchangeRateTypeUID?: string;
-  fromDate?: string;
-  toDate?: string;
+  fromDate?: DateString;
+  toDate?: DateString;
   valuateToCurrrencyUID?: string;
+
+  autoExchangeRatesFromDate?: boolean;
+  exchangeRatesList?: ExchangeRate[];
 }
 
 
@@ -79,7 +84,29 @@ export const EmptyTrialBalanceCommandPeriod: TrialBalanceCommandPeriod = {
   exchangeRateDate: '',
   exchangeRateTypeUID: '',
   valuateToCurrrencyUID: '',
+
+  autoExchangeRatesFromDate: false,
+  exchangeRatesList: [],
 };
+
+
+export function resetExchangeRateValues(period: TrialBalanceCommandPeriod) {
+  period.exchangeRateDate = '';
+  period.exchangeRateTypeUID = '';
+  period.valuateToCurrrencyUID = '';
+}
+
+
+export function mapToValidTrialBalanceCommandPeriod(
+period: TrialBalanceCommandPeriod): TrialBalanceCommandPeriod {
+  return {
+    fromDate: period.fromDate,
+    toDate: period.toDate,
+    exchangeRateDate: period.exchangeRateDate,
+    exchangeRateTypeUID: period.exchangeRateTypeUID,
+    valuateToCurrrencyUID: period.valuateToCurrrencyUID,
+  };
+}
 
 
 export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {

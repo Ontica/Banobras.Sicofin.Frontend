@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { DateString, EventInfo, Identifiable } from '@app/core';
 
 import { ExchangeRate } from '@app/models';
 
@@ -26,7 +26,7 @@ export class ExchangeRateSelectorComponent implements OnChanges {
 
   @Input() exchangeRatesList: ExchangeRate[] = [];
 
-  @Input() exchangeRateDate = '';
+  @Input() exchangeRateDate: DateString = '';
 
   @Input() exchangeRateTypeUID = '';
 
@@ -36,7 +36,7 @@ export class ExchangeRateSelectorComponent implements OnChanges {
 
   @Input() showConsolidateBalancesToTargetCurrency = true;
 
-  @Output() exchangeRateDateChange = new EventEmitter<string>();
+  @Output() exchangeRateDateChange = new EventEmitter<DateString>();
 
   @Output() exchangeRateTypeUIDChange = new EventEmitter<string>();
 

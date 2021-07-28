@@ -5,13 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Identifiable } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
 
 
 export interface ExchangeRate {
   id: number;
   exchangeRateType: Identifiable;
-  date: string;
+  date: DateString;
   fromCurrency: Identifiable;
   toCurrency: Identifiable;
   value: number;

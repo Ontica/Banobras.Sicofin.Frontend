@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, DateString, HttpService } from '@app/core';
 
 import { ExchangeRate  } from '@app/models';
 
@@ -20,7 +20,7 @@ export class ExchangeRatesDataService {
   constructor(private http: HttpService) { }
 
 
-  getExchangeRatesForDate(date: string): Observable<ExchangeRate[]> {
+  getExchangeRatesForDate(date: DateString): Observable<ExchangeRate[]> {
     Assertion.assertValue(date, 'date');
 
     const path = `v2/financial-accounting/exchange-rates/?date=${date}`;

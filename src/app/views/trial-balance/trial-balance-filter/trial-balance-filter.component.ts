@@ -7,15 +7,15 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, DateString, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { ExchangeRatesDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, BalancesTypeList, ExchangeRate,
-         getEmptyTrialBalanceCommand,
-         getLevelsListFromPattern, TrialBalanceCommand, TrialBalanceTypeList} from '@app/models';
+import { AccountsChartMasterData, BalancesTypeList, getEmptyTrialBalanceCommand, getLevelsListFromPattern,
+         mapToValidTrialBalanceCommandPeriod, resetExchangeRateValues, TrialBalanceCommand,
+         TrialBalanceCommandPeriod, TrialBalanceTypeList} from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -29,7 +29,6 @@ export enum TrialBalanceFilterEventType {
   BUILD_TRIAL_BALANCE_CLICKED = 'TrialBalanceFilterComponent.Event.BuildTrialBalanceClicked',
   CLEAR_TRIAL_BALANCE_CLICKED = 'TrialBalanceFilterComponent.Event.ClearTrialBalanceClicked',
 }
-
 
 @Component({
   selector: 'emp-fa-trial-balance-filter',
@@ -62,15 +61,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   displayExchangeRates = false;
 
-  autoInitialPeriodExchangeRatesFromDate = false;
-
-  autoFinalPeriodExchangeRatesFromDate = false;
-
-  initialPeriodExchangeRatesList: ExchangeRate[] = [];
-
-  finalPeriodExchangeRatesList: ExchangeRate[] = [];
-
-
   constructor(private uiLayer: PresentationLayer,
               private exchangeRatesData: ExchangeRatesDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
@@ -86,6 +76,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.helper.destroy();
   }
+
 
   get exchangeRatesRequired(): boolean {
     return ['AnaliticoDeCuentas',
@@ -121,30 +112,33 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get exchangeRateFormFieldsValid(): boolean {
-    if (!this.displayExchangeRates) {
-      return true;
-    }
-
-    if (this.periodsRequired) {
-      return !!this.trialBalanceCommand.initialPeriod.exchangeRateDate &&
-             !!this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID &&
-             !!this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID &&
-             !!this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID &&
-             !!this.trialBalanceCommand.finalPeriod.exchangeRateDate &&
-             !!this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID;
-    }
-
+  get initialPeriodValid(): boolean  {
     return !!this.trialBalanceCommand.initialPeriod.exchangeRateDate &&
            !!this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID &&
            !!this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID;
   }
 
 
+  get finalPeriodValid(): boolean {
+    return !!this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID &&
+           !!this.trialBalanceCommand.finalPeriod.exchangeRateDate &&
+           !!this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID;
+  }
+
+
+  get exchangeRateFormFieldsValid(): boolean {
+    if (!this.displayExchangeRates) {
+      return true;
+    }
+
+    return this.periodsRequired ? this.initialPeriodValid && this.finalPeriodValid : this.initialPeriodValid;
+  }
+
+
   onTrialBalanceTypeChange() {
-    this.displayExchangeRates = this.exchangeRatesRequired ? true : this.displayExchangeRates;
     this.trialBalanceCommand.showCascadeBalances = this.showCascadeBalancesRequired ?
       true : this.trialBalanceCommand.showCascadeBalances;
+    this.displayExchangeRates = this.exchangeRatesRequired ? true : this.displayExchangeRates;
   }
 
 
@@ -162,106 +156,66 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onDisplayExchangeRatesChange() {
-    this.trialBalanceCommand.initialPeriod.exchangeRateDate = '';
-    this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID = '';
-    this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID = '';
-
-    this.trialBalanceCommand.finalPeriod.exchangeRateDate = '';
-    this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID = '';
-    this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID = '';
+    resetExchangeRateValues(this.trialBalanceCommand.initialPeriod);
+    resetExchangeRateValues(this.trialBalanceCommand.finalPeriod);
 
     if (this.trialBalanceCommand.initialPeriod.toDate) {
-      this.onInitialPeriodToDateChange(this.trialBalanceCommand.initialPeriod.toDate);
+      this.onToDateChange(this.trialBalanceCommand.initialPeriod,
+                          this.trialBalanceCommand.initialPeriod.toDate);
     }
 
-    if (this.trialBalanceCommand.finalPeriod.toDate) {
-      this.onFinalPeriodToDateChange(this.trialBalanceCommand.finalPeriod.toDate);
-    }
-  }
-
-
-  onInitialPeriodToDateChange(toDate){
-    if (this.displayExchangeRates && toDate && !this.trialBalanceCommand.initialPeriod.exchangeRateDate) {
-      this.autoInitialPeriodExchangeRatesFromDate = true;
-      this.initialPeriodExchangeRatesList = [];
-      this.trialBalanceCommand.initialPeriod.exchangeRateDate = toDate;
+    if (this.periodsRequired && this.trialBalanceCommand.finalPeriod.toDate) {
+      this.onToDateChange(this.trialBalanceCommand.finalPeriod, this.trialBalanceCommand.finalPeriod.toDate);
     }
   }
 
 
-  onFinalPeriodToDateChange(toDate){
-    if (this.displayExchangeRates && toDate && !this.trialBalanceCommand.finalPeriod.exchangeRateDate) {
-      this.autoFinalPeriodExchangeRatesFromDate = true;
-      this.finalPeriodExchangeRatesList = [];
-      this.trialBalanceCommand.finalPeriod.exchangeRateDate = toDate;
+  onToDateChange(period: TrialBalanceCommandPeriod, toDate: DateString){
+    if (this.displayExchangeRates && toDate && !period.exchangeRateDate) {
+      this.onExchangeRateDateChanged(period, toDate, true);
+      this.getExchangeRatesForDate(period);
     }
   }
 
 
-  onInitialPeriodExchangeRateDateChanged(value) {
-    this.autoInitialPeriodExchangeRatesFromDate = false;
-    this.trialBalanceCommand.initialPeriod.exchangeRateDate = value;
-    this.initialPeriodExchangeRatesList = [];
+  onExchangeRateDateChanged(period: TrialBalanceCommandPeriod, date: DateString, autoFill = false) {
+    period.autoExchangeRatesFromDate = autoFill;
+    period.exchangeRatesList = [];
+    period.exchangeRateDate = date;
   }
 
 
-  onInitialPeriodExchangeRateSelectorEvent(event) {
-    if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type) {
-      this.initialPeriodExchangeRatesList = [];
-
-      if (!this.trialBalanceCommand.initialPeriod.exchangeRateDate) {
-        return;
-      }
-
-      this.exchangeRatesData.getExchangeRatesForDate(this.trialBalanceCommand.initialPeriod.exchangeRateDate)
-        .subscribe(x => {
-          this.initialPeriodExchangeRatesList = x;
-          if (this.autoInitialPeriodExchangeRatesFromDate && this.initialPeriodExchangeRatesList.length > 0) {
-            this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID =
-              this.initialPeriodExchangeRatesList[0].exchangeRateType.uid;
-            this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID =
-              this.initialPeriodExchangeRatesList[0].toCurrency.uid;
-            this.autoInitialPeriodExchangeRatesFromDate = false;
-          }
-        });
+  onExchangeRateSelectorEvent(event, period: TrialBalanceCommandPeriod) {
+    if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type &&
+        !period.autoExchangeRatesFromDate) {
+      this.getExchangeRatesForDate(period);
     }
   }
 
 
-  onFinalPeriodExchangeRateDateChanged(value) {
-    this.autoFinalPeriodExchangeRatesFromDate = false;
-    this.trialBalanceCommand.finalPeriod.exchangeRateDate = value;
-    this.finalPeriodExchangeRatesList = [];
-  }
+  getExchangeRatesForDate(period: TrialBalanceCommandPeriod) {
+    period.exchangeRatesList = [];
 
-
-  onFinalPeriodExchangeRateSelectorEvent(event) {
-    if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type) {
-      this.finalPeriodExchangeRatesList = [];
-
-      if (!this.trialBalanceCommand.finalPeriod.exchangeRateDate) {
-        return;
-      }
-
-      this.exchangeRatesData.getExchangeRatesForDate(this.trialBalanceCommand.finalPeriod.exchangeRateDate)
-        .subscribe(x => {
-          this.finalPeriodExchangeRatesList = x;
-          if (this.autoFinalPeriodExchangeRatesFromDate && this.finalPeriodExchangeRatesList.length > 0) {
-            this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID =
-              this.finalPeriodExchangeRatesList[0].exchangeRateType.uid;
-            this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID =
-              this.finalPeriodExchangeRatesList[0].toCurrency.uid;
-            this.autoFinalPeriodExchangeRatesFromDate = false;
-          }
-        });
+    if (!this.trialBalanceCommand.initialPeriod.exchangeRateDate) {
+      return;
     }
+
+    this.exchangeRatesData.getExchangeRatesForDate(period.exchangeRateDate)
+      .subscribe(x => {
+        period.exchangeRatesList = x;
+        if (period.autoExchangeRatesFromDate && period.exchangeRatesList.length > 0) {
+          period.exchangeRateTypeUID = period.exchangeRatesList[0].exchangeRateType.uid;
+          period.valuateToCurrrencyUID = period.exchangeRatesList[0].toCurrency.uid;
+          period.autoExchangeRatesFromDate = false;
+        }
+      });
   }
 
 
   onClearFilters() {
     this.displayExchangeRates = this.exchangeRatesRequired;
-    this.initialPeriodExchangeRatesList = [];
-    this.finalPeriodExchangeRatesList = [];
+    this.trialBalanceCommand.initialPeriod.exchangeRatesList = [];
+    this.trialBalanceCommand.finalPeriod.exchangeRatesList = [];
 
     this.trialBalanceCommand = Object.assign({}, getEmptyTrialBalanceCommand(), {
         trialBalanceType: this.trialBalanceCommand.trialBalanceType,
@@ -276,11 +230,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   onBuildTrialBalanceClicked() {
     Assertion.assert(this.trialBalanceFormFieldsValid,
-      'Programming error: form must be validated before command execution.');
+      'Programming error: trialBalance form must be validated before command execution.');
 
     if (this.displayExchangeRates) {
       Assertion.assert(this.exchangeRateFormFieldsValid,
-        'Programming error: form must be validated before command execution.');
+        'Programming error: exchangeRate form must be validated before command execution.');
     }
 
     sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
@@ -304,7 +258,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     };
 
     this.validateCommandFieldsByBalanceType(data);
-
     return data;
   }
 
@@ -319,11 +272,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     }
 
     if (this.displayExchangeRates) {
-      data.initialPeriod = this.trialBalanceCommand.initialPeriod;
+      data.initialPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.initialPeriod);
       data.consolidateBalancesToTargetCurrency = this.trialBalanceCommand.consolidateBalancesToTargetCurrency;
 
       if (this.periodsRequired) {
-        data.finalPeriod = this.trialBalanceCommand.finalPeriod;
+        data.finalPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.finalPeriod);
       }
     }
   }
@@ -343,7 +296,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   private setLevelsList(){
     if (!this.accountChartSelected) {
-      this.levelsList =  [];
+      this.levelsList = [];
       return;
     }
 

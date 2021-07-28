@@ -51,7 +51,7 @@
               <emp-ng-datepicker name="initialPeriodToDate" required
                 [(ngModel)]="trialBalanceCommand.initialPeriod.toDate"
                 [showError]="!trialBalanceCommand.initialPeriod.toDate"
-                (valueChange)="onInitialPeriodToDateChange($event)">
+                (valueChange)="onToDateChange(trialBalanceCommand.initialPeriod, $event)">
 
               </emp-ng-datepicker>
 
@@ -82,7 +82,7 @@
               <emp-ng-datepicker name="finalPeriodToDate" required
                 [(ngModel)]="trialBalanceCommand.finalPeriod.toDate"
                 [showError]="!trialBalanceCommand.finalPeriod.toDate"
-                (valueChange)="onFinalPeriodToDateChange($event)">
+                (valueChange)="onToDateChange(trialBalanceCommand.finalPeriod, $event)">
 
               </emp-ng-datepicker>
 
@@ -280,13 +280,13 @@
             <div class="section-title" *ngIf="periodsRequired"> Periodo inicial </div>
 
             <emp-fa-exchange-rate-selector
-              [exchangeRatesList]="initialPeriodExchangeRatesList"
+              [exchangeRatesList]="trialBalanceCommand.initialPeriod.exchangeRatesList"
               [exchangeRateDate]="trialBalanceCommand.initialPeriod.exchangeRateDate"
               [(exchangeRateTypeUID)]="trialBalanceCommand.initialPeriod.exchangeRateTypeUID"
               [(valuateToCurrrencyUID)]="trialBalanceCommand.initialPeriod.valuateToCurrrencyUID"
               [(consolidateBalancesToTargetCurrency)]="trialBalanceCommand.consolidateBalancesToTargetCurrency"
-              (exchangeRateDateChange)="onInitialPeriodExchangeRateDateChanged($event)"
-              (exchangeRateSelectorEvent)="onInitialPeriodExchangeRateSelectorEvent($event)">
+              (exchangeRateDateChange)="onExchangeRateDateChanged(trialBalanceCommand.initialPeriod, $event)"
+              (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event, trialBalanceCommand.initialPeriod)">
 
             </emp-fa-exchange-rate-selector>
 
@@ -297,13 +297,13 @@
             <div class="section-title"> Periodo final </div>
 
             <emp-fa-exchange-rate-selector
-              [exchangeRatesList]="finalPeriodExchangeRatesList"
+              [exchangeRatesList]="trialBalanceCommand.finalPeriod.exchangeRatesList"
               [exchangeRateDate]="trialBalanceCommand.finalPeriod.exchangeRateDate"
               [(exchangeRateTypeUID)]="trialBalanceCommand.finalPeriod.exchangeRateTypeUID"
               [(valuateToCurrrencyUID)]="trialBalanceCommand.finalPeriod.valuateToCurrrencyUID"
               [showConsolidateBalancesToTargetCurrency]="false"
-              (exchangeRateDateChange)="onFinalPeriodExchangeRateDateChanged($event)"
-              (exchangeRateSelectorEvent)="onFinalPeriodExchangeRateSelectorEvent($event)">
+              (exchangeRateDateChange)="onExchangeRateDateChanged(trialBalanceCommand.finalPeriod, $event)"
+              (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event, trialBalanceCommand.finalPeriod)">
 
             </emp-fa-exchange-rate-selector>
 
