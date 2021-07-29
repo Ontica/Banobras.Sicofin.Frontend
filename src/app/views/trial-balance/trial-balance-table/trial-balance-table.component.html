@@ -1,5 +1,7 @@
 <div fxLayout="column" fxFlexFill>
 
+  <mat-divider *ngIf="!displayTrialBalanceTable" [style.marginBottom.px]="8"> </mat-divider>
+
   <div #controlsContainer *ngIf="displayTrialBalanceTable" fxFlex="none">
 
     <mat-divider [style.marginBottom.px]="8">

@@ -50,8 +50,7 @@
 
               <emp-ng-datepicker name="initialPeriodToDate" required
                 [(ngModel)]="trialBalanceCommand.initialPeriod.toDate"
-                [showError]="!trialBalanceCommand.initialPeriod.toDate"
-                (valueChange)="onToDateChange(trialBalanceCommand.initialPeriod, $event)">
+                [showError]="!trialBalanceCommand.initialPeriod.toDate">
 
               </emp-ng-datepicker>
 
@@ -81,8 +80,7 @@
 
               <emp-ng-datepicker name="finalPeriodToDate" required
                 [(ngModel)]="trialBalanceCommand.finalPeriod.toDate"
-                [showError]="!trialBalanceCommand.finalPeriod.toDate"
-                (valueChange)="onToDateChange(trialBalanceCommand.finalPeriod, $event)">
+                [showError]="!trialBalanceCommand.finalPeriod.toDate">
 
               </emp-ng-datepicker>
 
@@ -131,7 +129,7 @@
 
       </div>
 
-      <div fxLayout="row" [style.marginBottom.px]="8">
+      <div fxLayout="row" >
 
         <div fxFlex="50">
 
@@ -162,6 +160,42 @@
 
         </div>
 
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-sm="column" [style.marginBottom.px]="8">
+
+        <div fxFlex="25">
+
+          <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesRequired"
+            [(ngModel)]="trialBalanceCommand.showCascadeBalances"
+            (click)="$event.stopPropagation">
+            Imprimir en cascada
+          </mat-checkbox>
+
+        </div>
+
+
+        <div fxFlex="25">
+
+          <mat-checkbox name="useValuation" [disabled]="exchangeRatesRequired"
+            [(ngModel)]="trialBalanceCommand.useValuation"
+            (click)="$event.stopPropagation"
+            (change)="onUseValuationChange()">
+            Valorizar saldos
+          </mat-checkbox>
+
+        </div>
+
+        <div fxFlex="25">
+
+          <mat-checkbox name="useDefaultValuation" *ngIf="trialBalanceCommand.useValuation"
+            [(ngModel)]="trialBalanceCommand.useDefaultValuation"
+            (click)="$event.stopPropagation"
+            (change)="onUseDefaultValuationChange($event.checked)">
+            Valorización default
+          </mat-checkbox>
+
+        </div>
       </div>
 
     </ng-container>
@@ -210,7 +244,24 @@
 
           </div>
 
-          <div fxFlex="50" *ngIf="displayLevel">
+
+          <div fxFlex="50">
+
+            <label>Incluir:</label>
+
+            <emp-ng-select name="balancesType" required
+              [(ngModel)]="trialBalanceCommand.balancesType"
+              [items]="balancesTypeList"
+              [showError]="!trialBalanceCommand.balancesType">
+            </emp-ng-select>
+
+          </div>
+
+        </div>
+
+        <div fxLayout="row" [style.marginBottom.px]="8" *ngIf="displayLevel">
+
+          <div fxFlex="50">
 
             <label>Nivel:</label>
 
@@ -225,61 +276,24 @@
 
         </div>
 
-        <div fxLayout="row" [style.marginBottom.px]="8">
-
-          <div fxFlex="50">
-
-            <label>Incluir:</label>
-
-            <emp-ng-select name="balancesType" required
-              [(ngModel)]="trialBalanceCommand.balancesType"
-              [items]="balancesTypeList"
-              [showError]="!trialBalanceCommand.balancesType">
-            </emp-ng-select>
-
-          </div>
-
-          <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
-
-            <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesRequired"
-              [(ngModel)]="trialBalanceCommand.showCascadeBalances"
-              (click)="$event.stopPropagation">
-              Imprimir en cascada
-            </mat-checkbox>
-
-          </div>
-
-          <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
-
-            <mat-checkbox name="displayExchangeRates" [disabled]="exchangeRatesRequired"
-              [(ngModel)]="displayExchangeRates"
-              (click)="$event.stopPropagation"
-              (change)="onDisplayExchangeRatesChange()">
-              Valorizar saldos
-            </mat-checkbox>
-
-          </div>
-
-        </div>
-
       </ng-container>
 
 
-      <div #exchangeRateFieldsContainer *ngIf="displayExchangeRates" [@expandCollapse]>
+      <div #exchangeRateFieldsContainer [@expandCollapse]
+        *ngIf="trialBalanceCommand.useValuation && !trialBalanceCommand.useDefaultValuation">
 
         <mat-divider
           [style.marginTop.px]="8" [style.marginBottom.px]="8" [style.marginRight.px]="8">
 
         </mat-divider>
 
-        <div fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.px]="8"
-          [fxLayoutAlign]="periodsRequired ? 'start start' : 'end start'">
+        <div fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.px]="8">
 
           <div fxFlex="50" fxFlex.lt-md="none" [style.width.%]="100">
 
             <div class="section-title" *ngIf="periodsRequired"> Periodo inicial </div>
 
-            <emp-fa-exchange-rate-selector
+            <emp-fa-exchange-rate-selector #initialPeriodExchangeRates
               [exchangeRatesList]="trialBalanceCommand.initialPeriod.exchangeRatesList"
               [exchangeRateDate]="trialBalanceCommand.initialPeriod.exchangeRateDate"
               [(exchangeRateTypeUID)]="trialBalanceCommand.initialPeriod.exchangeRateTypeUID"
@@ -296,7 +310,7 @@
 
             <div class="section-title"> Periodo final </div>
 
-            <emp-fa-exchange-rate-selector
+            <emp-fa-exchange-rate-selector #finalPeriodExchangeRates
               [exchangeRatesList]="trialBalanceCommand.finalPeriod.exchangeRatesList"
               [exchangeRateDate]="trialBalanceCommand.finalPeriod.exchangeRateDate"
               [(exchangeRateTypeUID)]="trialBalanceCommand.finalPeriod.exchangeRateTypeUID"

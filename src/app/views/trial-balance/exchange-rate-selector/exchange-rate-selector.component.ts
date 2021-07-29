@@ -59,10 +59,6 @@ export class ExchangeRateSelectorComponent implements OnChanges {
       this.setToCurrencyList();
       this.isLoading = false;
     }
-
-    if (changes.exchangeRateDate && this.exchangeRatesList.length === 0) {
-      setTimeout(() => this.searchExchangeRatesList());
-    }
   }
 
 

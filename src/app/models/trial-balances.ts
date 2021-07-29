@@ -63,6 +63,8 @@ export interface TrialBalanceCommand {
   subledgerAccount?: string;
   toAccount?: string;
   trialBalanceType: string;
+  useValuation?: boolean;
+  useDefaultValuation?: boolean;
 }
 
 
@@ -72,20 +74,16 @@ export interface TrialBalanceCommandPeriod {
   fromDate?: DateString;
   toDate?: DateString;
   valuateToCurrrencyUID?: string;
-
-  autoExchangeRatesFromDate?: boolean;
   exchangeRatesList?: ExchangeRate[];
 }
 
 
 export const EmptyTrialBalanceCommandPeriod: TrialBalanceCommandPeriod = {
-  fromDate: '',
-  toDate: '',
   exchangeRateDate: '',
   exchangeRateTypeUID: '',
+  fromDate: '',
+  toDate: '',
   valuateToCurrrencyUID: '',
-
-  autoExchangeRatesFromDate: false,
   exchangeRatesList: [],
 };
 
@@ -98,14 +96,19 @@ export function resetExchangeRateValues(period: TrialBalanceCommandPeriod) {
 
 
 export function mapToValidTrialBalanceCommandPeriod(
-period: TrialBalanceCommandPeriod): TrialBalanceCommandPeriod {
-  return {
+period: TrialBalanceCommandPeriod, useDefaultValuation: boolean): TrialBalanceCommandPeriod {
+  const trialBalanceCommandPeriod: TrialBalanceCommandPeriod = {
     fromDate: period.fromDate,
-    toDate: period.toDate,
-    exchangeRateDate: period.exchangeRateDate,
-    exchangeRateTypeUID: period.exchangeRateTypeUID,
-    valuateToCurrrencyUID: period.valuateToCurrrencyUID,
+    toDate: period.toDate
   };
+
+  if (!useDefaultValuation) {
+    trialBalanceCommandPeriod.exchangeRateDate =  period.exchangeRateDate;
+    trialBalanceCommandPeriod.exchangeRateTypeUID =  period.exchangeRateTypeUID;
+    trialBalanceCommandPeriod.valuateToCurrrencyUID =  period.valuateToCurrrencyUID;
+  }
+
+  return trialBalanceCommandPeriod;
 }
 
 
@@ -124,6 +127,8 @@ export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
     subledgerAccount: '',
     toAccount: '',
     trialBalanceType: '',
+    useValuation: false,
+    useDefaultValuation: true,
   };
 }
 

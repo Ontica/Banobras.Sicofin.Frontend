@@ -59,8 +59,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   helper: SubscriptionHelper;
 
-  displayExchangeRates = false;
-
   constructor(private uiLayer: PresentationLayer,
               private exchangeRatesData: ExchangeRatesDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
@@ -106,7 +104,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get displayLevel(): boolean {
-    return !['SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
+    return !this.showCascadeBalancesRequired;
   }
 
 
@@ -118,21 +116,23 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get initialPeriodValid(): boolean  {
-    return !!this.trialBalanceCommand.initialPeriod.exchangeRateDate &&
-           !!this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID &&
-           !!this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID;
+    return this.trialBalanceCommand.useDefaultValuation ? true :
+      !!this.trialBalanceCommand.initialPeriod.exchangeRateDate &&
+      !!this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID &&
+      !!this.trialBalanceCommand.initialPeriod.valuateToCurrrencyUID;
   }
 
 
   get finalPeriodValid(): boolean {
-    return !!this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID &&
-           !!this.trialBalanceCommand.finalPeriod.exchangeRateDate &&
-           !!this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID;
+    return this.trialBalanceCommand.useDefaultValuation ? true :
+      !!this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID &&
+      !!this.trialBalanceCommand.finalPeriod.exchangeRateDate &&
+      !!this.trialBalanceCommand.finalPeriod.valuateToCurrrencyUID;
   }
 
 
   get exchangeRateFormFieldsValid(): boolean {
-    if (!this.displayExchangeRates) {
+    if (!this.trialBalanceCommand.useValuation) {
       return true;
     }
 
@@ -141,9 +141,14 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onTrialBalanceTypeChange() {
-    this.trialBalanceCommand.showCascadeBalances = this.showCascadeBalancesRequired ?
-      true : this.trialBalanceCommand.showCascadeBalances;
-    this.displayExchangeRates = this.exchangeRatesRequired ? true : this.displayExchangeRates;
+    this.trialBalanceCommand.showCascadeBalances = this.showCascadeBalancesRequired;
+
+    if (this.exchangeRatesRequired) {
+      this.trialBalanceCommand.useValuation = true;
+    } else {
+      this.trialBalanceCommand.useValuation = this.trialBalanceCommand.useDefaultValuation ? false :
+        this.exchangeRateFormFieldsValid;
+    }
   }
 
 
@@ -160,39 +165,28 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onDisplayExchangeRatesChange() {
+  onUseValuationChange() {
+    this.trialBalanceCommand.useDefaultValuation = true;
     resetExchangeRateValues(this.trialBalanceCommand.initialPeriod);
     resetExchangeRateValues(this.trialBalanceCommand.finalPeriod);
+  }
 
-    if (this.trialBalanceCommand.initialPeriod.toDate) {
-      this.onToDateChange(this.trialBalanceCommand.initialPeriod,
-                          this.trialBalanceCommand.initialPeriod.toDate);
-    }
 
-    if (this.periodsRequired && this.trialBalanceCommand.finalPeriod.toDate) {
-      this.onToDateChange(this.trialBalanceCommand.finalPeriod, this.trialBalanceCommand.finalPeriod.toDate);
+  onUseDefaultValuationChange(checked) {
+    if (!checked && !this.showFilters) {
+      this.onShowFiltersClicked();
     }
   }
 
 
-  onToDateChange(period: TrialBalanceCommandPeriod, toDate: DateString){
-    if (this.displayExchangeRates && toDate && !period.exchangeRateDate) {
-      this.onExchangeRateDateChanged(period, toDate, true);
-      this.getExchangeRatesForDate(period);
-    }
-  }
-
-
-  onExchangeRateDateChanged(period: TrialBalanceCommandPeriod, date: DateString, autoFill = false) {
-    period.autoExchangeRatesFromDate = autoFill;
+  onExchangeRateDateChanged(period: TrialBalanceCommandPeriod, date: DateString) {
     period.exchangeRatesList = [];
     period.exchangeRateDate = date;
   }
 
 
   onExchangeRateSelectorEvent(event, period: TrialBalanceCommandPeriod) {
-    if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type &&
-        !period.autoExchangeRatesFromDate) {
+    if (ExchangeRateSelectorEventType.SEARCH_EXCHANGE_RATES_CLICKED === event.type) {
       this.getExchangeRatesForDate(period);
     }
   }
@@ -206,19 +200,13 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     }
 
     this.exchangeRatesData.getExchangeRatesForDate(period.exchangeRateDate)
-      .subscribe(x => {
-        period.exchangeRatesList = x;
-        if (period.autoExchangeRatesFromDate && period.exchangeRatesList.length > 0) {
-          period.exchangeRateTypeUID = period.exchangeRatesList[0].exchangeRateType.uid;
-          period.valuateToCurrrencyUID = period.exchangeRatesList[0].toCurrency.uid;
-          period.autoExchangeRatesFromDate = false;
-        }
-      });
+      .subscribe(x => period.exchangeRatesList = x);
   }
 
 
   onClearFilters() {
-    this.displayExchangeRates = this.exchangeRatesRequired;
+    this.trialBalanceCommand.useValuation = this.exchangeRatesRequired;
+    this.trialBalanceCommand.useDefaultValuation = true;
     this.trialBalanceCommand.initialPeriod.exchangeRatesList = [];
     this.trialBalanceCommand.finalPeriod.exchangeRatesList = [];
 
@@ -237,7 +225,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     Assertion.assert(this.trialBalanceFormFieldsValid,
       'Programming error: trialBalance form must be validated before command execution.');
 
-    if (this.displayExchangeRates) {
+    if (this.trialBalanceCommand.useValuation) {
       Assertion.assert(this.exchangeRateFormFieldsValid,
         'Programming error: exchangeRate form must be validated before command execution.');
     }
@@ -259,14 +247,18 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       fromAccount: this.trialBalanceCommand.fromAccount,
       showCascadeBalances: this.trialBalanceCommand.showCascadeBalances,
       balancesType: this.trialBalanceCommand.balancesType,
+      useValuation: this.trialBalanceCommand.useValuation,
+      useDefaultValuation: this.trialBalanceCommand.useValuation ?
+        this.trialBalanceCommand.useDefaultValuation : false,
     };
 
-    this.validateCommandFieldsByBalanceType(data);
+    this.validateCommandFields(data);
+    this.validateExchangeRatesFields(data);
     return data;
   }
 
 
-  private validateCommandFieldsByBalanceType(data: TrialBalanceCommand) {
+  private validateCommandFields(data: TrialBalanceCommand) {
     if (this.displayToAccount) {
       data.toAccount = this.trialBalanceCommand.toAccount;
     }
@@ -278,13 +270,19 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     if (this.displayLevel) {
       data.level = this.trialBalanceCommand.level;
     }
+  }
 
-    if (this.displayExchangeRates) {
-      data.initialPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.initialPeriod);
+
+  private validateExchangeRatesFields(data: TrialBalanceCommand) {
+    if (this.trialBalanceCommand.useValuation) {
       data.consolidateBalancesToTargetCurrency = this.trialBalanceCommand.consolidateBalancesToTargetCurrency;
 
+      data.initialPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.initialPeriod,
+                                                               this.trialBalanceCommand.useDefaultValuation);
+
       if (this.periodsRequired) {
-        data.finalPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.finalPeriod);
+        data.finalPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.finalPeriod,
+                                                               this.trialBalanceCommand.useDefaultValuation);
       }
     }
   }
