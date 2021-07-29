@@ -229,13 +229,12 @@ export class SystemManagementWorkspaceComponent {
 
 
   private exportStoredBalanceSetToExcel() {
-    console.log('EXPORT_STORED_BALANCE_SET',
-      'accountsChart: ' + this.selectedStoredBalanceSet.accountsChart.name,
-      'balanceSetUID: ' + this.selectedStoredBalanceSet.uid);
-
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy ' + this.selectedStoredBalanceSet.uid;
-    }, 1000);
+    this.balancesStoreData.exportStoredBalanceSetToExcel(this.selectedStoredBalanceSet.accountsChart.uid,
+                                                         this.selectedStoredBalanceSet.uid)
+      .toPromise()
+      .then(x => {
+        this.excelFileUrl = x.url;
+      });
   }
 
 

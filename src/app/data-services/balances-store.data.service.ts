@@ -61,4 +61,15 @@ export class BalancesStoreDataService {
     return this.http.post<StoredBalanceSet>(path, balanceSet);
   }
 
+
+  exportStoredBalanceSetToExcel(accountsChartUID: string, balanceSetUID: string): Observable<any> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(balanceSetUID, 'balanceSetUID');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}` +
+      `/balance-store/${balanceSetUID}/excel`;
+
+    return this.http.get<any>(path);
+  }
+
 }
