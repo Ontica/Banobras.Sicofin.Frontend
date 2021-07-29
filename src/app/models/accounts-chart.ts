@@ -92,6 +92,7 @@ export interface AccountDescriptor {
   usesSector: boolean;
   debtorCreditor: DebtorCreditorType;   // naturaleza
   startDate: DateString;
+  endDate: DateString;
   level: number;
   obsolete: boolean;
 }
@@ -109,14 +110,13 @@ export const EmptyAccountDescriptor: AccountDescriptor = {
   debtorCreditor: null,
   level: 0,
   startDate: '',
+  endDate: '',
   obsolete: false
 };
 
 
 export interface Account extends AccountDescriptor {
   description: string;
-  startDate: DateString;
-  endDate: DateString;
   accountsChart: Identifiable;
   areaRules: AreaRule[];
   currencyRules: CurrencyRule[];
@@ -176,6 +176,7 @@ export const EmptyAccountsSearchCommand: AccountsSearchCommand = {
   withSectors: false
 };
 
+
 export interface AccountHistory {
   uID: string;
   number: string;
@@ -187,6 +188,7 @@ export interface AccountHistory {
   startDate: string;
   endDate: string;
 }
+
 
 export interface Currency {
   uid: string;

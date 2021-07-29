@@ -12,15 +12,15 @@
 
       <div fxFlex="7%"> Rol </div>
 
-      <div fxFlex="5%"> Sector </div>
+      <div fxFlex="4%"> Sector </div>
 
-      <div fxFlex="5%"> Auxiliar </div>
+      <div fxFlex="4%"> Auxiliar </div>
 
-      <div fxFlex="7%"> Tipo</div>
+      <div fxFlex="10%"> Tipo</div>
 
       <div fxFlex="7%"> Naturaleza </div>
 
-      <div fxFlex="10%"> Fecha alta </div>
+      <div fxFlex="10%"> Alta / Baja </div>
 
     </div>
 
@@ -44,22 +44,23 @@
 
   <div fxFlex class="list-item-column-border-shadow">
     <div class="border-left"></div>
-    <div [style.marginLeft.px]="marginLeftByLevel">{{account.name}}</div>
+    <div [style.marginLeft.px]="marginLeftByLevel"
+         [ngClass]="{'list-item-deleted': account.obsolete}">{{account.name}}</div>
   </div>
 
   <div fxFlex="7%">
     <div class="nowrap">{{account.role}}</div>
   </div>
 
-  <div fxFlex="5%">
+  <div fxFlex="4%">
     <div>{{account.usesSector ? "Sí": "No"}}</div>
   </div>
 
-  <div fxFlex="5%">
+  <div fxFlex="4%">
     <div>{{account.usesSubledger ? "Sí": "No"}}</div>
   </div>
 
-  <div fxFlex="7%">
+  <div fxFlex="10%">
     <div>{{account.type}}</div>
   </div>
 
@@ -69,6 +70,7 @@
 
   <div fxFlex="10%">
     <div>{{account.startDate | dateTimeFormat}}</div>
+    <div *ngIf="account.obsolete">{{account.endDate | dateTimeFormat}}</div>
   </div>
 
 </div>
