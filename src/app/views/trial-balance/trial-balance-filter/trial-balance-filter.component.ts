@@ -205,15 +205,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onClearFilters() {
-    this.trialBalanceCommand.useValuation = this.exchangeRatesRequired;
-    this.trialBalanceCommand.useDefaultValuation = true;
-    this.trialBalanceCommand.initialPeriod.exchangeRatesList = [];
-    this.trialBalanceCommand.finalPeriod.exchangeRatesList = [];
-
     this.trialBalanceCommand = Object.assign({}, getEmptyTrialBalanceCommand(), {
         trialBalanceType: this.trialBalanceCommand.trialBalanceType,
         accountsChartUID: this.trialBalanceCommand.accountsChartUID,
         balancesType: this.balancesTypeList[0].uid,
+        useValuation: this.exchangeRatesRequired,
       });
 
     sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED,
