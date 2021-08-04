@@ -82,4 +82,34 @@ export class Validate {
     };
   }
 
+
+  static periodRequired(periodValidationType: 'both-dates' | 'one-date' | 'start-date' | 'end-date' = 'both-dates',
+                        startDateLabel: string = 'fromDate',
+                        endDateLabel: string = 'toDate'): ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let periodRequired = false;
+
+      if (control.value) {
+        const hasStartDate = !!control.value[startDateLabel];
+        const hasEndDate = !!control.value[endDateLabel];
+
+        switch (periodValidationType) {
+          case 'one-date':
+            periodRequired = !hasStartDate && !hasEndDate;
+            break;
+          case 'start-date':
+            periodRequired = !hasStartDate;
+            break;
+          case 'end-date':
+            periodRequired = !hasEndDate;
+            break;
+          case 'both-dates':
+          default:
+            periodRequired = !hasStartDate || !hasEndDate;
+            break;
+        }
+      }
+      return periodRequired ? { periodRequired } : null;
+    };
+  }
 }
