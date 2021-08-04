@@ -1,0 +1,31 @@
+<div class="date-range-container">
+
+  <mat-date-range-input [rangePicker]="picker" [class.invalid-date-picker]="showError"
+    [comparisonStart]="getDateForComparison(comparisonStartDate)"
+    [comparisonEnd]="getDateForComparison(comparisonEndDate)">
+
+    <input type="text" #inputStartDate matStartDate
+      autocomplete="off" maxlength="11"
+      placeholder="Fecha inicial"
+      [disabled]="disabled"
+      [ngModel]="startDate"
+      (blur)="onBlur()"
+      (change)="onInputsChange(inputStartDate.value, inputEndDate.value)"
+      (dateChange)="onChange(inputStartDate.value, inputEndDate.value)">
+
+    <input type="text" #inputEndDate matEndDate
+      autocomplete="off" maxlength="11"
+      placeholder="Fecha final"
+      [disabled]="disabled"
+      [ngModel]="endDate"
+      (blur)="onBlur()"
+      (change)="onInputsChange(inputStartDate.value, inputEndDate.value)"
+      (dateChange)="onChange(inputStartDate.value, inputEndDate.value)">
+
+  </mat-date-range-input>
+
+  <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="disabled"></mat-datepicker-toggle>
+
+  <mat-date-range-picker #picker [startView]="startView" [disabled]="disabled"></mat-date-range-picker>
+
+</div>

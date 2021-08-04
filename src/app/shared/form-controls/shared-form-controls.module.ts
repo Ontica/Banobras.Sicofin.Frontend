@@ -20,6 +20,7 @@ import { IconSvgModule } from '../icon-svg.module';
 
 import { CheckboxAllComponent } from './check-box-all/check-box-all.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
+import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
 import { FileControlComponent } from './file-control/file-control.component';
 import { FilePrintPreviewComponent } from './file-print-preview/file-print-preview.component';
 import { MenuComponent } from './menu/menu.component';
@@ -45,6 +46,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
   declarations: [
     CheckboxAllComponent,
     DatePickerComponent,
+    DateRangePickerComponent,
     FileControlComponent,
     FilePrintPreviewComponent,
     MenuComponent,
@@ -56,6 +58,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
   exports: [
     CheckboxAllComponent,
     DatePickerComponent,
+    DateRangePickerComponent,
     FileControlComponent,
     FilePrintPreviewComponent,
     MenuComponent,
