@@ -110,12 +110,24 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get trialBalanceFormFieldsValid(): boolean {
     return !!this.trialBalanceCommand.trialBalanceType && !!this.trialBalanceCommand.accountsChartUID &&
-           !!this.trialBalanceCommand.initialPeriod.fromDate &&
-           !!this.trialBalanceCommand.initialPeriod.toDate && !!this.trialBalanceCommand.balancesType;
+           this.initalPeriodDatesValid && this.finalPeriodDatesValid &&
+           !!this.trialBalanceCommand.balancesType;
+  }
+
+  get initalPeriodDatesValid(): boolean {
+    return !!this.trialBalanceCommand.initialPeriod.fromDate &&
+           !!this.trialBalanceCommand.initialPeriod.toDate;
   }
 
 
-  get initialPeriodValid(): boolean  {
+  get finalPeriodDatesValid(): boolean {
+    return !this.periodsRequired ? true :
+           !!this.trialBalanceCommand.finalPeriod.fromDate &&
+           !!this.trialBalanceCommand.finalPeriod.toDate;
+  }
+
+
+  get initialPeriodExchangeRateValid(): boolean  {
     return this.trialBalanceCommand.useDefaultValuation ? true :
       !!this.trialBalanceCommand.initialPeriod.exchangeRateDate &&
       !!this.trialBalanceCommand.initialPeriod.exchangeRateTypeUID &&
@@ -123,7 +135,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get finalPeriodValid(): boolean {
+  get finalPeriodExchangeRateValid(): boolean {
     return this.trialBalanceCommand.useDefaultValuation ? true :
       !!this.trialBalanceCommand.finalPeriod.exchangeRateTypeUID &&
       !!this.trialBalanceCommand.finalPeriod.exchangeRateDate &&
@@ -136,7 +148,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    return this.periodsRequired ? this.initialPeriodValid && this.finalPeriodValid : this.initialPeriodValid;
+    return this.periodsRequired ? this.initialPeriodExchangeRateValid && this.finalPeriodExchangeRateValid :
+      this.initialPeriodExchangeRateValid;
   }
 
 

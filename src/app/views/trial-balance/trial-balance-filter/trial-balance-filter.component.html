@@ -98,9 +98,9 @@
 
             <div fxFlex="36px" fxFlex.lt-md="none">
 
-              <button [class.btn-icon-action]="form.valid && exchangeRateFormFieldsValid"
-                [class.btn-icon]="form.invalid || !exchangeRateFormFieldsValid"
-                [disabled]="form.invalid || !exchangeRateFormFieldsValid"
+              <button [class.btn-icon-action]="trialBalanceFormFieldsValid && exchangeRateFormFieldsValid"
+                [class.btn-icon]="!trialBalanceFormFieldsValid || !exchangeRateFormFieldsValid"
+                [disabled]="!trialBalanceFormFieldsValid || !exchangeRateFormFieldsValid"
                 (click)="onBuildTrialBalanceClicked()"
                 title="Generar balanza">
 
