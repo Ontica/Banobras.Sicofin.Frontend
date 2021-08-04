@@ -19,6 +19,26 @@ export const MINUTES_IN_DAY = 1440;
 
 export class DateStringLibrary {
 
+  static validateDateValue(obj: any): Date {
+    if (!obj) {
+      return null;
+    }
+
+    let date: Date;
+    if (moment.isMoment(obj)) {
+      date = this.toDate(obj.toDate());
+    } else {
+      date = this.toDate(obj);
+    }
+
+    if (date) {
+      return date;
+    } else {
+      return null;
+    }
+  }
+
+
   static compareDates(value1: DateString, value2: DateString): number {
     const date1 = this.datePart(value1);
     const date2 = this.datePart(value2);

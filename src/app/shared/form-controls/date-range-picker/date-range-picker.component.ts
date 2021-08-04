@@ -67,26 +67,12 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   propagateTouch = () => { };
 
   onInputsChange(startDateValue: string, endDateValue: string) {
-    if (!startDateValue && !endDateValue) {
-      this.setDatesAndPropagateChanges(null, null);
-    } else {
-      const startDate = this.getDateInputValue(startDateValue);
-      const endDate = this.getDateInputValue(endDateValue);
-
-      this.setDatesAndPropagateChanges(startDate, endDate);
-    }
+    this.validateChange(startDateValue, endDateValue);
   }
 
 
   onChange(startDateValue: string, endDateValue: string) {
-    if (!startDateValue && !endDateValue) {
-      this.setDatesAndPropagateChanges(null, null);
-    } else {
-      const startDate = this.getDateInputValue(startDateValue);
-      const endDate = this.getDateInputValue(endDateValue);
-
-      this.setDatesAndPropagateChanges(startDate, endDate);
-    }
+    this.validateChange(startDateValue, endDateValue);
   }
 
 
@@ -139,21 +125,18 @@ export class DateRangePickerComponent implements ControlValueAccessor {
 
 
   private getDateInputValue(obj: any): Date {
-    if (!obj) {
-      return null;
-    }
+    return DateStringLibrary.validateDateValue(obj);
+  }
 
-    let date: Date;
-    if (moment.isMoment(obj)) {
-      date = DateStringLibrary.toDate(obj.toDate());
-    } else {
-      date = DateStringLibrary.toDate(obj);
-    }
 
-    if (date) {
-      return date;
+  private validateChange(startDateValue: string, endDateValue: string) {
+    if (!startDateValue && !endDateValue) {
+      this.setDatesAndPropagateChanges(null, null);
     } else {
-      return null;
+      const startDate = this.getDateInputValue(startDateValue);
+      const endDate = this.getDateInputValue(endDateValue);
+
+      this.setDatesAndPropagateChanges(startDate, endDate);
     }
   }
 

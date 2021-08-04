@@ -5,15 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import {
-  Component, EventEmitter,
-  Input, Output, forwardRef
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DateString, DateStringLibrary } from '@app/core/data-types/date-string-library';
 
-import { isMoment } from 'moment';
+import { DateString, DateStringLibrary } from '@app/core/data-types/date-string-library';
 
 
 @Component({
@@ -44,26 +40,13 @@ export class DatePickerComponent implements ControlValueAccessor {
 
 
   onChange(value: any) {
-    if (value) {
-      const date = this.getDateInputValue(value);
-
-      this.setDateAndPropagateChanges(date);
-    } else {
-      this.setDateAndPropagateChanges(null);
-    }
+    this.validateChange(value);
   }
 
 
-  onInputChange(value: string) {
-    if (value) {
-      const date = this.getDateInputValue(value);
-
-      this.setDateAndPropagateChanges(date);
-    } else {
-      this.setDateAndPropagateChanges(null);
-    }
+  onInputChange(value: any) {
+    this.validateChange(value);
   }
-
 
   onBlur() {
     this.propagateTouch();
@@ -102,24 +85,19 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   // private methods
 
+  private validateChange(value: any) {
+    if (value) {
+      const date = this.getDateInputValue(value);
+
+      this.setDateAndPropagateChanges(date);
+    } else {
+      this.setDateAndPropagateChanges(null);
+    }
+  }
+
 
   private getDateInputValue(obj: any): Date {
-    if (!obj) {
-      return null;
-    }
-
-    let date: Date;
-    if (isMoment(obj)) {
-      date = DateStringLibrary.toDate(obj.toDate());
-    } else {
-      date = DateStringLibrary.toDate(obj);
-    }
-
-    if (date) {
-      return date;
-    } else {
-      return null;
-    }
+    return DateStringLibrary.validateDateValue(obj);
   }
 
 
