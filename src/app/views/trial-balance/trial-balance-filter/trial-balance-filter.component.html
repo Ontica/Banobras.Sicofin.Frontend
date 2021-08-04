@@ -25,64 +25,35 @@
 
           <div fxLayout="row" #initialPeriodSection>
 
-            <div fxFlex="50px" fxLayoutAlign="start end" *ngIf="periodsRequired"
-              [style.paddingTop.px]="12" [style.paddingRight.px]="8">
-
-              <label>Periodo <br>inicial:</label>
-
-            </div>
-
             <div fxFlex="none">
 
-              <label>Fecha inicial:</label>
+              <label>Periodo inicial:</label>
 
-              <emp-ng-datepicker name="initialPeriodFromDate" required
-                [(ngModel)]="trialBalanceCommand.initialPeriod.fromDate"
-                [showError]="!trialBalanceCommand.initialPeriod.fromDate">
+              <emp-ng-date-range-picker name="initialPeriod"
+                [(startDate)]="trialBalanceCommand.initialPeriod.fromDate"
+                [(endDate)]="trialBalanceCommand.initialPeriod.toDate"
+                [showError]="!trialBalanceCommand.initialPeriod.fromDate ||
+                             !trialBalanceCommand.initialPeriod.toDate">
 
-              </emp-ng-datepicker>
-
-            </div>
-
-            <div fxFlex="none">
-
-              <label>Fecha final:</label>
-
-              <emp-ng-datepicker name="initialPeriodToDate" required
-                [(ngModel)]="trialBalanceCommand.initialPeriod.toDate"
-                [showError]="!trialBalanceCommand.initialPeriod.toDate">
-
-              </emp-ng-datepicker>
+              </emp-ng-date-range-picker>
 
             </div>
 
           </div>
 
-          <div fxLayout="row" *ngIf="periodsRequired" #finalPeriodSection>
-
-            <div fxFlex="50px" fxLayoutAlign="start end" *ngIf="periodsRequired" [style.paddingRight.px]="8">
-
-              <label>Periodo <br>final:</label>
-
-            </div>
+          <div fxLayout="row" #finalPeriodSection *ngIf="periodsRequired" [style.marginTop.rem]="0.25">
 
             <div fxFlex="none">
 
-              <emp-ng-datepicker name="finalPeriodFromDate" required
-                [(ngModel)]="trialBalanceCommand.finalPeriod.fromDate"
-                [showError]="!trialBalanceCommand.finalPeriod.fromDate">
+              <label>Periodo final:</label>
 
-              </emp-ng-datepicker>
+              <emp-ng-date-range-picker name="finalPeriod" #finalPeriodRangePicker
+                [(startDate)]="trialBalanceCommand.finalPeriod.fromDate"
+                [(endDate)]="trialBalanceCommand.finalPeriod.toDate"
+                [showError]="!trialBalanceCommand.finalPeriod.fromDate ||
+                             !trialBalanceCommand.finalPeriod.toDate">
 
-            </div>
-
-            <div fxFlex="none">
-
-              <emp-ng-datepicker name="finalPeriodToDate" required
-                [(ngModel)]="trialBalanceCommand.finalPeriod.toDate"
-                [showError]="!trialBalanceCommand.finalPeriod.toDate">
-
-              </emp-ng-datepicker>
+              </emp-ng-date-range-picker>
 
             </div>
 
