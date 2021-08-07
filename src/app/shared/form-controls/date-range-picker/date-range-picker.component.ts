@@ -5,14 +5,33 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, forwardRef, ViewChild, ElementRef, OnChanges,
+         SimpleChanges } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { DateString, DateStringLibrary } from '@app/core/data-types/date-string-library';
+import { MatDateRangePicker } from '@angular/material/datepicker';
 
 import * as moment from 'moment';
 
+import { Moment } from 'moment';
+
+import { DateString, DateStringLibrary } from '@app/core/data-types/date-string-library';
+
+import { MonthPickerComponent, MonthRange } from './month-picker/month-picker.component';
+
+import { Identifiable } from '@app/core';
+
+enum SelectionType {
+  day = 'Selección por día',
+  month = 'Selección por mes',
+  year = 'Selección por año'
+}
+
+function getIdentifiableListFromEnum(enumObject): Identifiable[] {
+  return Object.keys(enumObject)
+        .map(key => Object.assign({uid: key, name: enumObject[key]}) );
+}
 
 @Component({
   selector: 'emp-ng-date-range-picker',
@@ -22,15 +41,21 @@ import * as moment from 'moment';
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DateRangePickerComponent), multi: true },
   ]
 })
-export class DateRangePickerComponent implements ControlValueAccessor {
+export class DateRangePickerComponent implements ControlValueAccessor, OnChanges {
+
+  @ViewChild(MatDateRangePicker, {static: false}) picker: MatDateRangePicker<Moment>;
+
+  @ViewChild(MonthPickerComponent, {static: false}) monthPicker: MonthPickerComponent;
+
+  @ViewChild('appendedContainer', {static: false}) appendedContainer: ElementRef;
 
   @Input() bindValueStartDate = 'fromDate';
 
   @Input() bindValueEndDate = 'toDate';
 
-  @Input() startView: 'month' | 'year' | 'multi-year' = 'year';
-
   @Input() showError = false;
+
+  @Input() displaySelectionType = true;
 
   @Input()
   get value(): any {
@@ -62,12 +87,53 @@ export class DateRangePickerComponent implements ControlValueAccessor {
 
   disabled = false;
 
+  selectionTypeList: Identifiable[] = getIdentifiableListFromEnum(SelectionType);
+
+  selectedSelectionType = SelectionType.day;
+
+  selectedPickerView: 'month' | 'year' | 'multi-year' = 'month';
+
+  selectRangeClicked = false;
+
   propagateChange = (_: any) => { };
 
   propagateTouch = () => { };
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.startDate && changes.endDate &&
+        !changes.startDate.currentValue && !changes.endDate.currentValue) {
+      this.clearMonthPicker();
+    }
+  }
+
+
+  get isMonthSelection() {
+    return this.displaySelectionType && this.selectedSelectionType === SelectionType.month;
+  }
+
+
+  get isYearSelection() {
+    return this.displaySelectionType && this.selectedSelectionType === SelectionType.year;
+  }
+
+
+  onOpenedPicker() {
+    this.appendFooter();
+  }
+
+
+  onClearDates() {
+    this.setDatesAndPropagateChanges(null, null);
+    this.clearMonthPicker();
+  }
+
+
   onInputsChange(startDateValue: string, endDateValue: string) {
     this.validateChange(startDateValue, endDateValue);
+    if (!!startDateValue || !!endDateValue) {
+      this.selectedPickerView = 'month';
+      this.selectedSelectionType = SelectionType.day;
+    }
   }
 
 
@@ -121,15 +187,80 @@ export class DateRangePickerComponent implements ControlValueAccessor {
   }
 
 
-  // private methods
-
-
-  private getDateInputValue(obj: any): Date {
-    return DateStringLibrary.validateDateValue(obj);
+  onViewChanged(view) {
+    if (this.selectRangeClicked) {
+      this.selectRangeClicked = false;
+    }
   }
 
 
-  private validateChange(startDateValue: string, endDateValue: string) {
+  onSelectionTypeChanges(event) {
+    switch (event) {
+      case this.selectionTypeList[0]:
+        this.selectedPickerView = 'month';
+        break;
+
+      case this.selectionTypeList[1]:
+        this.selectedPickerView = 'year';
+        break;
+
+      case this.selectionTypeList[2]:
+      default:
+        this.selectedPickerView = 'multi-year';
+        break;
+    }
+    this.validateChange(null, null);
+    this.resetDatePicker();
+  }
+
+
+  onMonthsSelected(rangeOfMonths: MonthRange) {
+    if (this.isMonthSelection) {
+      const startOfMonth = DateStringLibrary.mapDateStringFromMoment(rangeOfMonths.startMonthDate);
+      const endOfMonth = DateStringLibrary.mapDateStringFromMoment(rangeOfMonths.endMonthDate);
+      this.validateChangeMonthOrYearRange(startOfMonth, endOfMonth);
+    }
+  }
+
+
+  onYearSelected(normalizedYear: Moment) {
+    if (this.isYearSelection) {
+      const startOfYear = DateStringLibrary.mapDateStringFromMoment(normalizedYear.startOf('year'));
+      const endOfYear = DateStringLibrary.mapDateStringFromMoment(normalizedYear.endOf('year'));
+      this.validateChangeMonthOrYearRange(startOfYear, endOfYear);
+    }
+  }
+
+
+
+
+  private appendFooter() {
+    const matCalendar = document.getElementsByClassName('mat-datepicker-content')[0] as HTMLElement;
+    matCalendar.appendChild(this.appendedContainer.nativeElement);
+  }
+
+
+  private clearMonthPicker() {
+    if (this.isMonthSelection && this.monthPicker) {
+      this.monthPicker.resetRange();
+    }
+  }
+
+
+  private resetDatePicker() {
+    this.picker.close();
+    setTimeout(() => this.picker.open(), 250);
+  }
+
+
+  private validateChangeMonthOrYearRange(startDateValue: DateString, endDateValue: DateString) {
+    this.selectRangeClicked = true;
+    this.validateChange(startDateValue, endDateValue);
+    this.picker.close();
+  }
+
+
+  private validateChange(startDateValue, endDateValue) {
     if (!startDateValue && !endDateValue) {
       this.setDatesAndPropagateChanges(null, null);
     } else {
@@ -138,6 +269,11 @@ export class DateRangePickerComponent implements ControlValueAccessor {
 
       this.setDatesAndPropagateChanges(startDate, endDate);
     }
+  }
+
+
+  private getDateInputValue(obj): Date {
+    return DateStringLibrary.validateDateValue(obj);
   }
 
 

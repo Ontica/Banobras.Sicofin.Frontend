@@ -1,4 +1,4 @@
-<div class="date-range-container">
+<div class="row">
 
   <mat-date-range-input [rangePicker]="picker" [class.invalid-date-picker]="showError"
     [comparisonStart]="getDateForComparison(comparisonStartDate)"
@@ -26,6 +26,45 @@
 
   <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="disabled"></mat-datepicker-toggle>
 
-  <mat-date-range-picker #picker [startView]="startView" [disabled]="disabled"></mat-date-range-picker>
+  <mat-date-range-picker #picker [disabled]="disabled"
+    [startView]="selectedPickerView"
+    [panelClass]="[isYearSelection || isMonthSelection ? 'selection-type-picker': '',
+                   isMonthSelection ? 'default-calendar-hidden' : '']"
+    (yearSelected)="onYearSelected($event)"
+    (viewChanged)="onViewChanged($event)"
+    (opened)="onOpenedPicker()">
+
+  </mat-date-range-picker>
+
+</div>
+
+<div class="hidden">
+
+  <div class="appended-container" #appendedContainer>
+
+    <emp-ng-month-picker *ngIf="isMonthSelection"
+      (monthRangeSelected)="onMonthsSelected($event)">
+
+    </emp-ng-month-picker>
+
+    <mat-divider class="appended-container-divider"></mat-divider>
+
+    <div class="appended-container-footer">
+
+      <emp-ng-select name="selectionType"
+        [(ngModel)]="selectedSelectionType"
+        [items]="selectionTypeList"
+        bindValue="name"
+        [style.marginLeft.px]="8"
+        (changes)="onSelectionTypeChanges($event)">
+      </emp-ng-select>
+
+      <button class="btn-base" (click)="onClearDates()">
+        Limpiar
+      </button>
+
+    </div>
+
+  </div>
 
 </div>

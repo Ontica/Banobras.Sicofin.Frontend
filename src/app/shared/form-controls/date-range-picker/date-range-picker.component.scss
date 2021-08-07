@@ -5,6 +5,24 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-.date-range-container {
+.appended-container {
+  align-items: center;
+  box-sizing: border-box;
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding-bottom: 1rem;
+}
+
+
+.appended-container-divider {
+  margin: 0 -8px 16px -8px;
+  width: 100%;
+}
+
+
+.appended-container-footer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }

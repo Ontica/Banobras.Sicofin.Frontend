@@ -71,7 +71,12 @@ export class DateStringLibrary {
 
 
   static today(): DateString {
-    return moment().format('YYYY-MM-DD');
+    return this.mapDateStringFromMoment(moment());
+  }
+
+
+  static mapDateStringFromMoment(date: moment.Moment): DateString {
+    return date.format('YYYY-MM-DD');
   }
 
 

@@ -400,6 +400,18 @@ table.mat-table {
   }
 }
 
+.selection-type-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.selection-type-picker .mat-calendar-arrow {
+  display: none;
+}
+
+.default-calendar-hidden {
+  display: none !important;
+}
+
 //
 // mat date range picker
 //
