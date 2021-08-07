@@ -93,10 +93,11 @@ export class MonthPickerComponent implements OnInit {
   onMonthClicked(indexClicked) {
     if (this.rangeIndexes.startIndex === null) {
       this.rangeIndexes.startIndex = this.calculateMonthIndex(indexClicked);
-    } else if (this.rangeIndexes.endIndex === null) {
+      return;
+    }
 
+    if (this.rangeIndexes.endIndex === null) {
       this.focusMonthIndex = null;
-
       const endIndex = this.calculateMonthIndex(indexClicked);
 
       if (this.rangeIndexes.startIndex > endIndex) {
@@ -108,11 +109,12 @@ export class MonthPickerComponent implements OnInit {
       this.updateMonthDataInRange();
       this.validateEmitData();
 
-    } else {
-      this.resetRange();
-      this.onMonthClicked(indexClicked);
-      this.sliceDataIntoView();
+      return;
     }
+
+    this.resetRange();
+    this.onMonthClicked(indexClicked);
+    this.sliceDataIntoView();
   }
 
 
@@ -281,12 +283,16 @@ export class MonthPickerComponent implements OnInit {
     const fromMonthYear = this.monthsData[this.rangeIndexes.startIndex];
     const toMonthYear = this.monthsData[this.rangeIndexes.endIndex];
 
-    const startMonth = moment().date(1).month(fromMonthYear.month).year(fromMonthYear.monthYear)
-                      .startOf('month');
-    const endMonth = moment().date(1).year(toMonthYear.monthYear).month(toMonthYear.month)
-                     .endOf('month');
+    const startMonth =
+      this.getMomentDateFromParts(1, fromMonthYear.month, fromMonthYear.monthYear).startOf('month');
+    const endMonth = this.getMomentDateFromParts(1, toMonthYear.month, toMonthYear.monthYear).endOf('month');
 
     this.emitData(startMonth, endMonth);
+  }
+
+
+  private getMomentDateFromParts(date: number, month: number, year: number) {
+    return moment().date(date).month(month).year(year)
   }
 
 }
