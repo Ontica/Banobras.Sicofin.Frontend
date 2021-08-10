@@ -22,13 +22,13 @@
 
       <div fxFlex fxLayoutAlign="start end">
 
-        <div class="input-icon-container" [style.width.%]="100" [style.marginBottom.px]="4">
+        <div class="input-search-container">
 
           <input type="text" class="text-box" name="keywords"
-          placeholder="Buscar cuentas..."
-          [(ngModel)]="accountsSearch.keywords"
-          (keyup.enter)="onSearchAccountsChartClicked()"
-          (keyup.escape)="onClearKeyword()">
+            placeholder="Buscar cuentas..."
+            [(ngModel)]="accountsSearch.keywords"
+            (keyup.enter)="onSearchAccountsChartClicked()"
+            (keyup.escape)="onClearKeyword()">
 
         </div>
 
@@ -47,8 +47,7 @@
 
       <ng-container #filterOptionsSection>
 
-        <mat-divider vertical="true" [style.marginTop.px]="12"
-          [style.marginRight.px]="8" [style.height.px]="28">
+        <mat-divider vertical="true" class="vertical">
 
         </mat-divider>
 
@@ -206,8 +205,7 @@
 
         <ng-container #clearFilterSection>
 
-          <mat-divider vertical="true" [style.marginTop.px]="12"
-            [style.marginRight.px]="8" [style.height.px]="28">
+          <mat-divider vertical="true" class="vertical">
 
           </mat-divider>
 

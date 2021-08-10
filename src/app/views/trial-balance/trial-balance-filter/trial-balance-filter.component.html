@@ -81,7 +81,7 @@
 
             </div>
 
-            <mat-divider vertical="true" [style.marginRight.px]="8" [style.height.px]="28">
+            <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0">
 
             </mat-divider>
 
@@ -253,10 +253,7 @@
       <div #exchangeRateFieldsContainer [@expandCollapse]
         *ngIf="trialBalanceCommand.useValuation && !trialBalanceCommand.useDefaultValuation">
 
-        <mat-divider
-          [style.marginTop.px]="8" [style.marginBottom.px]="8" [style.marginRight.px]="8">
-
-        </mat-divider>
+        <mat-divider class="horizontal"></mat-divider>
 
         <div fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.px]="8">
 
@@ -301,14 +298,13 @@
 
       <ng-container #clearFilterContainer>
 
-        <mat-divider [style.marginTop.px]="8" [style.marginBottom.px]="8" [style.marginRight.px]="8">
+        <mat-divider class="horizontal">
 
         </mat-divider>
 
         <div fxLayout="row" fxLayoutAlign="end end">
 
-          <mat-divider fxFlex="none" vertical="true" [style.marginBottom.px]="2"
-            [style.marginRight.px]="8" [style.height.px]="28">
+          <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0" [style.marginBottom.px]="2">
 
           </mat-divider>
 

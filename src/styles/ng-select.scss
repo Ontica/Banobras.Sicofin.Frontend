@@ -27,8 +27,8 @@ $font-size-small: 10pt;
 
 .ng-select .ng-select-container {
   min-height: $control-height;
-  margin: 2px 8px 2px 0;
-  padding: 2px 2px 2px 6px;
+  margin: $control-margin;
+  padding: $select-padding;
   border-radius: 2px;
   font-family: $primary-font-family;
   border: $control-border;
@@ -80,7 +80,7 @@ $font-size-small: 10pt;
   color: $control-color;
   font-family: $primary-font-family;
   font-size: $font-size;
-  padding: 2px 2px 2px 6px;
+  padding: $select-padding;
 }
 
 .ng-select.ng-select-disabled > .ng-select-container {

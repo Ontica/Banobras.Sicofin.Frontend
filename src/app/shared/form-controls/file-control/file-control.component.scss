@@ -61,7 +61,7 @@ input[type="file"] {
   flex-wrap: wrap;
   padding: $space $space * 2;
   border-radius: $border-radius;
-  margin: 2px 8px 2px 0;
+  margin: $control-margin;
   border: dashed 1px $border-color-dark;
   min-height: $area-height + 4 * $space + 2;
 

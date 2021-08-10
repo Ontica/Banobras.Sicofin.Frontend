@@ -221,8 +221,8 @@ button.btn-margin-right {
   color: $control-color;
   font: $control-font;
   font-weight: normal;
-  margin: 2px 8px 2px 0;
-  padding: 2px 2px 2px 6px;
+  margin: $control-margin;
+  padding: $control-padding;
   vertical-align: middle;
   height: $control-height;
   width: $control-width;
@@ -275,19 +275,29 @@ input::placeholder {
   color: $control-disabled-color;
 }
 
+.input-search-container {
+  height: $control-height;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
 .input-icon-container {
   position: relative;
-  height: 28px;
+  height: $control-height;
+  width: 100%;
 
   input {
     padding-right: 30px;
+    margin: 0;
   }
 }
 
 .input-icon {
   position: absolute;
+  top: 0;
   right: 14px;
-  top: calc(50% - 0.5em);
+  bottom: 0;
+  margin: auto;
   color: $icon-color;
 }
 
@@ -303,8 +313,8 @@ input::placeholder {
   font: $control-font;
   font-weight: normal;
   line-height: 1.125em;
-  margin: 2px 8px 2px 0;
-  padding: 6px 2px 6px 6px;
+  margin: $control-margin;
+  padding: $control-padding;
   vertical-align: middle;
   min-height: $control-height;
   width: $control-width;

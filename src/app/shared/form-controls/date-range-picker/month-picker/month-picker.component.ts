@@ -292,7 +292,7 @@ export class MonthPickerComponent implements OnInit {
 
 
   private getMomentDateFromParts(date: number, month: number, year: number) {
-    return moment().date(date).month(month).year(year)
+    return moment().date(date).month(month).year(year);
   }
 
 }
