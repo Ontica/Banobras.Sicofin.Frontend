@@ -88,7 +88,7 @@ button.btn {
 
 button.btn:hover {
   background-color: $button-selected-color;
-  color: $text-color;
+  color: $text-color-dark;
   transition: 0.3s ease-out;
 }
 
@@ -314,7 +314,7 @@ input::placeholder {
   font-weight: normal;
   line-height: 1.125em;
   margin: $control-margin;
-  padding: $control-padding;
+  padding: 6px;
   vertical-align: middle;
   min-height: $control-height;
   width: $control-width;
