@@ -6,13 +6,14 @@
  */
 
 import { Injectable } from '@angular/core';
+
 import { Router, CanActivate } from '@angular/router';
 
 import { SessionService } from '../general/session.service';
 
 
 @Injectable()
-export class SecurityGuardService implements CanActivate {
+export class SecurityGuard implements CanActivate {
 
   constructor(private router: Router,
               private session: SessionService) { }

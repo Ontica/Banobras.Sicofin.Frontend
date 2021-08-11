@@ -15,6 +15,7 @@ import { DataServicesModule } from '@app/data-services/data.services.module';
 import { PresentationModule } from './presentation/presentation.module';
 
 import { SessionService } from './general/session.service';
+import { LocalStorageService } from './general/local-storage.service';
 import { LoggerService } from './general/logger.service';
 import { ApplicationSettingsService } from './general/application-settings.service';
 
@@ -25,7 +26,7 @@ import { HttpErrorInterceptor } from './http/http-error-interceptor';
 
 import { SecurityDataService } from './security/security-data.service';
 import { AuthenticationService } from './security/authentication.service';
-import { SecurityGuardService } from './security/security-guard.service';
+import { SecurityGuard } from './security/security.guard';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
 
@@ -52,10 +53,11 @@ import { ErrorMessageService } from './errors/error-message.service';
     ErrorMessageService,
     SessionService,
     ApplicationSettingsService,
+    LocalStorageService,
     LoggerService,
     SecurityDataService,
     AuthenticationService,
-    SecurityGuardService,
+    SecurityGuard,
     HttpHandler,
     HttpService,
     DirectoryService,

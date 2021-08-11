@@ -15,7 +15,7 @@ import { Assertion } from '../general/assertion';
 
 import { HttpHandler } from '../http/http-handler';
 
-import { SessionToken, Identity, ClaimsList } from './security-types';
+import { SessionToken, PrincipalData } from './security-types';
 
 
 interface ExternalSessionToken {
@@ -34,13 +34,13 @@ export class SecurityDataService {
   changePassword(event: EventInfo): Promise<boolean> {
     Assertion.assertValue(event, 'event');
 
-    return this.httpHandler.post<boolean>('v2/security/change-password', event)
+    return this.httpHandler.post<boolean>('v3/security/change-password', event)
                            .toPromise();
   }
 
 
   closeSession(): Promise<void> {
-    return this.httpHandler.post<void>('v1/security/logout')
+    return this.httpHandler.post<void>('v3/security/logout')
                .toPromise();
   }
 
@@ -63,27 +63,11 @@ export class SecurityDataService {
   }
 
 
-  getPrincipalClaimsList(): Promise<ClaimsList> {
-    const list = [
-      { type: 'token', value: 'abc' },
-      { type: 'phone', value: '567-890-1234' }
-    ];
-
-    const claims = new ClaimsList(list);
-
-    return Promise.resolve(claims);
+  getPrincipal(): Promise<PrincipalData> {
+    return this.httpHandler.get<PrincipalData>('v3/security/principal')
+      .toPromise();
   }
 
-
-  getPrincipalIdentity(): Promise<Identity> {
-    const fakeIdentity = {
-      username: 'jrulfo',
-      email: 'jrulfo@escritores.com',
-      fullname: '{Nombre del usuario} || settings'
-    };
-
-    return Promise.resolve(fakeIdentity);
-  }
 
   private mapToSessionToken(source: ExternalSessionToken): SessionToken {
     return {

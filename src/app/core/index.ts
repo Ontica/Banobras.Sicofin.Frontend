@@ -15,9 +15,10 @@ export { Validate } from './general/validate';
 
 export { SessionService } from './general/session.service';
 export { HttpService } from './http/http.service';
+export { LocalStorageService } from './general/local-storage.service';
 export { LoggerService } from './general/logger.service';
 
 export { AuthenticationService } from './security/authentication.service';
-export { SecurityGuardService } from './security/security-guard.service';
+export { SecurityGuard } from './security/security.guard';
 
 export * from './localization';

@@ -8,10 +8,14 @@
 import { Injectable } from '@angular/core';
 
 import { Assertion } from '../general/assertion';
+
 import { SessionService } from '../general/session.service';
 
-import { SecurityDataService } from './security-data.service';
 import { Principal } from './principal';
+
+import { SecurityDataService } from './security-data.service';
+
+import { PrincipalData, SessionToken } from './security-types';
 
 
 @Injectable()
@@ -21,19 +25,21 @@ export class AuthenticationService {
               private securityService: SecurityDataService) { }
 
 
-  login(userID: string, userPassword: string): Promise<void> {
+  async login(userID: string, userPassword: string): Promise<void> {
     Assertion.assertValue(userID, 'userID');
     Assertion.assertValue(userPassword, 'userPassword');
 
-    const sessionToken = this.securityService.createSession(userID, userPassword);
-    const identity = this.securityService.getPrincipalIdentity();
-    const claimsList = this.securityService.getPrincipalClaimsList();
-
-    return Promise.all([sessionToken, identity, claimsList])
-      .then(([a, b, c]) => {
-        const principal = new Principal(a, b, c);
-        this.session.setPrincipal(principal);
+    const sessionToken = await this.securityService.createSession(userID, userPassword)
+      .then(x => {
+        this.session.setSessionToken(x);
+        return x;
       })
+      .catch((e) => this.handleAuthenticationError(e));
+
+    const principal = this.securityService.getPrincipal();
+
+    return Promise.all([sessionToken, principal])
+      .then(([x, y]) => this.setSession(x, y))
       .catch((e) => this.handleAuthenticationError(e));
   }
 
@@ -46,11 +52,19 @@ export class AuthenticationService {
     }
 
     return this.securityService.closeSession()
-      .then(() => Promise.resolve(true));
+      .then(() => Promise.resolve(true))
+      .finally(() => this.session.clearSession());
   }
 
 
-  // private methods
+  private setSession(sessionToken: SessionToken, principalData: PrincipalData ){
+    const principal = new Principal(sessionToken,
+                                    principalData.identity,
+                                    principalData.claims,
+                                    principalData.roles,
+                                    principalData.permissions);
+    this.session.setPrincipal(principal);
+  }
 
 
   private handleAuthenticationError(error): Promise<never> {

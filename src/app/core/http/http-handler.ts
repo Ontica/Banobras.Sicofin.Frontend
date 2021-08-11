@@ -106,13 +106,13 @@ export class HttpHandler {
 
   private async getHeaders(path: string, service?: Service): Promise<HttpHeaders> {
     const settings = await this.session.getSettings();
-    const principal = this.session.getPrincipal();
+    const sessionToken = this.session.getSessionToken();
 
     let headers = new HttpHeaders();
-    if (service && service.isProtected && principal.isAuthenticated) {
-      headers = headers.set('Authorization', 'bearer ' + principal.sessionToken.accessToken);
+    if (service && service.isProtected && !!sessionToken) {
+      headers = headers.set('Authorization', 'bearer ' + sessionToken.accessToken);
 
-    } else if (service && service.isProtected && !principal.isAuthenticated) {
+    } else if (service && service.isProtected && !sessionToken.accessToken) {
       throw new Error('Unauthenticated user');
 
     } else if (service && !service.isProtected) {
@@ -121,8 +121,8 @@ export class HttpHandler {
     } else if (path.includes('http://') || path.includes('https://')) {
       // no-op
 
-    } else if (principal.isAuthenticated) {
-      headers = headers.set('Authorization', 'bearer ' + principal.sessionToken.accessToken);
+    } else if (!!sessionToken) {
+      headers = headers.set('Authorization', 'bearer ' + sessionToken.accessToken);
 
     } else {
       headers = headers.set('ApplicationKey', settings.applicationKey);

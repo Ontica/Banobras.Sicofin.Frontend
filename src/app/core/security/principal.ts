@@ -6,23 +6,25 @@
  */
 
 
-import { SessionToken, Identity, ClaimsList } from './security-types';
+import { SessionToken, Identity, Claim } from './security-types';
 
 
 export class Principal {
 
   constructor(public readonly sessionToken: SessionToken,
               public readonly identity: Identity,
-              public readonly claims: ClaimsList) { }
+              public readonly claims: Claim[],
+              public readonly roles: string[],
+              public readonly permissions: string[]) { }
 
 
   static get empty(): Principal {
-    return new Principal(undefined, undefined, undefined);
+    return new Principal(undefined, undefined, undefined, undefined, undefined);
   }
 
 
   get isAuthenticated(): boolean {
-    return (this.sessionToken && this.identity && this.claims && true);
+    return (!!this.sessionToken);
   }
 
 }

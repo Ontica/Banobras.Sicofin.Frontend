@@ -21,6 +21,7 @@ export interface Identity {
   readonly username: string;
   readonly email: string;
   readonly fullname: string;
+  readonly name: string;
 }
 
 
@@ -29,4 +30,12 @@ export interface SessionToken {
   readonly expiresIn: number;
   readonly refreshToken: string;
   readonly tokenType: string;
+}
+
+
+export interface PrincipalData {
+  claims: Claim[];
+  identity: Identity;
+  roles: string[];
+  permissions: string[];
 }
