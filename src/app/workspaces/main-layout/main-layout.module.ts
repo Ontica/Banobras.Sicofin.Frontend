@@ -21,6 +21,7 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 import { NavigationHeaderComponent } from './nav-header/nav-header.component';
 import { NavigationMenuComponent } from './nav-menu/nav-menu.component';
 import { NoContentComponent } from './no-content.component';
+import { UserSessionComponent } from './user-session/user-session.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { NoContentComponent } from './no-content.component';
     MainMenuComponent,
     NavigationHeaderComponent,
     NavigationMenuComponent,
-    NoContentComponent
+    NoContentComponent,
+    UserSessionComponent,
   ],
 
   exports: [

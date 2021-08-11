@@ -1,0 +1,32 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+@import "../../../../styles/variables";
+
+.container {
+  text-align: end;
+}
+
+.user-name {
+  text-transform: uppercase;
+  font-size: 10pt;
+}
+
+.logout {
+  font-size: 8pt;
+  text-decoration: underline;
+}
+
+.logout:hover {
+  color: $text-color-dark;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    text-align: end;
+  }
+}

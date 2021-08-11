@@ -7,6 +7,9 @@
 
 @import "../../../styles/general-styles";
 
+$margin-size: 16px;
+$margin-size-small: 8px;
+
 .main-layout {
   @include column;
 
@@ -44,6 +47,12 @@
     width: auto;
     align-items: center;
     white-space: nowrap;
+    margin: 0 $margin-size;
+  }
+
+  .right-section {
+    min-width: 225px;
+    margin: 0 $margin-size;
   }
 
   .search-and-settings {
@@ -53,18 +62,34 @@
     align-items: center;
 
     > * {
-      margin-left: 32px;
+      margin-left: 16px;
     }
   }
 
   .logo {
     max-height: 46px;
-    margin-left: 8px;
   }
 
   .main-menu {
-    margin-left: 16px;
+    margin: 0 $margin-size;
   }
+
+  @media only screen and (max-width: 1140px) {
+
+    .left-section {
+      margin: 0 0 0 $margin-size-small;
+    }
+
+    .main-menu {
+      margin: 0;
+    }
+
+    .right-section {
+      min-width: auto;
+      margin: 0 $margin-size-small 0 0;
+    }
+  }
+
 }
 
 .content {
