@@ -223,6 +223,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         accountsChartUID: this.trialBalanceCommand.accountsChartUID,
         balancesType: this.balancesTypeList[0].uid,
         useValuation: this.exchangeRatesRequired,
+        showCascadeBalances: this.showCascadeBalancesRequired,
       });
 
     sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED,
@@ -284,7 +285,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   private validateExchangeRatesFields(data: TrialBalanceCommand) {
     if (this.trialBalanceCommand.useValuation) {
-      data.consolidateBalancesToTargetCurrency = this.trialBalanceCommand.consolidateBalancesToTargetCurrency;
+      data.consolidateBalancesToTargetCurrency = this.trialBalanceCommand.useDefaultValuation ? false :
+        this.trialBalanceCommand.consolidateBalancesToTargetCurrency;
 
       data.initialPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.initialPeriod,
                                                                this.trialBalanceCommand.useDefaultValuation);
