@@ -15,7 +15,7 @@ import { ExchangeRatesDataService } from '@app/data-services';
 
 import { AccountsChartMasterData, BalancesTypeList, getEmptyTrialBalanceCommand, getLevelsListFromPattern,
          mapToValidTrialBalanceCommandPeriod, resetExchangeRateValues, TrialBalanceCommand,
-         TrialBalanceCommandPeriod, TrialBalanceTypeList} from '@app/models';
+         TrialBalanceCommandPeriod, TrialBalanceType, TrialBalanceTypeList } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -77,29 +77,46 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get exchangeRatesRequired(): boolean {
-    return ['AnaliticoDeCuentas',
-            'BalanzaValorizadaComparativa'].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceType.AnaliticoDeCuentas,
+            TrialBalanceType.BalanzaValorizadaComparativa]
+            .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get showCascadeBalancesRequired(): boolean {
-    return ['SaldosPorCuentaYMayor'].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceType.SaldosPorCuentaYMayor].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get showWithSubledgerAccountDisabled(): boolean {
+    return [TrialBalanceType.AnaliticoDeCuentas,
+            TrialBalanceType.SaldosPorCuentaYMayor,
+            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get withSubledgerAccountRequired(): boolean {
+    return [TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get periodsRequired(): boolean {
-    return ['BalanzaValorizadaComparativa'].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceType.BalanzaValorizadaComparativa]
+            .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displaySubledgerAccount() {
-    return ['SaldosPorCuenta', 'SaldosPorAuxiliar'].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceType.SaldosPorCuenta,
+            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayToAccount() {
-    return ['Balanza', 'BalanzaConAuxiliares', 'SaldosPorCuentaYMayor', 'AnaliticoDeCuentas',
-            'BalanzaValorizadaComparativa'].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceType.AnaliticoDeCuentas,
+            TrialBalanceType.Balanza,
+            TrialBalanceType.BalanzaValorizadaComparativa,
+            TrialBalanceType.SaldosPorCuentaYMayor].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -155,6 +172,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   onTrialBalanceTypeChange() {
     this.trialBalanceCommand.showCascadeBalances = this.showCascadeBalancesRequired;
+    this.trialBalanceCommand.withSubledgerAccount = this.withSubledgerAccountRequired;
 
     if (this.exchangeRatesRequired) {
       this.trialBalanceCommand.useValuation = true;
@@ -224,6 +242,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         balancesType: this.balancesTypeList[0].uid,
         useValuation: this.exchangeRatesRequired,
         showCascadeBalances: this.showCascadeBalancesRequired,
+        withSubledgerAccount: this.withSubledgerAccountRequired,
       });
 
     sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED,
@@ -260,6 +279,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       useValuation: this.trialBalanceCommand.useValuation,
       useDefaultValuation: this.trialBalanceCommand.useValuation ?
         this.trialBalanceCommand.useDefaultValuation : false,
+      withSubledgerAccount: this.trialBalanceCommand.withSubledgerAccount,
     };
 
     this.validateCommandFields(data);

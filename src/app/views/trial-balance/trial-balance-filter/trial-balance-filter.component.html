@@ -137,6 +137,17 @@
 
         <div fxFlex="25">
 
+          <mat-checkbox name="withSubledgerAccount" [disabled]="showWithSubledgerAccountDisabled"
+            [(ngModel)]="trialBalanceCommand.withSubledgerAccount"
+            [title]="showWithSubledgerAccountDisabled && !withSubledgerAccountRequired ? 'No aplica' : ''"
+            (click)="$event.stopPropagation">
+            Con Auxiliares
+          </mat-checkbox>
+
+        </div>
+
+        <div fxFlex="25">
+
           <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesRequired"
             [(ngModel)]="trialBalanceCommand.showCascadeBalances"
             (click)="$event.stopPropagation">

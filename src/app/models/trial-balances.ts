@@ -12,14 +12,23 @@ import { AccountRole } from './accounts-chart';
 import { ExchangeRate } from './exchange-rates';
 
 
+export enum TrialBalanceType {
+  AnaliticoDeCuentas           = 'AnaliticoDeCuentas',
+  Balanza                      = 'Balanza',
+  BalanzaValorizadaComparativa = 'BalanzaValorizadaComparativa',
+  SaldosPorCuenta              = 'SaldosPorCuenta',
+  SaldosPorAuxiliar            = 'SaldosPorAuxiliar',
+  SaldosPorCuentaYMayor        = 'SaldosPorCuentaYMayor',
+}
+
+
 export const TrialBalanceTypeList: Identifiable[] = [
-  {uid: 'BalanzaValorizadaComparativa', name: 'Balanza de comparación entre periodos'},
-  {uid: 'AnaliticoDeCuentas', name: 'Analítico de cuentas'},
-  {uid: 'Balanza', name: 'Balanza tradicional'},
-  {uid: 'BalanzaConAuxiliares', name: 'Balanza tradicional con auxiliares'},
-  {uid: 'SaldosPorCuentaYMayor', name: 'Balanza consolidada con cuentas en cascada'},
-  {uid: 'SaldosPorCuenta', name: 'Saldos por cuenta y auxiliar'},
-  {uid: 'SaldosPorAuxiliar', name: 'Saldos por auxiliar'},
+  {uid: TrialBalanceType.AnaliticoDeCuentas,           name: 'Analítico de cuentas'},
+  {uid: TrialBalanceType.SaldosPorCuentaYMayor,        name: 'Balanza con contabilidades en cascada'},
+  {uid: TrialBalanceType.BalanzaValorizadaComparativa, name: 'Balanza de comparación entre periodos'},
+  {uid: TrialBalanceType.Balanza,                      name: 'Balanza tradicional'},
+  {uid: TrialBalanceType.SaldosPorAuxiliar,            name: 'Saldos por auxiliar'},
+  {uid: TrialBalanceType.SaldosPorCuenta,              name: 'Saldos por cuenta'},
 ];
 
 
@@ -62,9 +71,10 @@ export interface TrialBalanceCommand {
   showCascadeBalances: boolean;
   subledgerAccount?: string;
   toAccount?: string;
-  trialBalanceType: string;
-  useValuation?: boolean;
+  trialBalanceType: TrialBalanceType;
   useDefaultValuation?: boolean;
+  useValuation?: boolean;
+  withSubledgerAccount?: boolean;
 }
 
 
@@ -126,9 +136,10 @@ export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
     showCascadeBalances: false,
     subledgerAccount: '',
     toAccount: '',
-    trialBalanceType: '',
-    useValuation: false,
+    trialBalanceType: null,
     useDefaultValuation: true,
+    useValuation: false,
+    withSubledgerAccount: false,
   };
 }
 
