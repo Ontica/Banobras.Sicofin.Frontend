@@ -90,13 +90,15 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get showWithSubledgerAccountDisabled(): boolean {
     return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.SaldosPorCuentaYMayor,
-            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceType.BalanzaValorizadaComparativa,
+            TrialBalanceType.SaldosPorAuxiliar,
+            TrialBalanceType.SaldosPorCuentaYMayor].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get withSubledgerAccountRequired(): boolean {
-    return [TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceType.BalanzaValorizadaComparativa,
+            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -119,6 +121,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceType.SaldosPorCuentaYMayor].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
+  get displayInitialPeriod() {
+    return ![TrialBalanceType.SaldosPorCuenta,
+             TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
 
   get displayLevel(): boolean {
     return !this.showCascadeBalancesRequired;
@@ -132,8 +139,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
   get initalPeriodDatesValid(): boolean {
-    return !!this.trialBalanceCommand.initialPeriod.fromDate &&
-           !!this.trialBalanceCommand.initialPeriod.toDate;
+    if (this.displayInitialPeriod) {
+      return !!this.trialBalanceCommand.initialPeriod.fromDate &&
+             !!this.trialBalanceCommand.initialPeriod.toDate;
+    }
+
+    return !!this.trialBalanceCommand.initialPeriod.fromDate;
   }
 
 
@@ -271,7 +282,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       ledgers: this.trialBalanceCommand.ledgers,
       initialPeriod: {
         fromDate: this.trialBalanceCommand.initialPeriod.fromDate,
-        toDate: this.trialBalanceCommand.initialPeriod.toDate,
+        toDate: this.getInitPeriodToDate(),
       },
       fromAccount: this.trialBalanceCommand.fromAccount,
       showCascadeBalances: this.trialBalanceCommand.showCascadeBalances,
@@ -285,6 +296,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.validateCommandFields(data);
     this.validateExchangeRatesFields(data);
     return data;
+  }
+
+
+  private getInitPeriodToDate() {
+    return this.displayInitialPeriod ? this.trialBalanceCommand.initialPeriod.toDate :
+      this.trialBalanceCommand.initialPeriod.fromDate;
   }
 
 

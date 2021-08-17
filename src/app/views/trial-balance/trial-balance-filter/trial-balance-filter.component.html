@@ -25,7 +25,7 @@
 
           <div fxLayout="row" #initialPeriodSection>
 
-            <div fxFlex="none">
+            <div *ngIf="displayInitialPeriod" fxFlex="none">
 
               <label>Periodo inicial:</label>
 
@@ -36,6 +36,18 @@
                              !trialBalanceCommand.initialPeriod.toDate">
 
               </emp-ng-date-range-picker>
+
+            </div>
+
+            <div *ngIf="!displayInitialPeriod" fxFlex="none">
+
+              <label>Fecha:</label>
+
+              <emp-ng-datepicker name="date"
+                [(ngModel)]="trialBalanceCommand.initialPeriod.fromDate"
+                [showError]="!trialBalanceCommand.initialPeriod.fromDate">
+
+              </emp-ng-datepicker>
 
             </div>
 
