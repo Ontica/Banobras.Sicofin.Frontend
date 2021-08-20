@@ -11,7 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { EmptyVoucher, EmptyVoucherEntry, Voucher, VoucherEntry, VoucherFields } from '@app/models';
+import { EmptyVoucher, EmptyVoucherEntry, Voucher, VoucherEntry, VoucherEntryFields,
+         VoucherFields } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -83,13 +84,12 @@ export class VoucherEditorComponent {
 
       case VoucherEntryTableEventType.UPDATE_VOUCHER_ENTRY_CLICKED:
         Assertion.assertValue(event.payload.voucherEntry, 'event.payload.voucherEntry');
-
         this.setSelectedVoucherEntry(event.payload.voucherEntry as VoucherEntry);
-
         return;
 
       case VoucherEntryTableEventType.REMOVE_VOUCHER_ENTRY_CLICKED:
-        console.log('REMOVE_VOUCHER_ENTRY_CLICKED', event.payload.voucherEntry);
+        Assertion.assertValue(event.payload.voucherEntry.id, 'event.payload.voucherEntry.id');
+        this.deleteVoucherEntry(event.payload.voucherEntry.id);
         return;
 
       default:
@@ -109,11 +109,11 @@ export class VoucherEditorComponent {
 
       case VoucherEntryEditorEventType.CLOSE_MODAL_CLICKED:
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
-
         return;
 
       case VoucherEntryEditorEventType.CREATE_VOUCHER_ENTRY:
-        console.log('CREATE_VOUCHER_ENTRY', event.payload);
+        Assertion.assertValue(event.payload.voucherEntry, 'event.payload.voucherEntry');
+        this.appendVoucherEntry(event.payload.voucherEntry as VoucherEntryFields);
         return;
 
       case VoucherEntryEditorEventType.UPDATE_VOUCHER_ENTRY:
@@ -146,6 +146,31 @@ export class VoucherEditorComponent {
       .toPromise()
       .then(x => {
         sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_DELETED, {voucher: this.voucher});
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private appendVoucherEntry(voucherEntryFields: VoucherEntryFields) {
+    this.submitted = true;
+
+    this.vouchersData.appendVoucherEntry(voucherEntryFields.voucherId, voucherEntryFields)
+      .toPromise()
+      .then(x => {
+        this.setSelectedVoucherEntry(EmptyVoucherEntry);
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private deleteVoucherEntry(voucherEntryId: number) {
+    this.submitted = true;
+
+    this.vouchersData.deleteVoucherEntry(this.voucher.id, voucherEntryId)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
       })
       .finally(() => this.submitted = false);
   }

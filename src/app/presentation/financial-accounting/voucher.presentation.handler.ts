@@ -29,6 +29,7 @@ export enum EffectType {
 
 
 export enum SelectorType {
+  EVENT_TYPES_LIST = 'FA.Vouchers.Selector.EventTypes.List',
   FUNCTIONAL_AREAS_LIST = 'FA.Vouchers.Selector.FunctionalAreas.List',
   TRANSACTION_TYPES_LIST = 'FA.Vouchers.Selector.TransactionTypes.List',
   VOUCHER_TYPES_LIST = 'FA.Vouchers.Selector.VoucherTypes.List',
@@ -37,6 +38,7 @@ export enum SelectorType {
 
 
 const initialState: StateValues = [
+  { key: SelectorType.EVENT_TYPES_LIST, value: [] },
   { key: SelectorType.FUNCTIONAL_AREAS_LIST, value: [] },
   { key: SelectorType.TRANSACTION_TYPES_LIST, value: [] },
   { key: SelectorType.VOUCHER_TYPES_LIST, value: [] },
@@ -62,6 +64,11 @@ export class VoucherPresentationHandler extends AbstractPresentationHandler {
     let provider: () => any;
 
     switch (selectorType) {
+      case SelectorType.EVENT_TYPES_LIST:
+        provider = () => this.data.getEventTypes();
+
+        return super.selectFirst<U>(selectorType, provider);
+
       case SelectorType.FUNCTIONAL_AREAS_LIST:
         provider = () => this.data.getFunctionalAreas();
 
@@ -79,7 +86,6 @@ export class VoucherPresentationHandler extends AbstractPresentationHandler {
 
       default:
         return super.select<U>(selectorType, params);
-
     }
   }
 

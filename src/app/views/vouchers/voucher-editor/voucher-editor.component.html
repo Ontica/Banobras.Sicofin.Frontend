@@ -25,6 +25,7 @@
 </div>
 
 <emp-fa-voucher-entry-editor *ngIf="displayVoucherEntryEditor"
+  [voucherId]="voucher.id"
   [voucherEntry]="selectedVoucherEntry"
   (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
 

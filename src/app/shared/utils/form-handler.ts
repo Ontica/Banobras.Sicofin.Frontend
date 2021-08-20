@@ -33,7 +33,9 @@ export class FormHandler {
   }
 
   showInvalidControl(name: string) {
-    return this.getControl(name).touched && !this.getControl(name).valid;
+    return this.getControl(name).touched &&
+           this.getControl(name).enabled &&
+           this.getControl(name).invalid;
   }
 
   validateReadyForSubmit() {

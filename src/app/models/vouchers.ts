@@ -7,6 +7,7 @@
 
 import { Assertion, DateString, Empty, Identifiable } from '@app/core';
 
+import { AccountRole, DebtorCreditorType } from './accounts-chart';
 
 export enum VoucherStage {
   MyInbox = 'MyInbox',
@@ -302,4 +303,73 @@ export function mapVoucherStageFromViewName(viewName: string): VoucherStage {
     default:
       throw Assertion.assertNoReachThisCode(`Unhandled transaction stage for view '${viewName}'.`);
   }
+}
+
+
+export interface VoucherEntryFields {
+  voucherId: number;
+  referenceEntryId: number;
+  voucherEntryType: VoucherEntryType;
+  ledgerAccountId: number;
+  sectorId: number;
+  subledgerAccountId: number;
+  currencyId: number;
+  amount: number;
+  exchangeRate: number;
+  baseCurrencyAmount: number;
+  responsibilityAreaId: number;
+  budgetConcept: string;
+  eventTypeId: string;
+  verificationNumber: string;
+  date?: string;
+  concept: string;
+}
+
+
+export interface LedgerAccount {
+  id: number;
+  ledger: Identifiable;
+  number: string;
+  name: string;
+  description: string;
+  accountType: string;
+  role: AccountRole;
+  debtorCreditor: DebtorCreditorType;
+  level: number;
+  currencies: Identifiable[];
+  sectors: LedgerAccountSectorRule[];
+}
+
+
+export const EmptyLedgerAccount: LedgerAccount = {
+  id: 0,
+  ledger: Empty,
+  number: '',
+  name: '',
+  description: '',
+  accountType: '',
+  role: null,
+  debtorCreditor: null,
+  level: 0,
+  currencies: [],
+  sectors: [],
+};
+
+
+export interface LedgerAccountSectorRule {
+  id: number;
+  code: string;
+  name: string;
+  role: AccountRole;
+}
+
+
+export interface SubsidiaryAccount {
+  id: number;
+  ledger: Identifiable;
+  subsidiaryLedger: Identifiable;
+  number: string;
+  name: string;
+  keywords: string;
+  description: string;
 }

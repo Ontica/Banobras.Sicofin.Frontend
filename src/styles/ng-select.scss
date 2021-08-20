@@ -11,6 +11,7 @@
 $primary-font-family: $font-family-secondary;
 $font-size: 11pt;
 $font-size-small: 10pt;
+$font-size-xsmall: 9pt;
 
 .ng-select {
   margin-right: 8px;
@@ -19,8 +20,24 @@ $font-size-small: 10pt;
 
 .ng-dropdown-panel-items,
 .ng-select-container {
+  .item {
+    padding: 0.25rem 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .item-highlight {
+    color: $selected-control-color;
+  }
+
   .item-text-sm {
     font-size: $font-size-small;
+    text-overflow: ellipsis;
+  }
+
+  .item-text-xs {
+    font-size: $font-size-xsmall;
     text-overflow: ellipsis;
   }
 }

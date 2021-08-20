@@ -26,7 +26,9 @@ export class AccountsChartListEntryComponent {
   @Output() accountClicked = new EventEmitter<AccountDescriptor>();
 
   onAccountClicked(){
-    this.accountClicked.emit(this.account);
+    if (window.getSelection().toString().length <= 0) {
+      this.accountClicked.emit(this.account);
+    }
   }
 
 

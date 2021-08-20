@@ -46,7 +46,7 @@ export class VoucherEntryTableComponent implements OnChanges {
 
 
   onUpdateVoucherEntryClicked(voucherEntry: VoucherEntryDescriptor) {
-    if (!(window.getSelection().toString().length > 0)) {
+    if (window.getSelection().toString().length <= 0) {
       sendEvent(this.voucherEntryTableEvent, VoucherEntryTableEventType.UPDATE_VOUCHER_ENTRY_CLICKED,
         {voucherEntry});
     }

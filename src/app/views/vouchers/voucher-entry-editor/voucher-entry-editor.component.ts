@@ -10,18 +10,23 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { concat, Observable, of, Subject } from 'rxjs';
+import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
-import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
-         tap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
-
-import { EmptyVoucherEntry, VoucherEntry, VoucherEntryTypeList } from '@app/models';
+import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
+         SubsidiaryAccount,
+         VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { VouchersDataService } from '@app/data-services';
+
+import { VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 
 export enum VoucherEntryEditorEventType {
@@ -53,9 +58,13 @@ enum VoucherEntryEditorFormControls {
 })
 export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy {
 
+  @Input() voucherId: number;
+
   @Input() voucherEntry: VoucherEntry = EmptyVoucherEntry;
 
   @Output() voucherEntryEditorEvent = new EventEmitter<EventInfo>();
+
+  helper: SubscriptionHelper;
 
   formHandler: FormHandler;
   controls = VoucherEntryEditorFormControls;
@@ -63,22 +72,34 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   isLoading = false;
 
   voucherEntryTypeList: Identifiable[] = VoucherEntryTypeList;
+  functionalAreasList: Identifiable[] = [];
+  eventTypesList: Identifiable[] = [];
 
-  helper: SubscriptionHelper;
-
-  ledgerAccountList$: Observable<any[]>;
+  ledgerAccountList$: Observable<LedgerAccount[]>;
   ledgerAccountInput$ = new Subject<string>();
+  ledgerAccountMinTermLength = 4;
   ledgerAccountLoading = false;
-  minTermLength = 5;
 
-  constructor(private uiLayer: PresentationLayer) {
+  subledgerAccountList$: Observable<SubsidiaryAccount[]>;
+  subledgerAccountInput$ = new Subject<string>();
+  subledgerAccountMinTermLength = 5;
+  subledgerAccountLoading = false;
+
+  sectorRequired = false;
+  subledgerAccountRequired = false;
+
+  constructor(private uiLayer: PresentationLayer,
+              private vouchersData: VouchersDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
+    this.onLedgerAccountChanges();
   }
 
 
   ngOnInit(): void {
+    this.loadDataLists();
     this.subscribeLedgerAccountList();
+    this.subscribeSubledgerAccountList();
   }
 
 
@@ -88,6 +109,8 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
       if (this.editionMode) {
         this.setFormData();
+        this.subscribeLedgerAccountList();
+        this.subscribeSubledgerAccountList();
       }
     }
   }
@@ -98,8 +121,96 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
+  get ledgerAccountSelected() {
+    const ledgerAccount: LedgerAccount = this.formHandler.getControl(this.controls.ledgerAccount).value;
+    return ledgerAccount?.id > 0 ? ledgerAccount : EmptyLedgerAccount;
+  }
+
+
+  get subledgerAccountSelected() {
+    const subledgerAccount: any = this.formHandler.getControl(this.controls.subledgerAccount).value;
+    return subledgerAccount?.id > 0 ? subledgerAccount : null;
+  }
+
+
+  get placeholderSector() {
+    if (this.formHandler.getControl(this.controls.ledgerAccount).valid) {
+      if (this.sectorRequired) {
+        return 'Seleccionar';
+      }
+      return 'No aplica';
+    }
+    return 'Seleccione la cuenta';
+  }
+
+
+  get placeholderSubledgerAccount() {
+    if (this.formHandler.getControl(this.controls.ledgerAccount).valid) {
+      if (this.sectorRequired && this.formHandler.getControl(this.controls.sector).invalid) {
+        return 'Seleccione el sector';
+      }
+
+      if (this.subledgerAccountRequired) {
+        return 'Seleccionar';
+      }
+      return 'No aplica';
+    }
+    return 'Seleccione la cuenta';
+  }
+
+
+  get placeholderCurrency() {
+    return this.formHandler.getControl(this.controls.ledgerAccount).valid ?
+      'Seleccionar' : 'Seleccione la cuenta';
+  }
+
+
   onClose() {
     sendEvent(this.voucherEntryEditorEvent, VoucherEntryEditorEventType.CLOSE_MODAL_CLICKED);
+  }
+
+
+  onLedgerAccountChanges() {
+    this.formHandler.getControl(this.controls.currency).reset();
+
+    this.sectorRequired = this.ledgerAccountSelected.role === AccountRole.Sectorizada;
+    this.formHandler.getControl(this.controls.sector).reset();
+    this.formHandler.disableControl(this.controls.sector, !this.sectorRequired);
+
+    if (this.sectorRequired) {
+      this.formHandler.setControlValidators(this.controls.sector, Validators.required);
+    } else {
+      this.formHandler.clearControlValidators(this.controls.sector);
+    }
+
+    this.onSectorChanges(null);
+  }
+
+
+  onClearLedgerAccount() {
+    this.onLedgerAccountChanges();
+    this.subscribeLedgerAccountList();
+    this.subscribeSubledgerAccountList();
+  }
+
+
+  onSectorChanges(sectorRule: LedgerAccountSectorRule) {
+    this.subledgerAccountRequired = this.ledgerAccountSelected.role === AccountRole.Control ||
+      this.sectorRequired && sectorRule?.role === AccountRole.Control;
+
+    this.formHandler.getControl(this.controls.subledgerAccount).reset();
+    this.formHandler.disableControl(this.controls.subledgerAccount, !this.subledgerAccountRequired);
+
+    if (this.subledgerAccountRequired) {
+      this.formHandler.setControlValidators(this.controls.subledgerAccount, Validators.required);
+    } else {
+      this.formHandler.clearControlValidators(this.controls.subledgerAccount);
+    }
+  }
+
+
+  onClearSubledgerAccount() {
+    this.subscribeSubledgerAccountList();
   }
 
 
@@ -138,13 +249,31 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       return;
     }
 
-    let eventType = VoucherEntryEditorEventType.CREATE_VOUCHER_ENTRY;
+    const eventType = this.editionMode ?
+      VoucherEntryEditorEventType.UPDATE_VOUCHER_ENTRY :
+      VoucherEntryEditorEventType.CREATE_VOUCHER_ENTRY;
 
-    if (this.editionMode) {
-      eventType = VoucherEntryEditorEventType.UPDATE_VOUCHER_ENTRY;
-    }
+    const payload = {
+      voucherEntry: this.getFormData(),
+      voucherEntryId: this.voucherEntry.id,
+    };
 
-    sendEvent(this.voucherEntryEditorEvent, eventType, {voucher: this.getFormData()});
+    sendEvent(this.voucherEntryEditorEvent, eventType, payload);
+  }
+
+
+  private loadDataLists() {
+    this.isLoading = true;
+
+    combineLatest([
+      this.helper.select<Identifiable[]>(VoucherStateSelector.EVENT_TYPES_LIST),
+      this.helper.select<Identifiable[]>(VoucherStateSelector.FUNCTIONAL_AREAS_LIST)
+    ])
+    .subscribe(([x, y]) => {
+      this.eventTypesList = x;
+      this.functionalAreasList = y;
+      this.isLoading = false;
+    });
   }
 
 
@@ -156,7 +285,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     this.formHandler = new FormHandler(
       new FormGroup({
         voucherEntryType: new FormControl('', Validators.required),
-        ledgerAccount: new FormControl('', Validators.required),
+        ledgerAccount: new FormControl(null, Validators.required),
         sector: new FormControl('', Validators.required),
         subledgerAccount: new FormControl('', Validators.required),
         currency: new FormControl('', Validators.required),
@@ -164,10 +293,10 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
         exchangeRate: new FormControl('', Validators.required),
         baseCurrencyAmount: new FormControl('', Validators.required),
         responsibilityArea: new FormControl(''),
-        budgetConcept: new FormControl(''),
+        budgetConcept: new FormControl('', Validators.maxLength(6)),
         eventType: new FormControl(''),
-        verificationNumber: new FormControl(''),
-        concept: new FormControl(''),
+        verificationNumber: new FormControl('', Validators.maxLength(6)),
+        concept: new FormControl('', Validators.maxLength(255)),
         date: new FormControl(''),
       })
     );
@@ -182,9 +311,9 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
     this.formHandler.form.reset({
       voucherEntryType: this.voucherEntry.voucherEntryType || '',
-      ledgerAccount: this.voucherEntry.ledgerAccount?.uid || '',
-      sector: this.voucherEntry.sector.name || '',
-      subledgerAccount: this.voucherEntry.subledgerAccount?.uid || '',
+      ledgerAccount: this.voucherEntry.ledgerAccount || null,
+      sector: this.voucherEntry.sector?.name || '',
+      subledgerAccount: this.voucherEntry.subledgerAccount || '',
       currency: this.voucherEntry.currency?.uid || '',
       amount: this.voucherEntry.amount || '',
       exchangeRate: this.voucherEntry.exchangeRate || '',
@@ -199,28 +328,33 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  private getFormData(): any {
+  private getFormData(): VoucherEntryFields {
     Assertion.assert(this.formHandler.form.valid,
       'Programming error: form must be validated before command execution.');
 
     const formModel = this.formHandler.form.getRawValue();
 
-    const data: any = {
+    const data: VoucherEntryFields = {
+      voucherId: this.voucherId,
+      referenceEntryId: null,
       voucherEntryType: formModel.voucherEntryType ?? '',
-      ledgerAccount: formModel.ledgerAccount ?? '',
-      sector: formModel.sector ?? '',
-      subledgerAccount: formModel.subledgerAccount ?? '',
-      currency: formModel.currency ?? '',
-      amount: formModel.amount ?? '',
-      exchangeRate: formModel.exchangeRate ?? '',
-      baseCurrencyAmount: formModel.baseCurrencyAmount ?? '',
-      responsibilityArea: formModel.responsibilityArea ?? '',
+      ledgerAccountId: formModel.ledgerAccount?.id ?? '',
+      sectorId: formModel.sector ?? '',
+      subledgerAccountId: formModel.subledgerAccount?.id ?? '',
+      currencyId: formModel.currency ?? '',
+      amount: FormatLibrary.stringToNumber(formModel.amount),
+      exchangeRate: FormatLibrary.stringToNumber(formModel.exchangeRate),
+      baseCurrencyAmount: FormatLibrary.stringToNumber(formModel.baseCurrencyAmount),
+      responsibilityAreaId: formModel.responsibilityArea ?? '',
       budgetConcept: formModel.budgetConcept ?? '',
-      eventType: formModel.eventType ?? '',
+      eventTypeId: formModel.eventType ?? '',
       verificationNumber: formModel.verificationNumber ?? '',
       concept: formModel.concept ?? '',
-      date: formModel.date ?? '',
     };
+
+    if (formModel.date) {
+      data.date = formModel.date;
+    }
 
     return data;
   }
@@ -228,29 +362,41 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   private subscribeLedgerAccountList() {
     this.ledgerAccountList$ = concat(
-      of([]),
+      of(this.ledgerAccountSelected.id > 0 ? [this.ledgerAccountSelected] : []),
       this.ledgerAccountInput$.pipe(
-          filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-          distinctUntilChanged(),
-          debounceTime(800),
-          tap(() => this.ledgerAccountLoading = true),
-          switchMap(keyword =>
-            of([]).pipe(
-              delay(2000),
-              catchError(() => of([])),
-              tap(() => this.ledgerAccountLoading = false)
-          ))
+        filter(keyword => keyword !== null && keyword.length >= this.ledgerAccountMinTermLength),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.ledgerAccountLoading = true),
+        switchMap(keyword =>
+          this.vouchersData.searchAccountsForEdition(this.voucherId, keyword)
+          .pipe(
+            catchError(() => of([])),
+            tap(() => this.ledgerAccountLoading = false)
+        ))
       )
     );
   }
 
 
-  private buildLedgerAccountFilter(keywords: string): any {
-    const ledgerAccountFilter: any = {
-      keywords
-    };
-
-    return ledgerAccountFilter;
+  private subscribeSubledgerAccountList() {
+    this.subledgerAccountList$ = concat(
+      of(this.subledgerAccountSelected?.id > 0 ? [this.subledgerAccountSelected] : []),
+      this.subledgerAccountInput$.pipe(
+        filter(keyword => keyword !== null && keyword.length >= this.subledgerAccountMinTermLength),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.subledgerAccountLoading = true),
+        switchMap(keyword =>
+          this.vouchersData.searchSubledgerAccountsForEdition(this.voucherId,
+                                                              this.ledgerAccountSelected.id,
+                                                              keyword)
+          .pipe(
+            catchError(() => of([])),
+            tap(() => this.subledgerAccountLoading = false)
+        ))
+      )
+    );
   }
 
 }

@@ -43,30 +43,43 @@
 
               <div fxLayout="row">
 
-                <div fxFlex>
+                <div fxFlex="calc(100% - 85px)">
                   <label>Cuenta:</label>
                   <emp-ng-select
-                    [config]="{ hideSelected: true, minTermLength: minTermLength }"
+                    [config]="{ bindByValue: false,
+                                clearable: true,
+                                minTermLength: ledgerAccountMinTermLength,
+                                typeToSearchText: 'Ingrese ' + ledgerAccountMinTermLength +' o más caracteres'}"
                     [formControlName]="controls.ledgerAccount"
                     [items]="ledgerAccountList$ | async"
                     [typeahead]="ledgerAccountInput$"
                     [loading]="ledgerAccountLoading"
-                    placeholder="Buscar cuenta"
-                    [showError]="formHandler.showInvalidControl(controls.ledgerAccount)">
+                    [showError]="formHandler.showInvalidControl(controls.ledgerAccount)"
+                    (clear)="onClearLedgerAccount()"
+                    (changes)="onLedgerAccountChanges()"
+                    bindValue="id"
+                    placeholder="Buscar cuenta">
                     <ng-template #labelTemplate let-item="item">
-                      {{item.name}}
+                      {{item.number}}: {{item.name}}
                     </ng-template>
                     <ng-template #optionTemplate let-item="item">
-                      {{item.name}}
+                      {{item.number}}: {{item.name}}
                     </ng-template>
                   </emp-ng-select>
                 </div>
 
-                <div fxFlex="50px">
+                <div fxFlex="85px">
                   <label>Sector:</label>
-                  <input type="text" class="text-box"
+                  <emp-ng-select
                     [formControlName]="controls.sector"
-                    [class.invalid-control]="formHandler.showInvalidControl(controls.sector)">
+                    [items]="ledgerAccountSelected.sectors"
+                    [placeholder]="placeholderSector"
+                    [showError]="formHandler.showInvalidControl(controls.sector)"
+                    [title]="placeholderSector"
+                    (changes)="onSectorChanges($event)"
+                    bindValue="id"
+                    bindLabel="code">
+                  </emp-ng-select>
                 </div>
 
               </div>
@@ -76,9 +89,30 @@
                 <div [fxFlex]="100">
                   <label>Auxiliar:</label>
                   <emp-ng-select
+                    [config]="{ bindByValue: false,
+                                clearable: true,
+                                minTermLength: subledgerAccountMinTermLength,
+                                typeToSearchText: 'Ingrese ' + subledgerAccountMinTermLength +' o más caracteres'}"
                     [formControlName]="controls.subledgerAccount"
-                    [items]="[]"
-                    [showError]="formHandler.showInvalidControl(controls.subledgerAccount)">
+                    [items]="subledgerAccountList$ | async"
+                    [typeahead]="subledgerAccountInput$"
+                    [loading]="subledgerAccountLoading"
+                    [placeholder]="placeholderSubledgerAccount"
+                    [showError]="formHandler.showInvalidControl(controls.subledgerAccount)"
+                    (clear)="onClearSubledgerAccount()"
+                    bindValue="id">
+
+                    <ng-template #labelTemplate let-item="item">
+                      {{item.number}} {{item.name ? ' | ' + item.name : ''}}
+                    </ng-template>
+
+                    <ng-template #optionTemplate let-item="item">
+                      <div class="item">
+                        <span class="item-highlight">{{item.number}}</span> <br>
+                        <span class="item-text-xs">{{item.name}}</span>
+                      </div>
+                    </ng-template>
+
                   </emp-ng-select>
                 </div>
 
@@ -90,7 +124,8 @@
                   <label>Moneda:</label>
                   <emp-ng-select
                     [formControlName]="controls.currency"
-                    [items]="[]"
+                    [items]="ledgerAccountSelected.currencies"
+                    [placeholder]="placeholderCurrency"
                     [showError]="formHandler.showInvalidControl(controls.currency)">
                   </emp-ng-select>
                 </div>
@@ -104,7 +139,8 @@
                   <input type="text" class="text-box text-align-right" empNgCurrency
                     empNgCurrencyDisplaySymbol=""
                     [formControlName]="controls.amount"
-                    [class.invalid-control]="formHandler.showInvalidControl(controls.amount)">
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.amount)"
+                    (change)="onCalculateBaseCurrencyAmountClicked()">
                 </div>
 
               </div>
@@ -116,7 +152,8 @@
                   <input type="text" class="text-box text-align-right" empNgCurrency
                     empNgCurrencyDisplaySymbol=""
                     [formControlName]="controls.exchangeRate"
-                    [class.invalid-control]="formHandler.showInvalidControl(controls.exchangeRate)">
+                    [class.invalid-control]="formHandler.showInvalidControl(controls.exchangeRate)"
+                    (change)="onCalculateBaseCurrencyAmountClicked()">
                 </div>
 
               </div>
@@ -124,13 +161,7 @@
               <div fxLayout="row">
 
                 <div [fxFlex]="100">
-                  <label>
-                    <span [fxFlex]="50">Monto en moneda base:</span>
-                    <a class="link" (click)="onCalculateBaseCurrencyAmountClicked()"
-                      [fxFlex]="50" fxLayoutAlign="end" [style.marginRight.px]="8">
-                      ( Calcular monto )
-                    </a>
-                  </label>
+                  <label>Monto en moneda base:</label>
                   <input type="text" class="text-box text-align-right" empNgCurrency
                     empNgCurrencyDisplaySymbol=""
                     [formControlName]="controls.baseCurrencyAmount"
@@ -148,8 +179,10 @@
                 <div [fxFlex]="100">
                   <label>Area de responsabilidad:</label>
                   <emp-ng-select
+                    [config]="{ clearable: true }"
                     [formControlName]="controls.responsibilityArea"
-                    [items]="[]"
+                    [items]="functionalAreasList"
+                    [loading]="isLoading"
                     [showError]="formHandler.showInvalidControl(controls.responsibilityArea)">
                   </emp-ng-select>
                 </div>
@@ -159,7 +192,13 @@
               <div fxLayout="row">
 
                 <div [fxFlex]="100">
-                  <label>Concepto presupuestal:</label>
+                  <label>
+                    Concepto presupuestal:
+                    <span class="warning-text">
+                      {{formHandler.showInvalidControl(controls.budgetConcept) ?
+                      '(máximo 6 caracteres permitidos)' : ''}}
+                    </span>
+                  </label>
                   <input type="text" class="text-box"
                     [formControlName]="controls.budgetConcept"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.budgetConcept)">
@@ -172,8 +211,10 @@
                 <div [fxFlex]="100">
                   <label>Tipo de evento:</label>
                   <emp-ng-select
+                    [config]="{ clearable: true }"
                     [formControlName]="controls.eventType"
-                    [items]="[]"
+                    [items]="eventTypesList"
+                    [loading]="isLoading"
                     [showError]="formHandler.showInvalidControl(controls.eventType)">
                   </emp-ng-select>
                 </div>
@@ -183,7 +224,13 @@
               <div fxLayout="row">
 
                 <div fxFlex>
-                  <label>Número de verificación:</label>
+                  <label>
+                    Número de verificación:
+                    <span class="warning-text">
+                      {{formHandler.showInvalidControl(controls.verificationNumber) ?
+                      '(máximo 6 caracteres permitidos)' : ''}}
+                    </span>
+                  </label>
                   <input type="text" class="text-box"
                     [formControlName]="controls.verificationNumber"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.verificationNumber)">
@@ -206,7 +253,13 @@
               <div fxLayout="row" fxFlex="108px">
 
                 <div [fxFlex]="100">
-                  <label>Concepto:</label>
+                  <label>
+                    Concepto:
+                    <span class="warning-text">
+                      {{formHandler.showInvalidControl(controls.concept) ?
+                      '(máximo 255 caracteres permitidos)' : ''}}
+                    </span>
+                  </label>
                   <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
                     [formControlName]="controls.concept"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.concept)">
