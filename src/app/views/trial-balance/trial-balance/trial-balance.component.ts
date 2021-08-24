@@ -61,6 +61,8 @@ export class TrialBalanceComponent {
 
         this.trialBalanceCommand = event.payload.trialBalanceCommand as TrialBalanceCommand;
 
+        this.setTrialBalanceData(EmptyTrialBalance);
+
         this.getTrialBalance(this.trialBalanceCommand);
 
         return;

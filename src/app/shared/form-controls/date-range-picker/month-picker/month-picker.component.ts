@@ -91,6 +91,11 @@ export class MonthPickerComponent implements OnInit {
 
 
   onMonthClicked(indexClicked) {
+    if (this.rangeIndexes.startIndex !== null && this.rangeIndexes.endIndex !== null) {
+      this.rangeIndexes.startIndex = null;
+      this.rangeIndexes.endIndex = null;
+    }
+
     if (this.rangeIndexes.startIndex === null) {
       this.rangeIndexes.startIndex = this.calculateMonthIndex(indexClicked);
       return;
@@ -108,13 +113,7 @@ export class MonthPickerComponent implements OnInit {
       this.rangeIndexes.endIndex = endIndex;
       this.updateMonthDataInRange();
       this.validateEmitData();
-
-      return;
     }
-
-    this.resetRange();
-    this.onMonthClicked(indexClicked);
-    this.sliceDataIntoView();
   }
 
 
