@@ -222,11 +222,81 @@ export const EmptyNumberedNamedEntity: NumberedNamedEntity = {
 };
 
 
+export interface LedgerAccount {
+  id: number;
+  ledger: Identifiable;
+  number: string;
+  name: string;
+  description: string;
+  accountType: string;
+  role: AccountRole;
+  debtorCreditor: DebtorCreditorType;
+  level: number;
+  currencies: Identifiable[];
+  sectors: LedgerAccountSectorRule[];
+}
+
+
+export const EmptyLedgerAccount: LedgerAccount = {
+  id: 0,
+  ledger: Empty,
+  number: '',
+  name: '',
+  description: '',
+  accountType: '',
+  role: null,
+  debtorCreditor: null,
+  level: 0,
+  currencies: [],
+  sectors: [],
+};
+
+
+export interface LedgerAccountSectorRule {
+  id: number;
+  code: string;
+  name: string;
+  role: AccountRole;
+}
+
+
+export const EmptyLedgerAccountSectorRule: LedgerAccountSectorRule = {
+  id: 0,
+  code: '',
+  name: '',
+  role: null,
+};
+
+
+export interface SubsidiaryAccount {
+  id: number;
+  ledger: Identifiable;
+  subsidiaryLedger: Identifiable;
+  number: string;
+  name: string;
+  keywords: string;
+  description: string;
+}
+
+
+export function mapSubsidiaryAccountFromNumberedNamedEntity(entity: NumberedNamedEntity): SubsidiaryAccount {
+  return {
+    id: +entity.uid,
+    ledger: Empty,
+    subsidiaryLedger: Empty,
+    number: entity.number,
+    name: entity.name,
+    keywords: '',
+    description: '',
+  };
+}
+
+
 export interface VoucherEntry {
   id: number;
   voucherEntryType: VoucherEntryType;
-  ledgerAccount: NumberedNamedEntity;
-  sector: Identifiable;
+  ledgerAccount: LedgerAccount;
+  sector: LedgerAccountSectorRule;
   subledgerAccount: NumberedNamedEntity;
   concept: string;
   date: string;
@@ -247,8 +317,8 @@ export interface VoucherEntry {
 export const EmptyVoucherEntry: VoucherEntry = {
   id: 0,
   voucherEntryType: VoucherEntryType.Debit,
-  ledgerAccount: EmptyNumberedNamedEntity,
-  sector: Empty,
+  ledgerAccount: EmptyLedgerAccount,
+  sector: EmptyLedgerAccountSectorRule,
   subledgerAccount: EmptyNumberedNamedEntity,
   concept: '',
   date: '',
@@ -323,53 +393,4 @@ export interface VoucherEntryFields {
   verificationNumber: string;
   date?: string;
   concept: string;
-}
-
-
-export interface LedgerAccount {
-  id: number;
-  ledger: Identifiable;
-  number: string;
-  name: string;
-  description: string;
-  accountType: string;
-  role: AccountRole;
-  debtorCreditor: DebtorCreditorType;
-  level: number;
-  currencies: Identifiable[];
-  sectors: LedgerAccountSectorRule[];
-}
-
-
-export const EmptyLedgerAccount: LedgerAccount = {
-  id: 0,
-  ledger: Empty,
-  number: '',
-  name: '',
-  description: '',
-  accountType: '',
-  role: null,
-  debtorCreditor: null,
-  level: 0,
-  currencies: [],
-  sectors: [],
-};
-
-
-export interface LedgerAccountSectorRule {
-  id: number;
-  code: string;
-  name: string;
-  role: AccountRole;
-}
-
-
-export interface SubsidiaryAccount {
-  id: number;
-  ledger: Identifiable;
-  subsidiaryLedger: Identifiable;
-  number: string;
-  name: string;
-  keywords: string;
-  description: string;
 }

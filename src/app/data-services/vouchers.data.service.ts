@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { LedgerAccount, SearchVouchersCommand, SubsidiaryAccount, Voucher, VoucherDescriptor,
-         VoucherEntryFields, VoucherFields } from '@app/models';
+         VoucherEntry, VoucherEntryFields, VoucherFields } from '@app/models';
 
 
 @Injectable()
@@ -142,6 +142,13 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/${voucherId}/entries/${voucherEntryId}`;
 
     return this.http.delete<Voucher>(path);
+  }
+
+
+  getVoucherEntry(voucherId: number, voucherEntryId: number): Observable<VoucherEntry> {
+    const path = `v2/financial-accounting/vouchers/${voucherId}/entries/${voucherEntryId}`;
+
+    return this.http.get<VoucherEntry>(path);
   }
 
 }

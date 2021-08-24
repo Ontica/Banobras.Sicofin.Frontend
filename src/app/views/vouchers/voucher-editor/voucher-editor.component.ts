@@ -83,8 +83,8 @@ export class VoucherEditorComponent {
     switch (event.type as VoucherEntryTableEventType) {
 
       case VoucherEntryTableEventType.UPDATE_VOUCHER_ENTRY_CLICKED:
-        Assertion.assertValue(event.payload.voucherEntry, 'event.payload.voucherEntry');
-        this.setSelectedVoucherEntry(event.payload.voucherEntry as VoucherEntry);
+        Assertion.assertValue(event.payload.voucherEntry.id, 'event.payload.voucherEntry.id');
+        this.getVoucherEntry(event.payload.voucherEntry.id);
         return;
 
       case VoucherEntryTableEventType.REMOVE_VOUCHER_ENTRY_CLICKED:
@@ -159,6 +159,18 @@ export class VoucherEditorComponent {
       .then(x => {
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
         sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private getVoucherEntry(voucherEntryId: number) {
+    this.submitted = true;
+
+    this.vouchersData.getVoucherEntry(this.voucher.id, voucherEntryId)
+      .toPromise()
+      .then(x => {
+        this.setSelectedVoucherEntry(x);
       })
       .finally(() => this.submitted = false);
   }
