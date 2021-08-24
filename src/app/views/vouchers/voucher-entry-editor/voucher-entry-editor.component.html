@@ -151,6 +151,7 @@
                   <label><a class="link" (click)="onExchangeRateClicked()">Tipo de cambio:</a></label>
                   <input type="text" class="text-box text-align-right" empNgCurrency
                     empNgCurrencyDisplaySymbol=""
+                    [empNgCurrencyFractionDigit]="6"
                     [formControlName]="controls.exchangeRate"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.exchangeRate)"
                     (change)="onCalculateBaseCurrencyAmountClicked()">

@@ -21,6 +21,8 @@ export class EmpCurrencyDirective implements OnChanges {
 
   @Input() empNgCurrencyDisplaySymbol = 'symbol-narrow';
 
+  @Input() empNgCurrencyFractionDigit = 2;
+
   constructor(private el: ElementRef,
               private currencyPipe: CurrencyPipe,
               @Optional() private control: NgControl) { }
@@ -60,9 +62,12 @@ export class EmpCurrencyDirective implements OnChanges {
 
     const numberValue = parseFloat(String(initalValue).replace(/[,$€]*/g, ''));
 
+    const digitsInfo = `1.${this.empNgCurrencyFractionDigit}-${this.empNgCurrencyFractionDigit}`;
+
     const formattedValue = this.currencyPipe.transform(numberValue,
                                                        this.empNgCurrencyCode,
-                                                       this.empNgCurrencyDisplaySymbol);
+                                                       this.empNgCurrencyDisplaySymbol,
+                                                       digitsInfo);
 
     this.setValue(formattedValue);
   }
