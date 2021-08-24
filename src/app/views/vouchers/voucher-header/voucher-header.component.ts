@@ -106,6 +106,11 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
+  get hasEntries() {
+    return this.voucher.entries.length > 0;
+  }
+
+
   enableEditor(enable) {
     this.editionMode = enable;
 
@@ -114,6 +119,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.disableForm(!this.editionMode);
+    this.validateDisabledFieldsByHasEntries();
+  }
+
+
+  validateDisabledFieldsByHasEntries() {
+    if (this.editionMode) {
+      this.formHandler.disableControl(this.controls.accountsChart, this.hasEntries);
+      this.formHandler.disableControl(this.controls.ledgerUID, this.hasEntries);
+    }
   }
 
 
