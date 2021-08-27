@@ -17,13 +17,14 @@ import { VoucherCreatorComponent } from './voucher-creator/voucher-creator.compo
 import { VoucherEditorComponent } from './voucher-editor/voucher-editor.component';
 import { VoucherEntryEditorComponent } from './voucher-entry-editor/voucher-entry-editor.component';
 import { VoucherEntryTableComponent } from './voucher-entry-table/voucher-entry-table.component';
+import { VoucherEntryUploaderComponent } from './voucher-entry-uploader/voucher-entry-uploader.component';
 import { VoucherFilterComponent } from './voucher-filter/voucher-filter.component';
 import { VoucherHeaderComponent } from './voucher-header/voucher-header.component';
 import { VoucherListComponent } from './voucher-list/voucher-list.component';
 import { VoucherListItemComponent } from './voucher-list/voucher-list-item.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
-import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';
 import { VouchersUploaderComponent } from './vouchers-uploader/vouchers-uploader.component';
+import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { VouchersUploaderComponent } from './vouchers-uploader/vouchers-uploader
     VoucherEditorComponent,
     VoucherEntryEditorComponent,
     VoucherEntryTableComponent,
+    VoucherEntryUploaderComponent,
     VoucherFilterComponent,
     VoucherHeaderComponent,
     VoucherListComponent,

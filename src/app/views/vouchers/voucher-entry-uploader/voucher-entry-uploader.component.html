@@ -1,0 +1,49 @@
+<emp-ng-modal-window [config]="{width:'750px'}">
+
+  <emp-ng-card
+    title='Importador de movimientos'
+    hint='Se importarán los movimientos contenidos en el archivo a SICOFIN'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+        <div fxLayout="row" fxLayout.lt-md="column">
+
+          <div fxFlex="100">
+            <label>Archivo:</label>
+            <emp-ng-file-control
+              [(fileControl)]="file"
+              [showError]="showFileError"
+              [config]="{filesTypes: ['excel'], autoUpload: true,
+                        placeholder: 'Elija o arrastre el archivo excel.'}">
+
+            </emp-ng-file-control>
+          </div>
+
+        </div>
+
+        <mat-divider class="horizontal"></mat-divider>
+
+        <div fxLayout="row">
+
+          <div fxFlex fxLayoutAlign="end center">
+
+            <button (click)="onSubmitForm()"
+              [class.btn]="showFileError"
+              [class.btn-action]="!showFileError">
+              Importar movimientos
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>
