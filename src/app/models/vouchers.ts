@@ -279,17 +279,20 @@ export interface SubsidiaryAccount {
 }
 
 
-export function mapSubsidiaryAccountFromNumberedNamedEntity(entity: NumberedNamedEntity): SubsidiaryAccount {
-  return {
-    id: +entity.uid,
-    ledger: Empty,
-    subsidiaryLedger: Empty,
-    number: entity.number,
-    name: entity.name,
-    keywords: '',
-    description: '',
-  };
+export interface SubledgerAccountDescriptor {
+  id: number;
+  number: string;
+  name: string;
+  fullname: string;
 }
+
+
+export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
+  id: 0,
+  number: '',
+  name: '',
+  fullname: '',
+};
 
 
 export interface VoucherEntry {
@@ -297,7 +300,7 @@ export interface VoucherEntry {
   voucherEntryType: VoucherEntryType;
   ledgerAccount: LedgerAccount;
   sector: LedgerAccountSectorRule;
-  subledgerAccount: NumberedNamedEntity;
+  subledgerAccount: SubledgerAccountDescriptor;
   concept: string;
   date: string;
   responsibilityArea: Identifiable;
@@ -319,7 +322,7 @@ export const EmptyVoucherEntry: VoucherEntry = {
   voucherEntryType: VoucherEntryType.Debit,
   ledgerAccount: EmptyLedgerAccount,
   sector: EmptyLedgerAccountSectorRule,
-  subledgerAccount: EmptyNumberedNamedEntity,
+  subledgerAccount: EmptySubledgerAccountDescriptor,
   concept: '',
   date: '',
   responsibilityArea: Empty,
@@ -389,8 +392,8 @@ export interface VoucherEntryFields {
   baseCurrencyAmount: number;
   responsibilityAreaId: number;
   budgetConcept: string;
-  eventTypeId: string;
+  eventTypeId: number;
   verificationNumber: string;
-  date?: string;
+  date?: DateString;
   concept: string;
 }
