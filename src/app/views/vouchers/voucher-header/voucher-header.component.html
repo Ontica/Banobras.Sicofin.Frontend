@@ -110,41 +110,79 @@
 
     </div>
 
+    <mat-divider class="horizontal" *ngIf="!(isSavedVoucher && !isOpenVoucher)"></mat-divider>
 
-    <mat-divider class="horizontal"></mat-divider>
+    <div fxLayout="row" *ngIf="!isSavedVoucher">
 
+      <div fxFlex fxLayoutAlign="end center">
+
+      </div>
+
+    </div>
 
     <div fxLayout="row">
 
-      <div *ngIf="editionMode && showEnableEditor" fxFlex fxLayoutAlign="start center">
-        <button (click)="onDeleteClicked()" type="button" class="btn-warning">
+      <div fxFlex fxLayoutAlign="start center" *ngIf="isSavedVoucher && isOpenVoucher">
+        <ng-container *ngIf="!editionMode">
+          <button *ngIf="voucher.actions?.reviewVoucher"
+            class="btn-action"
+            (click)="onEventButtonClicked(eventType.REVIEW_VOUCHER_BUTTON_CLICKED)">
+            Analizar póliza
+          </button>
+          <button *ngIf="voucher.actions?.sendToLedger"
+            class="btn-action"
+            (click)="onEventButtonClicked(eventType.SEND_TO_LEDGER_BUTTON_CLICKED)">
+            Enviar al diario
+          </button>
+          <button *ngIf="voucher.actions?.sendToSupervisor"
+            class="btn-action"
+            (click)="onEventButtonClicked(eventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED)">
+            Enviar a supervisión
+          </button>
+        </ng-container>
+
+        <button *ngIf="editionMode"
+          type="button" class="btn-warning"
+          (click)="onEventButtonClicked(eventType.DELETE_VOUCHER_CLICKED)">
           Eliminar
         </button>
       </div>
 
       <div fxFlex fxLayoutAlign="end center">
-        <ng-container *ngIf="!editionMode && showEnableEditor">
-          <button (click)="onAddVoucherEntryClicked()"
-            class="btn-action">
+        <ng-container *ngIf="!editionMode && isSavedVoucher && isOpenVoucher">
+          <button
+            class="btn-action"
+            (click)="onEventButtonClicked(eventType.ADD_VOUCHER_ENTRY_CLICKED)">
             Agregar movimiento
           </button>
-          <button (click)="enableEditor(true)"
-            class="btn-action">
+          <button
+            class="btn-action"
+            (click)="onEventButtonClicked(eventType.IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED)">
+            Importar movimientos
+          </button>
+
+          <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0"></mat-divider>
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
             Editar
           </button>
         </ng-container>
 
         <ng-container *ngIf="editionMode">
-          <button (click)="submitForm()" [class.btn]="!formHandler.isValid"
-            [class.btn-action]="formHandler.isValid">
+          <button
+            [class.btn]="!formHandler.isValid"
+            [class.btn-action]="formHandler.isValid"
+            (click)="submitForm()">
             Guardar
           </button>
-          <button *ngIf="showEnableEditor" class="btn-base uppercase"
+          <button *ngIf="isSavedVoucher"
+            class="btn-base uppercase"
             (click)="enableEditor(false)">
             Descartar Cambios
           </button>
         </ng-container>
-
       </div>
 
     </div>

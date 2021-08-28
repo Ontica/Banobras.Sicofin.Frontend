@@ -20,6 +20,8 @@ import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-ent
 
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
 
+import { VoucherEntryUploaderEventType } from '../voucher-entry-uploader/voucher-entry-uploader.component';
+
 import { VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
 
 export enum VoucherEditorEventType {
@@ -39,6 +41,8 @@ export class VoucherEditorComponent {
 
   submitted = false;
 
+  displayUploaderVoucherEntries = false;
+
   displayVoucherEntryEditor = false;
 
   selectedVoucherEntry: VoucherEntry = EmptyVoucherEntry;
@@ -46,7 +50,6 @@ export class VoucherEditorComponent {
   constructor(private vouchersData: VouchersDataService) {}
 
   onVoucherHeaderEvent(event: EventInfo): void {
-
     if (this.submitted) {
       return;
     }
@@ -67,6 +70,17 @@ export class VoucherEditorComponent {
         this.setSelectedVoucherEntry(EmptyVoucherEntry, true);
         return;
 
+      case VoucherHeaderEventType.REVIEW_VOUCHER_BUTTON_CLICKED:
+      case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
+      case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
+        Assertion.assertValue(event.payload, 'event.payload');
+        console.log(event);
+        return;
+
+      case VoucherHeaderEventType.IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED:
+        this.displayUploaderVoucherEntries = true;
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -75,7 +89,6 @@ export class VoucherEditorComponent {
 
 
   onVoucherEntryTableEvent(event: EventInfo): void {
-
     if (this.submitted) {
       return;
     }
@@ -100,7 +113,6 @@ export class VoucherEditorComponent {
 
 
   onVoucherEntryEditorEvent(event: EventInfo): void {
-
     if (this.submitted) {
       return;
     }
@@ -118,6 +130,28 @@ export class VoucherEditorComponent {
 
       case VoucherEntryEditorEventType.UPDATE_VOUCHER_ENTRY:
         console.log('UPDATE_VOUCHER_ENTRY', event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onVoucherEntryUploaderEvent(event: EventInfo) {
+    if (this.submitted) {
+      return;
+    }
+
+    switch (event.type as VoucherEntryUploaderEventType) {
+
+      case VoucherEntryUploaderEventType.CLOSE_MODAL_CLICKED:
+        this.displayUploaderVoucherEntries = false;
+        return;
+
+      case VoucherEntryUploaderEventType.IMPORT_VOUCHER_ENTRIES:
+        console.log('IMPORT_VOUCHER_ENTRIES', event.payload);
         return;
 
       default:

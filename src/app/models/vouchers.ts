@@ -142,6 +142,20 @@ export const VoucherEntryTypeList: Identifiable[] = [
 ];
 
 
+export interface VoucherActions {
+  reviewVoucher?: boolean;
+  sendToLedger?: boolean;
+  sendToSupervisor?: boolean;
+}
+
+
+export const EmptyVoucherActions: VoucherActions = {
+  reviewVoucher: false,
+  sendToLedger: false,
+  sendToSupervisor: false,
+};
+
+
 export interface Voucher {
   id: number;
   number: string;
@@ -157,6 +171,7 @@ export interface Voucher {
   authorizedBy: string;
   status: string;
   entries: VoucherEntryDescriptor[];
+  actions: VoucherActions;
 }
 
 
@@ -175,6 +190,7 @@ export const EmptyVoucher: Voucher = {
   authorizedBy: '',
   status: '',
   entries: [],
+  actions: EmptyVoucherActions,
 };
 
 

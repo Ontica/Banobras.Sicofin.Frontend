@@ -33,7 +33,11 @@ export enum VoucherHeaderEventType {
   CREATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.CreateVoucherClicked',
   UPDATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.UpdateVoucherClicked',
   DELETE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.DeleteVoucherClicked',
+  REVIEW_VOUCHER_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.reviewVoucherButtonClicked',
+  SEND_TO_LEDGER_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.SendToLedgerButtonClicked',
+  SEND_TO_SUPERVISOR_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.SendToSupervisorButtonClicked',
   ADD_VOUCHER_ENTRY_CLICKED = 'VoucherHeaderComponent.Event.AddVoucherEntryClicked',
+  IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.ImportVoucherEntriesButtonClicked',
 }
 
 enum VoucherHeaderFormControls {
@@ -73,6 +77,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   accountingDatesList: Identifiable[] = [];
 
   helper: SubscriptionHelper;
+  eventType = VoucherHeaderEventType;
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
@@ -101,8 +106,13 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  get showEnableEditor() {
+  get isSavedVoucher() {
     return this.voucher && this.voucher.id > 0;
+  }
+
+
+  get isOpenVoucher() {
+    return this.voucher.status === 'Pendiente';
   }
 
 
@@ -157,7 +167,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     let eventType = VoucherHeaderEventType.CREATE_VOUCHER_CLICKED;
 
-    if (this.showEnableEditor) {
+    if (this.isSavedVoucher) {
       eventType = VoucherHeaderEventType.UPDATE_VOUCHER_CLICKED;
     }
 
@@ -165,24 +175,14 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  onAddVoucherEntryClicked() {
-    sendEvent(this.voucherHeaderEvent, VoucherHeaderEventType.ADD_VOUCHER_ENTRY_CLICKED);
-  }
-
-
-  onDeleteClicked() {
-    const message = `Esta operación eliminará la póliza
-      <strong> ${this.voucher.number}: ${this.voucher.voucherType.name}</strong>.
-      <br><br>¿Elimino la póliza?`;
-
-    this.messageBox.confirm(message, 'Eliminar póliza', 'DeleteCancel')
-      .toPromise()
-      .then(x => {
-        if (x) {
-          sendEvent(this.voucherHeaderEvent, VoucherHeaderEventType.DELETE_VOUCHER_CLICKED,
-            {voucher: this.voucher});
-        }
-      });
+  onEventButtonClicked(eventType: VoucherHeaderEventType) {
+    if ([VoucherHeaderEventType.DELETE_VOUCHER_CLICKED,
+         VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED,
+         VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED].includes(eventType)) {
+      this.showConfirmMessage(eventType);
+      return;
+    }
+    sendEvent(this.voucherHeaderEvent, eventType, {voucher: this.voucher});
   }
 
 
@@ -298,6 +298,56 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     return data;
+  }
+
+
+  private showConfirmMessage(eventType: VoucherHeaderEventType) {
+    const type = eventType == VoucherHeaderEventType.DELETE_VOUCHER_CLICKED ? 'DeleteCancel' : 'AcceptCancel';
+
+    this.messageBox.confirm(this.getConfirmMessage(eventType), this.getConfirmTitle(eventType), type)
+      .toPromise()
+      .then(x => {
+        if (x) {
+          sendEvent(this.voucherHeaderEvent, eventType, {voucher: this.voucher});
+        }
+      });
+  }
+
+
+  private getConfirmTitle(eventType: VoucherHeaderEventType): string {
+    switch (eventType) {
+      case VoucherHeaderEventType.DELETE_VOUCHER_CLICKED:
+        return 'Eliminar póliza';
+      case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
+        return 'Enviar al diario';
+      case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
+        return 'Enviar a supervisión';
+      default:
+        return 'Confirmar operación';
+    }
+  }
+
+
+  private getConfirmMessage(eventType: VoucherHeaderEventType): string {
+    let operation = 'modificará';
+    let question = '¿Continuo con la operación?';
+    switch (eventType) {
+      case VoucherHeaderEventType.DELETE_VOUCHER_CLICKED:
+        operation = 'eliminará';
+        question = '¿Elimino la póliza?';
+        break;
+      case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
+        operation = 'enviara al diario';
+        break;
+      case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
+        operation = 'enviara a supervisión';
+        break;
+      default:
+        break;
+    }
+    return `Esta operación ${operation} la póliza
+            <strong> ${this.voucher.number}: ${this.voucher.voucherType.name}</strong>.
+            <br><br>${question}`;
   }
 
 }
