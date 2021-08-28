@@ -61,6 +61,8 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   @Input() voucherEntry: VoucherEntry = EmptyVoucherEntry;
 
+  @Input() readonly = false;
+
   @Output() voucherEntryEditorEvent = new EventEmitter<EventInfo>();
 
   helper: SubscriptionHelper;
@@ -110,6 +112,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
         this.setFormData();
         this.validateSectorField();
         this.validateSubledgerField(this.voucherEntry.sector);
+        this.validateDisableForm();
         this.subscribeLedgerAccountList();
         this.subscribeSubledgerAccountList();
       }
@@ -141,7 +144,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       }
       return 'No aplica';
     }
-    return 'Seleccione la cuenta';
+    return this.readonly ? '' : 'Seleccione la cuenta';
   }
 
 
@@ -156,7 +159,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       }
       return 'No aplica';
     }
-    return 'Seleccione la cuenta';
+    return this.readonly ? '' : 'Seleccione la cuenta';
   }
 
 
@@ -306,6 +309,8 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       concept: this.voucherEntry.concept || '',
       date: this.voucherEntry.date || '',
     });
+
+    this.formHandler.disableForm(false);
   }
 
 
@@ -401,6 +406,13 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       this.formHandler.setControlValidators(control, Validators.required);
     } else {
       this.formHandler.clearControlValidators(control);
+    }
+  }
+
+
+  private validateDisableForm() {
+    if (this.readonly) {
+      this.formHandler.disableForm(true);
     }
   }
 

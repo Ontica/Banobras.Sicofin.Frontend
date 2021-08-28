@@ -30,10 +30,14 @@ export class VoucherEntryTableComponent implements OnChanges {
 
   @Input() voucherEntryList: VoucherEntryDescriptor[] = [];
 
+  @Input() canDelete = false;
+
   @Output() voucherEntryTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['accountNumber', 'sector', 'accountName', 'verificationNumber',
-    'responsibilityArea', 'currency', 'exchangeRate', 'partial', 'debit', 'credit', 'action' ];
+  displayedColumnsDefault: string[] = ['accountNumber', 'sector', 'accountName', 'verificationNumber',
+    'responsibilityArea', 'currency', 'exchangeRate', 'partial', 'debit', 'credit'];
+
+  displayedColumns = [...this.displayedColumnsDefault];
 
   dataSource: MatTableDataSource<VoucherEntryDescriptor>;
 
@@ -42,6 +46,7 @@ export class VoucherEntryTableComponent implements OnChanges {
 
   ngOnChanges() {
     this.dataSource = new MatTableDataSource(this.voucherEntryList);
+    this.resetColumns();
   }
 
 
@@ -65,6 +70,15 @@ export class VoucherEntryTableComponent implements OnChanges {
             {voucherEntry});
         }
       });
+  }
+
+
+  private resetColumns() {
+    this.displayedColumns = [...this.displayedColumnsDefault];
+
+    if (this.canDelete) {
+      this.displayedColumns.push('actionDelete');
+    }
   }
 
 

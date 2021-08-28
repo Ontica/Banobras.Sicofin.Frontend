@@ -8,6 +8,7 @@
 
     <emp-fa-voucher-header fxFlex="none"
       [voucher]="voucher"
+      [canEdit]="canEditVoucher"
       (voucherHeaderEvent)="onVoucherHeaderEvent($event)">
 
     </emp-fa-voucher-header>
@@ -18,6 +19,7 @@
 
     <emp-fa-voucher-entry-table fxFlex
       [voucherEntryList]="voucher.entries"
+      [canDelete]="canEditVoucher"
       (voucherEntryTableEvent)="onVoucherEntryTableEvent($event)">
 
     </emp-fa-voucher-entry-table>
@@ -27,6 +29,7 @@
 <emp-fa-voucher-entry-editor *ngIf="displayVoucherEntryEditor"
   [voucherId]="voucher.id"
   [voucherEntry]="selectedVoucherEntry"
+  [readonly]="!canEditVoucher"
   (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
 
 </emp-fa-voucher-entry-editor>

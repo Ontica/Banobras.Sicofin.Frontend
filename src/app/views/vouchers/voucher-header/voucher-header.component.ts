@@ -59,6 +59,8 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
+  @Input() canEdit = true;
+
   @Output() voucherHeaderEvent = new EventEmitter<EventInfo>();
 
   formHandler: FormHandler;
@@ -108,11 +110,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   get isSavedVoucher() {
     return this.voucher && this.voucher.id > 0;
-  }
-
-
-  get isOpenVoucher() {
-    return this.voucher.status === 'Pendiente';
   }
 
 
@@ -302,7 +299,8 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private showConfirmMessage(eventType: VoucherHeaderEventType) {
-    const type = eventType == VoucherHeaderEventType.DELETE_VOUCHER_CLICKED ? 'DeleteCancel' : 'AcceptCancel';
+    const type = eventType === VoucherHeaderEventType.DELETE_VOUCHER_CLICKED ?
+      'DeleteCancel' : 'AcceptCancel';
 
     this.messageBox.confirm(this.getConfirmMessage(eventType), this.getConfirmTitle(eventType), type)
       .toPromise()

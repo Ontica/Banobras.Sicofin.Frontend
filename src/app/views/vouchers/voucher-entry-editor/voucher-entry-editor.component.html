@@ -273,21 +273,25 @@
 
           </div>
 
-          <mat-divider class="horizontal"></mat-divider>
+          <ng-container *ngIf="!readonly">
 
-          <div #rowFooter fxLayout="row">
+            <mat-divider class="horizontal"></mat-divider>
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div #rowFooter fxLayout="row">
 
-              <button (click)="onSubmitForm()"
-                [class.btn]="!formHandler.isValid"
-                [class.btn-action]="formHandler.isValid">
-                {{editionMode ? 'Editar' : 'Agregar'}}
-              </button>
+              <div fxFlex fxLayoutAlign="end center">
+
+                <button (click)="onSubmitForm()"
+                  [class.btn]="!formHandler.isValid"
+                  [class.btn-action]="formHandler.isValid">
+                  {{editionMode ? 'Editar' : 'Agregar'}}
+                </button>
+
+              </div>
 
             </div>
 
-          </div>
+          </ng-container>
 
         </div>
 

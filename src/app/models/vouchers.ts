@@ -194,6 +194,11 @@ export const EmptyVoucher: Voucher = {
 };
 
 
+export function isOpenVoucher(status: string): boolean {
+  return status === 'Pendiente';
+}
+
+
 export function mapVoucherDescriptorFromVoucher(voucher: Voucher): VoucherDescriptor {
   return {
     id: voucher.id,
