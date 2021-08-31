@@ -116,6 +116,24 @@ export class VouchersDataService {
   }
 
 
+  validateVoucher(voucherId: number): Observable<string[]> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/validate`;
+
+    return this.http.get<string[]>(path);
+  }
+
+
+  closeVoucher(voucherId: number): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/close`;
+
+    return this.http.post<Voucher>(path);
+  }
+
+
   deleteVoucher(voucherId: number): Observable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
 

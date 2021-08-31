@@ -565,3 +565,11 @@ pre {
 .hidden {
   display: none;
 }
+
+ul.info-list {
+  padding: 0 1.5em;
+
+  li:not(:last-child) {
+    padding-bottom: 1em;
+  }
+}

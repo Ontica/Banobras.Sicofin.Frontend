@@ -14,6 +14,8 @@ import { VouchersDataService } from '@app/data-services';
 import { EmptyVoucher, EmptyVoucherEntry, isOpenVoucher, Voucher, VoucherEntry, VoucherEntryFields,
          VoucherFields } from '@app/models';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 import { sendEvent } from '@app/shared/utils';
 
 import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-entry-editor.component';
@@ -47,7 +49,8 @@ export class VoucherEditorComponent {
 
   selectedVoucherEntry: VoucherEntry = EmptyVoucherEntry;
 
-  constructor(private vouchersData: VouchersDataService) {}
+  constructor(private vouchersData: VouchersDataService,
+              private messageBox: MessageBoxService) {}
 
 
   get canEditVoucher(): boolean {
@@ -77,10 +80,18 @@ export class VoucherEditorComponent {
         return;
 
       case VoucherHeaderEventType.REVIEW_VOUCHER_BUTTON_CLICKED:
+        Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
+        this.validateVoucher();
+        return;
+
       case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
-      case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
-        Assertion.assertValue(event.payload, 'event.payload');
+        Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
         console.log(event);
+        return;
+
+      case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
+        Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
+        this.closeVoucher();
         return;
 
       case VoucherHeaderEventType.IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED:
@@ -174,6 +185,33 @@ export class VoucherEditorComponent {
     this.submitted = true;
 
     this.vouchersData.updateVoucher(this.voucher.id, voucherFields)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private validateVoucher() {
+    this.submitted = true;
+
+    this.vouchersData.validateVoucher(this.voucher.id)
+      .toPromise()
+      .then(x => {
+        const message = x && x.length > 0 ?
+          '<ul class="info-list">' + x.map(y => '<li>' + y + '</li>').join('') + '</ul>' :
+          'No se encontraron resultados';
+        this.messageBox.show(message, 'Análisis de póliza');
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private closeVoucher() {
+    this.submitted = true;
+
+    this.vouchersData.closeVoucher(this.voucher.id)
       .toPromise()
       .then(x => {
         sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
