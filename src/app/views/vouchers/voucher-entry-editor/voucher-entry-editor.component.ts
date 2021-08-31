@@ -195,7 +195,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  onCloneLastVoucherEntryClicked() {
+  onCopyOfLastVoucherEntryClicked() {
     this.getCopyOfLastEntry(this.voucherId);
   }
 
