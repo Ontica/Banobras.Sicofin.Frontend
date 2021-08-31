@@ -193,11 +193,8 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
     switch (event.type as VouchersUploaderEventType) {
 
       case VouchersUploaderEventType.CLOSE_MODAL_CLICKED:
+      case VouchersUploaderEventType.VOUCHERS_IMPORTED:
         this.onOptionModalClosed();
-        return;
-
-      case VouchersUploaderEventType.IMPORT_VOUCHERS:
-        console.log('IMPORT_VOUCHERS', event.payload);
         return;
 
       default:

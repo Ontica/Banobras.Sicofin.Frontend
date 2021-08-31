@@ -171,7 +171,8 @@ export class VoucherEditorComponent {
         return;
 
       case VoucherEntryUploaderEventType.IMPORT_VOUCHER_ENTRIES:
-        console.log('IMPORT_VOUCHER_ENTRIES', event.payload);
+        Assertion.assertValue(event.payload.file, 'event.payload.file');
+        this.importVoucherEntriesFromExcel(event.payload.file as File);
         return;
 
       default:
@@ -239,6 +240,19 @@ export class VoucherEditorComponent {
       .toPromise()
       .then(x => {
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private importVoucherEntriesFromExcel(file: File) {
+    this.submitted = true;
+
+    this.vouchersData.importVoucherEntriesFromExcel(this.voucher.id, file)
+      .toPromise()
+      .then(x => {
+        this.displayUploaderVoucherEntries = false;
         sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
       })
       .finally(() => this.submitted = false);

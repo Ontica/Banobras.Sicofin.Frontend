@@ -5,7 +5,12 @@
 
   <div class="card-body-padding">
 
-    <form [formGroup]="formHandler.form" autocomplete="off" class="form-section">
+    <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner"
+      autocomplete="off" class="form-section">
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
 
       <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
@@ -47,7 +52,6 @@
               [config]="{selectFirst: true}"
               [formControlName]="controls.accountsChartUID"
               [items]="accountsChartMasterDataList"
-              [loading]="isLoading"
               [showError]="formHandler.showInvalidControl(controls.accountsChartUID)">
             </emp-ng-select>
 
@@ -60,7 +64,6 @@
             <emp-ng-select
               [formControlName]="controls.transactionTypeUID"
               [items]="transactionTypesList"
-              [loading]="isLoading"
               [showError]="formHandler.showInvalidControl(controls.transactionTypeUID)">
             </emp-ng-select>
 
@@ -113,7 +116,6 @@
         </div>
 
         <mat-divider class="horizontal"></mat-divider>
-
 
         <div fxLayout="row">
 

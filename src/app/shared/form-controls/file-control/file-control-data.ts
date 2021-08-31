@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export enum FileTypeAccepted {
   all = '*',
   pdf = 'application/pdf',
-  excel = '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
+  excel = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
   image = 'image/*',
   txt = 'text/plain',
 }

@@ -13,10 +13,14 @@ import { Assertion, DateStringLibrary, EventInfo, Identifiable } from '@app/core
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData } from '@app/models';
+import { VouchersDataService } from '@app/data-services';
+
+import { AccountsChartMasterData, VoucherFileData } from '@app/models';
 
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -24,7 +28,7 @@ import { combineLatest } from 'rxjs';
 
 export enum VouchersUploaderEventType {
   CLOSE_MODAL_CLICKED  = 'VouchersUploaderComponent.Event.CloseModalClicked',
-  IMPORT_VOUCHERS = 'VouchersUploaderComponent.Event.ImportVouchers',
+  VOUCHERS_IMPORTED = 'VouchersUploaderComponent.Event.VouchersImported',
 }
 
 enum VouchersUploaderFormControls {
@@ -60,7 +64,9 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer) {
+  constructor(private uiLayer: PresentationLayer,
+              private vouchersData: VouchersDataService,
+              private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
   }
@@ -94,7 +100,7 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    sendEvent(this.vouchersUploaderEvent, VouchersUploaderEventType.IMPORT_VOUCHERS, this.getFormData());
+    this.importVouchersFromTextFile(this.file.file, this.getFormData());
   }
 
 
@@ -132,23 +138,38 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
   }
 
 
-  private getFormData(): any {
+  private getFormData(): VoucherFileData {
     Assertion.assert(this.formHandler.form.valid,
       'Programming error: form must be validated before command execution.');
 
     const formModel = this.formHandler.form.getRawValue();
 
-    const data: any = {
-      file: this.file.file,
+    const data: VoucherFileData = {
       recordingDate: formModel.recordingDate,
       accountsChartUID: formModel.accountsChartUID,
       transactionTypeUID: formModel.transactionTypeUID,
       distributeVouchers: formModel.distributeVouchers,
       generateSubledgerAccount: formModel.generateSubledgerAccount,
       canEditVoucherEntries: formModel.canEditVoucherEntries,
+      type: 'TextFile',
+      format: 'txt',
+      version: '1.0'
     };
 
     return data;
+  }
+
+
+  private importVouchersFromTextFile(file: File, dataFile: VoucherFileData) {
+    this.isLoading = true;
+
+    this.vouchersData.importVouchersFromTextFile(file, dataFile)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.vouchersUploaderEvent, VouchersUploaderEventType.VOUCHERS_IMPORTED);
+        this.messageBox.show(x, 'Importador de pólizas');
+      })
+      .finally(() => this.isLoading = false);
   }
 
 }

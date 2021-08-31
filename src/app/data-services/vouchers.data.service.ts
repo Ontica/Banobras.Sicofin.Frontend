@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { LedgerAccount, SearchVouchersCommand, SubsidiaryAccount, Voucher, VoucherDescriptor,
+import { LedgerAccount, SearchVouchersCommand, SubsidiaryAccount, Voucher, VoucherFileData, VoucherDescriptor,
          VoucherEntry, VoucherEntryFields, VoucherFields } from '@app/models';
 
 
@@ -106,6 +106,20 @@ export class VouchersDataService {
   }
 
 
+  importVouchersFromTextFile(file: File, dataFile: VoucherFileData): Observable<string> {
+    Assertion.assertValue(file, 'file');
+    Assertion.assertValue(dataFile, 'dataFile');
+
+    const formData: FormData = new FormData();
+    formData.append('media', file);
+    formData.append('data', JSON.stringify(dataFile));
+
+    const path = `v2/financial-accounting/vouchers/import-from-text-file`;
+
+    return this.http.post<string>(path, formData);
+  }
+
+
   updateVoucher(voucherId: number, voucherFields: VoucherFields): Observable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherFields, 'voucherFields');
@@ -150,6 +164,19 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/${voucherId}/entries`;
 
     return this.http.post<Voucher>(path, voucherEntryFields);
+  }
+
+
+  importVoucherEntriesFromExcel(voucherId: number, file: File): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+    Assertion.assertValue(file, 'fileToUpload');
+
+    const formData: FormData = new FormData();
+    formData.append('media', file);
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/entries/import-from-excel`;
+
+    return this.http.post<Voucher>(path, formData);
   }
 
 
