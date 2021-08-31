@@ -135,7 +135,10 @@ export class VoucherEditorComponent {
         return;
 
       case VoucherEntryEditorEventType.UPDATE_VOUCHER_ENTRY:
-        console.log('UPDATE_VOUCHER_ENTRY', event.payload);
+        Assertion.assertValue(event.payload.voucherEntry, 'event.payload.voucherEntry');
+        Assertion.assertValue(event.payload.voucherEntryId, 'event.payload.voucherEntryId');
+        this.updateVoucherEntry(event.payload.voucherEntryId,
+                                event.payload.voucherEntry as VoucherEntryFields);
         return;
 
       default:
@@ -211,6 +214,19 @@ export class VoucherEditorComponent {
       .toPromise()
       .then(x => {
         this.setSelectedVoucherEntry(x);
+      })
+      .finally(() => this.submitted = false);
+  }
+
+
+  private updateVoucherEntry(voucherEntryId: number, voucherEntryFields: VoucherEntryFields) {
+    this.submitted = true;
+
+    this.vouchersData.updateVoucherEntry(this.voucher.id, voucherEntryId, voucherEntryFields)
+      .toPromise()
+      .then(x => {
+        this.setSelectedVoucherEntry(EmptyVoucherEntry);
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
       })
       .finally(() => this.submitted = false);
   }

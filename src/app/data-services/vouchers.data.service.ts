@@ -135,6 +135,19 @@ export class VouchersDataService {
   }
 
 
+  updateVoucherEntry(voucherId: number,
+                     voucherEntryId: number,
+                     voucherEntryFields: VoucherEntryFields): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+    Assertion.assertValue(voucherEntryId, 'voucherEntryId');
+    Assertion.assertValue(voucherEntryFields, 'voucherEntryFields');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/entries/${voucherEntryId}`;
+
+    return this.http.put<Voucher>(path, voucherEntryFields);
+  }
+
+
   deleteVoucherEntry(voucherId: number, voucherEntryId: number): Observable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherEntryId, 'voucherEntryId');
@@ -142,6 +155,15 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/${voucherId}/entries/${voucherEntryId}`;
 
     return this.http.delete<Voucher>(path);
+  }
+
+
+  getCopyOfLastEntry(voucherId: number): Observable<VoucherEntry> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/get-copy-of-last-entry`;
+
+    return this.http.get<VoucherEntry>(path);
   }
 
 

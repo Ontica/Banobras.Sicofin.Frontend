@@ -109,12 +109,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       this.editionMode = this.voucherEntry.id > 0;
 
       if (this.editionMode) {
-        this.setFormData();
-        this.validateSectorField();
-        this.validateSubledgerField(this.voucherEntry.sector);
-        this.validateDisableForm();
-        this.subscribeLedgerAccountList();
-        this.subscribeSubledgerAccountList();
+        this.setAndValidateFormData(this.voucherEntry);
       }
     }
   }
@@ -201,7 +196,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
 
   onCloneLastVoucherEntryClicked() {
-    console.log('CLONE LAST VOUCHER ENTRY CLICKED');
+    this.getCopyOfLastEntry(this.voucherId);
   }
 
 
@@ -260,6 +255,19 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
+  private getCopyOfLastEntry(voucherEntryId: number) {
+    this.isLoading = true;
+
+    this.vouchersData.getCopyOfLastEntry(voucherEntryId)
+      .toPromise()
+      .then(x => {
+        this.setAndValidateFormData(x);
+        this.formHandler.form.markAsDirty();
+      })
+      .finally(() => this.isLoading = false);
+  }
+
+
   private initForm() {
     if (this.formHandler) {
       return;
@@ -286,28 +294,34 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  private setFormData() {
-    if (!this.editionMode) {
-      this.formHandler.form.reset();
-      return;
-    }
+  private setAndValidateFormData(voucherEntry: VoucherEntry) {
+    this.setFormData(voucherEntry);
+    this.validateSectorField();
+    this.validateSubledgerField(voucherEntry.sector);
+    this.validateDisableForm();
+    this.subscribeLedgerAccountList();
+    this.subscribeSubledgerAccountList();
+  }
 
+
+  private setFormData(voucherEntry: VoucherEntry) {
     this.formHandler.form.reset({
-      voucherEntryType: this.voucherEntry.voucherEntryType || '',
-      ledgerAccount: this.voucherEntry.ledgerAccount || '',
-      sector: this.voucherEntry.sector?.id || '',
-      subledgerAccount: this.voucherEntry.subledgerAccount?.id ? this.voucherEntry.subledgerAccount : '',
-      currency: isEmpty(this.voucherEntry.currency) ? '' : this.voucherEntry.currency.uid,
-      amount: this.voucherEntry.amount || '',
-      exchangeRate: this.voucherEntry.exchangeRate || '',
-      baseCurrencyAmount: this.voucherEntry.baseCurrencyAmount || '',
-      responsibilityArea: isEmpty(this.voucherEntry.responsibilityArea) ?
-        '' : this.voucherEntry.responsibilityArea.uid,
-      budgetConcept: this.voucherEntry.budgetConcept || '',
-      eventType: isEmpty(this.voucherEntry.eventType) ? '' : this.voucherEntry.eventType.uid,
-      verificationNumber: this.voucherEntry.verificationNumber || '',
-      concept: this.voucherEntry.concept || '',
-      date: this.voucherEntry.date || '',
+      voucherEntryType: voucherEntry.voucherEntryType || '',
+      ledgerAccount: voucherEntry.ledgerAccount || '',
+      sector: voucherEntry.sector?.id || '',
+      subledgerAccount: voucherEntry.subledgerAccount?.id ? voucherEntry.subledgerAccount : '',
+      currency: isEmpty(voucherEntry.currency) ? '' : voucherEntry.currency.uid,
+      amount: voucherEntry.amount ? FormatLibrary.numberWithCommas(voucherEntry.amount, '1.2-2') : '',
+      exchangeRate: voucherEntry.exchangeRate ?
+        FormatLibrary.numberWithCommas(voucherEntry.exchangeRate, '1.6-6') : '',
+      baseCurrencyAmount: voucherEntry.baseCurrencyAmount ?
+        FormatLibrary.numberWithCommas(voucherEntry.baseCurrencyAmount, '1.2-2') : '',
+      responsibilityArea: isEmpty(voucherEntry.responsibilityArea) ? '' : voucherEntry.responsibilityArea.uid,
+      budgetConcept: voucherEntry.budgetConcept || '',
+      eventType: isEmpty(voucherEntry.eventType) ? '' : voucherEntry.eventType.uid,
+      verificationNumber: voucherEntry.verificationNumber || '',
+      concept: voucherEntry.concept || '',
+      date: voucherEntry.date || '',
     });
 
     this.formHandler.disableForm(false);
