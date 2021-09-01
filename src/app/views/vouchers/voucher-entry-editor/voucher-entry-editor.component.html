@@ -14,13 +14,21 @@
 
         <div fxLayout="column">
 
-          <div #rowCopyButton *ngIf="!editionMode" fxLayout="row" fxLayoutAlign="end"
-            [style.marginBottom.rem]="1.25">
+          <div #rowTopButtons fxLayout="row" fxLayoutAlign="end" *ngIf="!readonly"
+            [style.marginBottom.rem]="1.25" [style.height.px]="28">
 
-            <div fxFlex="none">
+            <div fxFlex="none" *ngIf="!cloneMode">
 
-              <button class="btn-base" (click)="onCopyOfLastVoucherEntryClicked()">
+              <button *ngIf="!editionMode"
+                class="btn-base"
+                (click)="onCopyOfLastVoucherEntryClicked()">
                 Copiar datos del último movimiento
+              </button>
+
+              <button *ngIf="editionMode"
+                class="btn-base"
+                (click)="onCloneVoucherEntryClicked()">
+                Clonar movimiento
               </button>
 
             </div>

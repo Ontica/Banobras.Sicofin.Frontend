@@ -70,6 +70,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   formHandler: FormHandler;
   controls = VoucherEntryEditorFormControls;
   editionMode = false;
+  cloneMode = false;
   isLoading = false;
 
   voucherEntryTypeList: Identifiable[] = VoucherEntryTypeList;
@@ -200,6 +201,11 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
+  onCloneVoucherEntryClicked() {
+    this.setVoucherEntryToClone(this.voucherEntry);
+  }
+
+
   onExchangeRateClicked() {
     console.log('EXCHANGE RATE CLICKED');
   }
@@ -260,11 +266,17 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
     this.vouchersData.getCopyOfLastEntry(voucherEntryId)
       .toPromise()
-      .then(x => {
-        this.setAndValidateFormData(x);
-        this.formHandler.form.markAsDirty();
-      })
+      .then(x => this.setVoucherEntryToClone(x))
       .finally(() => this.isLoading = false);
+  }
+
+
+  private setVoucherEntryToClone(voucherEntry: VoucherEntry) {
+    this.voucherEntry.id = 0;
+    this.editionMode = false;
+    this.cloneMode = true;
+    this.setAndValidateFormData(voucherEntry);
+    this.formHandler.form.markAsDirty();
   }
 
 
