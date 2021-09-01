@@ -272,7 +272,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
 
   private setVoucherEntryToClone(voucherEntry: VoucherEntry) {
-    this.voucherEntry.id = 0;
+    voucherEntry.id = 0;
     this.editionMode = false;
     this.cloneMode = true;
     this.setAndValidateFormData(voucherEntry);
