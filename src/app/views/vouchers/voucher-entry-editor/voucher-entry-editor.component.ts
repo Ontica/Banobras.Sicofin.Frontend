@@ -23,9 +23,11 @@ import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+
 import { VouchersDataService } from '@app/data-services';
 
-import { VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 
 export enum VoucherEntryEditorEventType {
@@ -59,6 +61,8 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   @Input() voucherId: number;
 
+  @Input() voucherLedgerName: string;
+
   @Input() voucherEntry: VoucherEntry = EmptyVoucherEntry;
 
   @Input() readonly = false;
@@ -91,10 +95,11 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   subledgerAccountRequired = false;
 
   constructor(private uiLayer: PresentationLayer,
-              private vouchersData: VouchersDataService) {
+              private vouchersData: VouchersDataService,
+              private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
-    this.onLedgerAccountChanges();
+    this.ledgerAccountChange();
   }
 
 
@@ -170,16 +175,16 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  onLedgerAccountChanges() {
-    this.formHandler.getControl(this.controls.currency).reset();
-    this.formHandler.getControl(this.controls.sector).reset();
-    this.validateSectorField();
-    this.onSectorChanges(null);
+  onLedgerAccountChanges(ledgerAccount: LedgerAccount) {
+    this.ledgerAccountChange();
+
+    if (ledgerAccount && ledgerAccount.id === 0 && ledgerAccount.standardAccountId > 0) {
+      this.showConfirmAssignAccountToVoucher(ledgerAccount);
+    }
   }
 
 
   onClearLedgerAccount() {
-    this.onLedgerAccountChanges();
     this.subscribeLedgerAccountList();
     this.subscribeSubledgerAccountList();
   }
@@ -267,6 +272,20 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     this.vouchersData.getCopyOfLastEntry(voucherEntryId)
       .toPromise()
       .then(x => this.setVoucherEntryToClone(x))
+      .finally(() => this.isLoading = false);
+  }
+
+
+  private assignAccountToVoucher(standardAccountId: number) {
+    this.isLoading = true;
+
+    this.vouchersData.assignAccountToVoucher(this.voucherId, standardAccountId)
+      .toPromise()
+      .then(x => {
+        this.formHandler.getControl(this.controls.ledgerAccount).reset(x);
+        this.subscribeLedgerAccountList();
+        this.ledgerAccountChange();
+      })
       .finally(() => this.isLoading = false);
   }
 
@@ -409,6 +428,31 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
         ))
       )
     );
+  }
+
+
+  private ledgerAccountChange() {
+    this.formHandler.getControl(this.controls.currency).reset();
+    this.formHandler.getControl(this.controls.sector).reset();
+    this.validateSectorField();
+    this.onSectorChanges(null);
+  }
+
+
+  private showConfirmAssignAccountToVoucher(ledgerAccount: LedgerAccount) {
+    const message = `La cuenta <strong>${ledgerAccount.number}: ${ledgerAccount.name}</strong>
+      no se ha utilizado en la contabilidad ${this.voucherLedgerName}.
+      <br><br>¿Desea utilizarla por primera vez?`;
+
+    this.messageBox.confirm(message, 'Agregar cuenta')
+      .toPromise()
+      .then(x => {
+        if (x) {
+          this.assignAccountToVoucher(ledgerAccount.standardAccountId);
+        } else {
+          this.formHandler.getControl(this.controls.ledgerAccount).reset();
+        }
+      });
   }
 
 

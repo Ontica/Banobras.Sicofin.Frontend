@@ -28,6 +28,7 @@
 
 <emp-fa-voucher-entry-editor *ngIf="displayVoucherEntryEditor"
   [voucherId]="voucher.id"
+  [voucherLedgerName]="voucher.ledger.name"
   [voucherEntry]="selectedVoucherEntry"
   [readonly]="!canEditVoucher"
   (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">

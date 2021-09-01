@@ -67,7 +67,7 @@
                     [loading]="ledgerAccountLoading"
                     [showError]="formHandler.showInvalidControl(controls.ledgerAccount)"
                     (clear)="onClearLedgerAccount()"
-                    (changes)="onLedgerAccountChanges()"
+                    (changes)="onLedgerAccountChanges($event)"
                     bindValue="id"
                     placeholder="Buscar cuenta">
                     <ng-template #labelTemplate let-item="item">

@@ -245,6 +245,7 @@ export const EmptyNumberedNamedEntity: NumberedNamedEntity = {
 
 export interface LedgerAccount {
   id: number;
+  standardAccountId: number;
   ledger: Identifiable;
   number: string;
   name: string;
@@ -260,6 +261,7 @@ export interface LedgerAccount {
 
 export const EmptyLedgerAccount: LedgerAccount = {
   id: 0,
+  standardAccountId: 0,
   ledger: Empty,
   number: '',
   name: '',

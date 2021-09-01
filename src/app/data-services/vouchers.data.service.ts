@@ -157,6 +157,16 @@ export class VouchersDataService {
   }
 
 
+  assignAccountToVoucher(voucherId: number, standardAccountId: number): Observable<LedgerAccount> {
+    Assertion.assertValue(voucherId, 'voucherId');
+    Assertion.assertValue(standardAccountId, 'standardAccountId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/assign-account/${standardAccountId}`;
+
+    return this.http.post<LedgerAccount>(path);
+  }
+
+
   appendVoucherEntry(voucherId: number, voucherEntryFields: VoucherEntryFields): Observable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherEntryFields, 'voucherEntryFields');
