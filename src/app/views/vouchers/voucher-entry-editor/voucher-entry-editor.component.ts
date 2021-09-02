@@ -76,6 +76,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   editionMode = false;
   cloneMode = false;
   isLoading = false;
+  displayDateAndConcept = false;
 
   voucherEntryTypeList: Identifiable[] = VoucherEntryTypeList;
   functionalAreasList: Identifiable[] = [];
@@ -232,6 +233,13 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
+  onDisplayDateAndConceptClicked() {
+    this.formHandler.getControl(this.controls.date).reset();
+    this.formHandler.getControl(this.controls.concept).reset();
+    this.formHandler.form.markAsDirty();
+  }
+
+
   onSubmitForm() {
     if (!this.formHandler.validateReadyForSubmit()) {
       this.formHandler.invalidateForm();
@@ -356,6 +364,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     });
 
     this.formHandler.disableForm(false);
+    this.displayDateAndConcept = !!voucherEntry.date || !!voucherEntry.concept;
   }
 
 

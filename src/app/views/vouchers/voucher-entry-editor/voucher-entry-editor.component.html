@@ -251,19 +251,32 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div fxLayout="row" fxLayoutAlign="space-between">
 
                 <div fxFlex="none">
-                  <label>Fecha:</label>
-                  <emp-ng-datepicker
-                    [formControlName]="controls.date"
-                    [showError]="formHandler.showInvalidControl(controls.date)">
-                  </emp-ng-datepicker>
+                  <ng-container *ngIf="displayDateAndConcept">
+                    <label>Fecha:</label>
+                    <emp-ng-datepicker
+                      [formControlName]="controls.date"
+                      [showError]="formHandler.showInvalidControl(controls.date)">
+                    </emp-ng-datepicker>
+                  </ng-container>
+                </div>
+
+                <div fxFlex="none" fxFlexAlign="center"
+                  [style.paddingTop.px]="12" [style.height.px]="42" [style.marginRight.px]="8">
+                  <mat-checkbox
+                    [(ngModel)]="displayDateAndConcept"
+                    [ngModelOptions]="{standalone: true}"
+                    (click)="$event.stopPropagation"
+                    (change)="onDisplayDateAndConceptClicked()">
+                    Fecha y concepto
+                  </mat-checkbox>
                 </div>
 
               </div>
 
-              <div fxLayout="row" fxFlex="108px">
+              <div *ngIf="displayDateAndConcept" fxLayout="row" fxFlex="95px">
 
                 <div [fxFlex]="100">
                   <label>
