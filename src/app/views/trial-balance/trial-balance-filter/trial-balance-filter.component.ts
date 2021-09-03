@@ -325,7 +325,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       data.consolidateBalancesToTargetCurrency = this.trialBalanceCommand.useDefaultValuation ? false :
         this.trialBalanceCommand.consolidateBalancesToTargetCurrency;
 
-      data.initialPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.initialPeriod,
+      data.initialPeriod = mapToValidTrialBalanceCommandPeriod(data.initialPeriod,
                                                                this.trialBalanceCommand.useDefaultValuation);
 
       if (this.periodsRequired) {
