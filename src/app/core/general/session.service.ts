@@ -31,7 +31,6 @@ export class SessionService {
   constructor(private appSettingsService: ApplicationSettingsService,
               private localStorage: LocalStorageService) {
     this.setPrincipalFromLocalStorage();
-
   }
 
 
@@ -109,8 +108,9 @@ export class SessionService {
       const claims = this.localStorage.get<Claim[]>('claims');
       const roles = this.localStorage.get<string[]>('roles');
       const permissions = this.localStorage.get<string[]>('permissions');
+      const defaultRoute = this.localStorage.get<string>('defaultRoute');
 
-      this.principal = new Principal(sessionToken, identity, claims, roles, permissions);
+      this.principal = new Principal(sessionToken, identity, claims, roles, permissions, defaultRoute);
     }
   }
 
@@ -121,6 +121,7 @@ export class SessionService {
     this.localStorage.set<string[]>('permissions', this.principal.permissions);
     this.localStorage.set<string[]>('roles', this.principal.roles);
     this.localStorage.set<Claim[]>('claims', this.principal.claims);
+    this.localStorage.set<string>('defaultRoute', this.principal.defaultRoute);
   }
 
 }

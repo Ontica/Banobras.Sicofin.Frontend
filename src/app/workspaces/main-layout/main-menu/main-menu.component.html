@@ -2,13 +2,29 @@
 
   <ul>
 
-    <li><a routerLink='/operacion-contable' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">PÓLIZAS</a></li>
+    <li *empNgHasPermission="permissions.MENU_OPERACION_CONTABLE">
+      <a routerLink='/operacion-contable' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
+        PÓLIZAS
+      </a>
+    </li>
 
-    <li><a routerLink='/tableros' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">SALDOS Y REPORTES</a></li>
+    <li *empNgHasPermission="permissions.MENU_TABLEROS">
+      <a routerLink='/tableros' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
+        SALDOS Y REPORTES
+      </a>
+    </li>
 
-    <li><a routerLink='/reglas-y-catalogos' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">REGLAS Y CATÁLOGOS</a></li>
+    <li *empNgHasPermission="permissions.MENU_REGLAS_Y_CATALOGOS">
+      <a routerLink='/reglas-y-catalogos' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
+        REGLAS Y CATÁLOGOS
+      </a>
+    </li>
 
-    <li><a routerLink='/administracion' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">ADMINISTRACIÓN</a></li>
+    <li *empNgHasPermission="permissions.MENU_ADMINISTRACION">
+      <a routerLink='/administracion' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
+        ADMINISTRACIÓN
+      </a>
+    </li>
 
   </ul>
 

@@ -34,8 +34,8 @@ export interface SessionToken {
 
 
 export interface PrincipalData {
-  claims: Claim[];
-  identity: Identity;
-  roles: string[];
+  readonly claims: Claim[];
+  readonly identity: Identity;
+  readonly roles: string[];
   permissions: string[];
 }

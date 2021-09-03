@@ -6,7 +6,9 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '@app/core';
@@ -59,7 +61,7 @@ export class UserLoginComponent implements OnInit {
 
     this.authenticationService.login(this.form.value.userID, this.form.value.password)
       .then(
-        () => this.router.navigate(['/tableros/saldos-y-balanzas']),
+        x => this.router.navigate([x]),
         err => this.exceptionMsg = err
       )
       .finally(() => this.submitted = false);

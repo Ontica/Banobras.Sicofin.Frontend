@@ -9,6 +9,8 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
+import { ROUTES_LIBRARY } from '@app/models';
+
 import {
   AccountingCataloguesAndRulesWorkspaceComponent
 } from './accounting-catalogues-and-rules-workspace.component';
@@ -19,11 +21,31 @@ import {
 
 
 const routes: Routes = [
-  { path: 'catalogos-de-cuentas', component: AccountsChartMainPageComponent },
-  { path: 'reglas-contabilizadoras', component: AccountingCataloguesAndRulesWorkspaceComponent },
-  { path: 'agrupaciones', component: AccountingCataloguesAndRulesWorkspaceComponent },
-  { path: 'disenador-de-reportes', component: AccountingCataloguesAndRulesWorkspaceComponent },
-  { path: '', redirectTo: 'catalogos-de-cuentas', pathMatch: 'full' }
+  {
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.path,
+    component: AccountsChartMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.path,
+    component: AccountingCataloguesAndRulesWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.path,
+    component: AccountingCataloguesAndRulesWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_disenador_de_reportes.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_disenador_de_reportes.path,
+    component: AccountingCataloguesAndRulesWorkspaceComponent,
+  },
+  {
+    path: '',
+    redirectTo: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.path,
+    pathMatch: 'full',
+  },
 ];
 
 

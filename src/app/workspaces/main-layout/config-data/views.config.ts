@@ -114,3 +114,11 @@ export const AccountingSystemManagementViews: View[] = [
     url: '/administracion/generacion-de-saldos'
   }
 ];
+
+export const UnauthorizedViews: View[] = [
+  {
+    name: 'Unauthorized',
+    title: '',
+    url: '/unauthorized'
+  },
+];

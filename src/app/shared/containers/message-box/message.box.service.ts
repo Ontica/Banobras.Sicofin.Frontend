@@ -6,6 +6,7 @@
  */
 
 import { Injectable } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
 
 import { Exception } from '@app/core';
@@ -84,6 +85,11 @@ export class MessageBoxService {
     observable.subscribe( () => of<void>() );
 
     return observable;
+  }
+
+
+  isOpen() {
+    return this.dialog.openDialogs.length > 0;
   }
 
 

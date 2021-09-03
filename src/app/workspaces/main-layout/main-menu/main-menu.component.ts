@@ -7,10 +7,13 @@
 
 import { Component } from '@angular/core';
 
+import { PermissionsLibrary } from '@app/models';
 
 @Component({
   selector: 'emp-ng-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss']
 })
-export class MainMenuComponent { }
+export class MainMenuComponent {
+  permissions = PermissionsLibrary;
+}

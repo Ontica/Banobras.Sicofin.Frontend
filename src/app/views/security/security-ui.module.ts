@@ -9,9 +9,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SecurityUIRoutingModule } from './security-ui-routing.module';
 import { UserLoginComponent } from './user-login/user-login.component';
-import { AngularMaterialModule } from '@app/shared/angular-material.module';
 
 
 @NgModule({
@@ -25,7 +25,7 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
   ],
 
   declarations: [
-    UserLoginComponent
+    UserLoginComponent,
   ],
 
   exports: []

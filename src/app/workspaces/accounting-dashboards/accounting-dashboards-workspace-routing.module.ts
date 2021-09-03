@@ -9,17 +9,39 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
+import { ROUTES_LIBRARY } from '@app/models';
+
 import { AccountingDashboardsWorkspaceComponent } from './accounting-dashboards-workspace.component';
 
 import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-balance-main-page.component';
 
 
 const routes: Routes = [
-  { path: 'saldos-y-balanzas', component: TrialBalanceMainPageComponent },
-  { path: 'calculo-de-agrupaciones', component: AccountingDashboardsWorkspaceComponent },
-  { path: 'indicadores-financieros', component: AccountingDashboardsWorkspaceComponent },
-  { path: 'alertas', component: AccountingDashboardsWorkspaceComponent },
-  { path: '', redirectTo: 'saldos-y-balanzas', pathMatch: 'full' }
+  {
+    data: { permission: ROUTES_LIBRARY.tableros_saldos_y_balanzas.permission },
+    path: ROUTES_LIBRARY.tableros_saldos_y_balanzas.path,
+    component: TrialBalanceMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.tableros_calculo_de_agrupaciones.permission },
+    path: ROUTES_LIBRARY.tableros_calculo_de_agrupaciones.path,
+    component: AccountingDashboardsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.tableros_indicadores_financieros.permission },
+    path: ROUTES_LIBRARY.tableros_indicadores_financieros.path,
+    component: AccountingDashboardsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.tableros_alertas.permission },
+    path: ROUTES_LIBRARY.tableros_alertas.path,
+    component: AccountingDashboardsWorkspaceComponent,
+  },
+  {
+    path: '',
+    redirectTo: ROUTES_LIBRARY.tableros_saldos_y_balanzas.path,
+    pathMatch: 'full',
+  },
 ];
 
 

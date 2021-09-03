@@ -15,11 +15,12 @@ export class Principal {
               public readonly identity: Identity,
               public readonly claims: Claim[],
               public readonly roles: string[],
-              public readonly permissions: string[]) { }
+              public readonly permissions: string[],
+              public readonly defaultRoute: string) { }
 
 
   static get empty(): Principal {
-    return new Principal(undefined, undefined, undefined, undefined, undefined);
+    return new Principal(undefined, undefined, undefined, undefined, undefined, undefined);
   }
 
 

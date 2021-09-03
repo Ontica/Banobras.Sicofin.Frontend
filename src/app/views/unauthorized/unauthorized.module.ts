@@ -9,26 +9,28 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/models';
-
-import { UserLoginComponent } from './user-login/user-login.component';
-
+import { UnauthorizedComponent } from './unauthorized.component';
 
 const routes: Routes = [
   {
-    path: ROUTES_LIBRARY.security_login.path,
-    component: UserLoginComponent,
-  },
-  {
     path: '',
-    redirectTo: ROUTES_LIBRARY.security_login.path,
+    component: UnauthorizedComponent,
     pathMatch: 'full',
   },
 ];
 
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+
+  imports: [
+    RouterModule.forChild(routes),
+  ],
+
+  declarations: [
+    UnauthorizedComponent,
+  ],
+
+  exports: []
+
 })
-export class SecurityUIRoutingModule { }
+export class UnauthorizedModule { }

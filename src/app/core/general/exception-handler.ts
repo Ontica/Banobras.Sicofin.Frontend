@@ -6,7 +6,9 @@
  */
 
 import { HttpErrorResponse } from '@angular/common/http';
+
 import { ErrorHandler, Injectable, NgZone } from '@angular/core';
+
 import { ErrorMessageService } from '../errors/error-message.service';
 
 
@@ -20,8 +22,6 @@ export class ExceptionHandler extends ErrorHandler {
 
 
   handleError(error: any): void {
-    // do real error handling like logging them to a central log server and present it through user-interface
-    console.log('Global Exception handler', error);
 
     if (!(error instanceof HttpErrorResponse)) {
       return this.errorService.handleClientSideError(error);
@@ -29,15 +29,15 @@ export class ExceptionHandler extends ErrorHandler {
 
     // to implement the complete error handling here,
     // we need to resolve the issue with promises or
-    // use observables instead of promises
-    // in execute function of presentation layer
+    // use observables instead of promises.
+    // the execute() function in the presentation layer return a promise.
 
     // if (error instanceof HttpErrorResponse) {
-    //   if(!navigator.onLine){
+    //   if (!navigator.onLine) {
     //     return this.errorService.handleOfflineError();
     //   }
     //   return this.errorService.handleServerSideError(error);
-    // }else{
+    // } else {
     //   return this.errorService.handleClientSideError(error);
     // }
   }

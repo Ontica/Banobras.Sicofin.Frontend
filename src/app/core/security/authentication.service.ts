@@ -7,6 +7,8 @@
 
 import { Injectable } from '@angular/core';
 
+import { DEFAULT_ROUTE, DEFAULT_URL, ROUTES_LIST, UNAUTHORIZED_ROUTE, getPermissionsList } from '@app/models';
+
 import { Assertion } from '../general/assertion';
 
 import { SessionService } from '../general/session.service';
@@ -25,7 +27,7 @@ export class AuthenticationService {
               private securityService: SecurityDataService) { }
 
 
-  async login(userID: string, userPassword: string): Promise<void> {
+  async login(userID: string, userPassword: string): Promise<string> {
     Assertion.assertValue(userID, 'userID');
     Assertion.assertValue(userPassword, 'userPassword');
 
@@ -39,7 +41,10 @@ export class AuthenticationService {
     const principal = this.securityService.getPrincipal();
 
     return Promise.all([sessionToken, principal])
-      .then(([x, y]) => this.setSession(x, y))
+      .then(([x, y]) => {
+        this.setSession(x, y);
+        return this.session.getPrincipal().defaultRoute;
+      })
       .catch((e) => this.handleAuthenticationError(e));
   }
 
@@ -57,12 +62,16 @@ export class AuthenticationService {
   }
 
 
-  private setSession(sessionToken: SessionToken, principalData: PrincipalData ){
+  private setSession(sessionToken: SessionToken, principalData: PrincipalData){
+    principalData.permissions = getPermissionsList(); // Tmp
+    const defaultRoute =  this.getDefaultRoute(principalData.permissions);
+
     const principal = new Principal(sessionToken,
                                     principalData.identity,
                                     principalData.claims,
                                     principalData.roles,
-                                    principalData.permissions);
+                                    principalData.permissions,
+                                    defaultRoute);
     this.session.setPrincipal(principal);
   }
 
@@ -75,6 +84,32 @@ export class AuthenticationService {
       return Promise.reject(new Error(`Tuve un problema al intentar acceder al sistema: ` +
         `${error.status} ${error.statusText} ${error.message}`));
     }
+  }
+
+
+  private getDefaultRoute(permissions: string[]): string {
+    if (permissions.includes(DEFAULT_ROUTE.permission)) {
+      return DEFAULT_URL;
+    }
+
+    const routesValid = this.getValitRoutes(permissions);
+
+    if (routesValid.length === 0) {
+      return UNAUTHORIZED_ROUTE;
+    }
+
+    for (let route of ROUTES_LIST) {
+      if (route.permission === routesValid[0]) {
+        return route.parent + '/' + route.path;
+      }
+    }
+
+    return UNAUTHORIZED_ROUTE;
+  }
+
+
+  private getValitRoutes(permissions): string[] {
+    return permissions ? permissions.filter(x => x.startsWith('route-')) : [];
   }
 
 }

@@ -6,14 +6,25 @@
  */
 
 import { NgModule } from '@angular/core';
+
 import { RouterModule, Routes } from '@angular/router';
+
+import { ROUTES_LIBRARY } from '@app/models';
 
 import { SystemManagementWorkspaceComponent } from './system-management-workspace.component';
 
 
 const routes: Routes = [
-  { path: 'generacion-de-saldos', component: SystemManagementWorkspaceComponent },
-  { path: '', redirectTo: 'generacion-de-saldos', pathMatch: 'full' }
+  {
+    data: { permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission },
+    path: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
+    component: SystemManagementWorkspaceComponent,
+  },
+  {
+    path: '',
+    redirectTo: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
+    pathMatch: 'full',
+  },
 ];
 
 

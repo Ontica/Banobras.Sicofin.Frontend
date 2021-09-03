@@ -7,25 +7,45 @@
 
 import { Injectable } from '@angular/core';
 
-import { Router, CanActivate } from '@angular/router';
+import { Router, CanActivate, CanActivateChild, ActivatedRouteSnapshot } from '@angular/router';
 
 import { SessionService } from '../general/session.service';
 
 
 @Injectable()
-export class SecurityGuard implements CanActivate {
+export class SecurityGuard implements CanActivate, CanActivateChild {
 
   constructor(private router: Router,
               private session: SessionService) { }
 
+
   canActivate() {
+    return this.isAuthenticated();
+  }
+
+
+  canActivateChild(childRoute: ActivatedRouteSnapshot) {
+    if (!this.isAuthenticated()) {
+      return false;
+    }
+
+    if (!this.session.hasPermission(childRoute.data.permission)) {
+      this.router.navigateByUrl('unauthorized');
+      return false;
+    }
+
+    return true;
+  }
+
+
+  private isAuthenticated() {
     const principal = this.session.getPrincipal();
 
     if (!principal.isAuthenticated) {
-      this.router.navigateByUrl('/security/login');
-
+      this.router.navigateByUrl('security/login');
       return false;
     }
+
     return true;
   }
 

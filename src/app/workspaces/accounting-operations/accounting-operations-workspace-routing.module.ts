@@ -6,17 +6,40 @@
  */
 
 import { NgModule } from '@angular/core';
+
 import { RouterModule, Routes } from '@angular/router';
+
+import { ROUTES_LIBRARY } from '@app/models';
 
 import { AccountingOperationsWorkspaceComponent } from './accounting-operations-workspace.component';
 
 
 const routes: Routes = [
-  { path: 'mis-volantes-pendientes', component: AccountingOperationsWorkspaceComponent },
-  { path: 'mesa-de-control', component: AccountingOperationsWorkspaceComponent },
-  { path: 'volantes-en-libros', component: AccountingOperationsWorkspaceComponent },
-  { path: 'todos-los-volantes', component: AccountingOperationsWorkspaceComponent },
-  { path: '', redirectTo: 'mis-volantes-pendientes', pathMatch: 'full' }
+  {
+    data: { permission: ROUTES_LIBRARY.operacion_contable_mis_volantes_pendientes.permission },
+    path: ROUTES_LIBRARY.operacion_contable_mis_volantes_pendientes.path,
+    component: AccountingOperationsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.operacion_contable_mesa_de_control.permission },
+    path: ROUTES_LIBRARY.operacion_contable_mesa_de_control.path,
+    component: AccountingOperationsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.operacion_contable_volantes_en_libros.permission },
+    path: ROUTES_LIBRARY.operacion_contable_volantes_en_libros.path,
+    component: AccountingOperationsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.operacion_contable_todos_los_volantes.permission },
+    path: ROUTES_LIBRARY.operacion_contable_todos_los_volantes.path,
+    component: AccountingOperationsWorkspaceComponent,
+  },
+  {
+    path: '',
+    redirectTo: ROUTES_LIBRARY.operacion_contable_mis_volantes_pendientes.path,
+    pathMatch: 'full',
+  },
 ];
 
 

@@ -30,13 +30,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       .pipe(
         catchError((err) => throwError(this.getNormalizedHttpErrorResponse(err, req)))
       );
-
   }
 
 
   private getNormalizedHttpErrorResponse(sourceErr: any,
                                          request: HttpRequest<any>): HttpErrorResponse {
-
     if (!(sourceErr instanceof HttpErrorResponse)) {
       return this.getUnknownHttpError(sourceErr, request);
     }

@@ -6,62 +6,66 @@
  */
 
 import { Injectable } from '@angular/core';
+
+import { Router } from '@angular/router';
+
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 
 @Injectable()
 export class ErrorMessageService {
 
-  constructor(private messageBox: MessageBoxService) { }
+  constructor(private messageBox: MessageBoxService,
+              private router: Router) { }
+
 
   handleOfflineError() {
-    this.showErrorMessage('Sin conexión a Internet', '');
+    this.displayConsoleMessage('OFFLINE ERROR', 'No hay conexión a Internet.');
+    this.showErrorMessage('No hay conexión a Internet.');
   }
+
 
   handleClientSideError(error) {
-    this.showErrorMessage(error.message || 'Ocurrió un error de aplicación indefinido.');
+    this.displayConsoleMessage('CLIENT SIDE ERROR', 'Verifique su conexion a la VPN.', error.message);
+    this.showErrorMessage(`Ocurrió un error de aplicación, verifique su conexión
+      a la VPN o consulte la consola para ver mas detalles.`);
   }
 
+
   handleServerSideError(error, request?) {
+    this.displayConsoleMessage('SERVER SIDE ERROR', `Status: ${error.status}.`, error.message);
 
     switch (error.status) {
-      case 400:
-        this.handle400Error(error);
-        return;
-
-      case 404:
-        this.handle404Error(error);
-        return;
-
-      case 500:
-        this.handle500Error(error);
+      case 401:
+        this.handle401Error();
         return;
 
       default:
-        this.handleOtherError(error);
+        this.showErrorMessage(error.error.message, error.status);
     }
-
   }
 
-  private handle400Error(error) {
-    this.showErrorMessage(error.error.message, error.status);
+
+  private displayConsoleMessage(errorType: string, message1: string, message2?: any) {
+    console.log(` \n%c${errorType.toUpperCase()}: `, 'color:red', message1,
+      (message2 ? ` \n\n${message2}\n` : ''));
   }
 
-  private handle404Error(error) {
-    this.showErrorMessage(error.error.message, error.status);
-  }
-
-  private handle500Error(error) {
-    this.showErrorMessage(error.error.message, error.status);
-  }
-
-  private handleOtherError(error) {
-    this.showErrorMessage(error.error.message, error.status);
-  }
 
   private showErrorMessage(message: string, status?: string) {
-    const statusMessage = status ? `<strong>(${status})</strong>  ` : '';
-    this.messageBox.showError(statusMessage + message);
+    if (!this.messageBox.isOpen()) {
+      const statusMessage = status ? `<strong>(${status})</strong>  ` : '';
+      this.messageBox.showError(statusMessage + message);
+    }
+  }
+
+
+  private handle401Error() {
+    if (!this.messageBox.isOpen()) {
+      this.messageBox.showError('Su sesión ha expirado, inicie sesión de nuevo para continuar.')
+        .toPromise()
+        .then(x => this.router.navigateByUrl('security/login'));
+    }
   }
 
 }

@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 
-
+import { SharedDirectivesModule } from '@app/shared/directives/shared-directives.module';
 import { SharedFormControlsModule } from '@app/shared/form-controls/shared-form-controls.module';
 import { SharedIndicatorsModule } from '@app/shared/indicators/shared-indicators.module';
 
@@ -33,8 +33,9 @@ import { UserSessionComponent } from './user-session/user-session.component';
     AngularMaterialModule,
     AngularFlexLayoutModule,
 
+    SharedDirectivesModule,
+    SharedFormControlsModule,
     SharedIndicatorsModule,
-    SharedFormControlsModule
   ],
 
   declarations: [
@@ -48,7 +49,7 @@ import { UserSessionComponent } from './user-session/user-session.component';
 
   exports: [
     MainLayoutComponent,
-    NoContentComponent
+    NoContentComponent,
   ],
 
   providers: []

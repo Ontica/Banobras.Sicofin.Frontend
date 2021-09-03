@@ -6,17 +6,40 @@
  */
 
 import { NgModule } from '@angular/core';
+
 import { RouterModule, Routes } from '@angular/router';
+
+import { ROUTES_LIBRARY } from '@app/models';
 
 import { AccountingReportsWorkspaceComponent } from './accounting-reports-workspace.component';
 
 
 const routes: Routes = [
-  { path: 'regulatorios', component: AccountingReportsWorkspaceComponent },
-  { path: 'operativos', component: AccountingReportsWorkspaceComponent },
-  { path: 'financieros', component: AccountingReportsWorkspaceComponent },
-  { path: 'todos', component: AccountingReportsWorkspaceComponent },
-  { path: '', redirectTo: 'regulatorios', pathMatch: 'full' }
+  {
+    data: { permission: ROUTES_LIBRARY.reportes_regulatorios.permission },
+    path: ROUTES_LIBRARY.reportes_regulatorios.path,
+    component: AccountingReportsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reportes_operativos.permission },
+    path: ROUTES_LIBRARY.reportes_operativos.path,
+    component: AccountingReportsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reportes_financieros.permission },
+    path: ROUTES_LIBRARY.reportes_financieros.path,
+    component: AccountingReportsWorkspaceComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reportes_todos.permission },
+    path: ROUTES_LIBRARY.reportes_todos.path,
+    component: AccountingReportsWorkspaceComponent,
+  },
+  {
+    path: '',
+    redirectTo: ROUTES_LIBRARY.reportes_regulatorios.path,
+    pathMatch: 'full',
+  },
 ];
 
 

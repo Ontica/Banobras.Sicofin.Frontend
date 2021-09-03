@@ -12,18 +12,20 @@ import {
   AccountingDashboardsViews,
   AccountingReportsViews,
   AccountingCataloguesAndRulesViews,
-  AccountingSystemManagementViews
+  AccountingSystemManagementViews,
+  UnauthorizedViews
 } from './views.config';
 
 
-export type LayoutType = 'AccountingOperation' | 'AccountingDashboards' |
-                         'AccountingReports' | 'AccountingCataloguesAndRules' | 'Management';
+export type LayoutType = 'AccountingOperation' | 'AccountingDashboards' | 'AccountingReports' |
+                         'AccountingCataloguesAndRules' | 'Management' | 'Unauthorized';
 
 
 export const APP_VIEWS: View[] = AccountingOperationViews.concat(AccountingDashboardsViews,
                                                                  AccountingReportsViews,
                                                                  AccountingCataloguesAndRulesViews,
-                                                                 AccountingSystemManagementViews);
+                                                                 AccountingSystemManagementViews,
+                                                                 UnauthorizedViews);
 
 
 export const APP_LAYOUTS: Layout[] = [
@@ -56,5 +58,11 @@ export const APP_LAYOUTS: Layout[] = [
     views: AccountingSystemManagementViews,
     hint: 'Herramientas de administración del sistema',
     defaultTitle: 'Administración del sistema'
-  }
+  },
+  {
+    name: 'Unauthorized',
+    views: UnauthorizedViews,
+    hint: '',
+    defaultTitle: ''
+  },
 ];

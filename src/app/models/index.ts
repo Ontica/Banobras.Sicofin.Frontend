@@ -19,8 +19,15 @@
 //
 
 export * from './accounts-chart';
-export * from './balances';
+
 export * from './balances-store';
+
+export * from './balances';
+
 export * from './exchange-rates';
+
+export * from './permissions';
+
 export * from './trial-balances';
+
 export * from './vouchers';
