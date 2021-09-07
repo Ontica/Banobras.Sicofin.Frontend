@@ -98,6 +98,10 @@ $font-size-xsmall: 9pt;
   font-family: $primary-font-family;
   font-size: $font-size;
   padding: $select-padding;
+
+  &.inner-message {
+    padding: 6px;
+  }
 }
 
 .ng-select.ng-select-disabled > .ng-select-container {

@@ -29,6 +29,7 @@ export interface SelectBoxConfig {
   dropdownPosition?: DropdownPosition;
   groupBy?: string;
   hideSelected?: boolean;
+  loadingText?: string;
   minTermLength?: number;
   multiple?: boolean;
   notFoundText?: string;
@@ -51,6 +52,7 @@ const DefaultSelectBoxConfig: SelectBoxConfig = {
   dropdownPosition: 'auto',
   groupBy: null,
   hideSelected: false,
+  loadingText: 'Cargando',
   minTermLength: 5,
   multiple: false,
   notFoundText: 'No se encontraron registros',
@@ -78,6 +80,8 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
   @ContentChild('labelTemplate', { read: TemplateRef }) labelTemplate: TemplateRef<any>;
   @ContentChild('groupTemplate', { read: TemplateRef }) groupTemplate: TemplateRef<any>;
   @ContentChild('optionTemplate', { read: TemplateRef }) optionTemplate: TemplateRef<any>;
+  @ContentChild('headerTemplate', { read: TemplateRef }) headerTemplate: TemplateRef<any>;
+  @ContentChild('footerTemplate', { read: TemplateRef }) footerTemplate: TemplateRef<any>;
 
   @Input() items: any[];
   @Input() bindLabel = 'name';

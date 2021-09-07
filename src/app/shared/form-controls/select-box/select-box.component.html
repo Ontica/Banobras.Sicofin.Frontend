@@ -16,6 +16,7 @@
   [dropdownPosition]="selectBoxConfig.dropdownPosition"
   [groupBy]="selectBoxConfig.groupBy"
   [hideSelected]="selectBoxConfig.hideSelected"
+  [loadingText]="selectBoxConfig.loadingText"
   [minTermLength]="selectBoxConfig.minTermLength"
   [multiple]="selectBoxConfig.multiple"
   [notFoundText]="selectBoxConfig.notFoundText"
@@ -51,6 +52,32 @@
     <ng-container *ngIf="!optionTemplate">
      {{bindLabel ? item[bindLabel] : item}}
     </ng-container>
+  </ng-template>
+
+  <ng-template ng-header-tmp *ngIf="headerTemplate">
+    <ng-container *ngTemplateOutlet="headerTemplate;"></ng-container>
+  </ng-template>
+
+  <ng-template ng-footer-tmp *ngIf="footerTemplate">
+    <ng-container *ngTemplateOutlet="footerTemplate;"></ng-container>
+  </ng-template>
+
+  <ng-template ng-typetosearch-tmp>
+    <div class="ng-option disabled inner-message">
+        {{selectBoxConfig.typeToSearchText}}
+    </div>
+  </ng-template>
+
+  <ng-template ng-notfound-tmp>
+    <div class="ng-option disabled inner-message">
+        {{selectBoxConfig.notFoundText}}
+    </div>
+  </ng-template>
+
+  <ng-template ng-loadingtext-tmp>
+    <div class="ng-option disabled inner-message">
+        {{selectBoxConfig.loadingText}}
+    </div>
   </ng-template>
 
 </ng-select>
