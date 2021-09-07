@@ -26,9 +26,8 @@ export class ErrorMessageService {
 
 
   handleClientSideError(error) {
-    this.displayConsoleMessage('CLIENT SIDE ERROR', 'Verifique su conexion a la VPN.', error.message);
-    this.showErrorMessage(`Ocurrió un error de aplicación, verifique su conexión
-      a la VPN o consulte la consola para ver mas detalles.`);
+    this.displayConsoleMessage('CLIENT SIDE ERROR', error.message);
+    this.showErrorMessage(`Ocurrió un error de aplicación, consulte la consola para ver mas detalles.`);
   }
 
 
