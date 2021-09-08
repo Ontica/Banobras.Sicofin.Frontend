@@ -148,6 +148,7 @@ export interface DataTableColumn {
   field: string;
   title: string;
   type: string;
+  digits?: number;
 }
 
 

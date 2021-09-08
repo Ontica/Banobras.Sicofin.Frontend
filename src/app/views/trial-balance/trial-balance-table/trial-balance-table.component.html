@@ -35,7 +35,7 @@
                         'nowrap': column.type === 'text-nowrap'}">
 
             <ng-container [ngSwitch]="column.type">
-              <span *ngSwitchCase="'decimal'">{{ row[column.field] | number : '1.2-2' }}</span>
+              <span *ngSwitchCase="'decimal'">{{ row[column.field] | empDecimal: column.digits }}</span>
               <span *ngSwitchDefault>{{ row[column.field] }}</span>
             </ng-container>
 

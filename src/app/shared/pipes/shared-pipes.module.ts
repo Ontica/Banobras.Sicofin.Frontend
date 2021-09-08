@@ -8,9 +8,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { DateTimeFormatPipe } from './date-time-format.pipe';
+import { DecimalFormatPipe } from './decimal-format.pipe';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { SafeUrlPipe } from './safe-url.pipe';
-import { DateTimeFormatPipe } from './date-time-format.pipe';
 import { TimeFormatPipe } from './time-format.pipe';
 
 
@@ -21,16 +22,18 @@ import { TimeFormatPipe } from './time-format.pipe';
   ],
 
   declarations: [
+    DateTimeFormatPipe,
+    DecimalFormatPipe,
     SafeHtmlPipe,
     SafeUrlPipe,
-    DateTimeFormatPipe,
     TimeFormatPipe
   ],
 
   exports: [
+    DateTimeFormatPipe,
+    DecimalFormatPipe,
     SafeHtmlPipe,
     SafeUrlPipe,
-    DateTimeFormatPipe,
     TimeFormatPipe
   ],
 
