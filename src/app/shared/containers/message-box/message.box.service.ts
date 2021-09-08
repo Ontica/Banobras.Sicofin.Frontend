@@ -88,6 +88,14 @@ export class MessageBoxService {
   }
 
 
+  showInDevelopment(info?) {
+    this.showError('Funcionalidad en proceso de desarrollo.');
+    if (info) {
+      console.log(info);
+    }
+  }
+
+
   isOpen() {
     return this.dialog.openDialogs.length > 0;
   }
