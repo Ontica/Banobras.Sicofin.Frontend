@@ -14,7 +14,7 @@ import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, EventInfo, Identifiable, isEmpty, Validate } from '@app/core';
 
 import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
          SubsidiaryAccount, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
@@ -29,12 +29,17 @@ import { VouchersDataService } from '@app/data-services';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
+import {
+  SubledgerAccountCreatorEventType
+} from '@app/views/subledger-accounts/subledger-account-creator/subledger-account-creator.component';
+
 
 export enum VoucherEntryEditorEventType {
   CLOSE_MODAL_CLICKED  = 'VoucherEntryEditorComponent.Event.CloseModalClicked',
   CREATE_VOUCHER_ENTRY = 'VoucherEntryEditorComponent.Event.CreateVoucherEntry',
   UPDATE_VOUCHER_ENTRY = 'VoucherEntryEditorComponent.Event.UpdateVoucherEntry',
 }
+
 
 enum VoucherEntryEditorFormControls {
   voucherEntryType = 'voucherEntryType',
@@ -61,7 +66,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   @Input() voucherId: number;
 
-  @Input() voucherLedgerName: string;
+  @Input() voucherLedger: Identifiable;
 
   @Input() voucherEntry: VoucherEntry = EmptyVoucherEntry;
 
@@ -95,6 +100,8 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   sectorRequired = false;
   subledgerAccountRequired = false;
 
+  displaySubledgerAccountCreator = false;
+
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {
@@ -127,19 +134,19 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  get ledgerAccountSelected() {
-    const ledgerAccount: LedgerAccount = this.formHandler.getControl(this.controls.ledgerAccount).value;
+  get ledgerAccountSelected(): LedgerAccount {
+    const ledgerAccount = this.formHandler.getControl(this.controls.ledgerAccount).value;
     return ledgerAccount?.id > 0 ? ledgerAccount : EmptyLedgerAccount;
   }
 
 
-  get subledgerAccountSelected() {
-    const subledgerAccount: any = this.formHandler.getControl(this.controls.subledgerAccount).value;
+  get subledgerAccountSelected(): SubsidiaryAccount {
+    const subledgerAccount = this.formHandler.getControl(this.controls.subledgerAccount).value;
     return subledgerAccount?.id > 0 ? subledgerAccount : null;
   }
 
 
-  get placeholderSector() {
+  get placeholderSector(): string {
     if (this.formHandler.getControl(this.controls.ledgerAccount).valid) {
       if (this.sectorRequired) {
         return 'Seleccionar';
@@ -150,7 +157,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  get placeholderSubledgerAccount() {
+  get placeholderSubledgerAccount(): string {
     if (this.formHandler.getControl(this.controls.ledgerAccount).valid) {
       if (this.sectorRequired && this.formHandler.getControl(this.controls.sector).invalid) {
         return 'Seleccione el sector';
@@ -165,7 +172,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  get placeholderCurrency() {
+  get placeholderCurrency(): string {
     return this.formHandler.getControl(this.controls.ledgerAccount).valid ?
       'Seleccionar' : 'Seleccione la cuenta';
   }
@@ -209,6 +216,36 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   onCloneVoucherEntryClicked() {
     this.setVoucherEntryToClone(this.voucherEntry);
+  }
+
+
+  onCreateSubledgerAccountClicked() {
+    this.displaySubledgerAccountCreator = true;
+  }
+
+
+  onSubledgerAccountCreatorEvent(event: EventInfo) {
+    switch (event.type as SubledgerAccountCreatorEventType) {
+
+      case SubledgerAccountCreatorEventType.CLOSE_MODAL_CLICKED:
+        this.displaySubledgerAccountCreator = false;
+        return;
+
+      case SubledgerAccountCreatorEventType.SUBLEDGER_ACCOUNT_CREATED:
+        Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
+
+        this.displaySubledgerAccountCreator = false;
+
+        if (this.subledgerAccountRequired) {
+          this.formHandler.getControl(this.controls.subledgerAccount).reset(event.payload.subledgerAccount);
+          this.subscribeSubledgerAccountList();
+        }
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -450,7 +487,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   private showConfirmAssignAccountToVoucher(ledgerAccount: LedgerAccount) {
     const message = `La cuenta <strong>${ledgerAccount.number}: ${ledgerAccount.name}</strong>
-      no se ha utilizado en la contabilidad ${this.voucherLedgerName}.
+      no se ha utilizado en la contabilidad ${this.voucherLedger.name}.
       <br><br>¿Desea utilizarla por primera vez?`;
 
     this.messageBox.confirm(message, 'Agregar cuenta')

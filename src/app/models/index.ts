@@ -28,6 +28,8 @@ export * from './exchange-rates';
 
 export * from './permissions';
 
+export * from './subledgers';
+
 export * from './trial-balances';
 
 export * from './vouchers';

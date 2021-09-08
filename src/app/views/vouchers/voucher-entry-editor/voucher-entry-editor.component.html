@@ -8,7 +8,7 @@
     <div class="card-body-padding">
 
       <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner"
-        autocomplete="off" class="form-section">
+        autocomplete="off" class="form-section" (keydown.enter)="$event.preventDefault()">
 
         <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 
@@ -102,11 +102,12 @@
 
                 <div [fxFlex]="100">
                   <label>Auxiliar:</label>
-                  <emp-ng-select
+                  <emp-ng-select #subledgerAccount
                     [config]="{ bindByValue: false,
                                 clearable: true,
                                 minTermLength: subledgerAccountMinTermLength,
-                                typeToSearchText: 'Ingrese ' + subledgerAccountMinTermLength +' o más caracteres'}"
+                                typeToSearchText: 'Ingrese ' + subledgerAccountMinTermLength +' o más caracteres',
+                                virtualScroll: true }"
                     [formControlName]="controls.subledgerAccount"
                     [items]="subledgerAccountList$ | async"
                     [typeahead]="subledgerAccountInput$"
@@ -127,6 +128,12 @@
                       </div>
                     </ng-template>
 
+                    <ng-template #footerTemplate>
+                      <button *ngIf="subledgerAccountRequired" class="btn"
+                        (click)="subledgerAccount.select.close(); onCreateSubledgerAccountClicked()">
+                        Agregar Auxiliar
+                      </button>
+                    </ng-template>
                   </emp-ng-select>
                 </div>
 
@@ -327,3 +334,9 @@
   </emp-ng-card>
 
 </emp-ng-modal-window>
+
+<emp-fa-subledger-account-creator *ngIf="displaySubledgerAccountCreator"
+  [ledger]="voucherLedger"
+  (subledgerAccountCreatorEvent)="onSubledgerAccountCreatorEvent($event)">
+
+</emp-fa-subledger-account-creator>
