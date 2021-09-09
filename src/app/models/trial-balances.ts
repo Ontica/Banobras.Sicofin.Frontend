@@ -13,22 +13,24 @@ import { ExchangeRate } from './exchange-rates';
 
 
 export enum TrialBalanceType {
-  AnaliticoDeCuentas           = 'AnaliticoDeCuentas',
-  Balanza                      = 'Balanza',
-  BalanzaValorizadaComparativa = 'BalanzaValorizadaComparativa',
-  SaldosPorCuenta              = 'SaldosPorCuenta',
-  SaldosPorAuxiliar            = 'SaldosPorAuxiliar',
-  SaldosPorCuentaYMayor        = 'SaldosPorCuentaYMayor',
+  AnaliticoDeCuentas                = 'AnaliticoDeCuentas',
+  Balanza                           = 'Balanza',
+  BalanzaValorizadaComparativa      = 'BalanzaValorizadaComparativa',
+  BalanzaValorizadaEnDolares        = 'BalanzaValorizadaEnDolares',
+  SaldosPorCuenta                   = 'SaldosPorCuenta',
+  SaldosPorAuxiliar                 = 'SaldosPorAuxiliar',
+  BalanzaConContabilidadesEnCascada = 'BalanzaConContabilidadesEnCascada',
 }
 
 
 export const TrialBalanceTypeList: Identifiable[] = [
-  {uid: TrialBalanceType.AnaliticoDeCuentas,           name: 'Analítico de cuentas'},
-  {uid: TrialBalanceType.SaldosPorCuentaYMayor,        name: 'Balanza con contabilidades en cascada'},
-  {uid: TrialBalanceType.BalanzaValorizadaComparativa, name: 'Balanza de comparación entre periodos'},
-  {uid: TrialBalanceType.Balanza,                      name: 'Balanza tradicional'},
-  {uid: TrialBalanceType.SaldosPorAuxiliar,            name: 'Saldos por auxiliar'},
-  {uid: TrialBalanceType.SaldosPorCuenta,              name: 'Saldos por cuenta'},
+  {uid: TrialBalanceType.AnaliticoDeCuentas,                name: 'Analítico de cuentas'},
+  {uid: TrialBalanceType.BalanzaConContabilidadesEnCascada, name: 'Balanza con contabilidades en cascada'},
+  {uid: TrialBalanceType.BalanzaValorizadaComparativa,      name: 'Balanza de comparación entre periodos'},
+  {uid: TrialBalanceType.Balanza,                           name: 'Balanza tradicional'},
+  {uid: TrialBalanceType.BalanzaValorizadaEnDolares,        name: 'Balanza valorizada en dolares'},
+  {uid: TrialBalanceType.SaldosPorAuxiliar,                 name: 'Saldos por auxiliar'},
+  {uid: TrialBalanceType.SaldosPorCuenta,                   name: 'Saldos por cuenta'},
 ];
 
 

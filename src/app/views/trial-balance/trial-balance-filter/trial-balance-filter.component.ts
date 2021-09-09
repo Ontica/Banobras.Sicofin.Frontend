@@ -78,21 +78,34 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get exchangeRatesRequired(): boolean {
     return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.BalanzaValorizadaComparativa]
-            .includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceType.BalanzaValorizadaComparativa,
+            TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get useDefaultValuationDisabled(): boolean {
+    return [TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
+  get showCascadeBalancesDisabled(): boolean {
+    return [TrialBalanceType.BalanzaConContabilidadesEnCascada,
+            TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get showCascadeBalancesRequired(): boolean {
-    return [TrialBalanceType.SaldosPorCuentaYMayor].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceType.BalanzaConContabilidadesEnCascada]
+              .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
-  get showWithSubledgerAccountDisabled(): boolean {
+  get withSubledgerAccountDisabled(): boolean {
     return [TrialBalanceType.AnaliticoDeCuentas,
+            TrialBalanceType.BalanzaConContabilidadesEnCascada,
             TrialBalanceType.BalanzaValorizadaComparativa,
-            TrialBalanceType.SaldosPorAuxiliar,
-            TrialBalanceType.SaldosPorCuentaYMayor].includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceType.BalanzaValorizadaEnDolares,
+            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -117,9 +130,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get displayToAccount() {
     return [TrialBalanceType.AnaliticoDeCuentas,
             TrialBalanceType.Balanza,
+            TrialBalanceType.BalanzaConContabilidadesEnCascada,
             TrialBalanceType.BalanzaValorizadaComparativa,
-            TrialBalanceType.SaldosPorCuentaYMayor].includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
+
 
   get displayInitialPeriod() {
     return ![TrialBalanceType.SaldosPorCuenta,
@@ -128,7 +143,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get displayLevel(): boolean {
-    return !this.showCascadeBalancesRequired;
+    return ![TrialBalanceType.BalanzaConContabilidadesEnCascada,
+             TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -137,6 +153,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
            this.initalPeriodDatesValid && this.finalPeriodDatesValid &&
            !!this.trialBalanceCommand.balancesType;
   }
+
 
   get initalPeriodDatesValid(): boolean {
     if (this.displayInitialPeriod) {
@@ -187,6 +204,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
     if (this.exchangeRatesRequired) {
       this.trialBalanceCommand.useValuation = true;
+      this.trialBalanceCommand.useDefaultValuation = true;
     } else {
       this.trialBalanceCommand.useValuation = this.trialBalanceCommand.useDefaultValuation ? false :
         this.exchangeRateFormFieldsValid;

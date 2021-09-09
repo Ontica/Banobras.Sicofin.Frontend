@@ -149,9 +149,9 @@
 
         <div fxFlex="25">
 
-          <mat-checkbox name="withSubledgerAccount" [disabled]="showWithSubledgerAccountDisabled"
+          <mat-checkbox name="withSubledgerAccount" [disabled]="withSubledgerAccountDisabled"
             [(ngModel)]="trialBalanceCommand.withSubledgerAccount"
-            [title]="showWithSubledgerAccountDisabled && !withSubledgerAccountRequired ? 'No aplica' : ''"
+            [title]="withSubledgerAccountDisabled && !withSubledgerAccountRequired ? 'No aplica' : ''"
             (click)="$event.stopPropagation">
             Con Auxiliares
           </mat-checkbox>
@@ -160,7 +160,7 @@
 
         <div fxFlex="25">
 
-          <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesRequired"
+          <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesDisabled"
             [(ngModel)]="trialBalanceCommand.showCascadeBalances"
             (click)="$event.stopPropagation">
             Imprimir en cascada
@@ -182,6 +182,7 @@
         <div fxFlex="25">
 
           <mat-checkbox name="useDefaultValuation" *ngIf="trialBalanceCommand.useValuation"
+            [disabled]="useDefaultValuationDisabled"
             [(ngModel)]="trialBalanceCommand.useDefaultValuation"
             (click)="$event.stopPropagation"
             (change)="onUseDefaultValuationChange($event.checked)">
