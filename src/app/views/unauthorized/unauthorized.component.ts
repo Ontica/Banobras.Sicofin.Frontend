@@ -12,7 +12,7 @@ import { Component } from '@angular/core';
   selector: 'emp-ng-unauthorized',
   template: `
     <div class="unauthorized-container">
-      <h1>401: No tienes permisos</h1>
+      <h1>401: La cuenta de usuario no tiene permisos de acceso o la sesión ya expiró.</h1>
     </div>
   `,
   styles: [`

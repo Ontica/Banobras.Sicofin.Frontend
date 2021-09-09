@@ -328,11 +328,8 @@ export interface VoucherEntry {
   date: string;
   responsibilityArea: Identifiable;
   budgetConcept: string;
-  availabilityCode: string;
   eventType: Identifiable;
   verificationNumber: string;
-  debit: number;
-  credit: number;
   currency: Identifiable;
   amount: number;
   exchangeRate: number;
@@ -350,11 +347,8 @@ export const EmptyVoucherEntry: VoucherEntry = {
   date: '',
   responsibilityArea: Empty,
   budgetConcept: '',
-  availabilityCode: '',
   eventType: Empty,
   verificationNumber: '',
-  debit: 0,
-  credit: 0,
   currency: Empty,
   amount: 0,
   exchangeRate: 0,
