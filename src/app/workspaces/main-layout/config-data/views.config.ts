@@ -11,8 +11,8 @@ import { View } from '../common-models/common';
 export const AccountingOperationViews: View[] = [
   {
     name: 'AccountingOperation.MyInbox',
-    title: 'Mis volantes pendientes',
-    url: '/operacion-contable/mis-volantes-pendientes'
+    title: 'Mis pólizas pendientes',
+    url: '/operacion-contable/mis-polizas-pendientes'
   },
   {
     name: 'AccountingOperation.ControlDesk',
@@ -22,15 +22,15 @@ export const AccountingOperationViews: View[] = [
   },
   {
     name: 'AccountingOperation.Finished',
-    title: 'Volantes en libros',
-    menuTitle: 'Volantes en libros',
-    url: '/operacion-contable/volantes-en-libros'
+    title: 'Pólizas en libros',
+    menuTitle: 'Pólizas en libros',
+    url: '/operacion-contable/polizas-en-libros'
   },
   {
     name: 'AccountingOperation.All',
-    title: 'Todos los volantes',
-    menuTitle: 'Todos los volantes',
-    url: '/operacion-contable/todos-los-volantes'
+    title: 'Todas las pólizas',
+    menuTitle: 'Todas las pólizas',
+    url: '/operacion-contable/todas-las-polizas'
   }
 ];
 
@@ -43,8 +43,8 @@ export const AccountingDashboardsViews: View[] = [
   },
   {
     name: 'AccountingDashboards.AccountGroupsBalances',
-    title: 'Cálculo de agrupaciones',
-    url: '/tableros/calculo-de-agrupaciones'
+    title: 'Reportes regulatorios',
+    url: '/tableros/reportes-regulatorios'
   },
   {
     name: 'AccountingDashboards.FinancialFacts',
@@ -90,14 +90,14 @@ export const AccountingCataloguesAndRulesViews: View[] = [
     url: '/reglas-y-catalogos/catalogos-de-cuentas'
   },
   {
-    name: 'AccountingCataloguesAndRulesViews.AccountingRules',
-    title: 'Reglas contabilizadoras',
-    url: '/reglas-y-catalogos/reglas-contabilizadoras'
-  },
-  {
     name: 'AccountingCataloguesAndRulesViews.AccountsGroups',
     title: 'Agrupaciones',
     url: '/reglas-y-catalogos/agrupaciones'
+  },
+  {
+    name: 'AccountingCataloguesAndRulesViews.AccountingRules',
+    title: 'Reglas contabilizadoras',
+    url: '/reglas-y-catalogos/reglas-contabilizadoras'
   },
   {
     name: 'AccountingCataloguesAndRulesViews.AccountsGroups',

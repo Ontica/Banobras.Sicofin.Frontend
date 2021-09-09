@@ -67,7 +67,7 @@ export const ROUTES_LIBRARY = {
   operacion_contable_mis_volantes_pendientes: {
     permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
     parent: 'operacion-contable',
-    path: 'mis-volantes-pendientes',
+    path: 'mis-polizas-pendientes',
   },
   operacion_contable_mesa_de_control: {
     permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
@@ -77,12 +77,12 @@ export const ROUTES_LIBRARY = {
   operacion_contable_volantes_en_libros: {
     permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
     parent: 'operacion-contable',
-    path: 'volantes-en-libros',
+    path: 'polizas-en-libros',
   },
   operacion_contable_todos_los_volantes: {
     permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
     parent: 'operacion-contable',
-    path: 'todos-los-volantes',
+    path: 'todas-las-polizas',
   },
 
   // #endregion
@@ -97,7 +97,7 @@ export const ROUTES_LIBRARY = {
   tableros_calculo_de_agrupaciones: {
     permission: PermissionsLibrary.ROUTE_TABLEROS,
     parent: 'tableros',
-    path: 'calculo-de-agrupaciones',
+    path: 'reportes-regulatorios',
   },
   tableros_indicadores_financieros: {
     permission: PermissionsLibrary.ROUTE_TABLEROS,
