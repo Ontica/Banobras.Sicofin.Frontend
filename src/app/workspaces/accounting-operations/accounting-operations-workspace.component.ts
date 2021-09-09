@@ -18,6 +18,8 @@ import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherDescriptorFromVouch
 
 import { View } from '../main-layout';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 import { VouchersDataService } from '@app/data-services';
 
 import { ArrayLibrary } from '@app/shared/utils';
@@ -63,7 +65,8 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   excelFileUrl = '';
 
   constructor(private uiLayer: PresentationLayer,
-              private vouchersData: VouchersDataService) {
+              private vouchersData: VouchersDataService,
+              private messageBox: MessageBoxService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
 
@@ -114,7 +117,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION_CLICKED:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.option, 'event.payload.option');
-        console.log('SELECT_VOUCHERS_OPTION_CLICKED: ', event.payload.option, event.payload.vouchers);
+        this.messageBox.showInDevelopment(event);
         return;
 
       default:
@@ -239,11 +242,10 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
 
   private exportVouchersToExcel() {
-    console.log('EXPORT_VOUCHERS', this.searchVouchersCommand);
-
     setTimeout(() => {
       this.excelFileUrl = 'data-dummy';
-    }, 1000);
+      this.messageBox.showInDevelopment({type: 'EXPORT_VOUCHERS', command: this.searchVouchersCommand});
+    }, 500);
   }
 
 

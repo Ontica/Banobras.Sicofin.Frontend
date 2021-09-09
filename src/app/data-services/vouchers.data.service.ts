@@ -36,6 +36,8 @@ export class VouchersDataService {
 
 
   getOpenedAccountingDates(ledgerUID: string): Observable<string[]> {
+    Assertion.assertValue(ledgerUID, 'ledgerUID');
+
     const path = `v2/financial-accounting/vouchers/opened-accounting-dates/${ledgerUID}`;
 
     return this.http.get<string[]>(path);
@@ -57,6 +59,8 @@ export class VouchersDataService {
 
 
   getVoucher(voucherId: number): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
     const path = `v2/financial-accounting/vouchers/${voucherId}`;
 
     return this.http.get<Voucher>(path);
@@ -223,6 +227,9 @@ export class VouchersDataService {
 
 
   getVoucherEntry(voucherId: number, voucherEntryId: number): Observable<VoucherEntry> {
+    Assertion.assertValue(voucherId, 'voucherId');
+    Assertion.assertValue(voucherEntryId, 'voucherEntryId');
+
     const path = `v2/financial-accounting/vouchers/${voucherId}/entries/${voucherEntryId}`;
 
     return this.http.get<VoucherEntry>(path);

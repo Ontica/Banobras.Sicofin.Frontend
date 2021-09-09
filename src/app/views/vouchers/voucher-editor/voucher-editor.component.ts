@@ -86,7 +86,7 @@ export class VoucherEditorComponent {
 
       case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
-        console.log(event);
+        this.messageBox.showInDevelopment(event);
         return;
 
       case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:

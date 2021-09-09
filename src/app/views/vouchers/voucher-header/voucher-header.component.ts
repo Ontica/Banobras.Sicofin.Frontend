@@ -205,7 +205,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  private getOpenedAccountingDates(ledgerUID: string) {
+  private getOpenedAccountingDates(ledgerUID: string, initialLoad: boolean = false) {
     this.isLoadingAccountingDates = true;
 
     this.vouchersData.getOpenedAccountingDates(ledgerUID)
@@ -213,9 +213,11 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       .then(x => {
         this.accountingDatesList =
           x.map(item => Object.create({ uid: item, name: this.dateTimeFormat.transform(item) }));
-        this.hasValueDate = this.voucher.id > 0 ?
-          !x.includes(this.voucher.accountingDate) : false;
-      })
+
+        if (initialLoad) {
+          this.hasValueDate = this.voucher.id > 0 ? !x.includes(this.voucher.accountingDate) : false;
+        }
+        }, error => this.accountingDatesList = [])
       .finally(() => this.isLoadingAccountingDates = false);
   }
 
@@ -256,7 +258,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.setAccountChartSelected();
-    this.getOpenedAccountingDates(this.voucher.ledger.uid);
+    this.getOpenedAccountingDates(this.voucher.ledger.uid, true);
   }
 
 
