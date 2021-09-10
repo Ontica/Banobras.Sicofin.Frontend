@@ -28,6 +28,8 @@ export * from './data-table';
 
 export * from './exchange-rates';
 
+export * from './grouping-rules';
+
 export * from './permissions';
 
 export * from './subledgers';

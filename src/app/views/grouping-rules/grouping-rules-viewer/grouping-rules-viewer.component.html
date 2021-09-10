@@ -1,0 +1,50 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Visualizador de reglas de agrupación
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div fxLayout="column" fxFlexFill>
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <emp-fa-grouping-rules-filter fxFlex="none"
+        (groupingRulesFilterEvent)="onGroupingRulesFilterEvent($event)">
+
+      </emp-fa-grouping-rules-filter>
+
+      <emp-fa-data-table fxFlex
+        [dataTable]="groupingRuleData"
+        [commandExecuted]="commandExecuted"
+        (dataTableEvent)="onGroupingRulesTableEvent($event)">
+
+      </emp-fa-data-table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  [title]="'Exportar ' + rulesSetName"
+  [excelFileUrl]="excelFileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

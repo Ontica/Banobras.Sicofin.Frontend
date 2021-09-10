@@ -11,6 +11,7 @@ import { AccountsChartDataService } from './accounts-chart.data.service';
 import { BalancesDataService } from './balances.data.service';
 import { BalancesStoreDataService } from './balances-store.data.service';
 import { ExchangeRatesDataService } from './exchange-rates.data.service';
+import { RulesDataService } from './rules.data.service';
 import { SubledgerDataService } from './subledgers.data.service';
 import { VouchersDataService } from './vouchers.data.service';
 
@@ -26,6 +27,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     BalancesStoreDataService,
     ExchangeRatesDataService,
     FileDownloadService,
+    RulesDataService,
     SubledgerDataService,
     VouchersDataService,
 

@@ -19,6 +19,10 @@ import {
   AccountsChartMainPageComponent
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
 
+import {
+  GroupingRulesMainPageComponent
+} from './grouping-rules-main-page/grouping-rules-main-page.component';
+
 
 const routes: Routes = [
   {
@@ -27,13 +31,13 @@ const routes: Routes = [
     component: AccountsChartMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.path,
-    component: AccountingCataloguesAndRulesWorkspaceComponent,
-  },
-  {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.permission },
     path: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.path,
+    component: GroupingRulesMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.path,
     component: AccountingCataloguesAndRulesWorkspaceComponent,
   },
   {

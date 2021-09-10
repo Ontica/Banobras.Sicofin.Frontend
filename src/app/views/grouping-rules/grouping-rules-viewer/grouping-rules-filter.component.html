@@ -1,0 +1,66 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div fxFlex>
+
+        <label>Catálogo de cuentas:</label>
+
+        <emp-ng-select name="accountChart" required
+          [config]="{selectFirst: true, bindByValue: false}"
+          [(ngModel)]="groupingRulesForm.accountChart"
+          [items]="accountsChartMasterDataList"
+          [showError]="!groupingRulesForm.accountChart"
+          (changes)="onAccountsChartChanges($event)">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex>
+
+        <label>Agrupación:</label>
+
+        <emp-ng-select name="rulesSet" required
+          [config]="{bindByValue: false}"
+          [(ngModel)]="groupingRulesForm.rulesSet"
+          [items]="rulesSetList"
+          [showError]="!groupingRulesForm.rulesSet">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="none" #periodSection>
+
+        <label>Fecha:</label>
+
+        <emp-ng-datepicker name="date" disabled
+          [(ngModel)]="groupingRulesForm.date">
+
+        </emp-ng-datepicker>
+
+      </div>
+
+      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button title="Consultar agrupaciones"
+          [class.btn-icon]="form.invalid"
+          [class.btn-icon-action]="form.valid"
+          [disabled]="form.invalid"
+          (click)="onSearchGroupingRulesClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
