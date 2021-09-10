@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrialBalanceComponent } from './trial-balance.component';
+import { TrialBalanceViewerComponent } from './trial-balance-viewer.component';
 
-describe('TrialBalanceComponent', () => {
-  let component: TrialBalanceComponent;
-  let fixture: ComponentFixture<TrialBalanceComponent>;
+describe('TrialBalanceViewerComponent', () => {
+  let component: TrialBalanceViewerComponent;
+  let fixture: ComponentFixture<TrialBalanceViewerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrialBalanceComponent ]
+      declarations: [ TrialBalanceViewerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TrialBalanceComponent);
+    fixture = TestBed.createComponent(TrialBalanceViewerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

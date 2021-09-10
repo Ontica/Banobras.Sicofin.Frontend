@@ -16,8 +16,8 @@ import { SharedModule } from '@app/shared/shared.module';
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
 import { ExchangeRateSelectorComponent } from './exchange-rate-selector/exchange-rate-selector.component';
-import { TrialBalanceComponent } from './trial-balance/trial-balance.component';
-import { TrialBalanceFilterComponent } from './trial-balance-filter/trial-balance-filter.component';
+import { TrialBalanceFilterComponent } from './trial-balance-viewer/trial-balance-filter.component';
+import { TrialBalanceViewerComponent } from './trial-balance-viewer/trial-balance-viewer.component';
 
 @NgModule({
   imports: [
@@ -33,11 +33,11 @@ import { TrialBalanceFilterComponent } from './trial-balance-filter/trial-balanc
   ],
   declarations: [
     ExchangeRateSelectorComponent,
-    TrialBalanceComponent,
     TrialBalanceFilterComponent,
+    TrialBalanceViewerComponent,
   ],
   exports: [
-    TrialBalanceComponent,
+    TrialBalanceViewerComponent,
   ]
 })
 export class TrialBalanceModule { }

@@ -19,15 +19,15 @@ import { DataTableEventType } from '@app/views/reports-controls/data-table/data-
 import {
   ExportReportModalEventType
 } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+import { TrialBalanceFilterEventType } from './trial-balance-filter.component';
 
-import { TrialBalanceFilterEventType } from '../trial-balance-filter/trial-balance-filter.component';
 
 
 @Component({
-  selector: 'emp-fa-trial-balance',
-  templateUrl: './trial-balance.component.html',
+  selector: 'emp-fa-trial-balance-viewer',
+  templateUrl: './trial-balance-viewer.component.html',
 })
-export class TrialBalanceComponent {
+export class TrialBalanceViewerComponent {
 
   balanceTypeName = '';
 
