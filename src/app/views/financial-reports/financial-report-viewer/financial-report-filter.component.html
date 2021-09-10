@@ -1,0 +1,64 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  (keydown.enter)="$event.preventDefault()">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div fxFlex>
+
+        <label>Catálogo de cuentas:</label>
+
+        <emp-ng-select name="accountsChartUID" required
+          [config]="{selectFirst: true}"
+          [(ngModel)]="financialReportCommand.accountsChartUID"
+          [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
+          [showError]="!financialReportCommand.accountsChartUID">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex>
+
+        <label>Reporte:</label>
+
+        <emp-ng-select name="financialReportType" required
+          [(ngModel)]="financialReportCommand.financialReportType"
+          [items]="financialReportTypeList"
+          [showError]="!financialReportCommand.financialReportType">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="none">
+
+        <label>Fecha:</label>
+
+        <emp-ng-datepicker name="date" required
+          [(ngModel)]="financialReportCommand.date"
+          [showError]="!financialReportCommand.date">
+
+        </emp-ng-datepicker>
+
+      </div>
+
+      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button title="Generar reporte"
+          [class.btn-icon]="form.invalid"
+          [class.btn-icon-action]="form.valid"
+          [disabled]="form.invalid"
+          (click)="onBuildFinancialReportClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

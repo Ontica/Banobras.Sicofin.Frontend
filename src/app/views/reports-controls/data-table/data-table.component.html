@@ -44,14 +44,14 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-          [ngClass]="{'item-type-summary': row['itemType'] === 'BalanceSummary',
-                      'item-type-group': ['BalanceTotalGroupDebtor',
-                                          'BalanceTotalGroupCreditor'].includes(row['itemType']),
-                      'item-type-total': ['BalanceTotalDebtor',
-                                          'BalanceTotalCreditor',
-                                          'BalanceTotalCurrency',
-                                          'BalanceTotalConsolidatedByLedger',
-                                          'BalanceTotalConsolidated'].includes(row['itemType'])}">
+          [ngClass]="{'item-type-summary': ['Summary','BalanceSummary'].includes(row['itemType']),
+                      'item-type-group':   ['BalanceTotalGroupDebtor',
+                                            'BalanceTotalGroupCreditor'].includes(row['itemType']),
+                      'item-type-total':   ['BalanceTotalDebtor',
+                                            'BalanceTotalCreditor',
+                                            'BalanceTotalCurrency',
+                                            'BalanceTotalConsolidatedByLedger',
+                                            'BalanceTotalConsolidated'].includes(row['itemType'])}">
         </tr>
 
       </table>

@@ -6,7 +6,8 @@
  */
 
 import { Assertion, DateString, Identifiable } from '@app/core';
-import { DataTableColumn } from './data-table';
+
+import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
 
 export enum FinancialReportType {
@@ -19,28 +20,21 @@ export const FinancialReportList: Identifiable[] = [
 ];
 
 
-export interface FinancialReport {
+export interface FinancialReport extends DataTable {
   command: FinancialReportCommand;
   columns: DataTableColumn[];
   entries: FinancialReportEntry[];
 }
 
 
-export interface FinancialReportCommand {
+export interface FinancialReportCommand extends DataTableCommand {
   financialReportType: FinancialReportType;
   accountsChartUID: string;
   date: DateString;
 }
 
 
-export const EmptyTrialBalanceCommand: FinancialReportCommand = {
-  financialReportType: null,
-  accountsChartUID: '',
-  date: ''
-};
-
-
-export interface FinancialReportEntry {
+export interface FinancialReportEntry extends DataTableEntry {
   itemType: FinancialReportItemType;
   groupingRuleUID: string;
   conceptCode: string;
@@ -55,6 +49,20 @@ export enum FinancialReportItemType {
   Entry = 'Entry',
   Summary = 'Summary'
 }
+
+
+export const EmptyFinancialReportCommand: FinancialReportCommand = {
+  financialReportType: null,
+  accountsChartUID: '',
+  date: ''
+};
+
+
+export const EmptyFinancialReport: FinancialReport = {
+  command: EmptyFinancialReportCommand,
+  columns: [],
+  entries: [],
+};
 
 
 export function getFinancialReportNameFromUID(financialReportTypeUID: string): string {

@@ -1,0 +1,50 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Visualizador de reportes regulatorios
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div fxLayout="column" fxFlexFill>
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <emp-fa-financial-report-filter fxFlex="none"
+        (financialReportFilterEvent)="onFinancialReportFilterEvent($event)">
+
+      </emp-fa-financial-report-filter>
+
+      <emp-fa-data-table fxFlex
+        [dataTable]="financialReport"
+        [commandExecuted]="commandExecuted"
+        (dataTableEvent)="onFinancialReportTableEvent($event)">
+
+      </emp-fa-data-table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  [title]="'Exportar ' + financialReportTypeName"
+  [excelFileUrl]="excelFileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>
