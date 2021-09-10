@@ -24,6 +24,8 @@ export * from './balances-store';
 
 export * from './balances';
 
+export * from './data-table';
+
 export * from './exchange-rates';
 
 export * from './permissions';

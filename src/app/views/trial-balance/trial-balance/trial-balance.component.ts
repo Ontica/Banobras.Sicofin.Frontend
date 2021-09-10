@@ -11,8 +11,10 @@ import { Assertion } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { EmptyTrialBalance, getEmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, TrialBalance,
+import { EmptyTrialBalance, getEmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, DataTable,
          TrialBalanceCommand } from '@app/models';
+
+import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
 import {
   ExportReportModalEventType
@@ -20,7 +22,6 @@ import {
 
 import { TrialBalanceFilterEventType } from '../trial-balance-filter/trial-balance-filter.component';
 
-import { TrialBalanceTableEventType } from '../trial-balance-table/trial-balance-table.component';
 
 @Component({
   selector: 'emp-fa-trial-balance',
@@ -36,7 +37,7 @@ export class TrialBalanceComponent {
 
   submitted = false;
 
-  trialBalance: TrialBalance = EmptyTrialBalance;
+  trialBalance: DataTable = EmptyTrialBalance;
 
   trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
 
@@ -84,14 +85,14 @@ export class TrialBalanceComponent {
 
 
   onTrialBalanceTableEvent(event) {
-    switch (event.type as TrialBalanceTableEventType) {
+    switch (event.type as DataTableEventType) {
 
-      case TrialBalanceTableEventType.COUNT_ITEMS_DISPLAYED:
+      case DataTableEventType.COUNT_ITEMS_DISPLAYED:
         Assertion.assertValue(event.payload, 'event.payload');
         setTimeout(() => this.setText(event.payload));
         return;
 
-      case TrialBalanceTableEventType.EXPORT_BALANCE:
+      case DataTableEventType.EXPORT_BALANCE:
         this.setDisplayExportModal(true);
         return;
 
@@ -146,20 +147,25 @@ export class TrialBalanceComponent {
   }
 
 
-  private setTrialBalanceData(trialBalance: TrialBalance) {
+  private setTrialBalanceData(trialBalance: DataTable) {
     this.trialBalance = trialBalance;
     this.setText();
   }
 
 
+  get isValidCommand() {
+    return !!this.trialBalance.command['trialBalanceType'];
+  }
+
+
   private setText(itemsDisplayed?: number) {
 
-    if (!this.trialBalance.command.trialBalanceType) {
+    if (!this.isValidCommand) {
       this.cardHint =  'Selecciona los filtros';
       return;
     }
 
-    this.balanceTypeName = getTrialBalanceTypeNameFromUid(this.trialBalance.command.trialBalanceType);
+    this.balanceTypeName = getTrialBalanceTypeNameFromUid(this.trialBalance.command['trialBalanceType']);
 
     this.cardHint = this.balanceTypeName;
 

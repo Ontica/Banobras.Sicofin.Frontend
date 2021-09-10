@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrialBalanceControlsComponent } from './trial-balance-controls.component';
+import { DataTableControlsComponent } from './data-table-controls.component';
 
-describe('TrialBalanceControlsComponent', () => {
-  let component: TrialBalanceControlsComponent;
-  let fixture: ComponentFixture<TrialBalanceControlsComponent>;
+describe('DataTableControlsComponent', () => {
+  let component: DataTableControlsComponent;
+  let fixture: ComponentFixture<DataTableControlsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrialBalanceControlsComponent ]
+      declarations: [ DataTableControlsComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TrialBalanceControlsComponent);
+    fixture = TestBed.createComponent(DataTableControlsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

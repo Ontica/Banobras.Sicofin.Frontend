@@ -7,7 +7,7 @@
 
 import { Assertion, DateString, Identifiable } from '@app/core';
 
-import { AccountRole } from './accounts-chart';
+import { DataTable, DataTableCommand } from './data-table';
 
 import { ExchangeRate } from './exchange-rates';
 
@@ -60,26 +60,6 @@ export const BalancesTypeList: Identifiable[] = [
 ];
 
 
-export interface TrialBalanceCommand {
-  accountsChartUID: string;
-  balancesType?: string;
-  consolidateBalancesToTargetCurrency?: boolean;
-  finalPeriod?: TrialBalanceCommandPeriod;
-  fromAccount?: string;
-  initialPeriod?: TrialBalanceCommandPeriod;
-  ledgers?: string[];
-  level?: number;
-  sectors?: string[];
-  showCascadeBalances: boolean;
-  subledgerAccount?: string;
-  toAccount?: string;
-  trialBalanceType: TrialBalanceType;
-  useDefaultValuation?: boolean;
-  useValuation?: boolean;
-  withSubledgerAccount?: boolean;
-}
-
-
 export interface TrialBalanceCommandPeriod {
   exchangeRateDate?: DateString;
   exchangeRateTypeUID?: string;
@@ -124,6 +104,26 @@ period: TrialBalanceCommandPeriod, useDefaultValuation: boolean): TrialBalanceCo
 }
 
 
+export interface TrialBalanceCommand extends DataTableCommand {
+  accountsChartUID: string;
+  balancesType?: string;
+  consolidateBalancesToTargetCurrency?: boolean;
+  finalPeriod?: TrialBalanceCommandPeriod;
+  fromAccount?: string;
+  initialPeriod?: TrialBalanceCommandPeriod;
+  ledgers?: string[];
+  level?: number;
+  sectors?: string[];
+  showCascadeBalances: boolean;
+  subledgerAccount?: string;
+  toAccount?: string;
+  trialBalanceType: TrialBalanceType;
+  useDefaultValuation?: boolean;
+  useValuation?: boolean;
+  withSubledgerAccount?: boolean;
+}
+
+
 export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
   return {
     accountsChartUID: '',
@@ -146,44 +146,7 @@ export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
 }
 
 
-export interface DataTableColumn {
-  field: string;
-  title: string;
-  type: string;
-  digits?: number;
-}
-
-
-export interface TrialBalance {
-  command: TrialBalanceCommand;
-  columns: DataTableColumn[];
-  entries: TrialBalanceEntry[];
-}
-
-
-export type TrialBalanceItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalGroupDebtor' |
-  'BalanceTotalGroupCreditor' | 'BalanceTotalDebtor' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' |
-  'BalanceTotalConsolidatedByLedger' | 'BalanceTotalConsolidated';
-
-
-export interface TrialBalanceEntry {
-  itemType: TrialBalanceItemType;
-  ledgerUID: string;
-  currencyUID: string;
-  ledgerAccountId: number;
-  accountNumber: string;
-  accountName: string;
-  accountRole: AccountRole;
-  accountLevel: number;
-  sectorCode: string;
-  initialBalance: number;
-  debit: number;
-  credit: number;
-  currentBalance: number;
-}
-
-
-export const EmptyTrialBalance: TrialBalance = {
+export const EmptyTrialBalance: DataTable = {
   command: getEmptyTrialBalanceCommand(),
   columns: [],
   entries: [],

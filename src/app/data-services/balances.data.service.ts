@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { AccountBalance, TrialBalance, TrialBalanceCommand } from '@app/models';
+import { AccountBalance, DataTable, TrialBalanceCommand } from '@app/models';
 
 
 @Injectable()
@@ -38,12 +38,12 @@ export class BalancesDataService {
   }
 
 
-  getTrialBalance(trialBalanceCommand: TrialBalanceCommand): Observable<TrialBalance> {
+  getTrialBalance(trialBalanceCommand: TrialBalanceCommand): Observable<DataTable> {
     Assertion.assertValue(trialBalanceCommand, 'trialBalanceCommand');
 
     const path = `v2/financial-accounting/trial-balance`;
 
-    return this.http.post<TrialBalance>(path, trialBalanceCommand);
+    return this.http.post<DataTable>(path, trialBalanceCommand);
   }
 
 }

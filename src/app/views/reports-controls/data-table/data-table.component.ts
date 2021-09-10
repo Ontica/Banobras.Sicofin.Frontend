@@ -12,37 +12,39 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 
 import { EventInfo } from '@app/core';
 
-import { EmptyTrialBalance, DataTableColumn, TrialBalance, TrialBalanceEntry } from '@app/models';
+import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
-import { TrialBalanceControlsEventType } from './trial-balance-controls.component';
+import { DataTableControlsEventType } from './data-table-controls.component';
 
-export enum TrialBalanceTableEventType {
-  COUNT_ITEMS_DISPLAYED = 'TrialBalanceTableComponent.Event.CountItemsDisplayed',
-  EXPORT_BALANCE        = 'TrialBalanceTableComponent.Event.ExportBalance',
+export enum DataTableEventType {
+  COUNT_ITEMS_DISPLAYED = 'DataTableComponent.Event.CountItemsDisplayed',
+  EXPORT_BALANCE        = 'DataTableComponent.Event.ExportBalance',
 }
 
 @Component({
-  selector: 'emp-fa-trial-balance-table',
-  templateUrl: './trial-balance-table.component.html',
+  selector: 'emp-fa-data-table',
+  templateUrl: './data-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrialBalanceTableComponent implements OnChanges {
+export class DataTableComponent implements OnChanges {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
-  @Input() trialBalance: TrialBalance = EmptyTrialBalance;
+  @Input() dataTable: DataTable = EmptyDataTable;
 
-  @Output() trialBalanceTableEvent = new EventEmitter<EventInfo>();
+  @Input() commandExecuted = false;
+
+  @Output() dataTableEvent = new EventEmitter<EventInfo>();
 
   columns: DataTableColumn[] = [];
 
   displayedColumns: string[] = [];
 
-  dataSource: TableVirtualScrollDataSource<TrialBalanceEntry>;
+  dataSource: TableVirtualScrollDataSource<DataTableEntry>;
 
   filter = '';
 
@@ -59,24 +61,19 @@ export class TrialBalanceTableComponent implements OnChanges {
   }
 
 
-  get displayTrialBalanceTable() {
-    return !!this.trialBalance.command.trialBalanceType;
-  }
-
-
   initDataSource() {
-    this.columns = this.trialBalance.columns;
+    this.columns = this.dataTable.columns;
     this.displayedColumns = this.columns.map(column => column.field);
 
-    this.dataSource = new TableVirtualScrollDataSource(this.trialBalance.entries);
+    this.dataSource = new TableVirtualScrollDataSource(this.dataTable.entries);
     this.dataSource.filterPredicate = this.getFilterPredicate();
   }
 
 
-  onTrialBalanceControlsEvent(event: EventInfo) {
-   switch (event.type as TrialBalanceControlsEventType) {
+  onDataTableControlsEvent(event: EventInfo) {
+   switch (event.type as DataTableControlsEventType) {
 
-      case TrialBalanceControlsEventType.FILTER_CHANGED:
+      case DataTableControlsEventType.FILTER_CHANGED:
 
         this.filter = event.payload.filter as string;
 
@@ -84,9 +81,9 @@ export class TrialBalanceTableComponent implements OnChanges {
 
         return;
 
-      case TrialBalanceControlsEventType.EXPORT_BUTTON_CLICKED:
+      case DataTableControlsEventType.EXPORT_BUTTON_CLICKED:
 
-        sendEvent(this.trialBalanceTableEvent, TrialBalanceTableEventType.EXPORT_BALANCE);
+        sendEvent(this.dataTableEvent, DataTableEventType.EXPORT_BALANCE);
 
         return;
 
@@ -98,7 +95,7 @@ export class TrialBalanceTableComponent implements OnChanges {
 
 
   private getFilterPredicate() {
-    return (row: TrialBalanceEntry, filters: string) => (
+    return (row: DataTable, filters: string) => (
       this.columns.filter(x => x.type !== 'decimal' &&
                                row[x.field].toLowerCase().includes(filters)).length > 0
     );
@@ -120,8 +117,8 @@ export class TrialBalanceTableComponent implements OnChanges {
 
 
   private emitItemsDisplayed() {
-    sendEvent(this.trialBalanceTableEvent,
-      TrialBalanceTableEventType.COUNT_ITEMS_DISPLAYED, this.dataSource.filteredData.length);
+    sendEvent(this.dataTableEvent, DataTableEventType.COUNT_ITEMS_DISPLAYED,
+      this.dataSource.filteredData.length);
   }
 
 }

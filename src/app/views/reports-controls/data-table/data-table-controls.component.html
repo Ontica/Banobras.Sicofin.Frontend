@@ -4,24 +4,6 @@
 
     <div fxLayout="row" fxLayoutAlign="space-between center">
 
-      <!-- <div fxFlex="none" [style.paddingRight.px]="8">
-
-        Indice:
-
-      </div>
-
-      <div fxFlex="25">
-
-        <emp-ng-select name="accountsChartUID" fxFlex="100"
-          [(ngModel)]="indexSelected"
-          [items]="[]"
-          (changes)="onFilterData(filterInput.value)">
-
-        </emp-ng-select>
-
-      </div> -->
-
-
       <div fxFlex="25">
 
         <div class="input-icon-container">
@@ -40,7 +22,9 @@
 
       <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
 
-        <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
+        <button class="btn" (click)="onExportButtonClicked()">
+          Exportar
+        </button>
 
       </div>
 

@@ -17,9 +17,7 @@ import { ReportsControlsModule } from '../reports-controls/reports-controls.modu
 
 import { ExchangeRateSelectorComponent } from './exchange-rate-selector/exchange-rate-selector.component';
 import { TrialBalanceComponent } from './trial-balance/trial-balance.component';
-import { TrialBalanceControlsComponent } from './trial-balance-table/trial-balance-controls.component';
 import { TrialBalanceFilterComponent } from './trial-balance-filter/trial-balance-filter.component';
-import { TrialBalanceTableComponent } from './trial-balance-table/trial-balance-table.component';
 
 @NgModule({
   imports: [
@@ -36,9 +34,7 @@ import { TrialBalanceTableComponent } from './trial-balance-table/trial-balance-
   declarations: [
     ExchangeRateSelectorComponent,
     TrialBalanceComponent,
-    TrialBalanceControlsComponent,
     TrialBalanceFilterComponent,
-    TrialBalanceTableComponent,
   ],
   exports: [
     TrialBalanceComponent,

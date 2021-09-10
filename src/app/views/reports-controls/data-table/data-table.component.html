@@ -1,19 +1,19 @@
 <div fxLayout="column" fxFlexFill>
 
-  <mat-divider *ngIf="!displayTrialBalanceTable" [style.marginBottom.px]="8"> </mat-divider>
+  <mat-divider *ngIf="!commandExecuted" [style.marginBottom.px]="8"> </mat-divider>
 
-  <div #controlsContainer *ngIf="displayTrialBalanceTable" fxFlex="none">
+  <div #controlsContainer *ngIf="commandExecuted" fxFlex="none">
 
     <mat-divider [style.marginBottom.px]="8">
 
     </mat-divider>
 
-    <emp-fa-trial-balance-controls
+    <emp-fa-data-table-controls
       [filter]="filter"
       [indexSelected]="indexSelected"
-      (trialBalanceControlsEvent)="onTrialBalanceControlsEvent($event)">
+      (dataTableControlsEvent)="onDataTableControlsEvent($event)">
 
-    </emp-fa-trial-balance-controls>
+    </emp-fa-data-table-controls>
 
   </div>
 
@@ -57,11 +57,11 @@
 
       </table>
 
-      <div *ngIf="!displayTrialBalanceTable" class="text-not-found">
+      <div *ngIf="!commandExecuted" class="text-not-found">
         No se ha invocado la consulta.
       </div>
 
-      <div *ngIf="displayTrialBalanceTable && trialBalance.entries.length === 0" class="text-not-found">
+      <div *ngIf="commandExecuted && dataTable.entries.length === 0" class="text-not-found">
         No se encontraron registros con el filtro proporcionado.
       </div>
 
