@@ -5,22 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { DateString } from '@app/core';
+
 import { DataTable, DataTableColumn } from './data-table';
 
 
 export interface GroupingRuleCommand {
   accountsChartUID: string;
   rulesSetUID?: string;
-  date?: string;
-}
-
-
-export function getEmptyGroupingRuleCommand(): GroupingRuleCommand {
-  return {
-    accountsChartUID: '',
-    rulesSetUID: '',
-    date: '',
-  };
+  date?: DateString;
 }
 
 
@@ -48,8 +41,15 @@ export const DefaultGroupingRulesColumns: DataTableColumn[] = [
 ];
 
 
+export const EmptyGroupingRuleCommand: GroupingRuleCommand = {
+  accountsChartUID: '',
+  rulesSetUID: '',
+  date: '',
+};
+
+
 export const EmptyGroupingRule: DataTable = {
-  command: getEmptyGroupingRuleCommand(),
+  command: EmptyGroupingRuleCommand,
   columns: DefaultGroupingRulesColumns,
   entries: [],
 };

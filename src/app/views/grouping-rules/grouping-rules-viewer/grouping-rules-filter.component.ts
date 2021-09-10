@@ -13,7 +13,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { RulesDataService } from '@app/data-services';
 
-import { AccountsChartMasterData } from '@app/models';
+import { AccountsChartMasterData, GroupingRuleCommand } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -103,8 +103,8 @@ export class GroupingRulesFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getGroupingRuleCommand(): any {
-    const data: any = {
+  private getGroupingRuleCommand(): GroupingRuleCommand {
+    const data: GroupingRuleCommand = {
       accountsChartUID: this.groupingRulesForm.accountChart.uid,
       rulesSetUID: this.groupingRulesForm.rulesSet.uid,
       date:  this.groupingRulesForm.date,
