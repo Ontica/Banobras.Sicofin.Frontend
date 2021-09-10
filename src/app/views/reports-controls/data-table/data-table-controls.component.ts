@@ -22,8 +22,6 @@ export enum DataTableControlsEventType {
 })
 export class DataTableControlsComponent {
 
-  @Input() indexSelected = '';
-
   @Input() filter = '';
 
   @Output() dataTableControlsEvent = new EventEmitter<EventInfo>();
@@ -37,7 +35,7 @@ export class DataTableControlsComponent {
 
   onFilterData() {
     sendEvent(this.dataTableControlsEvent, DataTableControlsEventType.FILTER_CHANGED,
-      {filter: this.filter, index: this.indexSelected});
+      {filter: this.filter});
   }
 
 

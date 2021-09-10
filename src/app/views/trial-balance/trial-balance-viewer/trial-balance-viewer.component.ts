@@ -87,12 +87,12 @@ export class TrialBalanceViewerComponent {
   onTrialBalanceTableEvent(event) {
     switch (event.type as DataTableEventType) {
 
-      case DataTableEventType.COUNT_ITEMS_DISPLAYED:
+      case DataTableEventType.COUNT_FILTERED_ITEMS:
         Assertion.assertValue(event.payload, 'event.payload');
-        setTimeout(() => this.setText(event.payload));
+        this.setText(event.payload);
         return;
 
-      case DataTableEventType.EXPORT_BALANCE:
+      case DataTableEventType.EXPORT_DATA:
         this.setDisplayExportModal(true);
         return;
 
@@ -159,19 +159,20 @@ export class TrialBalanceViewerComponent {
 
 
   private setText(itemsDisplayed?: number) {
-
     if (!this.isValidCommand) {
-      this.cardHint =  'Selecciona los filtros';
+      this.cardHint = 'Selecciona los filtros';
       return;
     }
 
     this.balanceTypeName = getTrialBalanceTypeNameFromUid(this.trialBalance.command['trialBalanceType']);
 
-    this.cardHint = this.balanceTypeName;
+    if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.trialBalance.entries.length) {
+      this.cardHint = `${this.balanceTypeName} - ${itemsDisplayed} de ` +
+        `${this.trialBalance.entries.length} registros mostrados`;
+      return;
+    }
 
-    this.cardHint += itemsDisplayed >= 0 ?
-      ` - ${itemsDisplayed} de ${this.trialBalance.entries.length} registros mostrados` :
-      ` - ${this.trialBalance.entries.length} registros encontrados`;
+    this.cardHint = `${this.balanceTypeName} - ${this.trialBalance.entries.length} registros encontrados`;
   }
 
 

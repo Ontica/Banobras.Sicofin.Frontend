@@ -21,8 +21,8 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { DataTableControlsEventType } from './data-table-controls.component';
 
 export enum DataTableEventType {
-  COUNT_ITEMS_DISPLAYED = 'DataTableComponent.Event.CountItemsDisplayed',
-  EXPORT_BALANCE        = 'DataTableComponent.Event.ExportBalance',
+  COUNT_FILTERED_ITEMS = 'DataTableComponent.Event.CountFilteredItems',
+  EXPORT_DATA          = 'DataTableComponent.Event.ExportData',
 }
 
 @Component({
@@ -48,16 +48,11 @@ export class DataTableComponent implements OnChanges {
 
   filter = '';
 
-  indexSelected = '';
 
   ngOnChanges(): void {
     this.filter = '';
-    this.indexSelected = '';
-
     this.initDataSource();
-
     this.scrollToTop();
-    this.emitItemsDisplayed();
   }
 
 
@@ -83,7 +78,7 @@ export class DataTableComponent implements OnChanges {
 
       case DataTableControlsEventType.EXPORT_BUTTON_CLICKED:
 
-        sendEvent(this.dataTableEvent, DataTableEventType.EXPORT_BALANCE);
+        sendEvent(this.dataTableEvent, DataTableEventType.EXPORT_DATA);
 
         return;
 
@@ -105,7 +100,7 @@ export class DataTableComponent implements OnChanges {
   private applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
     this.scrollToTop();
-    this.emitItemsDisplayed();
+    this.emitCountFilteredItems();
   }
 
 
@@ -116,8 +111,8 @@ export class DataTableComponent implements OnChanges {
   }
 
 
-  private emitItemsDisplayed() {
-    sendEvent(this.dataTableEvent, DataTableEventType.COUNT_ITEMS_DISPLAYED,
+  private emitCountFilteredItems() {
+    sendEvent(this.dataTableEvent, DataTableEventType.COUNT_FILTERED_ITEMS,
       this.dataSource.filteredData.length);
   }
 
