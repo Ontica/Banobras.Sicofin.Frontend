@@ -16,8 +16,8 @@ import { AccountingOperationsWorkspaceComponent } from './accounting-operations-
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_mis_volantes_pendientes.permission },
-    path: ROUTES_LIBRARY.operacion_contable_mis_volantes_pendientes.path,
+    data: { permission: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.permission },
+    path: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.path,
     component: AccountingOperationsWorkspaceComponent,
   },
   {
@@ -26,18 +26,18 @@ const routes: Routes = [
     component: AccountingOperationsWorkspaceComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_volantes_en_libros.permission },
-    path: ROUTES_LIBRARY.operacion_contable_volantes_en_libros.path,
+    data: { permission: ROUTES_LIBRARY.operacion_contable_polizas_en_libros.permission },
+    path: ROUTES_LIBRARY.operacion_contable_polizas_en_libros.path,
     component: AccountingOperationsWorkspaceComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_todos_los_volantes.permission },
-    path: ROUTES_LIBRARY.operacion_contable_todos_los_volantes.path,
+    data: { permission: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.permission },
+    path: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.path,
     component: AccountingOperationsWorkspaceComponent,
   },
   {
     path: '',
-    redirectTo: ROUTES_LIBRARY.operacion_contable_mis_volantes_pendientes.path,
+    redirectTo: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.path,
     pathMatch: 'full',
   },
 ];

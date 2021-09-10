@@ -64,7 +64,7 @@ export const ROUTES_LIBRARY = {
 
   // #region accounting-operation-routing module
 
-  operacion_contable_mis_volantes_pendientes: {
+  operacion_contable_mis_polizas_pendientes: {
     permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
     parent: 'operacion-contable',
     path: 'mis-polizas-pendientes',
@@ -74,12 +74,12 @@ export const ROUTES_LIBRARY = {
     parent: 'operacion-contable',
     path: 'mesa-de-control',
   },
-  operacion_contable_volantes_en_libros: {
+  operacion_contable_polizas_en_libros: {
     permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
     parent: 'operacion-contable',
     path: 'polizas-en-libros',
   },
-  operacion_contable_todos_los_volantes: {
+  operacion_contable_todos_los_polizas: {
     permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
     parent: 'operacion-contable',
     path: 'todas-las-polizas',
@@ -94,7 +94,7 @@ export const ROUTES_LIBRARY = {
     parent: 'tableros',
     path: 'saldos-y-balanzas',
   },
-  tableros_calculo_de_agrupaciones: {
+  tableros_reportes_regulatorios: {
     permission: PermissionsLibrary.ROUTE_TABLEROS,
     parent: 'tableros',
     path: 'reportes-regulatorios',

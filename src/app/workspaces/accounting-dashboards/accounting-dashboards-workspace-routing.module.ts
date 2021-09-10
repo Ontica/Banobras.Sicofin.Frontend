@@ -23,8 +23,8 @@ const routes: Routes = [
     component: TrialBalanceMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.tableros_calculo_de_agrupaciones.permission },
-    path: ROUTES_LIBRARY.tableros_calculo_de_agrupaciones.path,
+    data: { permission: ROUTES_LIBRARY.tableros_reportes_regulatorios.permission },
+    path: ROUTES_LIBRARY.tableros_reportes_regulatorios.path,
     component: AccountingDashboardsWorkspaceComponent,
   },
   {
