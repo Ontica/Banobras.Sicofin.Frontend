@@ -170,7 +170,7 @@
 
         <div fxFlex="25">
 
-          <mat-checkbox name="useValuation" [disabled]="exchangeRatesRequired"
+          <mat-checkbox name="useValuation" [disabled]="exchangeRatesDisabled"
             [(ngModel)]="trialBalanceCommand.useValuation"
             (click)="$event.stopPropagation"
             (change)="onUseValuationChange()">
