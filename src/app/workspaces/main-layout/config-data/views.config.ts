@@ -46,16 +46,16 @@ export const AccountingDashboardsViews: View[] = [
     title: 'Reportes regulatorios',
     url: '/tableros/reportes-regulatorios'
   },
-  {
-    name: 'AccountingDashboards.FinancialFacts',
-    title: 'Indicadores financieros',
-    url: '/tableros/indicadores-financieros'
-  },
-  {
-    name: 'AccountingDashboards.Alerts',
-    title: 'Alertas',
-    url: '/tableros/alertas'
-  }
+  // {
+  //   name: 'AccountingDashboards.FinancialFacts',
+  //   title: 'Indicadores financieros',
+  //   url: '/tableros/indicadores-financieros'
+  // },
+  // {
+  //   name: 'AccountingDashboards.Alerts',
+  //   title: 'Alertas',
+  //   url: '/tableros/alertas'
+  // }
 ];
 
 
@@ -95,15 +95,25 @@ export const AccountingCataloguesAndRulesViews: View[] = [
     url: '/reglas-y-catalogos/agrupaciones'
   },
   {
-    name: 'AccountingCataloguesAndRulesViews.AccountingRules',
-    title: 'Reglas contabilizadoras',
-    url: '/reglas-y-catalogos/reglas-contabilizadoras'
+    name: 'AccountingCataloguesAndRulesViews.OperationsData',
+    title: 'Datos operativos',
+    url: '/reglas-y-catalogos/datos-operativos'
   },
   {
-    name: 'AccountingCataloguesAndRulesViews.AccountsGroups',
-    title: 'Diseñador de reportes',
-    url: '/reglas-y-catalogos/disenador-de-reportes'
-  }
+    name: 'AccountingCataloguesAndRulesViews.SubledgerAccounts',
+    title: 'Auxiliares',
+    url: '/reglas-y-catalogos/auxiliares'
+  },
+  // {
+  //   name: 'AccountingCataloguesAndRulesViews.AccountingRules',
+  //   title: 'Reglas contabilizadoras',
+  //   url: '/reglas-y-catalogos/reglas-contabilizadoras'
+  // },
+  // {
+  //   name: 'AccountingCataloguesAndRulesViews.AccountsGroups',
+  //   title: 'Diseñador de reportes',
+  //   url: '/reglas-y-catalogos/disenador-de-reportes'
+  // }
 ];
 
 

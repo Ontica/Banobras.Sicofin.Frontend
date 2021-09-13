@@ -144,15 +144,25 @@ export const ROUTES_LIBRARY = {
     parent: 'reglas-y-catalogos',
     path: 'catalogos-de-cuentas',
   },
-  reglas_y_catalogos_reglas_contabilizadoras: {
+  reglas_y_catalogos_auxiliares: {
     permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
-    path: 'reglas-contabilizadoras',
+    path: 'auxiliares',
   },
   reglas_y_catalogos_agrupaciones: {
     permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
     path: 'agrupaciones',
+  },
+  reglas_y_catalogos_datos_operativos: {
+    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
+    parent: 'reglas-y-catalogos',
+    path: 'datos-operativos',
+  },
+  reglas_y_catalogos_reglas_contabilizadoras: {
+    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
+    parent: 'reglas-y-catalogos',
+    path: 'reglas-contabilizadoras',
   },
   reglas_y_catalogos_disenador_de_reportes: {
     permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
