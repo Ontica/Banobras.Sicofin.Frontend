@@ -11,8 +11,6 @@ import { Assertion } from '@app/core';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { DataTable, FinancialReportCommand, EmptyFinancialReport, EmptyFinancialReportCommand,
          getFinancialReportNameFromUID } from '@app/models';
 
@@ -49,8 +47,7 @@ export class FinancialReportViewerComponent {
 
   commandExecuted = false;
 
-  constructor(private financialReportsData: FinancialReportsDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private financialReportsData: FinancialReportsDataService) { }
 
 
   onFinancialReportFilterEvent(event) {
@@ -127,11 +124,11 @@ export class FinancialReportViewerComponent {
 
 
   private exportFinancialReportToExcel() {
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy';
-      this.messageBox.showInDevelopment({type: 'EXPORT_FINANCIAL_REPORT',
-        command: this.financialReportCommand});
-    }, 500);
+    this.financialReportsData.exportFinancialReportToExcel(this.financialReportCommand)
+      .toPromise()
+      .then(x => {
+        this.excelFileUrl = x.url;
+      });
   }
 
 
