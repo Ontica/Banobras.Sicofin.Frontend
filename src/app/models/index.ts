@@ -26,6 +26,8 @@ export * from './balances';
 
 export * from './data-table';
 
+export * from './excel-reports';
+
 export * from './exchange-rates';
 
 export * from './financial-reports';

@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { StoredBalanceSet } from '@app/models';
+import { ExcelFile, StoredBalanceSet } from '@app/models';
 
 
 @Injectable()
@@ -62,14 +62,14 @@ export class BalancesStoreDataService {
   }
 
 
-  exportStoredBalanceSetToExcel(accountsChartUID: string, balanceSetUID: string): Observable<any> {
+  exportStoredBalanceSetToExcel(accountsChartUID: string, balanceSetUID: string): Observable<ExcelFile> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(balanceSetUID, 'balanceSetUID');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}` +
       `/balance-store/${balanceSetUID}/excel`;
 
-    return this.http.get<any>(path);
+    return this.http.get<ExcelFile>(path);
   }
 
 }
