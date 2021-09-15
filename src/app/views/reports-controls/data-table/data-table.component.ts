@@ -7,13 +7,12 @@
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output,
-         SimpleChanges,
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges,
          ViewChild } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
-import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry } from '@app/models';
+import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -40,8 +39,6 @@ export class DataTableComponent implements OnChanges {
 
   @Input() commandExecuted = false;
 
-  @Input() clickableEntry = false;
-
   @Input() selectedEntry: DataTableEntry = null;
 
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
@@ -53,6 +50,8 @@ export class DataTableComponent implements OnChanges {
   dataSource: TableVirtualScrollDataSource<DataTableEntry>;
 
   filter = '';
+
+  dataTableColumnType = DataTableColumnType;
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -98,18 +97,13 @@ export class DataTableComponent implements OnChanges {
 
 
   onEntryClicked(entry: DataTableEntry) {
-    if (this.clickableEntry) {
-      const payload = {
-        entry
-      };
-      sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, payload);
-    }
+    sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, { entry });
   }
 
 
   private getFilterPredicate() {
     return (row: DataTable, filters: string) => (
-      this.columns.filter(x => x.type !== 'decimal' &&
+      this.columns.filter(x => x.type !== DataTableColumnType.decimal &&
                                row[x.field].toLowerCase().includes(filters)).length > 0
     );
   }

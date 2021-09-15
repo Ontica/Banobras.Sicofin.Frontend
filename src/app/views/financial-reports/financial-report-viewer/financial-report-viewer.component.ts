@@ -83,6 +83,11 @@ export class FinancialReportViewerComponent {
         this.setDisplayExportModal(true);
         return;
 
+      case DataTableEventType.ENTRY_CLICKED:
+        Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
+        console.log('ENTRY_CLICKED: ', event.payload.entry.uid, this.financialReportCommand);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;

@@ -20,7 +20,7 @@ export interface DataTableCommand {
 export interface DataTableColumn {
   field: string;
   title: string;
-  type: string;
+  type: DataTableColumnType;
   digits?: number;
 }
 
@@ -35,6 +35,15 @@ export const EmptyDataTable: DataTable = {
   columns: [],
   entries: [],
 };
+
+
+export enum DataTableColumnType {
+  text = 'text',
+  text_link = 'text-link',
+  text_nowrap = 'text-nowrap',
+  decimal = 'decimal',
+  date = 'date',
+}
 
 
 export type DataTableItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalGroupDebtor' |

@@ -35,6 +35,7 @@ export interface FinancialReportCommand extends DataTableCommand {
 
 
 export interface FinancialReportEntry extends DataTableEntry {
+  uid: string;
   itemType: FinancialReportItemType;
   groupingRuleUID: string;
   conceptCode: string;

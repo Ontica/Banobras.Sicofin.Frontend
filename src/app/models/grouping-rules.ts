@@ -7,7 +7,7 @@
 
 import { DateString } from '@app/core';
 
-import { DataTable, DataTableColumn } from './data-table';
+import { DataTable, DataTableColumn, DataTableColumnType } from './data-table';
 
 
 export interface GroupingRuleCommand {
@@ -39,12 +39,12 @@ export const DefaultGroupingRulesColumns: DataTableColumn[] = [
   {
     field: 'code',
     title: 'Clave',
-    type: 'text-nowrap',
+    type: DataTableColumnType.text_link,
   },
   {
     field: 'concept',
     title: 'Concepto',
-    type: 'text',
+    type: DataTableColumnType.text,
   },
 ];
 

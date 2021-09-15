@@ -227,6 +227,14 @@ table.mat-table {
       padding-top: 4px;
       padding-bottom: 4px;
     }
+
+    a.item-link {
+      color: $primary-color-dark;
+    }
+
+    a.item-link:hover {
+      text-decoration: underline;
+    }
   }
 
   tr {
