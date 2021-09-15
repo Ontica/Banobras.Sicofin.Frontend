@@ -51,7 +51,10 @@
                                             'BalanceTotalCreditor',
                                             'BalanceTotalCurrency',
                                             'BalanceTotalConsolidatedByLedger',
-                                            'BalanceTotalConsolidated'].includes(row['itemType'])}">
+                                            'BalanceTotalConsolidated'].includes(row['itemType']),
+                      'selectable-row':     clickableEntry,
+                      'row-selected':       row === selectedEntry}"
+          (click)="onEntryClicked(row)">
         </tr>
 
       </table>

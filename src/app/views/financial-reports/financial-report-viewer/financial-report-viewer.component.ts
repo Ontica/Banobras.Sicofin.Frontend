@@ -74,7 +74,7 @@ export class FinancialReportViewerComponent {
   onFinancialReportTableEvent(event) {
     switch (event.type as DataTableEventType) {
 
-      case DataTableEventType.COUNT_FILTERED_ITEMS:
+      case DataTableEventType.COUNT_FILTERED_ENTRIES:
         Assertion.assertValue(event.payload, 'event.payload');
         this.setText(event.payload);
         return;

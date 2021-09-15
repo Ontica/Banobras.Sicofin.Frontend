@@ -8,6 +8,7 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output,
+         SimpleChanges,
          ViewChild } from '@angular/core';
 
 import { EventInfo } from '@app/core';
@@ -21,8 +22,9 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { DataTableControlsEventType } from './data-table-controls.component';
 
 export enum DataTableEventType {
-  COUNT_FILTERED_ITEMS = 'DataTableComponent.Event.CountFilteredItems',
-  EXPORT_DATA          = 'DataTableComponent.Event.ExportData',
+  COUNT_FILTERED_ENTRIES = 'DataTableComponent.Event.CountFilteredEntries',
+  ENTRY_CLICKED          = 'DataTableComponent.Event.EntryClicked',
+  EXPORT_DATA            = 'DataTableComponent.Event.ExportData',
 }
 
 @Component({
@@ -38,6 +40,10 @@ export class DataTableComponent implements OnChanges {
 
   @Input() commandExecuted = false;
 
+  @Input() clickableEntry = false;
+
+  @Input() selectedEntry: DataTableEntry = null;
+
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
 
   columns: DataTableColumn[] = [];
@@ -49,10 +55,12 @@ export class DataTableComponent implements OnChanges {
   filter = '';
 
 
-  ngOnChanges(): void {
-    this.filter = '';
-    this.initDataSource();
-    this.scrollToTop();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.dataTable) {
+      this.filter = '';
+      this.initDataSource();
+      this.scrollToTop();
+    }
   }
 
 
@@ -89,6 +97,16 @@ export class DataTableComponent implements OnChanges {
   }
 
 
+  onEntryClicked(entry: DataTableEntry) {
+    if (this.clickableEntry) {
+      const payload = {
+        entry
+      };
+      sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, payload);
+    }
+  }
+
+
   private getFilterPredicate() {
     return (row: DataTable, filters: string) => (
       this.columns.filter(x => x.type !== 'decimal' &&
@@ -100,7 +118,7 @@ export class DataTableComponent implements OnChanges {
   private applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
     this.scrollToTop();
-    this.emitCountFilteredItems();
+    this.emitCountFilteredEntries();
   }
 
 
@@ -111,8 +129,8 @@ export class DataTableComponent implements OnChanges {
   }
 
 
-  private emitCountFilteredItems() {
-    sendEvent(this.dataTableEvent, DataTableEventType.COUNT_FILTERED_ITEMS,
+  private emitCountFilteredEntries() {
+    sendEvent(this.dataTableEvent, DataTableEventType.COUNT_FILTERED_ENTRIES,
       this.dataSource.filteredData.length);
   }
 
