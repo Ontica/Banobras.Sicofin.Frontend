@@ -24,6 +24,14 @@ export interface GroupingRule {
   position: number;
   level: number;
   parentUID: string;
+  accountsChartName: string;
+  rulesSetName: string;
+}
+
+
+export interface GroupingRuleDataTable extends DataTable {
+  command: GroupingRuleCommand;
+  entries: GroupingRule[];
 }
 
 
@@ -31,7 +39,7 @@ export const DefaultGroupingRulesColumns: DataTableColumn[] = [
   {
     field: 'code',
     title: 'Clave',
-    type: 'text',
+    type: 'text-nowrap',
   },
   {
     field: 'concept',
@@ -41,6 +49,24 @@ export const DefaultGroupingRulesColumns: DataTableColumn[] = [
 ];
 
 
+export enum GroupingRuleItemType {
+  Agrupation = 'Agrupation',
+  Account = 'Account',
+  FixedValue = 'FixedValue',
+}
+
+
+export interface GroupingRuleItem {
+  uid: string;
+  type: GroupingRuleItemType;
+  itemName: string;
+  itemCode: string;
+  subledgerAccount: string;
+  sectorCode: string;
+  operator: string;
+}
+
+
 export const EmptyGroupingRuleCommand: GroupingRuleCommand = {
   accountsChartUID: '',
   rulesSetUID: '',
@@ -48,8 +74,20 @@ export const EmptyGroupingRuleCommand: GroupingRuleCommand = {
 };
 
 
-export const EmptyGroupingRule: DataTable = {
+export const EmptyGroupingRuleDataTable: GroupingRuleDataTable = {
   command: EmptyGroupingRuleCommand,
   columns: DefaultGroupingRulesColumns,
   entries: [],
+};
+
+
+export const EmptyGroupingRule: GroupingRule = {
+  uid: '',
+  code: '',
+  concept: '',
+  position: 0,
+  level: 0,
+  parentUID: '',
+  accountsChartName: '',
+  rulesSetName: '',
 };

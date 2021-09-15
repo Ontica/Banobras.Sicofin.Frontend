@@ -5,15 +5,18 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
-import { Assertion } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
 import { RulesDataService } from '@app/data-services';
 
-import { DataTable, EmptyGroupingRule, GroupingRuleCommand } from '@app/models';
+import { EmptyGroupingRule, EmptyGroupingRuleDataTable, GroupingRule, GroupingRuleCommand,
+         GroupingRuleDataTable } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
+
+import { sendEvent } from '@app/shared/utils';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
@@ -24,11 +27,17 @@ import {
 import { GroupingRulesFilterEventType } from './grouping-rules-filter.component';
 
 
+export enum GroupingRulesViewerEventType {
+  GROUPING_RULE_SELECTED = 'GroupingRulesViewerComponent.Event.GroupingRuleSelected',
+}
+
 @Component({
   selector: 'emp-fa-grouping-rules-viewer',
   templateUrl: './grouping-rules-viewer.component.html',
 })
 export class GroupingRulesViewerComponent {
+
+  @Output() groupingRulesViewerEvent = new EventEmitter<EventInfo>();
 
   rulesSetName = '';
 
@@ -40,11 +49,13 @@ export class GroupingRulesViewerComponent {
 
   commandExecuted = false;
 
-  groupingRuleData: DataTable = EmptyGroupingRule;
+  groupingRuleData: GroupingRuleDataTable = EmptyGroupingRuleDataTable;
 
   displayExportModal = false;
 
   excelFileUrl = '';
+
+  selectedGroupingRule = EmptyGroupingRule;
 
   constructor(private rulesData: RulesDataService,
               private messageBox: MessageBoxService) { }
@@ -85,6 +96,12 @@ export class GroupingRulesViewerComponent {
         this.setDisplayExportModal(true);
         return;
 
+      case DataTableEventType.ENTRY_CLICKED:
+        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
+        this.selectedGroupingRule = event.payload.entry as GroupingRule;
+        this.emitGroupingRuleSelected(this.selectedGroupingRule);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -100,7 +117,7 @@ export class GroupingRulesViewerComponent {
         return;
 
       case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
-        if (this.submitted || !this.groupingRuleData.command['accountsChartUID'] ) {
+        if (this.submitted || !this.groupingRuleData.command.accountsChartUID) {
           return;
         }
 
@@ -122,6 +139,7 @@ export class GroupingRulesViewerComponent {
       .then(x => {
         this.groupingRuleData = Object.assign({}, this.groupingRuleData, {command, entries: x});
         this.setText();
+        this.emitGroupingRuleSelected(EmptyGroupingRule);
       })
       .finally(() => this.setSubmitted(false));
   }
@@ -161,6 +179,15 @@ export class GroupingRulesViewerComponent {
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
+  }
+
+
+  private emitGroupingRuleSelected(groupingRule: GroupingRule) {
+    const payload = {
+      groupingRule,
+    };
+
+    sendEvent(this.groupingRulesViewerEvent, GroupingRulesViewerEventType.GROUPING_RULE_SELECTED, payload);
   }
 
 }

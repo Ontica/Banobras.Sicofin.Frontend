@@ -31,6 +31,8 @@
       <emp-fa-data-table fxFlex
         [dataTable]="groupingRuleData"
         [commandExecuted]="commandExecuted"
+        [clickableEntry]="true"
+        [selectedEntry]="selectedGroupingRule"
         (dataTableEvent)="onGroupingRulesTableEvent($event)">
 
       </emp-fa-data-table>

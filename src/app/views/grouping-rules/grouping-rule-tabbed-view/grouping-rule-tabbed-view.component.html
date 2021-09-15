@@ -1,0 +1,19 @@
+<emp-ng-card [title]="title"
+             [hint]="hint"
+             (cardClose)="onClose()">
+
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+    <mat-tab label="Subagrupaciones">
+
+      <emp-fa-grouping-rule-items-table
+        [groupingRuleItemList]="groupingRuleItemList"
+        [isLoading]="isLoading">
+
+      </emp-fa-grouping-rule-items-table>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

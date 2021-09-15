@@ -1,10 +1,21 @@
 <div class="explorer" fxLayoutGap="32px">
 
-  <div class="primary">
+  <div class="primary" [fxHide.lt-lg]="displayGroupingRuleTabbed">
 
-    <emp-fa-grouping-rules-viewer>
+    <emp-fa-grouping-rules-viewer
+      (groupingRulesViewerEvent)="onGroupingRulesViewerEvent($event)">
 
     </emp-fa-grouping-rules-viewer>
+
+  </div>
+
+  <div class="secondary priority" *ngIf="displayGroupingRuleTabbed">
+
+    <emp-fa-grouping-rule-tabbed-view
+      [groupingRule]="selectedGroupingRule"
+      (groupingRuleTabbedViewEvent)="onCloseGroupingRuleTabbedView()">
+
+    </emp-fa-grouping-rule-tabbed-view>
 
   </div>
 

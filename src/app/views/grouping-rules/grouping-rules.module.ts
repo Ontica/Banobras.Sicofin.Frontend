@@ -17,12 +17,16 @@ import { ReportsControlsModule } from '../reports-controls/reports-controls.modu
 
 import { GroupingRulesFilterComponent } from './grouping-rules-viewer/grouping-rules-filter.component';
 import { GroupingRulesViewerComponent } from './grouping-rules-viewer/grouping-rules-viewer.component';
+import { GroupingRuleTabbedViewComponent } from './grouping-rule-tabbed-view/grouping-rule-tabbed-view.component';
+import { GroupingRuleItemsTableComponent } from './grouping-rule-items-table/grouping-rule-items-table.component';
 
 
 @NgModule({
   declarations: [
+    GroupingRuleItemsTableComponent,
     GroupingRulesFilterComponent,
     GroupingRulesViewerComponent,
+    GroupingRuleTabbedViewComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +41,7 @@ import { GroupingRulesViewerComponent } from './grouping-rules-viewer/grouping-r
   ],
   exports: [
     GroupingRulesViewerComponent,
+    GroupingRuleTabbedViewComponent,
   ]
 })
 export class GroupingRulesModule { }

@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { GroupingRule } from '@app/models';
+import { GroupingRule, GroupingRuleItem } from '@app/models';
 
 
 @Injectable()
@@ -35,6 +35,15 @@ export class RulesDataService {
     const path = `v2/financial-accounting/rules/grouping-rules/${rulesSetUID}`;
 
     return this.http.get<GroupingRule[]>(path);
+  }
+
+
+  getGroupingRuleItems(groupingRuleUID: string): Observable<GroupingRuleItem[]> {
+    Assertion.assertValue(groupingRuleUID, 'groupingRuleUID');
+
+    const path = `v2/financial-accounting/rules/grouping-rule-items/${groupingRuleUID}`;
+
+    return this.http.get<GroupingRuleItem[]>(path);
   }
 
 }
