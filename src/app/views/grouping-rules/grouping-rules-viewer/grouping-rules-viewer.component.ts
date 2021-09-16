@@ -11,10 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { RulesDataService } from '@app/data-services';
 
-import { EmptyGroupingRule, EmptyGroupingRuleDataTable, GroupingRule, GroupingRuleCommand,
-         GroupingRuleDataTable } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { EmptyGroupingRule, EmptyGroupingRuleCommand, EmptyGroupingRuleDataTable, GroupingRule,
+         GroupingRuleCommand, GroupingRuleDataTable } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -25,7 +23,6 @@ import {
 } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { GroupingRulesFilterEventType } from './grouping-rules-filter.component';
-
 
 export enum GroupingRulesViewerEventType {
   GROUPING_RULE_SELECTED = 'GroupingRulesViewerComponent.Event.GroupingRuleSelected',
@@ -51,14 +48,15 @@ export class GroupingRulesViewerComponent {
 
   groupingRuleData: GroupingRuleDataTable = EmptyGroupingRuleDataTable;
 
+  groupingRuleCommand: GroupingRuleCommand = Object.assign({}, EmptyGroupingRuleCommand);
+
   displayExportModal = false;
 
   excelFileUrl = '';
 
   selectedGroupingRule = EmptyGroupingRule;
 
-  constructor(private rulesData: RulesDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private rulesData: RulesDataService) { }
 
 
   onGroupingRulesFilterEvent(event) {
@@ -73,8 +71,9 @@ export class GroupingRulesViewerComponent {
         Assertion.assertValue(event.payload.rulesSetName, 'event.payload.rulesSetName');
 
         this.commandExecuted = true;
+        this.groupingRuleCommand = event.payload.groupingRuleCommand as GroupingRuleCommand;
         this.rulesSetName = event.payload.rulesSetName;
-        this.getGroupingRules(event.payload.groupingRuleCommand as GroupingRuleCommand);
+        this.getGroupingRules();
         return;
 
       default:
@@ -131,13 +130,14 @@ export class GroupingRulesViewerComponent {
   }
 
 
-  private getGroupingRules(command: GroupingRuleCommand) {
+  private getGroupingRules() {
     this.setSubmitted(true);
 
-    this.rulesData.getGroupingRules(command.rulesSetUID)
+    this.rulesData.getGroupingRules(this.groupingRuleCommand.rulesSetUID)
       .toPromise()
       .then(x => {
-        this.groupingRuleData = Object.assign({}, this.groupingRuleData, {command, entries: x});
+        this.groupingRuleData = Object.assign({}, this.groupingRuleData,
+          {command: this.groupingRuleCommand, entries: x});
         this.setText();
         this.emitGroupingRuleSelected(EmptyGroupingRule);
       })
@@ -146,11 +146,11 @@ export class GroupingRulesViewerComponent {
 
 
   private exportGroupingRulesToExcel() {
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy';
-      this.messageBox.showInDevelopment({type: 'EXPORT_GROPING_RULES',
-        command: this.groupingRuleData.command});
-    }, 500);
+    this.rulesData.exportGroupingRulesToExcel(this.groupingRuleCommand.rulesSetUID)
+      .toPromise()
+      .then(x => {
+        this.excelFileUrl = x.url;
+      });
   }
 
 

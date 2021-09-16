@@ -11,13 +11,22 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { GroupingRule, GroupingRuleItem } from '@app/models';
+import { ExcelFile, GroupingRule, GroupingRuleItem } from '@app/models';
 
 
 @Injectable()
 export class RulesDataService {
 
   constructor(private http: HttpService) { }
+
+
+  exportGroupingRulesToExcel(rulesSetUID: string): Observable<ExcelFile> {
+    Assertion.assertValue(rulesSetUID, 'rulesSetUID');
+
+    const path = `v2/financial-accounting/rules/grouping-rules/${rulesSetUID}/excel`;
+
+    return this.http.get<ExcelFile>(path);
+  }
 
 
   getRulesSets(accountsChartUID: string): Observable<Identifiable[]> {
