@@ -65,7 +65,7 @@ export class GroupingRuleItemsTableComponent implements OnChanges {
 
     const message = this.getConfirmMessage(groupingRuleItem);
 
-    this.messageBox.confirm(message, 'Eliminar subagrupación', 'DeleteCancel')
+    this.messageBox.confirm(message, 'Eliminar integración', 'DeleteCancel')
       .toPromise()
       .then(x => {
         if (x) {
@@ -101,7 +101,7 @@ export class GroupingRuleItemsTableComponent implements OnChanges {
         </strong></td></tr>
       </table>
 
-     <br>¿Elimino la subagrupación?`;
+     <br>¿Elimino la integración?`;
   }
 
 }
