@@ -12,11 +12,17 @@ import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './
 
 export enum FinancialReportType {
   R01 = 'R01',
+  R01_Integracion = 'R01_integracion',
+  R01_Banxico = 'R01_Banxico',
+  R01_Banxico_Integracion = 'R01_Banxico_Integracion',
 }
 
 
 export const FinancialReportList: Identifiable[] = [
-  {uid: FinancialReportType.R01,  name: 'R01'},
+  { uid: FinancialReportType.R01,                      name: 'R01' },
+  { uid: FinancialReportType.R01_Integracion,          name: 'R01 Integración' },
+  { uid: FinancialReportType.R01_Banxico,              name: 'R01 Banxico' },
+  { uid: FinancialReportType.R01_Banxico_Integracion,  name: 'R01 Banxico Integración' },
 ];
 
 
