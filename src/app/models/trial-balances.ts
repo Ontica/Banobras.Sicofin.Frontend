@@ -14,7 +14,6 @@ import { ExchangeRate } from './exchange-rates';
 
 export enum TrialBalanceType {
   AnaliticoDeCuentas                = 'AnaliticoDeCuentas',
-  AnaliticoDeCuentasPorAuxiliar     = 'AnaliticoDeCuentasPorAuxiliar',
   Balanza                           = 'Balanza',
   BalanzaValorizadaComparativa      = 'BalanzaValorizadaComparativa',
   BalanzaValorizadaEnDolares        = 'BalanzaValorizadaEnDolares',
@@ -27,7 +26,6 @@ export enum TrialBalanceType {
 
 export const TrialBalanceTypeList: Identifiable[] = [
   {uid: TrialBalanceType.AnaliticoDeCuentas,                name: 'Analítico de cuentas'},
-  {uid: TrialBalanceType.AnaliticoDeCuentasPorAuxiliar,     name: 'Analítico de cuentas por auxiliar'},
   {uid: TrialBalanceType.BalanzaConContabilidadesEnCascada, name: 'Balanza con contabilidades en cascada'},
   {uid: TrialBalanceType.BalanzaValorizadaComparativa,      name: 'Balanza de comparación entre períodos'},
   {uid: TrialBalanceType.Balanza,                           name: 'Balanza tradicional'},

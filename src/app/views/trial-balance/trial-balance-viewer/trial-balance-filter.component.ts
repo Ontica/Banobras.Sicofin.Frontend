@@ -78,7 +78,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get exchangeRatesDisabled(): boolean {
     return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.AnaliticoDeCuentasPorAuxiliar,
             TrialBalanceType.BalanzaConsolidadaPorMoneda,
             TrialBalanceType.BalanzaValorizadaComparativa,
             TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
@@ -87,7 +86,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get exchangeRatesRequired(): boolean {
     return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.AnaliticoDeCuentasPorAuxiliar,
             TrialBalanceType.BalanzaValorizadaComparativa,
             TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
@@ -112,9 +110,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get withSubledgerAccountDisabled(): boolean {
-    return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.AnaliticoDeCuentasPorAuxiliar,
-            TrialBalanceType.BalanzaConContabilidadesEnCascada,
+    return [TrialBalanceType.BalanzaConContabilidadesEnCascada,
             TrialBalanceType.BalanzaConsolidadaPorMoneda,
             TrialBalanceType.BalanzaValorizadaComparativa,
             TrialBalanceType.BalanzaValorizadaEnDolares,
@@ -123,8 +119,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get withSubledgerAccountRequired(): boolean {
-    return [TrialBalanceType.AnaliticoDeCuentasPorAuxiliar,
-            TrialBalanceType.BalanzaValorizadaComparativa,
+    return [TrialBalanceType.BalanzaValorizadaComparativa,
             TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
@@ -149,7 +144,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get displayToAccount() {
     return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.AnaliticoDeCuentasPorAuxiliar,
             TrialBalanceType.Balanza,
             TrialBalanceType.BalanzaConContabilidadesEnCascada,
             TrialBalanceType.BalanzaConsolidadaPorMoneda,
