@@ -37,4 +37,15 @@ export class FinancialReportsDataService {
     return this.http.post<FinancialReport>(path, financialReportCommand);
   }
 
+
+  getFinancialReportBreakdown(financialReportUID: string,
+                              financialReportCommand: FinancialReportCommand): Observable<FinancialReport> {
+    Assertion.assertValue(financialReportUID, 'financialReportUID');
+    Assertion.assertValue(financialReportCommand, 'financialReportCommand');
+
+    const path = `v2/financial-accounting/financial-reports/breakdown/${financialReportUID}`;
+
+    return this.http.post<FinancialReport>(path, financialReportCommand);
+  }
+
 }

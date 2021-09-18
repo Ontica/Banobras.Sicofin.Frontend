@@ -1,10 +1,21 @@
 <div class="explorer" fxLayoutGap="32px">
 
-  <div class="primary">
+  <div class="primary" [fxHide.lt-lg]="displayFinancialReportBreakdown">
 
-    <emp-fa-financial-report-viewer>
+    <emp-fa-financial-report-viewer
+      (financialReportViewerEvent)="onFinancialReportViewerEvent($event)">
 
     </emp-fa-financial-report-viewer>
+
+  </div>
+
+  <div class="secondary priority" *ngIf="displayFinancialReportBreakdown">
+
+    <emp-fa-financial-report-breakdown-tabbed-view
+      [financialReportBreakdown]="selectedFinancialReport"
+      (financialReportBreakdownTabbedViewEvent)="onFinancialReportBreakdownTabbedViewEvent($event)">
+
+    </emp-fa-financial-report-breakdown-tabbed-view>
 
   </div>
 

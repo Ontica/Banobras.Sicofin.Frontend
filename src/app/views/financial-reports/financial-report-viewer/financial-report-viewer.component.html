@@ -19,7 +19,7 @@
 
     <div fxLayout="column" fxFlexFill>
 
-      <emp-ng-spinner #spinner [visible]="isLoading">
+      <emp-ng-spinner #spinner [visible]="isLoading || isLoadingBreakdown">
 
       </emp-ng-spinner>
 
@@ -30,6 +30,7 @@
 
       <emp-fa-data-table fxFlex
         [dataTable]="financialReport"
+        [selectedEntry]="selectedFinancialReportBreakdown.financialReportEntry"
         [commandExecuted]="commandExecuted"
         (dataTableEvent)="onFinancialReportTableEvent($event)">
 

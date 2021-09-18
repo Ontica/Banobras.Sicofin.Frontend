@@ -1,4 +1,4 @@
-<div class="list-selection-header" [style.top.px]="53">
+<div [ngClass]="controlsAligned ? 'controls-container-aligned' : 'controls-container'" [style.top.px]="53">
 
   <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
 
@@ -22,7 +22,8 @@
 
       <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
 
-        <button class="btn" (click)="onExportButtonClicked()">
+        <button *ngIf="showExportButton" class="btn"
+          (click)="onExportButtonClicked()">
           Exportar
         </button>
 

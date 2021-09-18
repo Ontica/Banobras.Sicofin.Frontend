@@ -5,14 +5,17 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
-import { Assertion } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { DataTable, FinancialReportCommand, EmptyFinancialReport, EmptyFinancialReportCommand,
-         getFinancialReportNameFromUID } from '@app/models';
+import { FinancialReportCommand, EmptyFinancialReport, EmptyFinancialReportCommand,
+         getFinancialReportNameFromUID, FinancialReport, FinancialReportEntry,
+         EmptyFinancialReportBreakdown} from '@app/models';
+
+import { sendEvent } from '@app/shared/utils';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
@@ -22,6 +25,9 @@ import {
 
 import { FinancialReportFilterEventType } from './financial-report-filter.component';
 
+export enum FinancialReportViewerEventType {
+  FINANCIAL_REPORT_ENTRY_SELECTED = 'FinancialReportViewerComponent.Event.FinancialReportEntrySelected',
+}
 
 @Component({
   selector: 'emp-fa-financial-report-viewer',
@@ -29,21 +35,27 @@ import { FinancialReportFilterEventType } from './financial-report-filter.compon
 })
 export class FinancialReportViewerComponent {
 
+  @Output() financialReportViewerEvent = new EventEmitter<EventInfo>();
+
   financialReportTypeName = '';
 
   cardHint = 'Selecciona los filtros';
 
   isLoading = false;
 
+  isLoadingBreakdown = false;
+
   submitted = false;
 
-  financialReport: DataTable = Object.assign({}, EmptyFinancialReport);
+  financialReport: FinancialReport = Object.assign({}, EmptyFinancialReport);
 
   financialReportCommand: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
 
   displayExportModal = false;
 
   excelFileUrl = '';
+
+  selectedFinancialReportBreakdown = EmptyFinancialReportBreakdown;
 
   commandExecuted = false;
 
@@ -85,7 +97,7 @@ export class FinancialReportViewerComponent {
 
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
-        console.log('ENTRY_CLICKED: ', event.payload.entry.uid, this.financialReportCommand);
+        this.getFinancialReportBreakdown(event.payload.entry);
         return;
 
       default:
@@ -137,7 +149,27 @@ export class FinancialReportViewerComponent {
   }
 
 
-  private setFinancialReportData(financialReport: DataTable, commandExecuted = true) {
+  private getFinancialReportBreakdown(financialReportEntry: FinancialReportEntry) {
+    this.isLoadingBreakdown = true;
+
+    this.financialReportsData.getFinancialReportBreakdown(financialReportEntry.uid,
+                                                          this.financialReportCommand)
+      .toPromise()
+      .then(x => {
+        this.selectedFinancialReportBreakdown = {
+          financialReportEntry,
+          financialReportBreakdown: x,
+        };
+
+        sendEvent(this.financialReportViewerEvent,
+                  FinancialReportViewerEventType.FINANCIAL_REPORT_ENTRY_SELECTED,
+                  {financialReportBreakdown: this.selectedFinancialReportBreakdown});
+      })
+      .finally(() => this.isLoadingBreakdown = false);
+  }
+
+
+  private setFinancialReportData(financialReport: FinancialReport, commandExecuted = true) {
     this.financialReport = financialReport;
     this.commandExecuted = commandExecuted;
     this.setText();

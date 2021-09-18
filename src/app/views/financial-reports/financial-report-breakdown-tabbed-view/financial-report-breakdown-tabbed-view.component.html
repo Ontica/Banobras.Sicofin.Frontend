@@ -1,0 +1,20 @@
+<emp-ng-card [title]="title"
+             [hint]="hint"
+             (cardClose)="onClose()">
+
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+    <mat-tab label="Desglose">
+
+      <emp-fa-data-table
+        [dataTable]="financialReportBreakdown.financialReportBreakdown"
+        [controlsAligned]="true"
+        [showExportButton]="false">
+
+      </emp-fa-data-table>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

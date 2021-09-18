@@ -12,7 +12,7 @@ import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './
 
 export enum FinancialReportType {
   R01 = 'R01',
-  R01_Integracion = 'R01_integracion',
+  R01_Integracion = 'R01_Integracion',
   R01_Banxico = 'R01_Banxico',
   R01_Banxico_Integracion = 'R01_Banxico_Integracion',
 }
@@ -42,6 +42,8 @@ export interface FinancialReportCommand extends DataTableCommand {
 
 export interface FinancialReportEntry extends DataTableEntry {
   uid: string;
+  accountsChartName: string;
+  rulesSetName: string;
   itemType: FinancialReportItemType;
   groupingRuleUID: string;
   conceptCode: string;
@@ -49,6 +51,12 @@ export interface FinancialReportEntry extends DataTableEntry {
   domesticCurrencyTotal: number;
   foreignCurrencyTotal: number;
   total: number;
+}
+
+
+export interface FinancialReportBreakdown {
+  financialReportEntry: FinancialReportEntry;
+  financialReportBreakdown: FinancialReport;
 }
 
 
@@ -65,10 +73,30 @@ export const EmptyFinancialReportCommand: FinancialReportCommand = {
 };
 
 
+export const EmptyFinancialReportEntry: FinancialReportEntry = {
+  uid: '',
+  accountsChartName: '',
+  rulesSetName: '',
+  itemType: FinancialReportItemType.Entry,
+  groupingRuleUID: '',
+  conceptCode: '',
+  concept: '',
+  domesticCurrencyTotal: 0,
+  foreignCurrencyTotal: 0,
+  total: 0,
+};
+
+
 export const EmptyFinancialReport: FinancialReport = {
   command: EmptyFinancialReportCommand,
   columns: [],
   entries: [],
+};
+
+
+export const EmptyFinancialReportBreakdown: FinancialReportBreakdown = {
+  financialReportEntry: EmptyFinancialReportEntry,
+  financialReportBreakdown: EmptyFinancialReport,
 };
 
 

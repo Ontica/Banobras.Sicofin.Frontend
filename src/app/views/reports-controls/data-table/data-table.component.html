@@ -4,12 +4,14 @@
 
   <div #controlsContainer *ngIf="commandExecuted" fxFlex="none">
 
-    <mat-divider [style.marginBottom.px]="8">
+    <mat-divider *ngIf="!controlsAligned" [style.marginBottom.px]="8">
 
     </mat-divider>
 
     <emp-fa-data-table-controls
       [filter]="filter"
+      [showExportButton]="showExportButton"
+      [controlsAligned]="controlsAligned"
       (dataTableControlsEvent)="onDataTableControlsEvent($event)">
 
     </emp-fa-data-table-controls>

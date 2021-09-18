@@ -15,11 +15,15 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
+import {
+  FinancialReportBreakdownTabbedViewComponent
+} from './financial-report-breakdown-tabbed-view/financial-report-breakdown-tabbed-view.component';
 import { FinancialReportFilterComponent } from './financial-report-viewer/financial-report-filter.component';
 import { FinancialReportViewerComponent } from './financial-report-viewer/financial-report-viewer.component';
 
 @NgModule({
   declarations: [
+    FinancialReportBreakdownTabbedViewComponent,
     FinancialReportFilterComponent,
     FinancialReportViewerComponent,
   ],
@@ -35,6 +39,7 @@ import { FinancialReportViewerComponent } from './financial-report-viewer/financ
     ReportsControlsModule,
   ],
   exports: [
+    FinancialReportBreakdownTabbedViewComponent,
     FinancialReportViewerComponent,
   ]
 })

@@ -37,7 +37,11 @@ export class DataTableComponent implements OnChanges {
 
   @Input() dataTable: DataTable = EmptyDataTable;
 
-  @Input() commandExecuted = false;
+  @Input() commandExecuted = true;
+
+  @Input() controlsAligned = false;
+
+  @Input() showExportButton = true;
 
   @Input() selectedEntry: DataTableEntry = null;
 

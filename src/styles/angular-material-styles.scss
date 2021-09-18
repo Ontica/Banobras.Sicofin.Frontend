@@ -288,7 +288,7 @@ table.mat-table {
     }
 
     &.mat-row:hover {
-      background-color: lighten($grid-footer-background-color, 5%);
+      background-color: $selected-control-background-color;
 
       &.item-type-total {
         background-color: $grid-footer-background-color;
