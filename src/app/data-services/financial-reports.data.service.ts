@@ -23,7 +23,7 @@ export class FinancialReportsDataService {
   exportFinancialReportToExcel(financialReportCommand: FinancialReportCommand): Observable<ExcelFile> {
     Assertion.assertValue(financialReportCommand, 'financialReportCommand');
 
-    const path = `v2/financial-accounting/financial-reports/excel`;
+    const path = `v2/financial-accounting/financial-reports/generate/excel`;
 
     return this.http.post<ExcelFile>(path, financialReportCommand);
   }
@@ -32,7 +32,7 @@ export class FinancialReportsDataService {
   getFinancialReport(financialReportCommand: FinancialReportCommand): Observable<FinancialReport> {
     Assertion.assertValue(financialReportCommand, 'financialReportCommand');
 
-    const path = `v2/financial-accounting/financial-reports`;
+    const path = `v2/financial-accounting/financial-reports/generate`;
 
     return this.http.post<FinancialReport>(path, financialReportCommand);
   }
@@ -43,7 +43,7 @@ export class FinancialReportsDataService {
     Assertion.assertValue(financialReportUID, 'financialReportUID');
     Assertion.assertValue(financialReportCommand, 'financialReportCommand');
 
-    const path = `v2/financial-accounting/financial-reports/breakdown/${financialReportUID}`;
+    const path = `v2/financial-accounting/financial-reports/generate/breakdown/${financialReportUID}`;
 
     return this.http.post<FinancialReport>(path, financialReportCommand);
   }
