@@ -154,22 +154,21 @@ export const ROUTES_LIBRARY = {
     parent: 'reglas-y-catalogos',
     path: 'agrupaciones',
   },
-  reglas_y_catalogos_datos_operativos: {
+  reglas_y_catalogos_configuracion_de_reportes: {
     permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
-    path: 'datos-operativos',
+    path: 'configuracion-de-reportes',
+  },
+  reglas_y_catalogos_datos_operacion: {
+    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
+    parent: 'reglas-y-catalogos',
+    path: 'datos-operacion',
   },
   reglas_y_catalogos_reglas_contabilizadoras: {
     permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
     path: 'reglas-contabilizadoras',
   },
-  reglas_y_catalogos_disenador_de_reportes: {
-    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
-    parent: 'reglas-y-catalogos',
-    path: 'disenador-de-reportes',
-  },
-
   // #endregion
 
   // #region system-management-routing module

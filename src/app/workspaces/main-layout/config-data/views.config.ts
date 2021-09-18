@@ -90,30 +90,31 @@ export const AccountingCataloguesAndRulesViews: View[] = [
     url: '/reglas-y-catalogos/catalogos-de-cuentas'
   },
   {
+    name: 'AccountingCataloguesAndRulesViews.SubledgerAccounts',
+    title: 'Auxiliares',
+    url: '/reglas-y-catalogos/auxiliares'
+  },
+  {
+    name: 'AccountingCataloguesAndRulesViews.OperationsData',
+    title: 'Datos operación',
+    url: '/reglas-y-catalogos/datos-operacion'
+  },
+  {
     name: 'AccountingCataloguesAndRulesViews.AccountsGroups',
     title: 'Agrupaciones',
     url: '/reglas-y-catalogos/agrupaciones'
   },
   {
-    name: 'AccountingCataloguesAndRulesViews.OperationsData',
-    title: 'Datos operativos',
-    url: '/reglas-y-catalogos/datos-operativos'
-  },
-  {
-    name: 'AccountingCataloguesAndRulesViews.SubledgerAccounts',
-    title: 'Auxiliares',
-    url: '/reglas-y-catalogos/auxiliares'
-  },
+    name: 'AccountingCataloguesAndRulesViews.ReportsDesigner',
+    title: 'Configuración de reportes',
+    url: '/reglas-y-catalogos/configuracion-de-reportes'
+  }
   // {
   //   name: 'AccountingCataloguesAndRulesViews.AccountingRules',
   //   title: 'Reglas contabilizadoras',
   //   url: '/reglas-y-catalogos/reglas-contabilizadoras'
   // },
-  // {
-  //   name: 'AccountingCataloguesAndRulesViews.AccountsGroups',
-  //   title: 'Diseñador de reportes',
-  //   url: '/reglas-y-catalogos/disenador-de-reportes'
-  // }
+
 ];
 
 
