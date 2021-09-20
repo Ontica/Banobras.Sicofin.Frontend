@@ -12,7 +12,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 
 import { EventInfo } from '@app/core';
 
-import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType } from '@app/models';
+import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType,
+         SummaryItemTypeList, GroupItemTypeList, TotalItemTypeList } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -43,6 +44,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() showExportButton = true;
 
+  @Input() formatFieldName = 'format';
+
   @Input() selectedEntry: DataTableEntry = null;
 
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
@@ -57,6 +60,12 @@ export class DataTableComponent implements OnChanges {
 
   dataTableColumnType = DataTableColumnType;
 
+  summaryItemTypeList = SummaryItemTypeList;
+
+  groupItemTypeList = GroupItemTypeList;
+
+  totalItemTypeList = TotalItemTypeList;
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.dataTable) {
@@ -64,15 +73,6 @@ export class DataTableComponent implements OnChanges {
       this.initDataSource();
       this.scrollToTop();
     }
-  }
-
-
-  initDataSource() {
-    this.columns = this.dataTable.columns;
-    this.displayedColumns = this.columns.map(column => column.field);
-
-    this.dataSource = new TableVirtualScrollDataSource(this.dataTable.entries);
-    this.dataSource.filterPredicate = this.getFilterPredicate();
   }
 
 
@@ -105,6 +105,15 @@ export class DataTableComponent implements OnChanges {
   }
 
 
+  private initDataSource() {
+    this.columns = this.dataTable.columns;
+    this.displayedColumns = this.columns.map(column => column.field);
+
+    this.dataSource = new TableVirtualScrollDataSource(this.dataTable.entries);
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+  }
+
+
   private getFilterPredicate() {
     return (row: DataTable, filters: string) => (
       this.columns.filter(x => x.type !== DataTableColumnType.decimal &&
@@ -113,17 +122,17 @@ export class DataTableComponent implements OnChanges {
   }
 
 
-  private applyFilter(value: string) {
-    this.dataSource.filter = value.trim().toLowerCase();
-    this.scrollToTop();
-    this.emitCountFilteredEntries();
-  }
-
-
   private scrollToTop() {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(-1);
     }
+  }
+
+
+  private applyFilter(value: string) {
+    this.dataSource.filter = value.trim().toLowerCase();
+    this.scrollToTop();
+    this.emitCountFilteredEntries();
   }
 
 

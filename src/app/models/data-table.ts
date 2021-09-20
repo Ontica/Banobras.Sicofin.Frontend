@@ -46,6 +46,27 @@ export enum DataTableColumnType {
 }
 
 
-export type DataTableItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalGroupDebtor' |
-  'BalanceTotalGroupCreditor' | 'BalanceTotalDebtor' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' |
-  'BalanceTotalConsolidatedByLedger' | 'BalanceTotalConsolidated';
+export type DataTableItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalConsolidated' |
+  'BalanceTotalConsolidatedByLedger' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' |
+  'BalanceTotalDebtor' | 'BalanceTotalGroupCreditor' | 'BalanceTotalGroupDebtor' | 'Summary';
+
+
+export const SummaryItemTypeList: DataTableItemType[] = [
+  'Summary',
+  'BalanceSummary',
+];
+
+
+export const GroupItemTypeList: DataTableItemType[] = [
+  'BalanceTotalGroupDebtor',
+  'BalanceTotalGroupCreditor',
+];
+
+
+export const TotalItemTypeList: DataTableItemType[] = [
+  'BalanceTotalDebtor',
+  'BalanceTotalCreditor',
+  'BalanceTotalCurrency',
+  'BalanceTotalConsolidatedByLedger',
+  'BalanceTotalConsolidated',
+];

@@ -64,6 +64,7 @@ export interface FinancialReportEntry extends DataTableEntry {
   uid: string;
   accountsChartName: string;
   rulesSetName: string;
+  format: string;
   itemType: FinancialReportItemType;
   groupingRuleUID: string;
   conceptCode: string;
@@ -97,6 +98,7 @@ export const EmptyFinancialReportEntry: FinancialReportEntry = {
   uid: '',
   accountsChartName: '',
   rulesSetName: '',
+  format: '',
   itemType: FinancialReportItemType.Entry,
   groupingRuleUID: '',
   conceptCode: '',
