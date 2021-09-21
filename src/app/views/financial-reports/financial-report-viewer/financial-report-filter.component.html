@@ -14,7 +14,8 @@
           [(ngModel)]="financialReportCommand.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [showError]="!financialReportCommand.accountsChartUID">
+          [showError]="!financialReportCommand.accountsChartUID"
+          (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
 
       </div>

@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { ExcelFile, FinancialReport, FinancialReportCommand } from '@app/models';
 
@@ -46,6 +46,15 @@ export class FinancialReportsDataService {
     const path = `v2/financial-accounting/financial-reports/generate/breakdown/${financialReportUID}`;
 
     return this.http.post<FinancialReport>(path, financialReportCommand);
+  }
+
+
+  getFinancialReportTypes(accountsChartUID: string): Observable<Identifiable[]> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+
+    const path = `v2/financial-accounting/financial-reports/types/${accountsChartUID}`;
+
+    return this.http.get<Identifiable[]>(path);
   }
 
 }

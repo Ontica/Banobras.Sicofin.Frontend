@@ -11,8 +11,9 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyFinancialReportCommand, FinancialReportCommand,
-         FinancialReportList } from '@app/models';
+import { FinancialReportsDataService } from '@app/data-services';
+
+import { AccountsChartMasterData, EmptyFinancialReportCommand, FinancialReportCommand } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -35,13 +36,14 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   financialReportCommand: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
 
-  financialReportTypeList: Identifiable[] = FinancialReportList;
+  financialReportTypeList: Identifiable[] = [];
 
   isLoading = false;
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer) {
+  constructor(private uiLayer: PresentationLayer,
+              private financialReportsData: FinancialReportsDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -56,9 +58,22 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onAccountsChartChanges(accountChart: AccountsChartMasterData) {
+    this.financialReportCommand.financialReportType = '';
+    this.financialReportTypeList = [];
+    if (accountChart.uid) {
+      this.getFinancialReportTypes(accountChart.uid);
+    }
+  }
+
+
   onBuildFinancialReportClicked() {
+    const financialReportTypeName = this.financialReportTypeList
+      .filter(x => x.uid === this.financialReportCommand.financialReportType);
+
     const payload = {
       financialReportCommand: Object.assign({}, this.financialReportCommand),
+      financialReportTypeName: financialReportTypeName ? financialReportTypeName[0].name : '',
     };
 
     sendEvent(this.financialReportFilterEvent,
@@ -74,6 +89,16 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
         this.accountsChartMasterDataList = x;
         this.isLoading = false;
       });
+  }
+
+
+  private getFinancialReportTypes(accountChartUID) {
+    this.isLoading = true;
+
+    this.financialReportsData.getFinancialReportTypes(accountChartUID)
+      .toPromise()
+      .then(x => this.financialReportTypeList = x )
+      .finally(() => this.isLoading = false);
   }
 
 }

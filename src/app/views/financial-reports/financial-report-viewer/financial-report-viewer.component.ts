@@ -12,8 +12,7 @@ import { Assertion, EventInfo } from '@app/core';
 import { FinancialReportsDataService } from '@app/data-services';
 
 import { FinancialReportCommand, EmptyFinancialReport, EmptyFinancialReportCommand,
-         getFinancialReportNameFromUID, FinancialReport, FinancialReportEntry,
-         EmptyFinancialReportBreakdown} from '@app/models';
+         FinancialReport, FinancialReportEntry, EmptyFinancialReportBreakdown} from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -71,8 +70,10 @@ export class FinancialReportViewerComponent {
 
       case FinancialReportFilterEventType.BUILD_FINANCIAL_REPORT_CLICKED:
         Assertion.assertValue(event.payload.financialReportCommand, 'event.payload.financialReportCommand');
+        Assertion.assertValue(event.payload.financialReportTypeName, 'event.payload.financialReportTypeName');
 
         this.financialReportCommand = event.payload.financialReportCommand as FinancialReportCommand;
+        this.financialReportTypeName = event.payload.financialReportTypeName;
         this.getFinancialReport();
         return;
 
@@ -143,9 +144,8 @@ export class FinancialReportViewerComponent {
   private exportFinancialReportToExcel() {
     this.financialReportsData.exportFinancialReportToExcel(this.financialReportCommand)
       .toPromise()
-      .then(x => {
-        this.excelFileUrl = x.url;
-      });
+      .then(x => this.excelFileUrl = x.url)
+      .catch(() => this.setDisplayExportModal(false));
   }
 
 
@@ -181,10 +181,6 @@ export class FinancialReportViewerComponent {
       this.cardHint =  'Selecciona los filtros';
       return;
     }
-
-    this.financialReportTypeName =
-      getFinancialReportNameFromUID(this.financialReport.command['financialReportType']);
-
 
     if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.financialReport.entries.length) {
       this.cardHint = `${this.financialReportTypeName} - ${itemsDisplayed} de ` +
