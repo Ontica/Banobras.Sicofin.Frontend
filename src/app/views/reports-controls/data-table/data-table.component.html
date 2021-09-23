@@ -24,7 +24,7 @@
 
       <table mat-table [dataSource]="dataSource">
 
-        <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{column.field}}">
+        <ng-container *ngFor="let column of columns; let i = index" [matColumnDef]="column.field">
 
           <th mat-header-cell *matHeaderCellDef class="nowrap"
             [ngClass]="{'text-align-right': column.type === dataTableColumnType.decimal}">

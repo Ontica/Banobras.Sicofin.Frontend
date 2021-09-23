@@ -314,6 +314,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       useValuation: this.trialBalanceCommand.useValuation,
       useDefaultValuation: this.trialBalanceCommand.useValuation ?
         this.trialBalanceCommand.useDefaultValuation : false,
+      withAverageBalance: this.trialBalanceCommand.withAverageBalance,
       withSubledgerAccount: this.trialBalanceCommand.withSubledgerAccount,
     };
 

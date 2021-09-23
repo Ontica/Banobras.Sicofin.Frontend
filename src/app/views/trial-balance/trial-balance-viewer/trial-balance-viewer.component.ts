@@ -11,7 +11,7 @@ import { Assertion } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { EmptyTrialBalance, getEmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, DataTable,
+import { EmptyTrialBalance, getEmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, TrialBalance,
          TrialBalanceCommand } from '@app/models';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
@@ -19,8 +19,8 @@ import { DataTableEventType } from '@app/views/reports-controls/data-table/data-
 import {
   ExportReportModalEventType
 } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
-import { TrialBalanceFilterEventType } from './trial-balance-filter.component';
 
+import { TrialBalanceFilterEventType } from './trial-balance-filter.component';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class TrialBalanceViewerComponent {
 
   submitted = false;
 
-  trialBalance: DataTable = EmptyTrialBalance;
+  trialBalance: TrialBalance = EmptyTrialBalance;
 
   trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
 
@@ -147,7 +147,7 @@ export class TrialBalanceViewerComponent {
   }
 
 
-  private setTrialBalanceData(trialBalance: DataTable) {
+  private setTrialBalanceData(trialBalance: TrialBalance) {
     this.trialBalance = trialBalance;
     this.setText();
   }

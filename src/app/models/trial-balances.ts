@@ -7,7 +7,7 @@
 
 import { Assertion, DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableCommand } from './data-table';
+import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
 import { ExchangeRate } from './exchange-rates';
 
@@ -106,6 +106,13 @@ period: TrialBalanceCommandPeriod, useDefaultValuation: boolean): TrialBalanceCo
 }
 
 
+export interface TrialBalance extends DataTable {
+  command: TrialBalanceCommand;
+  columns: DataTableColumn[];
+  entries: TrialBalanceEntry[];
+}
+
+
 export interface TrialBalanceCommand extends DataTableCommand {
   accountsChartUID: string;
   balancesType?: string;
@@ -122,7 +129,13 @@ export interface TrialBalanceCommand extends DataTableCommand {
   trialBalanceType: TrialBalanceType;
   useDefaultValuation?: boolean;
   useValuation?: boolean;
+  withAverageBalance?: boolean;
   withSubledgerAccount?: boolean;
+}
+
+
+export interface TrialBalanceEntry extends DataTableEntry {
+  uid: string;
 }
 
 
@@ -143,12 +156,13 @@ export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
     trialBalanceType: null,
     useDefaultValuation: true,
     useValuation: false,
+    withAverageBalance: false,
     withSubledgerAccount: false,
   };
 }
 
 
-export const EmptyTrialBalance: DataTable = {
+export const EmptyTrialBalance: TrialBalance = {
   command: getEmptyTrialBalanceCommand(),
   columns: [],
   entries: [],

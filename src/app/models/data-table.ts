@@ -20,7 +20,7 @@ export interface DataTableCommand {
 export interface DataTableColumn {
   field: string;
   title: string;
-  type: DataTableColumnType;
+  type: string;
   digits?: number;
 }
 
