@@ -117,7 +117,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
       case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION_CLICKED:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.option, 'event.payload.option');
-        this.messageBox.showInDevelopment(event);
+        this.messageBox.showInDevelopment('Ejecutar selección de pólizas', event);
         return;
 
       default:
@@ -244,7 +244,8 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   private exportVouchersToExcel() {
     setTimeout(() => {
       this.excelFileUrl = 'data-dummy';
-      this.messageBox.showInDevelopment({type: 'EXPORT_VOUCHERS', command: this.searchVouchersCommand});
+      this.messageBox.showInDevelopment('Exportar pólizas',
+        {type: 'EXPORT_VOUCHERS', command: this.searchVouchersCommand});
     }, 500);
   }
 

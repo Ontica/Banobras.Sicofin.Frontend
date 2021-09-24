@@ -76,7 +76,7 @@ export class SubledgerAccountCreatorComponent implements OnInit {
       subledgerAccount: this.getFormData(),
     };
 
-    this.messageBox.showInDevelopment(payload);
+    this.messageBox.showInDevelopment('Agregar auxiliar', payload);
   }
 
 

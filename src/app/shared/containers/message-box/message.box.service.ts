@@ -88,10 +88,10 @@ export class MessageBoxService {
   }
 
 
-  showInDevelopment(info?) {
-    this.showError('Funcionalidad en proceso de desarrollo.');
-    if (info) {
-      console.log(info);
+  showInDevelopment(title?: string, infoExtra?: any) {
+    this.show('Funcionalidad en proceso de desarrollo.', title ?? 'Tengo un problema');
+    if (infoExtra) {
+      console.log(infoExtra);
     }
   }
 
