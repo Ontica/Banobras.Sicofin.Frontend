@@ -1,0 +1,58 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Diseñador de reportes
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div fxLayout="column" fxFlexFill>
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <emp-fa-financial-report-selector fxFlex="none"
+        (financialReportSelectorEvent)="onFinancialReportSelectorEvent($event)">
+
+      </emp-fa-financial-report-selector>
+
+      <mat-divider [style.marginBottom.px]="8"> </mat-divider>
+
+      <emp-fa-financial-report-designer fxFlex *ngIf="commandExecuted"
+        [financialReportDesign]="financialReportDesign">
+
+      </emp-fa-financial-report-designer>
+
+      <div fxFlex *ngIf="isLoading || financialReportDesign.rows.length === 0">
+        <div *ngIf="isLoading" class="text-not-found">
+          Cargando...
+        </div>
+
+        <ng-container *ngIf="!isLoading">
+          <div *ngIf="!commandExecuted" class="text-not-found">
+            No se ha invocado la consulta.
+          </div>
+
+          <div *ngIf="commandExecuted" class="text-not-found">
+            No se encontraron registros con el filtro proporcionado.
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

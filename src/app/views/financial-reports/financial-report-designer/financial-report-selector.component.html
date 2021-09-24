@@ -1,0 +1,55 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div fxFlex>
+
+        <label>Catálogo de cuentas:</label>
+
+        <emp-ng-select name="accountChart" required
+          [config]="{selectFirst: true, bindByValue: false}"
+          [(ngModel)]="reportsForm.accountChart"
+          [items]="accountsChartMasterDataList"
+          [showError]="!reportsForm.accountChart"
+          (changes)="onAccountsChartChanges($event)">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex>
+
+        <label>Reporte:</label>
+
+        <emp-ng-select name="financialReportType" required
+          [config]="{bindByValue: false}"
+          [(ngModel)]="reportsForm.financialReportType"
+          [items]="financialReportTypesList"
+          [showError]="!reportsForm.financialReportType">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button title="Consultar reporte"
+          [class.btn-icon]="form.invalid"
+          [class.btn-icon-action]="form.valid"
+          [disabled]="form.invalid"
+          (click)="onSearchReportsClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

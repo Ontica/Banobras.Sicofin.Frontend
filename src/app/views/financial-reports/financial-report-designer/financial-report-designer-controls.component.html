@@ -1,0 +1,45 @@
+<div class="controls-container" [style.top.px]="53">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex="25">
+
+        <div class="input-icon-container">
+
+          <input #filterInput type="text" class="text-box" name="filterInput" autocomplete="off"
+            [(ngModel)]="filter"
+            placeholder="Buscar en resultado..."
+            (keyup.enter)="onFilterData()"
+            (keyup.escape)="onClearFilter()">
+
+          <mat-icon class="input-icon" (click)="onFilterData()">search</mat-icon>
+
+        </div>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
+
+        <button class="btn" [style.marginRight.px]="8" (click)="onExecuteButtonClicked()" *ngIf="readonly">
+          Ejecutar
+        </button>
+
+        <button class="btn"
+          (click)=" onToggleReadonlyClicked()">
+          {{readonly ? 'Editar' : 'Deshacer cambios'}}
+        </button>
+
+        <button class="btn" *ngIf="!readonly" [style.marginLeft.px]="8"
+          (click)="onSaveButtonClicked()">
+          Guardar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

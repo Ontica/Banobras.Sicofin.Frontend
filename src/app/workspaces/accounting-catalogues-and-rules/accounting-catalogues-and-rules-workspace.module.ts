@@ -20,6 +20,7 @@ import {
 import {
   AccountingCataloguesAndRulesWorkspaceRoutingModule
 } from './accounting-catalogues-and-rules-workspace-routing.module';
+import { FinancialReportsModule } from '@app/views/financial-reports/financial-reports.module';
 
 import {
   AccountsChartMainPageComponent
@@ -30,6 +31,7 @@ import { GroupingRulesModule } from '@app/views/grouping-rules/grouping-rules.mo
 import {
   GroupingRulesMainPageComponent
 } from './grouping-rules-main-page/grouping-rules-main-page.component';
+import { ReportDesignerMainPageComponent } from './reports-designer-main-page/reports-designer-main-page.component';
 
 
 @NgModule({
@@ -45,6 +47,7 @@ import {
 
     AccountingCataloguesAndRulesWorkspaceRoutingModule,
     AccountsChartModule,
+    FinancialReportsModule,
     GroupingRulesModule,
   ],
 
@@ -52,6 +55,7 @@ import {
     AccountingCataloguesAndRulesWorkspaceComponent,
     AccountsChartMainPageComponent,
     GroupingRulesMainPageComponent,
+    ReportDesignerMainPageComponent,
   ],
 
   exports: [

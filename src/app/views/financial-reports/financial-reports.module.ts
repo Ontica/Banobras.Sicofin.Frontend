@@ -18,13 +18,35 @@ import { ReportsControlsModule } from '../reports-controls/reports-controls.modu
 import {
   FinancialReportBreakdownTabbedViewComponent
 } from './financial-report-breakdown-tabbed-view/financial-report-breakdown-tabbed-view.component';
+
+import {
+  FinancialReportDesignerComponent
+} from './financial-report-designer/financial-report-designer.component';
+
+import {
+  FinancialReportDesignerControlsComponent
+} from './financial-report-designer/financial-report-designer-controls.component';
+
+import {
+  FinancialReportDesignerViewerComponent
+} from './financial-report-designer/financial-report-designer-viewer.component';
+
 import { FinancialReportFilterComponent } from './financial-report-viewer/financial-report-filter.component';
+
+import {
+  FinancialReportSelectorComponent
+} from './financial-report-designer/financial-report-selector.component';
+
 import { FinancialReportViewerComponent } from './financial-report-viewer/financial-report-viewer.component';
 
 @NgModule({
   declarations: [
     FinancialReportBreakdownTabbedViewComponent,
+    FinancialReportDesignerComponent,
+    FinancialReportDesignerControlsComponent,
+    FinancialReportDesignerViewerComponent,
     FinancialReportFilterComponent,
+    FinancialReportSelectorComponent,
     FinancialReportViewerComponent,
   ],
   imports: [
@@ -40,6 +62,7 @@ import { FinancialReportViewerComponent } from './financial-report-viewer/financ
   ],
   exports: [
     FinancialReportBreakdownTabbedViewComponent,
+    FinancialReportDesignerViewerComponent,
     FinancialReportViewerComponent,
   ]
 })

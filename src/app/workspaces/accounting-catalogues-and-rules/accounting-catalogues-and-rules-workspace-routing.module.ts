@@ -23,6 +23,10 @@ import {
   GroupingRulesMainPageComponent
 } from './grouping-rules-main-page/grouping-rules-main-page.component';
 
+import {
+  ReportDesignerMainPageComponent
+} from './reports-designer-main-page/reports-designer-main-page.component';
+
 
 const routes: Routes = [
   {
@@ -31,18 +35,8 @@ const routes: Routes = [
     component: AccountsChartMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.path,
-    component: GroupingRulesMainPageComponent,
-  },
-  {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_auxiliares.permission },
     path: ROUTES_LIBRARY.reglas_y_catalogos_auxiliares.path,
-    component: AccountingCataloguesAndRulesWorkspaceComponent,
-  },
-  {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.path,
     component: AccountingCataloguesAndRulesWorkspaceComponent,
   },
   {
@@ -50,12 +44,21 @@ const routes: Routes = [
     path: ROUTES_LIBRARY.reglas_y_catalogos_datos_operacion.path,
     component: AccountingCataloguesAndRulesWorkspaceComponent,
   },
+  {
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.path,
+    component: GroupingRulesMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.path,
+    component: ReportDesignerMainPageComponent,
+  },
   // {
   //   data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.permission },
   //   path: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.path,
   //   component: AccountingCataloguesAndRulesWorkspaceComponent,
   // },
-
   {
     path: '',
     redirectTo: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.path,

@@ -84,3 +84,61 @@ export const EmptyFinancialReportBreakdown: FinancialReportBreakdown = {
   financialReportEntry: EmptyFinancialReportEntry,
   financialReportBreakdown: EmptyFinancialReport,
 };
+
+//
+// Designer
+//
+
+export interface FinancialReportRow {
+  uid: string;
+  code: string;
+  label: string;
+  format: string;
+  position: number;
+  groupingRuleUID: string;
+}
+
+
+export interface FinancialReportColumn extends DataTableColumn {
+
+}
+
+
+export interface FinancialReportDesign {
+  rows: FinancialReportRow[];
+  columns: FinancialReportColumn[];
+}
+
+
+export enum FinancialReportColumnType {
+  text = 'text',
+  text_nowrap = 'text-nowrap',
+  decimal = 'decimal',
+  grouping_rule = 'grouping_rule',
+  operation_data = 'operation_data',
+  colums_sum = 'colums_sum',
+}
+
+
+export const EmptyFinancialReportRow: FinancialReportRow = {
+  uid: '',
+  code: '',
+  label: '',
+  format: '',
+  position: null,
+  groupingRuleUID: '',
+};
+
+
+export const EmptyFinancialReportDesign: FinancialReportDesign = {
+  rows: [],
+  columns: [],
+};
+
+
+export const EmptyFinancialReportColumn: FinancialReportColumn = {
+  field: 'Empty',
+  title: '',
+  type: FinancialReportColumnType.text,
+  digits: 0,
+};

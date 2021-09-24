@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { ExcelFile, FinancialReport, FinancialReportCommand } from '@app/models';
+import { ExcelFile, FinancialReport, FinancialReportCommand, FinancialReportDesign } from '@app/models';
 
 
 @Injectable()
@@ -55,6 +55,27 @@ export class FinancialReportsDataService {
     const path = `v2/financial-accounting/financial-reports/types/${accountsChartUID}`;
 
     return this.http.get<Identifiable[]>(path);
+  }
+
+  //
+  // Designer
+  //
+
+  getFinancialReportTypesForDesign(accountsChartUID: string): Observable<Identifiable[]> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+
+    const path = `v2/financial-accounting/financial-reports/design/types/${accountsChartUID}`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getFinancialReportDesign(financialReportTypeUID: string): Observable<FinancialReportDesign> {
+    Assertion.assertValue(financialReportTypeUID, 'financialReportTypeUID');
+
+    const path = `v2/financial-accounting/financial-reports/design/${financialReportTypeUID}`;
+
+    return this.http.get<FinancialReportDesign>(path);
   }
 
 }
