@@ -352,7 +352,8 @@ table.mat-table {
         background-color: darken($designer-gray-color, 1%);
       }
 
-      &.Verde, &.VerdeBold {
+      &.Verde,
+      &.VerdeBold {
         background-color: darken($designer-green-color, 3%);
       }
     }
@@ -379,13 +380,13 @@ table.mat-table.emp-designer {
     &:first-of-type {
       border-left: 1px solid $designer-border-color;
       left: 0;
-      position: sticky!important;
-      z-index: 101!important;
+      position: sticky !important;
+      z-index: 101 !important;
     }
 
     &:hover .resize-handle {
       opacity: 1;
-      transition: .3s ease-in-out;
+      transition: 0.3s ease-in-out;
     }
   }
 
@@ -423,7 +424,7 @@ table.mat-table.emp-designer {
       height: 28px;
 
       th {
-        color: #000000;
+        color: #000;
         font-weight: 500;
       }
 

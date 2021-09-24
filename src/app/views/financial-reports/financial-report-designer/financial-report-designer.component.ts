@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { EventInfo } from '@app/core';
 
 import { EmptyFinancialReportDesign, FinancialReportDesign, FinancialReportColumn, FinancialReportRow,
-         FinancialReportColumnType } from '@app/models';
+         FinancialReportColumnType, EmptyFinancialReportRow } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -94,13 +94,10 @@ export class FinancialReportDesignerComponent implements OnChanges {
 
 
   private setDataTable() {
-    if (this.financialReportDesign.columns.length > 0 && this.financialReportDesign.rows.length > 0) {
-      this.rows = this.financialReportDesign.rows.map(x => ({...x}));
-      this.columns = this.financialReportDesign.columns;
-    } else {
-      this.rows = [];
-      this.columns = [];
-    }
+    this.rows = this.financialReportDesign.rows.length > 0 ?
+      this.financialReportDesign.rows.map(x => ({...x})) : [Object.assign({}, EmptyFinancialReportRow)];
+    this.columns = this.financialReportDesign.columns.length > 0 ?
+      this.financialReportDesign.columns : this.getEmptyColumnsList(7);
 
     this.initDataSource();
     this.scrollToTop();
@@ -134,6 +131,16 @@ export class FinancialReportDesignerComponent implements OnChanges {
   private applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
     this.scrollToTop();
+  }
+
+
+  private getEmptyColumnsList(numberColumns: number): FinancialReportColumn[] {
+    const lastIndexColumn = this.financialReportDesign.columns.length;
+    return ALPHABET.slice(lastIndexColumn, numberColumns).map(x => Object.create({
+      field: 'column' + x,
+      title: '',
+      type: FinancialReportColumnType.text,
+    }));
   }
 
 }
