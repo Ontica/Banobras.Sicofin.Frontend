@@ -689,38 +689,58 @@ table.mat-table.emp-designer {
 // checkbox
 //
 
-.mat-checkbox-layout .mat-checkbox-label {
-  font-size: 9pt;
-  margin-right: 8px;
-}
+.mat-checkbox {
+  &.mat-checkbox-checked,
+  &.mat-checkbox-indeterminate {
+    &.mat-checkbox-disabled {
+      .mat-checkbox-background {
+        background-color: lighten($control-disabled-color, 20%) !important;
+      }
 
-.mat-checkbox-text-light .mat-checkbox-layout .mat-checkbox-label {
-  color: $white;
-}
+      .mat-checkbox-label {
+        color: lighten($control-disabled-color, 20%) !important;
+      }
+    }
 
-.mat-checkbox-frame {
-  background: $white !important;
-}
-
-.mat-checkbox-checked,
-.mat-checkbox-indeterminate {
-  .mat-checkbox-background {
-    background-color: $warning-color !important;
-  }
-
-  &.mat-checkbox-disabled {
     .mat-checkbox-background {
-      background-color: lighten($control-disabled-color, 20%) !important;
+      background-color: $checkbox-background-color !important;
     }
+  }
 
-    .mat-checkbox-label {
-      color: lighten($control-disabled-color, 20%) !important;
-    }
+  &:not(.mat-checkbox-login) .mat-checkbox-inner-container {
+    margin-top: -2px;
+  }
+
+  .mat-checkbox-frame {
+    background: $white !important;
+  }
+
+
+  .mat-checkbox-label {
+    font-size: 9pt;
+    margin-right: 8px;
+  }
+
+  .mat-checkbox-ripple .mat-ripple-element {
+    background: $checkbox-background-color !important;
   }
 }
 
-.mat-checkbox-ripple .mat-ripple-element {
-  background: $warning-color !important;
+.mat-checkbox.mat-checkbox-login {
+  &.mat-checkbox-checked,
+  &.mat-checkbox-indeterminate {
+    .mat-checkbox-background {
+      background-color: $warning-color !important;
+    }
+  }
+
+  .mat-checkbox-label {
+    color: $white;
+  }
+
+  .mat-checkbox-ripple .mat-ripple-element {
+    background: $warning-color !important;
+  }
 }
 
 //
@@ -741,4 +761,17 @@ table.mat-table.emp-designer {
 .mat-radio-label {
   display: inline-flex !important;
   font-size: 9pt !important;
+}
+
+.mat-radio-button.mat-radio-checked .mat-radio-outer-circle{
+  border-color: $checkbox-background-color !important;
+}
+
+.mat-radio-button .mat-radio-inner-circle{
+  color: $checkbox-background-color !important;
+  background-color: $checkbox-background-color !important;
+}
+
+.mat-radio-button .mat-radio-ripple .mat-ripple-element {
+  background: $checkbox-background-color !important;
 }
