@@ -27,7 +27,7 @@
 </div>
 
 <emp-ng-modal-window *ngIf="displayOptionModalSelected"
-                     [config]="{width:'920px'}">
+  [config]="{width: displayOptionModalSelected ===  'VouchersImporter' ? '760px' : '920px'}">
 
   <ng-container [ngSwitch]="displayOptionModalSelected">
 

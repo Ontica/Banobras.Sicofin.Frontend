@@ -722,3 +722,23 @@ table.mat-table.emp-designer {
 .mat-checkbox-ripple .mat-ripple-element {
   background: $warning-color !important;
 }
+
+//
+// radio button
+//
+
+.mat-radio-group {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 32px;
+}
+
+.mat-radio-label {
+  display: inline-flex !important;
+  font-size: 9pt !important;
+}

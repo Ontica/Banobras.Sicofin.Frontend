@@ -22,6 +22,8 @@ import { AccountChartStateSelector,
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
+import { FileType } from '@app/shared/form-controls/file-control/file-control-data';
+
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { combineLatest } from 'rxjs';
@@ -38,6 +40,7 @@ enum VouchersUploaderFormControls {
   distributeVouchers = 'distributeVouchers',
   generateSubledgerAccount = 'generateSubledgerAccount',
   canEditVoucherEntries = 'canEditVoucherEntries',
+  excelSheets = 'excelSheets',
 }
 
 @Component({
@@ -64,6 +67,10 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
 
   helper: SubscriptionHelper;
 
+  fileType: FileType = 'excel';
+
+  excelSheetsList: Identifiable[] = [];
+
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {
@@ -74,6 +81,7 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadDataLists();
+    this.generateExcelSheetsList();
   }
 
 
@@ -92,6 +100,21 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
   }
 
 
+  onFileTypeChange() {
+    this.file = null;
+    this.formHandler.getControl(this.controls.excelSheets).reset();
+    this.formHandler.setControlValidators(this.controls.excelSheets,
+      this.fileType === 'excel' ? Validators.required : null);
+  }
+
+
+  onExcelSheetsChanges() {
+    const excelSheets: string[] = this.formHandler.getControl(this.controls.excelSheets).value;
+    const excelSheetsOrdered = excelSheets.sort((a, b) => +a - +b);
+    this.formHandler.getControl(this.controls.excelSheets).reset(excelSheetsOrdered);
+  }
+
+
   onSubmitForm() {
     this.isFormInvalidated = !this.formHandler.validateReadyForSubmit() || !this.file;
 
@@ -100,7 +123,14 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.importVouchersFromTextFile(this.file.file, this.getFormData());
+    if (this.fileType === 'excel') {
+      this.importVouchersFromExcelFile(this.file.file, this.getFormData());
+      return;
+    }
+
+    if (this.fileType === 'txt') {
+      this.importVouchersFromTextFile(this.file.file, this.getFormData());
+    }
   }
 
 
@@ -120,6 +150,13 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
   }
 
 
+  private generateExcelSheetsList() {
+    this.excelSheetsList = Array.from({ length: 10 }, (v, k) => (k + 1).toString())
+      .map(x => Object.create({uid: x, name: x}));
+    this.excelSheetsList.unshift({uid: '-1', name: 'Todas'});
+  }
+
+
   private initForm() {
     if (this.formHandler) {
       return;
@@ -133,6 +170,7 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
         distributeVouchers: new FormControl(false),
         generateSubledgerAccount: new FormControl(false),
         canEditVoucherEntries: new FormControl(true),
+        excelSheets: new FormControl('', Validators.required),
       })
     );
   }
@@ -151,12 +189,22 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
       distributeVouchers: formModel.distributeVouchers,
       generateSubledgerAccount: formModel.generateSubledgerAccount,
       canEditVoucherEntries: formModel.canEditVoucherEntries,
-      type: 'TextFile',
-      format: 'txt',
+      excelSheets: this.fileType === 'excel' ? formModel.excelSheets.map(x => +x) : [],
+      type: this.fileType === 'excel' ? 'ExcelFile' : 'TextFile',
+      format: this.fileType === 'excel' ? 'excel' : 'txt',
       version: '1.0'
     };
 
     return data;
+  }
+
+
+  private importVouchersFromExcelFile(file: File, dataFile: VoucherFileData) {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+      this.messageBox.showInDevelopment('Importador de pólizas desde archivo Excel', {file, dataFile});
+    }, 600);
   }
 
 
@@ -165,11 +213,14 @@ export class VouchersUploaderComponent implements OnInit, OnDestroy {
 
     this.vouchersData.importVouchersFromTextFile(file, dataFile)
       .toPromise()
-      .then(x => {
-        sendEvent(this.vouchersUploaderEvent, VouchersUploaderEventType.VOUCHERS_IMPORTED);
-        this.messageBox.show(x, 'Importador de pólizas');
-      })
+      .then(x => this.emitVouchersImported(x))
       .finally(() => this.isLoading = false);
+  }
+
+
+  private emitVouchersImported(message: string) {
+    sendEvent(this.vouchersUploaderEvent, VouchersUploaderEventType.VOUCHERS_IMPORTED);
+    this.messageBox.show(message, 'Importador de pólizas');
   }
 
 }

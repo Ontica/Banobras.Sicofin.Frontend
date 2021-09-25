@@ -5,7 +5,7 @@
 
   <div class="card-body-padding">
 
-    <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner"
+    <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()"
       autocomplete="off" class="form-section">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
@@ -14,15 +14,41 @@
 
       <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
+        <div class="section-title"> Información sobre el archivo a importar </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column">
+
+          <div fxFlex="50">
+            <label>Tipo de archivo:</label>
+            <mat-radio-group [(ngModel)]="fileType" [ngModelOptions]="{standalone: true}"
+              (change)="onFileTypeChange()">
+              <mat-radio-button value="excel" selected>Archivo Excel</mat-radio-button>
+              <mat-radio-button value="txt">Archivo de texto plano</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div fxFlex="50" *ngIf="fileType === 'excel'">
+            <label>Hojas a importar:</label>
+            <emp-ng-select
+              [config]="{clearable: true, multiple: true, closeOnSelect: false}"
+              [formControlName]="controls.excelSheets"
+              [items]="excelSheetsList"
+              [showError]="formHandler.showInvalidControl(controls.excelSheets)"
+              (changes)="onExcelSheetsChanges()">
+            </emp-ng-select>
+          </div>
+
+        </div>
+
         <div fxLayout="row" fxLayout.lt-md="column">
 
           <div fxFlex="100">
             <label>Archivo:</label>
             <emp-ng-file-control
               [(fileControl)]="file"
-              [showError]="showFileError "
-              [config]="{filesTypes: ['txt'], autoUpload: true,
-                         placeholder: 'Elija o arrastre el archivo de texto.'}">
+              [showError]="showFileError"
+              [config]="{filesTypes: [fileType], autoUpload: true,
+                         placeholder: 'Elija o arrastre el archivo ' + ( fileType === 'excel' ? 'excel.' : 'de texto.')}">
 
             </emp-ng-file-control>
           </div>
@@ -44,7 +70,7 @@
             </emp-ng-datepicker>
           </div>
 
-          <div fxFlex="calc((100% - 120px) / 2)">
+          <div fxFlex="calc(50% - 120px)">
 
             <label>Catálogo:</label>
 
@@ -57,7 +83,7 @@
 
           </div>
 
-          <div fxFlex="calc((100% - 120px) / 2)">
+          <div fxFlex="50">
 
             <label>Tipo de transacción:</label>
 

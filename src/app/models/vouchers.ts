@@ -423,6 +423,7 @@ export interface VoucherFileData {
   distributeVouchers: string;
   generateSubledgerAccount: string;
   canEditVoucherEntries: string;
+  excelSheets: number[];
   type: string;
   format: string;
   version: string;
