@@ -1,4 +1,5 @@
-<form [formGroup]="formHandler.form" autocomplete="off" class="form-section">
+<form [formGroup]="formHandler.form" (keydown.enter)="$event.preventDefault()"
+  autocomplete="off" class="form-section">
 
   <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
 
