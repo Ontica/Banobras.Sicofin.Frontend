@@ -159,6 +159,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get displayWithAverageBalance(): boolean {
+    return ![TrialBalanceType.BalanzaConsolidadaPorMoneda,
+             TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
   get trialBalanceFormFieldsValid(): boolean {
     return !!this.trialBalanceCommand.trialBalanceType && !!this.trialBalanceCommand.accountsChartUID &&
            this.initalPeriodDatesValid && this.finalPeriodDatesValid &&
@@ -215,6 +221,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
     this.trialBalanceCommand.useValuation = this.exchangeRatesRequired;
     this.trialBalanceCommand.useDefaultValuation = this.exchangeRatesRequired;
+
+    this.trialBalanceCommand.withAverageBalance = false;
   }
 
 

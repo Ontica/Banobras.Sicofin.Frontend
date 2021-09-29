@@ -162,6 +162,7 @@
 
           <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesDisabled"
             [(ngModel)]="trialBalanceCommand.showCascadeBalances"
+            [title]="showCascadeBalancesDisabled && !showCascadeBalancesRequired ? 'No aplica' : ''"
             (click)="$event.stopPropagation">
             Imprimir en cascada
           </mat-checkbox>
@@ -172,6 +173,7 @@
 
           <mat-checkbox name="useValuation" [disabled]="exchangeRatesDisabled"
             [(ngModel)]="trialBalanceCommand.useValuation"
+            [title]="exchangeRatesDisabled && !exchangeRatesRequired ? 'No aplica' : ''"
             (click)="$event.stopPropagation"
             (change)="onUseValuationChange()">
             Valorizar saldos
@@ -253,7 +255,7 @@
 
         </div>
 
-        <div fxLayout="row" [style.marginBottom.px]="8">
+        <div fxLayout="row" [style.marginBottom.px]="8" *ngIf="displayLevel || displayWithAverageBalance">
 
           <div fxFlex="50" *ngIf="displayLevel">
 
@@ -268,7 +270,7 @@
 
           </div>
 
-          <div fxFlex="25" fxLayoutAlign="start center"
+          <div fxFlex="25" fxLayoutAlign="start center" *ngIf="displayWithAverageBalance"
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
             <mat-checkbox name="withAverageBalance"
