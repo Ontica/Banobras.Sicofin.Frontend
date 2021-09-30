@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VouchersUploaderComponent } from './vouchers-uploader.component';
+import { VouchersImporterComponent } from './vouchers-importer.component';
 
-describe('VouchersUploaderComponent', () => {
-  let component: VouchersUploaderComponent;
-  let fixture: ComponentFixture<VouchersUploaderComponent>;
+describe('VouchersImporterComponent', () => {
+  let component: VouchersImporterComponent;
+  let fixture: ComponentFixture<VouchersImporterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VouchersUploaderComponent ]
+      declarations: [ VouchersImporterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VouchersUploaderComponent);
+    fixture = TestBed.createComponent(VouchersImporterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

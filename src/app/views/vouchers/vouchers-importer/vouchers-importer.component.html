@@ -1,0 +1,179 @@
+<emp-ng-card
+  title='Importador de pólizas'
+  hint='Se importarán las pólizas a SICOFIN'
+  (cardClose)="onClose()">
+
+  <div class="card-body-padding" style>
+
+    <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()"
+      autocomplete="off" class="form-section">
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
+        fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+        <div fxLayout="row" fxLayout.lt-md="column">
+
+          <div fxFlex="100">
+            <label>Tipo de importación:</label>
+            <mat-radio-group [(ngModel)]="selectedImportType" [ngModelOptions]="{standalone: true}"
+              (change)="onImportTypeChange()">
+              <mat-radio-button [value]="importTypes.excelFile" selected>Archivo Excel</mat-radio-button>
+              <mat-radio-button [value]="importTypes.txtFile">Archivo de texto plano</mat-radio-button>
+              <mat-radio-button [value]="importTypes.dataBase">De sistemas transversales</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+        </div>
+
+        <ng-container *ngIf="isExcelImport || isTxtImport">
+
+          <div class="section-title"> Archivo a importar </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column">
+
+            <div fxFlex="100">
+              <label>Archivo:</label>
+              <emp-ng-file-control
+                [fileControl]="file"
+                [showError]="showFileError"
+                [config]="{filesTypes: [selectedFileType], autoUpload: true,
+                           placeholder: 'Elija o arrastre el archivo ' + ( isExcelImport ? 'excel.' : 'de texto.')}"
+                (fileControlChange)="onFileControlChange($event)">
+
+              </emp-ng-file-control>
+            </div>
+
+          </div>
+
+          <div class="section-title"> Información sobre las pólizas y parámetros de importación </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+            <div #column1 fxLayout="column" fxFlex="calc(100% - 130px)" fxFlex.lt-md="100"
+              fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+              <div fxLayout="row" fxLayout.lt-md="column">
+
+                <div fxFlex="none" fxLayoutAlign="start center">
+
+                  <mat-checkbox
+                    [formControlName]="controls.distributeVouchers"
+                    (click)="$event.stopPropagation">
+                    Distribuir las pólizas hacia los grupos de trabajo correspondientes.
+                  </mat-checkbox>
+
+                </div>
+
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column">
+
+                <div fxFlex="none" fxLayoutAlign="start center">
+
+                  <mat-checkbox
+                    [formControlName]="controls.generateSubledgerAccount"
+                    (click)="$event.stopPropagation">
+                    Generar cuentas auxiliares que no existen.
+                  </mat-checkbox>
+
+                </div>
+
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column">
+
+                <div fxFlex="none" fxLayoutAlign="start center">
+
+                  <mat-checkbox
+                    [formControlName]="controls.canEditVoucherEntries"
+                    (click)="$event.stopPropagation">
+                    Habilitar edición de movimientos.
+                  </mat-checkbox>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div #column2 fxLayout="column" fxFlex="130px" fxFlex.lt-md="100">
+
+              <div fxLayout="row" fxLayout.lt-md="column">
+
+                <div fxFlex="none" fxFlex.lt-md="none">
+                  <label>Fecha de elaboración:</label>
+                  <emp-ng-datepicker
+                    [formControlName]="controls.recordingDate"
+                    [showError]="formHandler.showInvalidControl(controls.recordingDate)">
+
+                  </emp-ng-datepicker>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="executedDryRun || isDataBaseImport">
+
+          <div class="section-title" *ngIf="isExcelImport || isTxtImport">
+            Información del archivo a importar
+          </div>
+
+          <div class="section-title" *ngIf="isDataBaseImport">
+            Información a importar
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" [style.maxHeight.px]="200"
+            [style.minHeight]="isDataBaseImport ? '200px' : 'auto'">
+
+            <emp-fa-vouchers-importer-details-table fxFlex="100"
+              [importVouchersResult]="importVouchersResult"
+              [canSelect]="isExcelImport"
+              [commandExecuted]="executedDryRun"
+              (vouchersImporterDetailsTableEvent)="onVouchersImporterDetailsTableEvent($event)">
+
+            </emp-fa-vouchers-importer-details-table>
+
+          </div>
+
+        </ng-container>
+
+        <mat-divider class="horizontal"></mat-divider>
+
+        <div fxLayout="row">
+
+          <div fxFlex fxLayoutAlign="end center">
+
+            <button *ngIf="isExcelImport || isTxtImport"
+              [class.btn]="executedDryRun || !isFileFormValid"
+              [class.btn-action]="!executedDryRun && isFileFormValid"
+              (click)="onSubmitDryRunImportVouchers()">
+              Analizar archivo
+            </button>
+
+            <button
+              [class.btn]="!isReadyForSubmit"
+              [class.btn-action]="isReadyForSubmit"
+              (click)="onSubmitImportVouchers()">
+              Importar pólizas
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</emp-ng-card>

@@ -375,6 +375,28 @@ textarea:focus {
   font-weight: 600;
 }
 
+.bold-text {
+  font-weight: 600;
+}
+
+.error-text {
+  color: $warning-color;
+}
+
+a.error-text:hover {
+  color: $warning-color;
+  text-decoration: underline;
+}
+
+.warning-text {
+  color: $title-color;
+}
+
+a.warning-text:hover {
+  color: $title-color;
+  text-decoration: underline;
+}
+
 .remove-min-width {
   min-width: 0;
 }

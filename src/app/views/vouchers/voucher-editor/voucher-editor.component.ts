@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { VouchersDataService } from '@app/data-services';
+import { ImportVouchersDataService, VouchersDataService } from '@app/data-services';
 
 import { EmptyVoucher, EmptyVoucherEntry, isOpenVoucher, Voucher, VoucherEntry, VoucherEntryFields,
          VoucherFields } from '@app/models';
@@ -50,6 +50,7 @@ export class VoucherEditorComponent {
   selectedVoucherEntry: VoucherEntry = EmptyVoucherEntry;
 
   constructor(private vouchersData: VouchersDataService,
+              private importVouchersData: ImportVouchersDataService,
               private messageBox: MessageBoxService) {}
 
 
@@ -249,7 +250,7 @@ export class VoucherEditorComponent {
   private importVoucherEntriesFromExcel(file: File) {
     this.submitted = true;
 
-    this.vouchersData.importVoucherEntriesFromExcel(this.voucher.id, file)
+    this.importVouchersData.importVoucherEntriesFromExcel(this.voucher.id, file)
       .toPromise()
       .then(x => {
         this.displayUploaderVoucherEntries = false;

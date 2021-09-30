@@ -228,6 +228,12 @@ table.mat-table {
       padding-bottom: 2px;
     }
 
+    &.column-action-check {
+      padding: 7px;
+      width: 32px;
+      text-align: center;
+    }
+
     &.padding-icon {
       padding-top: 4px;
       padding-bottom: 4px;
@@ -689,9 +695,40 @@ table.mat-table.emp-designer {
 // checkbox
 //
 
+.mat-ripple-element {
+  background: $checkbox-background-color !important;
+}
+
 .mat-checkbox {
+  width: 16px;
+  height: 16px;
+
+  .mat-checkbox-layout {
+    height: 16px;
+  }
+
+  .mat-checkbox-label {
+    font-size: 9pt;
+    margin-right: 8px;
+  }
+
+  .mat-checkbox-frame {
+    background: $white !important;
+  }
+
+  .mat-checkbox-ripple, .mat-ripple-element {
+    left: calc(50% - 16px) !important;
+    top: calc(50% - 16px) !important;
+    height: 32px !important;
+    width: 32px !important;
+  }
+
   &.mat-checkbox-checked,
   &.mat-checkbox-indeterminate {
+    .mat-checkbox-background {
+      background-color: $checkbox-background-color !important;
+    }
+
     &.mat-checkbox-disabled {
       .mat-checkbox-background {
         background-color: lighten($control-disabled-color, 20%) !important;
@@ -701,28 +738,10 @@ table.mat-table.emp-designer {
         color: lighten($control-disabled-color, 20%) !important;
       }
     }
-
-    .mat-checkbox-background {
-      background-color: $checkbox-background-color !important;
-    }
   }
 
   &:not(.mat-checkbox-login) .mat-checkbox-inner-container {
-    margin-top: -2px;
-  }
-
-  .mat-checkbox-frame {
-    background: $white !important;
-  }
-
-
-  .mat-checkbox-label {
-    font-size: 9pt;
-    margin-right: 8px;
-  }
-
-  .mat-checkbox-ripple .mat-ripple-element {
-    background: $checkbox-background-color !important;
+    margin-top: -4px;
   }
 }
 
@@ -763,15 +782,11 @@ table.mat-table.emp-designer {
   font-size: 9pt !important;
 }
 
-.mat-radio-button.mat-radio-checked .mat-radio-outer-circle{
+.mat-radio-button.mat-radio-checked .mat-radio-outer-circle {
   border-color: $checkbox-background-color !important;
 }
 
-.mat-radio-button .mat-radio-inner-circle{
+.mat-radio-button .mat-radio-inner-circle {
   color: $checkbox-background-color !important;
   background-color: $checkbox-background-color !important;
-}
-
-.mat-radio-button .mat-radio-ripple .mat-ripple-element {
-  background: $checkbox-background-color !important;
 }

@@ -34,9 +34,6 @@ export enum VouchersExplorerEventType {
 @Component({
   selector: 'emp-fa-vouchers-explorer',
   templateUrl: './vouchers-explorer.component.html',
-  animations: [
-    expandCollapse
-  ],
 })
 export class VouchersExplorerComponent implements OnInit, OnChanges {
 

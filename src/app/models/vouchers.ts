@@ -414,17 +414,3 @@ export interface VoucherEntryFields {
   date?: DateString;
   concept: string;
 }
-
-
-export interface VoucherFileData {
-  recordingDate: string;
-  accountsChartUID: string;
-  transactionTypeUID: string;
-  distributeVouchers: string;
-  generateSubledgerAccount: string;
-  canEditVoucherEntries: string;
-  excelSheets: number[];
-  type: string;
-  format: string;
-  version: string;
-}

@@ -30,7 +30,7 @@ import {
   ExportReportModalEventType
 } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
-import { VouchersUploaderEventType } from '@app/views/vouchers/vouchers-uploader/vouchers-uploader.component';
+import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer/vouchers-importer.component';
 
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
 
@@ -192,11 +192,11 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   }
 
 
-  onVouchersUploaderEvent(event: EventInfo) {
-    switch (event.type as VouchersUploaderEventType) {
+  onVouchersImporterEvent(event: EventInfo) {
+    switch (event.type as VouchersImporterEventType) {
 
-      case VouchersUploaderEventType.CLOSE_MODAL_CLICKED:
-      case VouchersUploaderEventType.VOUCHERS_IMPORTED:
+      case VouchersImporterEventType.CLOSE_MODAL_CLICKED:
+      case VouchersImporterEventType.VOUCHERS_IMPORTED:
         this.onOptionModalClosed();
         return;
 
