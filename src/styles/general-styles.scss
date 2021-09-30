@@ -379,20 +379,20 @@ textarea:focus {
   font-weight: 600;
 }
 
-.error-text {
+.error-indicator-text {
   color: $warning-color;
 }
 
-a.error-text:hover {
+a.error-indicator-text:hover {
   color: $warning-color;
   text-decoration: underline;
 }
 
-.warning-text {
+.warning-indicator-text {
   color: $title-color;
 }
 
-a.warning-text:hover {
+a.warning-indicator-text:hover {
   color: $title-color;
   text-decoration: underline;
 }

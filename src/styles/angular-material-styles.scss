@@ -700,9 +700,6 @@ table.mat-table.emp-designer {
 }
 
 .mat-checkbox {
-  width: 16px;
-  height: 16px;
-
   .mat-checkbox-layout {
     height: 16px;
   }
@@ -716,7 +713,8 @@ table.mat-table.emp-designer {
     background: $white !important;
   }
 
-  .mat-checkbox-ripple, .mat-ripple-element {
+  .mat-checkbox-ripple,
+  .mat-ripple-element {
     left: calc(50% - 16px) !important;
     top: calc(50% - 16px) !important;
     height: 32px !important;
