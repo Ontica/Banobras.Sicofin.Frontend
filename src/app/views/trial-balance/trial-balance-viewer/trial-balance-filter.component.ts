@@ -221,8 +221,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
     this.trialBalanceCommand.useValuation = this.exchangeRatesRequired;
     this.trialBalanceCommand.useDefaultValuation = this.exchangeRatesRequired;
-
-    this.trialBalanceCommand.withAverageBalance = false;
   }
 
 
@@ -322,7 +320,9 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       useValuation: this.trialBalanceCommand.useValuation,
       useDefaultValuation: this.trialBalanceCommand.useValuation ?
         this.trialBalanceCommand.useDefaultValuation : false,
-      withAverageBalance: this.trialBalanceCommand.withAverageBalance,
+      withAverageBalance: this.displayWithAverageBalance ?
+        this.trialBalanceCommand.withAverageBalance : false,
+      WithSectorization: this.trialBalanceCommand.WithSectorization,
       withSubledgerAccount: this.trialBalanceCommand.withSubledgerAccount,
     };
 

@@ -255,7 +255,7 @@
 
         </div>
 
-        <div fxLayout="row" [style.marginBottom.px]="8" *ngIf="displayLevel || displayWithAverageBalance">
+        <div fxLayout="row" [style.marginBottom.px]="8">
 
           <div fxFlex="50" *ngIf="displayLevel">
 
@@ -277,6 +277,17 @@
               [(ngModel)]="trialBalanceCommand.withAverageBalance"
               (click)="$event.stopPropagation">
               Con saldo promedio
+            </mat-checkbox>
+
+          </div>
+
+          <div fxFlex="25" fxLayoutAlign="start center"
+            [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
+
+            <mat-checkbox name="WithSectorization"
+              [(ngModel)]="trialBalanceCommand.WithSectorization"
+              (click)="$event.stopPropagation">
+              Con sectorización
             </mat-checkbox>
 
           </div>

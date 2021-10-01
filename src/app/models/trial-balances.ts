@@ -130,6 +130,7 @@ export interface TrialBalanceCommand extends DataTableCommand {
   useDefaultValuation?: boolean;
   useValuation?: boolean;
   withAverageBalance?: boolean;
+  WithSectorization?: boolean;
   withSubledgerAccount?: boolean;
 }
 
@@ -157,6 +158,7 @@ export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
     useDefaultValuation: true,
     useValuation: false,
     withAverageBalance: false,
+    WithSectorization: false,
     withSubledgerAccount: false,
   };
 }
