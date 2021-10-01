@@ -14,18 +14,18 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { SubledgerAccountsModule } from '../subledger-accounts/subledger-accounts.module';
 
+import { ImporterDetailsTableComponent } from './importers/importer-details-table.component';
 import { VoucherCreatorComponent } from './voucher-creator/voucher-creator.component';
 import { VoucherEditorComponent } from './voucher-editor/voucher-editor.component';
+import { VoucherEntriesImporterComponent } from './importers/voucher-entries-importer.component';
 import { VoucherEntryEditorComponent } from './voucher-entry-editor/voucher-entry-editor.component';
 import { VoucherEntryTableComponent } from './voucher-entry-table/voucher-entry-table.component';
-import { VoucherEntryUploaderComponent } from './voucher-entry-uploader/voucher-entry-uploader.component';
 import { VoucherFilterComponent } from './voucher-filter/voucher-filter.component';
 import { VoucherHeaderComponent } from './voucher-header/voucher-header.component';
 import { VoucherListComponent } from './voucher-list/voucher-list.component';
 import { VoucherListItemComponent } from './voucher-list/voucher-list-item.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
-import { VouchersImporterComponent } from './vouchers-importer/vouchers-importer.component';
-import { VouchersImporterDetailsTableComponent } from './vouchers-importer/vouchers-importer-details-table.component';
+import { VouchersImporterComponent } from './importers/vouchers-importer.component';
 import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';
 
 
@@ -40,18 +40,18 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     SubledgerAccountsModule,
   ],
   declarations: [
+    ImporterDetailsTableComponent,
     VoucherCreatorComponent,
     VoucherEditorComponent,
+    VoucherEntriesImporterComponent,
     VoucherEntryEditorComponent,
     VoucherEntryTableComponent,
-    VoucherEntryUploaderComponent,
     VoucherFilterComponent,
     VoucherHeaderComponent,
     VoucherListComponent,
     VoucherListItemComponent,
     VouchersExplorerComponent,
     VouchersImporterComponent,
-    VouchersImporterDetailsTableComponent,
     VoucherTabbedViewComponent,
   ],
   exports: [

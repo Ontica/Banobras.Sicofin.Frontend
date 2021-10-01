@@ -22,7 +22,7 @@ import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-ent
 
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
 
-import { VoucherEntryUploaderEventType } from '../voucher-entry-uploader/voucher-entry-uploader.component';
+import { VoucherEntriesImporterEventType } from '../importers/voucher-entries-importer.component';
 
 import { VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
 
@@ -43,7 +43,7 @@ export class VoucherEditorComponent {
 
   submitted = false;
 
-  displayUploaderVoucherEntries = false;
+  displayVoucherEntriesImporter = false;
 
   displayVoucherEntryEditor = false;
 
@@ -96,7 +96,7 @@ export class VoucherEditorComponent {
         return;
 
       case VoucherHeaderEventType.IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED:
-        this.displayUploaderVoucherEntries = true;
+        this.displayVoucherEntriesImporter = true;
         return;
 
       default:
@@ -160,20 +160,21 @@ export class VoucherEditorComponent {
   }
 
 
-  onVoucherEntryUploaderEvent(event: EventInfo) {
+  onVoucherEntriesImporterEvent(event: EventInfo) {
     if (this.submitted) {
       return;
     }
 
-    switch (event.type as VoucherEntryUploaderEventType) {
+    switch (event.type as VoucherEntriesImporterEventType) {
 
-      case VoucherEntryUploaderEventType.CLOSE_MODAL_CLICKED:
-        this.displayUploaderVoucherEntries = false;
+      case VoucherEntriesImporterEventType.CLOSE_MODAL_CLICKED:
+        this.displayVoucherEntriesImporter = false;
         return;
 
-      case VoucherEntryUploaderEventType.IMPORT_VOUCHER_ENTRIES:
-        Assertion.assertValue(event.payload.file, 'event.payload.file');
-        this.importVoucherEntriesFromExcel(event.payload.file as File);
+      case VoucherEntriesImporterEventType.VOUCHER_ENTRIES_IMPORTED:
+        Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
+        this.displayVoucherEntriesImporter = false;
+        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, event.payload);
         return;
 
       default:
@@ -241,19 +242,6 @@ export class VoucherEditorComponent {
       .toPromise()
       .then(x => {
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
-        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
-      })
-      .finally(() => this.submitted = false);
-  }
-
-
-  private importVoucherEntriesFromExcel(file: File) {
-    this.submitted = true;
-
-    this.importVouchersData.importVoucherEntriesFromExcel(this.voucher.id, file)
-      .toPromise()
-      .then(x => {
-        this.displayUploaderVoucherEntries = false;
         sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
       })
       .finally(() => this.submitted = false);

@@ -5,14 +5,14 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Identifiable } from '@app/core';
+import { DateString, DateStringLibrary, Identifiable } from '@app/core';
 
 
 export interface ImportVouchersCommand {
-  distributeVouchers: string;
-  generateSubledgerAccount: string;
-  canEditVoucherEntries: string;
-  recordingDate: string;
+  distributeVouchers: boolean;
+  generateSubledgerAccount: boolean;
+  canEditVoucherEntries: boolean;
+  recordingDate: DateString;
   processOnly?: string[];
 }
 
@@ -39,4 +39,12 @@ export const EmptyImportVouchersResult: ImportVouchersResult = {
   errors: [],
   warnings: [],
   voucherTotals: [],
+};
+
+
+export const EmptyImportVouchersCommand: ImportVouchersCommand = {
+  distributeVouchers: false,
+  generateSubledgerAccount: false,
+  canEditVoucherEntries: false,
+  recordingDate: DateStringLibrary.today(),
 };

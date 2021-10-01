@@ -29,7 +29,7 @@ export class ImportVouchersDataService {
   }
 
 
-  dryRunImportVouchersFromExcel(file: File, importVouchersCommand: ImportVouchersCommand):
+  dryRunImportVouchersFromExcelFile(file: File, importVouchersCommand: ImportVouchersCommand):
     Observable<ImportVouchersResult> {
     Assertion.assertValue(file, 'file');
     Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
@@ -67,7 +67,7 @@ export class ImportVouchersDataService {
   }
 
 
-  importVouchersFromExcel(file: File, importVouchersCommand: ImportVouchersCommand):
+  importVouchersFromExcelFile(file: File, importVouchersCommand: ImportVouchersCommand):
     Observable<ImportVouchersResult> {
     Assertion.assertValue(file, 'file');
     Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
@@ -96,16 +96,35 @@ export class ImportVouchersDataService {
     return this.http.post<ImportVouchersResult>(path, formData);
   }
 
-  //
-  // Voucher entries
-  //
 
-  importVoucherEntriesFromExcel(voucherId: number, file: File): Observable<Voucher> {
+  dryRunImportVoucherEntriesFromExcelFile(voucherId: number,
+                                          file: File,
+                                          importVouchersCommand: ImportVouchersCommand)
+                                          : Observable<ImportVouchersResult> {
     Assertion.assertValue(voucherId, 'voucherId');
-    Assertion.assertValue(file, 'fileToUpload');
+    Assertion.assertValue(file, 'file');
+    Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
 
     const formData: FormData = new FormData();
     formData.append('media', file);
+    formData.append('command', JSON.stringify(importVouchersCommand));
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/entries/import-from-excel/dry-run`;
+
+    return this.http.post<ImportVouchersResult>(path, formData);
+  }
+
+
+  importVoucherEntriesFromExcelFile(voucherId: number,
+                                    file: File,
+                                    importVouchersCommand: ImportVouchersCommand): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+    Assertion.assertValue(file, 'file');
+    Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
+
+    const formData: FormData = new FormData();
+    formData.append('media', file);
+    formData.append('command', JSON.stringify(importVouchersCommand));
 
     const path = `v2/financial-accounting/vouchers/${voucherId}/entries/import-from-excel`;
 

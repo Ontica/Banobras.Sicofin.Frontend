@@ -134,13 +134,14 @@
           <div fxLayout="row" fxLayout.lt-md="column" [style.maxHeight.px]="200"
             [style.minHeight]="isDataBaseImport ? '200px' : 'auto'">
 
-            <emp-fa-vouchers-importer-details-table fxFlex="100"
+            <emp-fa-importer-details-table fxFlex="100"
               [importVouchersResult]="importVouchersResult"
               [canSelect]="isExcelImport"
               [commandExecuted]="executedDryRun"
-              (vouchersImporterDetailsTableEvent)="onVouchersImporterDetailsTableEvent($event)">
+              [descriptionColumnText]="isExcelImport ? 'Hoja' : 'Parte'"
+              (importerDetailsTableEvent)="onImporterDetailsTableEvent($event)">
 
-            </emp-fa-vouchers-importer-details-table>
+            </emp-fa-importer-details-table>
 
           </div>
 

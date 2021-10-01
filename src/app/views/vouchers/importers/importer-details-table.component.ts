@@ -7,7 +7,7 @@
 
 import { SelectionModel } from '@angular/cdk/collections';
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -20,15 +20,15 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { sendEvent } from '@app/shared/utils';
 
 
-export enum VouchersImporterDetailsTableEventType {
-  CHECK_CLICKED = 'VouchersImporterDetailsTableComponent.Event.CheckClicked',
+export enum ImporterDetailsTableEventType {
+  CHECK_CLICKED = 'ImporterDetailsTableComponent.Event.CheckClicked',
 }
 
 @Component({
-  selector: 'emp-fa-vouchers-importer-details-table',
-  templateUrl: './vouchers-importer-details-table.component.html',
+  selector: 'emp-fa-importer-details-table',
+  templateUrl: './importer-details-table.component.html',
 })
-export class VouchersImporterDetailsTableComponent implements OnChanges {
+export class ImporterDetailsTableComponent implements OnChanges {
 
   @Input() importVouchersResult: ImportVouchersResult = EmptyImportVouchersResult;
 
@@ -36,7 +36,9 @@ export class VouchersImporterDetailsTableComponent implements OnChanges {
 
   @Input() canSelect = false;
 
-  @Output() vouchersImporterDetailsTableEvent = new EventEmitter<EventInfo>();
+  @Input() descriptionColumnText = 'Parte';
+
+  @Output() importerDetailsTableEvent = new EventEmitter<EventInfo>();
 
   displayedColumnsDefault: string[] = ['description', 'vouchersCount', 'errorsCount', 'warningsCount'];
 
@@ -49,10 +51,12 @@ export class VouchersImporterDetailsTableComponent implements OnChanges {
   constructor(private messageBox: MessageBoxService) { }
 
 
-  ngOnChanges() {
-    this.dataSource = new MatTableDataSource(this.importVouchersResult?.voucherTotals || []);
-    this.resetColumns();
-    this.selectAllRows();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.importVouchersResult || changes.canSelect) {
+      this.dataSource = new MatTableDataSource(this.importVouchersResult?.voucherTotals || []);
+      this.resetColumns();
+      this.selectAllRows();
+    }
   }
 
 
@@ -63,29 +67,20 @@ export class VouchersImporterDetailsTableComponent implements OnChanges {
       this.selection.select(row);
     }
 
-    sendEvent(this.vouchersImporterDetailsTableEvent,
-      VouchersImporterDetailsTableEventType.CHECK_CLICKED, {selection: this.selection.selected});
+    sendEvent(this.importerDetailsTableEvent,
+      ImporterDetailsTableEventType.CHECK_CLICKED, {selection: this.selection.selected});
   }
 
 
   onShowErrorsClicked(row: ImportVouchersTotals) {
-    const errorsList = this.importVouchersResult.errors.filter(x => x.uid === row.uid);
-    if (errorsList.length > 0) {
-      let message = `<strong>${row.description}:</strong> <br><br> `;
-      message += '<ul class="info-list">' + errorsList.map(x => '<li>' + x.name + '</li>').join('') + '</ul>';
-      this.messageBox.show(message, 'Errores detectados');
-    }
+    const errorsList = this.importVouchersResult.errors.filter(x => x.uid === row.uid).map(x => x.name);
+    this.showMessage('Errores detectados', row.description, errorsList);
   }
 
 
   onShowWarningsClicked(row: ImportVouchersTotals) {
-    const warningsList = this.importVouchersResult.warnings.filter(x => x.uid === row.uid);
-    if (warningsList.length > 0) {
-      let message = `<strong>${row.description}:</strong> <br><br> `;
-      message += '<ul class="info-list">' +
-        warningsList.map(x => '<li>' + x.name + '</li>').join('') + '</ul>';
-      this.messageBox.show(message, 'Advertencias detectadas');
-    }
+    const warningsList = this.importVouchersResult.warnings.filter(x => x.uid === row.uid).map(x => x.name);
+    this.showMessage('Advertencias detectadas', row.description, warningsList);
   }
 
 
@@ -105,9 +100,19 @@ export class VouchersImporterDetailsTableComponent implements OnChanges {
       this.importVouchersResult.voucherTotals.forEach(x => this.selection.select(x));
 
       setTimeout(() => {
-        sendEvent(this.vouchersImporterDetailsTableEvent, VouchersImporterDetailsTableEventType.CHECK_CLICKED,
+        sendEvent(this.importerDetailsTableEvent, ImporterDetailsTableEventType.CHECK_CLICKED,
           {selection: this.selection.selected});
       });
+    }
+  }
+
+
+  private showMessage(title: string, description: string, messageList: string[]) {
+    if (messageList.length > 0) {
+      let message = `<strong>${description}:</strong> <br><br> `;
+      message += '<ul class="info-list">' +
+        messageList.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+      this.messageBox.show(message, title);
     }
   }
 

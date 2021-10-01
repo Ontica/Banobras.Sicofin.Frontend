@@ -24,7 +24,7 @@ import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { Observable } from 'rxjs';
 
-import { VouchersImporterDetailsTableEventType } from './vouchers-importer-details-table.component';
+import { ImporterDetailsTableEventType } from './importer-details-table.component';
 
 export enum VouchersImporterEventType {
   CLOSE_MODAL_CLICKED  = 'VouchersImporterComponent.Event.CloseModalClicked',
@@ -143,8 +143,8 @@ export class VouchersImporterComponent {
   }
 
 
-  onVouchersImporterDetailsTableEvent(event) {
-    if (event.type === VouchersImporterDetailsTableEventType.CHECK_CLICKED) {
+  onImporterDetailsTableEvent(event) {
+    if (event.type === ImporterDetailsTableEventType.CHECK_CLICKED) {
       Assertion.assertValue(event.payload.selection, 'event.payload.selection');
       this.selectedPartsToImport = event.payload.selection as ImportVouchersTotals[];
     }
@@ -161,7 +161,7 @@ export class VouchersImporterComponent {
     switch (this.selectedImportType) {
       case ImportTypes.excelFile:
         observable =
-          this.importVouchersData.dryRunImportVouchersFromExcel(this.file.file, this.getFormData());
+          this.importVouchersData.dryRunImportVouchersFromExcelFile(this.file.file, this.getFormData());
         break;
       case ImportTypes.txtFile:
         observable =
@@ -182,7 +182,9 @@ export class VouchersImporterComponent {
   onSubmitImportVouchers() {
     if (this.setAndReturnIsFormInvalidated() || !this.isReadyForSubmit ||
         this.importVouchersResult.hasErrors) {
-      this.messageBox.showError('Se encontraron errores en los datos, favor de rectificar.');
+      if (this.executedDryRun) {
+        this.messageBox.showError('Se encontraron errores en los datos, favor de rectificar.');
+      }
       return;
     }
 
@@ -190,7 +192,7 @@ export class VouchersImporterComponent {
 
     switch (this.selectedImportType) {
       case ImportTypes.excelFile:
-        observable = this.importVouchersData.importVouchersFromExcel(this.file.file, this.getFormData());
+        observable = this.importVouchersData.importVouchersFromExcelFile(this.file.file, this.getFormData());
         break;
       case ImportTypes.txtFile:
         observable = this.importVouchersData.importVouchersFromTextFile(this.file.file, this.getFormData());

@@ -35,7 +35,8 @@
 
 </emp-fa-voucher-entry-editor>
 
-<emp-fa-voucher-entry-uploader *ngIf="displayUploaderVoucherEntries"
-  (voucherEntryUploaderEvent)="onVoucherEntryUploaderEvent($event)">
+<emp-fa-voucher-entries-importer *ngIf="displayVoucherEntriesImporter"
+  [voucher]="voucher"
+  (voucherEntriesImporterEvent)="onVoucherEntriesImporterEvent($event)">
 
-</emp-fa-voucher-entry-uploader>
+</emp-fa-voucher-entries-importer>

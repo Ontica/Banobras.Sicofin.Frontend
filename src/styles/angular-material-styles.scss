@@ -229,9 +229,10 @@ table.mat-table {
     }
 
     &.column-action-check {
-      padding: 7px;
+      padding: 0;
       width: 32px;
       text-align: center;
+      vertical-align: middle;
     }
 
     &.padding-icon {
@@ -700,10 +701,6 @@ table.mat-table.emp-designer {
 }
 
 .mat-checkbox {
-  .mat-checkbox-layout {
-    height: 16px;
-  }
-
   .mat-checkbox-label {
     font-size: 9pt;
     margin-right: 8px;

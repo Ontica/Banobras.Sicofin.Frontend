@@ -30,7 +30,7 @@ import {
   ExportReportModalEventType
 } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
-import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer/vouchers-importer.component';
+import { VouchersImporterEventType } from '@app/views/vouchers/importers/vouchers-importer.component';
 
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
 

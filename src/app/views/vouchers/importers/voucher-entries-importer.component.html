@@ -1,0 +1,90 @@
+<emp-ng-modal-window [config]="{width:'750px'}">
+
+  <emp-ng-card
+    title='Importador de movimientos'
+    hint='Se importarán los movimientos contenidos en el archivo a SICOFIN'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <form #form="ngForm" [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()"
+        autocomplete="off" class="form-section">
+
+        <emp-ng-spinner #spinner [visible]="isLoading">
+
+        </emp-ng-spinner>
+
+        <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
+          fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+          <div class="section-title"> Archivo a importar </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column">
+
+            <div fxFlex="100">
+              <label>Archivo:</label>
+              <emp-ng-file-control
+                [fileControl]="file"
+                [showError]="showFileError"
+                [config]="{filesTypes: ['excel'], autoUpload: true,
+                          placeholder: 'Elija o arrastre el archivo excel.'}"
+                (fileControlChange)="onFileControlChange($event)">
+
+              </emp-ng-file-control>
+            </div>
+
+          </div>
+
+          <ng-container *ngIf="executedDryRun">
+
+            <div class="section-title"> Información del archivo a importar </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" [style.maxHeight.px]="360"
+              [style.minHeight]="'auto'">
+
+              <emp-fa-importer-details-table fxFlex="100"
+                [importVouchersResult]="importVouchersResult"
+                [canSelect]="true"
+                [commandExecuted]="executedDryRun"
+                descriptionColumnText="Hoja"
+                (importerDetailsTableEvent)="onImporterDetailsTableEvent($event)">
+
+              </emp-fa-importer-details-table>
+
+            </div>
+
+          </ng-container>
+
+          <mat-divider class="horizontal"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button
+                [class.btn]="!isReadyForSubmitDryRun"
+                [class.btn-action]="isReadyForSubmitDryRun"
+                (click)="onSubmitDryRunImportVoucherEntries()">
+                Analizar movimientos
+              </button>
+
+              <button
+                [class.btn]="!isReadyForSubmitImport"
+                [class.btn-action]="isReadyForSubmitImport"
+                (click)="onSubmitImportVoucherEntries()">
+                Importar movimientos
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>
