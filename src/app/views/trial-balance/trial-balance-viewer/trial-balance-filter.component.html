@@ -255,7 +255,8 @@
 
         </div>
 
-        <div fxLayout="row" [style.marginBottom.px]="8">
+        <div fxLayout="row" [style.marginBottom.px]="8"
+          *ngIf="displayLevel || displayWithAverageBalance || displayWithSectorization">
 
           <div fxFlex="50" *ngIf="displayLevel">
 
@@ -281,11 +282,11 @@
 
           </div>
 
-          <div fxFlex="25" fxLayoutAlign="start center"
+          <div fxFlex="25" fxLayoutAlign="start center" *ngIf="displayWithSectorization"
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
-            <mat-checkbox name="WithSectorization"
-              [(ngModel)]="trialBalanceCommand.WithSectorization"
+            <mat-checkbox name="withSectorization"
+              [(ngModel)]="trialBalanceCommand.withSectorization"
               (click)="$event.stopPropagation">
               Con sectorización
             </mat-checkbox>

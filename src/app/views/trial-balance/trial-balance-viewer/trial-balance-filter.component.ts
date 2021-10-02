@@ -165,6 +165,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get displayWithSectorization(): boolean {
+    return [TrialBalanceType.AnaliticoDeCuentas,
+            TrialBalanceType.Balanza].includes(this.trialBalanceCommand.trialBalanceType);
+  }
+
+
   get trialBalanceFormFieldsValid(): boolean {
     return !!this.trialBalanceCommand.trialBalanceType && !!this.trialBalanceCommand.accountsChartUID &&
            this.initalPeriodDatesValid && this.finalPeriodDatesValid &&
@@ -322,7 +328,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         this.trialBalanceCommand.useDefaultValuation : false,
       withAverageBalance: this.displayWithAverageBalance ?
         this.trialBalanceCommand.withAverageBalance : false,
-      WithSectorization: this.trialBalanceCommand.WithSectorization,
+      withSectorization: this.displayWithSectorization ?
+        this.trialBalanceCommand.withSectorization : false,
       withSubledgerAccount: this.trialBalanceCommand.withSubledgerAccount,
     };
 
