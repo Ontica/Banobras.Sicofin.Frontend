@@ -696,10 +696,6 @@ table.mat-table.emp-designer {
 // checkbox
 //
 
-.mat-ripple-element {
-  background: $checkbox-background-color !important;
-}
-
 .mat-checkbox {
   .mat-checkbox-label {
     font-size: 9pt;
@@ -708,14 +704,6 @@ table.mat-table.emp-designer {
 
   .mat-checkbox-frame {
     background: $white !important;
-  }
-
-  .mat-checkbox-ripple,
-  .mat-ripple-element {
-    left: calc(50% - 16px) !important;
-    top: calc(50% - 16px) !important;
-    height: 32px !important;
-    width: 32px !important;
   }
 
   &.mat-checkbox-checked,
@@ -751,10 +739,6 @@ table.mat-table.emp-designer {
   .mat-checkbox-label {
     color: $white;
   }
-
-  .mat-checkbox-ripple .mat-ripple-element {
-    background: $warning-color !important;
-  }
 }
 
 //
@@ -784,4 +768,22 @@ table.mat-table.emp-designer {
 .mat-radio-button .mat-radio-inner-circle {
   color: $checkbox-background-color !important;
   background-color: $checkbox-background-color !important;
+}
+
+
+//
+// ripple
+//
+
+.mat-checkbox-ripple > .mat-ripple-element,
+.mat-radio-ripple > .mat-ripple-element {
+  left: calc(50% - 16px) !important;
+  top: calc(50% - 16px) !important;
+  height: 32px !important;
+  width: 32px !important;
+  background: $checkbox-background-color !important;
+}
+
+.mat-checkbox.mat-checkbox-login .mat-checkbox-ripple > .mat-ripple-element {
+  background: $warning-color !important;
 }
