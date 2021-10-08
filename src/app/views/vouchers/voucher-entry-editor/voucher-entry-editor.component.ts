@@ -418,7 +418,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       ledgerAccountId: formModel.ledgerAccount?.id ? +formModel.ledgerAccount?.id : 0,
       sectorId: formModel.sector ? +formModel.sector : 0,
       subledgerAccountId: formModel.subledgerAccount?.id ? +formModel.subledgerAccount?.id : 0,
-      currencyId: formModel.currency ? +formModel.currency : 0,
+      currencyUID: formModel.currency ?? '',
       amount: FormatLibrary.stringToNumber(formModel.amount),
       exchangeRate: FormatLibrary.stringToNumber(formModel.exchangeRate),
       baseCurrencyAmount: FormatLibrary.stringToNumber(formModel.baseCurrencyAmount),

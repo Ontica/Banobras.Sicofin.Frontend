@@ -293,7 +293,7 @@ export const EmptyLedgerAccountSectorRule: LedgerAccountSectorRule = {
 
 export interface SubsidiaryAccount {
   id: number;
-  ledger: Identifiable;
+  baseLedger: Identifiable;
   subsidiaryLedger: Identifiable;
   number: string;
   name: string;
@@ -403,7 +403,7 @@ export interface VoucherEntryFields {
   ledgerAccountId: number;
   sectorId: number;
   subledgerAccountId: number;
-  currencyId: number;
+  currencyUID: string;
   amount: number;
   exchangeRate: number;
   baseCurrencyAmount: number;
