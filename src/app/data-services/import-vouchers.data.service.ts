@@ -20,15 +20,6 @@ export class ImportVouchersDataService {
   constructor(private http: HttpService) { }
 
 
-  dryRunImportVouchersFromDatabase(importVouchersCommand: ImportVouchersCommand):
-    Observable<ImportVouchersResult> {
-    Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
-
-    const path = `v2/financial-accounting/vouchers/import-from-database/dry-run`;
-    return this.http.post<ImportVouchersResult>(path, importVouchersCommand);
-  }
-
-
   dryRunImportVouchersFromExcelFile(file: File, importVouchersCommand: ImportVouchersCommand):
     Observable<ImportVouchersResult> {
     Assertion.assertValue(file, 'file');
@@ -59,10 +50,18 @@ export class ImportVouchersDataService {
   }
 
 
+  getStatusImportVouchersFromDatabase(): Observable<ImportVouchersResult> {
+    const path = `v2/financial-accounting/vouchers/import-from-database/status`;
+
+    return this.http.get<ImportVouchersResult>(path);
+  }
+
+
   importVouchersFromDatabase(importVouchersCommand: ImportVouchersCommand): Observable<ImportVouchersResult> {
     Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
 
     const path = `v2/financial-accounting/vouchers/import-from-database`;
+
     return this.http.post<ImportVouchersResult>(path, importVouchersCommand);
   }
 

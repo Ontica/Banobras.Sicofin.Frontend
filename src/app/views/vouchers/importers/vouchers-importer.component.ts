@@ -104,7 +104,7 @@ export class VouchersImporterComponent {
 
   get isReadyForSubmit() {
     if (this.isDataBaseImport) {
-      return this.executedDryRun && !this.importVouchersResult.hasErrors &&
+      return this.executedDryRun && !this.importVouchersResult.isRunning &&
         this.importVouchersResult.voucherTotals.length > 0;
     }
 
@@ -114,6 +114,19 @@ export class VouchersImporterComponent {
 
     return this.executedDryRun && this.isFileFormValid && !this.importVouchersResult.hasErrors &&
       this.importVouchersResult.voucherTotals.length > 0;
+  }
+
+
+  get descriptionColumnText() {
+    if (this.isExcelImport) {
+      return 'Hoja';
+    }
+
+    if (this.isDataBaseImport) {
+      return 'Sistema';
+    }
+
+    return 'Parte';
   }
 
 
@@ -132,7 +145,7 @@ export class VouchersImporterComponent {
     this.resetForm();
 
     if (this.isDataBaseImport) {
-      this.dryRunImportVouchers(this.importVouchersData.dryRunImportVouchersFromDatabase(this.getFormData()));
+      this.dryRunImportVouchers(this.importVouchersData.getStatusImportVouchersFromDatabase());
     }
   }
 
@@ -148,6 +161,11 @@ export class VouchersImporterComponent {
       Assertion.assertValue(event.payload.selection, 'event.payload.selection');
       this.selectedPartsToImport = event.payload.selection as ImportVouchersTotals[];
     }
+  }
+
+
+  onGetStatusImportVouchersFromDatabase() {
+    this.dryRunImportVouchers(this.importVouchersData.getStatusImportVouchersFromDatabase());
   }
 
 
@@ -168,7 +186,7 @@ export class VouchersImporterComponent {
           this.importVouchersData.dryRunImportVouchersFromTextFile(this.file.file, this.getFormData());
         break;
       case ImportTypes.dataBase:
-        observable = this.importVouchersData.dryRunImportVouchersFromDatabase(this.getFormData());
+        observable = this.importVouchersData.getStatusImportVouchersFromDatabase();
         break;
       default:
         console.log(`Unhandled import type ${this.selectedImportType}`);
@@ -180,11 +198,7 @@ export class VouchersImporterComponent {
 
 
   onSubmitImportVouchers() {
-    if (this.setAndReturnIsFormInvalidated() || !this.isReadyForSubmit ||
-        this.importVouchersResult.hasErrors) {
-      if (this.executedDryRun) {
-        this.messageBox.showError('Se encontraron errores en los datos, favor de rectificar.');
-      }
+    if (this.hasErrorSubmitImportVouchers()) {
       return;
     }
 
@@ -265,6 +279,26 @@ export class VouchersImporterComponent {
   }
 
 
+  private hasErrorSubmitImportVouchers(): boolean {
+    if (this.setAndReturnIsFormInvalidated() || !this.isReadyForSubmit ||
+        this.importVouchersResult.hasErrors) {
+
+      if (this.isDataBaseImport && this.importVouchersResult.isRunning) {
+        this.messageBox.show('El importador de pólizas ya está en ejecución.', 'Importador de pólizas');
+        return true;
+      }
+
+      if (this.executedDryRun) {
+        this.messageBox.showError('Se encontraron errores en los datos, favor de rectificar.');
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
+
   private setAndReturnIsFormInvalidated(): boolean {
     this.isFormInvalidated = this.isFileFormValid ? false :
       !this.formHandler.validateReadyForSubmit() || !this.file;
@@ -297,10 +331,9 @@ export class VouchersImporterComponent {
 
 
   private resolveDryRunImportVoucherResponse() {
-    if (this.importVouchersResult.hasErrors) {
+    if (!this.isDataBaseImport && this.importVouchersResult.hasErrors) {
       const message = `No es posible realizar la importación, ya que se detectaron ` +
-        `${this.importVouchersResult.errors.length} errores` +
-        `${this.isDataBaseImport ? '' : ' en el archivo'}.`;
+        `${this.importVouchersResult.errors.length} errores en el archivo.`;
       this.messageBox.showError(message);
     }
   }
@@ -308,6 +341,13 @@ export class VouchersImporterComponent {
 
   private resolveImportVoucherResponse(response: ImportVouchersResult) {
     let message = '';
+
+    if (this.isDataBaseImport) {
+      this.importVouchersResult = response;
+      message = `Se ha iniciado la importacion de pólizas de sistemas tranversales.`;
+      this.messageBox.show(message, 'Importador de pólizas');
+      return;
+    }
 
     if (response.hasErrors) {
       message = `No fue posible realizar la importación, ya que se detectaron ` +

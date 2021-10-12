@@ -38,11 +38,13 @@ export class ImporterDetailsTableComponent implements OnChanges {
 
   @Input() descriptionColumnText = 'Parte';
 
+  @Input() showItemsStatus = true;
+
+  @Input() showProcessedCount = true;
+
   @Output() importerDetailsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['description', 'vouchersCount', 'errorsCount', 'warningsCount'];
-
-  displayedColumns = [...this.displayedColumnsDefault];
+  displayedColumns = [];
 
   dataSource: MatTableDataSource<ImportVouchersTotals>;
 
@@ -91,7 +93,15 @@ export class ImporterDetailsTableComponent implements OnChanges {
       this.displayedColumns = ['action'];
     }
 
-    this.displayedColumns = [...this.displayedColumns, ...this.displayedColumnsDefault];
+    this.displayedColumns = [...this.displayedColumns, ...['description', 'vouchersCount']];
+
+    if (this.showProcessedCount) {
+      this.displayedColumns = [...this.displayedColumns, ...['processedCount']];
+    }
+
+    if (this.showItemsStatus) {
+      this.displayedColumns = [...this.displayedColumns, ...['errorsCount', 'warningsCount']];
+    }
   }
 
 

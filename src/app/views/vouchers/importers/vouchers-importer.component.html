@@ -127,18 +127,32 @@
             Información del archivo a importar
           </div>
 
-          <div class="section-title" *ngIf="isDataBaseImport">
-            Información a importar
+          <div *ngIf="isDataBaseImport" class="section-title" fxLayout="row">
+
+            <ng-container *ngIf="importVouchersResult.isRunning">
+              <span>Información de pólizas en proceso de importación</span>
+              <span *ngIf="executedDryRun" class="tag-info"
+                [style.marginLeft.px]="10" [style.marginBottom.px]="1">En ejecución</span>
+            </ng-container>
+
+            <ng-container *ngIf="!importVouchersResult.isRunning">
+              <span>Información a importar</span>
+              <span *ngIf="executedDryRun" class="tag-warning"
+                [style.marginLeft.px]="10" [style.marginBottom.px]="1">Detenido</span>
+            </ng-container>
+
           </div>
 
           <div fxLayout="row" fxLayout.lt-md="column" [style.maxHeight.px]="200"
-            [style.minHeight]="isDataBaseImport ? '200px' : 'auto'">
+            [style.minHeight]="isDataBaseImport ? '190px' : 'auto'">
 
             <emp-fa-importer-details-table fxFlex="100"
               [importVouchersResult]="importVouchersResult"
               [canSelect]="isExcelImport"
               [commandExecuted]="executedDryRun"
-              [descriptionColumnText]="isExcelImport ? 'Hoja' : 'Parte'"
+              [descriptionColumnText]="descriptionColumnText"
+              [showItemsStatus]="!isDataBaseImport || importVouchersResult.isRunning"
+              [showProcessedCount]="isDataBaseImport && importVouchersResult.isRunning"
               (importerDetailsTableEvent)="onImporterDetailsTableEvent($event)">
 
             </emp-fa-importer-details-table>
@@ -158,6 +172,11 @@
               [class.btn-action]="!executedDryRun && isFileFormValid"
               (click)="onSubmitDryRunImportVouchers()">
               Analizar archivo
+            </button>
+
+            <button *ngIf="isDataBaseImport" class="btn-action"
+              (click)="onGetStatusImportVouchersFromDatabase()">
+              Actualizar estado
             </button>
 
             <button

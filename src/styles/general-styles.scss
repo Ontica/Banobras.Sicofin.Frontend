@@ -370,6 +370,11 @@ textarea:focus {
   white-space: normal !important;
 }
 
+.info-text {
+  color: $primary-color;
+  font-weight: 600;
+}
+
 .warning-text {
   color: $warning-color;
   font-weight: 600;
@@ -515,21 +520,22 @@ i.disabled {
 
 // tags
 
-.tag {
+.tag-info {
   background-color: $primary-color-light;
   border-radius: 8px;
+  font-size: 8px;
   color: white;
-  padding: 4px 4px 4px 8px;
+  padding: 4px 8px;
+  width: fit-content;
 }
 
-.tag i {
-  padding-left: 4px;
+.tag-warning {
+  background-color: $warning-color-light;
+  border-radius: 8px;
+  font-size: 8px;
   color: white;
-  padding-right: 4px;
-}
-
-.tag i:hover {
-  color: $primary-color;
+  padding: 4px 8px;
+  width: fit-content;
 }
 
 // blink

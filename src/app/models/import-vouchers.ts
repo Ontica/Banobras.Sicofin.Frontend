@@ -19,6 +19,7 @@ export interface ImportVouchersCommand {
 
 export interface ImportVouchersResult {
   hasErrors: boolean;
+  isRunning: boolean;
   errors: Identifiable[];
   warnings: Identifiable[];
   voucherTotals: ImportVouchersTotals[];
@@ -29,6 +30,7 @@ export interface ImportVouchersTotals {
   uid: string;
   description: string;
   vouchersCount: number;
+  processedCount: number;
   errorsCount: number;
   warningsCount: number;
 }
@@ -36,6 +38,7 @@ export interface ImportVouchersTotals {
 
 export const EmptyImportVouchersResult: ImportVouchersResult = {
   hasErrors: false,
+  isRunning: false,
   errors: [],
   warnings: [],
   voucherTotals: [],
