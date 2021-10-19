@@ -5,16 +5,20 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, DateStringLibrary, EventInfo } from '@app/core';
+import { Assertion, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { ImportVouchersDataService } from '@app/data-services';
 
 import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals,
          ImportVouchersCommand } from '@app/models';
+
+import { VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -36,6 +40,7 @@ enum VouchersImporterFormControls {
   generateSubledgerAccount = 'generateSubledgerAccount',
   canEditVoucherEntries = 'canEditVoucherEntries',
   recordingDate = 'recordingDate',
+  voucherTypeUID = 'voucherTypeUID',
 }
 
 enum ImportTypes {
@@ -48,7 +53,7 @@ enum ImportTypes {
   selector: 'emp-fa-vouchers-importer',
   templateUrl: './vouchers-importer.component.html',
 })
-export class VouchersImporterComponent {
+export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   @Output() vouchersImporterEvent = new EventEmitter<EventInfo>();
 
@@ -64,6 +69,8 @@ export class VouchersImporterComponent {
 
   importTypes = ImportTypes;
 
+  voucherTypesList: Identifiable[] = [];
+
   selectedImportType = ImportTypes.excelFile;
 
   selectedFileType: FileType = 'excel';
@@ -74,9 +81,23 @@ export class VouchersImporterComponent {
 
   executedDryRun = false;
 
-  constructor(private importVouchersData: ImportVouchersDataService,
+  helper: SubscriptionHelper;
+
+  constructor(private uiLayer: PresentationLayer,
+              private importVouchersData: ImportVouchersDataService,
               private messageBox: MessageBoxService) {
+    this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
+  }
+
+
+  ngOnInit(): void {
+    this.loadDataLists();
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -223,6 +244,17 @@ export class VouchersImporterComponent {
   }
 
 
+  private loadDataLists() {
+    this.isLoading = true;
+
+    this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST)
+      .subscribe(x => {
+        this.voucherTypesList = x;
+        this.isLoading = false;
+      });
+  }
+
+
   private initForm() {
     if (this.formHandler) {
       return;
@@ -234,6 +266,7 @@ export class VouchersImporterComponent {
         generateSubledgerAccount: new FormControl(false),
         canEditVoucherEntries: new FormControl(true),
         recordingDate: new FormControl(DateStringLibrary.today(), Validators.required),
+        voucherTypeUID: new FormControl('', Validators.required),
       })
     );
 
@@ -247,6 +280,7 @@ export class VouchersImporterComponent {
       generateSubledgerAccount: false,
       canEditVoucherEntries: true,
       recordingDate: DateStringLibrary.today(),
+      voucherTypeUID: '',
     });
   }
 
@@ -262,6 +296,7 @@ export class VouchersImporterComponent {
       generateSubledgerAccount: formModel.generateSubledgerAccount,
       canEditVoucherEntries: formModel.canEditVoucherEntries,
       recordingDate: formModel.recordingDate,
+      voucherTypeUID: formModel.voucherTypeUID,
     };
 
     if (this.isExcelImport) {

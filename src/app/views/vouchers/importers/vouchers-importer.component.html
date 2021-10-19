@@ -58,6 +58,20 @@
 
               <div fxLayout="row" fxLayout.lt-md="column">
 
+                <div fxFlex="430px" fxFlex.lt-md="none">
+                  <label>Tipo de póliza:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.voucherTypeUID"
+                    [items]="voucherTypesList"
+                    [loading]="isLoading"
+                    [showError]="formHandler.showInvalidControl(controls.voucherTypeUID)">
+                  </emp-ng-select>
+                </div>
+
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column">
+
                 <div fxFlex="none" fxLayoutAlign="start center">
 
                   <mat-checkbox

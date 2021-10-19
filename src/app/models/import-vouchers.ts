@@ -13,6 +13,7 @@ export interface ImportVouchersCommand {
   generateSubledgerAccount: boolean;
   canEditVoucherEntries: boolean;
   recordingDate: DateString;
+  voucherTypeUID: string,
   processOnly?: string[];
 }
 
@@ -50,4 +51,5 @@ export const EmptyImportVouchersCommand: ImportVouchersCommand = {
   generateSubledgerAccount: false,
   canEditVoucherEntries: false,
   recordingDate: DateStringLibrary.today(),
+  voucherTypeUID: '',
 };
