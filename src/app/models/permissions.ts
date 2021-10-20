@@ -9,12 +9,10 @@
 export enum PermissionsLibrary {
   ROUTE_OPERACION_CONTABLE = 'route-operacion-contable',
   ROUTE_TABLEROS = 'route-tableros',
-  ROUTE_REPORTES = 'route-reportes',
   ROUTE_REGLAS_Y_CATALOGOS = 'route-reglas-y-catalogos',
   ROUTE_ADMINISTRACION = 'route-administracion',
   MENU_OPERACION_CONTABLE = 'menu-operacion-contable',
   MENU_TABLEROS = 'menu-tableros',
-  MENU_REPORTES = 'menu-reportes',
   MENU_REGLAS_Y_CATALOGOS = 'menu-reglas-y-catalogos',
   MENU_ADMINISTRACION = 'menu-administracion',
   FEATURE_VOUCHERS_ADD = 'feature-vouchers-add',
@@ -34,11 +32,6 @@ export const ROUTES_LIBRARY = {
     permission: PermissionsLibrary.ROUTE_TABLEROS,
     parent: '',
     path: 'tableros',
-  },
-  reportes: {
-    permission: PermissionsLibrary.ROUTE_REPORTES,
-    parent: '',
-    path: 'reportes',
   },
   reglas_y_catalogos: {
     permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
@@ -108,31 +101,6 @@ export const ROUTES_LIBRARY = {
     permission: PermissionsLibrary.ROUTE_TABLEROS,
     parent: 'tableros',
     path: 'alertas',
-  },
-
-  // #endregion
-
-  // #region accounting-reports-routing module
-
-  reportes_regulatorios: {
-    permission: PermissionsLibrary.ROUTE_REPORTES,
-    parent: 'reportes',
-    path: 'regulatorios',
-  },
-  reportes_operativos: {
-    permission: PermissionsLibrary.ROUTE_REPORTES,
-    parent: 'reportes',
-    path: 'operativos',
-  },
-  reportes_financieros: {
-    permission: PermissionsLibrary.ROUTE_REPORTES,
-    parent: 'reportes',
-    path: 'financieros',
-  },
-  reportes_todos: {
-    permission: PermissionsLibrary.ROUTE_REPORTES,
-    parent: 'reportes',
-    path: 'todos',
   },
 
   // #endregion

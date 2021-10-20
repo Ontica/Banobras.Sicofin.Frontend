@@ -59,30 +59,6 @@ export const AccountingDashboardsViews: View[] = [
 ];
 
 
-export const AccountingReportsViews: View[] = [
-  {
-    name: 'AccountingReports.RegulatoryReports',
-    title: 'Reportes regulatorios',
-    url: '/reportes/regulatorios'
-  },
-  {
-    name: 'AccountingReports.OperationalReports',
-    title: 'Operativos',
-    url: '/reportes/operativos'
-  },
-  {
-    name: 'AccountingReports.OperationalReports',
-    title: 'Financieros',
-    url: '/reportes/financieros'
-  },
-  {
-    name: 'AccountingReports.OperationalReports',
-    title: 'Todos los reportes',
-    url: '/reportes/todos'
-  }
-];
-
-
 export const AccountingCataloguesAndRulesViews: View[] = [
   {
     name: 'AccountingCataloguesAndRulesViews.AccountsChart',
@@ -114,7 +90,6 @@ export const AccountingCataloguesAndRulesViews: View[] = [
   //   title: 'Reglas contabilizadoras',
   //   url: '/reglas-y-catalogos/reglas-contabilizadoras'
   // },
-
 ];
 
 
@@ -125,6 +100,7 @@ export const AccountingSystemManagementViews: View[] = [
     url: '/administracion/generacion-de-saldos'
   }
 ];
+
 
 export const UnauthorizedViews: View[] = [
   {

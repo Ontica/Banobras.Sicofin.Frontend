@@ -5,9 +5,12 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+export type LayoutType = 'AccountingOperation' | 'AccountingDashboards' | 'AccountingCataloguesAndRules' |
+                         'Management' | 'Unauthorized';
+
 
 export interface Layout {
-  name: string;
+  name: LayoutType;
   views: View[];
   hint: string;
   defaultTitle: string;

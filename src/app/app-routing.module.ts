@@ -35,15 +35,6 @@ const routes: Routes = [
                               .then((m) => m.AccountingDashboardsWorkspaceModule)
   },
   {
-    data: { permission: ROUTES_LIBRARY.reportes.permission },
-    path: ROUTES_LIBRARY.reportes.path,
-    component: MainLayoutComponent,
-    canActivate: [SecurityGuard],
-    canActivateChild: [SecurityGuard],
-    loadChildren: () => import('./workspaces/accounting-reports/accounting-reports-workspace.module')
-                              .then((m) => m.AccountingReportsWorkspaceModule)
-  },
-  {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos.permission },
     path: ROUTES_LIBRARY.reglas_y_catalogos.path,
     component: MainLayoutComponent,
