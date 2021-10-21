@@ -164,6 +164,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
     this.resetImportVouchersResult();
     this.resetForm();
+    this.validateRequiredFormFields();
 
     if (this.isDataBaseImport) {
       this.dryRunImportVouchers(this.importVouchersData.getStatusImportVouchersFromDatabase());
@@ -282,6 +283,15 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       recordingDate: DateStringLibrary.today(),
       voucherTypeUID: '',
     });
+  }
+
+
+  private validateRequiredFormFields() {
+    if (this.isDataBaseImport) {
+      this.formHandler.clearControlValidators(this.controls.voucherTypeUID);
+    } else {
+      this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
+    }
   }
 
 
