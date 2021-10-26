@@ -115,7 +115,7 @@ export class FinancialReportViewerComponent {
         this.setDisplayExportModal(false);
         return;
 
-      case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
         if (this.submitted || !this.financialReportCommand.accountsChartUID ) {
           return;
         }

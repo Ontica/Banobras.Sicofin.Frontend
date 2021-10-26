@@ -144,7 +144,7 @@ export class SystemManagementWorkspaceComponent {
         this.setDisplayExportModal(false);
         return;
 
-      case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
         if (!this.selectedStoredBalanceSet.accountsChart.name || !this.selectedStoredBalanceSet.uid) {
           return;
         }

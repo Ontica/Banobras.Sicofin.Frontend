@@ -765,6 +765,10 @@ table.mat-table.emp-designer {
   border-color: $checkbox-background-color !important;
 }
 
+.mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+  color: $control-color;
+}
+
 .mat-radio-button .mat-radio-inner-circle {
   color: $checkbox-background-color !important;
   background-color: $checkbox-background-color !important;

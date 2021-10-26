@@ -134,7 +134,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         this.setDisplayExportModal(false);
         return;
 
-      case ExportReportModalEventType.EXPORT_EXCEL_CLICKED:
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
         if (!this.searchVouchersCommand.accountsChartUID ) {
           return;
         }

@@ -8,3 +8,10 @@
 export interface ExcelFile {
   url: string;
 }
+
+
+export enum ReportFileType {
+  excel = 'excel',
+  pdf = 'pdf',
+  xml = 'xml',
+}

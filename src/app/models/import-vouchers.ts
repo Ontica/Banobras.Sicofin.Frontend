@@ -13,7 +13,7 @@ export interface ImportVouchersCommand {
   generateSubledgerAccount: boolean;
   canEditVoucherEntries: boolean;
   recordingDate: DateString;
-  voucherTypeUID: string,
+  voucherTypeUID: string;
   processOnly?: string[];
 }
 

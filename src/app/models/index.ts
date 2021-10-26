@@ -26,8 +26,6 @@ export * from './balances';
 
 export * from './data-table';
 
-export * from './excel-reports';
-
 export * from './exchange-rates';
 
 export * from './financial-reports';
@@ -37,6 +35,8 @@ export * from './grouping-rules';
 export * from './import-vouchers';
 
 export * from './permissions';
+
+export * from './report-file';
 
 export * from './subledgers';
 
