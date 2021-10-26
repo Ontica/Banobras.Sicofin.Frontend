@@ -1,0 +1,51 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Visualizador de reportes fiscales
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div fxLayout="column" fxFlexFill>
+
+      <emp-ng-spinner #spinner [visible]="isLoading || isLoadingBreakdown">
+
+      </emp-ng-spinner>
+
+      <emp-fa-operational-report-filter fxFlex="none"
+        (operationalReportFilterEvent)="onOperationalReportFilterEvent($event)">
+
+      </emp-fa-operational-report-filter>
+
+      <emp-fa-data-table fxFlex
+        [dataTable]="operationalReport"
+        [commandExecuted]="commandExecuted"
+        (dataTableEvent)="onOperationalReportTableEvent($event)">
+
+      </emp-fa-data-table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  [title]="'Exportar ' + operationalReportTypeName"
+  [fileUrl]="fileUrl"
+  [canExportToExcel]="true"
+  [canExportToXML]="true"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

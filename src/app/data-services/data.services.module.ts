@@ -13,6 +13,7 @@ import { BalancesStoreDataService } from './balances-store.data.service';
 import { ExchangeRatesDataService } from './exchange-rates.data.service';
 import { FinancialReportsDataService } from '.';
 import { ImportVouchersDataService } from './import-vouchers.data.service';
+import { OperationalReportsDataService } from './operational-reports.data.service';
 import { RulesDataService } from './rules.data.service';
 import { SubledgerDataService } from './subledgers.data.service';
 import { VouchersDataService } from './vouchers.data.service';
@@ -31,6 +32,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     FileDownloadService,
     FinancialReportsDataService,
     ImportVouchersDataService,
+    OperationalReportsDataService,
     RulesDataService,
     SubledgerDataService,
     VouchersDataService,

@@ -1,0 +1,65 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  (keydown.enter)="$event.preventDefault()">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div fxFlex>
+
+        <label>Catálogo de cuentas:</label>
+
+        <emp-ng-select name="accountsChartUID" required
+          [config]="{selectFirst: true}"
+          [(ngModel)]="operationalReportCommand.accountsChartUID"
+          [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
+          [showError]="!operationalReportCommand.accountsChartUID"
+          (changes)="onAccountsChartChanges()">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex>
+
+        <label>Reporte:</label>
+
+        <emp-ng-select name="operationalReportType" required
+          [(ngModel)]="operationalReportCommand.reportType"
+          [items]="operationalReportTypeList"
+          [showError]="!operationalReportCommand.reportType">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="none">
+
+        <label>Fecha:</label>
+
+        <emp-ng-datepicker name="date" required
+          [(ngModel)]="operationalReportCommand.date"
+          [showError]="!operationalReportCommand.date">
+
+        </emp-ng-datepicker>
+
+      </div>
+
+      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button title="Generar reporte"
+          [class.btn-icon]="form.invalid"
+          [class.btn-icon-action]="form.valid"
+          [disabled]="form.invalid"
+          (click)="onBuildOperationalReportClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

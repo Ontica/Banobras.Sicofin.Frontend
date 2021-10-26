@@ -46,6 +46,11 @@ export const AccountingDashboardsViews: View[] = [
     title: 'Reportes regulatorios',
     url: '/tableros/reportes-regulatorios'
   },
+  {
+    name: 'AccountingDashboards.OperationalReports',
+    title: 'Reportes Fiscales',
+    url: '/tableros/reportes-fiscales'
+  },
   // {
   //   name: 'AccountingDashboards.FinancialFacts',
   //   title: 'Indicadores financieros',

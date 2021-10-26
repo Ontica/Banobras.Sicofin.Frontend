@@ -15,6 +15,8 @@ import { AccountingDashboardsWorkspaceComponent } from './accounting-dashboards-
 
 import { FinancialReportsMainPageComponent } from './financial-reports-main-page/financial-reports-main-page.component';
 
+import { OperationalReportsMainPageComponent } from './operational-reports-main-page/operational-reports-main-page.component';
+
 import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-balance-main-page.component';
 
 
@@ -28,6 +30,11 @@ const routes: Routes = [
     data: { permission: ROUTES_LIBRARY.tableros_reportes_regulatorios.permission },
     path: ROUTES_LIBRARY.tableros_reportes_regulatorios.path,
     component: FinancialReportsMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission },
+    path: ROUTES_LIBRARY.tableros_reportes_fiscales.path,
+    component: OperationalReportsMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.tableros_indicadores_financieros.permission },

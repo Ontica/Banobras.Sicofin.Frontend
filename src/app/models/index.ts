@@ -34,6 +34,8 @@ export * from './grouping-rules';
 
 export * from './import-vouchers';
 
+export * from './operational-reports';
+
 export * from './permissions';
 
 export * from './report-file';

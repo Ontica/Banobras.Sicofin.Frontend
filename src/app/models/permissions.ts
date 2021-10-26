@@ -92,6 +92,11 @@ export const ROUTES_LIBRARY = {
     parent: 'tableros',
     path: 'reportes-regulatorios',
   },
+  tableros_reportes_fiscales: {
+    permission: PermissionsLibrary.ROUTE_TABLEROS,
+    parent: 'tableros',
+    path: 'reportes-fiscales',
+  },
   tableros_indicadores_financieros: {
     permission: PermissionsLibrary.ROUTE_TABLEROS,
     parent: 'tableros',
