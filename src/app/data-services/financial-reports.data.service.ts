@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { ExcelFile, FinancialReport, FinancialReportCommand, FinancialReportDesign } from '@app/models';
+import { FileReport, FinancialReport, FinancialReportCommand, FinancialReportDesign } from '@app/models';
 
 
 @Injectable()
@@ -20,12 +20,12 @@ export class FinancialReportsDataService {
   constructor(private http: HttpService) { }
 
 
-  exportFinancialReportToExcel(financialReportCommand: FinancialReportCommand): Observable<ExcelFile> {
+  exportFinancialReportToExcel(financialReportCommand: FinancialReportCommand): Observable<FileReport> {
     Assertion.assertValue(financialReportCommand, 'financialReportCommand');
 
     const path = `v2/financial-accounting/financial-reports/generate/excel`;
 
-    return this.http.post<ExcelFile>(path, financialReportCommand);
+    return this.http.post<FileReport>(path, financialReportCommand);
   }
 
 

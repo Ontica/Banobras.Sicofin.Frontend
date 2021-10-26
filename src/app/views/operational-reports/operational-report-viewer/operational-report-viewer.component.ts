@@ -12,7 +12,7 @@ import { Assertion } from '@app/core';
 import { OperationalReportsDataService } from '@app/data-services';
 
 import { OperationalReportCommand, EmptyOperationalReport, EmptyOperationalReportCommand,
-         OperationalReport, ReportFileType} from '@app/models';
+         OperationalReport, FileReportType } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -110,7 +110,7 @@ export class OperationalReportViewerComponent {
           return;
         }
         Assertion.assertValue(event.payload.exportFileType, 'event.payload.exportFileType');
-        this.validateReportFileType(event.payload.exportFileType as ReportFileType);
+        this.validateFileReportType(event.payload.exportFileType as FileReportType);
         return;
 
       default:
@@ -131,15 +131,15 @@ export class OperationalReportViewerComponent {
   }
 
 
-  private validateReportFileType(reportFileType: ReportFileType) {
-    switch (reportFileType) {
-      case ReportFileType.excel:
-      case ReportFileType.xml:
-        this.messageBox.showInDevelopment(`Exportar reporte a ${reportFileType}`,
-          {reportFileType, command: this.operationalReportCommand});
+  private validateFileReportType(fileReportType: FileReportType) {
+    switch (fileReportType) {
+      case FileReportType.excel:
+      case FileReportType.xml:
+        this.messageBox.showInDevelopment(`Exportar reporte a ${fileReportType}`,
+          {fileReportType, command: this.operationalReportCommand});
         return;
       default:
-        console.log(`Unhandled export type ${reportFileType}`);
+        console.log(`Unhandled file report type ${fileReportType}`);
         return;
     }
   }

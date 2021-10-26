@@ -5,12 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-export interface ExcelFile {
+export interface FileReport {
   url: string;
+  type?: FileReportType;
 }
 
 
-export enum ReportFileType {
+export enum FileReportType {
   excel = 'excel',
   pdf = 'pdf',
   xml = 'xml',

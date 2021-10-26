@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { ReportFileType } from '@app/models';
+import { FileReportType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -82,15 +82,15 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
     this.exportFileTypeList = [];
 
     if (this.canExportToExcel) {
-      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: ReportFileType.excel, name: 'Excel'}]];
+      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: FileReportType.excel, name: 'Excel'}]];
     }
 
     if (this.canExportToXML) {
-      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: ReportFileType.xml, name: 'XML'}]];
+      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: FileReportType.xml, name: 'XML'}]];
     }
 
     if (this.canExportToPDF) {
-      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: ReportFileType.pdf, name: 'PDF'}]];
+      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: FileReportType.pdf, name: 'PDF'}]];
     }
 
     this.selectedExportFileType = this.exportFileTypeList.length > 0 ? this.exportFileTypeList[0] : null;
