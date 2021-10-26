@@ -11,13 +11,22 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { OperationalReport, OperationalReportCommand } from '@app/models';
+import { FileReport, OperationalReport, OperationalReportCommand } from '@app/models';
 
 
 @Injectable()
 export class OperationalReportsDataService {
 
   constructor(private http: HttpService) { }
+
+
+  exportOperationalReportToXML(operationalReportCommand: OperationalReportCommand): Observable<FileReport> {
+    Assertion.assertValue(operationalReportCommand, 'operationalReportCommand');
+
+    const path = `v2/financial-accounting/operational-reports/xml`;
+
+    return this.http.post<FileReport>(path, operationalReportCommand);
+  }
 
 
   getOperationalReport(operationalReportCommand: OperationalReportCommand): Observable<OperationalReport> {

@@ -131,12 +131,22 @@ export class OperationalReportViewerComponent {
   }
 
 
+  private exportOperationalReportToXML() {
+    this.operationalReportsData.exportOperationalReportToXML(this.operationalReportCommand)
+      .toPromise()
+      .then(x => this.fileUrl = x.url)
+      .catch(() => this.setDisplayExportModal(false));
+  }
+
+
   private validateFileReportType(fileReportType: FileReportType) {
     switch (fileReportType) {
       case FileReportType.excel:
-      case FileReportType.xml:
         this.messageBox.showInDevelopment(`Exportar reporte a ${fileReportType}`,
           {fileReportType, command: this.operationalReportCommand});
+        return;
+      case FileReportType.xml:
+        this.exportOperationalReportToXML();
         return;
       default:
         console.log(`Unhandled file report type ${fileReportType}`);
