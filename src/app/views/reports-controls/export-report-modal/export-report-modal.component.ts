@@ -38,9 +38,9 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
 
   @Output() exportReportModalEvent = new EventEmitter<EventInfo>();
 
-  exportFileTypeList: Identifiable[] = [];
+  fileTypesList: Identifiable[] = [];
 
-  selectedExportFileType = null;
+  selectedFileType = null;
 
   working = false;
 
@@ -68,32 +68,32 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
 
 
   onExportButtonClicked() {
-    if (this.selectedExportFileType === null) {
+    if (this.selectedFileType === null) {
       return;
     }
 
     this.working = true;
     sendEvent(this.exportReportModalEvent, ExportReportModalEventType.EXPORT_BUTTON_CLICKED,
-      {exportFileType: this.selectedExportFileType.uid});
+      {fileType: this.selectedFileType.uid});
   }
 
 
   private setExportTypesList() {
-    this.exportFileTypeList = [];
+    this.fileTypesList = [];
 
     if (this.canExportToExcel) {
-      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: FileReportType.excel, name: 'Excel'}]];
+      this.fileTypesList = [...this.fileTypesList, ...[{uid: FileReportType.Excel, name: 'Excel'}]];
     }
 
     if (this.canExportToXML) {
-      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: FileReportType.xml, name: 'XML'}]];
+      this.fileTypesList = [...this.fileTypesList, ...[{uid: FileReportType.Xml, name: 'XML'}]];
     }
 
     if (this.canExportToPDF) {
-      this.exportFileTypeList = [...this.exportFileTypeList, ...[{uid: FileReportType.pdf, name: 'PDF'}]];
+      this.fileTypesList = [...this.fileTypesList, ...[{uid: FileReportType.PDF, name: 'PDF'}]];
     }
 
-    this.selectedExportFileType = this.exportFileTypeList.length > 0 ? this.exportFileTypeList[0] : null;
+    this.selectedFileType = this.fileTypesList.length > 0 ? this.fileTypesList[0] : null;
   }
 
 }

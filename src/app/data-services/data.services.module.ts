@@ -11,7 +11,7 @@ import { AccountsChartDataService } from './accounts-chart.data.service';
 import { BalancesDataService } from './balances.data.service';
 import { BalancesStoreDataService } from './balances-store.data.service';
 import { ExchangeRatesDataService } from './exchange-rates.data.service';
-import { FinancialReportsDataService } from '.';
+import { FinancialReportsDataService } from './financial-reports.data.service';
 import { ImportVouchersDataService } from './import-vouchers.data.service';
 import { OperationalReportsDataService } from './operational-reports.data.service';
 import { RulesDataService } from './rules.data.service';

@@ -9,6 +9,8 @@ import { DateString, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
+import { FileReportType } from './report-file';
+
 
 export enum OperationalReportType {
   BalanzaSat = 'BalanzaSat',
@@ -26,6 +28,7 @@ export interface OperationalReportCommand extends DataTableCommand {
   reportType: OperationalReportType;
   accountsChartUID: string;
   date: DateString;
+  fileType?: FileReportType;
 }
 
 

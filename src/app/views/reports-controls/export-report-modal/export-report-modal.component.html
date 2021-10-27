@@ -8,14 +8,14 @@
 
     <div class="card-body-padding">
 
-      <ng-container *ngIf="exportFileTypeList.length > 1">
+      <ng-container *ngIf="fileTypesList.length > 1">
 
         <div [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
           Selecciona el tipo de exportación:
         </div>
 
-        <mat-radio-group [(ngModel)]="selectedExportFileType" [disabled]="working || hasFileUrl">
-          <mat-radio-button *ngFor="let type of exportFileTypeList"
+        <mat-radio-group [(ngModel)]="selectedFileType" [disabled]="working || hasFileUrl">
+          <mat-radio-button *ngFor="let type of fileTypesList"
             [value]="type">
             {{type.name}}
           </mat-radio-button>
@@ -24,7 +24,7 @@
       </ng-container>
 
       <div [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
-        {{message || 'Se generará la exportación a '+ selectedExportFileType.name +' con el último filtro consultado.'}}
+        {{message || 'Se generará la exportación a '+ selectedFileType.name +' con el último filtro consultado.'}}
       </div>
 
       <mat-divider class="horizontal">
@@ -36,9 +36,9 @@
         <div fxFlex="none" fxLayoutAlign="start center">
 
           <button *ngIf="!working && !hasFileUrl"
-            [class.btn]="selectedExportFileType === null"
-            [class.btn-action]="selectedExportFileType !== null"
-            [disabled]="selectedExportFileType === null"
+            [class.btn]="selectedFileType === null"
+            [class.btn-action]="selectedFileType !== null"
+            [disabled]="selectedFileType === null"
             (click)="onExportButtonClicked()">
             Exportar
           </button>
@@ -53,7 +53,7 @@
         <div fxFlex fxLayoutAlign="end center" [style.marginRight.px]="8">
 
           <a *ngIf="fileUrl" [href]="fileUrl" target="_blank">
-            El archivo {{selectedExportFileType.name}} esta listo. Haga clic para descargarlo.</a>
+            El archivo {{selectedFileType.name}} esta listo. Haga clic para descargarlo.</a>
 
           <div *ngIf="working" [style.width.px]="242"
             empNgProgressText

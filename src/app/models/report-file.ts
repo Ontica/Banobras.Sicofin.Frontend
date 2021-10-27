@@ -12,7 +12,7 @@ export interface FileReport {
 
 
 export enum FileReportType {
-  excel = 'excel',
-  pdf = 'pdf',
-  xml = 'xml',
+  Excel = 'Excel',
+  PDF = 'PDF',
+  Xml = 'Xml',
 }

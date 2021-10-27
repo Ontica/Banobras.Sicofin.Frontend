@@ -69,6 +69,7 @@ export class OperationalReportViewerComponent {
 
         this.operationalReportCommand = event.payload.operationalReportCommand as OperationalReportCommand;
         this.operationalReportTypeName = event.payload.operationalReportTypeName;
+        this.setOperationalReportData(EmptyOperationalReport, false);
         this.getOperationalReport();
         return;
 
@@ -109,8 +110,8 @@ export class OperationalReportViewerComponent {
         if (this.submitted) {
           return;
         }
-        Assertion.assertValue(event.payload.exportFileType, 'event.payload.exportFileType');
-        this.validateFileReportType(event.payload.exportFileType as FileReportType);
+        Assertion.assertValue(event.payload.fileType, 'event.payload.fileType');
+        this.exportOperationalReport(event.payload.fileType as FileReportType);
         return;
 
       default:
@@ -122,8 +123,6 @@ export class OperationalReportViewerComponent {
 
   private getOperationalReport() {
     this.setSubmitted(true);
-    this.setOperationalReportData(EmptyOperationalReport, false);
-
     this.operationalReportsData.getOperationalReport(this.operationalReportCommand)
       .toPromise()
       .then( x => this.setOperationalReportData(x))
@@ -131,27 +130,12 @@ export class OperationalReportViewerComponent {
   }
 
 
-  private exportOperationalReportToXML() {
-    this.operationalReportsData.exportOperationalReportToXML(this.operationalReportCommand)
+  private exportOperationalReport(fileType: FileReportType) {
+    const command = Object.assign({}, this.operationalReportCommand, {fileType});
+    this.operationalReportsData.exportOperationalReport(command)
       .toPromise()
       .then(x => this.fileUrl = x.url)
       .catch(() => this.setDisplayExportModal(false));
-  }
-
-
-  private validateFileReportType(fileReportType: FileReportType) {
-    switch (fileReportType) {
-      case FileReportType.excel:
-        this.messageBox.showInDevelopment(`Exportar reporte a ${fileReportType}`,
-          {fileReportType, command: this.operationalReportCommand});
-        return;
-      case FileReportType.xml:
-        this.exportOperationalReportToXML();
-        return;
-      default:
-        console.log(`Unhandled file report type ${fileReportType}`);
-        return;
-    }
   }
 
 
