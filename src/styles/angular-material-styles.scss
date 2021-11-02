@@ -235,6 +235,11 @@ table.mat-table {
       vertical-align: middle;
     }
 
+    &.column-no-padding {
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+
     &.padding-icon {
       padding-top: 4px;
       padding-bottom: 4px;
@@ -271,7 +276,14 @@ table.mat-table {
     }
 
     &.mat-footer-row {
-      background-color: $grid-footer-background-color;
+
+      &.text-not-found > td {
+        padding: 1rem;
+      }
+
+      &:not(.text-not-found) {
+        background-color: $grid-footer-background-color;
+      }
     }
 
     &.mat-row {

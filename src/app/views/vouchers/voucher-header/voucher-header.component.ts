@@ -33,7 +33,6 @@ export enum VoucherHeaderEventType {
   CREATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.CreateVoucherClicked',
   UPDATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.UpdateVoucherClicked',
   DELETE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.DeleteVoucherClicked',
-  REVIEW_VOUCHER_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.reviewVoucherButtonClicked',
   SEND_TO_LEDGER_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.SendToLedgerButtonClicked',
   SEND_TO_SUPERVISOR_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.SendToSupervisorButtonClicked',
   ADD_VOUCHER_ENTRY_CLICKED = 'VoucherHeaderComponent.Event.AddVoucherEntryClicked',
@@ -130,14 +129,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  validateDisabledFieldsByHasEntries() {
-    if (this.editionMode) {
-      this.formHandler.disableControl(this.controls.accountsChart, this.hasEntries);
-      this.formHandler.disableControl(this.controls.ledgerUID, this.hasEntries);
-    }
-  }
-
-
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
     this.formHandler.getControl(this.controls.ledgerUID).reset();
@@ -156,7 +147,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  submitForm() {
+  onSubmitForm() {
     if (!this.formHandler.validateReadyForSubmit()) {
       this.formHandler.invalidateForm();
       return;
@@ -242,7 +233,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private setFormData() {
-    if (!this.voucher) {
+    if (!this.isSavedVoucher) {
       this.formHandler.form.reset();
       return;
     }
@@ -264,6 +255,14 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   private disableForm(disable) {
     this.formHandler.disableForm(disable);
+  }
+
+
+  private validateDisabledFieldsByHasEntries() {
+    if (this.editionMode) {
+      this.formHandler.disableControl(this.controls.accountsChart, this.hasEntries);
+      this.formHandler.disableControl(this.controls.ledgerUID, this.hasEntries);
+    }
   }
 
 

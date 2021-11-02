@@ -18,8 +18,9 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { sendEvent } from '@app/shared/utils';
 
 export enum VoucherEntryTableEventType {
-  UPDATE_VOUCHER_ENTRY_CLICKED = 'VoucherEntryTableComponent.Event.UpdateVoucherEntryClicked',
-  REMOVE_VOUCHER_ENTRY_CLICKED = 'VoucherEntryTableComponent.Event.RemoveVoucherEntryClicked',
+  UPDATE_VOUCHER_ENTRY_CLICKED  = 'VoucherEntryTableComponent.Event.UpdateVoucherEntryClicked',
+  REMOVE_VOUCHER_ENTRY_CLICKED  = 'VoucherEntryTableComponent.Event.RemoveVoucherEntryClicked',
+  REVIEW_VOUCHER_BUTTON_CLICKED = 'VoucherEntryTableComponent.Event.ReviewVoucherButtonClicked',
 }
 
 @Component({
@@ -31,6 +32,8 @@ export class VoucherEntryTableComponent implements OnChanges {
   @Input() voucherEntryList: VoucherEntryDescriptor[] = [];
 
   @Input() canDelete = false;
+
+  @Input() canReviewVoucher = false;
 
   @Output() voucherEntryTableEvent = new EventEmitter<EventInfo>();
 
@@ -70,6 +73,11 @@ export class VoucherEntryTableComponent implements OnChanges {
             {voucherEntry});
         }
       });
+  }
+
+
+  onReviewVoucherButtonClicked() {
+    sendEvent(this.voucherEntryTableEvent, VoucherEntryTableEventType.REVIEW_VOUCHER_BUTTON_CLICKED);
   }
 
 

@@ -60,14 +60,38 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="notFoundMessage">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+        A esta póliza no se le han asignado movimientos.
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="column-no-padding">
+
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem">
+          <mat-icon>info</mat-icon>
+          <span>Estado</span>
+          <div fxFlex></div>
+          <span>
+            {{canReviewVoucher ? 'La póliza NO esta balanceada.' : 'La póliza está balanceada correctamente.'}}
+          </span>
+          <button *ngIf="canReviewVoucher" class="btn-action"
+            (click)="onReviewVoucherButtonClicked()">
+            Analizar póliza
+          </button>
+        </div>
+
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onUpdateVoucherEntryClicked(row)"
       class="selectable-row" [ngClass]="{'item-type-total': row.itemType === 'TotalsEntry'}"></tr>
+    <tr mat-footer-row *matFooterRowDef="['notFoundMessage']" class="text-not-found"
+      [hidden]="dataSource.data.length > 0"></tr>
+    <tr mat-footer-row *matFooterRowDef="['status']; sticky: true;"></tr>
 
   </table>
-
-  <div *ngIf="dataSource.data.length == 0" class="text-not-found">
-    <p>A esta póliza no se le han asignado movimientos.</p>
-  </div>
 
 </div>

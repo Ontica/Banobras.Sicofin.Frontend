@@ -540,7 +540,7 @@ i.disabled {
   width: fit-content;
 
   &:hover {
-    background-color: darken( $warning-color-light, 4%);
+    background-color: darken($warning-color-light, 4%);
   }
 }
 
@@ -556,13 +556,12 @@ i.disabled {
   }
 }
 
-
 a.tag-info,
 a.tag-error,
 a.tag-warning {
   text-decoration: underline;
 
-  &:hover{
+  &:hover {
     color: $white;
     cursor: pointer;
   }

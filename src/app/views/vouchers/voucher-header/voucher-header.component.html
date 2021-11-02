@@ -117,11 +117,6 @@
 
       <div fxFlex fxLayoutAlign="start center" *ngIf="isSavedVoucher && canEdit">
         <ng-container *ngIf="!editionMode">
-          <button *ngIf="voucher.actions?.reviewVoucher"
-            class="btn-action"
-            (click)="onEventButtonClicked(eventType.REVIEW_VOUCHER_BUTTON_CLICKED)">
-            Analizar póliza
-          </button>
           <button *ngIf="voucher.actions?.sendToLedger"
             class="btn-action"
             (click)="onEventButtonClicked(eventType.SEND_TO_LEDGER_BUTTON_CLICKED)">
@@ -167,7 +162,7 @@
           <button
             [class.btn]="!formHandler.isValid"
             [class.btn-action]="formHandler.isValid"
-            (click)="submitForm()">
+            (click)="onSubmitForm()">
             Guardar
           </button>
           <button *ngIf="isSavedVoucher"

@@ -80,11 +80,6 @@ export class VoucherEditorComponent {
         this.setSelectedVoucherEntry(EmptyVoucherEntry, true);
         return;
 
-      case VoucherHeaderEventType.REVIEW_VOUCHER_BUTTON_CLICKED:
-        Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
-        this.validateVoucher();
-        return;
-
       case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
         this.messageBox.showInDevelopment('Enviar a supervisión', event);
@@ -121,6 +116,10 @@ export class VoucherEditorComponent {
       case VoucherEntryTableEventType.REMOVE_VOUCHER_ENTRY_CLICKED:
         Assertion.assertValue(event.payload.voucherEntry.id, 'event.payload.voucherEntry.id');
         this.deleteVoucherEntry(event.payload.voucherEntry.id);
+        return;
+
+      case VoucherEntryTableEventType.REVIEW_VOUCHER_BUTTON_CLICKED:
+        this.validateVoucher();
         return;
 
       default:

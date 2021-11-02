@@ -20,6 +20,7 @@
     <emp-fa-voucher-entry-table fxFlex
       [voucherEntryList]="voucher.entries"
       [canDelete]="canEditVoucher"
+      [canReviewVoucher]="voucher.actions?.reviewVoucher"
       (voucherEntryTableEvent)="onVoucherEntryTableEvent($event)">
 
     </emp-fa-voucher-entry-table>
