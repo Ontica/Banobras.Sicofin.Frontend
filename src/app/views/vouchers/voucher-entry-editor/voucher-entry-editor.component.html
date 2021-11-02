@@ -274,6 +274,7 @@
                   [style.paddingTop.px]="12" [style.height.px]="42" [style.marginRight.px]="8">
                   <mat-checkbox
                     [(ngModel)]="displayDateAndConcept"
+                    [disabled]="readonly"
                     [ngModelOptions]="{standalone: true}"
                     (click)="$event.stopPropagation"
                     (change)="onDisplayDateAndConceptClicked()">
