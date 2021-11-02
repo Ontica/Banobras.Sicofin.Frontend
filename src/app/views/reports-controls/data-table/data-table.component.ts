@@ -116,7 +116,7 @@ export class DataTableComponent implements OnChanges {
 
   private getFilterPredicate() {
     return (row: DataTableEntry, filters: string) => (
-      this.columns.filter(x => x.type !== DataTableColumnType.decimal &&
+      this.columns.filter(x => x.type !== DataTableColumnType.decimal && typeof row[x.field] === 'string' &&
                                row[x.field].toLowerCase().includes(filters)).length > 0
     );
   }
