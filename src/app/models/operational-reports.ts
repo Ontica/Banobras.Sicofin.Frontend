@@ -14,13 +14,13 @@ import { FileReportType } from './report-file';
 
 export enum OperationalReportType {
   BalanzaSat = 'BalanzaSat',
-  CatalogoDeCuentaSat = 'CatalogoDeCuentaSat',
+  CatalogoSAT = 'CatalogoSAT',
 }
 
 
 export const OperationalReportTypeList: Identifiable[] = [
-  {uid: OperationalReportType.BalanzaSat,          name: 'Balanza'},
-  {uid: OperationalReportType.CatalogoDeCuentaSat, name: 'Catalogo de cuentas'},
+  {uid: OperationalReportType.BalanzaSat,  name: 'Balanza'},
+  {uid: OperationalReportType.CatalogoSAT, name: 'Catalogo de cuentas'},
 ];
 
 
