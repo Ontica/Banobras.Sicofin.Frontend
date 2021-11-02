@@ -151,7 +151,7 @@
 
             <ng-container *ngIf="!importVouchersResult.isRunning">
               <span>Información a importar</span>
-              <span *ngIf="executedDryRun" class="tag-warning"
+              <span *ngIf="executedDryRun" class="tag-error" [style.fontSize.px]="8"
                 [style.marginLeft.px]="10" [style.marginBottom.px]="1">Detenido</span>
             </ng-container>
 

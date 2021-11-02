@@ -37,7 +37,9 @@
     <ng-container matColumnDef="errorsCount">
       <th mat-header-cell *matHeaderCellDef class="text-align-right"> Errores </th>
       <td mat-cell *matCellDef="let row" class="text-align-right bold-text" [style.width.px]="80">
-        <a [ngClass]="{'error-indicator-text': row.errorsCount > 0}" (click)="onShowErrorsClicked(row)">
+        <span *ngIf="!row.errorsCount || row.errorsCount === 0">-</span>
+        <a *ngIf="row.errorsCount > 0" class="tag-error" title="Mostrar errores"
+          (click)="onShowErrorsClicked(row)">
           {{ row.errorsCount | number }}
         </a>
       </td>
@@ -46,7 +48,9 @@
     <ng-container matColumnDef="warningsCount">
       <th mat-header-cell *matHeaderCellDef class="text-align-right"> Advertencias </th>
       <td mat-cell *matCellDef="let row" class="text-align-right bold-text" [style.width.px]="80">
-        <a [ngClass]="{'warning-indicator-text': row.warningsCount > 0}" (click)="onShowWarningsClicked(row)">
+        <span *ngIf="!row.warningsCount || row.warningsCount === 0">-</span>
+        <a *ngIf="row.warningsCount > 0" class="tag-warning" title="Mostrar advertencias"
+          (click)="onShowWarningsClicked(row)">
           {{ row.warningsCount | number }}
         </a>
       </td>

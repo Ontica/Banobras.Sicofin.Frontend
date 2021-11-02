@@ -386,20 +386,20 @@ textarea:focus {
 
 .error-indicator-text {
   color: $warning-color;
+  text-decoration: underline;
 }
 
 a.error-indicator-text:hover {
-  color: $warning-color;
-  text-decoration: underline;
+  color: darken($warning-color, 4%);
 }
 
 .warning-indicator-text {
   color: $title-color;
+  text-decoration: underline;
 }
 
 a.warning-indicator-text:hover {
-  color: $title-color;
-  text-decoration: underline;
+  color: darken($title-color, 4%);
 }
 
 .remove-min-width {
@@ -522,20 +522,50 @@ i.disabled {
 
 .tag-info {
   background-color: $primary-color-light;
-  border-radius: 8px;
-  font-size: 8px;
+  border-radius: 10px;
   color: white;
   padding: 4px 8px;
   width: fit-content;
+
+  &:hover {
+    background-color: darken($primary-color-light, 4%);
+  }
+}
+
+.tag-error {
+  background-color: $warning-color-light;
+  border-radius: 10px;
+  color: $white;
+  padding: 4px 8px;
+  width: fit-content;
+
+  &:hover {
+    background-color: darken( $warning-color-light, 4%);
+  }
 }
 
 .tag-warning {
-  background-color: $warning-color-light;
-  border-radius: 8px;
-  font-size: 8px;
-  color: white;
+  background-color: $title-color;
+  border-radius: 10px;
+  color: $white;
   padding: 4px 8px;
   width: fit-content;
+
+  &:hover {
+    background-color: darken($title-color, 4%);
+  }
+}
+
+
+a.tag-info,
+a.tag-error,
+a.tag-warning {
+  text-decoration: underline;
+
+  &:hover{
+    color: $white;
+    cursor: pointer;
+  }
 }
 
 // blink

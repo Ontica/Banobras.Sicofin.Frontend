@@ -12,8 +12,6 @@ import { Assertion, EventInfo } from '@app/core';
 import { EmptySearchVouchersCommand, EmptyVoucher, SearchVouchersCommand, Voucher,
          VoucherDescriptor } from '@app/models';
 
-import { expandCollapse } from '@app/shared/animations/animations';
-
 import { sendEvent } from '@app/shared/utils';
 
 import { VoucherFilterEventType } from '../voucher-filter/voucher-filter.component';

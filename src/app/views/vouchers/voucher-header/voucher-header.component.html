@@ -111,15 +111,7 @@
 
     </div>
 
-    <mat-divider class="horizontal" *ngIf="!(isSavedVoucher && !canEdit)"></mat-divider>
-
-    <div fxLayout="row" *ngIf="!isSavedVoucher">
-
-      <div fxFlex fxLayoutAlign="end center">
-
-      </div>
-
-    </div>
+    <mat-divider class="horizontal" *ngIf="canEdit"></mat-divider>
 
     <div fxLayout="row">
 
@@ -150,7 +142,7 @@
       </div>
 
       <div fxFlex fxLayoutAlign="end center">
-        <ng-container *ngIf="!editionMode && isSavedVoucher && canEdit">
+        <ng-container *ngIf="isSavedVoucher && canEdit && !editionMode">
           <button
             class="btn-action"
             (click)="onEventButtonClicked(eventType.ADD_VOUCHER_ENTRY_CLICKED)">
