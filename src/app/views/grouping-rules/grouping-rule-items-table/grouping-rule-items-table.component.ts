@@ -61,7 +61,8 @@ export class GroupingRuleItemsTableComponent implements OnChanges {
   }
 
 
-  onRemoveGroupingRuleItemClicked(groupingRuleItem: GroupingRuleItem) {
+  onRemoveGroupingRuleItemClicked(event, groupingRuleItem: GroupingRuleItem) {
+    event.stopPropagation();
 
     const message = this.getConfirmMessage(groupingRuleItem);
 

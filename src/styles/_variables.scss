@@ -40,10 +40,6 @@ $secondary-text-color: $white !default;
 $action-color: $primary-color;
 $action-selected-color: $primary-color-dark;
 
-$icon-color: #909090 !default;
-$icon-color-light: #e8e8e8 !default;
-$icon-color-dark: #606060 !default;
-
 //
 // Typography
 //
@@ -77,6 +73,14 @@ $link-color: $text-color-dark;
 // icons
 //
 $primary-icon-size: 16pt;
+
+$icon-color: #909090 !default;
+$icon-color-light: #e8e8e8 !default;
+$icon-color-dark: #606060 !default;
+
+$icon-color-success: #65a596 !default;
+$icon-color-warning: #f3d08f !default;
+$icon-color-error: #df879d !default;
 
 //
 // form

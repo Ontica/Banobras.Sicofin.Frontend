@@ -54,6 +54,7 @@ export class FileControlMenuOptions {
   name: string;
   action: FileControlActions;
   disabled?: boolean;
+  icon?: string;
 }
 
 

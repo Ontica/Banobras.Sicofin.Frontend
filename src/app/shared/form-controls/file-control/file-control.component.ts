@@ -152,20 +152,20 @@ export class FileControlComponent implements OnChanges {
       const options: FileControlMenuOptions[] = [];
 
       if (this.validateShowOption(file.type)) {
-        options.push({ name: 'Ver', action: 'SHOW' });
+        options.push({ name: 'Ver', action: 'SHOW', icon: 'visibility' });
       }
 
-      options.push({ name: 'Descargar', action: 'DOWNLOAD' });
+      options.push({ name: 'Descargar', action: 'DOWNLOAD', icon: 'file_download' });
 
       if (!this.readonly) {
-        options.push({ name: 'Eliminar', action: 'REMOVE' });
+        options.push({ name: 'Eliminar', action: 'REMOVE', icon: 'delete' });
       }
 
       return options;
     }
     return [
-      { name: 'Guardar', action: 'SAVE' },
-      { name: 'Cancelar', action: 'CANCEL' },
+      { name: 'Guardar', action: 'SAVE', icon: 'save' },
+      { name: 'Cancelar', action: 'CANCEL', icon: 'clear' },
     ];
   }
 

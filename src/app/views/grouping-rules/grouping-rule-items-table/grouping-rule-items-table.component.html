@@ -35,8 +35,11 @@
     <ng-container matColumnDef="actionDelete">
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let row" class="column-action">
-        <mat-icon title="Eliminar movimiento"
-          (click)="$event.stopPropagation(); onRemoveGroupingRuleItemClicked(row)">delete</mat-icon>
+        <button mat-icon-button>
+          <mat-icon title="Eliminar movimiento" (click)="onRemoveGroupingRuleItemClicked($event, row)">
+            delete
+          </mat-icon>
+        </button>
       </td>
     </ng-container>
 
