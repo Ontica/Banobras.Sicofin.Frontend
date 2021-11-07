@@ -20,34 +20,33 @@ export class FinancialReportsDataService {
   constructor(private http: HttpService) { }
 
 
-  exportFinancialReportToExcel(financialReportCommand: FinancialReportCommand): Observable<FileReport> {
-    Assertion.assertValue(financialReportCommand, 'financialReportCommand');
+  exportFinancialReportToExcel(command: FinancialReportCommand): Observable<FileReport> {
+    Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/financial-reports/generate/excel`;
 
-    return this.http.post<FileReport>(path, financialReportCommand);
+    return this.http.post<FileReport>(path, command);
   }
 
 
-  getFinancialReport(financialReportCommand: FinancialReportCommand): Observable<FinancialReport> {
-    Assertion.assertValue(financialReportCommand, 'financialReportCommand');
+  getFinancialReport(command: FinancialReportCommand): Observable<FinancialReport> {
+    Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/financial-reports/generate`;
 
-    return this.http.post<FinancialReport>(path, financialReportCommand);
+    return this.http.post<FinancialReport>(path, command);
   }
 
 
-  getFinancialReportBreakdown(financialReportUID: string,
-                              financialReportCommand: FinancialReportCommand): Observable<FinancialReport> {
-    Assertion.assertValue(financialReportUID, 'financialReportUID');
-    Assertion.assertValue(financialReportCommand, 'financialReportCommand');
+  getFinancialReportBreakdown(financialReportItemUID: string,
+                              command: FinancialReportCommand): Observable<FinancialReport> {
+    Assertion.assertValue(financialReportItemUID, 'financialReportItemUID');
+    Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/financial-reports/generate/breakdown/${financialReportUID}`;
+    const path = `v2/financial-accounting/financial-reports/generate/breakdown/${financialReportItemUID}`;
 
-    return this.http.post<FinancialReport>(path, financialReportCommand);
+    return this.http.post<FinancialReport>(path, command);
   }
-
 
   getFinancialReportTypes(accountsChartUID: string): Observable<Identifiable[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');

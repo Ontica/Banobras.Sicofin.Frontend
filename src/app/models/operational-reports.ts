@@ -13,22 +13,22 @@ import { FileReportType } from './report-file';
 
 
 export enum OperationalReportType {
-  BalanzaSat = 'BalanzaSat',
+  BalanzaSat = 'BalanzaSAT',
   CatalogoSAT = 'CatalogoSAT',
 }
 
 
 export const OperationalReportTypeList: Identifiable[] = [
-  {uid: OperationalReportType.BalanzaSat,  name: 'Balanza'},
-  {uid: OperationalReportType.CatalogoSAT, name: 'Catalogo de cuentas'},
+  {uid: OperationalReportType.BalanzaSat,  name: 'Balanza SAT'},
+  {uid: OperationalReportType.CatalogoSAT, name: 'Catálogo de cuentas SAT'},
 ];
 
 
 export interface OperationalReportCommand extends DataTableCommand {
   reportType: OperationalReportType;
   accountsChartUID: string;
-  date: DateString;
-  fileType?: FileReportType;
+  toDate: DateString;
+  exportTo?: FileReportType;
 }
 
 
@@ -47,7 +47,7 @@ export interface OperationalReportEntry extends DataTableEntry {
 export const EmptyOperationalReportCommand: OperationalReportCommand = {
   reportType: null,
   accountsChartUID: '',
-  date: '',
+  toDate: '',
 };
 
 

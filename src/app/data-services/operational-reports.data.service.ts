@@ -20,21 +20,21 @@ export class OperationalReportsDataService {
   constructor(private http: HttpService) { }
 
 
-  exportOperationalReport(operationalReportCommand: OperationalReportCommand): Observable<FileReport> {
-    Assertion.assertValue(operationalReportCommand, 'operationalReportCommand');
+  exportOperationalReport(command: OperationalReportCommand): Observable<FileReport> {
+    Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/operational-reports/export`;
+    const path = `v2/financial-accounting/reporting/${command.reportType}/export`;
 
-    return this.http.post<FileReport>(path, operationalReportCommand);
+    return this.http.post<FileReport>(path, command);
   }
 
 
-  getOperationalReport(operationalReportCommand: OperationalReportCommand): Observable<OperationalReport> {
-    Assertion.assertValue(operationalReportCommand, 'operationalReportCommand');
+  getOperationalReport(command: OperationalReportCommand): Observable<OperationalReport> {
+    Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/operational-reports`;
+    const path = `v2/financial-accounting/reporting/${command.reportType}/data`;
 
-    return this.http.post<OperationalReport>(path, operationalReportCommand);
+    return this.http.post<OperationalReport>(path, command);
   }
 
 }

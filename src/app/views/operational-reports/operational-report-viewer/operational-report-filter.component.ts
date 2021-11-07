@@ -58,7 +58,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   onAccountsChartChanges() {
     this.operationalReportCommand.reportType = null;
-    this.operationalReportCommand.date = null;
+    this.operationalReportCommand.toDate = null;
   }
 
 
