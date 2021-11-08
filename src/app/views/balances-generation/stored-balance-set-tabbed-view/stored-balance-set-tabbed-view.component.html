@@ -32,8 +32,8 @@
 
                 <div fxFlex="none" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
 
-                  <mat-checkbox name="subsidiaryAccount"
-                    [(ngModel)]="showSubsidiaryAccount"
+                  <mat-checkbox name="subledgerAccount"
+                    [(ngModel)]="showSubledgerAccount"
                     (click)="$event.stopPropagation">
                     Consultar auxiliar
                   </mat-checkbox>
@@ -112,13 +112,13 @@
                   <th mat-header-cell *matHeaderCellDef> Nombre de la cuenta </th>
                   <td mat-cell *matCellDef="let row">{{ row.accountName }}</td>
                 </ng-container>
-                <ng-container matColumnDef="subsidiaryAccountNumber">
+                <ng-container matColumnDef="subledgerAccountNumber">
                   <th mat-header-cell *matHeaderCellDef> Auxiliar </th>
-                  <td mat-cell *matCellDef="let row" class="nowrap">{{ row.subsidiaryAccountNumber }}</td>
+                  <td mat-cell *matCellDef="let row" class="nowrap">{{ row.subledgerAccountNumber }}</td>
                 </ng-container>
-                <ng-container matColumnDef="subsidiaryAccountName">
+                <ng-container matColumnDef="subledgerAccountName">
                   <th mat-header-cell *matHeaderCellDef> Nombre del auxiliar </th>
-                  <td mat-cell *matCellDef="let row">{{ row.subsidiaryAccountName }}</td>
+                  <td mat-cell *matCellDef="let row">{{ row.subledgerAccountName }}</td>
                 </ng-container>
                 <ng-container matColumnDef="balance">
                   <th mat-header-cell *matHeaderCellDef class="text-align-right"> Saldo </th>

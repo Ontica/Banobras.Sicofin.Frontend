@@ -247,7 +247,7 @@ export interface Ledger {
   fullName: string;
   number: string;
   subnumber: string;
-  subsidiaryAccountsPrefix: string;
+  subledgerAccountsPrefix: string;
   accountsChart: Identifiable;
   baseCurrency: Identifiable;
 }

@@ -34,11 +34,11 @@ export interface StoredBalance {
   ledgerAccountId: number;
   ledger: Identifiable;
   currency: Identifiable;
-  subsidiaryAccountId: number;
+  subledgerAccountId: number;
   sectorCode: string;
   accountName: string;
   accountNumber: string;
-  subsidiaryAccountNumber: string;
-  subsidiaryAccountName: string;
+  subledgerAccountNumber: string;
+  subledgerAccountName: string;
   balance: number;
 }

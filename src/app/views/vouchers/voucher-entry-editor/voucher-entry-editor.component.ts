@@ -17,7 +17,7 @@ import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap 
 import { Assertion, EventInfo, Identifiable, isEmpty, Validate } from '@app/core';
 
 import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
-         SubsidiaryAccount, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
+         SubledgerAccount, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -92,7 +92,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   ledgerAccountMinTermLength = 4;
   ledgerAccountLoading = false;
 
-  subledgerAccountList$: Observable<SubsidiaryAccount[]>;
+  subledgerAccountList$: Observable<SubledgerAccount[]>;
   subledgerAccountInput$ = new Subject<string>();
   subledgerAccountMinTermLength = 5;
   subledgerAccountLoading = false;
@@ -140,7 +140,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  get subledgerAccountSelected(): SubsidiaryAccount {
+  get subledgerAccountSelected(): SubledgerAccount {
     const subledgerAccount = this.formHandler.getControl(this.controls.subledgerAccount).value;
     return subledgerAccount?.id > 0 ? subledgerAccount : null;
   }

@@ -291,10 +291,10 @@ export const EmptyLedgerAccountSectorRule: LedgerAccountSectorRule = {
 };
 
 
-export interface SubsidiaryAccount {
+export interface SubledgerAccount {
   id: number;
   baseLedger: Identifiable;
-  subsidiaryLedger: Identifiable;
+  subledger: Identifiable;
   number: string;
   name: string;
   keywords: string;

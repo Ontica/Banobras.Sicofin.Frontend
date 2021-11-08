@@ -51,7 +51,7 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
   selectedLedger: Identifiable = null;
 
-  showSubsidiaryAccount = false;
+  showSubledgerAccount = false;
 
   keywords = '';
 
@@ -137,9 +137,9 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
 
   private setDisplayedColumns() {
-    if (this.showSubsidiaryAccount) {
+    if (this.showSubledgerAccount) {
       this.storedBalanceDisplayedColumns = ['ledger', 'sectorCode', 'accountNumber', 'accountName',
-                                            'subsidiaryAccountNumber', 'subsidiaryAccountName', 'balance'];
+                                            'subledgerAccountNumber', 'subledgerAccountName', 'balance'];
     } else {
       this.storedBalanceDisplayedColumns =
         ['ledger', 'sectorCode', 'accountNumber', 'accountName', 'balance'];
