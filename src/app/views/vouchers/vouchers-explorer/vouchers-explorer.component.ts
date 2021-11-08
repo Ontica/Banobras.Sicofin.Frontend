@@ -145,7 +145,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
   private setInitTexts() {
     this.hintText = this.searching || this.voucherList.length > 0 ?
-      this.voucherList.length + ' pólizas encontradas' : 'Selecciona los filtros';
+      this.voucherList.length + ' pólizas encontradas' : 'Seleccionar los filtros';
 
     this.textNotFound = this.searching ?
       'No se encontraron pólizas con el filtro proporcionado.' : 'No se ha invocado la búsqueda de pólizas.';

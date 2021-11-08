@@ -31,7 +31,7 @@ export class TrialBalanceViewerComponent {
 
   balanceTypeName = '';
 
-  cardHint = 'Selecciona los filtros';
+  cardHint = 'Seleccionar los filtros';
 
   isLoading = false;
 
@@ -160,7 +160,7 @@ export class TrialBalanceViewerComponent {
 
   private setText(itemsDisplayed?: number) {
     if (!this.isValidCommand) {
-      this.cardHint = 'Selecciona los filtros';
+      this.cardHint = 'Seleccionar los filtros';
       return;
     }
 

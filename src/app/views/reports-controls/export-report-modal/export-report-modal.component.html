@@ -11,7 +11,7 @@
       <ng-container *ngIf="fileTypesList.length > 1">
 
         <div [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
-          Selecciona el tipo de exportación:
+          Seleccionar el tipo de exportación:
         </div>
 
         <mat-radio-group [(ngModel)]="selectedFileType" [disabled]="working || hasFileUrl">

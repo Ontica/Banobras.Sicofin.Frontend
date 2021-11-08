@@ -38,7 +38,7 @@ export class FinancialReportViewerComponent {
 
   financialReportTypeName = '';
 
-  cardHint = 'Selecciona los filtros';
+  cardHint = 'Seleccionar los filtros';
 
   isLoading = false;
 

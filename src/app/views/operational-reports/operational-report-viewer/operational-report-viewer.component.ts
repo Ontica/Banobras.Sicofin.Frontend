@@ -32,7 +32,7 @@ export class OperationalReportViewerComponent {
 
   operationalReportTypeName = '';
 
-  cardHint = 'Selecciona los filtros';
+  cardHint = 'Seleccionar los filtros';
 
   isLoading = false;
 
@@ -130,8 +130,9 @@ export class OperationalReportViewerComponent {
   }
 
 
-  private exportOperationalReport(fileType: FileReportType) {
-    const command = Object.assign({}, this.operationalReportCommand, {fileType});
+  private exportOperationalReport(exportTo: FileReportType) {
+    const command = Object.assign({}, this.operationalReportCommand, {exportTo});
+
     this.operationalReportsData.exportOperationalReport(command)
       .toPromise()
       .then(x => this.fileUrl = x.url)
@@ -148,7 +149,7 @@ export class OperationalReportViewerComponent {
 
   private setText(itemsDisplayed?: number) {
     if (!this.commandExecuted) {
-      this.cardHint =  'Selecciona los filtros';
+      this.cardHint =  'Seleccionar los filtros';
       return;
     }
 

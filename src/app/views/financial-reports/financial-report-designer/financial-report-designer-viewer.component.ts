@@ -26,7 +26,7 @@ export class FinancialReportDesignerViewerComponent {
 
   @Output() financialReportDesignerViewerEvent = new EventEmitter<EventInfo>();
 
-  cardHint = 'Selecciona el reporte';
+  cardHint = 'Seleccionar el reporte';
 
   isLoading = false;
 
@@ -89,7 +89,7 @@ export class FinancialReportDesignerViewerComponent {
 
   private setText() {
     if (isEmpty(this.selectedFinancialReportTypes)) {
-      this.cardHint = 'Selecciona el reporte';
+      this.cardHint = 'Favor de seleccionar el reporte';
       return;
     }
 

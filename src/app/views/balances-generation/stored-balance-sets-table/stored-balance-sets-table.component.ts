@@ -42,7 +42,7 @@ export class StoredBalanceSetsTableComponent implements OnChanges, OnInit, OnDes
 
   isLoadingAccountChart = false;
 
-  cardHint = 'Selecciona los filtros';
+  cardHint = 'Favor de seleccionar los filtros';
 
   displayedColumns: string[] = ['accountsChart', 'name', 'balancesDate', 'calculationTime'];
 

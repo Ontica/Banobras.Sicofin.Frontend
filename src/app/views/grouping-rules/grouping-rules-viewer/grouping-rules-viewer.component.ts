@@ -38,7 +38,7 @@ export class GroupingRulesViewerComponent {
 
   rulesSetName = '';
 
-  cardHint = 'Selecciona los filtros';
+  cardHint = 'Seleccionar los filtros';
 
   isLoading = false;
 
