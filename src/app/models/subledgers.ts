@@ -16,3 +16,30 @@ export interface Subledger {
   description: string;
   accountsPrefix: string;
 }
+
+
+export interface SubledgerAccount {
+  id: number;
+  baseLedger: Identifiable;
+  subledger: Identifiable;
+  number: string;
+  name: string;
+  keywords: string;
+  description: string;
+}
+
+
+export interface SubledgerAccountDescriptor {
+  id: number;
+  number: string;
+  name: string;
+  fullname: string;
+}
+
+
+export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
+  id: 0,
+  number: '',
+  name: '',
+  fullname: '',
+};

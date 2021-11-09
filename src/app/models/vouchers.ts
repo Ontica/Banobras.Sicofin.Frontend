@@ -7,7 +7,10 @@
 
 import { Assertion, DateString, Empty, Identifiable } from '@app/core';
 
-import { AccountRole, DebtorCreditorType } from './accounts-chart';
+import { EmptyLedgerAccount, EmptyLedgerAccountSectorRule, LedgerAccount,
+         LedgerAccountSectorRule } from './ledgers';
+
+import { EmptySubledgerAccountDescriptor, SubledgerAccountDescriptor } from './subledgers';
 
 export enum VoucherStage {
   MyInbox = 'MyInbox',
@@ -240,81 +243,6 @@ export const EmptyNumberedNamedEntity: NumberedNamedEntity = {
   number: '',
   name: '',
   fullName: '',
-};
-
-
-export interface LedgerAccount {
-  id: number;
-  standardAccountId: number;
-  ledger: Identifiable;
-  number: string;
-  name: string;
-  description: string;
-  accountType: string;
-  role: AccountRole;
-  debtorCreditor: DebtorCreditorType;
-  level: number;
-  currencies: Identifiable[];
-  sectors: LedgerAccountSectorRule[];
-}
-
-
-export const EmptyLedgerAccount: LedgerAccount = {
-  id: 0,
-  standardAccountId: 0,
-  ledger: Empty,
-  number: '',
-  name: '',
-  description: '',
-  accountType: '',
-  role: null,
-  debtorCreditor: null,
-  level: 0,
-  currencies: [],
-  sectors: [],
-};
-
-
-export interface LedgerAccountSectorRule {
-  id: number;
-  code: string;
-  name: string;
-  role: AccountRole;
-}
-
-
-export const EmptyLedgerAccountSectorRule: LedgerAccountSectorRule = {
-  id: 0,
-  code: '',
-  name: '',
-  role: null,
-};
-
-
-export interface SubledgerAccount {
-  id: number;
-  baseLedger: Identifiable;
-  subledger: Identifiable;
-  number: string;
-  name: string;
-  keywords: string;
-  description: string;
-}
-
-
-export interface SubledgerAccountDescriptor {
-  id: number;
-  number: string;
-  name: string;
-  fullname: string;
-}
-
-
-export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
-  id: 0,
-  number: '',
-  name: '',
-  fullname: '',
 };
 
 
