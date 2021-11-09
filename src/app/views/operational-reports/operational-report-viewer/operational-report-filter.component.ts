@@ -63,10 +63,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   onAccountsChartChanges() {
-    this.filteredReportTypeList = this.reportTypeList.filter(x =>
-      x.accountsCharts.includes(this.operationalReportCommand.accountsChartUID) &&
-      x.group === this.reportGroup);
-
+    this.setFilteredReportTypeList();
     this.operationalReportCommand.reportType = null;
     this.operationalReportCommand.toDate = null;
   }
@@ -96,8 +93,24 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     .subscribe(([x, y]) => {
       this.accountsChartMasterDataList = x;
       this.reportTypeList = y;
+      this.setDefaultAccountsChartUID();
+      this.setFilteredReportTypeList();
       this.isLoading = false;
     });
+  }
+
+
+  private setDefaultAccountsChartUID() {
+    this.operationalReportCommand.accountsChartUID = this.accountsChartMasterDataList.length > 0 ?
+      this.accountsChartMasterDataList[0].uid : '';
+  }
+
+
+  private setFilteredReportTypeList() {
+    this.filteredReportTypeList = this.reportTypeList.filter(x =>
+      x.accountsCharts.includes(this.operationalReportCommand.accountsChartUID) &&
+      x.group === this.reportGroup
+    );
   }
 
 }

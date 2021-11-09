@@ -10,7 +10,6 @@
         <label>Catálogo de cuentas:</label>
 
         <emp-ng-select name="accountsChartUID" required
-          [config]="{selectFirst: true}"
           [(ngModel)]="operationalReportCommand.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
