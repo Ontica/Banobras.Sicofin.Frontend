@@ -5,14 +5,14 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 import { Assertion } from '@app/core';
 
 import { OperationalReportsDataService } from '@app/data-services';
 
 import { OperationalReportCommand, EmptyOperationalReport, EmptyOperationalReportCommand,
-         OperationalReport, FileReportType } from '@app/models';
+         OperationalReport, FileType, ReportGroup } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -28,9 +28,11 @@ import { OperationalReportFilterEventType } from './operational-report-filter.co
   selector: 'emp-fa-operational-report-viewer',
   templateUrl: './operational-report-viewer.component.html',
 })
-export class OperationalReportViewerComponent {
+export class OperationalReportViewerComponent implements OnChanges {
 
-  operationalReportTypeName = '';
+  @Input() reportGroup: ReportGroup;
+
+  reportGroupName = '';
 
   cardHint = 'Seleccionar los filtros';
 
@@ -44,14 +46,23 @@ export class OperationalReportViewerComponent {
 
   operationalReportCommand: OperationalReportCommand = Object.assign({}, EmptyOperationalReportCommand);
 
+  selectedReportType = null;
+
   displayExportModal = false;
 
   fileUrl = '';
 
   commandExecuted = false;
 
+  reportGroups = ReportGroup;
+
   constructor(private operationalReportsData: OperationalReportsDataService,
               private messageBox: MessageBoxService) { }
+
+
+  ngOnChanges() {
+    this.setReportGroupName();
+  }
 
 
   onOperationalReportFilterEvent(event) {
@@ -64,11 +75,11 @@ export class OperationalReportViewerComponent {
       case OperationalReportFilterEventType.BUILD_OPERATIONAL_REPORT_CLICKED:
         Assertion.assertValue(event.payload.operationalReportCommand,
           'event.payload.operationalReportCommand');
-        Assertion.assertValue(event.payload.operationalReportTypeName,
-          'event.payload.operationalReportTypeName');
+        Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
         this.operationalReportCommand = event.payload.operationalReportCommand as OperationalReportCommand;
-        this.operationalReportTypeName = event.payload.operationalReportTypeName;
+        this.selectedReportType = event.payload.reportType;
+
         this.setOperationalReportData(EmptyOperationalReport, false);
         this.getOperationalReport();
         return;
@@ -111,11 +122,28 @@ export class OperationalReportViewerComponent {
           return;
         }
         Assertion.assertValue(event.payload.fileType, 'event.payload.fileType');
-        this.exportOperationalReport(event.payload.fileType as FileReportType);
+        this.exportOperationalReport(event.payload.fileType as FileType);
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  private setReportGroupName() {
+    switch (this.reportGroup) {
+      case ReportGroup.ReportesFiscales:
+        this.reportGroupName = 'fiscales';
+        return;
+
+      case ReportGroup.ReportesOperativos:
+        this.reportGroupName = 'operativos';
+        return;
+
+      default:
+        this.reportGroupName = '';
         return;
     }
   }
@@ -130,10 +158,10 @@ export class OperationalReportViewerComponent {
   }
 
 
-  private exportOperationalReport(exportTo: FileReportType) {
-    const command = Object.assign({}, this.operationalReportCommand, {exportTo});
+  private exportOperationalReport(exportTo: FileType) {
+    const operationalReportCommand = Object.assign({}, this.operationalReportCommand, {exportTo});
 
-    this.operationalReportsData.exportOperationalReport(command)
+    this.operationalReportsData.exportOperationalReport(operationalReportCommand)
       .toPromise()
       .then(x => this.fileUrl = x.url)
       .catch(() => this.setDisplayExportModal(false));
@@ -154,12 +182,12 @@ export class OperationalReportViewerComponent {
     }
 
     if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.operationalReport.entries.length) {
-      this.cardHint = `${this.operationalReportTypeName} - ${itemsDisplayed} de ` +
+      this.cardHint = `${this.selectedReportType.name} - ${itemsDisplayed} de ` +
         `${this.operationalReport.entries.length} registros mostrados`;
       return;
     }
 
-    this.cardHint = `${this.operationalReportTypeName} - ${this.operationalReport.entries.length} ` +
+    this.cardHint = `${this.selectedReportType.name} - ${this.operationalReport.entries.length} ` +
       `registros encontrados`;
   }
 

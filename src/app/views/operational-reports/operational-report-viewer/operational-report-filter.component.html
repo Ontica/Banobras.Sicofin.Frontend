@@ -24,9 +24,9 @@
 
         <label>Reporte:</label>
 
-        <emp-ng-select name="operationalReportType" required
+        <emp-ng-select name="reportType" required
           [(ngModel)]="operationalReportCommand.reportType"
-          [items]="operationalReportTypeList"
+          [items]="filteredReportTypeList"
           [showError]="!operationalReportCommand.reportType">
         </emp-ng-select>
 

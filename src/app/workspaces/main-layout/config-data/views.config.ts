@@ -38,7 +38,7 @@ export const AccountingOperationViews: View[] = [
 export const AccountingDashboardsViews: View[] = [
   {
     name: 'AccountingDashboards.AccountsBalancesAndTrialBalances',
-    title: 'Saldos y Balanzas',
+    title: 'Saldos y balanzas',
     url: '/tableros/saldos-y-balanzas'
   },
   {
@@ -48,7 +48,12 @@ export const AccountingDashboardsViews: View[] = [
   },
   {
     name: 'AccountingDashboards.OperationalReports',
-    title: 'Reportes Fiscales',
+    title: 'Reportes operativos',
+    url: '/tableros/reportes-operativos'
+  },
+  {
+    name: 'AccountingDashboards.FinancialReports',
+    title: 'Reportes fiscales',
     url: '/tableros/reportes-fiscales'
   },
   // {

@@ -40,7 +40,7 @@ export * from './operational-reports';
 
 export * from './permissions';
 
-export * from './report-file';
+export * from './reporting';
 
 export * from './subledgers';
 

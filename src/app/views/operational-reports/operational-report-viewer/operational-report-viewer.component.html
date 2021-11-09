@@ -3,7 +3,7 @@
   <div class="card-header card-header-flat">
 
     <div class="card-title">
-      Generación de reportes fiscales
+      Generación de reportes {{reportGroupName}}
 
       <div class="card-hint" empNgProgressText
         loadingText="Cargando"
@@ -24,6 +24,7 @@
       </emp-ng-spinner>
 
       <emp-fa-operational-report-filter fxFlex="none"
+        [reportGroup]="reportGroup"
         (operationalReportFilterEvent)="onOperationalReportFilterEvent($event)">
 
       </emp-fa-operational-report-filter>
@@ -42,10 +43,9 @@
 </div>
 
 <emp-fa-export-report-modal *ngIf="displayExportModal"
-  [title]="'Exportar ' + operationalReportTypeName"
+  [title]="'Exportar ' + selectedReportType?.name"
   [fileUrl]="fileUrl"
-  [canExportToExcel]="true"
-  [canExportToXML]="true"
+  [fileTypes]="selectedReportType?.exportTo ?? []"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
 </emp-fa-export-report-modal>

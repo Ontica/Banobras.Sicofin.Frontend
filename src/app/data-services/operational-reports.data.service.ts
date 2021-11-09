@@ -11,13 +11,20 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { FileReport, OperationalReport, OperationalReportCommand } from '@app/models';
+import { FileReport, OperationalReport, OperationalReportCommand, ReportType } from '@app/models';
 
 
 @Injectable()
 export class OperationalReportsDataService {
 
   constructor(private http: HttpService) { }
+
+
+  getReportTypes(): Observable<ReportType[]> {
+    const path = `v2/financial-accounting/reporting/report-types`;
+
+    return this.http.get<ReportType[]>(path);
+  }
 
 
   exportOperationalReport(command: OperationalReportCommand): Observable<FileReport> {

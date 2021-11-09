@@ -5,30 +5,18 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from '@app/core';
+import { DateString } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
-import { FileReportType } from './report-file';
-
-
-export enum OperationalReportType {
-  BalanzaSat = 'BalanzaSAT',
-  CatalogoSAT = 'CatalogoSAT',
-}
-
-
-export const OperationalReportTypeList: Identifiable[] = [
-  {uid: OperationalReportType.BalanzaSat,  name: 'Balanza SAT'},
-  {uid: OperationalReportType.CatalogoSAT, name: 'Catálogo de cuentas SAT'},
-];
+import { FileType } from './reporting';
 
 
 export interface OperationalReportCommand extends DataTableCommand {
-  reportType: OperationalReportType;
+  reportType: string;
   accountsChartUID: string;
   toDate: DateString;
-  exportTo?: FileReportType;
+  exportTo?: FileType;
 }
 
 

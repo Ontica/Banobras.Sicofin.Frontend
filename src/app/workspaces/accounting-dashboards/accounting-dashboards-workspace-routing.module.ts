@@ -32,6 +32,11 @@ const routes: Routes = [
     component: FinancialReportsMainPageComponent,
   },
   {
+    data: { permission: ROUTES_LIBRARY.tableros_reportes_operativos.permission },
+    path: ROUTES_LIBRARY.tableros_reportes_operativos.path,
+    component: OperationalReportsMainPageComponent,
+  },
+  {
     data: { permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission },
     path: ROUTES_LIBRARY.tableros_reportes_fiscales.path,
     component: OperationalReportsMainPageComponent,

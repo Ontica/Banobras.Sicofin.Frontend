@@ -92,6 +92,11 @@ export const ROUTES_LIBRARY = {
     parent: 'tableros',
     path: 'reportes-regulatorios',
   },
+  tableros_reportes_operativos: {
+    permission: PermissionsLibrary.ROUTE_TABLEROS,
+    parent: 'tableros',
+    path: 'reportes-operativos',
+  },
   tableros_reportes_fiscales: {
     permission: PermissionsLibrary.ROUTE_TABLEROS,
     parent: 'tableros',
@@ -183,6 +188,5 @@ export const ROUTES_LIST = Object.keys(ROUTES_LIBRARY)
 // data dummy
 export function getPermissionsList() {
   return Object.keys(PermissionsLibrary)
-               .map(key => PermissionsLibrary[key])
-               .filter(x => !x.includes('reportes'));
+               .map(key => PermissionsLibrary[key]);
 }

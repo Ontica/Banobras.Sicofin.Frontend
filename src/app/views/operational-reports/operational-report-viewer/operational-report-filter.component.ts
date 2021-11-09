@@ -5,18 +5,20 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountsChartMasterData, EmptyOperationalReportCommand, OperationalReportCommand,
-         OperationalReportTypeList } from '@app/models';
+         ReportGroup, ReportType} from '@app/models';
 
-import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector, ReportingtStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { combineLatest } from 'rxjs';
 
 
 export enum OperationalReportFilterEventType {
@@ -29,13 +31,17 @@ export enum OperationalReportFilterEventType {
 })
 export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
+  @Input() reportGroup: ReportGroup;
+
   @Output() operationalReportFilterEvent = new EventEmitter<EventInfo>();
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
   operationalReportCommand: OperationalReportCommand = Object.assign({}, EmptyOperationalReportCommand);
 
-  operationalReportTypeList: Identifiable[] = OperationalReportTypeList;
+  reportTypeList: ReportType[] = [];
+
+  filteredReportTypeList: ReportType[] = [];
 
   isLoading = false;
 
@@ -47,7 +53,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.loadAccountsCharts();
+    this.loadDataLists();
   }
 
 
@@ -57,18 +63,21 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   onAccountsChartChanges() {
+    this.filteredReportTypeList = this.reportTypeList.filter(x =>
+      x.accountsCharts.includes(this.operationalReportCommand.accountsChartUID) &&
+      x.group === this.reportGroup);
+
     this.operationalReportCommand.reportType = null;
     this.operationalReportCommand.toDate = null;
   }
 
 
   onBuildOperationalReportClicked() {
-    const operationalReportTypeName = this.operationalReportTypeList
-      .filter(x => x.uid === this.operationalReportCommand.reportType);
+    const reportType = this.reportTypeList.filter(x => x.uid === this.operationalReportCommand.reportType);
 
     const payload = {
       operationalReportCommand: Object.assign({}, this.operationalReportCommand),
-      operationalReportTypeName: operationalReportTypeName ? operationalReportTypeName[0].name : '',
+      reportType: reportType.length > 0 ? reportType[0] : null,
     };
 
     sendEvent(this.operationalReportFilterEvent,
@@ -76,14 +85,19 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private loadAccountsCharts() {
+  private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
-      .subscribe(x => {
-        this.accountsChartMasterDataList = x;
-        this.isLoading = false;
-      });
+    combineLatest([
+      this.helper.select<AccountsChartMasterData[]>
+        (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
+      this.helper.select<ReportType[]>(ReportingtStateSelector.REPORT_TYPES_LIST),
+    ])
+    .subscribe(([x, y]) => {
+      this.accountsChartMasterDataList = x;
+      this.reportTypeList = y;
+      this.isLoading = false;
+    });
   }
 
 }

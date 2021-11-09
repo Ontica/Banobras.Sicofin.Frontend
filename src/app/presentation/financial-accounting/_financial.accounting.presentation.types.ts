@@ -31,7 +31,10 @@ export type FAEffects = VoucherEffectType;
 import { SelectorType as AccountChartStateSelector } from './account-chart.presentation.handler';
 export { SelectorType as AccountChartStateSelector } from './account-chart.presentation.handler';
 
+import { SelectorType as ReportingStateSelector } from './reporting.presentation.handler';
+export { SelectorType as ReportingtStateSelector } from './reporting.presentation.handler';
+
 import { SelectorType as VoucherStateSelector } from './voucher.presentation.handler';
 export { SelectorType as VoucherStateSelector } from './voucher.presentation.handler';
 
-export type FASelectors = AccountChartStateSelector | VoucherStateSelector;
+export type FASelectors = AccountChartStateSelector | ReportingStateSelector | VoucherStateSelector;
