@@ -7,9 +7,9 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EventInfo } from '@app/core';
 
-import { FileReportType } from '@app/models';
+import { FileType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -30,15 +30,9 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
 
   @Input() fileUrl = '';
 
-  @Input() canExportToExcel = true;
-
-  @Input() canExportToXML = false;
-
-  @Input() canExportToPDF = false;
+  @Input() fileTypes: FileType[] = [FileType.Excel];
 
   @Output() exportReportModalEvent = new EventEmitter<EventInfo>();
-
-  fileTypesList: Identifiable[] = [];
 
   selectedFileType = null;
 
@@ -53,7 +47,7 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
 
 
   ngOnInit(): void {
-    this.setExportTypesList();
+    this.setDefaultSelectedFileType();
   }
 
 
@@ -74,26 +68,12 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
 
     this.working = true;
     sendEvent(this.exportReportModalEvent, ExportReportModalEventType.EXPORT_BUTTON_CLICKED,
-      {fileType: this.selectedFileType.uid});
+      {fileType: this.selectedFileType});
   }
 
 
-  private setExportTypesList() {
-    this.fileTypesList = [];
-
-    if (this.canExportToExcel) {
-      this.fileTypesList = [...this.fileTypesList, ...[{uid: FileReportType.Excel, name: 'Excel'}]];
-    }
-
-    if (this.canExportToXML) {
-      this.fileTypesList = [...this.fileTypesList, ...[{uid: FileReportType.Xml, name: 'XML'}]];
-    }
-
-    if (this.canExportToPDF) {
-      this.fileTypesList = [...this.fileTypesList, ...[{uid: FileReportType.PDF, name: 'PDF'}]];
-    }
-
-    this.selectedFileType = this.fileTypesList.length > 0 ? this.fileTypesList[0] : null;
+  private setDefaultSelectedFileType() {
+    this.selectedFileType = this.fileTypes.length > 0 ? this.fileTypes[0] : null;
   }
 
 }
