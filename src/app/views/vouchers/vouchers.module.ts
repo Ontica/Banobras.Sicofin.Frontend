@@ -20,10 +20,10 @@ import { VoucherEditorComponent } from './voucher-editor/voucher-editor.componen
 import { VoucherEntriesImporterComponent } from './importers/voucher-entries-importer.component';
 import { VoucherEntryEditorComponent } from './voucher-entry-editor/voucher-entry-editor.component';
 import { VoucherEntryTableComponent } from './voucher-entry-table/voucher-entry-table.component';
-import { VoucherFilterComponent } from './voucher-filter/voucher-filter.component';
+import { VoucherFilterComponent } from './vouchers-explorer/voucher-filter.component';
 import { VoucherHeaderComponent } from './voucher-header/voucher-header.component';
-import { VoucherListComponent } from './voucher-list/voucher-list.component';
-import { VoucherListItemComponent } from './voucher-list/voucher-list-item.component';
+import { VoucherListComponent } from './vouchers-explorer/voucher-list.component';
+import { VoucherListItemComponent } from './vouchers-explorer/voucher-list-item.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
 import { VouchersImporterComponent } from './importers/vouchers-importer.component';
 import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';

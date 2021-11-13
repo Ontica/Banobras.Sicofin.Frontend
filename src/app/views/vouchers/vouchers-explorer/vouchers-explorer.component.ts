@@ -14,9 +14,9 @@ import { EmptySearchVouchersCommand, EmptyVoucher, SearchVouchersCommand, Vouche
 
 import { sendEvent } from '@app/shared/utils';
 
-import { VoucherFilterEventType } from '../voucher-filter/voucher-filter.component';
+import { VoucherFilterEventType } from './voucher-filter.component';
 
-import { VoucherListEventType } from '../voucher-list/voucher-list.component';
+import { VoucherListEventType } from './voucher-list.component';
 
 export enum VouchersExplorerEventType {
   FILTER_CHANGED = 'VouchersExplorerComponent.Event.FilterChanged',
