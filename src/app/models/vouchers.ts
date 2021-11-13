@@ -220,6 +220,19 @@ export function mapVoucherDescriptorFromVoucher(voucher: Voucher): VoucherDescri
 }
 
 
+export enum VoucherCreatorCases {
+  Manual = 'Manual',
+  Special = 'Special',
+}
+
+
+export interface VoucherSpecialCaseType extends Identifiable {
+  askForCalculationDateField: boolean;
+  askForVoucherNumberField: boolean;
+  calculationDateFieldName: string;
+}
+
+
 export interface VoucherFields {
   voucherTypeUID: string;
   concept: string;
@@ -227,6 +240,8 @@ export interface VoucherFields {
   functionalAreaId: number;
   transactionTypeUID: string;
   accountingDate: string;
+  calculationDate?: DateString;
+  onVoucherNumber?: string;
 }
 
 

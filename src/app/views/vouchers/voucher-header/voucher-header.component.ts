@@ -16,7 +16,8 @@ import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyVoucher, Ledger, Voucher, VoucherFields } from '@app/models';
+import { AccountsChartMasterData, EmptyVoucher, Ledger, Voucher, VoucherFields,
+         VoucherSpecialCaseType } from '@app/models';
 
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
@@ -53,6 +54,8 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() editionMode = true;
 
+  @Input() isSpecialCase = false;
+
   @Output() voucherHeaderEvent = new EventEmitter<EventInfo>();
 
   formHandler: FormHandler;
@@ -65,6 +68,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
   voucherTypesList: Identifiable[] = [];
+  voucherSpecialCaseTypesList: VoucherSpecialCaseType[] = [];
   functionalAreasList: Identifiable[] = [];
   transactionTypesList: Identifiable[] = [];
   accountingDatesList: Identifiable[] = [];
@@ -88,6 +92,10 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.voucher || changes.editionMode) {
       this.enableEditor(this.editionMode);
+    }
+
+    if (changes.isSpecialCase) {
+      this.setFormData();
     }
   }
 
@@ -124,7 +132,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  onVoucherTypeChanges(voucherType: Identifiable) {
+  onVoucherTypeChanges(voucherType: VoucherSpecialCaseType) {
     const payload = { voucherType: isEmpty(voucherType) ? null : voucherType };
     sendEvent(this.voucherHeaderEvent, VoucherHeaderEventType.VOUCHER_TYPE_CHANGED, payload);
   }
@@ -153,16 +161,18 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     combineLatest([
       this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
+      this.helper.select<VoucherSpecialCaseType[]>(VoucherStateSelector.VOUCHER_SPECIAL_CASE_TYPES_LIST),
       this.helper.select<Identifiable[]>(VoucherStateSelector.TRANSACTION_TYPES_LIST),
       this.helper.select<Identifiable[]>(VoucherStateSelector.FUNCTIONAL_AREAS_LIST),
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
     ])
-    .subscribe(([a, b, c, d, ]) => {
+    .subscribe(([a, b, c, d, e]) => {
       this.voucherTypesList = a;
-      this.transactionTypesList = b;
-      this.functionalAreasList = c;
-      this.accountsChartMasterDataList = d;
+      this.voucherSpecialCaseTypesList = b;
+      this.transactionTypesList = c;
+      this.functionalAreasList = d;
+      this.accountsChartMasterDataList = e;
 
       this.setAccountChartSelected();
       this.isLoading = false;

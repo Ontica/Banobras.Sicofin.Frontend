@@ -9,12 +9,36 @@
 
     </emp-ng-spinner>
 
+    <form autocomplete="off" class="form-section" (keydown.enter)="$event.preventDefault()">
+
+      <div fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+
+        <div fxFlex="100">
+          <label>Modalidad:</label>
+          <mat-radio-group [(ngModel)]="selectedCreatorCase" [ngModelOptions]="{standalone: true}"
+            (change)="onCreatorTypeChange()">
+            <mat-radio-button [value]="creatorCases.Manual">Póliza manual</mat-radio-button>
+            <mat-radio-button [value]="creatorCases.Special">Póliza especial</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+      </div>
+
+    </form>
+
     <div class="section-title"> Información general de la póliza </div>
 
     <emp-fa-voucher-header #voucherHeader
+      [isSpecialCase]="isSpecialCase"
       (voucherHeaderEvent)="onVoucherHeaderEvent($event)">
 
     </emp-fa-voucher-header>
+
+    <emp-fa-voucher-special-case-editor #voucherSpecialCaseEditor *ngIf="isSpecialCase"
+      [voucherSpecialCaseType]="selectedVoucherType"
+      (voucherSpecialCaseEditorEvent)="onVoucherSpecialCaseEditorEvent($event)">
+
+    </emp-fa-voucher-special-case-editor>
 
     <mat-divider class="horizontal"></mat-divider>
 

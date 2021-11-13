@@ -9,7 +9,7 @@
         <label>Tipo de póliza:</label>
         <emp-ng-select
           [formControlName]="controls.voucherTypeUID"
-          [items]="voucherTypesList"
+          [items]="isSpecialCase ? voucherSpecialCaseTypesList : voucherTypesList"
           [loading]="isLoading"
           [showError]="formHandler.showInvalidControl(controls.voucherTypeUID)"
           (changes)="onVoucherTypeChanges($event)">

@@ -7,15 +7,20 @@
 
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { VoucherFields } from '@app/models';
+import { Voucher, VoucherCreatorCases, VoucherFields, VoucherSpecialCaseType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
+import { Observable } from 'rxjs';
+
 import { VoucherHeaderComponent, VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
+
+import { VoucherSpecialCaseEditorComponent,
+         VoucherSpecialCaseEditorEventType } from './voucher-special-case-editor.component';
 
 export enum VoucherCreatorEventType {
   CLOSE_MODAL_CLICKED = 'VoucherCreatorComponent.Event.CloseModalClicked',
@@ -30,11 +35,20 @@ export class VoucherCreatorComponent {
 
   @ViewChild('voucherHeader') voucherHeader: VoucherHeaderComponent;
 
+  @ViewChild('voucherSpecialCaseEditor',
+              {static: false}) voucherSpecialCaseEditor: VoucherSpecialCaseEditorComponent;
+
   @Output() voucherCreatorEvent = new EventEmitter<EventInfo>();
 
-  selectedVoucherType: Identifiable;
+  creatorCases = VoucherCreatorCases;
+
+  selectedCreatorCase = VoucherCreatorCases.Manual;
+
+  selectedVoucherType: VoucherSpecialCaseType;
 
   voucherFieldsValid = false;
+
+  voucherSpecialCaseFieldsValid = false;
 
   voucherFields: VoucherFields = null;
 
@@ -43,13 +57,29 @@ export class VoucherCreatorComponent {
   constructor(private vouchersData: VouchersDataService) {}
 
 
+  get isSpecialCase() {
+    return this.selectedCreatorCase === VoucherCreatorCases.Special;
+  }
+
+
   get readyForSubmit() {
+    if (this.isSpecialCase && !this.voucherSpecialCaseFieldsValid) {
+      return false;
+    }
+
     return this.voucherFieldsValid;
   }
 
 
   onClose() {
     sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.CLOSE_MODAL_CLICKED);
+  }
+
+
+  onCreatorTypeChange() {
+    this.voucherSpecialCaseFieldsValid = false;
+    this.voucherFields = null;
+    this.selectedVoucherType = null;
   }
 
 
@@ -63,7 +93,13 @@ export class VoucherCreatorComponent {
       return;
     }
 
-    this.createVoucher(this.voucherFields);
+    let observable = this.vouchersData.createVoucher(this.voucherFields);
+
+    if (this.isSpecialCase) {
+      observable = this.vouchersData.createVoucherSpecialCase(this.voucherFields);
+    }
+
+    this.createVoucher(observable);
   }
 
 
@@ -93,15 +129,37 @@ export class VoucherCreatorComponent {
   }
 
 
-  private invalidateForms() {
-    this.voucherHeader.invalidateForm();
+  onVoucherSpecialCaseEditorEvent(event: EventInfo): void {
+    switch (event.type as VoucherSpecialCaseEditorEventType) {
+
+      case VoucherSpecialCaseEditorEventType.FIELDS_CHANGED:
+        Assertion.assertValue(event.payload.isFormValid, 'event.payload.isFormValid');
+        Assertion.assertValue(event.payload.voucherSpecialCase, 'event.payload.voucherSpecialCase');
+
+        this.voucherSpecialCaseFieldsValid = event.payload.isFormValid;
+        this.voucherFields = Object.assign({}, this.voucherFields, event.payload.voucherSpecialCase);
+
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
-  private createVoucher(voucherFields: VoucherFields) {
+  private invalidateForms() {
+    this.voucherHeader.invalidateForm();
+    if (this.isSpecialCase) {
+      this.voucherSpecialCaseEditor.invalidateForm();
+    }
+  }
+
+
+  private createVoucher(createVoucherObserbable: Observable<Voucher>) {
     this.submitted = true;
 
-    this.vouchersData.createVoucher(voucherFields)
+    createVoucherObserbable
       .toPromise()
       .then(x => {
         sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.VOUCHER_CREATED, {voucher: x});

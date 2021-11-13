@@ -1,0 +1,34 @@
+<form [formGroup]="formHandler.form" autocomplete="off" class="form-section"
+  (keydown.enter)="$event.preventDefault()">
+
+  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+
+      <div class="section-title"> Información de la póliza especial </div>
+
+      <div fxLayout="row wrap" fxLayout.lt-md="column">
+
+        <div *ngIf="!voucherSpecialCaseType" [fxFlex]="100" class="instruction-text" [style.height.px]="42">
+          Seleccione el tipo de póliza
+        </div>
+
+        <div [fxFlex]="100/3" *ngIf="voucherSpecialCaseType?.askForCalculationDateField">
+          <label>{{voucherSpecialCaseType?.calculationDateFieldName}}:</label>
+          <emp-ng-datepicker
+            [formControlName]="controls.calculationDate"
+            [showError]="formHandler.showInvalidControl(controls.calculationDate)">
+
+          </emp-ng-datepicker>
+        </div>
+
+        <div [fxFlex]="100/3" *ngIf="voucherSpecialCaseType?.askForVoucherNumberField">
+          <label>Número de poliza:</label>
+          <input type="text" class="text-box"
+            [formControlName]="controls.onVoucherNumber"
+            [class.invalid-control]="formHandler.showInvalidControl(controls.onVoucherNumber)">
+        </div>
+
+      </div>
+
+  </div>
+
+</form>

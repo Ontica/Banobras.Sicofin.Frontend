@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { LedgerAccount, SearchVouchersCommand, SubledgerAccount, Voucher, VoucherDescriptor, VoucherEntry,
-         VoucherEntryFields, VoucherFields } from '@app/models';
+         VoucherEntryFields, VoucherFields, VoucherSpecialCaseType } from '@app/models';
 
 
 @Injectable()
@@ -55,6 +55,13 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/voucher-types`;
 
     return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getVoucherSpecialCaseTypes(): Observable<VoucherSpecialCaseType[]> {
+    const path = `v2/financial-accounting/vouchers/special-case-types`;
+
+    return this.http.get<VoucherSpecialCaseType[]>(path);
   }
 
 
@@ -105,6 +112,15 @@ export class VouchersDataService {
     Assertion.assertValue(voucherFields, 'voucherFields');
 
     const path = `v2/financial-accounting/vouchers/create-voucher`;
+
+    return this.http.post<Voucher>(path, voucherFields);
+  }
+
+
+  createVoucherSpecialCase(voucherFields: VoucherFields): Observable<Voucher> {
+    Assertion.assertValue(voucherFields, 'voucherFields');
+
+    const path = `v2/financial-accounting/vouchers/special-case/create-voucher`;
 
     return this.http.post<Voucher>(path, voucherFields);
   }
