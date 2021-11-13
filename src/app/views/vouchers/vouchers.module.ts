@@ -26,6 +26,7 @@ import { VoucherListComponent } from './vouchers-explorer/voucher-list.component
 import { VoucherListItemComponent } from './vouchers-explorer/voucher-list-item.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
 import { VouchersImporterComponent } from './importers/vouchers-importer.component';
+import { VoucherSubmitterComponent } from './voucher-editor/voucher-submitter.component';
 import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';
 
 
@@ -52,6 +53,7 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     VoucherListItemComponent,
     VouchersExplorerComponent,
     VouchersImporterComponent,
+    VoucherSubmitterComponent,
     VoucherTabbedViewComponent,
   ],
   exports: [

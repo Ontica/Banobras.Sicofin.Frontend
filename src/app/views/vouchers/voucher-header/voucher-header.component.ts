@@ -12,7 +12,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest } from 'rxjs';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -25,18 +25,11 @@ import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { DateTimeFormatPipe } from '@app/shared/pipes/date-time-format.pipe';
 
 export enum VoucherHeaderEventType {
-  CREATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.CreateVoucherClicked',
-  UPDATE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.UpdateVoucherClicked',
-  DELETE_VOUCHER_CLICKED = 'VoucherHeaderComponent.Event.DeleteVoucherClicked',
-  SEND_TO_LEDGER_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.SendToLedgerButtonClicked',
-  SEND_TO_SUPERVISOR_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.SendToSupervisorButtonClicked',
-  ADD_VOUCHER_ENTRY_CLICKED = 'VoucherHeaderComponent.Event.AddVoucherEntryClicked',
-  IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED = 'VoucherHeaderComponent.Event.ImportVoucherEntriesButtonClicked',
+  VOUCHER_TYPE_CHANGED = 'VoucherHeaderComponent.Event.VoucherTypeChanged',
+  FIELDS_CHANGED = 'VoucherHeaderComponent.Event.FieldsChanged',
 }
 
 enum VoucherHeaderFormControls {
@@ -58,13 +51,12 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
-  @Input() canEdit = true;
+  @Input() editionMode = true;
 
   @Output() voucherHeaderEvent = new EventEmitter<EventInfo>();
 
   formHandler: FormHandler;
   controls = VoucherHeaderFormControls;
-  editionMode = false;
   isLoading = false;
   isLoadingAccountingDates = false;
 
@@ -78,11 +70,9 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   accountingDatesList: Identifiable[] = [];
 
   helper: SubscriptionHelper;
-  eventType = VoucherHeaderEventType;
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
-              private messageBox: MessageBoxService,
               private dateTimeFormat: DateTimeFormatPipe) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
@@ -96,8 +86,8 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.voucher) {
-      this.enableEditor(false);
+    if (changes.voucher || changes.editionMode) {
+      this.enableEditor(this.editionMode);
     }
   }
 
@@ -129,6 +119,17 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
+  invalidateForm() {
+    this.formHandler.invalidateForm();
+  }
+
+
+  onVoucherTypeChanges(voucherType: Identifiable) {
+    const payload = { voucherType: isEmpty(voucherType) ? null : voucherType };
+    sendEvent(this.voucherHeaderEvent, VoucherHeaderEventType.VOUCHER_TYPE_CHANGED, payload);
+  }
+
+
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
     this.formHandler.getControl(this.controls.ledgerUID).reset();
@@ -147,33 +148,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  onSubmitForm() {
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
-      return;
-    }
-
-    let eventType = VoucherHeaderEventType.CREATE_VOUCHER_CLICKED;
-
-    if (this.isSavedVoucher) {
-      eventType = VoucherHeaderEventType.UPDATE_VOUCHER_CLICKED;
-    }
-
-    sendEvent(this.voucherHeaderEvent, eventType, {voucher: this.getFormData()});
-  }
-
-
-  onEventButtonClicked(eventType: VoucherHeaderEventType) {
-    if ([VoucherHeaderEventType.DELETE_VOUCHER_CLICKED,
-         VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED,
-         VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED].includes(eventType)) {
-      this.showConfirmMessage(eventType);
-      return;
-    }
-    sendEvent(this.voucherHeaderEvent, eventType, {voucher: this.voucher});
-  }
-
-
   private loadDataLists() {
     this.isLoading = true;
 
@@ -184,7 +158,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
     ])
-    .subscribe(([a, b, c, d]) => {
+    .subscribe(([a, b, c, d, ]) => {
       this.voucherTypesList = a;
       this.transactionTypesList = b;
       this.functionalAreasList = c;
@@ -229,6 +203,18 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
         accountingDate: new FormControl('', Validators.required),
       })
     );
+
+    this.formHandler.form.valueChanges.subscribe(v => this.emitChanges());
+  }
+
+
+  private emitChanges() {
+    const payload = {
+      isFormValid: this.formHandler.form.valid,
+      voucher: this.getFormData(),
+    };
+
+    sendEvent(this.voucherHeaderEvent, VoucherHeaderEventType.FIELDS_CHANGED, payload);
   }
 
 
@@ -280,10 +266,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  private getFormData(): any {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
-
+  private getFormData(): VoucherFields {
     const formModel = this.formHandler.form.getRawValue();
 
     const data: VoucherFields = {
@@ -296,57 +279,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     return data;
-  }
-
-
-  private showConfirmMessage(eventType: VoucherHeaderEventType) {
-    const type = eventType === VoucherHeaderEventType.DELETE_VOUCHER_CLICKED ?
-      'DeleteCancel' : 'AcceptCancel';
-
-    this.messageBox.confirm(this.getConfirmMessage(eventType), this.getConfirmTitle(eventType), type)
-      .toPromise()
-      .then(x => {
-        if (x) {
-          sendEvent(this.voucherHeaderEvent, eventType, {voucher: this.voucher});
-        }
-      });
-  }
-
-
-  private getConfirmTitle(eventType: VoucherHeaderEventType): string {
-    switch (eventType) {
-      case VoucherHeaderEventType.DELETE_VOUCHER_CLICKED:
-        return 'Eliminar póliza';
-      case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
-        return 'Enviar al diario';
-      case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
-        return 'Enviar a supervisión';
-      default:
-        return 'Confirmar operación';
-    }
-  }
-
-
-  private getConfirmMessage(eventType: VoucherHeaderEventType): string {
-    let operation = 'modificará';
-    let question = '¿Continuo con la operación?';
-    switch (eventType) {
-      case VoucherHeaderEventType.DELETE_VOUCHER_CLICKED:
-        operation = 'eliminará';
-        question = '¿Elimino la póliza?';
-        break;
-      case VoucherHeaderEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
-        operation = 'enviara al diario';
-        break;
-      case VoucherHeaderEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
-        operation = 'enviara a supervisión';
-        break;
-      default:
-        break;
-    }
-    return `Esta operación ${operation} la póliza
-            <strong> ${this.voucher.number}: ${this.voucher.voucherType.name}</strong>.
-            <br><br>${question}`;
   }
 
 }

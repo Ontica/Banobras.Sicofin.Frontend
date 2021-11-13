@@ -1,0 +1,63 @@
+<mat-divider class="horizontal"></mat-divider>
+
+<div fxLayout="row">
+
+  <div fxFlex fxLayoutAlign="start center">
+    <ng-container *ngIf="!editionMode">
+      <button *ngIf="voucher.actions?.sendToLedger"
+        class="btn-action"
+        (click)="onEventButtonClicked(eventType.SEND_TO_LEDGER_BUTTON_CLICKED)">
+        Enviar al diario
+      </button>
+      <button *ngIf="voucher.actions?.sendToSupervisor"
+        class="btn-action"
+        (click)="onEventButtonClicked(eventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED)">
+        Enviar a supervisión
+      </button>
+    </ng-container>
+
+    <button *ngIf="editionMode"
+      type="button" class="btn-warning"
+      (click)="onEventButtonClicked(eventType.DELETE_VOUCHER_CLICKED)">
+      Eliminar
+    </button>
+  </div>
+
+  <div fxFlex fxLayoutAlign="end center">
+    <ng-container *ngIf="!editionMode">
+      <button
+        class="btn-action"
+        (click)="onEventButtonClicked(eventType.ADD_VOUCHER_ENTRY_CLICKED)">
+        Agregar movimiento
+      </button>
+      <button
+        class="btn-action"
+        (click)="onEventButtonClicked(eventType.IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED)">
+        Importar movimientos
+      </button>
+
+      <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0"></mat-divider>
+
+      <button
+        class="btn-action"
+        (click)="onToggleEditionMode()">
+        Editar
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="editionMode">
+      <button
+        [class.btn]="!isValidForm"
+        [class.btn-action]="isValidForm"
+        (click)="onSubmitForm()">
+        Guardar
+      </button>
+      <button
+        class="btn-base uppercase"
+        (click)="onToggleEditionMode()">
+        Descartar Cambios
+      </button>
+    </ng-container>
+  </div>
+
+</div>

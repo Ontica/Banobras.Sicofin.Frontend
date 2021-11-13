@@ -1,6 +1,6 @@
 <emp-ng-card
   title='Nueva póliza'
-  hint='Información general de la póliza'
+  hint='Información de la póliza a crear en SICOFIN'
   (cardClose)="onClose()">
 
   <div class="card-body-padding" [empNgSpinnerHost]="spinner">
@@ -9,10 +9,29 @@
 
     </emp-ng-spinner>
 
-    <emp-fa-voucher-header
+    <div class="section-title"> Información general de la póliza </div>
+
+    <emp-fa-voucher-header #voucherHeader
       (voucherHeaderEvent)="onVoucherHeaderEvent($event)">
 
     </emp-fa-voucher-header>
+
+    <mat-divider class="horizontal"></mat-divider>
+
+    <div fxLayout="row" [style.marginRight.px]="8">
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button
+          [class.btn]="!readyForSubmit"
+          [class.btn-action]="readyForSubmit"
+          (click)="onSubmitForm()">
+          Guardar
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 

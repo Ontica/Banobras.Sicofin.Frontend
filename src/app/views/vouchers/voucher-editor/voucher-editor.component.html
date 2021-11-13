@@ -6,12 +6,20 @@
 
     <div class="section-title"> Información general de la póliza </div>
 
-    <emp-fa-voucher-header fxFlex="none"
+    <emp-fa-voucher-header #voucherHeader fxFlex="none"
       [voucher]="voucher"
-      [canEdit]="canEditVoucher"
+      [editionMode]="formEditionMode"
       (voucherHeaderEvent)="onVoucherHeaderEvent($event)">
 
     </emp-fa-voucher-header>
+
+    <emp-fa-voucher-submitter *ngIf="canEditVoucher"
+      [voucher]="voucher"
+      [isValidForm]="voucherFieldsValid"
+      [editionMode]="formEditionMode"
+      (voucherSubmitterEvent)="onVoucherSubmitterEvent($event)">
+
+    </emp-fa-voucher-submitter>
 
     <br>
 

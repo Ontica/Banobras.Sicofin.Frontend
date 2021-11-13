@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
@@ -15,7 +15,7 @@ import { VoucherFields } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
+import { VoucherHeaderComponent, VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
 
 export enum VoucherCreatorEventType {
   CLOSE_MODAL_CLICKED = 'VoucherCreatorComponent.Event.CloseModalClicked',
@@ -28,34 +28,73 @@ export enum VoucherCreatorEventType {
 })
 export class VoucherCreatorComponent {
 
+  @ViewChild('voucherHeader') voucherHeader: VoucherHeaderComponent;
+
   @Output() voucherCreatorEvent = new EventEmitter<EventInfo>();
+
+  selectedVoucherType: Identifiable;
+
+  voucherFieldsValid = false;
+
+  voucherFields: VoucherFields = null;
 
   submitted = false;
 
   constructor(private vouchersData: VouchersDataService) {}
+
+
+  get readyForSubmit() {
+    return this.voucherFieldsValid;
+  }
+
 
   onClose() {
     sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.CLOSE_MODAL_CLICKED);
   }
 
 
-  onVoucherHeaderEvent(event: EventInfo): void {
-
+  onSubmitForm() {
     if (this.submitted) {
       return;
     }
 
+    if (!this.readyForSubmit) {
+      this.invalidateForms();
+      return;
+    }
+
+    this.createVoucher(this.voucherFields);
+  }
+
+
+  onVoucherHeaderEvent(event: EventInfo): void {
     switch (event.type as VoucherHeaderEventType) {
 
-      case VoucherHeaderEventType.CREATE_VOUCHER_CLICKED:
+      case VoucherHeaderEventType.FIELDS_CHANGED:
+        Assertion.assertValue(event.payload.isFormValid, 'event.payload.isFormValid');
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
-        this.createVoucher(event.payload.voucher as VoucherFields);
+
+        this.voucherFieldsValid = event.payload.isFormValid;
+        this.voucherFields = Object.assign({}, this.voucherFields, event.payload.voucher);
+
+        return;
+
+      case VoucherHeaderEventType.VOUCHER_TYPE_CHANGED:
+        Assertion.assertValue(event.payload.voucherType, 'event.payload.voucherType');
+
+        this.selectedVoucherType = event.payload.voucherType;
+
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private invalidateForms() {
+    this.voucherHeader.invalidateForm();
   }
 
 
