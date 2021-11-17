@@ -1,0 +1,94 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div [fxFlex]="50">
+
+        <label>Grupo de contabilidades:</label>
+
+        <emp-ng-select name="accountChart" #accountChart="ngModel" required
+          [config]="{selectFirst: true, bindByValue: false}"
+          [(ngModel)]="subledgerAccountsForm.accountChart"
+          [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
+          [showError]="accountChart.invalid"
+          (changes)="onAccountChartChanges()">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex>
+
+        <label>Contabilidad:</label>
+
+        <emp-ng-select name="ledger" #ledger="ngModel" required
+          [config]="{bindByValue: false}"
+          [(ngModel)]="subledgerAccountsForm.ledger"
+          [items]="subledgerAccountsForm.accountChart?.ledgers"
+          [showError]="ledger.invalid"
+          [placeholder]="subledgerAccountsForm.accountChart ?
+            'Todas para el grupo seleccionado' : 'Seleccione el grupo'"
+          bindLabel="fullName"
+          (changes)="onLedgerChanges()">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button title="Consultar agrupaciones"
+          [class.btn-icon]="form.invalid"
+          [class.btn-icon-action]="form.valid"
+          [disabled]="form.invalid"
+          (click)="onSearchSubledgerAccountsClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div [fxFlex]="50">
+
+        <label>Tipo de auxiliar:</label>
+
+        <emp-ng-select name="subledgerType" #subledgerType="ngModel"
+          [config]="{clearable: true, bindByValue: false, notFoundText: subledgerAccountsForm.ledger ?
+                    'No se encontraron registros' : 'Seleccione la contabilidad'}"
+          [(ngModel)]="subledgerAccountsForm.subledgerType"
+          [items]="subledgerAccountsForm.ledger?.subledgerAccountsTypes"
+          [showError]="subledgerType.invalid"
+          placeholder="Todos">
+        </emp-ng-select>
+
+      </div>
+
+      <div [fxFlex]="50" fxLayoutAlign="start end">
+
+        <div class="input-search-container">
+
+          <input type="text" class="text-box" name="keywords"
+            placeholder="Buscar auxiliares..."
+            [(ngModel)]="subledgerAccountsForm.keywords"
+            (keyup.enter)="onSearchSubledgerAccountsClicked()"
+            (keyup.escape)="onClearKeyword()">
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

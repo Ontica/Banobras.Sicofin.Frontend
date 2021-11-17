@@ -1,0 +1,27 @@
+<div class="explorer" fxLayoutGap="32px">
+
+  <div class="primary priority">
+
+    <emp-fa-subledger-accounts-viewer
+      [subledgerAccountData]="subledgerAccountData"
+      [commandExecuted]="commandExecuted"
+      [isLoading]="isLoading"
+      (subledgerAccountsViewerEvent)="onSubledgerAccountsViewerEvent($event)">
+
+    </emp-fa-subledger-accounts-viewer>
+
+  </div>
+
+</div>
+
+<emp-fa-subledger-account-creator *ngIf="displaySubledgerAccountCreator"
+  (subledgerAccountCreatorEvent)="onSubledgerAccountCreatorEvent($event)">
+
+</emp-fa-subledger-account-creator>
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  title="Exportar auxiliares"
+  [fileUrl]="exportData"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

@@ -27,6 +27,10 @@ import {
   ReportDesignerMainPageComponent
 } from './reports-designer-main-page/reports-designer-main-page.component';
 
+import {
+  SubledgerAccountsMainPageComponent
+} from './subledger-accounts-main-page/subledger-accounts-main-page.component';
+
 
 const routes: Routes = [
   {
@@ -37,7 +41,7 @@ const routes: Routes = [
   {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_auxiliares.permission },
     path: ROUTES_LIBRARY.reglas_y_catalogos_auxiliares.path,
-    component: AccountingCataloguesAndRulesWorkspaceComponent,
+    component: SubledgerAccountsMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_datos_operacion.permission },

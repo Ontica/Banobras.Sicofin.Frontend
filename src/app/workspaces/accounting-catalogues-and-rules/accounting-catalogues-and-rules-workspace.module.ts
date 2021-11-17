@@ -14,24 +14,29 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedModule } from '@app/shared/shared.module';
 
 import {
-  AccountingCataloguesAndRulesWorkspaceComponent
-} from './accounting-catalogues-and-rules-workspace.component';
-
-import {
   AccountingCataloguesAndRulesWorkspaceRoutingModule
 } from './accounting-catalogues-and-rules-workspace-routing.module';
+import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
 import { FinancialReportsModule } from '@app/views/financial-reports/financial-reports.module';
+import { GroupingRulesModule } from '@app/views/grouping-rules/grouping-rules.module';
 
+import {
+  AccountingCataloguesAndRulesWorkspaceComponent
+} from './accounting-catalogues-and-rules-workspace.component';
 import {
   AccountsChartMainPageComponent
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
-
-import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
-import { GroupingRulesModule } from '@app/views/grouping-rules/grouping-rules.module';
 import {
   GroupingRulesMainPageComponent
 } from './grouping-rules-main-page/grouping-rules-main-page.component';
-import { ReportDesignerMainPageComponent } from './reports-designer-main-page/reports-designer-main-page.component';
+import {
+  ReportDesignerMainPageComponent
+} from './reports-designer-main-page/reports-designer-main-page.component';
+import {
+  SubledgerAccountsMainPageComponent
+} from './subledger-accounts-main-page/subledger-accounts-main-page.component';
+import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger-accounts.module';
 
 
 @NgModule({
@@ -49,6 +54,8 @@ import { ReportDesignerMainPageComponent } from './reports-designer-main-page/re
     AccountsChartModule,
     FinancialReportsModule,
     GroupingRulesModule,
+    ReportsControlsModule,
+    SubledgerAccountsModule,
   ],
 
   declarations: [
@@ -56,6 +63,7 @@ import { ReportDesignerMainPageComponent } from './reports-designer-main-page/re
     AccountsChartMainPageComponent,
     GroupingRulesMainPageComponent,
     ReportDesignerMainPageComponent,
+    SubledgerAccountsMainPageComponent,
   ],
 
   exports: [

@@ -7,6 +7,8 @@
 
 import { Identifiable } from '@app/core';
 
+import { DataTable, DataTableColumn, DataTableColumnType } from './data-table';
+
 
 export interface Subledger {
   uid: string;
@@ -34,6 +36,9 @@ export interface SubledgerAccountDescriptor {
   number: string;
   name: string;
   fullname: string;
+  description: string;
+  typeName: string;
+  ledgerName: string;
 }
 
 
@@ -42,4 +47,62 @@ export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
   number: '',
   name: '',
   fullname: '',
+  description: '',
+  typeName: '',
+  ledgerName: '',
+};
+
+
+export interface SearchSubledgerAccountCommand {
+  accountsChartUID: string;
+  ledgerUID?: string;
+  subledgerTypeUID?: string;
+  keywords?: string;
+  lists?: string[];
+}
+
+
+export interface SubledgerAccountDataTable extends DataTable {
+  command: SearchSubledgerAccountCommand;
+  entries: SubledgerAccountDescriptor[];
+}
+
+
+export const EmptySearchSubledgerAccountCommand: SearchSubledgerAccountCommand = {
+  accountsChartUID: '',
+  ledgerUID: '',
+  subledgerTypeUID: '',
+  keywords: '',
+  lists: [],
+};
+
+
+export const DefaultSubledgerAccountColumns: DataTableColumn[] = [
+  {
+    field: 'number',
+    title: 'Auxiliar',
+    type: DataTableColumnType.text_link,
+  },
+  {
+    field: 'name',
+    title: 'Nombre del auxiliar',
+    type: DataTableColumnType.text,
+  },
+  {
+    field: 'ledgerName',
+    title: 'Contabilidad',
+    type: DataTableColumnType.text,
+  },
+  {
+    field: 'typeName',
+    title: 'Tipo de auxiliar',
+    type: DataTableColumnType.text,
+  },
+];
+
+
+export const EmptySubledgerAccountDataTable: SubledgerAccountDataTable = {
+  command: EmptySearchSubledgerAccountCommand,
+  columns: DefaultSubledgerAccountColumns,
+  entries: [],
 };
