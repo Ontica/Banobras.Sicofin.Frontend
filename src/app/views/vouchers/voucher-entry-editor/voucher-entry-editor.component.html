@@ -337,7 +337,8 @@
 </emp-ng-modal-window>
 
 <emp-fa-subledger-account-creator *ngIf="displaySubledgerAccountCreator"
-  [ledger]="voucherLedger"
+  [accountsChartUID]="voucher.accountsChart.uid"
+  [ledgerUID]="voucher.ledger.uid"
   (subledgerAccountCreatorEvent)="onSubledgerAccountCreatorEvent($event)">
 
 </emp-fa-subledger-account-creator>

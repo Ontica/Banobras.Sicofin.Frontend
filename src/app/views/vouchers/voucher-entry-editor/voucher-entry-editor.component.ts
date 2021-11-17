@@ -17,7 +17,7 @@ import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap 
 import { Assertion, EventInfo, Identifiable, isEmpty, Validate } from '@app/core';
 
 import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
-         SubledgerAccount, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
+         SubledgerAccount, Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -64,9 +64,7 @@ enum VoucherEntryEditorFormControls {
 })
 export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() voucherId: number;
-
-  @Input() voucherLedger: Identifiable;
+  @Input() voucher: Voucher;
 
   @Input() voucherEntry: VoucherEntry = EmptyVoucherEntry;
 
@@ -210,7 +208,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
 
   onCopyOfLastVoucherEntryClicked() {
-    this.getCopyOfLastEntry(this.voucherId);
+    this.getCopyOfLastEntry(this.voucher.id);
   }
 
 
@@ -324,7 +322,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   private assignAccountToVoucher(standardAccountId: number) {
     this.isLoading = true;
 
-    this.vouchersData.assignAccountToVoucher(this.voucherId, standardAccountId)
+    this.vouchersData.assignAccountToVoucher(this.voucher.id, standardAccountId)
       .toPromise()
       .then(x => {
         this.formHandler.getControl(this.controls.ledgerAccount).reset(x);
@@ -412,7 +410,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     const formModel = this.formHandler.form.getRawValue();
 
     const data: VoucherEntryFields = {
-      voucherId: this.voucherId,
+      voucherId: this.voucher.id,
       referenceEntryId: 0,
       voucherEntryType: formModel.voucherEntryType ?? '',
       ledgerAccountId: formModel.ledgerAccount?.id ? +formModel.ledgerAccount?.id : 0,
@@ -446,7 +444,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
         debounceTime(800),
         tap(() => this.ledgerAccountLoading = true),
         switchMap(keyword =>
-          this.vouchersData.searchAccountsForEdition(this.voucherId, keyword)
+          this.vouchersData.searchAccountsForEdition(this.voucher.id, keyword)
           .pipe(
             catchError(() => of([])),
             tap(() => this.ledgerAccountLoading = false)
@@ -465,7 +463,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
         debounceTime(800),
         tap(() => this.subledgerAccountLoading = true),
         switchMap(keyword =>
-          this.vouchersData.searchSubledgerAccountsForEdition(this.voucherId,
+          this.vouchersData.searchSubledgerAccountsForEdition(this.voucher.id,
                                                               this.ledgerAccountSelected.id,
                                                               keyword)
           .pipe(
@@ -487,7 +485,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   private showConfirmAssignAccountToVoucher(ledgerAccount: LedgerAccount) {
     const message = `La cuenta <strong>${ledgerAccount.number}: ${ledgerAccount.name}</strong>
-      no se ha utilizado en la contabilidad ${this.voucherLedger.name}.
+      no se ha utilizado en la contabilidad ${this.voucher.ledger.name}.
       <br><br>¿Desea utilizarla por primera vez?`;
 
     this.messageBox.confirm(message, 'Agregar cuenta')

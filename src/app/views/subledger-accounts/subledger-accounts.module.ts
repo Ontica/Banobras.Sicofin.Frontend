@@ -14,6 +14,7 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedModule } from '@app/shared/shared.module';
 
 import { SubledgerAccountCreatorComponent } from './subledger-account-creator/subledger-account-creator.component';
+import { SubledgerAccountHeaderComponent } from './subledger-account-header/subledger-account-header.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { SubledgerAccountCreatorComponent } from './subledger-account-creator/su
   ],
   declarations: [
     SubledgerAccountCreatorComponent,
+    SubledgerAccountHeaderComponent,
   ],
   exports: [
     SubledgerAccountCreatorComponent,

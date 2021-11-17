@@ -1,0 +1,143 @@
+<form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner"
+  autocomplete="off" class="form-section" (keydown.enter)="$event.preventDefault()">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+    <div fxLayout="row">
+
+        <div [fxFlex]="100/3">
+          <label>Grupo de contabilidades:</label>
+          <emp-ng-select
+            [config]="{bindByValue: false}"
+            [formControlName]="controls.accountsChart"
+            [items]="accountsChartMasterDataList"
+            [showError]="formHandler.showInvalidControl(controls.accountsChart)">
+          </emp-ng-select>
+        </div>
+
+        <div [fxFlex]="100/3">
+          <label>Contabilidad:</label>
+          <emp-ng-select
+            [config]="{bindByValue: false}"
+            [formControlName]="controls.ledger"
+            [items]="selectedAccountChart?.ledgers"
+            [showError]="formHandler.showInvalidControl(controls.ledger)"
+            (changes)="onLedgerChanges()">
+          </emp-ng-select>
+        </div>
+
+        <div [fxFlex]="100/3">
+          <label>Libro auxiliar:</label>
+          <emp-ng-select
+            [formControlName]="controls.subledgerType"
+            [items]="selectedLedger?.subledgerAccountsTypes"
+            [showError]="formHandler.showInvalidControl(controls.subledgerType)">
+          </emp-ng-select>
+        </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100/3">
+        <label>Número:</label>
+        <input type="text" class="text-box" empNgInteger
+          [formControlName]="controls.number"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.number)">
+      </div>
+
+      <div fxFlex>
+        <label>Nombre:</label>
+        <input type="text" class="text-box"
+          [formControlName]="controls.name"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+      </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100">
+        <label>Descripción:</label>
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
+          [formControlName]="controls.description"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
+        </textarea>
+      </div>
+
+    </div>
+
+  </div>
+
+  <mat-divider class="horizontal"></mat-divider>
+
+  <div #rowFooter fxLayout="row">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button (click)="onSubmitForm()"
+          [class.btn]="!formHandler.isValid"
+          [class.btn-action]="formHandler.isValid">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved">
+
+      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+
+        <button
+          type="button" class="btn"
+          (click)="onEventButtonClicked(eventType.SUSPEND_SUBLEDGER_ACCOUNT)">
+          Suspender
+        </button>
+
+        <button
+          type="button" class="btn"
+          (click)="onEventButtonClicked(eventType.DELETE_SUBLEDGER_ACCOUNT)">
+          Eliminar
+        </button>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <ng-container *ngIf="editionMode">
+
+          <button (click)="onSubmitForm()"
+            [class.btn]="!formHandler.isValid"
+            [class.btn-action]="formHandler.isValid">
+            Guardar
+          </button>
+
+          <button (click)="enableEditor(false)"
+            class="btn-base uppercase">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
+            Editar
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

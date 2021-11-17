@@ -1,89 +1,24 @@
-<emp-ng-modal-window [config]="{width:'450px'}">
+<emp-ng-modal-window [config]="{width:'750px'}">
 
     <emp-ng-card
       title="Agregar auxiliar"
-      [hint]='ledger.name'
+      hint="Información general del auxiliar"
       (cardClose)="onClose()">
 
-      <div class="card-body-padding">
+        <div class="card-body-padding" [empNgSpinnerHost]="spinner">
 
-        <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner"
-          autocomplete="off" class="form-section" (keydown.enter)="$event.preventDefault()">
+          <emp-ng-spinner #spinner [visible]="submitted">
 
-          <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+          </emp-ng-spinner>
 
-          <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+          <emp-fa-subledger-account-header
+            [accountsChartUID]="accountsChartUID"
+            [ledgerUID]="ledgerUID"
+            (subledgerAccountHeaderEvent)="onSubledgerAccountHeaderEvent($event)">
 
-            <div fxLayout="row">
+          </emp-fa-subledger-account-header>
 
-                <div [fxFlex]="100">
-                  <label>Libro auxiliar:</label>
-                  <emp-ng-select
-                    [formControlName]="controls.subledger"
-                    [items]="subledgerList"
-                    [showError]="formHandler.showInvalidControl(controls.subledger)">
-                  </emp-ng-select>
-                </div>
-
-            </div>
-
-            <div fxLayout="row">
-
-              <div [fxFlex]="100">
-                <label>Número:</label>
-                <input type="text" class="text-box" empNgInteger
-                  [formControlName]="controls.number"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.number)">
-              </div>
-
-            </div>
-
-
-            <div fxLayout="row">
-
-              <div [fxFlex]="100">
-                <label>Nombre:</label>
-                <input type="text" class="text-box"
-                  [formControlName]="controls.name"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
-              </div>
-
-            </div>
-
-
-            <div fxLayout="row">
-
-              <div [fxFlex]="100">
-                <label>Descripción:</label>
-                <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
-                  [formControlName]="controls.description"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
-                </textarea>
-              </div>
-
-            </div>
-
-          </div>
-
-          <mat-divider class="horizontal"></mat-divider>
-
-          <div #rowFooter fxLayout="row">
-
-            <div fxFlex fxLayoutAlign="end center">
-
-              <button (click)="onSubmitForm()"
-                [class.btn]="!formHandler.isValid"
-                [class.btn-action]="formHandler.isValid">
-                Agregar
-              </button>
-
-            </div>
-
-          </div>
-
-        </form>
-
-      </div>
+        </div>
 
     </emp-ng-card>
 

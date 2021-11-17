@@ -250,6 +250,7 @@ export interface Ledger {
   subledgerAccountsPrefix: string;
   accountsChart: Identifiable;
   baseCurrency: Identifiable;
+  subledgerAccountsTypes: Identifiable[];
 }
 
 

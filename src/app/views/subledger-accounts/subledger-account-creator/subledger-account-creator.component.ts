@@ -5,59 +5,36 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-import { Assertion, EventInfo, Identifiable } from '@app/core';
-
-import { SubledgerDataService } from '@app/data-services';
-
-import { Subledger } from '@app/models';
+import { Assertion, EventInfo } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { sendEvent } from '@app/shared/utils';
+
+import { SubledgerAccountHeaderEventType } from '../subledger-account-header/subledger-account-header.component';
 
 export enum SubledgerAccountCreatorEventType {
   CLOSE_MODAL_CLICKED = 'SubledgerAccountCreatorComponent.Event.CloseModalClicked',
   SUBLEDGER_ACCOUNT_CREATED = 'SubledgerAccountCreatorComponent.Event.SubledgerAccountCreated',
 }
 
-enum SubledgerAccountCreatorFormControls {
-  subledger = 'subledger',
-  number = 'number',
-  name = 'name',
-  description = 'description',
-}
-
 @Component({
   selector: 'emp-fa-subledger-account-creator',
   templateUrl: './subledger-account-creator.component.html',
 })
-export class SubledgerAccountCreatorComponent implements OnInit {
+export class SubledgerAccountCreatorComponent {
 
-  @Input() ledger: Identifiable;
+  @Input() accountsChartUID = '';
+
+  @Input() ledgerUID = '';
 
   @Output() subledgerAccountCreatorEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  submitted = false;
 
-  controls = SubledgerAccountCreatorFormControls;
-
-  isLoading = false;
-
-  subledgerList: Subledger[] = [];
-
-  constructor(private subledgerData: SubledgerDataService,
-              private messageBox: MessageBoxService) {
-    this.initForm();
-  }
-
-
-  ngOnInit(): void {
-    this.loadSubledgers();
-  }
+  constructor(private messageBox: MessageBoxService) {}
 
 
   onClose() {
@@ -65,61 +42,30 @@ export class SubledgerAccountCreatorComponent implements OnInit {
   }
 
 
-  onSubmitForm() {
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
+  onSubledgerAccountHeaderEvent(event: EventInfo): void {
+    if (this.submitted) {
       return;
     }
 
-    const payload = {
-      ledgerUID: this.ledger.uid,
-      subledgerAccount: this.getFormData(),
-    };
+    switch (event.type as SubledgerAccountHeaderEventType) {
 
-    this.messageBox.showInDevelopment('Agregar auxiliar', payload);
-  }
+      case SubledgerAccountHeaderEventType.CREATE_SUBLEDGER_ACCOUNT:
+        Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
+        this.createSubledgerAccount(event.payload.subledgerAccount);
+        return;
 
-
-  private loadSubledgers() {
-    this.isLoading = true;
-
-    this.subledgerData.getSubledgers(this.ledger.uid)
-      .toPromise()
-      .then(x => this.subledgerList = x)
-      .finally(() => this.isLoading = false);
-  }
-
-
-  private initForm() {
-    if (this.formHandler) {
-      return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
     }
-
-    this.formHandler = new FormHandler(
-      new FormGroup({
-        subledger: new FormControl('', Validators.required),
-        number: new FormControl('', Validators.required),
-        name: new FormControl('', Validators.required),
-        description: new FormControl('', Validators.required),
-      })
-    );
   }
 
 
-  private getFormData(): any {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
-
-    const formModel = this.formHandler.form.getRawValue();
-
-    const data: any = {
-      subledgerUID: formModel.subledger ?? '',
-      number: formModel.number ?? '',
-      name: formModel.name ?? '',
-      description: formModel.description ?? '',
-    };
-
-    return data;
+  private createSubledgerAccount(subledgerAccountFields: any) {
+    this.messageBox.showInDevelopment('Agregar auxiliar', {
+      eventType: 'CREATE_SUBLEDGER_ACCOUNT',
+      subledgerAccount: subledgerAccountFields,
+    });
   }
 
 }

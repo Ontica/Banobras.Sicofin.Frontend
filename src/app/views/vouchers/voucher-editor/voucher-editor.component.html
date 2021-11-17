@@ -36,8 +36,7 @@
 </div>
 
 <emp-fa-voucher-entry-editor *ngIf="displayVoucherEntryEditor"
-  [voucherId]="voucher.id"
-  [voucherLedger]="voucher.ledger"
+  [voucher]="voucher"
   [voucherEntry]="selectedVoucherEntry"
   [readonly]="!canEditVoucher"
   (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
