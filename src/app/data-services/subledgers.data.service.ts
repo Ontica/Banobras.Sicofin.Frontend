@@ -30,12 +30,32 @@ export class SubledgerDataService {
   }
 
 
+  getSubledgerAccount(subledgerAccountId: number): Observable<SubledgerAccount> {
+    Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
+
+    const path = `v2/financial-accounting/subledger-accounts/${subledgerAccountId}`;
+
+    return this.http.get<SubledgerAccount>(path);
+  }
+
+
   createSubledgerAccount(subledgerAccountFields: SubledgerAccountFields): Observable<SubledgerAccount> {
     Assertion.assertValue(subledgerAccountFields, 'subledgerAccountFields');
 
     const path = `v2/financial-accounting/subledger-accounts`;
 
     return this.http.post<SubledgerAccount>(path, subledgerAccountFields);
+  }
+
+
+  updateSubledgerAccount(subledgerAccountId: number,
+                         subledgerAccountFields: SubledgerAccountFields): Observable<SubledgerAccount> {
+    Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
+    Assertion.assertValue(subledgerAccountFields, 'subledgerAccountFields');
+
+    const path = `v2/financial-accounting/subledger-accounts/${subledgerAccountId}`;
+
+    return this.http.put<SubledgerAccount>(path, subledgerAccountFields);
   }
 
 }

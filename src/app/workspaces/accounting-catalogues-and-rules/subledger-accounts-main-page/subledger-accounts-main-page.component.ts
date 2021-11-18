@@ -11,10 +11,13 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { SubledgerDataService } from '@app/data-services';
 
-import { EmptySearchSubledgerAccountCommand, EmptySubledgerAccountDataTable, SearchSubledgerAccountCommand,
-         SubledgerAccountDataTable } from '@app/models';
+import { EmptySubledgerAccount, EmptySearchSubledgerAccountCommand, EmptySubledgerAccountDataTable,
+         SubledgerAccountDescriptor, SearchSubledgerAccountCommand, SubledgerAccountDataTable,
+         SubledgerAccount, mapSubledgerAccountDescriptorFromSubledgerAccount} from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
+
+import { ArrayLibrary } from '@app/shared/utils';
 
 import {
   ExportReportModalEventType
@@ -23,6 +26,10 @@ import {
 import {
   SubledgerAccountCreatorEventType
 } from '@app/views/subledger-accounts/subledger-account-creator/subledger-account-creator.component';
+
+import {
+  SubledgerAccountTabbedViewEventType
+} from '@app/views/subledger-accounts/subledger-account-tabbed-view/subledger-account-tabbed-view.component';
 
 import {
   SubledgerAccountsViewerEventType
@@ -37,12 +44,15 @@ export class SubledgerAccountsMainPageComponent {
     Object.assign({}, EmptySearchSubledgerAccountCommand);
   subledgerAccountData: SubledgerAccountDataTable = Object.assign({}, EmptySubledgerAccountDataTable);
   exportData = '';
+  selectedSubledgerAccount: SubledgerAccount = EmptySubledgerAccount;
 
   isLoading = false;
+  isLoadingSubledgerAccount = false;
   commandExecuted = false;
 
   displaySubledgerAccountCreator = false;
   displayExportModal = false;
+  displaySubledgerAccountTabbed = false;
 
   constructor(private subledgerData: SubledgerDataService,
               private messageBox: MessageBoxService){}
@@ -55,7 +65,7 @@ export class SubledgerAccountsMainPageComponent {
         return;
       case SubledgerAccountCreatorEventType.SUBLEDGER_ACCOUNT_CREATED:
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
-        console.log(event.payload.subledgerAccount);
+        this.insertSubledgerAccountToEntries(event.payload.subledgerAccount);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -80,7 +90,9 @@ export class SubledgerAccountsMainPageComponent {
         return;
       case SubledgerAccountsViewerEventType.SELECT_SUBLEDGER_ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
-        console.log(event.payload.subledgerAccount);
+        Assertion.assertValue(event.payload.subledgerAccount.id, 'event.payload.subledgerAccount.id');
+
+        this.gettSubledgerAccount(event.payload.subledgerAccount.id);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -96,6 +108,26 @@ export class SubledgerAccountsMainPageComponent {
         return;
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
         this.exportSubledgerAccounts(this.subledgerAccountCommand);
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onSubledgerAccountTabbedViewEvent(event: EventInfo) {
+    switch (event.type as SubledgerAccountTabbedViewEventType) {
+      case SubledgerAccountTabbedViewEventType.CLOSE_BUTTON_CLICKED:
+        this.setSelectedSubledgerAccount(EmptySubledgerAccount);
+        return;
+      case SubledgerAccountTabbedViewEventType.SUBLEDGER_ACCOUNT_UPDATED:
+        Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
+        this.insertSubledgerAccountToEntries(event.payload.subledgerAccount);
+        return;
+      case SubledgerAccountTabbedViewEventType.SUBLEDGER_ACCOUNT_DELETED:
+        Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
+        this.removeSubledgerAccountFromEntries(event.payload.subledgerAccount);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -129,6 +161,46 @@ export class SubledgerAccountsMainPageComponent {
       });
       this.exportData = '';
     }, 500);
+  }
+
+
+  private gettSubledgerAccount(idSubledgerAccount: number) {
+    this.isLoadingSubledgerAccount = true;
+
+    this.subledgerData.getSubledgerAccount(idSubledgerAccount)
+      .toPromise()
+      .then(x => this.setSelectedSubledgerAccount(x))
+      .finally(() => this.isLoadingSubledgerAccount = false);
+  }
+
+
+  private insertSubledgerAccountToEntries(subledgerAccountSelected: SubledgerAccount) {
+    const subledgerAccountToInsert =
+      mapSubledgerAccountDescriptorFromSubledgerAccount(subledgerAccountSelected);
+
+    const subledgerAccountEntriesNew =
+      ArrayLibrary.insertItemTop(this.subledgerAccountData.entries, subledgerAccountToInsert, 'id');
+    this.setSubledgerAccountEntries(subledgerAccountEntriesNew);
+    this.setSelectedSubledgerAccount(subledgerAccountSelected);
+  }
+
+
+  private removeSubledgerAccountFromEntries(subledgerAccountDeleted: SubledgerAccount) {
+    const subledgerAccountEntriesNew =
+      this.subledgerAccountData.entries.filter(x => x.id !== subledgerAccountDeleted.id);
+    this.setSubledgerAccountEntries(subledgerAccountEntriesNew);
+    this.setSelectedSubledgerAccount(EmptySubledgerAccount);
+  }
+
+
+  private setSelectedSubledgerAccount(subledgerAccount: SubledgerAccount) {
+    this.selectedSubledgerAccount = subledgerAccount;
+    this.displaySubledgerAccountTabbed = !!this.selectedSubledgerAccount.id;
+  }
+
+
+  private setSubledgerAccountEntries(entries: SubledgerAccountDescriptor[]) {
+    this.subledgerAccountData = Object.assign({}, this.subledgerAccountData, {entries});
   }
 
 

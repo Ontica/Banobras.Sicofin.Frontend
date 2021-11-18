@@ -15,9 +15,11 @@ import { SharedModule } from '@app/shared/shared.module';
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
 import { SubledgerAccountCreatorComponent } from './subledger-account-creator/subledger-account-creator.component';
+import { SubledgerAccountEditorComponent } from './subledger-account-editor/subledger-account-editor.component';
 import { SubledgerAccountHeaderComponent } from './subledger-account-header/subledger-account-header.component';
 import { SubledgerAccountsFilterComponent } from './subledger-accounts-viewer/subledger-accounts-filter.component';
 import { SubledgerAccountsViewerComponent } from './subledger-accounts-viewer/subledger-accounts-viewer.component';
+import { SubledgerAccountTabbedViewComponent } from './subledger-account-tabbed-view/subledger-account-tabbed-view.component';
 
 
 @NgModule({
@@ -32,13 +34,16 @@ import { SubledgerAccountsViewerComponent } from './subledger-accounts-viewer/su
   ],
   declarations: [
     SubledgerAccountCreatorComponent,
+    SubledgerAccountEditorComponent,
     SubledgerAccountHeaderComponent,
     SubledgerAccountsFilterComponent,
     SubledgerAccountsViewerComponent,
+    SubledgerAccountTabbedViewComponent,
   ],
   exports: [
     SubledgerAccountCreatorComponent,
     SubledgerAccountsViewerComponent,
+    SubledgerAccountTabbedViewComponent,
   ],
 })
 export class SubledgerAccountsModule { }

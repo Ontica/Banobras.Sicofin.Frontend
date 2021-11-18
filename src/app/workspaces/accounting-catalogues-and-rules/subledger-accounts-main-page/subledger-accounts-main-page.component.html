@@ -1,6 +1,8 @@
+<emp-ng-spinner #spinner [visible]="isLoadingSubledgerAccount"></emp-ng-spinner>
+
 <div class="explorer" fxLayoutGap="32px">
 
-  <div class="primary priority">
+  <div class="primary priority" [fxHide.lt-lg]="displaySubledgerAccountTabbed">
 
     <emp-fa-subledger-accounts-viewer
       [subledgerAccountData]="subledgerAccountData"
@@ -9,6 +11,16 @@
       (subledgerAccountsViewerEvent)="onSubledgerAccountsViewerEvent($event)">
 
     </emp-fa-subledger-accounts-viewer>
+
+  </div>
+
+  <div class="secondary" *ngIf="displaySubledgerAccountTabbed">
+
+    <emp-fa-subledger-account-tabbed-view
+      [subledgerAccount]="selectedSubledgerAccount"
+      (subledgerAccountTabbedViewEvent)="onSubledgerAccountTabbedViewEvent($event)">
+
+    </emp-fa-subledger-account-tabbed-view>
 
   </div>
 

@@ -1,0 +1,27 @@
+<emp-ng-card [title]="title"
+             [hint]="hint"
+             (cardClose)="onClose()">
+
+<mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+    <mat-tab label="Información">
+
+      <emp-fa-subledger-account-editor
+        [subledgerAccount]="subledgerAccount"
+        (subledgerAccountEditorEvent)="onSubledgerAccountEditorEvent($event)">
+
+      </emp-fa-subledger-account-editor>
+
+    </mat-tab>
+
+    <mat-tab label="Listas" disabled>
+
+    </mat-tab>
+
+    <mat-tab label="Saldos" disabled>
+
+    </mat-tab>
+
+</mat-tab-group>
+
+</emp-ng-card>
