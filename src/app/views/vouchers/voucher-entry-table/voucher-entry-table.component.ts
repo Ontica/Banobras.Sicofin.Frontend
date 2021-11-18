@@ -38,7 +38,7 @@ export class VoucherEntryTableComponent implements OnChanges {
   @Output() voucherEntryTableEvent = new EventEmitter<EventInfo>();
 
   displayedColumnsDefault: string[] = ['accountNumber', 'sector', 'accountName', 'verificationNumber',
-    'responsibilityArea', 'currency', 'exchangeRate', 'partial', 'debit', 'credit'];
+    'responsibilityArea', 'currency', 'exchangeRate', 'debit', 'credit'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 
@@ -54,6 +54,10 @@ export class VoucherEntryTableComponent implements OnChanges {
 
 
   onUpdateVoucherEntryClicked(voucherEntry: VoucherEntryDescriptor) {
+    if (voucherEntry.itemType === "TotalsEntry") {
+      return;
+    }
+
     if (window.getSelection().toString().length <= 0) {
       sendEvent(this.voucherEntryTableEvent, VoucherEntryTableEventType.UPDATE_VOUCHER_ENTRY_CLICKED,
         {voucherEntry});
