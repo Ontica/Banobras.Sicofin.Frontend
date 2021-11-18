@@ -10,21 +10,20 @@
         <div [fxFlex]="100/3">
           <label>Grupo de contabilidades:</label>
           <emp-ng-select
-            [config]="{bindByValue: false}"
             [formControlName]="controls.accountsChart"
             [items]="accountsChartMasterDataList"
-            [showError]="formHandler.showInvalidControl(controls.accountsChart)">
+            [showError]="formHandler.showInvalidControl(controls.accountsChart)"
+            (changes)="onAccountsChartChanges($event)">
           </emp-ng-select>
         </div>
 
         <div [fxFlex]="100/3">
           <label>Contabilidad:</label>
           <emp-ng-select
-            [config]="{bindByValue: false}"
             [formControlName]="controls.ledger"
-            [items]="selectedAccountChart?.ledgers"
+            [items]="ledgerList"
             [showError]="formHandler.showInvalidControl(controls.ledger)"
-            (changes)="onLedgerChanges()">
+            (changes)="onLedgerChanges($event)">
           </emp-ng-select>
         </div>
 
@@ -32,7 +31,7 @@
           <label>Libro auxiliar:</label>
           <emp-ng-select
             [formControlName]="controls.subledgerType"
-            [items]="selectedLedger?.subledgerAccountsTypes"
+            [items]="subledgerAccountsTypeList"
             [showError]="formHandler.showInvalidControl(controls.subledgerType)">
           </emp-ng-select>
         </div>

@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { LedgerAccount, SearchVouchersCommand, SubledgerAccount, Voucher, VoucherDescriptor, VoucherEntry,
-         VoucherEntryFields, VoucherFields, VoucherSpecialCaseType } from '@app/models';
+import { LedgerAccount, SearchVouchersCommand, SubledgerAccountDescriptor, Voucher, VoucherDescriptor,
+         VoucherEntry, VoucherEntryFields, VoucherFields, VoucherSpecialCaseType } from '@app/models';
 
 
 @Injectable()
@@ -87,7 +87,7 @@ export class VouchersDataService {
 
   searchSubledgerAccountsForEdition(voucherId: number,
                                     accountId: number,
-                                    keywords: string): Observable<SubledgerAccount[]> {
+                                    keywords: string): Observable<SubledgerAccountDescriptor[]> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(accountId, 'accountId');
     Assertion.assertValue(keywords, 'keywords');
@@ -95,7 +95,7 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/${voucherId}/search-subledger-accounts-for-edition/` +
       `${accountId}/?keywords=${keywords}`;
 
-    return this.http.get<SubledgerAccount[]>(path);
+    return this.http.get<SubledgerAccountDescriptor[]>(path);
   }
 
 

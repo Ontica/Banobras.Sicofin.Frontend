@@ -17,7 +17,8 @@ import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap 
 import { Assertion, EventInfo, Identifiable, isEmpty, Validate } from '@app/core';
 
 import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
-         SubledgerAccount, Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
+         mapSubledgerAccountDescriptorFromSubledgerAccount, SubledgerAccount, SubledgerAccountDescriptor,
+         Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -90,7 +91,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   ledgerAccountMinTermLength = 4;
   ledgerAccountLoading = false;
 
-  subledgerAccountList$: Observable<SubledgerAccount[]>;
+  subledgerAccountList$: Observable<SubledgerAccountDescriptor[]>;
   subledgerAccountInput$ = new Subject<string>();
   subledgerAccountMinTermLength = 5;
   subledgerAccountLoading = false;
@@ -138,7 +139,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  get subledgerAccountSelected(): SubledgerAccount {
+  get subledgerAccountSelected(): SubledgerAccountDescriptor {
     const subledgerAccount = this.formHandler.getControl(this.controls.subledgerAccount).value;
     return subledgerAccount?.id > 0 ? subledgerAccount : null;
   }
@@ -231,13 +232,8 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
       case SubledgerAccountCreatorEventType.SUBLEDGER_ACCOUNT_CREATED:
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
-
+        this.setSubledgerAccountCreated(event.payload.subledgerAccount as SubledgerAccount);
         this.displaySubledgerAccountCreator = false;
-
-        if (this.subledgerAccountRequired) {
-          this.formHandler.getControl(this.controls.subledgerAccount).reset(event.payload.subledgerAccount);
-          this.subscribeSubledgerAccountList();
-        }
         return;
 
       default:
@@ -400,6 +396,14 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
     this.formHandler.disableForm(false);
     this.displayDateAndConcept = !!voucherEntry.date || !!voucherEntry.concept;
+  }
+
+
+  private setSubledgerAccountCreated(subledgerAccount: SubledgerAccount) {
+    const subledgerAccountCreated = mapSubledgerAccountDescriptorFromSubledgerAccount(subledgerAccount);
+    this.formHandler.getControl(this.controls.subledgerAccount).reset(subledgerAccountCreated);
+    this.subscribeSubledgerAccountList();
+    this.formHandler.form.markAsDirty();
   }
 
 

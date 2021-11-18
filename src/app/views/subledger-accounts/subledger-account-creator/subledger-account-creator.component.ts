@@ -9,7 +9,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { SubledgerDataService } from '@app/data-services';
+
+import { SubledgerAccountFields } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -34,7 +36,7 @@ export class SubledgerAccountCreatorComponent {
 
   submitted = false;
 
-  constructor(private messageBox: MessageBoxService) {}
+  constructor(private subledgerData: SubledgerDataService) {}
 
 
   onClose() {
@@ -51,7 +53,7 @@ export class SubledgerAccountCreatorComponent {
 
       case SubledgerAccountHeaderEventType.CREATE_SUBLEDGER_ACCOUNT:
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
-        this.createSubledgerAccount(event.payload.subledgerAccount);
+        this.createSubledgerAccount(event.payload.subledgerAccount as SubledgerAccountFields);
         return;
 
       default:
@@ -61,11 +63,17 @@ export class SubledgerAccountCreatorComponent {
   }
 
 
-  private createSubledgerAccount(subledgerAccountFields: any) {
-    this.messageBox.showInDevelopment('Agregar auxiliar', {
-      eventType: 'CREATE_SUBLEDGER_ACCOUNT',
-      subledgerAccount: subledgerAccountFields,
-    });
+  private createSubledgerAccount(subledgerAccountFields: SubledgerAccountFields) {
+    this.submitted = true;
+
+    this.subledgerData.createSubledgerAccount(subledgerAccountFields)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.subledgerAccountCreatorEvent,
+          SubledgerAccountCreatorEventType.SUBLEDGER_ACCOUNT_CREATED, {subledgerAccount: x});
+        this.onClose();
+      })
+      .finally(() => this.submitted = false);
   }
 
 }

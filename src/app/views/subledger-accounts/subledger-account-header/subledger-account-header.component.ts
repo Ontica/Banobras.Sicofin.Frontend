@@ -10,12 +10,12 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptySubledgerAccountDescriptor, Ledger,
-         SubledgerAccountDescriptor } from '@app/models';
+import { AccountsChartMasterData, EmptySubledgerAccount, Ledger, SubledgerAccount,
+         SubledgerAccountFields} from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -49,7 +49,7 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
   @Input() ledgerUID = '';
 
-  @Input() subledgerAccount: SubledgerAccountDescriptor = EmptySubledgerAccountDescriptor;
+  @Input() subledgerAccount: SubledgerAccount = EmptySubledgerAccount;
 
   @Output() subledgerAccountHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -59,6 +59,8 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   isLoading = false;
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
+  ledgerList: Ledger[] = [];
+  subledgerAccountsTypeList: Identifiable[] = [];
 
   helper: SubscriptionHelper;
   eventType = SubledgerAccountHeaderEventType;
@@ -102,16 +104,6 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  get selectedAccountChart(): AccountsChartMasterData {
-    return this.formHandler.getControl(this.controls.accountsChart).value;
-  }
-
-
-  get selectedLedger(): Ledger {
-    return this.formHandler.getControl(this.controls.ledger).value;
-  }
-
-
   enableEditor(enable) {
     this.editionMode = enable;
 
@@ -123,8 +115,16 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  onLedgerChanges() {
+  onAccountsChartChanges(accountsChart: AccountsChartMasterData) {
+    this.formHandler.getControl(this.controls.ledger).reset();
+    this.ledgerList = accountsChart.ledgers;
+    this.onLedgerChanges(null);
+  }
+
+
+  onLedgerChanges(ledger: Ledger) {
     this.formHandler.getControl(this.controls.subledgerType).reset();
+    this.subledgerAccountsTypeList = ledger?.subledgerAccountsTypes ?? [];
   }
 
 
@@ -162,7 +162,10 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
         this.accountsChartMasterDataList = x;
         this.isLoading = false;
 
-        if (!this.isSaved) {
+        if (this.isSaved) {
+          this.setLedgerList(this.subledgerAccount.accountsChartUID);
+          this.setSubledgerAccountsTypeList(this.subledgerAccount.ledger.uid);
+        } else {
           this.setAccountsChartDefault();
           this.setLedgerDefault();
         }
@@ -190,49 +193,63 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
   private setFormData() {
     this.formHandler.form.reset({
-      accountsChart: '',
-      ledger: '',
-      subledgerType: '',
+      accountsChart: this.subledgerAccount.accountsChartUID,
+      ledger: this.subledgerAccount.ledger.uid,
+      subledgerType: this.subledgerAccount.type.uid,
       number: this.subledgerAccount.number || '',
       name: this.subledgerAccount.name || '',
       description: this.subledgerAccount.description || '',
     });
+
+    this.setLedgerList(this.subledgerAccount.accountsChartUID);
+    this.setSubledgerAccountsTypeList(this.subledgerAccount.ledger.uid);
   }
 
 
   private setAccountsChartDefault() {
-    let accountsChart = this.accountsChartMasterDataList.length === 0 ? null :
-      this.accountsChartMasterDataList[0];
+    let accountsChartUID = this.accountsChartMasterDataList.length === 0 ? null :
+      this.accountsChartMasterDataList[0].uid;
 
-    if (!!this.accountsChartUID) {
-      accountsChart = this.accountsChartMasterDataList.find(x => x.uid === this.accountsChartUID);
-    }
+    accountsChartUID = !!this.accountsChartUID ? this.accountsChartUID : accountsChartUID;
 
-    this.formHandler.getControl(this.controls.accountsChart).reset(accountsChart);
+    this.formHandler.getControl(this.controls.accountsChart).reset(accountsChartUID);
     this.formHandler.disableControl(this.controls.accountsChart, !!this.accountsChartUID);
+
+    this.setLedgerList(accountsChartUID);
   }
 
 
   private setLedgerDefault() {
-    let ledger = null;
-
-    if (!!this.ledgerUID && this.selectedAccountChart?.ledgers.length > 0) {
-      ledger = this.selectedAccountChart.ledgers.find(x => x.uid === this.ledgerUID);
-    }
-
-    this.formHandler.getControl(this.controls.ledger).reset(ledger);
+    this.formHandler.getControl(this.controls.ledger).reset(this.ledgerUID ?? null);
     this.formHandler.disableControl(this.controls.ledger, !!this.ledgerUID);
+    this.setSubledgerAccountsTypeList(this.ledgerUID);
   }
 
 
-  private getFormData(): any {
+  private setLedgerList(accountsChartUID: string) {
+    const accountsChartSelected = this.accountsChartMasterDataList.find(x => x.uid === accountsChartUID);
+    this.ledgerList = !!accountsChartSelected?.ledgers ? accountsChartSelected.ledgers : [];
+  }
+
+
+  private setSubledgerAccountsTypeList(ledgerUID: string) {
+    const ledgerSelected = this.ledgerList.find(x => x.uid === ledgerUID);
+
+    if (!!ledgerSelected) {
+      this.subledgerAccountsTypeList = ledgerSelected.subledgerAccountsTypes;
+    }
+  }
+
+
+  private getFormData(): SubledgerAccountFields {
     Assertion.assert(this.formHandler.form.valid,
       'Programming error: form must be validated before command execution.');
 
     const formModel = this.formHandler.form.getRawValue();
 
-    const data: any = {
-      subledgerTypeUID: formModel.subledgerType ?? '',
+    const data: SubledgerAccountFields = {
+      ledgerUID: formModel.ledger ?? '',
+      typeUID: formModel.subledgerType ?? '',
       number: formModel.number ?? '',
       name: formModel.name ?? '',
       description: formModel.description ?? '',

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Identifiable } from '@app/core';
+import { Empty, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableColumnType } from './data-table';
 
@@ -22,12 +22,13 @@ export interface Subledger {
 
 export interface SubledgerAccount {
   id: number;
-  baseLedger: Identifiable;
-  subledger: Identifiable;
+  accountsChartUID: string;
+  ledger: Identifiable;
+  type: Identifiable;
   number: string;
   name: string;
-  keywords: string;
   description: string;
+  lists: Identifiable[];
 }
 
 
@@ -42,15 +43,13 @@ export interface SubledgerAccountDescriptor {
 }
 
 
-export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
-  id: 0,
-  number: '',
-  name: '',
-  fullname: '',
-  description: '',
-  typeName: '',
-  ledgerName: '',
-};
+export interface SubledgerAccountFields {
+  ledgerUID: string;
+  typeUID: string;
+  number: string;
+  name: string;
+  description: string;
+}
 
 
 export interface SearchSubledgerAccountCommand {
@@ -66,6 +65,29 @@ export interface SubledgerAccountDataTable extends DataTable {
   command: SearchSubledgerAccountCommand;
   entries: SubledgerAccountDescriptor[];
 }
+
+
+export const EmptySubledgerAccount: SubledgerAccount = {
+  id: 0,
+  accountsChartUID: '',
+  ledger: Empty,
+  type: Empty,
+  number: '',
+  name: '',
+  description: '',
+  lists: [],
+};
+
+
+export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
+  id: 0,
+  number: '',
+  name: '',
+  fullname: '',
+  description: '',
+  typeName: '',
+  ledgerName: '',
+};
 
 
 export const EmptySearchSubledgerAccountCommand: SearchSubledgerAccountCommand = {
@@ -106,3 +128,17 @@ export const EmptySubledgerAccountDataTable: SubledgerAccountDataTable = {
   columns: DefaultSubledgerAccountColumns,
   entries: [],
 };
+
+
+export function mapSubledgerAccountDescriptorFromSubledgerAccount(subledgerAccount: SubledgerAccount):
+  SubledgerAccountDescriptor {
+  return {
+    id: subledgerAccount.id,
+    number: subledgerAccount.number,
+    name: subledgerAccount.name,
+    fullname: subledgerAccount.number + ' - ' + subledgerAccount.ledger.name,
+    description: subledgerAccount.description,
+    typeName: subledgerAccount.type.name,
+    ledgerName: subledgerAccount.ledger.name,
+  };
+}
