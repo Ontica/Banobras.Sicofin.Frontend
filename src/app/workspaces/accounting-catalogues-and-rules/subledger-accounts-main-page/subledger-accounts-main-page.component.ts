@@ -66,6 +66,7 @@ export class SubledgerAccountsMainPageComponent {
       case SubledgerAccountCreatorEventType.SUBLEDGER_ACCOUNT_CREATED:
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
         this.insertSubledgerAccountToEntries(event.payload.subledgerAccount);
+        this.commandExecuted = true;
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
