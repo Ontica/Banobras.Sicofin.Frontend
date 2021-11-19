@@ -575,6 +575,12 @@ a.tag-warning {
   }
 }
 
+.tag-small {
+  font-size: 8px;
+  margin-left: 10px;
+  margin-bottom: 1px;
+}
+
 // blink
 
 @keyframes blinker {
