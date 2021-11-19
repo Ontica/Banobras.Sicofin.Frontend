@@ -13,8 +13,6 @@ import { SubledgerDataService } from '@app/data-services';
 
 import { EmptySubledgerAccount, SubledgerAccount, SubledgerAccountFields } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { sendEvent } from '@app/shared/utils';
 
 import { SubledgerAccountHeaderEventType } from '../subledger-account-header/subledger-account-header.component';
@@ -36,8 +34,7 @@ export class SubledgerAccountEditorComponent {
 
   submitted = false;
 
-  constructor(private subledgerData: SubledgerDataService,
-              private messageBox: MessageBoxService) {}
+  constructor(private subledgerData: SubledgerDataService) {}
 
 
   get canEditSubledgerAccount(): boolean {
@@ -61,8 +58,8 @@ export class SubledgerAccountEditorComponent {
         this.suspendSubledgerAccount();
         return;
 
-      case SubledgerAccountHeaderEventType.DELETE_SUBLEDGER_ACCOUNT:
-        this.deleteSubledgerAccount();
+      case SubledgerAccountHeaderEventType.ACTIVE_SUBLEDGER_ACCOUNT:
+        this.activateSubledgerAccount();
         return;
 
       default:
@@ -85,32 +82,29 @@ export class SubledgerAccountEditorComponent {
   }
 
 
-  private suspendSubledgerAccount() {
-    this.messageBox.showInDevelopment('Suspender auxiliar', {
-      eventType: 'SUSPEND_SUBLEDGER_ACCOUNT',
-      subledgerAccount: this.subledgerAccount,
-    });
-    // this.submitted = true;
-    // setTimeout(() => {
-    //   sendEvent(this.subledgerAccountEditorEvent,
-    //             SubledgerAccountEditorEventType.SUBLEDGER_ACCOUNT_UPDATED,
-    //     {subledgerAccount: {}});
-    //   this.submitted = false
-    // }, 500);
+  private activateSubledgerAccount() {
+    this.submitted = true;
+
+    this.subledgerData.activateSubledgerAccount(this.subledgerAccount.id)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.subledgerAccountEditorEvent, SubledgerAccountEditorEventType.SUBLEDGER_ACCOUNT_UPDATED,
+          {subledgerAccount: x});
+      })
+      .finally(() => this.submitted = false);
   }
 
 
-  private deleteSubledgerAccount() {
-    this.messageBox.showInDevelopment('Eliminar auxiliar', {
-      eventType: 'DELETE_SUBLEDGER_ACCOUNT',
-      subledgerAccount: this.subledgerAccount,
-    });
-    // this.submitted = true;
-    // setTimeout(() => {
-    //   sendEvent(this.subledgerAccountEditorEvent, SubledgerAccountEditorEventType.SUBLEDGER_ACCOUN_DELETED,
-    //     {subledgerAccount: this.subledgerAccount});
-    //   this.submitted = false
-    // }, 500);
+  private suspendSubledgerAccount() {
+    this.submitted = true;
+
+    this.subledgerData.suspendSubledgerAccount(this.subledgerAccount.id)
+      .toPromise()
+      .then(x => {
+        sendEvent(this.subledgerAccountEditorEvent, SubledgerAccountEditorEventType.SUBLEDGER_ACCOUNT_UPDATED,
+          {subledgerAccount: x});
+      })
+      .finally(() => this.submitted = false);
   }
 
 }

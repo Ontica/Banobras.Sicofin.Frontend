@@ -92,16 +92,16 @@
 
       <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
 
-        <button
-          type="button" class="btn"
-          (click)="onEventButtonClicked(eventType.SUSPEND_SUBLEDGER_ACCOUNT)">
+        <button *ngIf="!subledgerAccount.suspended"
+          type="button" class="btn-warning"
+          (click)="onSuspendButtonClicked()">
           Suspender
         </button>
 
-        <button
-          type="button" class="btn"
-          (click)="onEventButtonClicked(eventType.DELETE_SUBLEDGER_ACCOUNT)">
-          Eliminar
+        <button *ngIf="subledgerAccount.suspended"
+          type="button" class="btn-action"
+          (click)="onActiveButtonClicked()">
+          Activar
         </button>
 
       </div>

@@ -27,7 +27,7 @@ export enum SubledgerAccountHeaderEventType {
   CREATE_SUBLEDGER_ACCOUNT = 'SubledgerAccountHeaderComponent.Event.CreateSubledgerAccount',
   UPDATE_SUBLEDGER_ACCOUNT = 'SubledgerAccountHeaderComponent.Event.UpdateSubledgerAccount',
   SUSPEND_SUBLEDGER_ACCOUNT = 'SubledgerAccountHeaderComponent.Event.SuspendSubledgerAccount',
-  DELETE_SUBLEDGER_ACCOUNT = 'SubledgerAccountHeaderComponent.Event.DeleteSubledgerAccount',
+  ACTIVE_SUBLEDGER_ACCOUNT = 'SubledgerAccountHeaderComponent.Event.ActiveSubledgerAccount',
 }
 
 enum SubledgerAccountHeaderFormControls {
@@ -144,13 +144,13 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  onEventButtonClicked(eventType: SubledgerAccountHeaderEventType) {
-    if ([SubledgerAccountHeaderEventType.DELETE_SUBLEDGER_ACCOUNT,
-         SubledgerAccountHeaderEventType.SUSPEND_SUBLEDGER_ACCOUNT].includes(eventType)) {
-      this.showConfirmMessage(eventType);
-      return;
-    }
-    sendEvent(this.subledgerAccountHeaderEvent, eventType, {subledgerAccount: this.subledgerAccount});
+  onSuspendButtonClicked() {
+    this.showConfirmMessage(SubledgerAccountHeaderEventType.SUSPEND_SUBLEDGER_ACCOUNT);
+  }
+
+
+  onActiveButtonClicked() {
+    this.showConfirmMessage(SubledgerAccountHeaderEventType.ACTIVE_SUBLEDGER_ACCOUNT);
   }
 
 
@@ -260,19 +260,21 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private showConfirmMessage(eventType: SubledgerAccountHeaderEventType) {
-    let title = 'Eliminar auxiliar';
-    let message = `Esta operación eliminará el auxiliar
+    let confirmType: 'AcceptCancel' | 'DeleteCancel' = 'AcceptCancel';
+    let title = 'Activar auxiliar';
+    let message = `Esta operación activara el auxiliar
                    <strong> ${this.subledgerAccount.number}: ${this.subledgerAccount.name}</strong>.
-                   <br><br>¿Elimino al auxiliar?`;
+                   <br><br>¿Activo al auxiliar?`;
 
     if (eventType === SubledgerAccountHeaderEventType.SUSPEND_SUBLEDGER_ACCOUNT) {
+      confirmType = 'DeleteCancel';
       title = 'Suspender auxiliar';
       message = `Esta operación suspenderá el auxiliar
         <strong> ${this.subledgerAccount.number}: ${this.subledgerAccount.name}</strong>.
         <br><br>¿Suspendo al auxiliar?`;
     }
 
-    this.messageBox.confirm(message, title, 'DeleteCancel')
+    this.messageBox.confirm(message, title, confirmType)
       .toPromise()
       .then(x => {
         if (x) {

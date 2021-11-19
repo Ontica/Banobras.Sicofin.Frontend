@@ -58,4 +58,22 @@ export class SubledgerDataService {
     return this.http.put<SubledgerAccount>(path, subledgerAccountFields);
   }
 
+
+  activateSubledgerAccount(subledgerAccountId: number): Observable<SubledgerAccount> {
+    Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
+
+    const path = `v2/financial-accounting/subledger-accounts/${subledgerAccountId}/activate`;
+
+    return this.http.post<SubledgerAccount>(path);
+  }
+
+
+  suspendSubledgerAccount(subledgerAccountId: number): Observable<SubledgerAccount> {
+    Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
+
+    const path = `v2/financial-accounting/subledger-accounts/${subledgerAccountId}/suspend`;
+
+    return this.http.post<SubledgerAccount>(path);
+  }
+
 }

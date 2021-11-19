@@ -70,6 +70,10 @@ export class SubledgerAccountTabbedViewComponent implements OnChanges {
   private setTitle() {
     this.title = `${this.subledgerAccount.number}: ${this.subledgerAccount.name}`;
     this.hint = this.subledgerAccount.ledger.name;
+
+    if (this.subledgerAccount.suspended) {
+      this.hint += '<span class="tag-error tag-small"">Suspendido</span>';
+    }
   }
 
 }

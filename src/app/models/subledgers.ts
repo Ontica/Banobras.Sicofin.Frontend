@@ -113,6 +113,8 @@ export const DefaultSubledgerAccountColumns: DataTableColumn[] = [
     field: 'name',
     title: 'Nombre del auxiliar',
     type: DataTableColumnType.text,
+    isColumnStrikethrough: true,
+    fieldConditionStrikethrough: 'suspended',
   },
   {
     field: 'ledgerName',
