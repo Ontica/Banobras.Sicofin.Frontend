@@ -36,7 +36,7 @@ export class SubledgerAccountsFilterComponent implements OnInit, OnDestroy {
   subledgerAccountsForm = {
     accountChart: null,
     ledger: null,
-    subledgerType: null,
+    type: null,
     keywords: null,
   };
 
@@ -67,7 +67,7 @@ export class SubledgerAccountsFilterComponent implements OnInit, OnDestroy {
 
 
   onLedgerChanges() {
-    this.subledgerAccountsForm.subledgerType = null;
+    this.subledgerAccountsForm.type = null;
   }
 
 
@@ -102,7 +102,7 @@ export class SubledgerAccountsFilterComponent implements OnInit, OnDestroy {
     const data: SearchSubledgerAccountCommand = {
       accountsChartUID: this.subledgerAccountsForm.accountChart?.uid || '',
       ledgerUID:  this.subledgerAccountsForm.ledger?.uid || '',
-      subledgerTypeUID: this.subledgerAccountsForm.subledgerType?.uid || '',
+      typeUID: this.subledgerAccountsForm.type?.uid || '',
       keywords: this.subledgerAccountsForm.keywords || '',
       lists: [],
     };

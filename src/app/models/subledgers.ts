@@ -28,6 +28,7 @@ export interface SubledgerAccount {
   number: string;
   name: string;
   description: string;
+  suspended: boolean;
   lists: Identifiable[];
 }
 
@@ -40,6 +41,7 @@ export interface SubledgerAccountDescriptor {
   description: string;
   typeName: string;
   ledgerName: string;
+  suspended: boolean;
 }
 
 
@@ -55,7 +57,7 @@ export interface SubledgerAccountFields {
 export interface SearchSubledgerAccountCommand {
   accountsChartUID: string;
   ledgerUID?: string;
-  subledgerTypeUID?: string;
+  typeUID?: string;
   keywords?: string;
   lists?: string[];
 }
@@ -75,7 +77,8 @@ export const EmptySubledgerAccount: SubledgerAccount = {
   number: '',
   name: '',
   description: '',
-  lists: [],
+  suspended: false,
+  lists: []
 };
 
 
@@ -87,15 +90,16 @@ export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
   description: '',
   typeName: '',
   ledgerName: '',
+  suspended: false
 };
 
 
 export const EmptySearchSubledgerAccountCommand: SearchSubledgerAccountCommand = {
   accountsChartUID: '',
   ledgerUID: '',
-  subledgerTypeUID: '',
+  typeUID: '',
   keywords: '',
-  lists: [],
+  lists: []
 };
 
 
@@ -140,5 +144,6 @@ export function mapSubledgerAccountDescriptorFromSubledgerAccount(subledgerAccou
     description: subledgerAccount.description,
     typeName: subledgerAccount.type.name,
     ledgerName: subledgerAccount.ledger.name,
+    suspended: subledgerAccount.suspended,
   };
 }
