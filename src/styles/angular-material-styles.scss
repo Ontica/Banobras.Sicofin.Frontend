@@ -302,6 +302,10 @@ table.mat-table {
     &.mat-row {
       background-color: $white;
 
+      .item-strikethrough {
+        text-decoration: line-through;
+      }
+
       &.row-selected {
         background-color: $selected-control-background-color;
       }

@@ -22,6 +22,8 @@ export interface DataTableColumn {
   title: string;
   type: string;
   digits?: number;
+  isColumnStrikethrough?: boolean;
+  fieldConditionStrikethrough?: string;
 }
 
 
@@ -46,9 +48,10 @@ export enum DataTableColumnType {
 }
 
 
-export type DataTableItemType = 'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalConsolidated' |
-  'BalanceTotalConsolidatedByLedger' | 'BalanceTotalCreditor' | 'BalanceTotalCurrency' |
-  'BalanceTotalDebtor' | 'BalanceTotalGroupCreditor' | 'BalanceTotalGroupDebtor' | 'Summary';
+export type DataTableItemType = 'Entry' | 'Summary' | 'Group' | 'Total' |
+  'BalanceEntry' | 'BalanceSummary' | 'BalanceTotalConsolidated' | 'BalanceTotalConsolidatedByLedger' |
+  'BalanceTotalCreditor' | 'BalanceTotalCurrency' | 'BalanceTotalDebtor' | 'BalanceTotalGroupCreditor' |
+  'BalanceTotalGroupDebtor';
 
 
 export const SummaryItemTypeList: DataTableItemType[] = [
@@ -58,12 +61,14 @@ export const SummaryItemTypeList: DataTableItemType[] = [
 
 
 export const GroupItemTypeList: DataTableItemType[] = [
+  'Group',
   'BalanceTotalGroupDebtor',
   'BalanceTotalGroupCreditor',
 ];
 
 
 export const TotalItemTypeList: DataTableItemType[] = [
+  'Total',
   'BalanceTotalDebtor',
   'BalanceTotalCreditor',
   'BalanceTotalCurrency',
