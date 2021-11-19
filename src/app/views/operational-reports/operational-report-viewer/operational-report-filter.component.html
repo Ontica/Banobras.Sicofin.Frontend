@@ -5,7 +5,7 @@
 
     <div fxLayout="row" fxLayout.lt-sm="column">
 
-      <div fxFlex>
+      <div fxFlex="50">
 
         <label>Catálogo de cuentas:</label>
 
@@ -14,7 +14,7 @@
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
           [showError]="!operationalReportCommand.accountsChartUID"
-          (changes)="onAccountsChartChanges()">
+          (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
 
       </div>
@@ -26,29 +26,34 @@
         <emp-ng-select name="reportType" required
           [(ngModel)]="operationalReportCommand.reportType"
           [items]="filteredReportTypeList"
-          [showError]="!operationalReportCommand.reportType">
+          [showError]="!operationalReportCommand.reportType"
+          (changes)="onReportTypeChanges($event)">
         </emp-ng-select>
 
       </div>
 
-      <div fxFlex="none">
+      <div fxFlex="120px">
 
-        <label>Fecha:</label>
+        <ng-container *ngIf="displayDate">
 
-        <emp-ng-datepicker name="date" required
-          [(ngModel)]="operationalReportCommand.toDate"
-          [showError]="!operationalReportCommand.toDate">
+          <label>Fecha:</label>
 
-        </emp-ng-datepicker>
+          <emp-ng-datepicker name="toDate" required
+            [(ngModel)]="operationalReportCommand.toDate"
+            [showError]="!operationalReportCommand.toDate">
+
+          </emp-ng-datepicker>
+
+        </ng-container>
 
       </div>
 
       <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
         <button title="Generar reporte"
-          [class.btn-icon]="form.invalid"
-          [class.btn-icon-action]="form.valid"
-          [disabled]="form.invalid"
+          [class.btn-icon]="form.invalid || !periodValid"
+          [class.btn-icon-action]="form.valid && periodValid"
+          [disabled]="form.invalid || !periodValid"
           (click)="onBuildOperationalReportClicked()">
 
           <mat-icon>search</mat-icon>
@@ -56,6 +61,38 @@
         </button>
 
       </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="displayLedgerAndPeriod">
+
+        <div fxFlex="50">
+
+          <label>Contabilidad:</label>
+
+          <emp-ng-select name="ledger"
+            [config]="{clearable: true, multiple: true}"
+            [(ngModel)]="operationalReportCommand.ledgers"
+            [items]="selectedAccountChart?.ledgers ?? []"
+            bindLabel="fullName"
+            [placeholder]="selectedAccountChart ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'">
+          </emp-ng-select>
+
+        </div>
+
+        <div fxFlex="none">
+
+          <label>Periodo:</label>
+
+          <emp-ng-date-range-picker name="period"
+            [(startDate)]="operationalReportCommand.fromDate"
+            [(endDate)]="operationalReportCommand.toDate"
+            [showError]="!operationalReportCommand.fromDate ||
+                          !operationalReportCommand.toDate">
+
+          </emp-ng-date-range-picker>
+
+        </div>
 
     </div>
 

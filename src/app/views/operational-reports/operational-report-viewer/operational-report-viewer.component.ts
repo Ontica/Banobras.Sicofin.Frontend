@@ -12,7 +12,7 @@ import { Assertion } from '@app/core';
 import { OperationalReportsDataService } from '@app/data-services';
 
 import { OperationalReportCommand, EmptyOperationalReport, EmptyOperationalReportCommand,
-         OperationalReport, FileType, ReportGroup } from '@app/models';
+         OperationalReport, FileType, ReportGroup, ReportType } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -46,7 +46,7 @@ export class OperationalReportViewerComponent implements OnChanges {
 
   operationalReportCommand: OperationalReportCommand = Object.assign({}, EmptyOperationalReportCommand);
 
-  selectedReportType = null;
+  selectedReportType: ReportType = null;
 
   displayExportModal = false;
 
@@ -78,7 +78,7 @@ export class OperationalReportViewerComponent implements OnChanges {
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
         this.operationalReportCommand = event.payload.operationalReportCommand as OperationalReportCommand;
-        this.selectedReportType = event.payload.reportType;
+        this.selectedReportType = event.payload.reportType as ReportType;
 
         this.setOperationalReportData(EmptyOperationalReport, false);
         this.getOperationalReport();

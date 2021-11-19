@@ -11,10 +11,11 @@ import { EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyOperationalReportCommand, OperationalReportCommand,
-         ReportGroup, ReportType} from '@app/models';
+import { AccountsChartMasterData, EmptyOperationalReportCommand, OperationalReportCommand, ReportGroup,
+         ReportPayloadType, ReportType } from '@app/models';
 
-import { AccountChartStateSelector, ReportingtStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector,
+         ReportingtStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -39,6 +40,10 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   operationalReportCommand: OperationalReportCommand = Object.assign({}, EmptyOperationalReportCommand);
 
+  selectedAccountChart = null;
+
+  selectedReportType: ReportType = null;
+
   reportTypeList: ReportType[] = [];
 
   filteredReportTypeList: ReportType[] = [];
@@ -62,19 +67,46 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onAccountsChartChanges() {
+  get displayDate() {
+    return this.selectedReportType?.payloadType === ReportPayloadType.AccountsChartAndDate;
+  }
+
+
+  get displayLedgerAndPeriod() {
+    return this.selectedReportType?.payloadType === ReportPayloadType.LedgerAndPeriod;
+  }
+
+
+  get periodValid() {
+    if (this.displayLedgerAndPeriod) {
+      return !!this.operationalReportCommand.fromDate && !!this.operationalReportCommand.toDate;
+    }
+
+    return true;
+  }
+
+
+  onAccountsChartChanges(accountChart: AccountsChartMasterData) {
+    this.selectedAccountChart = accountChart;
     this.setFilteredReportTypeList();
-    this.operationalReportCommand.reportType = null;
+    this.onReportTypeChanges(null);
+  }
+
+
+  onReportTypeChanges(reportType: ReportType) {
+    this.selectedReportType = reportType ?? null;
+
+    this.operationalReportCommand.reportType = reportType?.uid ?? null;
     this.operationalReportCommand.toDate = null;
+    this.operationalReportCommand.fromDate = null;
+    this.operationalReportCommand.ledgers = [];
   }
 
 
   onBuildOperationalReportClicked() {
-    const reportType = this.reportTypeList.filter(x => x.uid === this.operationalReportCommand.reportType);
-
     const payload = {
-      operationalReportCommand: Object.assign({}, this.operationalReportCommand),
-      reportType: reportType.length > 0 ? reportType[0] : null,
+      operationalReportCommand: this.getOperationalReportCommandData(),
+      reportType: this.selectedReportType,
     };
 
     sendEvent(this.operationalReportFilterEvent,
@@ -101,8 +133,9 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   private setDefaultAccountsChartUID() {
-    this.operationalReportCommand.accountsChartUID = this.accountsChartMasterDataList.length > 0 ?
-      this.accountsChartMasterDataList[0].uid : '';
+    this.selectedAccountChart = this.accountsChartMasterDataList.length > 0 ?
+      this.accountsChartMasterDataList[0] : null;
+    this.operationalReportCommand.accountsChartUID = this.selectedAccountChart?.uid;
   }
 
 
@@ -111,6 +144,22 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
       x.accountsCharts.includes(this.operationalReportCommand.accountsChartUID) &&
       x.group === this.reportGroup
     );
+  }
+
+
+  private getOperationalReportCommandData(): OperationalReportCommand {
+    const data: OperationalReportCommand = {
+      reportType: this.operationalReportCommand.reportType,
+      accountsChartUID: this.operationalReportCommand.accountsChartUID,
+      toDate: this.operationalReportCommand.toDate,
+    };
+
+    if (this.displayLedgerAndPeriod) {
+      data.ledgers = this.operationalReportCommand.ledgers ?? [];
+      data.fromDate = this.operationalReportCommand.fromDate ?? '';
+    }
+
+    return data;
   }
 
 }

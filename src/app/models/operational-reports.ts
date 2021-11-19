@@ -15,6 +15,8 @@ import { FileType } from './reporting';
 export interface OperationalReportCommand extends DataTableCommand {
   reportType: string;
   accountsChartUID: string;
+  ledgers?: string[];
+  fromDate?: DateString;
   toDate: DateString;
   exportTo?: FileType;
 }
