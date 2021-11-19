@@ -9,6 +9,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmpCurrencyDirective } from './currency.directive';
 import { EmpIntegerDirective } from './integer.directive';
+import { EmpNumerationDirective } from './numeration.directive';
 import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive';
 import { HasPermissionDirective } from './has-permission.directive';
 import { PeriodRequiredValidatorDirective } from './period-required-validator.directive';
@@ -24,6 +25,7 @@ import { ResizableDirective } from './resizable.directive';
   declarations: [
     EmpCurrencyDirective,
     EmpIntegerDirective,
+    EmpNumerationDirective,
     EmpTextareaAutoresizeDirective,
     HasPermissionDirective,
     PeriodRequiredValidatorDirective,
@@ -33,6 +35,7 @@ import { ResizableDirective } from './resizable.directive';
   exports: [
     EmpCurrencyDirective,
     EmpIntegerDirective,
+    EmpNumerationDirective,
     EmpTextareaAutoresizeDirective,
     HasPermissionDirective,
     PeriodRequiredValidatorDirective,
