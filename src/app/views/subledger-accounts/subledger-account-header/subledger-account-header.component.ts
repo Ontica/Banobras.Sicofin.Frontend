@@ -185,7 +185,7 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
         subledgerType: new FormControl('', Validators.required),
         number: new FormControl('', Validators.required),
         name: new FormControl('', Validators.required),
-        description: new FormControl('', Validators.required),
+        description: new FormControl(''),
       })
     );
   }
