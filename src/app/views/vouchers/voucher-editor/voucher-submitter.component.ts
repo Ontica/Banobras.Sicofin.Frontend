@@ -21,8 +21,6 @@ export enum VoucherSubmitterEventType {
   DELETE_VOUCHER_CLICKED = 'VoucherSubmitterComponent.Event.DeleteVoucherClicked',
   SEND_TO_LEDGER_BUTTON_CLICKED = 'VoucherSubmitterComponent.Event.SendToLedgerButtonClicked',
   SEND_TO_SUPERVISOR_BUTTON_CLICKED = 'VoucherSubmitterComponent.Event.SendToSupervisorButtonClicked',
-  ADD_VOUCHER_ENTRY_CLICKED = 'VoucherSubmitterComponent.Event.AddVoucherEntryClicked',
-  IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED = 'VoucherSubmitterComponent.Event.ImportVoucherEntriesButtonClicked',
 }
 
 @Component({

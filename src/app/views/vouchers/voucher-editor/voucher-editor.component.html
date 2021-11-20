@@ -13,7 +13,7 @@
 
     </emp-fa-voucher-header>
 
-    <emp-fa-voucher-submitter *ngIf="canEditVoucher"
+    <emp-fa-voucher-submitter *ngIf="canEditVoucher" fxFlex
       [voucher]="voucher"
       [isValidForm]="voucherFieldsValid"
       [editionMode]="formEditionMode"
@@ -21,30 +21,4 @@
 
     </emp-fa-voucher-submitter>
 
-    <br>
-
-    <div class="section-title"> Movimientos </div>
-
-    <emp-fa-voucher-entry-table fxFlex
-      [voucherEntryList]="voucher.entries"
-      [canDelete]="canEditVoucher"
-      [canReviewVoucher]="voucher.actions?.reviewVoucher"
-      (voucherEntryTableEvent)="onVoucherEntryTableEvent($event)">
-
-    </emp-fa-voucher-entry-table>
-
 </div>
-
-<emp-fa-voucher-entry-editor *ngIf="displayVoucherEntryEditor"
-  [voucher]="voucher"
-  [voucherEntry]="selectedVoucherEntry"
-  [readonly]="!canEditVoucher"
-  (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
-
-</emp-fa-voucher-entry-editor>
-
-<emp-fa-voucher-entries-importer *ngIf="displayVoucherEntriesImporter"
-  [voucher]="voucher"
-  (voucherEntriesImporterEvent)="onVoucherEntriesImporterEvent($event)">
-
-</emp-fa-voucher-entries-importer>

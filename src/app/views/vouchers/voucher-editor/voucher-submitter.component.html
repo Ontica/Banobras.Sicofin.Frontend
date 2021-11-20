@@ -24,26 +24,11 @@
   </div>
 
   <div fxFlex fxLayoutAlign="end center">
-    <ng-container *ngIf="!editionMode">
-      <button
-        class="btn-action"
-        (click)="onEventButtonClicked(eventType.ADD_VOUCHER_ENTRY_CLICKED)">
-        Agregar movimiento
-      </button>
-      <button
-        class="btn-action"
-        (click)="onEventButtonClicked(eventType.IMPORT_VOUCHER_ENTRIES_BUTTON_CLICKED)">
-        Importar movimientos
-      </button>
-
-      <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0"></mat-divider>
-
-      <button
-        class="btn-action"
-        (click)="onToggleEditionMode()">
-        Editar
-      </button>
-    </ng-container>
+    <button *ngIf="!editionMode"
+      class="btn-action"
+      (click)="onToggleEditionMode()">
+      Editar
+    </button>
 
     <ng-container *ngIf="editionMode">
       <button

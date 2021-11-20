@@ -7,13 +7,15 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { DateStringLibrary, EventInfo } from '@app/core';
 
 import { EmptyVoucher, Voucher } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { VoucherEditorEventType } from '../voucher-editor/voucher-editor.component';
+
+import { VoucherEntriesEditorEventType } from '../voucher-entries-editor/voucher-entries-editor.component';
 
 export enum VoucherTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'VoucherTabbedViewComponent.Event.CloseButtonClicked',
@@ -65,9 +67,34 @@ export class VoucherTabbedViewComponent implements OnChanges {
   }
 
 
+  onVoucherEntriesEditorEvent(event: EventInfo) {
+    switch (event.type as VoucherEntriesEditorEventType) {
+
+      case VoucherEntriesEditorEventType.VOUCHER_UPDATED:
+        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_UPDATED,
+          event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   private setTitle() {
-    this.title = `${this.voucher.number}: ${this.voucher.voucherType.name}`;
-    this.hint = this.voucher.ledger.name;
+    if (this.voucher.status === 'Pendiente') {
+      this.title = this.voucher.concept;
+    } else {
+      this.title = `${this.voucher.number}: ${this.voucher.concept}`;
+    }
+
+    const accountingDate = DateStringLibrary.format(this.voucher.accountingDate);
+
+    this.hint = `<strong>${this.voucher.ledger.name} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+      `${this.voucher.voucherType.name}</strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+      `${this.voucher.transactionType.name} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+      `${accountingDate}`;
   }
 
 }
