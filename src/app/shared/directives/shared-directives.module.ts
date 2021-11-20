@@ -14,6 +14,8 @@ import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive
 import { HasPermissionDirective } from './has-permission.directive';
 import { PeriodRequiredValidatorDirective } from './period-required-validator.directive';
 import { ResizableDirective } from './resizable.directive';
+import { BreakpointDirective } from './notebook-breakpoint.directive';
+import { NotebookBreakPointsProvider } from './notebook-breakpoint';
 
 
 @NgModule({
@@ -23,6 +25,7 @@ import { ResizableDirective } from './resizable.directive';
   ],
 
   declarations: [
+    BreakpointDirective,
     EmpCurrencyDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
@@ -33,6 +36,7 @@ import { ResizableDirective } from './resizable.directive';
   ],
 
   exports: [
+    BreakpointDirective,
     EmpCurrencyDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
@@ -40,6 +44,10 @@ import { ResizableDirective } from './resizable.directive';
     HasPermissionDirective,
     PeriodRequiredValidatorDirective,
     ResizableDirective,
+  ],
+
+  providers: [
+    NotebookBreakPointsProvider,
   ],
 
 })
