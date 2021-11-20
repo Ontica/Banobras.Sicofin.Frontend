@@ -39,7 +39,7 @@ enum VouchersImporterFormControls {
   distributeVouchers = 'distributeVouchers',
   generateSubledgerAccount = 'generateSubledgerAccount',
   canEditVoucherEntries = 'canEditVoucherEntries',
-  recordingDate = 'recordingDate',
+  accountingDate = 'accountingDate',
   voucherTypeUID = 'voucherTypeUID',
 }
 
@@ -266,7 +266,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
         distributeVouchers: new FormControl(false),
         generateSubledgerAccount: new FormControl(false),
         canEditVoucherEntries: new FormControl(true),
-        recordingDate: new FormControl(DateStringLibrary.today(), Validators.required),
+        accountingDate: new FormControl(DateStringLibrary.today(), Validators.required),
         voucherTypeUID: new FormControl('', Validators.required),
       })
     );
@@ -280,7 +280,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       distributeVouchers: false,
       generateSubledgerAccount: false,
       canEditVoucherEntries: true,
-      recordingDate: DateStringLibrary.today(),
+      accountingDate: DateStringLibrary.today(),
       voucherTypeUID: '',
     });
   }
@@ -305,7 +305,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       distributeVouchers: formModel.distributeVouchers,
       generateSubledgerAccount: formModel.generateSubledgerAccount,
       canEditVoucherEntries: formModel.canEditVoucherEntries,
-      recordingDate: formModel.recordingDate,
+      accountingDate: formModel.accountingDate,
       voucherTypeUID: formModel.voucherTypeUID,
     };
 
@@ -334,7 +334,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       }
 
       if (this.executedDryRun) {
-        this.messageBox.showError('Se encontraron errores en los datos, favor de rectificar.');
+        this.messageBox.showError('Se encontraron errores en los datos.');
       }
 
       return true;
@@ -351,10 +351,10 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private dryRunImportVouchers(importObservavble: Observable<ImportVouchersResult>) {
+  private dryRunImportVouchers(importObservable: Observable<ImportVouchersResult>) {
     this.isLoading = true;
 
-    importObservavble
+    importObservable
       .toPromise()
       .then(x => {
         this.executedDryRun = true;
@@ -365,10 +365,10 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private importVouchers(importObservavble: Observable<ImportVouchersResult>) {
+  private importVouchers(importObservable: Observable<ImportVouchersResult>) {
     this.isLoading = true;
 
-    importObservavble
+    importObservable
       .toPromise()
       .then(x => this.resolveImportVoucherResponse(x))
       .finally(() => this.isLoading = false);

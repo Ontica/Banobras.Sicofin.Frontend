@@ -12,7 +12,7 @@ export interface ImportVouchersCommand {
   distributeVouchers: boolean;
   generateSubledgerAccount: boolean;
   canEditVoucherEntries: boolean;
-  recordingDate: DateString;
+  accountingDate: DateString;
   voucherTypeUID: string;
   processOnly?: string[];
 }
@@ -50,6 +50,6 @@ export const EmptyImportVouchersCommand: ImportVouchersCommand = {
   distributeVouchers: false,
   generateSubledgerAccount: false,
   canEditVoucherEntries: false,
-  recordingDate: DateStringLibrary.today(),
+  accountingDate: DateStringLibrary.today(),
   voucherTypeUID: '',
 };
