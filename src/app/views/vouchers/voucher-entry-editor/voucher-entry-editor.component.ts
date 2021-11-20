@@ -88,12 +88,12 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   ledgerAccountList$: Observable<LedgerAccount[]>;
   ledgerAccountInput$ = new Subject<string>();
-  ledgerAccountMinTermLength = 4;
+  ledgerAccountMinTermLength = 1;
   ledgerAccountLoading = false;
 
   subledgerAccountList$: Observable<SubledgerAccountDescriptor[]>;
   subledgerAccountInput$ = new Subject<string>();
-  subledgerAccountMinTermLength = 5;
+  subledgerAccountMinTermLength = 4;
   subledgerAccountLoading = false;
 
   sectorRequired = false;
@@ -101,7 +101,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   displaySubledgerAccountCreator = false;
 
-  constructor(private uiLayer: PresentationLayer,
+  constructor(uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();

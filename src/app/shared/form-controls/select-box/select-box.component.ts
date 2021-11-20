@@ -58,7 +58,7 @@ const DefaultSelectBoxConfig: SelectBoxConfig = {
   notFoundText: 'No se encontraron registros',
   searchable: true,
   selectFirst: false,
-  typeToSearchText: 'Por favor ingrese 5 o mas caracteres',
+  typeToSearchText: 'Favor de ingresar 5 o más caracteres',
   virtualScroll: false,
 };
 

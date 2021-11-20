@@ -60,7 +60,7 @@
                     [config]="{ bindByValue: false,
                                 clearable: true,
                                 minTermLength: ledgerAccountMinTermLength,
-                                typeToSearchText: 'Ingrese ' + ledgerAccountMinTermLength +' o más caracteres'}"
+                                typeToSearchText: 'Ingresar ' + ledgerAccountMinTermLength +' o más caracteres'}"
                     [formControlName]="controls.ledgerAccount"
                     [items]="ledgerAccountList$ | async"
                     [typeahead]="ledgerAccountInput$"
@@ -106,7 +106,7 @@
                     [config]="{ bindByValue: false,
                                 clearable: true,
                                 minTermLength: subledgerAccountMinTermLength,
-                                typeToSearchText: 'Ingrese ' + subledgerAccountMinTermLength +' o más caracteres',
+                                typeToSearchText: 'Ingresar ' + subledgerAccountMinTermLength +' o más caracteres',
                                 virtualScroll: true }"
                     [formControlName]="controls.subledgerAccount"
                     [items]="subledgerAccountList$ | async"
