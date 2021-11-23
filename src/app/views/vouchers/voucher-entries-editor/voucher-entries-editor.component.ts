@@ -139,7 +139,8 @@ export class VoucherEntriesEditorComponent {
       case VoucherEntriesImporterEventType.VOUCHER_ENTRIES_IMPORTED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         this.displayVoucherEntriesImporter = false;
-        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED, event.payload);
+        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
+          event.payload);
         return;
 
       default:
@@ -171,7 +172,8 @@ export class VoucherEntriesEditorComponent {
       .toPromise()
       .then(x => {
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
-        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED, {voucher: x});
+        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
+          {voucher: x});
       })
       .finally(() => this.submitted = false);
   }
@@ -196,7 +198,8 @@ export class VoucherEntriesEditorComponent {
       .toPromise()
       .then(x => {
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
-        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED, {voucher: x});
+        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
+          {voucher: x});
       })
       .finally(() => this.submitted = false);
   }
@@ -208,7 +211,8 @@ export class VoucherEntriesEditorComponent {
     this.vouchersData.deleteVoucherEntry(this.voucher.id, voucherEntryId)
       .toPromise()
       .then(x => {
-        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED, {voucher: x});
+        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
+          {voucher: x});
       })
       .finally(() => this.submitted = false);
   }

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { BREAKPOINT } from "@angular/flex-layout";
+import { BREAKPOINT } from '@angular/flex-layout';
 
 const NOTEBOOK_BREAKPOINT = [{
   alias: 'xs.notebook',
