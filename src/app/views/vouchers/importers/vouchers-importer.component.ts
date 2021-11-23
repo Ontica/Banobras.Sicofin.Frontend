@@ -13,12 +13,12 @@ import { Assertion, DateStringLibrary, EventInfo, Identifiable } from '@app/core
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { ImportVouchersDataService } from '@app/data-services';
+import { ImportVouchersDataService, VouchersDataService } from '@app/data-services';
 
 import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals,
          ImportVouchersCommand } from '@app/models';
 
-import { VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector, VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -26,7 +26,7 @@ import { FileType } from '@app/shared/form-controls/file-control/file-control-da
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 
 import { ImporterDetailsTableEventType } from './importer-details-table.component';
 
@@ -39,6 +39,7 @@ enum VouchersImporterFormControls {
   distributeVouchers = 'distributeVouchers',
   generateSubledgerAccount = 'generateSubledgerAccount',
   canEditVoucherEntries = 'canEditVoucherEntries',
+  accountsChart = 'accountsChart',
   accountingDate = 'accountingDate',
   voucherTypeUID = 'voucherTypeUID',
 }
@@ -60,31 +61,30 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   file = null;
 
   formHandler: FormHandler;
-
   controls = VouchersImporterFormControls;
-
   isFormInvalidated = false;
 
   isLoading = false;
+  isLoadingAccountingDates = false;
 
   importTypes = ImportTypes;
-
   voucherTypesList: Identifiable[] = [];
+  accountsChartMasterDataList: Identifiable[] = [];
+  accountingDatesList: Identifiable[] = [];
+  hasValueDate = false;
 
   selectedImportType = ImportTypes.excelFile;
-
   selectedFileType: FileType = 'excel';
 
   importVouchersResult: ImportVouchersResult = EmptyImportVouchersResult;
-
   selectedPartsToImport: ImportVouchersTotals[] = [];
-
   executedDryRun = false;
 
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
               private importVouchersData: ImportVouchersDataService,
+              private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
@@ -161,6 +161,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     this.selectedFileType = null;
     this.selectedFileType = this.isExcelImport ? 'excel' : this.selectedFileType;
     this.selectedFileType = this.isTxtImport ? 'txt' : this.selectedFileType;
+    this.hasValueDate = false;
 
     this.resetImportVouchersResult();
     this.resetForm();
@@ -175,6 +176,17 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   onFileControlChange(file) {
     this.file = file;
     this.resetImportVouchersResult();
+  }
+
+
+  onAccountChartChanges(accountChart: Identifiable) {
+    this.formHandler.getControl(this.controls.accountingDate).reset();
+    this.getOpenedAccountingDates(accountChart.uid);
+  }
+
+
+  onHasValueDateChange() {
+    this.formHandler.getControl(this.controls.accountingDate).reset();
   }
 
 
@@ -248,11 +260,34 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST)
-      .subscribe(x => {
-        this.voucherTypesList = x;
-        this.isLoading = false;
-      });
+    combineLatest([
+      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
+      this.helper.select<Identifiable[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
+    ])
+    .subscribe(([a, b]) => {
+      this.voucherTypesList = a;
+      this.accountsChartMasterDataList = b;
+      this.isLoading = false;
+    });
+  }
+
+
+  private getOpenedAccountingDates(accountsChartUID: string) {
+    this.accountingDatesList = [];
+
+    if (!accountsChartUID) {
+      return;
+    }
+
+    this.isLoadingAccountingDates = true;
+
+    this.vouchersData.getOpenedAccountingDates(accountsChartUID)
+      .toPromise()
+      .then(x => {
+        this.accountingDatesList =
+          x.map(item => Object.create({ uid: item, name: DateStringLibrary.format(item) }));
+      })
+      .finally(() => this.isLoadingAccountingDates = false);
   }
 
 
@@ -266,7 +301,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
         distributeVouchers: new FormControl(false),
         generateSubledgerAccount: new FormControl(false),
         canEditVoucherEntries: new FormControl(true),
-        accountingDate: new FormControl(DateStringLibrary.today(), Validators.required),
+        accountsChart: new FormControl('', Validators.required),
+        accountingDate: new FormControl('', Validators.required),
         voucherTypeUID: new FormControl('', Validators.required),
       })
     );
@@ -280,7 +316,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       distributeVouchers: false,
       generateSubledgerAccount: false,
       canEditVoucherEntries: true,
-      accountingDate: DateStringLibrary.today(),
+      accountsChart: '',
+      accountingDate: '',
       voucherTypeUID: '',
     });
   }
