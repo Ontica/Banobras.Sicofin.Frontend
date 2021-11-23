@@ -54,7 +54,7 @@ export class VoucherEntryTableComponent implements OnChanges {
 
 
   onUpdateVoucherEntryClicked(voucherEntry: VoucherEntryDescriptor) {
-    if (voucherEntry.itemType === "TotalsEntry") {
+    if (voucherEntry.itemType === 'TotalsEntry') {
       return;
     }
 
@@ -104,10 +104,12 @@ export class VoucherEntryTableComponent implements OnChanges {
 
         <tr><td class='nowrap'>No. cuenta / Auxiliar: </td><td><strong>
           ${voucherEntry.accountNumber}
+          ${voucherEntry.subledgerAccountNumber ? ': ' + voucherEntry.subledgerAccountNumber : ''}
         </strong></td></tr>
 
         <tr><td class='nowrap'>Descripción / Concepto: </td><td><strong>
           ${voucherEntry.accountName}
+          ${voucherEntry.subledgerAccountName ? ': ' + voucherEntry.subledgerAccountName : ''}
         </strong></td></tr>
       </table>
 

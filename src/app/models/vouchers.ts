@@ -311,6 +311,8 @@ export interface VoucherEntryDescriptor {
   voucherEntryType: VoucherEntryType;
   accountNumber: string;
   accountName: string;
+  subledgerAccountNumber: string;
+  subledgerAccountName: string;
   sector: string;
   verificationNumber: string;
   responsibilityArea: string;
