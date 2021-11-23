@@ -65,15 +65,6 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="100/3">
-        <label>Tipo de transacción:</label>
-        <emp-ng-select
-          [formControlName]="controls.transactionTypeUID"
-          [items]="transactionTypesList"
-          [showError]="formHandler.showInvalidControl(controls.transactionTypeUID)">
-        </emp-ng-select>
-      </div>
-
       <ng-container #accountingDateField>
 
         <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">

@@ -238,7 +238,6 @@ export interface VoucherFields {
   concept: string;
   ledgerUID: string;
   functionalAreaId: number;
-  transactionTypeUID: string;
   accountingDate: string;
   calculationDate?: DateString;
   onVoucherNumber?: string;

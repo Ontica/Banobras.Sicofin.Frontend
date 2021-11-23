@@ -37,7 +37,6 @@ enum VoucherHeaderFormControls {
   ledgerUID = 'ledgerUID',
   concept = 'concept',
   functionalAreaId = 'functionalAreaId',
-  transactionTypeUID = 'transactionTypeUID',
   accountingDate = 'accountingDate',
 }
 
@@ -67,7 +66,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   voucherTypesList: Identifiable[] = [];
   voucherSpecialCaseTypesList: VoucherSpecialCaseType[] = [];
   functionalAreasList: Identifiable[] = [];
-  transactionTypesList: Identifiable[] = [];
   accountingDatesList: Identifiable[] = [];
 
   helper: SubscriptionHelper;
@@ -153,17 +151,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     combineLatest([
       this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
       this.helper.select<VoucherSpecialCaseType[]>(VoucherStateSelector.VOUCHER_SPECIAL_CASE_TYPES_LIST),
-      this.helper.select<Identifiable[]>(VoucherStateSelector.TRANSACTION_TYPES_LIST),
       this.helper.select<Identifiable[]>(VoucherStateSelector.FUNCTIONAL_AREAS_LIST),
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
     ])
-    .subscribe(([a, b, c, d, e]) => {
+    .subscribe(([a, b, c, d]) => {
       this.voucherTypesList = a;
       this.voucherSpecialCaseTypesList = b;
-      this.transactionTypesList = c;
-      this.functionalAreasList = d;
-      this.accountsChartMasterDataList = e;
+      this.functionalAreasList = c;
+      this.accountsChartMasterDataList = d;
 
       this.setAccountChartSelected();
       this.isLoading = false;
@@ -206,7 +202,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
         ledgerUID: new FormControl('', Validators.required),
         concept: new FormControl('', Validators.required),
         functionalAreaId: new FormControl('', Validators.required),
-        transactionTypeUID: new FormControl('', Validators.required),
         accountingDate: new FormControl('', Validators.required),
       })
     );
@@ -237,7 +232,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       ledgerUID: this.voucher.ledger.uid || '',
       concept: this.voucher.concept || '',
       functionalAreaId: this.voucher.functionalArea.uid || '',
-      transactionTypeUID: this.voucher.transactionType.uid || '',
       accountingDate: this.voucher.accountingDate || '',
     });
 
@@ -290,7 +284,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       ledgerUID: formModel.ledgerUID ?? '',
       concept: formModel.concept ?? '',
       functionalAreaId: formModel.functionalAreaId ?? '',
-      transactionTypeUID: formModel.transactionTypeUID ?? '',
       accountingDate: formModel.accountingDate ?? '',
     };
 
