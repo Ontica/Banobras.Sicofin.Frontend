@@ -12,11 +12,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest } from 'rxjs';
 
-import { EventInfo, Identifiable, isEmpty } from '@app/core';
+import { DateStringLibrary, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyVoucher, Ledger, Voucher, VoucherFields,
+import { AccountsChartMasterData, EmptyVoucher, Voucher, VoucherFields,
          VoucherSpecialCaseType } from '@app/models';
 
 import { AccountChartStateSelector,
@@ -25,8 +25,6 @@ import { AccountChartStateSelector,
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { VouchersDataService } from '@app/data-services';
-
-import { DateTimeFormatPipe } from '@app/shared/pipes/date-time-format.pipe';
 
 export enum VoucherHeaderEventType {
   VOUCHER_TYPE_CHANGED = 'VoucherHeaderComponent.Event.VoucherTypeChanged',
@@ -46,7 +44,6 @@ enum VoucherHeaderFormControls {
 @Component({
   selector: 'emp-fa-voucher-header',
   templateUrl: './voucher-header.component.html',
-  providers: [DateTimeFormatPipe]
 })
 export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -76,8 +73,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private vouchersData: VouchersDataService,
-              private dateTimeFormat: DateTimeFormatPipe) {
+              private vouchersData: VouchersDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
     this.enableEditor(true);
@@ -139,15 +135,10 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
-    this.accountChartSelected = accountChart;
+    this.formHandler.getControl(this.controls.accountingDate).reset();
     this.formHandler.getControl(this.controls.ledgerUID).reset();
-  }
-
-
-  onLedgerChanges(ledger: Ledger) {
-    if (!!ledger.uid) {
-      this.getOpenedAccountingDates(ledger.uid);
-    }
+    this.accountChartSelected = accountChart;
+    this.getOpenedAccountingDates(accountChart.uid);
   }
 
 
@@ -180,19 +171,25 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  private getOpenedAccountingDates(ledgerUID: string, initialLoad: boolean = false) {
+  private getOpenedAccountingDates(accountsChartUID: string, resetHasValueDate: boolean = false) {
+    this.accountingDatesList = [];
+
+    if (!accountsChartUID) {
+      return;
+    }
+
     this.isLoadingAccountingDates = true;
 
-    this.vouchersData.getOpenedAccountingDates(ledgerUID)
+    this.vouchersData.getOpenedAccountingDates(accountsChartUID)
       .toPromise()
       .then(x => {
         this.accountingDatesList =
-          x.map(item => Object.create({ uid: item, name: this.dateTimeFormat.transform(item) }));
+          x.map(item => Object.create({ uid: item, name: DateStringLibrary.format(item) }));
 
-        if (initialLoad) {
-          this.hasValueDate = this.voucher.id > 0 ? !x.includes(this.voucher.accountingDate) : false;
+        if (resetHasValueDate) {
+          this.resetHasValueDate();
         }
-        }, error => this.accountingDatesList = [])
+      })
       .finally(() => this.isLoadingAccountingDates = false);
   }
 
@@ -246,6 +243,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     this.setAccountChartSelected();
     this.getOpenedAccountingDates(this.voucher.ledger.uid, true);
+  }
+
+
+  private resetHasValueDate() {
+    if (!this.isSavedVoucher) {
+      this.hasValueDate = false;
+      return;
+    }
+    this.hasValueDate = !this.accountingDatesList.find(x => x.uid === this.voucher.accountingDate);
   }
 
 

@@ -33,8 +33,7 @@
           [formControlName]="controls.ledgerUID"
           [items]="accountChartSelected?.ledgers"
           [placeholder]="accountChartSelected ? 'Seleccionar' : 'Seleccione el tipo de contabilidad'"
-          [showError]="formHandler.showInvalidControl(controls.ledgerUID)"
-          (changes)="onLedgerChanges($event)">
+          [showError]="formHandler.showInvalidControl(controls.ledgerUID)">
         </emp-ng-select>
       </div>
 
