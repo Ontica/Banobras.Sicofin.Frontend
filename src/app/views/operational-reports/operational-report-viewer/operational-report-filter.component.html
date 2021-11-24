@@ -96,6 +96,28 @@
 
     </div>
 
+
+    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="displayDateAndSendType">
+
+      <div fxFlex="50">
+
+        <div fxFlex>
+
+        <label>Tipo de envío:</label>
+
+          <emp-ng-select name="sendType" required
+            [config]="{selectFirst: true}"
+            [(ngModel)]="operationalReportCommand.sendType"
+            [items]="sendTypesList"
+            [showError]="!operationalReportCommand.sendType">
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
 </form>

@@ -5,11 +5,23 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
 import { FileType } from './reporting';
+
+
+export enum SendTypes {
+  N = 'N',
+  C = 'C',
+}
+
+
+export const SendTypesList: Identifiable[] = [
+  {uid: SendTypes.N, name: 'Normal'},
+  {uid: SendTypes.C, name: 'Complementario'},
+];
 
 
 export interface OperationalReportCommand extends DataTableCommand {
@@ -19,6 +31,7 @@ export interface OperationalReportCommand extends DataTableCommand {
   fromDate?: DateString;
   toDate: DateString;
   exportTo?: FileType;
+  sendType?: SendTypes;
 }
 
 

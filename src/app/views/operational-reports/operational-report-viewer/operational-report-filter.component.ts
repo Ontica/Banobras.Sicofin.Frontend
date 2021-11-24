@@ -7,12 +7,12 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountsChartMasterData, EmptyOperationalReportCommand, OperationalReportCommand, ReportGroup,
-         ReportPayloadType, ReportType } from '@app/models';
+         ReportPayloadType, ReportType, SendTypesList } from '@app/models';
 
 import { AccountChartStateSelector,
          ReportingtStateSelector } from '@app/presentation/exported.presentation.types';
@@ -48,6 +48,8 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   filteredReportTypeList: ReportType[] = [];
 
+  sendTypesList: Identifiable[] = SendTypesList;
+
   isLoading = false;
 
   helper: SubscriptionHelper;
@@ -68,12 +70,18 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   get displayDate() {
-    return this.selectedReportType?.payloadType === ReportPayloadType.AccountsChartAndDate;
+    return [ReportPayloadType.AccountsChartAndDate,
+            ReportPayloadType.DateAndSendType].includes(this.selectedReportType?.payloadType);
   }
 
 
   get displayLedgerAndPeriod() {
     return this.selectedReportType?.payloadType === ReportPayloadType.LedgerAndPeriod;
+  }
+
+
+  get displayDateAndSendType() {
+    return this.selectedReportType?.payloadType === ReportPayloadType.DateAndSendType;
   }
 
 
@@ -157,6 +165,10 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     if (this.displayLedgerAndPeriod) {
       data.ledgers = this.operationalReportCommand.ledgers ?? [];
       data.fromDate = this.operationalReportCommand.fromDate ?? '';
+    }
+
+    if (this.displayDateAndSendType) {
+      data.sendType = this.operationalReportCommand.sendType ?? null;
     }
 
     return data;

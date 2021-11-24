@@ -25,6 +25,7 @@ export interface ReportType {
 export enum ReportPayloadType {
   AccountsChartAndDate = 'AccountsChartAndDate',
   LedgerAndPeriod = 'LedgerAndPeriod',
+  DateAndSendType = 'DateAndSendType',
 }
 
 
