@@ -236,7 +236,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.setAccountChartSelected();
-    this.getOpenedAccountingDates(this.voucher.ledger.uid, true);
+    this.getOpenedAccountingDates(this.voucher.accountsChart.uid, true);
   }
 
 
