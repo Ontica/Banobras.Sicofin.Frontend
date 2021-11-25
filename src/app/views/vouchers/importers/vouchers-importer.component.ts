@@ -326,8 +326,12 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   private validateRequiredFormFields() {
     if (this.isDataBaseImport) {
       this.formHandler.clearControlValidators(this.controls.voucherTypeUID);
+      this.formHandler.clearControlValidators(this.controls.accountsChart);
+      this.formHandler.clearControlValidators(this.controls.accountingDate);
     } else {
       this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
+      this.formHandler.setControlValidators(this.controls.accountsChart, Validators.required);
+      this.formHandler.setControlValidators(this.controls.accountingDate, Validators.required);
     }
   }
 
