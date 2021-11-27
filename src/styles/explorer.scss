@@ -20,6 +20,12 @@
   margin: 8px;
   height: calc(100vh - 196px + 68px);
 
+  &.fluid {
+    height: 100%;
+    margin: 0;
+    background-color: #f4f6f6;
+  }
+
   .primary {
     flex: 1 1 600px;
     min-width: 400px;

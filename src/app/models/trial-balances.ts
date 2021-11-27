@@ -36,6 +36,12 @@ export const TrialBalanceTypeList: Identifiable[] = [
 ];
 
 
+export const BalanceTypeList: Identifiable[] = [
+  {uid: TrialBalanceType.SaldosPorCuenta,                   name: 'Saldos por cuenta'},
+  {uid: TrialBalanceType.SaldosPorAuxiliar,                 name: 'Saldos por auxiliar'},
+];
+
+
 export function getTrialBalanceTypeNameFromUid(trialBalanceTypeUid: string): string {
   const trialBalanceType = TrialBalanceTypeList.filter(x => x.uid === trialBalanceTypeUid);
   if (trialBalanceType && trialBalanceType.length > 0) {
@@ -123,7 +129,7 @@ export interface TrialBalanceCommand extends DataTableCommand {
   ledgers?: string[];
   level?: number;
   sectors?: string[];
-  showCascadeBalances: boolean;
+  showCascadeBalances?: boolean;
   subledgerAccount?: string;
   toAccount?: string;
   trialBalanceType: TrialBalanceType;

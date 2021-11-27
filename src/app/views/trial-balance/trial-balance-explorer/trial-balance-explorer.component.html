@@ -1,0 +1,12 @@
+<div class="explorer" fxLayoutGap="32px" [ngClass]="{'fluid': isQuickQuery}">
+
+  <div class="primary">
+
+    <emp-fa-trial-balance-viewer [isQuickQuery]="isQuickQuery"
+      (closeEvent)="onClose()">
+
+    </emp-fa-trial-balance-viewer>
+
+  </div>
+
+</div>

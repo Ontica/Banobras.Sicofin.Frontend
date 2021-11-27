@@ -3,7 +3,7 @@
   <div class="card-header card-header-flat">
 
     <div class="card-title">
-      Saldos y balanzas de comprobación
+      {{ isQuickQuery ? 'Consulta de saldos' : 'Saldos y balanzas de comprobación' }}
 
       <div class="card-hint" empNgProgressText
         loadingText="Cargando"
@@ -13,25 +13,35 @@
 
     </div>
 
+    <div *ngIf="isQuickQuery" class="card-header-options">
+      <mat-icon class="card-icon" (click)="onCloseButtonClicked()">close</mat-icon>
+    </div>
+
   </div>
 
-  <div class="card-body" [empNgSpinnerHost]="spinner">
+  <div class="card-body" [style.padding]="isQuickQuery ? '8px' : '0'">
 
-    <div fxLayout="column" fxFlexFill>
+    <div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
 
-      <emp-ng-spinner #spinner [visible]="isLoading">
+      <emp-ng-spinner #spinner [visible]="isLoading" >
 
       </emp-ng-spinner>
 
-      <emp-fa-trial-balance-filter fxFlex="none"
+      <emp-fa-trial-balance-filter fxFlex="none" *ngIf="!isQuickQuery"
         [(showFilters)]="showFilters"
-        (trialBalanceFilterEvent)="onTrialBalanceFilterEvent($event)">
+        (trialBalanceFilterEvent)="onFilterEvent($event)">
 
       </emp-fa-trial-balance-filter>
+
+      <emp-fa-balance-quick-filter fxFlex="none" *ngIf="isQuickQuery"
+        (balanceQuickFilterEvent)="onFilterEvent($event)">
+
+      </emp-fa-balance-quick-filter>
 
       <emp-fa-data-table fxFlex
         [dataTable]="trialBalance"
         [commandExecuted]="isValidCommand"
+        [controlsAligned]="isQuickQuery"
         (dataTableEvent)="onTrialBalanceTableEvent($event)">
 
       </emp-fa-data-table>

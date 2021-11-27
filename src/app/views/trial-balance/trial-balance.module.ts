@@ -15,7 +15,9 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
+import { BalanceQuickFilterComponent } from './trial-balance-viewer/balance-quick-filter.component';
 import { ExchangeRateSelectorComponent } from './exchange-rate-selector/exchange-rate-selector.component';
+import { TrialBalanceExplorerComponent } from './trial-balance-explorer/trial-balance-explorer.component';
 import { TrialBalanceFilterComponent } from './trial-balance-viewer/trial-balance-filter.component';
 import { TrialBalanceViewerComponent } from './trial-balance-viewer/trial-balance-viewer.component';
 
@@ -32,12 +34,14 @@ import { TrialBalanceViewerComponent } from './trial-balance-viewer/trial-balanc
     ReportsControlsModule,
   ],
   declarations: [
+    BalanceQuickFilterComponent,
     ExchangeRateSelectorComponent,
+    TrialBalanceExplorerComponent,
     TrialBalanceFilterComponent,
     TrialBalanceViewerComponent,
   ],
   exports: [
-    TrialBalanceViewerComponent,
+    TrialBalanceExplorerComponent,
   ]
 })
 export class TrialBalanceModule { }
