@@ -37,8 +37,8 @@ export const TrialBalanceTypeList: Identifiable[] = [
 
 
 export const BalanceTypeList: Identifiable[] = [
-  {uid: TrialBalanceType.SaldosPorCuenta,                   name: 'Saldos por cuenta'},
-  {uid: TrialBalanceType.SaldosPorAuxiliar,                 name: 'Saldos por auxiliar'},
+  {uid: TrialBalanceType.SaldosPorCuenta,   name: 'Saldos por cuenta'},
+  {uid: TrialBalanceType.SaldosPorAuxiliar, name: 'Saldos por auxiliar'},
 ];
 
 

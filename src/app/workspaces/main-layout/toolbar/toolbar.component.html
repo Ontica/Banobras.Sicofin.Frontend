@@ -1,4 +1,14 @@
 
 <div class="toolbar-container">
 
+  <button
+    class="toolbar-item"
+    title="Consultar saldos"
+    [ngClass]="{'activate': this.displayAsideRight}"
+    (click)="onCloseAsideRight('Balances')">
+
+    <mat-icon>stacked_bar_chart</mat-icon>
+
+  </button>
+
 </div>
