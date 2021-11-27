@@ -20,7 +20,7 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
+      <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="controlsAligned ? 0 : 8">
 
         <button *ngIf="showExportButton" class="btn"
           (click)="onExportButtonClicked()">

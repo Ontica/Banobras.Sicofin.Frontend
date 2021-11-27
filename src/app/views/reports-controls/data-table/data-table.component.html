@@ -1,12 +1,10 @@
 <div fxLayout="column" fxFlexFill>
 
-  <mat-divider *ngIf="!commandExecuted && columns.length === 0" [style.marginBottom.px]="8"> </mat-divider>
+  <mat-divider *ngIf="!controlsAligned">
+
+  </mat-divider>
 
   <div #controlsContainer *ngIf="commandExecuted" fxFlex="none">
-
-    <mat-divider *ngIf="!controlsAligned" [style.marginBottom.px]="8">
-
-    </mat-divider>
 
     <emp-fa-data-table-controls
       [filter]="filter"
