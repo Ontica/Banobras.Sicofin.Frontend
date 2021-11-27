@@ -25,6 +25,10 @@
   color: $secondary-color-light;
   padding: 5px 16px;
   white-space: nowrap;
+
+  .selected {
+    color: $primary-color;
+  }
 }
 
 .nav-bar li:last-of-type {

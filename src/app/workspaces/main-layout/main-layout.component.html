@@ -4,48 +4,28 @@
 
   </emp-ng-spinner>
 
-  <div class="top-bar"></div>
-
-  <div class="nav-bar">
-
-    <div class="left-section">
-
-      <img class="logo" src="assets/img/customer/main-page.logo.png"
-        alt="Banco Nacional de Obras y Servicios Públicos"/>
-
-    </div>
-
-    <emp-ng-main-menu class="main-menu">
-
-    </emp-ng-main-menu>
-
-    <emp-ng-user-session class="right-section">
-
-    </emp-ng-user-session>
+  <div class="top-bar">
 
   </div>
 
   <mat-sidenav-container>
 
-    <mat-sidenav class="side-bar" mode="side" #sidenav disableClose="true">
+    <mat-sidenav #sidenavLeft class="sidenav-left" mode="side" disableClose="true">
 
     </mat-sidenav>
 
-    <mat-sidenav class="right-bar" mode="side" #rightSidenav position="end">
 
-    </mat-sidenav>
+    <mat-sidenav-content #sidenavContent class="content">
 
-    <mat-sidenav-content class="content">
+      <div [style.margin-left.px]="sidenavLeft.opened ? 6 : 0">
 
-      <div [style.margin-left.px]="sidenav.opened ? 6 : 0">
+        <emp-ng-nav-bar>
 
-        <div>
+        </emp-ng-nav-bar>
 
-          <emp-ng-navigation-header (action)="onAction($event)">
+        <emp-ng-navigation-header (action)="onAction($event)">
 
-          </emp-ng-navigation-header>
-
-        </div>
+        </emp-ng-navigation-header>
 
         <div class="workarea">
 
@@ -58,6 +38,12 @@
       </div>
 
     </mat-sidenav-content>
+
+
+    <mat-sidenav #sidenavRight [(opened)]="displayAsideRight" mode="over" position="end"
+      class="sidenav-right">
+
+    </mat-sidenav>
 
   </mat-sidenav-container>
 

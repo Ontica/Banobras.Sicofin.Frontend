@@ -32,64 +32,6 @@ $margin-size-small: 8px;
   height: 35px;
 }
 
-.nav-bar {
-  @include row;
-
-  min-height: 68px;
-  overflow: visible;
-  justify-content: space-between;
-  align-items: center;
-  color: $text-color-dark;
-
-  .left-section {
-    @include row;
-
-    width: auto;
-    align-items: center;
-    white-space: nowrap;
-    margin: 0 $margin-size;
-  }
-
-  .right-section {
-    min-width: 225px;
-    margin: 0 $margin-size;
-  }
-
-  .search-and-settings {
-    @include row;
-
-    width: auto;
-    align-items: center;
-
-    > * {
-      margin-left: 16px;
-    }
-  }
-
-  .logo {
-    max-height: 46px;
-  }
-
-  .main-menu {
-    margin: 0 $margin-size;
-  }
-
-  @media only screen and (max-width: 1140px) {
-    .left-section {
-      margin: 0 0 0 $margin-size-small;
-    }
-
-    .main-menu {
-      margin: 0;
-    }
-
-    .right-section {
-      min-width: auto;
-      margin: 0 $margin-size-small 0 0;
-    }
-  }
-}
-
 .content {
   @include column;
 }
@@ -98,7 +40,7 @@ $margin-size-small: 8px;
   @include expand;
 }
 
-.side-bar {
+.sidenav-left {
   background-color: $secondary-color;
   color: $white;
   font-size: 10pt;
@@ -106,18 +48,9 @@ $margin-size-small: 8px;
   width: 300px;
 }
 
-.sidenav-toggle {
-  background-color: #edeef0;
-  height: 52px;
-  margin: 0;
-  padding: 8px;
-  padding-top: 12px;
-}
-
-.right-bar {
-  display: none;
-  background-color: $primary-color;
-  width: 200px;
+.sidenav-right {
+  max-width: 85%;
+  min-width: 50%;
 }
 
 .footer {

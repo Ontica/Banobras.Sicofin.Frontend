@@ -15,20 +15,22 @@ import { NavigationHeader, DefaultNavigationHeader,
          buildNavigationHeader,
          Layout, View, DefaultView } from '@app/workspaces/main-layout/common-models';
 
-import { APP_LAYOUTS, APP_VIEWS } from '@app/workspaces/main-layout/config-data';
+import { APP_LAYOUTS, APP_VIEWS, TOOL, TOOLS_LIST } from '@app/workspaces/main-layout/config-data';
 
 
 export enum ActionType {
   SET_CURRENT_VIEW_FROM_URL = 'Empiria.UI-Item.MainUserInterface.SetCurrentViewFromUrl',
-  SET_IS_PROCESSING_FLAG    = 'Empiria.UI-Item.MainUserInterface.SetIsProcessingFlag'
+  SET_IS_PROCESSING_FLAG    = 'Empiria.UI-Item.MainUserInterface.SetIsProcessingFlag',
+  SET_TOOL_SELECTED         = 'Empiria.UI-Item.MainUserInterface.SetToolSelectedt',
 }
 
 
 export enum SelectorType {
-  LAYOUT            = 'Empiria.UI-Item.MainUserInterface.Layout',
-  NAVIGATION_HEADER = 'Empiria.UI-Item.MainUserInterface.NavigationHeader',
-  CURRENT_VIEW      = 'Empiria.UI-Item.MainUserInterface.CurrentView',
-  IS_PROCESSING     = 'Empiria.UI-Item.MainUserInterface.IsProcessing'
+  LAYOUT              = 'Empiria.UI-Item.MainUserInterface.Layout',
+  NAVIGATION_HEADER   = 'Empiria.UI-Item.MainUserInterface.NavigationHeader',
+  CURRENT_VIEW        = 'Empiria.UI-Item.MainUserInterface.CurrentView',
+  IS_PROCESSING       = 'Empiria.UI-Item.MainUserInterface.IsProcessing',
+  TOOL_SELECTED       = 'Empiria.UI-Item.MainUserInterface.ToolSelected',
 }
 
 
@@ -37,6 +39,7 @@ export interface MainLayoutState {
   readonly navigationHeader: NavigationHeader;
   readonly currentView: View;
   readonly isProcessing: boolean;
+  readonly toolSelected: TOOL;
 }
 
 
@@ -44,7 +47,8 @@ const initialState: StateValues = [
   { key: SelectorType.LAYOUT, value: APP_LAYOUTS[0] },
   { key: SelectorType.NAVIGATION_HEADER, value: DefaultNavigationHeader },
   { key: SelectorType.CURRENT_VIEW, value: DefaultView },
-  { key: SelectorType.IS_PROCESSING, value: false }
+  { key: SelectorType.IS_PROCESSING, value: false },
+  { key: SelectorType.TOOL_SELECTED, value: 'None' },
 ];
 
 
@@ -65,7 +69,8 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
       layout: this.getValue(SelectorType.LAYOUT),
       navigationHeader: this.getValue(SelectorType.NAVIGATION_HEADER),
       currentView: this.getValue(SelectorType.CURRENT_VIEW),
-      isProcessing: this.getValue(SelectorType.IS_PROCESSING)
+      isProcessing: this.getValue(SelectorType.IS_PROCESSING),
+      toolSelected: this.getValue(SelectorType.TOOL_SELECTED),
     };
   }
 
@@ -83,6 +88,12 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
         Assertion.assertValue(payload.url, 'payload.url');
 
         this.setCurrentViewFromUrl(payload.url);
+        return;
+
+      case ActionType.SET_TOOL_SELECTED:
+        Assertion.assert(TOOLS_LIST.includes(payload), `${actionType} payload must be a boolean value.`);
+
+        this.setValue(SelectorType.TOOL_SELECTED, payload);
         return;
 
       default:

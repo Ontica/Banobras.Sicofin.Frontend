@@ -825,3 +825,11 @@ table.mat-table.emp-designer {
 .mat-checkbox.mat-checkbox-login .mat-checkbox-ripple > .mat-ripple-element {
   background: $warning-color !important;
 }
+
+//
+// mat-drawer backdrop
+//
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  background-color: rgba(100, 100, 100, 0.5);
+}

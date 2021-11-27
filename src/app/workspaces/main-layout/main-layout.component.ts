@@ -6,13 +6,18 @@
  */
 
 import { Component, OnDestroy } from '@angular/core';
+
 import { ActivationEnd, Router } from '@angular/router';
 
 import { Subject } from 'rxjs';
+
 import { takeUntil } from 'rxjs/operators';
 
 import { PresentationState } from '@app/core/presentation';
+
 import { MainUIStateAction, MainUIStateSelector } from '@app/core/presentation/presentation-types';
+
+import { TOOL } from './config-data';
 
 
 @Component({
@@ -22,21 +27,30 @@ import { MainUIStateAction, MainUIStateSelector } from '@app/core/presentation/p
 })
 export class MainLayoutComponent implements OnDestroy {
 
-  keywords = '';
   spinnerService = null;
+
+  displayAsideRight = false;
+
+  toolSelected: TOOL = 'None';
 
   private unsubscribe: Subject<void> = new Subject();
 
-  constructor(store: PresentationState, private router: Router) {
+  constructor(private store: PresentationState, private router: Router) {
 
     this.spinnerService = store.select<boolean>(MainUIStateSelector.IS_PROCESSING);
+
+    store.select<TOOL>(MainUIStateSelector.TOOL_SELECTED)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(x => {
+        this.toolSelected = x;
+        this.displayAsideRight = this.toolSelected !== 'None';
+      });
 
     this.router.events
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(val => {
         if (val instanceof ActivationEnd) {
           const url = this.router.routerState.snapshot.url.split(';')[0];
-
           store.dispatch(MainUIStateAction.SET_CURRENT_VIEW_FROM_URL, { url });
         }
       });
@@ -49,15 +63,13 @@ export class MainLayoutComponent implements OnDestroy {
   }
 
 
-  onAction(action: string) {
-
+  onCloseAsideRight() {
+    this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, 'None' as TOOL);
   }
 
 
-  search(keywords: string) {
-    if (keywords) {
-      this.router.navigate(['/search-services/all', { keywords } ]);
-    }
+  onAction(action: string) {
+
   }
 
 }
