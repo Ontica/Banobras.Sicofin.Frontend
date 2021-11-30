@@ -11,8 +11,9 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { LedgerAccount, SearchVouchersCommand, SubledgerAccountDescriptor, Voucher, VoucherDescriptor,
-         VoucherEntry, VoucherEntryFields, VoucherFields, VoucherSpecialCaseType } from '@app/models';
+import { LedgerAccount, SearchVouchersCommand, SubledgerAccountDescriptor, Voucher,
+         VoucherDescriptor, VoucherEntry, VoucherEntryFields, VoucherFields,
+         VoucherSpecialCaseType } from '@app/models';
 
 
 @Injectable()
@@ -91,6 +92,15 @@ export class VouchersDataService {
       `search-accounts-for-edition?keywords=${keywords}`;
 
     return this.http.get<LedgerAccount[]>(path);
+  }
+
+
+  searchEditors(keywords: string): Observable<Identifiable[]> {
+    Assertion.assertValue(keywords, 'keywords');
+
+    const path = `v2/financial-accounting/vouchers/editors?keywords=${keywords}`;
+
+    return this.http.get<Identifiable[]>(path);
   }
 
 

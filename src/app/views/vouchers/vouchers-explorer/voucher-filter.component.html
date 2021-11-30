@@ -210,10 +210,9 @@
 
         <div fxFlex="25" fxLayoutAlign="start end">
 
-          <emp-ng-select name="voucherUserType" [fxFlex]="100"
-            [config]="{bindByValue: false}"
-            [(ngModel)]="voucherUserTypeSelected"
-            [items]="voucherUserTypeList">
+          <emp-ng-select name="editorType" [fxFlex]="100"
+            [(ngModel)]="voucherFilter.editorType"
+            [items]="editorTypeList">
           </emp-ng-select>
 
         </div>
@@ -222,15 +221,15 @@
 
           <label>Usuario:</label>
 
-          <emp-ng-select name="voucherUserUID"
+          <emp-ng-select name="editorUID"
             [config]="{clearable: true,
-                       bindByValue: false,
-                       hideSelected: true,
-                       minTermLength: minTermLength}"
-            [(ngModel)]="voucherUserSelected"
-            [items]="voucherUserList$ | async"
-            [typeahead]="voucherUserInput$"
-            [loading]="voucherUserLoading"
+                       minTermLength: minTermLength,
+                       typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
+            [(ngModel)]="voucherFilter.editorUID"
+            [items]="editorList$ | async"
+            [typeahead]="editorInput$"
+            [loading]="editorLoading"
+            (changes)="onEditorChanges($event)"
             placeholder="Todos">
 
           </emp-ng-select>

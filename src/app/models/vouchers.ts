@@ -39,7 +39,7 @@ export enum DateSearchField {
 }
 
 
-export enum VoucherUserType {
+export enum EditorType {
   ElaboratedBy = 'ElaboratedBy',
   AuthorizedBy = 'AuthorizedBy',
   PostedBy = 'PostedBy',
@@ -52,10 +52,10 @@ export const DateSearchFieldList: Identifiable[] = [
 ];
 
 
-export const VoucherUserTypeList: Identifiable[] = [
-  {uid: 'ElaboratedBy', name: 'Elaborada por'},
-  {uid: 'AuthorizedBy', name: 'Autorizada por'},
-  {uid: 'PostedBy', name: 'Enviada a diario por'},
+export const EditorTypeList: Identifiable[] = [
+  {uid: EditorType.ElaboratedBy, name: 'Elaborada por'},
+  {uid: EditorType.AuthorizedBy, name: 'Autorizada por'},
+  {uid: EditorType.PostedBy, name: 'Enviada a diario por'},
 ];
 
 
@@ -64,7 +64,6 @@ export interface SearchVouchersCommand {
   keywords: string;
   number?: string;
   concept?: string;
-  ledgersGroupUID?: string;
   ledgerUID?: string;
 
   fromDate?: string;
@@ -74,9 +73,8 @@ export interface SearchVouchersCommand {
   subledgerAccountKeywords?: string;
   transactionTypeUID?: string;
   voucherTypeUID?: string;
-  elaboratedByUID?: string;
-  authorizedByUID?: string;
-  postedByUID?: string;
+  editorType?: EditorType;
+  editorUID?: string;
 
   stage: VoucherStage;
   status?: VoucherStatus;
@@ -90,8 +88,8 @@ export const EmptySearchVouchersCommand: SearchVouchersCommand = {
   stage: VoucherStage.All,
   accountsChartUID: '',
   keywords: '',
-  ledgersGroupUID: '',
   ledgerUID: '',
+  editorType: EditorType.ElaboratedBy,
 };
 
 

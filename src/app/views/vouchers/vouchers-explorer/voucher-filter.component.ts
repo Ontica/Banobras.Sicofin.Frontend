@@ -10,22 +10,25 @@ import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, On
 
 import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
+         tap } from 'rxjs/operators';
+
+import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
-
-import { AccountsChartMasterData, DateSearchFieldList, EmptySearchVouchersCommand, SearchVouchersCommand,
-         VoucherStage, VoucherUserType, VoucherUserTypeList} from '@app/models';
 
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
-import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
-         tap } from 'rxjs/operators';
-
 import { sendEvent } from '@app/shared/utils';
+
+import { VouchersDataService } from '@app/data-services';
+
+import { AccountsChartMasterData, DateSearchFieldList, EmptySearchVouchersCommand, SearchVouchersCommand,
+         VoucherStage, EditorTypeList} from '@app/models';
+
 
 export enum VoucherFilterEventType {
   SEARCH_VOUCHERS_CLICKED = 'VoucherFilterComponent.Event.SearchVouchersClicked',
@@ -50,36 +53,36 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
   dateSearchFieldList: Identifiable[] = DateSearchFieldList;
-  voucherUserTypeList: Identifiable[] = VoucherUserTypeList;
+  editorTypeList: Identifiable[] = EditorTypeList;
   transactionTypesList: Identifiable[] = [];
   voucherTypesList: Identifiable[] = [];
 
   accountChartSelected: AccountsChartMasterData = null;
-  voucherUserTypeSelected: Identifiable = null;
-  voucherUserSelected: Identifiable = null;
+  editorSelected: Identifiable = null;
 
   isLoading = false;
 
-  voucherUserList$: Observable<any[]>;
-  voucherUserInput$ = new Subject<string>();
-  voucherUserLoading = false;
-  minTermLength = 5;
+  editorList$: Observable<any[]>;
+  editorInput$ = new Subject<string>();
+  editorLoading = false;
+  minTermLength = 4;
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer, private cdRef: ChangeDetectorRef) {
+  constructor(private uiLayer: PresentationLayer,
+              private vouchersData: VouchersDataService,
+              private cdRef: ChangeDetectorRef) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
 
   ngOnInit(): void {
     this.loadDataLists();
-    this.subscribeVoucherUserList();
+    this.subscribeEditorList();
   }
 
 
-  ngAfterViewChecked()
-  {
+  ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
 
@@ -102,12 +105,18 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
   onShowFiltersClicked(){
     this.showFilters = !this.showFilters;
     this.showFiltersChange.emit(this.showFilters);
+    this.subscribeEditorList();
   }
 
 
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
     this.accountChartSelected = accountChart;
     this.validateFieldToClear();
+  }
+
+
+  onEditorChanges(editor: Identifiable) {
+    this.editorSelected = editor;
   }
 
 
@@ -156,35 +165,27 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
 
   private setDefaultFieldsSelected() {
     this.accountChartSelected = this.accountsChartMasterDataList[0];
-
-    this.voucherUserSelected = null;
-    this.voucherUserTypeSelected = this.voucherUserTypeList.length > 0 ? this.voucherUserTypeList[0] : null;
+    this.editorSelected = null;
   }
 
 
-  private subscribeVoucherUserList() {
-    this.voucherUserList$ = concat(
-      of(this.voucherUserSelected ? [this.voucherUserSelected] : []),
-      this.voucherUserInput$.pipe(
-          filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-          distinctUntilChanged(),
-          debounceTime(800),
-          tap(() => this.voucherUserLoading = true),
-          switchMap(keyword =>
-            of([]).pipe(
-              delay(2000),
-              catchError(() => of([])),
-              tap(() => this.voucherUserLoading = false)
-          ))
+  private subscribeEditorList() {
+    this.editorList$ = concat(
+      of(isEmpty(this.editorSelected) ? [] : [this.editorSelected]),
+      this.editorInput$.pipe(
+        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.editorLoading = true),
+        switchMap(keyword =>
+          this.vouchersData.searchEditors(keyword)
+          .pipe(
+            delay(2000),
+            catchError(() => of([])),
+            tap(() => this.editorLoading = false)
+        ))
       )
     );
-  }
-
-
-  private buildVoucherUserFilter(keywords: string): any {
-    const ledgerAccountFilter: any = { keywords };
-
-    return ledgerAccountFilter;
   }
 
 
@@ -195,13 +196,14 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
       keywords: this.voucherFilter.keywords ?? '',
       number: this.voucherFilter.number ?? '',
       concept: this.voucherFilter.concept ?? '',
-      ledgersGroupUID: this.voucherFilter.ledgersGroupUID ?? '',
       ledgerUID: this.voucherFilter.ledgerUID ?? '',
       accountKeywords: this.voucherFilter.accountKeywords ?? '',
       subledgerAccountKeywords: this.voucherFilter.subledgerAccountKeywords ?? '',
       dateSearchField: this.voucherFilter.dateSearchField ?? null,
       transactionTypeUID: this.voucherFilter.transactionTypeUID ?? '',
       voucherTypeUID: this.voucherFilter.voucherTypeUID ?? '',
+      editorType: this.voucherFilter.editorType ?? null,
+      editorUID: this.voucherFilter.editorUID ?? '',
     };
 
     this.validateSearchVoucherCommandFieldsNoRequired(command);
@@ -217,18 +219,6 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
 
     if (this.voucherFilter.toDate) {
       command.toDate = this.voucherFilter.toDate;
-    }
-
-    if (this.voucherUserTypeSelected.uid === VoucherUserType.ElaboratedBy && this.voucherUserSelected?.uid) {
-      command.elaboratedByUID = this.voucherUserSelected.uid;
-    }
-
-    if (this.voucherUserTypeSelected.uid === VoucherUserType.AuthorizedBy && this.voucherUserSelected?.uid) {
-      command.authorizedByUID = this.voucherUserSelected.uid;
-    }
-
-    if (this.voucherUserTypeSelected.uid === VoucherUserType.PostedBy && this.voucherUserSelected?.uid) {
-      command.postedByUID = this.voucherUserSelected.uid;
     }
   }
 
