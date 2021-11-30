@@ -25,6 +25,7 @@ import { VoucherFilterComponent } from './vouchers-explorer/voucher-filter.compo
 import { VoucherHeaderComponent } from './voucher-header/voucher-header.component';
 import { VoucherListComponent } from './vouchers-explorer/voucher-list.component';
 import { VoucherListItemComponent } from './vouchers-explorer/voucher-list-item.component';
+import { VoucherPrintableComponentViewerComponent } from './voucher-printable-viewer/voucher-printable-viewer.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
 import { VouchersImporterComponent } from './importers/vouchers-importer.component';
 import { VoucherSpecialCaseEditorComponent } from './voucher-creator/voucher-special-case-editor.component';
@@ -54,6 +55,7 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     VoucherHeaderComponent,
     VoucherListComponent,
     VoucherListItemComponent,
+    VoucherPrintableComponentViewerComponent,
     VouchersExplorerComponent,
     VouchersImporterComponent,
     VoucherSpecialCaseEditorComponent,

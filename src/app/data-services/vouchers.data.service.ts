@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { LedgerAccount, SearchVouchersCommand, SubledgerAccountDescriptor, Voucher,
+import { FileReport, LedgerAccount, SearchVouchersCommand, SubledgerAccountDescriptor, Voucher,
          VoucherDescriptor, VoucherEntry, VoucherEntryFields, VoucherFields,
          VoucherSpecialCaseType } from '@app/models';
 
@@ -75,12 +75,12 @@ export class VouchersDataService {
   }
 
 
-  printVoucher(voucherId: number): Observable<any> {
+  getVoucherForPrint(voucherId: number): Observable<FileReport> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}/print`;
 
-    return this.http.get<any>(path);
+    return this.http.get<FileReport>(path);
   }
 
 
