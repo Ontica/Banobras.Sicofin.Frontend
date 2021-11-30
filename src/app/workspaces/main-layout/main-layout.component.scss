@@ -7,6 +7,7 @@
 
 @import "../../../styles/general-styles";
 
+$breakpoint-width: 1600px;
 $margin-size: 16px;
 $margin-size-small: 8px;
 
@@ -58,4 +59,11 @@ $margin-size-small: 8px;
   height: 40px;
   padding: $margin-size;
   border-top: 1px inset $border-color-light;
+}
+
+@media only screen and (max-width: $breakpoint-width) {
+  .sidenav-right {
+    max-width: 90%;
+    min-width: 65%;
+  }
 }
