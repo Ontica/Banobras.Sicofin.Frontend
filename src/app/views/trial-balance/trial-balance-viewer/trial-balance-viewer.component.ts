@@ -7,12 +7,19 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Assertion } from '@app/core';
+import { Observable } from 'rxjs';
+
+import { Assertion, EventInfo } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { EmptyTrialBalance, getEmptyTrialBalanceCommand, getTrialBalanceTypeNameFromUid, TrialBalance,
-         TrialBalanceCommand } from '@app/models';
+import { Balance, BalanceCommand, BalanceEntry,
+         EmptyTrialBalance, FileReport, getEmptyBalanceCommand, getEmptyTrialBalanceCommand,
+         TrialBalance, TrialBalanceCommand, TrialBalanceEntry } from '@app/models';
+
+import { sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
@@ -25,6 +32,12 @@ import { BalanceQuickFilterEventType } from './balance-quick-filter.component';
 import { TrialBalanceFilterEventType } from './trial-balance-filter.component';
 
 
+export enum TrialBalanceViewerEventType {
+  CLOSE_BUTTON_CLICKED = 'TrialBalanceViewerComponent.Event.CloseButtonClicked',
+  SELECT_ENTRY_CLICKED = 'TrialBalanceViewerComponent.Event.SelectEntryClicked',
+  UNSELECT_ENTRY = 'TrialBalanceViewerComponent.Event.UnselectEntry',
+}
+
 @Component({
   selector: 'emp-fa-trial-balance-viewer',
   templateUrl: './trial-balance-viewer.component.html',
@@ -33,31 +46,35 @@ export class TrialBalanceViewerComponent {
 
   @Input() isQuickQuery = false;
 
-  @Output() closeEvent = new EventEmitter<void>();
+  @Output() trialBalanceViewerEvent = new EventEmitter<EventInfo>();
 
   balanceTypeName = '';
 
   cardHint = 'Seleccionar los filtros';
 
+  showFilters = false;
+
   isLoading = false;
 
   submitted = false;
 
-  trialBalance: TrialBalance = EmptyTrialBalance;
+  commandExecuted = false;
 
-  trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
+  command: BalanceCommand | TrialBalanceCommand = getEmptyTrialBalanceCommand();
+
+  data: TrialBalance | Balance = EmptyTrialBalance;
 
   displayExportModal = false;
 
   excelFileUrl = '';
 
-  showFilters = false;
 
-  constructor(private balancesDataService: BalancesDataService) { }
+  constructor(private balancesDataService: BalancesDataService,
+              private messageBox: MessageBoxService) { }
 
 
   onCloseButtonClicked() {
-    this.closeEvent.emit();
+    sendEvent(this.trialBalanceViewerEvent, TrialBalanceViewerEventType.CLOSE_BUTTON_CLICKED);
   }
 
 
@@ -66,23 +83,28 @@ export class TrialBalanceViewerComponent {
       return;
     }
 
+    this.resetData();
+
     switch (event.type as TrialBalanceFilterEventType | BalanceQuickFilterEventType) {
+      case BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED:
+        Assertion.assertValue(event.payload.trialBalanceTypeName, 'event.payload.trialBalanceTypeName');
+        Assertion.assertValue(event.payload.balanceCommand, 'event.payload.balanceCommand');
+
+        this.setBalanceTypeName(event.payload.trialBalanceTypeName);
+        this.executeGetBalance(event.payload.balanceCommand as BalanceCommand);
+        return;
 
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
-      case BalanceQuickFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
+        Assertion.assertValue(event.payload.trialBalanceTypeName, 'event.payload.trialBalanceTypeName');
         Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
 
-        this.trialBalanceCommand = event.payload.trialBalanceCommand as TrialBalanceCommand;
-        this.setTrialBalanceData(EmptyTrialBalance);
-        this.getTrialBalance(this.trialBalanceCommand);
+        this.setBalanceTypeName(event.payload.trialBalanceTypeName);
+        this.executeGetTrialBalance(event.payload.trialBalanceCommand as TrialBalanceCommand);
         return;
 
       case TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED:
-      case BalanceQuickFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED:
-        Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
-
-        this.trialBalanceCommand = event.payload.trialBalanceCommand as TrialBalanceCommand;
-        this.setTrialBalanceData(EmptyTrialBalance);
+        this.setBalanceTypeName(null);
+        this.clearCommand();
         return;
 
       default:
@@ -92,7 +114,7 @@ export class TrialBalanceViewerComponent {
   }
 
 
-  onTrialBalanceTableEvent(event) {
+  onDataTableEvent(event) {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
@@ -102,6 +124,11 @@ export class TrialBalanceViewerComponent {
 
       case DataTableEventType.EXPORT_DATA:
         this.setDisplayExportModal(true);
+        return;
+
+      case DataTableEventType.ENTRY_CLICKED:
+        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
+        this.emitEntrySelected(event.payload.entry);
         return;
 
       default:
@@ -119,11 +146,18 @@ export class TrialBalanceViewerComponent {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (this.submitted || !this.trialBalanceCommand.accountsChartUID ) {
+        if (this.submitted || !this.command.accountsChartUID ) {
           return;
         }
 
-        this.exportTrialBalanceToExcel();
+        if (this.isQuickQuery) {
+          this.messageBox.showInDevelopment('Exportar reporte', this.command);
+        } else {
+          const observable =
+            this.balancesDataService.exportTrialBalanceToExcel(this.command as TrialBalanceCommand);
+          this.exportDataToExcel(observable);
+        }
+
         return;
 
       default:
@@ -133,54 +167,77 @@ export class TrialBalanceViewerComponent {
   }
 
 
-  private getTrialBalance(trialBalanceCommand: TrialBalanceCommand) {
+  private executeGetBalance(command: BalanceCommand) {
+    this.command = command;
+    const observableBalance = this.balancesDataService.getBalance(this.command);
+    this.getData(observableBalance);
+  }
+
+
+  private executeGetTrialBalance(command: TrialBalanceCommand) {
+    this.command = command;
+    const observableTrialBalance = this.balancesDataService.getTrialBalance(this.command);
+    this.getData(observableTrialBalance);
+  }
+
+
+  private getData(observable: Observable<Balance | TrialBalance>) {
     this.setSubmitted(true);
 
-    this.balancesDataService.getTrialBalance(trialBalanceCommand)
+    observable
       .toPromise()
       .then(x => {
-        this.setTrialBalanceData(x);
+        this.commandExecuted = true;
         this.showFilters = false;
+        this.setData(x);
       })
       .finally(() => this.setSubmitted(false));
   }
 
 
-  private exportTrialBalanceToExcel() {
-    this.balancesDataService.exportTrialBalanceToExcel(this.trialBalanceCommand)
+  private exportDataToExcel(observable: Observable<FileReport>) {
+    observable
       .toPromise()
-      .then(x => {
-        this.excelFileUrl = x.url;
-      });
+      .then(x => this.excelFileUrl = x.url);
   }
 
 
-  private setTrialBalanceData(trialBalance: TrialBalance) {
-    this.trialBalance = trialBalance;
+  private setData(data: Balance | TrialBalance) {
+    this.data = data;
     this.setText();
   }
 
 
-  get isValidCommand() {
-    return !!this.trialBalance.command.trialBalanceType;
+  private resetData() {
+    this.commandExecuted = false;
+    this.setData(EmptyTrialBalance);
+    sendEvent(this.trialBalanceViewerEvent, TrialBalanceViewerEventType.UNSELECT_ENTRY);
+  }
+
+
+  private clearCommand() {
+    this.command = this.isQuickQuery ? getEmptyBalanceCommand() : getEmptyTrialBalanceCommand();
+  }
+
+
+  private setBalanceTypeName(balanceTypeName: string) {
+    this.balanceTypeName = balanceTypeName ?? '';
   }
 
 
   private setText(itemsDisplayed?: number) {
-    if (!this.isValidCommand) {
+    if (!this.commandExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       return;
     }
 
-    this.balanceTypeName = getTrialBalanceTypeNameFromUid(this.trialBalance.command.trialBalanceType);
-
-    if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.trialBalance.entries.length) {
+    if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.data.entries.length) {
       this.cardHint = `${this.balanceTypeName} - ${itemsDisplayed} de ` +
-        `${this.trialBalance.entries.length} registros mostrados`;
+        `${this.data.entries.length} registros mostrados`;
       return;
     }
 
-    this.cardHint = `${this.balanceTypeName} - ${this.trialBalance.entries.length} registros encontrados`;
+    this.cardHint = `${this.balanceTypeName} - ${this.data.entries.length} registros encontrados`;
   }
 
 
@@ -193,6 +250,16 @@ export class TrialBalanceViewerComponent {
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
+  }
+
+
+  private emitEntrySelected(entry: BalanceEntry | TrialBalanceEntry) {
+    const payload = {
+      command: this.command,
+      entry,
+    };
+
+    sendEvent(this.trialBalanceViewerEvent, TrialBalanceViewerEventType.SELECT_ENTRY_CLICKED, payload);
   }
 
 }

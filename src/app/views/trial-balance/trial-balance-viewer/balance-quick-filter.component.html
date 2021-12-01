@@ -11,10 +11,10 @@
 
           <emp-ng-select name="trialBalanceType" required
             [config]="{selectFirst: true}"
-            [(ngModel)]="trialBalanceCommand.trialBalanceType"
-            [items]="trialBalanceTypeList"
-            [showError]="!trialBalanceCommand.trialBalanceType"
-            (changes)="onTrialBalanceTypeChange()">
+            [(ngModel)]="balanceCommand.trialBalanceType"
+            [items]="balanceTypeList"
+            [showError]="!balanceCommand.trialBalanceType"
+            (changes)="onBalanceTypeChange()">
           </emp-ng-select>
 
         </div>
@@ -24,9 +24,9 @@
           <label>Cuenta:</label>
 
           <input type="text" class="text-box" name="fromAccount" required
-            [(ngModel)]="trialBalanceCommand.fromAccount"
-            [class.invalid-control]="!trialBalanceCommand.fromAccount"
-            (keyup.escape)="trialBalanceCommand.fromAccount = ''">
+            [(ngModel)]="balanceCommand.fromAccount"
+            [class.invalid-control]="!balanceCommand.fromAccount"
+            (keyup.escape)="balanceCommand.fromAccount = ''">
 
         </div>
 
@@ -35,9 +35,9 @@
           <label>Auxiliar:</label>
 
           <input type="text" class="text-box" name="subledgerAccount" required
-            [(ngModel)]="trialBalanceCommand.subledgerAccount"
-            [class.invalid-control]="!trialBalanceCommand.subledgerAccount"
-            (keyup.escape)="trialBalanceCommand.subledgerAccount = ''">
+            [(ngModel)]="balanceCommand.subledgerAccount"
+            [class.invalid-control]="!balanceCommand.subledgerAccount"
+            (keyup.escape)="balanceCommand.subledgerAccount = ''">
 
         </div>
 
@@ -48,8 +48,8 @@
           <label>Fecha:</label>
 
           <emp-ng-datepicker name="date" required
-            [(ngModel)]="trialBalanceCommand.initialPeriod.fromDate"
-            [showError]="!trialBalanceCommand.initialPeriod.fromDate">
+            [(ngModel)]="balanceCommand.initialPeriod.fromDate"
+            [showError]="!balanceCommand.initialPeriod.fromDate">
 
           </emp-ng-datepicker>
 
@@ -61,10 +61,10 @@
 
           <emp-ng-select name="accountsChartUID" required
             [config]="{selectFirst: true}"
-            [(ngModel)]="trialBalanceCommand.accountsChartUID"
+            [(ngModel)]="balanceCommand.accountsChartUID"
             [items]="accountsChartMasterDataList"
             [loading]="isLoading"
-            [showError]="!trialBalanceCommand.accountsChartUID">
+            [showError]="!balanceCommand.accountsChartUID">
           </emp-ng-select>
 
         </div>
@@ -75,7 +75,7 @@
           <button [class.btn-icon-action]="form.valid"
             [class.btn-icon]="form.invalid"
             [disabled]="form.invalid"
-            (click)="onBuildTrialBalanceClicked()"
+            (click)="onBuildBalanceClicked()"
             title="Generar balanza">
 
             <mat-icon>search</mat-icon>
@@ -91,7 +91,7 @@
         <div fxFlex="25">
 
           <mat-checkbox name="withSubledgerAccount"
-            [(ngModel)]="trialBalanceCommand.withSubledgerAccount"
+            [(ngModel)]="balanceCommand.withSubledgerAccount"
             (click)="$event.stopPropagation">
             Con Auxiliares
           </mat-checkbox>

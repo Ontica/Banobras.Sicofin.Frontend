@@ -2,8 +2,9 @@
 
   <div class="primary">
 
-    <emp-fa-trial-balance-viewer [isQuickQuery]="isQuickQuery"
-      (closeEvent)="onClose()">
+    <emp-fa-trial-balance-viewer
+      [isQuickQuery]="isQuickQuery"
+      (trialBalanceViewerEvent)="onTrialBalanceViewerEvent($event)">
 
     </emp-fa-trial-balance-viewer>
 

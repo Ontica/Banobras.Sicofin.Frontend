@@ -39,10 +39,10 @@
       </emp-fa-balance-quick-filter>
 
       <emp-fa-data-table fxFlex
-        [dataTable]="trialBalance"
-        [commandExecuted]="isValidCommand"
+        [dataTable]="data"
+        [commandExecuted]="commandExecuted"
         [controlsAligned]="isQuickQuery"
-        (dataTableEvent)="onTrialBalanceTableEvent($event)">
+        (dataTableEvent)="onDataTableEvent($event)">
 
       </emp-fa-data-table>
 

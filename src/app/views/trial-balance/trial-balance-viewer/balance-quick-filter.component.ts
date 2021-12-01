@@ -11,16 +11,15 @@ import { DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalanceTypeList, getEmptyTrialBalanceCommand, TrialBalanceCommand,
-         TrialBalanceType} from '@app/models';
+import { AccountsChartMasterData, BalanceCommand, BalanceType, BalanceTypeList,
+         getEmptyBalanceCommand } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
 
 export enum BalanceQuickFilterEventType {
-  BUILD_TRIAL_BALANCE_CLICKED = 'BalanceQuickFilterComponent.Event.BuildTrialBalanceClicked',
-  CLEAR_TRIAL_BALANCE_CLICKED = 'BalanceQuickFilterComponent.Event.ClearTrialBalanceClicked',
+  BUILD_BALANCE_CLICKED = 'BalanceQuickFilterComponent.Event.BuildBalanceClicked',
 }
 
 @Component({
@@ -31,11 +30,11 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
   @Output() balanceQuickFilterEvent = new EventEmitter<EventInfo>();
 
-  trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
+  balanceCommand: BalanceCommand = getEmptyBalanceCommand();
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  trialBalanceTypeList: Identifiable[] = BalanceTypeList;
+  balanceTypeList: Identifiable[] = BalanceTypeList;
 
   isLoading = false;
 
@@ -47,7 +46,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.trialBalanceCommand.initialPeriod.fromDate = DateStringLibrary.today();
+    this.balanceCommand.initialPeriod.fromDate = DateStringLibrary.today();
     this.loadAccountsCharts();
   }
 
@@ -57,45 +56,55 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get trialBalanceTypeSelected(): Identifiable {
+    return !this.balanceCommand.trialBalanceType ? null :
+      this.balanceTypeList.find(x => x.uid === this.balanceCommand.trialBalanceType);
+  }
+
+
   get displayFromAccount(): boolean {
-    return this.trialBalanceCommand.trialBalanceType === TrialBalanceType.SaldosPorCuenta;
+    return this.balanceCommand.trialBalanceType === BalanceType.SaldosPorCuenta;
   }
 
 
   get displaySubledgerAccount(): boolean {
-    return this.trialBalanceCommand.trialBalanceType === TrialBalanceType.SaldosPorAuxiliar;
+    return this.balanceCommand.trialBalanceType === BalanceType.SaldosPorAuxiliar;
   }
 
 
   get displayWithSubledgerAccount(): boolean {
-    return this.trialBalanceCommand.trialBalanceType === TrialBalanceType.SaldosPorCuenta;
+    return this.balanceCommand.trialBalanceType === BalanceType.SaldosPorCuenta;
   }
 
 
-  onTrialBalanceTypeChange() {
-    this.trialBalanceCommand.fromAccount = '';
-    this.trialBalanceCommand.subledgerAccount = '';
-    this.trialBalanceCommand.withSubledgerAccount = this.displaySubledgerAccount;
+  onBalanceTypeChange() {
+    this.balanceCommand.fromAccount = '';
+    this.balanceCommand.subledgerAccount = '';
+    this.balanceCommand.withSubledgerAccount = this.displaySubledgerAccount;
   }
 
 
-  onBuildTrialBalanceClicked() {
-    sendEvent(this.balanceQuickFilterEvent, BalanceQuickFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
-      {trialBalanceCommand: this.getTrialBalanceCommandData()});
+  onBuildBalanceClicked() {
+    const payload = {
+      trialBalanceTypeName: this.trialBalanceTypeSelected.name,
+      balanceCommand: this.getBalanceCommandData(),
+    };
+
+    sendEvent(this.balanceQuickFilterEvent, BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED, payload);
   }
 
 
-  private getTrialBalanceCommandData(): TrialBalanceCommand {
-    const data: TrialBalanceCommand = {
-      accountsChartUID: this.trialBalanceCommand.accountsChartUID,
-      trialBalanceType: this.trialBalanceCommand.trialBalanceType,
-      fromAccount: this.trialBalanceCommand.fromAccount,
-      subledgerAccount: this.trialBalanceCommand.subledgerAccount,
+  private getBalanceCommandData(): BalanceCommand {
+    const data: BalanceCommand = {
+      accountsChartUID: this.balanceCommand.accountsChartUID,
+      trialBalanceType: this.balanceCommand.trialBalanceType,
+      fromAccount: this.balanceCommand.fromAccount,
+      subledgerAccount: this.balanceCommand.subledgerAccount,
       initialPeriod: {
-        fromDate: this.trialBalanceCommand.initialPeriod.fromDate,
-        toDate: this.trialBalanceCommand.initialPeriod.fromDate,
+        fromDate: this.balanceCommand.initialPeriod.fromDate,
+        toDate: this.balanceCommand.initialPeriod.fromDate,
       },
-      withSubledgerAccount: this.trialBalanceCommand.withSubledgerAccount,
+      withSubledgerAccount: this.balanceCommand.withSubledgerAccount,
     };
 
     return data;

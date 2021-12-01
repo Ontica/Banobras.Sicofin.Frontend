@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Assertion, DateString, Identifiable } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
@@ -34,22 +34,6 @@ export const TrialBalanceTypeList: Identifiable[] = [
   {uid: TrialBalanceType.SaldosPorAuxiliar,                 name: 'Saldos por auxiliar'},
   {uid: TrialBalanceType.SaldosPorCuenta,                   name: 'Saldos por cuenta'},
 ];
-
-
-export const BalanceTypeList: Identifiable[] = [
-  {uid: TrialBalanceType.SaldosPorCuenta,   name: 'Saldos por cuenta'},
-  {uid: TrialBalanceType.SaldosPorAuxiliar, name: 'Saldos por auxiliar'},
-];
-
-
-export function getTrialBalanceTypeNameFromUid(trialBalanceTypeUid: string): string {
-  const trialBalanceType = TrialBalanceTypeList.filter(x => x.uid === trialBalanceTypeUid);
-  if (trialBalanceType && trialBalanceType.length > 0) {
-    return trialBalanceType[0].name;
-  }
-
-  throw Assertion.assertNoReachThisCode(`Unhandled trial balance type for uid '${trialBalanceTypeUid}'.`);
-}
 
 
 export enum BalancesType {

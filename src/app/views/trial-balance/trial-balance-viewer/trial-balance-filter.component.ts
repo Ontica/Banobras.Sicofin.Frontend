@@ -76,6 +76,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get trialBalanceTypeSelected(): Identifiable {
+    return !this.trialBalanceCommand.trialBalanceType ? null :
+      this.trialBalanceTypeList.find(x => x.uid === this.trialBalanceCommand.trialBalanceType);
+  }
+
+
   get exchangeRatesDisabled(): boolean {
     return [TrialBalanceType.AnaliticoDeCuentas,
             TrialBalanceType.BalanzaConsolidadaPorMoneda,
@@ -306,8 +312,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         'Programming error: exchangeRate form must be validated before command execution.');
     }
 
-    sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED,
-      {trialBalanceCommand: this.getTrialBalanceCommandData()});
+    const payload = {
+      trialBalanceTypeName: this.trialBalanceTypeSelected.name,
+      trialBalanceCommand: this.getTrialBalanceCommandData(),
+    };
+
+    sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED, payload);
   }
 
 
