@@ -44,6 +44,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() showExportButton = true;
 
+  @Input() clickableEntry = false;
+
   @Input() formatFieldName = 'format';
 
   @Input() selectedEntry: DataTableEntry = null;
@@ -80,17 +82,12 @@ export class DataTableComponent implements OnChanges {
    switch (event.type as DataTableControlsEventType) {
 
       case DataTableControlsEventType.FILTER_CHANGED:
-
         this.filter = event.payload.filter as string;
-
         this.applyFilter(this.filter);
-
         return;
 
       case DataTableControlsEventType.EXPORT_BUTTON_CLICKED:
-
         sendEvent(this.dataTableEvent, DataTableEventType.EXPORT_DATA);
-
         return;
 
       default:
@@ -100,8 +97,15 @@ export class DataTableComponent implements OnChanges {
   }
 
 
-  onEntryClicked(entry: DataTableEntry) {
-    sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, { entry });
+  onRowClicked(entry: DataTableEntry) {
+    if (this.clickableEntry) {
+      this.emitDataEntryClicked(entry);
+    }
+  }
+
+
+  onItemLinkClicked(entry: DataTableEntry) {
+    this.emitDataEntryClicked(entry);
   }
 
 
@@ -139,6 +143,11 @@ export class DataTableComponent implements OnChanges {
   private emitCountFilteredEntries() {
     sendEvent(this.dataTableEvent, DataTableEventType.COUNT_FILTERED_ENTRIES,
       this.dataSource.filteredData.length);
+  }
+
+
+  private emitDataEntryClicked(entry: DataTableEntry) {
+    sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, { entry });
   }
 
 }
