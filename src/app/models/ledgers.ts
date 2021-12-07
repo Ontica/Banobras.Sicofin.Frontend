@@ -21,7 +21,7 @@ export interface LedgerAccount {
   role: AccountRole;
   debtorCreditor: DebtorCreditorType;
   level: number;
-  currencies: Identifiable[];
+  currencies: ValuedCurrency[];
   sectors: LedgerAccountSectorRule[];
 }
 
@@ -56,3 +56,10 @@ export const EmptyLedgerAccountSectorRule: LedgerAccountSectorRule = {
   name: '',
   role: null,
 };
+
+
+export interface ValuedCurrency {
+  uid: string;
+  name: string;
+  exchangeRate: number;
+}

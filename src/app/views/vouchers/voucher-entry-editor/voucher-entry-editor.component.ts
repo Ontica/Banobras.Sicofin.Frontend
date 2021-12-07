@@ -18,7 +18,7 @@ import { Assertion, EventInfo, Identifiable, isEmpty, Validate } from '@app/core
 
 import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
          mapSubledgerAccountDescriptorFromSubledgerAccount, SubledgerAccount, SubledgerAccountDescriptor,
-         Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
+         ValuedCurrency, Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryTypeList } from '@app/models';
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -99,6 +99,8 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   sectorRequired = false;
   subledgerAccountRequired = false;
 
+  exchangeRateDefault = '';
+
   displaySubledgerAccountCreator = false;
 
   constructor(uiLayer: PresentationLayer,
@@ -106,7 +108,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
-    this.ledgerAccountChange();
+    this.initFieldsValidations();
   }
 
 
@@ -142,6 +144,13 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   get subledgerAccountSelected(): SubledgerAccountDescriptor {
     const subledgerAccount = this.formHandler.getControl(this.controls.subledgerAccount).value;
     return subledgerAccount?.id > 0 ? subledgerAccount : null;
+  }
+
+
+  get currencySelected(): ValuedCurrency {
+    const currencyUID = this.formHandler.getControl(this.controls.currency).value;
+    const currency: ValuedCurrency = this.ledgerAccountSelected.currencies.find(x => x.uid === currencyUID);
+    return isEmpty(currency) ? null : currency;
   }
 
 
@@ -184,6 +193,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   onLedgerAccountChanges(ledgerAccount: LedgerAccount) {
     this.ledgerAccountChange();
+    this.subscribeSubledgerAccountList();
 
     if (ledgerAccount && ledgerAccount.id === 0 && ledgerAccount.standardAccountId > 0) {
       this.showConfirmAssignAccountToVoucher(ledgerAccount);
@@ -200,6 +210,20 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   onSectorChanges(sectorRule: LedgerAccountSectorRule) {
     this.formHandler.getControl(this.controls.subledgerAccount).reset();
     this.validateSubledgerField(sectorRule);
+  }
+
+
+  onCurrencyChanges() {
+    this.validateCurrencyField();
+    this.formHandler.getControl(this.controls.exchangeRate).reset(this.exchangeRateDefault);
+
+    const amount = FormatLibrary.stringToNumber(this.formHandler.getControl(this.controls.amount).value);
+
+    if (this.exchangeRateDefault || amount > 0) {
+      this.onCalculateBaseCurrencyAmount();
+    } else {
+      this.resetAmountFields();
+    }
   }
 
 
@@ -243,14 +267,9 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  onExchangeRateClicked() {
-    console.log('EXCHANGE RATE CLICKED');
-  }
-
-
-  onCalculateBaseCurrencyAmountClicked() {
+  onCalculateBaseCurrencyAmount() {
     this.setValueIfControlIsEmpty(this.controls.amount, '0.00');
-    this.setValueIfControlIsEmpty(this.controls.exchangeRate, '1.000000');
+    this.setValueIfControlIsEmpty(this.controls.exchangeRate, this.exchangeRateDefault);
 
     setTimeout(() => {
       const amount = FormatLibrary.stringToNumber(this.formHandler.getControl(this.controls.amount).value);
@@ -364,10 +383,18 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
+  private initFieldsValidations() {
+    this.validateSectorField();
+    this.validateSubledgerField(null);
+    this.validateCurrencyField();
+  }
+
+
   private setAndValidateFormData(voucherEntry: VoucherEntry) {
     this.setFormData(voucherEntry);
     this.validateSectorField();
     this.validateSubledgerField(voucherEntry.sector);
+    this.validateCurrencyField();
     this.validateDisableForm();
     this.subscribeLedgerAccountList();
     this.subscribeSubledgerAccountList();
@@ -404,6 +431,12 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     this.formHandler.getControl(this.controls.subledgerAccount).reset(subledgerAccountCreated);
     this.subscribeSubledgerAccountList();
     this.formHandler.form.markAsDirty();
+  }
+
+
+  private resetAmountFields() {
+    this.formHandler.getControl(this.controls.amount).reset();
+    this.formHandler.getControl(this.controls.baseCurrencyAmount).reset();
   }
 
 
@@ -480,10 +513,12 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
 
   private ledgerAccountChange() {
-    this.formHandler.getControl(this.controls.currency).reset();
     this.formHandler.getControl(this.controls.sector).reset();
+    this.formHandler.getControl(this.controls.currency).reset();
+
     this.validateSectorField();
     this.onSectorChanges(null);
+    this.onCurrencyChanges();
   }
 
 
@@ -517,10 +552,20 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  private setControlConfig(control: VoucherEntryEditorFormControls, controlRequired: boolean) {
-    this.formHandler.disableControl(control, !controlRequired);
+  private validateCurrencyField() {
+    const exchangeRateDisabled = isEmpty(this.currencySelected) || this.currencySelected?.exchangeRate === 1;
 
-    if (controlRequired) {
+    this.exchangeRateDefault = isEmpty(this.currencySelected) ? '' :
+      FormatLibrary.numberWithCommas(this.currencySelected?.exchangeRate ?? 0, '1.6-6');
+
+    this.formHandler.disableControl(this.controls.exchangeRate, exchangeRateDisabled);
+  }
+
+
+  private setControlConfig(control: VoucherEntryEditorFormControls, required: boolean) {
+    this.formHandler.disableControl(control, !required);
+
+    if (required) {
       this.formHandler.setControlValidators(control, Validators.required);
     } else {
       this.formHandler.clearControlValidators(control);
@@ -535,7 +580,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  private setValueIfControlIsEmpty(control: VoucherEntryEditorFormControls, value ) {
+  private setValueIfControlIsEmpty(control: VoucherEntryEditorFormControls, value) {
     if (!this.formHandler.getControl(control).value) {
       this.formHandler.getControl(control).reset(value);
     }

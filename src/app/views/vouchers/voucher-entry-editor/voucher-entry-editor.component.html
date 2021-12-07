@@ -147,7 +147,8 @@
                     [formControlName]="controls.currency"
                     [items]="ledgerAccountSelected.currencies"
                     [placeholder]="placeholderCurrency"
-                    [showError]="formHandler.showInvalidControl(controls.currency)">
+                    [showError]="formHandler.showInvalidControl(controls.currency)"
+                    (changes)="onCurrencyChanges()">
                   </emp-ng-select>
                 </div>
 
@@ -161,7 +162,7 @@
                     empNgCurrencyDisplaySymbol=""
                     [formControlName]="controls.amount"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.amount)"
-                    (change)="onCalculateBaseCurrencyAmountClicked()">
+                    (change)="onCalculateBaseCurrencyAmount()">
                 </div>
 
               </div>
@@ -169,13 +170,15 @@
               <div fxLayout="row">
 
                 <div [fxFlex]="100">
-                  <label><a class="link" (click)="onExchangeRateClicked()">Tipo de cambio:</a></label>
-                  <input type="text" class="text-box text-align-right" empNgCurrency
+                  <label>Tipo de cambio:</label>
+                  <input type="text" class="text-box" empNgCurrency
                     empNgCurrencyDisplaySymbol=""
                     [empNgCurrencyFractionDigit]="6"
                     [formControlName]="controls.exchangeRate"
+                    [placeholder]="!currencySelected ? 'Seleccione la moneda' : ''"
+                    [ngClass]="!currencySelected ? 'text-align-left' : 'text-align-right'"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.exchangeRate)"
-                    (change)="onCalculateBaseCurrencyAmountClicked()">
+                    (change)="onCalculateBaseCurrencyAmount()">
                 </div>
 
               </div>
