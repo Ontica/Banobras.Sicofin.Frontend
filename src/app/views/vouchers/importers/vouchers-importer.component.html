@@ -120,10 +120,10 @@
               <div fxFlex="none" >
                 <label>Tipo de contabilidad:</label>
                 <emp-ng-select
-                  [formControlName]="controls.accountsChart"
+                  [formControlName]="controls.accountsChartUID"
                   [items]="accountsChartMasterDataList"
                   [loading]="isLoading"
-                  [showError]="formHandler.showInvalidControl(controls.accountsChart)"
+                  [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
                   (changes)="onAccountChartChanges($event)">
                 </emp-ng-select>
               </div>

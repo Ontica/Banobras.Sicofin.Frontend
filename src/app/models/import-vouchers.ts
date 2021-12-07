@@ -5,15 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, DateStringLibrary, Identifiable } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
 
 
 export interface ImportVouchersCommand {
   distributeVouchers: boolean;
   generateSubledgerAccount: boolean;
   canEditVoucherEntries: boolean;
-  accountingDate: DateString;
   voucherTypeUID: string;
+  accountsChartUID?: string;
+  accountingDate?: DateString;
   processOnly?: string[];
 }
 
@@ -50,6 +51,5 @@ export const EmptyImportVouchersCommand: ImportVouchersCommand = {
   distributeVouchers: false,
   generateSubledgerAccount: false,
   canEditVoucherEntries: false,
-  accountingDate: DateStringLibrary.today(),
   voucherTypeUID: '',
 };

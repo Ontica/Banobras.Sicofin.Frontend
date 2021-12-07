@@ -39,7 +39,7 @@ enum VouchersImporterFormControls {
   distributeVouchers = 'distributeVouchers',
   generateSubledgerAccount = 'generateSubledgerAccount',
   canEditVoucherEntries = 'canEditVoucherEntries',
-  accountsChart = 'accountsChart',
+  accountsChartUID = 'accountsChartUID',
   accountingDate = 'accountingDate',
   voucherTypeUID = 'voucherTypeUID',
 }
@@ -301,7 +301,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
         distributeVouchers: new FormControl(false),
         generateSubledgerAccount: new FormControl(false),
         canEditVoucherEntries: new FormControl(true),
-        accountsChart: new FormControl('', Validators.required),
+        accountsChartUID: new FormControl('', Validators.required),
         accountingDate: new FormControl('', Validators.required),
         voucherTypeUID: new FormControl('', Validators.required),
       })
@@ -316,7 +316,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       distributeVouchers: false,
       generateSubledgerAccount: false,
       canEditVoucherEntries: true,
-      accountsChart: '',
+      accountsChartUID: '',
       accountingDate: '',
       voucherTypeUID: '',
     });
@@ -326,11 +326,11 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   private validateRequiredFormFields() {
     if (this.isDataBaseImport) {
       this.formHandler.clearControlValidators(this.controls.voucherTypeUID);
-      this.formHandler.clearControlValidators(this.controls.accountsChart);
+      this.formHandler.clearControlValidators(this.controls.accountsChartUID);
       this.formHandler.clearControlValidators(this.controls.accountingDate);
     } else {
       this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
-      this.formHandler.setControlValidators(this.controls.accountsChart, Validators.required);
+      this.formHandler.setControlValidators(this.controls.accountsChartUID, Validators.required);
       this.formHandler.setControlValidators(this.controls.accountingDate, Validators.required);
     }
   }
@@ -346,9 +346,13 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       distributeVouchers: formModel.distributeVouchers,
       generateSubledgerAccount: formModel.generateSubledgerAccount,
       canEditVoucherEntries: formModel.canEditVoucherEntries,
-      accountingDate: formModel.accountingDate,
       voucherTypeUID: formModel.voucherTypeUID,
     };
+
+    if (this.isExcelImport || this.isTxtImport) {
+      data.accountsChartUID = formModel.accountsChartUID;
+      data.accountingDate = formModel.accountingDate;
+    }
 
     if (this.isExcelImport) {
       data.processOnly = this.selectedPartsToImport.map(x => x.uid);
