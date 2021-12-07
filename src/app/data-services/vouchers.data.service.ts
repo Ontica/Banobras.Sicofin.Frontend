@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { FileReport, LedgerAccount, SearchVouchersCommand, SubledgerAccountDescriptor, Voucher,
-         VoucherDescriptor, VoucherEntry, VoucherEntryFields, VoucherFields,
+import { FileReport, LedgerAccount, VouchersOperation, SearchVouchersCommand, SubledgerAccountDescriptor,
+         Voucher, VoucherDescriptor, VoucherEntry, VoucherEntryFields, VoucherFields,
          VoucherSpecialCaseType } from '@app/models';
 
 
@@ -179,6 +179,16 @@ export class VouchersDataService {
     const path = `v2/financial-accounting/vouchers/${voucherId}`;
 
     return this.http.delete<Voucher>(path);
+  }
+
+
+  bulkOperationVouchers(operationName: VouchersOperation, vouchers: string[]): Observable<string> {
+    Assertion.assertValue(operationName, 'operationName');
+    Assertion.assertValue(vouchers, 'vouchers');
+
+    const path = `v2/financial-accounting/vouchers/bulk-operation/${operationName}`;
+
+    return this.http.post<string>(path, vouchers);
   }
 
 

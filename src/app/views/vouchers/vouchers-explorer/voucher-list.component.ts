@@ -13,27 +13,26 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewC
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyVoucher, Voucher, VoucherDescriptor } from '@app/models';
-
-import { expandCollapse } from '@app/shared/animations/animations';
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { EmptyVoucher, Voucher, VoucherDescriptor, VouchersOperationList } from '@app/models';
+
+import { expandCollapse } from '@app/shared/animations/animations';
 
 import { VoucherListItemEventType } from './voucher-list-item.component';
 
 export enum VoucherListEventType {
-  VOUCHER_CLICKED                   = 'VoucherListComponent.Event.VoucherClicked',
-  VOUCHERS_SELECTED_OPTIONS_CLICKED = 'VoucherListComponent.Event.VouchersSelectedOptionsClicked',
-  EXPORT_BUTTON_CLICKED             = 'VoucherListComponent.Event.ExportButtonClicked',
+  VOUCHER_CLICKED                    = 'VoucherListComponent.Event.VoucherClicked',
+  EXECUTE_VOUCHERS_OPERATION_CLICKED = 'VoucherListComponent.Event.ExecuteVouchersOperationClicked',
 }
 
 
 @Component({
   selector: 'emp-fa-voucher-list',
   templateUrl: './voucher-list.component.html',
-  animations: [
-    expandCollapse
-  ],
+  animations: [expandCollapse],
 })
 export class VoucherListComponent implements OnChanges {
 
@@ -49,15 +48,11 @@ export class VoucherListComponent implements OnChanges {
 
   selection = new SelectionModel<VoucherDescriptor>(true, []);
 
-  optionSelected = null;
+  operationSelected = null;
 
-  optionList = [
-    {uid: 'PRINT', name: 'Imprimir'},
-    {uid: 'STATUS_1', name: 'Enviar al diario'},
-    {uid: 'STATUS_2', name: 'Enviar a otro participante'},
-    {uid: 'EXPORT', name: 'Exportar'},
-    {uid: 'DELETE', name: 'Eliminar'}
-  ];
+  operationsList = VouchersOperationList;
+
+  constructor(private messageBox: MessageBoxService){}
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -76,21 +71,14 @@ export class VoucherListComponent implements OnChanges {
   onVoucherListItemEvent(event) {
 
     switch (event.type as VoucherListItemEventType) {
-
       case VoucherListItemEventType.VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
-
         sendEvent(this.voucherListEvent, VoucherListEventType.VOUCHER_CLICKED, event.payload);
-
         return;
 
       case VoucherListItemEventType.CHECK_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
-
-        this.selection.isSelected(event.payload.voucher) ?
-        this.selection.deselect(event.payload.voucher) :
-        this.selection.select(event.payload.voucher);
-
+        this.selection.toggle(event.payload.voucher);
         return;
 
       default:
@@ -101,14 +89,8 @@ export class VoucherListComponent implements OnChanges {
   }
 
 
-  onClickVouchersSelectedOptions() {
-    sendEvent(this.voucherListEvent, VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED,
-      { vouchers: this.selection.selected, option: this.optionSelected });
-  }
-
-
-  onExportButtonClicked() {
-    sendEvent(this.voucherListEvent, VoucherListEventType.EXPORT_BUTTON_CLICKED);
+  onExecuteOperationClicked() {
+    this.showConfirmMessage();
   }
 
 
@@ -116,6 +98,23 @@ export class VoucherListComponent implements OnChanges {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(0);
     }
+  }
+
+
+  private showConfirmMessage() {
+    const title = 'Enviar pólizas al diario';
+    const message = `Esta operación enviará al diario las
+                   <strong> ${this.selection.selected.length} pólizas</strong> seleccionadas.
+                   <br><br>¿Envío al diario las pólizas?`;
+
+    this.messageBox.confirm(message, title)
+      .toPromise()
+      .then(x => {
+        if (x) {
+          sendEvent(this.voucherListEvent, VoucherListEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED,
+            { vouchers: this.selection.selected.map(v => v.id), operation: this.operationSelected });
+        }
+      });
   }
 
 }

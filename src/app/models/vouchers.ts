@@ -59,6 +59,16 @@ export const EditorTypeList: Identifiable[] = [
 ];
 
 
+export enum VouchersOperation {
+  close = 'close',
+}
+
+
+export const VouchersOperationList: Identifiable[] = [
+  {uid: VouchersOperation.close, name: 'Enviar al diario'},
+];
+
+
 export interface SearchVouchersCommand {
   accountsChartUID: string;
   keywords: string;

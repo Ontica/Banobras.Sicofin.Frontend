@@ -14,7 +14,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherDescriptorFromVoucher,
-         mapVoucherStageFromViewName, SearchVouchersCommand, Voucher, VoucherDescriptor } from '@app/models';
+         mapVoucherStageFromViewName, SearchVouchersCommand, Voucher, VoucherDescriptor,
+         VouchersOperation } from '@app/models';
 
 import { View } from '../main-layout';
 
@@ -25,10 +26,6 @@ import { VouchersDataService } from '@app/data-services';
 import { ArrayLibrary } from '@app/shared/utils';
 
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
-
-import {
-  ExportReportModalEventType
-} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { VouchersImporterEventType } from '@app/views/vouchers/importers/vouchers-importer.component';
 
@@ -60,9 +57,6 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   isLoadingVoucher = false;
 
   subscriptionHelper: SubscriptionHelper;
-
-  displayExportModal = false;
-  excelFileUrl = '';
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
@@ -96,10 +90,6 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         this.setSelectedVoucher(EmptyVoucher);
         return;
 
-      case VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED:
-        this.setDisplayExportModal(true);
-        return;
-
       case VouchersExplorerEventType.SELECT_VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
@@ -114,32 +104,10 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         this.displayOptionModalSelected = 'VouchersImporter';
         return;
 
-      case VouchersExplorerEventType.SELECT_VOUCHERS_OPTION_CLICKED:
+      case VouchersExplorerEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
-        Assertion.assertValue(event.payload.option, 'event.payload.option');
-        this.messageBox.showInDevelopment('Ejecutar selección de pólizas', event);
-        return;
-
-      default:
-        console.log(`Unhandled user interface event ${event.type}`);
-        return;
-    }
-  }
-
-
-  onExportReportModalEvent(event) {
-    switch (event.type as ExportReportModalEventType) {
-
-      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
-        this.setDisplayExportModal(false);
-        return;
-
-      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (!this.searchVouchersCommand.accountsChartUID ) {
-          return;
-        }
-
-        this.exportVouchersToExcel();
+        Assertion.assertValue(event.payload.operation, 'event.payload.operation');
+        this.bulkOperationVouchers(event.payload.operation as VouchersOperation, event.payload.vouchers);
         return;
 
       default:
@@ -235,18 +203,34 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   }
 
 
-  private setVoucherListData(voucherList: VoucherDescriptor[]) {
-    this.voucherList = voucherList;
-    this.searchVouchersCommand = Object.assign({}, this.filter);
+  private getVoucher(idVoucher: number) {
+    this.isLoadingVoucher = true;
+
+    this.vouchersData.getVoucher(idVoucher)
+      .toPromise()
+      .then(x => {
+        this.setSelectedVoucher(x);
+      })
+      .finally(() => this.isLoadingVoucher = false);
   }
 
 
-  private exportVouchersToExcel() {
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy';
-      this.messageBox.showInDevelopment('Exportar pólizas',
-        {type: 'EXPORT_VOUCHERS', command: this.searchVouchersCommand});
-    }, 500);
+  private bulkOperationVouchers(operation: VouchersOperation, vouchers: string[]) {
+    this.isLoadingVoucher = true;
+
+    this.vouchersData.bulkOperationVouchers(operation, vouchers)
+      .toPromise()
+      .then(x => {
+        this.messageBox.show(x, 'Operación ejecutada');
+        this.searchVouchers();
+      })
+      .finally(() => this.isLoadingVoucher = false);
+  }
+
+
+  private setVoucherListData(voucherList: VoucherDescriptor[]) {
+    this.voucherList = voucherList;
+    this.searchVouchersCommand = Object.assign({}, this.filter);
   }
 
 
@@ -265,27 +249,9 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   }
 
 
-  private getVoucher(idVoucher: number) {
-    this.isLoadingVoucher = true;
-
-    this.vouchersData.getVoucher(idVoucher)
-      .toPromise()
-      .then(x => {
-        this.setSelectedVoucher(x);
-      })
-      .finally(() => this.isLoadingVoucher = false);
-  }
-
-
   private setSelectedVoucher(voucher: Voucher) {
     this.selectedVoucher = voucher;
     this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
-  }
-
-
-  private setDisplayExportModal(display) {
-    this.displayExportModal = display;
-    this.excelFileUrl = '';
   }
 
 

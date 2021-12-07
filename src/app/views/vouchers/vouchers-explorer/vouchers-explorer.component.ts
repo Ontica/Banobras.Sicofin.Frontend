@@ -22,10 +22,9 @@ export enum VouchersExplorerEventType {
   FILTER_CHANGED = 'VouchersExplorerComponent.Event.FilterChanged',
   FILTER_CLEARED = 'VouchersExplorerComponent.Event.FilterCleared',
   SELECT_VOUCHER_CLICKED = 'VouchersExplorerComponent.Event.SelectVoucherClicked',
-  SELECT_VOUCHERS_OPTION_CLICKED = 'VouchersExplorerComponent.Event.SelectVouchersOptionClicked',
+  EXECUTE_VOUCHERS_OPERATION_CLICKED = 'VouchersExplorerComponent.Event.ExecuteVouchersOperationClicked',
   CREATE_VOUCHER_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.CreateVoucherButtonClicked',
   IMPORT_VOUCHERS_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.ImportVouchersButtonClicked',
-  EXPORT_VOUCHERS_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.ExportVouchersButtonClicked',
 }
 
 
@@ -121,18 +120,12 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
         return;
 
-      case VoucherListEventType.VOUCHERS_SELECTED_OPTIONS_CLICKED:
+      case VoucherListEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED:
         Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
-        Assertion.assertValue(event.payload.option, 'event.payload.option');
+        Assertion.assertValue(event.payload.operation, 'event.payload.operation');
 
-        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.SELECT_VOUCHERS_OPTION_CLICKED,
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED,
           event.payload);
-
-        return;
-
-      case VoucherListEventType.EXPORT_BUTTON_CLICKED:
-
-        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED);
 
         return;
 
