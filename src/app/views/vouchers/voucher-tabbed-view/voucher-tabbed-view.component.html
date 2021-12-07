@@ -26,9 +26,13 @@
 
     <mat-tab label="Impresión">
 
-      <emp-fa-voucher-printable-viewer [voucherId]="voucher.id">
+      <ng-template matTabContent>
 
-      </emp-fa-voucher-printable-viewer>
+        <emp-fa-voucher-printable-viewer [voucherId]="voucher.id">
+
+        </emp-fa-voucher-printable-viewer>
+
+      </ng-template>
 
     </mat-tab>
 
