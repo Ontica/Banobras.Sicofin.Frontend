@@ -10,15 +10,9 @@
 
         <button
           class="btn-action"
+          [style.marginLeft.px]="8"
           (click)="onAddVoucherEntryClicked()">
           Agregar movimiento
-        </button>
-
-        <button
-          class="btn-action"
-          [style.marginLeft.px]="8"
-          (click)="onImportVoucherEntryClicked()">
-          Importar movimientos
         </button>
 
       </div>
@@ -45,9 +39,3 @@
   (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
 
 </emp-fa-voucher-entry-editor>
-
-<emp-fa-voucher-entries-importer *ngIf="displayVoucherEntriesImporter"
-  [voucher]="voucher"
-  (voucherEntriesImporterEvent)="onVoucherEntriesImporterEvent($event)">
-
-</emp-fa-voucher-entries-importer>

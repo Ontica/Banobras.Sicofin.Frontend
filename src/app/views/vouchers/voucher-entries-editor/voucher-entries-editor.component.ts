@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { ImportVouchersDataService, VouchersDataService } from '@app/data-services';
+import { VouchersDataService } from '@app/data-services';
 
 import { EmptyVoucher, EmptyVoucherEntry, isOpenVoucher, Voucher, VoucherEntry,
          VoucherEntryFields } from '@app/models';
@@ -21,8 +21,6 @@ import { sendEvent } from '@app/shared/utils';
 import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-entry-editor.component';
 
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
-
-import { VoucherEntriesImporterEventType } from '../importers/voucher-entries-importer.component';
 
 export enum VoucherEntriesEditorEventType {
   VOUCHER_UPDATED = 'VoucherEntriesEditorComponent.Event.VoucherUpdated',
@@ -41,14 +39,11 @@ export class VoucherEntriesEditorComponent {
 
   submitted = false;
 
-  displayVoucherEntriesImporter = false;
-
   displayVoucherEntryEditor = false;
 
   selectedVoucherEntry: VoucherEntry = EmptyVoucherEntry;
 
   constructor(private vouchersData: VouchersDataService,
-              private importVouchersData: ImportVouchersDataService,
               private messageBox: MessageBoxService) {}
 
 
@@ -59,11 +54,6 @@ export class VoucherEntriesEditorComponent {
 
   onAddVoucherEntryClicked() {
     this.setSelectedVoucherEntry(EmptyVoucherEntry, true);
-  }
-
-
-  onImportVoucherEntryClicked() {
-  this.displayVoucherEntriesImporter = true;
   }
 
 
@@ -125,31 +115,6 @@ export class VoucherEntriesEditorComponent {
   }
 
 
-  onVoucherEntriesImporterEvent(event: EventInfo) {
-    if (this.submitted) {
-      return;
-    }
-
-    switch (event.type as VoucherEntriesImporterEventType) {
-
-      case VoucherEntriesImporterEventType.CLOSE_MODAL_CLICKED:
-        this.displayVoucherEntriesImporter = false;
-        return;
-
-      case VoucherEntriesImporterEventType.VOUCHER_ENTRIES_IMPORTED:
-        Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
-        this.displayVoucherEntriesImporter = false;
-        sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
-          event.payload);
-        return;
-
-      default:
-        console.log(`Unhandled user interface event ${event.type}`);
-        return;
-    }
-  }
-
-
   private validateVoucher() {
     this.submitted = true;
 
@@ -184,9 +149,7 @@ export class VoucherEntriesEditorComponent {
 
     this.vouchersData.getVoucherEntry(this.voucher.id, voucherEntryId)
       .toPromise()
-      .then(x => {
-        this.setSelectedVoucherEntry(x);
-      })
+      .then(x => this.setSelectedVoucherEntry(x))
       .finally(() => this.submitted = false);
   }
 

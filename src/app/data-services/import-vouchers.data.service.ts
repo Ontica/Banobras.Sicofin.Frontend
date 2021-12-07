@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { ImportVouchersResult, Voucher, ImportVouchersCommand } from '@app/models';
+import { ImportVouchersResult, ImportVouchersCommand } from '@app/models';
 
 
 @Injectable()
@@ -93,41 +93,6 @@ export class ImportVouchersDataService {
     const path = `v2/financial-accounting/vouchers/import-from-text-file`;
 
     return this.http.post<ImportVouchersResult>(path, formData);
-  }
-
-
-  dryRunImportVoucherEntriesFromExcelFile(voucherId: number,
-                                          file: File,
-                                          importVouchersCommand: ImportVouchersCommand)
-                                          : Observable<ImportVouchersResult> {
-    Assertion.assertValue(voucherId, 'voucherId');
-    Assertion.assertValue(file, 'file');
-    Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
-
-    const formData: FormData = new FormData();
-    formData.append('media', file);
-    formData.append('command', JSON.stringify(importVouchersCommand));
-
-    const path = `v2/financial-accounting/vouchers/${voucherId}/entries/import-from-excel/dry-run`;
-
-    return this.http.post<ImportVouchersResult>(path, formData);
-  }
-
-
-  importVoucherEntriesFromExcelFile(voucherId: number,
-                                    file: File,
-                                    importVouchersCommand: ImportVouchersCommand): Observable<Voucher> {
-    Assertion.assertValue(voucherId, 'voucherId');
-    Assertion.assertValue(file, 'file');
-    Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
-
-    const formData: FormData = new FormData();
-    formData.append('media', file);
-    formData.append('command', JSON.stringify(importVouchersCommand));
-
-    const path = `v2/financial-accounting/vouchers/${voucherId}/entries/import-from-excel`;
-
-    return this.http.post<Voucher>(path, formData);
   }
 
 }

@@ -14,11 +14,10 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { SubledgerAccountsModule } from '../subledger-accounts/subledger-accounts.module';
 
-import { ImporterDetailsTableComponent } from './importers/importer-details-table.component';
+import { ImporterDetailsTableComponent } from './vouchers-importer/importer-details-table.component';
 import { VoucherCreatorComponent } from './voucher-creator/voucher-creator.component';
 import { VoucherEditorComponent } from './voucher-editor/voucher-editor.component';
 import { VoucherEntriesEditorComponent } from './voucher-entries-editor/voucher-entries-editor.component';
-import { VoucherEntriesImporterComponent } from './importers/voucher-entries-importer.component';
 import { VoucherEntryEditorComponent } from './voucher-entry-editor/voucher-entry-editor.component';
 import { VoucherEntryTableComponent } from './voucher-entry-table/voucher-entry-table.component';
 import { VoucherFilterComponent } from './vouchers-explorer/voucher-filter.component';
@@ -27,7 +26,7 @@ import { VoucherListComponent } from './vouchers-explorer/voucher-list.component
 import { VoucherListItemComponent } from './vouchers-explorer/voucher-list-item.component';
 import { VoucherPrintableComponentViewerComponent } from './voucher-printable-viewer/voucher-printable-viewer.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
-import { VouchersImporterComponent } from './importers/vouchers-importer.component';
+import { VouchersImporterComponent } from './vouchers-importer/vouchers-importer.component';
 import { VoucherSpecialCaseEditorComponent } from './voucher-creator/voucher-special-case-editor.component';
 import { VoucherSubmitterComponent } from './voucher-editor/voucher-submitter.component';
 import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';
@@ -48,7 +47,6 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     VoucherCreatorComponent,
     VoucherEditorComponent,
     VoucherEntriesEditorComponent,
-    VoucherEntriesImporterComponent,
     VoucherEntryEditorComponent,
     VoucherEntryTableComponent,
     VoucherFilterComponent,

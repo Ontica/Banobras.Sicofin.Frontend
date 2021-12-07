@@ -27,7 +27,7 @@ import { ArrayLibrary } from '@app/shared/utils';
 
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
 
-import { VouchersImporterEventType } from '@app/views/vouchers/importers/vouchers-importer.component';
+import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer/vouchers-importer.component';
 
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
 
