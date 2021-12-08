@@ -36,7 +36,7 @@ export enum VouchersImporterEventType {
 }
 
 enum VouchersImporterFormControls {
-  distributeVouchers = 'distributeVouchers',
+  allowUnbalancedVouchers = 'allowUnbalancedVouchers',
   generateSubledgerAccount = 'generateSubledgerAccount',
   canEditVoucherEntries = 'canEditVoucherEntries',
   accountsChartUID = 'accountsChartUID',
@@ -298,7 +298,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
     this.formHandler = new FormHandler(
       new FormGroup({
-        distributeVouchers: new FormControl(false),
+        allowUnbalancedVouchers: new FormControl(false),
         generateSubledgerAccount: new FormControl(false),
         canEditVoucherEntries: new FormControl(true),
         accountsChartUID: new FormControl('', Validators.required),
@@ -313,7 +313,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   private resetForm() {
     this.formHandler.form.reset({
-      distributeVouchers: false,
+      allowUnbalancedVouchers: false,
       generateSubledgerAccount: false,
       canEditVoucherEntries: true,
       accountsChartUID: '',
@@ -343,7 +343,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     const formModel = this.formHandler.form.getRawValue();
 
     const data: ImportVouchersCommand = {
-      distributeVouchers: formModel.distributeVouchers,
+      allowUnbalancedVouchers: formModel.allowUnbalancedVouchers,
       generateSubledgerAccount: formModel.generateSubledgerAccount,
       canEditVoucherEntries: formModel.canEditVoucherEntries,
       voucherTypeUID: formModel.voucherTypeUID,
@@ -447,7 +447,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    message = `Se han importado ${response.voucherTotals.length} pólizas.`;
+    message = `Se han importado ${response.vouchersCount} pólizas.`;
     this.messageBox.show(message, 'Importador de pólizas');
     sendEvent(this.vouchersImporterEvent, VouchersImporterEventType.VOUCHERS_IMPORTED);
   }

@@ -58,7 +58,7 @@
 
               <div fxLayout="row" fxLayout.lt-md="column">
 
-                <div fxFlex="430px" fxFlex.lt-md="none">
+                <div fxFlex="100" fxFlex.lt-md="none">
                   <label>Tipo de póliza:</label>
                   <emp-ng-select
                     [formControlName]="controls.voucherTypeUID"
@@ -75,9 +75,9 @@
                 <div fxFlex="none" fxLayoutAlign="start center">
 
                   <mat-checkbox
-                    [formControlName]="controls.distributeVouchers"
+                    [formControlName]="controls.allowUnbalancedVouchers"
                     (click)="$event.stopPropagation">
-                    Distribuir las pólizas hacia los grupos de trabajo correspondientes.
+                    Permitir pólizas con diferencias entre cargos/abonos.
                   </mat-checkbox>
 
                 </div>

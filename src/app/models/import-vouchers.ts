@@ -9,7 +9,7 @@ import { DateString, Identifiable } from '@app/core';
 
 
 export interface ImportVouchersCommand {
-  distributeVouchers: boolean;
+  allowUnbalancedVouchers: boolean;
   generateSubledgerAccount: boolean;
   canEditVoucherEntries: boolean;
   voucherTypeUID: string;
@@ -24,6 +24,7 @@ export interface ImportVouchersResult {
   isRunning: boolean;
   errors: Identifiable[];
   warnings: Identifiable[];
+  vouchersCount: number;
   voucherTotals: ImportVouchersTotals[];
 }
 
@@ -43,12 +44,13 @@ export const EmptyImportVouchersResult: ImportVouchersResult = {
   isRunning: false,
   errors: [],
   warnings: [],
+  vouchersCount: 0,
   voucherTotals: [],
 };
 
 
 export const EmptyImportVouchersCommand: ImportVouchersCommand = {
-  distributeVouchers: false,
+  allowUnbalancedVouchers: false,
   generateSubledgerAccount: false,
   canEditVoucherEntries: false,
   voucherTypeUID: '',
