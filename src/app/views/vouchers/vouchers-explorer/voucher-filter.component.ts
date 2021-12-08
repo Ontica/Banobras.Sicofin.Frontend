@@ -5,8 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit,
-         Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
@@ -26,8 +25,8 @@ import { sendEvent } from '@app/shared/utils';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, DateSearchFieldList, EmptySearchVouchersCommand, SearchVouchersCommand,
-         VoucherStage, EditorTypeList} from '@app/models';
+import { AccountsChartMasterData, DateSearchFieldList, SearchVouchersCommand,
+         VoucherStage, EditorTypeList, EmptySearchVouchersCommand } from '@app/models';
 
 
 export enum VoucherFilterEventType {
@@ -41,15 +40,15 @@ export enum VoucherFilterEventType {
   templateUrl: './voucher-filter.component.html',
   animations: [expandCollapse],
 })
-export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestroy {
-
-  @Input() voucherFilter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
+export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   @Input() showFilters = false;
 
   @Output() showFiltersChange = new EventEmitter<boolean>();
 
   @Output() voucherFilterEvent = new EventEmitter<EventInfo>();
+
+  filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand)
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
   dateSearchFieldList: Identifiable[] = DateSearchFieldList;
@@ -70,8 +69,7 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private vouchersData: VouchersDataService,
-              private cdRef: ChangeDetectorRef) {
+              private vouchersData: VouchersDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -82,23 +80,18 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
   }
 
 
-  ngAfterViewChecked() {
-    this.cdRef.detectChanges();
-  }
-
-
   ngOnDestroy() {
     this.helper.destroy();
   }
 
 
   get isDateSearchFieldRequired() {
-    return !!this.voucherFilter.toDate || !!this.voucherFilter.fromDate;
+    return !!this.filter.toDate || !!this.filter.fromDate;
   }
 
 
   get isDateSearchFieldValid() {
-    return this.isDateSearchFieldRequired ? !!this.voucherFilter.dateSearchField : true;
+    return this.isDateSearchFieldRequired ? !!this.filter.dateSearchField : true;
   }
 
 
@@ -121,13 +114,7 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
 
 
   onClearFilters() {
-    this.setDefaultFieldsSelected();
-
-    this.voucherFilter = Object.assign({}, EmptySearchVouchersCommand,
-      { accountsChartUID: this.voucherFilter.accountsChartUID });
-
-    sendEvent(this.voucherFilterEvent, VoucherFilterEventType.CLEAR_VOUCHERS_CLICKED,
-      this.getSearchVoucherCommand());
+    this.setAndEmitDefaultFilter();
   }
 
 
@@ -151,21 +138,9 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
       this.transactionTypesList = y;
       this.voucherTypesList = z;
 
-      this.setDefaultFieldsSelected();
+      this.setAndEmitDefaultFilter();
       this.isLoading = false;
     });
-  }
-
-
-  private validateFieldToClear() {
-    this.voucherFilter.ledgerUID = this.accountChartSelected.ledgers
-      .filter(x => this.voucherFilter.ledgerUID === x.uid).length > 0 ? this.voucherFilter.ledgerUID : '';
-  }
-
-
-  private setDefaultFieldsSelected() {
-    this.accountChartSelected = this.accountsChartMasterDataList[0];
-    this.editorSelected = null;
   }
 
 
@@ -189,21 +164,46 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
   }
 
 
+  private validateFieldToClear() {
+    this.filter.ledgerUID = this.accountChartSelected.ledgers
+      .filter(x => this.filter.ledgerUID === x.uid).length > 0 ? this.filter.ledgerUID : '';
+  }
+
+
+  private setAndEmitDefaultFilter() {
+    this.setDefaultFieldsSelected();
+
+    this.filter = Object.assign({}, EmptySearchVouchersCommand,
+      { accountsChartUID: this.filter.accountsChartUID });
+
+    sendEvent(this.voucherFilterEvent, VoucherFilterEventType.CLEAR_VOUCHERS_CLICKED,
+      this.getSearchVoucherCommand());
+  }
+
+
+  private setDefaultFieldsSelected() {
+    this.accountChartSelected = this.accountsChartMasterDataList[0] ?? null;
+    this.editorSelected = null;
+    this.filter.accountsChartUID = this.accountChartSelected?.uid ?? '';
+    this.filter.editorUID = '';
+  }
+
+
   private getSearchVoucherCommand(): SearchVouchersCommand {
     const command: SearchVouchersCommand = {
-      stage: this.voucherFilter.stage ?? VoucherStage.All,
-      accountsChartUID: this.voucherFilter.accountsChartUID ?? '',
-      keywords: this.voucherFilter.keywords ?? '',
-      number: this.voucherFilter.number ?? '',
-      concept: this.voucherFilter.concept ?? '',
-      ledgerUID: this.voucherFilter.ledgerUID ?? '',
-      accountKeywords: this.voucherFilter.accountKeywords ?? '',
-      subledgerAccountKeywords: this.voucherFilter.subledgerAccountKeywords ?? '',
-      dateSearchField: this.voucherFilter.dateSearchField ?? null,
-      transactionTypeUID: this.voucherFilter.transactionTypeUID ?? '',
-      voucherTypeUID: this.voucherFilter.voucherTypeUID ?? '',
-      editorType: this.voucherFilter.editorType ?? null,
-      editorUID: this.voucherFilter.editorUID ?? '',
+      stage: this.filter.stage ?? VoucherStage.All,
+      accountsChartUID: this.filter.accountsChartUID ?? '',
+      keywords: this.filter.keywords ?? '',
+      number: this.filter.number ?? '',
+      concept: this.filter.concept ?? '',
+      ledgerUID: this.filter.ledgerUID ?? '',
+      accountKeywords: this.filter.accountKeywords ?? '',
+      subledgerAccountKeywords: this.filter.subledgerAccountKeywords ?? '',
+      dateSearchField: this.filter.dateSearchField ?? null,
+      transactionTypeUID: this.filter.transactionTypeUID ?? '',
+      voucherTypeUID: this.filter.voucherTypeUID ?? '',
+      editorType: this.filter.editorType ?? null,
+      editorUID: this.filter.editorUID ?? '',
     };
 
     this.validateSearchVoucherCommandFieldsNoRequired(command);
@@ -213,12 +213,12 @@ export class VoucherFilterComponent implements OnInit, AfterViewChecked, OnDestr
 
 
   private validateSearchVoucherCommandFieldsNoRequired(command: SearchVouchersCommand) {
-    if (this.voucherFilter.fromDate) {
-      command.fromDate = this.voucherFilter.fromDate;
+    if (this.filter.fromDate) {
+      command.fromDate = this.filter.fromDate;
     }
 
-    if (this.voucherFilter.toDate) {
-      command.toDate = this.voucherFilter.toDate;
+    if (this.filter.toDate) {
+      command.toDate = this.filter.toDate;
     }
   }
 

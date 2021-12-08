@@ -10,8 +10,7 @@
         <label>Catálogo:</label>
 
         <emp-ng-select name="accountsChartUID" #accountsChartUID="ngModel" required
-          [config]="{selectFirst: true}"
-          [(ngModel)]="voucherFilter.accountsChartUID"
+          [(ngModel)]="filter.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
           [showError]="accountsChartUID.invalid"
@@ -26,9 +25,9 @@
 
           <input type="text" class="text-box" name="keywords"
             placeholder="Buscar pólizas..."
-            [(ngModel)]="voucherFilter.keywords"
+            [(ngModel)]="filter.keywords"
             (keyup.enter)="onSearchVoucherClicked()"
-            (keyup.escape)="voucherFilter.keywords = ''">
+            (keyup.escape)="filter.keywords = ''">
 
         </div>
 
@@ -80,8 +79,8 @@
           <label>No. póliza:</label>
 
           <input type="text" class="text-box" name="number"
-            [(ngModel)]="voucherFilter.number"
-            (keyup.escape)="voucherFilter.number = ''">
+            [(ngModel)]="filter.number"
+            (keyup.escape)="filter.number = ''">
 
         </div>
 
@@ -90,8 +89,8 @@
           <label>Concepto:</label>
 
           <input type="text" class="text-box" name="concept"
-            [(ngModel)]="voucherFilter.concept"
-            (keyup.escape)="voucherFilter.concept = ''">
+            [(ngModel)]="filter.concept"
+            (keyup.escape)="filter.concept = ''">
 
         </div>
 
@@ -101,7 +100,7 @@
 
           <emp-ng-select name="ledger"
             [config]="{clearable: true}"
-            [(ngModel)]="voucherFilter.ledgerUID"
+            [(ngModel)]="filter.ledgerUID"
             [items]="accountChartSelected?.ledgers"
             bindLabel="fullName"
             placeholder="Todas">
@@ -118,8 +117,8 @@
           <label>Con la cuenta:</label>
 
           <input type="text" class="text-box" name="accountKeywords"
-            [(ngModel)]="voucherFilter.accountKeywords"
-            (keyup.escape)="voucherFilter.accountKeywords = ''">
+            [(ngModel)]="filter.accountKeywords"
+            (keyup.escape)="filter.accountKeywords = ''">
 
         </div>
 
@@ -128,8 +127,8 @@
           <label>Con el auxiliar:</label>
 
           <input type="text" class="text-box" name="subledgerAccountKeywords"
-            [(ngModel)]="voucherFilter.subledgerAccountKeywords"
-            (keyup.escape)="voucherFilter.subledgerAccountKeywords = ''">
+            [(ngModel)]="filter.subledgerAccountKeywords"
+            (keyup.escape)="filter.subledgerAccountKeywords = ''">
 
         </div>
 
@@ -140,7 +139,7 @@
             <label>Del día:</label>
 
             <emp-ng-datepicker name="fromDate"
-              [(ngModel)]="voucherFilter.fromDate">
+              [(ngModel)]="filter.fromDate">
 
             </emp-ng-datepicker>
 
@@ -151,7 +150,7 @@
             <label>Al día:</label>
 
             <emp-ng-datepicker name="toDate"
-              [(ngModel)]="voucherFilter.toDate">
+              [(ngModel)]="filter.toDate">
 
             </emp-ng-datepicker>
 
@@ -160,7 +159,7 @@
           <div fxFlex fxLayoutAlign="start end">
 
             <emp-ng-select name="dateSearchField"  #dateSearchField="ngModel" [fxFlex]="100"
-              [(ngModel)]="voucherFilter.dateSearchField"
+              [(ngModel)]="filter.dateSearchField"
               [config]="{clearable: true}"
               [items]="dateSearchFieldList"
               [required]="isDateSearchFieldRequired"
@@ -181,7 +180,7 @@
 
           <emp-ng-select name="transactionTypeUID"
             [config]="{clearable: true}"
-            [(ngModel)]="voucherFilter.transactionTypeUID"
+            [(ngModel)]="filter.transactionTypeUID"
             [items]="transactionTypesList"
             [loading]="isLoading"
             placeholder="Todos">
@@ -195,7 +194,7 @@
 
           <emp-ng-select  name="voucherTypeUID"
             [config]="{clearable: true}"
-            [(ngModel)]="voucherFilter.voucherTypeUID"
+            [(ngModel)]="filter.voucherTypeUID"
             [items]="voucherTypesList"
             [loading]="isLoading"
             placeholder="Todos">
@@ -211,7 +210,7 @@
         <div fxFlex="25" fxLayoutAlign="start end">
 
           <emp-ng-select name="editorType" [fxFlex]="100"
-            [(ngModel)]="voucherFilter.editorType"
+            [(ngModel)]="filter.editorType"
             [items]="editorTypeList">
           </emp-ng-select>
 
@@ -225,7 +224,7 @@
             [config]="{clearable: true,
                        minTermLength: minTermLength,
                        typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
-            [(ngModel)]="voucherFilter.editorUID"
+            [(ngModel)]="filter.editorUID"
             [items]="editorList$ | async"
             [typeahead]="editorInput$"
             [loading]="editorLoading"

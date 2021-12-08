@@ -44,16 +44,18 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   currentView: View;
 
-  voucherList: VoucherDescriptor[] = [];
-  filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
   searchVouchersCommand: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
+
+  voucherList: VoucherDescriptor[] = [];
 
   selectedVoucher: Voucher = EmptyVoucher;
 
   displayVoucherTabbedView = false;
+
   displayOptionModalSelected: AccountingOperationModalOptions = null;
 
   isLoading = false;
+
   isLoadingVoucher = false;
 
   subscriptionHelper: SubscriptionHelper;
@@ -164,8 +166,12 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
     switch (event.type as VouchersImporterEventType) {
 
       case VouchersImporterEventType.CLOSE_MODAL_CLICKED:
+        this.onOptionModalClosed();
+        return;
+
       case VouchersImporterEventType.VOUCHERS_IMPORTED:
         this.onOptionModalClosed();
+        this.refreshVouchers();
         return;
 
       default:
@@ -177,23 +183,29 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   private onCurrentViewChanged(newView: View) {
     this.currentView = newView;
-    this.applyVoucherFilter(this.filter);
+    this.applyVoucherFilter(this.searchVouchersCommand);
   }
 
 
   private applyVoucherFilter(newFilter: SearchVouchersCommand) {
-    this.filter =  Object.assign({}, newFilter, { stage: mapVoucherStageFromViewName(this.currentView.name)});
+    this.searchVouchersCommand =  Object.assign({}, newFilter,
+      {stage: mapVoucherStageFromViewName(this.currentView.name)});
+  }
+
+
+  private refreshVouchers() {
+    this.searchVouchers();
   }
 
 
   private searchVouchers() {
-    if (!this.filter.accountsChartUID) {
+    if (!this.searchVouchersCommand.accountsChartUID) {
       return;
     }
 
     this.isLoading = true;
 
-    this.vouchersData.searchVouchers(this.filter)
+    this.vouchersData.searchVouchers(this.searchVouchersCommand)
       .toPromise()
       .then(x => {
         this.setVoucherListData(x);
@@ -230,7 +242,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   private setVoucherListData(voucherList: VoucherDescriptor[]) {
     this.voucherList = voucherList;
-    this.searchVouchersCommand = Object.assign({}, this.filter);
+    this.searchVouchersCommand = Object.assign({}, this.searchVouchersCommand);
   }
 
 
