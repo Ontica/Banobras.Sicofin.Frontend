@@ -8,10 +8,7 @@
 
 /* Actions */
 
-import { ActionType as VoucherAction } from './voucher.presentation.handler';
-export { ActionType as VoucherAction } from './voucher.presentation.handler';
-
-export type FAActions = VoucherAction;
+export type FAActions = '';
 
 
 /* Commands */
@@ -21,9 +18,7 @@ export type FACommands = '';
 
 /* Effects */
 
-import { EffectType as VoucherEffectType } from './voucher.presentation.handler';
-
-export type FAEffects = VoucherEffectType;
+export type FAEffects = '';
 
 
 /* Selectors */
