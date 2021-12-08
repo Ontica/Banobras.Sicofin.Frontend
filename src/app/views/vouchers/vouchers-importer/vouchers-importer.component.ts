@@ -328,7 +328,15 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       this.formHandler.clearControlValidators(this.controls.voucherTypeUID);
       this.formHandler.clearControlValidators(this.controls.accountsChartUID);
       this.formHandler.clearControlValidators(this.controls.accountingDate);
-    } else {
+    }
+
+    if (this.isTxtImport) {
+      this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
+      this.formHandler.clearControlValidators(this.controls.accountsChartUID);
+      this.formHandler.clearControlValidators(this.controls.accountingDate);
+    }
+
+    if (this.isExcelImport) {
       this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
       this.formHandler.setControlValidators(this.controls.accountsChartUID, Validators.required);
       this.formHandler.setControlValidators(this.controls.accountingDate, Validators.required);
@@ -349,12 +357,9 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       voucherTypeUID: formModel.voucherTypeUID,
     };
 
-    if (this.isExcelImport || this.isTxtImport) {
+    if (this.isExcelImport) {
       data.accountsChartUID = formModel.accountsChartUID;
       data.accountingDate = formModel.accountingDate;
-    }
-
-    if (this.isExcelImport) {
       data.processOnly = this.selectedPartsToImport.map(x => x.uid);
     }
 

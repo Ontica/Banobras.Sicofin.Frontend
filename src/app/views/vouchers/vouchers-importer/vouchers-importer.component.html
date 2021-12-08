@@ -58,7 +58,7 @@
 
               <div fxLayout="row" fxLayout.lt-md="column">
 
-                <div fxFlex="100" fxFlex.lt-md="none">
+                <div fxFlex="363px" fxFlex.lt-md="none">
                   <label>Tipo de póliza:</label>
                   <emp-ng-select
                     [formControlName]="controls.voucherTypeUID"
@@ -114,10 +114,10 @@
 
             </div>
 
-            <div #column2 fxLayout="column" fxFlex="none" fxFlex.lt-md="100"
-              fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+            <div #column2 *ngIf="isExcelImport" fxLayout="column" fxFlex="none"
+              fxFlex.lt-md="100" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
-              <div fxFlex="none" >
+              <div fxFlex="none">
                 <label>Tipo de contabilidad:</label>
                 <emp-ng-select
                   [formControlName]="controls.accountsChartUID"
@@ -128,41 +128,37 @@
                 </emp-ng-select>
               </div>
 
-              <div fxLayout="row" fxLayout.lt-md="column">
+              <div #accountingDateField fxLayout="row" fxLayout.lt-md="column">
 
-                <ng-container #accountingDateField>
+                <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">
+                  <label>Fecha valor:</label>
+                  <emp-ng-datepicker
+                    [formControlName]="controls.accountingDate"
+                    [showError]="formHandler.showInvalidControl(controls.accountingDate)">
 
-                  <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">
-                    <label>Fecha valor:</label>
-                    <emp-ng-datepicker
-                      [formControlName]="controls.accountingDate"
-                      [showError]="formHandler.showInvalidControl(controls.accountingDate)">
+                  </emp-ng-datepicker>
+                </div>
 
-                    </emp-ng-datepicker>
-                  </div>
+                <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
+                  <label>Fecha de afectación:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.accountingDate"
+                    [items]="accountingDatesList"
+                    [loading]="isLoadingAccountingDates"
+                    [showError]="formHandler.showInvalidControl(controls.accountingDate)">
 
-                  <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
-                    <label>Fecha de afectación:</label>
-                    <emp-ng-select
-                      [formControlName]="controls.accountingDate"
-                      [items]="accountingDatesList"
-                      [loading]="isLoadingAccountingDates"
-                      [showError]="formHandler.showInvalidControl(controls.accountingDate)">
+                  </emp-ng-select>
+                </div>
 
-                    </emp-ng-select>
-                  </div>
-
-                  <div fxFlex="none" fxLayoutAlign="end center"
-                    [style.height.px]="28" [style.marginTop.px]="12" [style.paddingRight.px]="8">
-                    <mat-checkbox
-                      [(ngModel)]="hasValueDate" [ngModelOptions]="{standalone: true}"
-                      (click)="$event.stopPropagation"
-                      (change)="onHasValueDateChange()">
-                      Tiene fecha valor
-                    </mat-checkbox>
-                  </div>
-
-                </ng-container>
+                <div fxFlex="none" fxLayoutAlign="end center"
+                  [style.height.px]="28" [style.marginTop.px]="12" [style.paddingRight.px]="8">
+                  <mat-checkbox
+                    [(ngModel)]="hasValueDate" [ngModelOptions]="{standalone: true}"
+                    (click)="$event.stopPropagation"
+                    (change)="onHasValueDateChange()">
+                    Tiene fecha valor
+                  </mat-checkbox>
+                </div>
 
               </div>
 
