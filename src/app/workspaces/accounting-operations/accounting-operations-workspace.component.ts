@@ -7,15 +7,15 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, StringLibrary } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherDescriptorFromVoucher,
+import { EmptySearchVouchersCommand, EmptyVoucher, FileReport, mapVoucherDescriptorFromVoucher,
          mapVoucherStageFromViewName, SearchVouchersCommand, Voucher, VoucherDescriptor,
-         VouchersOperation } from '@app/models';
+         VouchersOperationCommand, VouchersOperationResult, VouchersOperationType} from '@app/models';
 
 import { View } from '../main-layout';
 
@@ -32,6 +32,7 @@ import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
 
 import { VoucherTabbedViewEventType } from '@app/views/vouchers/voucher-tabbed-view/voucher-tabbed-view.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 type AccountingOperationModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
@@ -62,7 +63,8 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
-              private messageBox: MessageBoxService) {
+              private messageBox: MessageBoxService,
+              private sanitized: DomSanitizer) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
 
@@ -107,9 +109,11 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
         return;
 
       case VouchersExplorerEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED:
-        Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.operation, 'event.payload.operation');
-        this.bulkOperationVouchers(event.payload.operation as VouchersOperation, event.payload.vouchers);
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.command.vouchers, 'event.payload.command.vouchers');
+        this.bulkOperationVouchers(event.payload.operation as VouchersOperationType,
+                                   event.payload.command);
         return;
 
       default:
@@ -227,14 +231,18 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
   }
 
 
-  private bulkOperationVouchers(operation: VouchersOperation, vouchers: string[]) {
+  private bulkOperationVouchers(operation: VouchersOperationType, command: VouchersOperationCommand) {
     this.isLoadingVoucher = true;
 
-    this.vouchersData.bulkOperationVouchers(operation, vouchers)
+    this.vouchersData.bulkOperationVouchers(operation, command)
       .toPromise()
       .then(x => {
-        this.messageBox.show(x, 'Operación ejecutada');
-        this.searchVouchers();
+        if (operation === VouchersOperationType.print) {
+          this.displayVouchersToPrint(x);
+        } else {
+          this.messageBox.show(x.message, 'Operación ejecutada');
+          this.searchVouchers();
+        }
       })
       .finally(() => this.isLoadingVoucher = false);
   }
@@ -269,6 +277,15 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   private onOptionModalClosed() {
     this.displayOptionModalSelected = null;
+  }
+
+
+  private displayVouchersToPrint(result: VouchersOperationResult) {
+    if (StringLibrary.isValidHttpUrl(result?.file?.url || '')) {
+      window.open(result.file.url, '_blank', `resizable=yes`);
+      return;
+    }
+    this.messageBox.showError(result?.message || '');
   }
 
 }

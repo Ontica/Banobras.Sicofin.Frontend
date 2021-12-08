@@ -48,7 +48,7 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   @Output() voucherFilterEvent = new EventEmitter<EventInfo>();
 
-  filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand)
+  filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
   dateSearchFieldList: Identifiable[] = DateSearchFieldList;
@@ -61,7 +61,7 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
-  editorList$: Observable<any[]>;
+  editorList$: Observable<Identifiable[]>;
   editorInput$ = new Subject<string>();
   editorLoading = false;
   minTermLength = 4;

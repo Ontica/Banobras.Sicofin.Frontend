@@ -24,12 +24,31 @@
 
           </div>
 
-          <div fxFlex="none">
+          <div fxFlex="160px">
 
             <emp-ng-select name="operation"
-              [config]="{selectFirst: true}"
+              [config]="{bindByValue: false, selectFirst: true}"
               [(ngModel)]="operationSelected"
-              [items]="operationsList">
+              [items]="operationsList"
+              (changes)="onOperationChanges($event)">
+            </emp-ng-select>
+
+          </div>
+
+          <div fxFlex="70" *ngIf="operationSelected?.assignToRequired">
+
+            <emp-ng-select name="editor"
+              [config]="{bindByValue: false,
+                        clearable: true,
+                        minTermLength: minTermLength,
+                        typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
+              [(ngModel)]="editorSelected"
+              [items]="editorList$ | async"
+              [typeahead]="editorInput$"
+              [loading]="editorLoading"
+              [showError]="!operationValid"
+              placeholder="Buscar usuario">
+
             </emp-ng-select>
 
           </div>

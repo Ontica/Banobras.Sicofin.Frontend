@@ -9,15 +9,31 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild,
+         OnInit, OnDestroy} from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { concat, Observable, of, Subject } from 'rxjs';
+
+import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
+         tap } from 'rxjs/operators';
+
+import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { View } from '@app/workspaces/main-layout';
+
+import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
+import { VouchersDataService } from '@app/data-services';
+
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyVoucher, Voucher, VoucherDescriptor, VouchersOperationList } from '@app/models';
+import { EmptyVoucher, mapVoucherStageFromViewName, Voucher, VoucherDescriptor, VouchersOperation,
+         VouchersOperationCommand, VouchersOperationList, VouchersOperationType,
+         VoucherStage } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
@@ -34,7 +50,7 @@ export enum VoucherListEventType {
   templateUrl: './voucher-list.component.html',
   animations: [expandCollapse],
 })
-export class VoucherListComponent implements OnChanges {
+export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
@@ -48,11 +64,24 @@ export class VoucherListComponent implements OnChanges {
 
   selection = new SelectionModel<VoucherDescriptor>(true, []);
 
-  operationSelected = null;
+  operationSelected: VouchersOperation = null;
 
-  operationsList = VouchersOperationList;
+  editorSelected: Identifiable = null;
 
-  constructor(private messageBox: MessageBoxService){}
+  operationsList: VouchersOperation[] = [];
+
+  editorList$: Observable<Identifiable[]>;
+  editorInput$ = new Subject<string>();
+  editorLoading = false;
+  minTermLength = 4;
+
+  subscriptionHelper: SubscriptionHelper;
+
+  constructor(private uiLayer: PresentationLayer,
+              private vouchersData: VouchersDataService,
+              private messageBox: MessageBoxService) {
+    this.subscriptionHelper = uiLayer.createSubscriptionHelper();
+  }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -60,6 +89,29 @@ export class VoucherListComponent implements OnChanges {
       this.scrollToTop();
       this.selection.clear();
     }
+  }
+
+
+  ngOnInit() {
+    this.setOperationListByCurrentView();
+  }
+
+
+  ngOnDestroy() {
+    this.subscriptionHelper.destroy();
+  }
+
+
+  get operationValid() {
+    if (isEmpty(this.operationSelected)) {
+      return false;
+    }
+
+    if (this.operationSelected.assignToRequired && isEmpty(this.editorSelected)) {
+      return false;
+    }
+
+    return true;
   }
 
 
@@ -89,8 +141,55 @@ export class VoucherListComponent implements OnChanges {
   }
 
 
+
+  onOperationChanges(operation: VouchersOperation) {
+    this.editorSelected = null;
+
+    if (operation.assignToRequired) {
+      this.subscribeEditorList();
+    }
+  }
+
+
   onExecuteOperationClicked() {
+    if (!this.operationValid) {
+      this.messageBox.showError('Operación no valida, verifique los datos.');
+      return;
+    }
+
     this.showConfirmMessage();
+  }
+
+
+  private setOperationListByCurrentView() {
+    this.subscriptionHelper.select<View>(MainUIStateSelector.CURRENT_VIEW)
+      .subscribe(x => {
+        this.operationsList = [...[], ...VouchersOperationList];
+        const voucherStage = mapVoucherStageFromViewName(x.name);
+        if (voucherStage !== VoucherStage.ControlDesk) {
+          this.operationsList = this.operationsList.filter(y => y.uid !== VouchersOperationType.reasign);
+        }
+      });
+  }
+
+
+  private subscribeEditorList() {
+    this.editorList$ = concat(
+      of([]),
+      this.editorInput$.pipe(
+        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.editorLoading = true),
+        switchMap(keyword =>
+          this.vouchersData.searchEditors(keyword)
+          .pipe(
+            delay(2000),
+            catchError(() => of([])),
+            tap(() => this.editorLoading = false)
+        ))
+      )
+    );
   }
 
 
@@ -102,19 +201,71 @@ export class VoucherListComponent implements OnChanges {
 
 
   private showConfirmMessage() {
-    const title = 'Enviar pólizas al diario';
-    const message = `Esta operación enviará al diario las
-                   <strong> ${this.selection.selected.length} pólizas</strong> seleccionadas.
-                   <br><br>¿Envío al diario las pólizas?`;
+    const type = this.operationSelected.uid === VouchersOperationType.delete ?
+      'DeleteCancel' : 'AcceptCancel';
 
-    this.messageBox.confirm(message, title)
+    this.messageBox.confirm(this.getConfirmMessage(), this.getConfirmTitle(), type)
       .toPromise()
       .then(x => {
         if (x) {
-          sendEvent(this.voucherListEvent, VoucherListEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED,
-            { vouchers: this.selection.selected.map(v => v.id), operation: this.operationSelected });
+          this.emitExecuteOperation();
         }
       });
+  }
+
+
+  private getConfirmTitle(): string {
+    switch (this.operationSelected.uid as VouchersOperationType) {
+      case VouchersOperationType.close:
+      case VouchersOperationType.delete:
+      case VouchersOperationType.print:
+        return `${this.operationSelected.name} las pólizas`;
+      case VouchersOperationType.reasign:
+        return 'Reasignar las pólizas';
+      default:
+        return 'Confirmar operación';
+    }
+  }
+
+
+  private getConfirmMessage(): string {
+    let operation = 'modificará';
+    let question = '¿Continuo con la operación?';
+    switch (this.operationSelected.uid as VouchersOperationType) {
+      case VouchersOperationType.close:
+        operation = 'enviará al diario';
+        question = '¿Envío al diario las pólizas?';
+        break;
+      case VouchersOperationType.delete:
+        operation = 'eliminará';
+        question = '¿Elimino la pólizas?';
+        break;
+      case VouchersOperationType.print:
+        operation = 'imprimirá';
+        question = '¿Imprimo las pólizas?';
+        break;
+      case VouchersOperationType.reasign:
+        operation = `reasignara a <strong>${this.editorSelected.name}</strong>`;
+        question = '¿Reasigno las pólizas?';
+        break;
+      default:
+        break;
+    }
+    return `Esta operación ${operation} las ` +
+           `<strong> ${this.selection.selected.length} pólizas</strong> seleccionadas.` +
+           `<br><br>${question}`;
+  }
+
+
+  private emitExecuteOperation() {
+    let command: VouchersOperationCommand = { vouchers: this.selection.selected.map(v => v.id) };
+
+    if (this.operationSelected.assignToRequired) {
+      command.assignToUID = this.editorSelected.uid;
+    }
+
+    sendEvent(this.voucherListEvent, VoucherListEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED,
+      { operation: this.operationSelected.uid, command });
   }
 
 }

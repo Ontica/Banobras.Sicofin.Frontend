@@ -118,8 +118,9 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
         return;
 
       case VoucherListEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED:
-        Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
         Assertion.assertValue(event.payload.operation, 'event.payload.operation');
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.command.vouchers, 'event.payload.command.vouchers');
 
         sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED,
           event.payload);

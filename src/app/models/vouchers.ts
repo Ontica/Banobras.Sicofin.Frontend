@@ -10,6 +10,8 @@ import { Assertion, DateString, Empty, Identifiable } from '@app/core';
 import { EmptyLedgerAccount, EmptyLedgerAccountSectorRule, LedgerAccount,
          LedgerAccountSectorRule } from './ledgers';
 
+import { FileReport } from './reporting';
+
 import { EmptySubledgerAccountDescriptor, SubledgerAccountDescriptor } from './subledgers';
 
 export enum VoucherStage {
@@ -59,14 +61,37 @@ export const EditorTypeList: Identifiable[] = [
 ];
 
 
-export enum VouchersOperation {
+export enum VouchersOperationType {
   close = 'close',
+  delete = 'delete',
+  print = 'print',
+  reasign = 'reasign',
 }
 
 
-export const VouchersOperationList: Identifiable[] = [
-  {uid: VouchersOperation.close, name: 'Enviar al diario'},
+export interface VouchersOperation extends Identifiable {
+  assignToRequired?: boolean;
+}
+
+
+export const VouchersOperationList: VouchersOperation[] = [
+  {uid: VouchersOperationType.close,   name: 'Enviar al diario'},
+  {uid: VouchersOperationType.reasign, name: 'Reasignar a', assignToRequired: true},
+  {uid: VouchersOperationType.delete,  name: 'Eliminar'},
+  {uid: VouchersOperationType.print,   name: 'Imprimir'},
 ];
+
+
+export interface VouchersOperationCommand {
+  vouchers: number[];
+  assignToUID?: string;
+}
+
+
+export interface VouchersOperationResult {
+  message?: string;
+  file?: FileReport;
+}
 
 
 export interface SearchVouchersCommand {

@@ -11,9 +11,10 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { FileReport, LedgerAccount, VouchersOperation, SearchVouchersCommand, SubledgerAccountDescriptor,
+import { FileReport, LedgerAccount, SearchVouchersCommand, SubledgerAccountDescriptor,
          Voucher, VoucherDescriptor, VoucherEntry, VoucherEntryFields, VoucherFields,
-         VoucherSpecialCaseType } from '@app/models';
+         VoucherSpecialCaseType, VouchersOperationCommand, VouchersOperationType,
+         VouchersOperationResult } from '@app/models';
 
 
 @Injectable()
@@ -182,13 +183,14 @@ export class VouchersDataService {
   }
 
 
-  bulkOperationVouchers(operationName: VouchersOperation, vouchers: string[]): Observable<string> {
-    Assertion.assertValue(operationName, 'operationName');
-    Assertion.assertValue(vouchers, 'vouchers');
+  bulkOperationVouchers(operationType: VouchersOperationType,
+                        command: VouchersOperationCommand): Observable<VouchersOperationResult> {
+    Assertion.assertValue(operationType, 'operationType');
+    Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/vouchers/bulk-operation/${operationName}`;
+    const path = `v2/financial-accounting/vouchers/bulk-operation/${operationType}`;
 
-    return this.http.post<string>(path, vouchers);
+    return this.http.post<VouchersOperationResult>(path, command);
   }
 
 
