@@ -161,6 +161,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     this.selectedFileType = null;
     this.selectedFileType = this.isExcelImport ? 'excel' : this.selectedFileType;
     this.selectedFileType = this.isTxtImport ? 'txt' : this.selectedFileType;
+
+    this.accountingDatesList = [];
     this.hasValueDate = false;
 
     this.resetImportVouchersResult();
@@ -180,8 +182,10 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
 
   onAccountChartChanges(accountChart: Identifiable) {
-    this.formHandler.getControl(this.controls.accountingDate).reset();
-    this.getOpenedAccountingDates(accountChart.uid);
+    if (this.isExcelImport) {
+      this.formHandler.getControl(this.controls.accountingDate).reset();
+      this.getOpenedAccountingDates(accountChart.uid);
+    }
   }
 
 
@@ -332,7 +336,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
     if (this.isTxtImport) {
       this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
-      this.formHandler.clearControlValidators(this.controls.accountsChartUID);
+      this.formHandler.setControlValidators(this.controls.accountsChartUID, Validators.required);
       this.formHandler.clearControlValidators(this.controls.accountingDate);
     }
 
@@ -361,6 +365,10 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       data.accountsChartUID = formModel.accountsChartUID;
       data.accountingDate = formModel.accountingDate;
       data.processOnly = this.selectedPartsToImport.map(x => x.uid);
+    }
+
+    if (this.isTxtImport) {
+      data.accountsChartUID = formModel.accountsChartUID;
     }
 
     return data;

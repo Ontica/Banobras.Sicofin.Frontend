@@ -114,21 +114,25 @@
 
             </div>
 
-            <div #column2 *ngIf="isExcelImport" fxLayout="column" fxFlex="none"
+            <div #column2 fxLayout="column" fxFlex="none"
               fxFlex.lt-md="100" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
-              <div fxFlex="none">
-                <label>Tipo de contabilidad:</label>
-                <emp-ng-select
-                  [formControlName]="controls.accountsChartUID"
-                  [items]="accountsChartMasterDataList"
-                  [loading]="isLoading"
-                  [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
-                  (changes)="onAccountChartChanges($event)">
-                </emp-ng-select>
+              <div #accountsChartField fxLayout="row" fxLayout.lt-md="column">
+
+                <div fxFlex="265px" fxFlex.lt-md="none">
+                  <label>Tipo de contabilidad:</label>
+                  <emp-ng-select
+                    [formControlName]="controls.accountsChartUID"
+                    [items]="accountsChartMasterDataList"
+                    [loading]="isLoading"
+                    [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
+                    (changes)="onAccountChartChanges($event)">
+                  </emp-ng-select>
+                </div>
+
               </div>
 
-              <div #accountingDateField fxLayout="row" fxLayout.lt-md="column">
+              <div #accountingDateField *ngIf="isExcelImport" fxLayout="row" fxLayout.lt-md="column">
 
                 <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">
                   <label>Fecha valor:</label>
