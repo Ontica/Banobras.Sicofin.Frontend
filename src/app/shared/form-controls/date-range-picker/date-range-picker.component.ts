@@ -77,6 +77,12 @@ export class DateRangePickerComponent implements ControlValueAccessor, OnChanges
 
   @Input() comparisonEndDate: DateString;
 
+  @Input() minDate = null;
+
+  @Input() maxDate = null;
+
+  @Input() fixedEndDate = null;
+
   @Output() valueChange = new EventEmitter<any>();
 
   @Output() startDateChange = new EventEmitter<any>();
@@ -264,11 +270,32 @@ export class DateRangePickerComponent implements ControlValueAccessor, OnChanges
     if (!startDateValue && !endDateValue) {
       this.setDatesAndPropagateChanges(null, null);
     } else {
+      if (this.fixedEndDate) {
+        startDateValue = this.validateFixedStartDate(startDateValue);
+        endDateValue = this.validateFixedEndDate(endDateValue);
+      }
+
       const startDate = this.getDateInputValue(startDateValue);
       const endDate = this.getDateInputValue(endDateValue);
 
       this.setDatesAndPropagateChanges(startDate, endDate);
     }
+  }
+
+  private validateFixedStartDate(startDateValue) {
+    if (this.minDate && (!startDateValue ||
+                          DateStringLibrary.compareDates(startDateValue, this.minDate) === -1) ) {
+      return this.minDate;
+    } else if (DateStringLibrary.compareDates(startDateValue, this.fixedEndDate) === 1){
+      return this.fixedEndDate;
+    }
+
+    return startDateValue;
+  }
+
+
+  private validateFixedEndDate(endDateValue) {
+    return this.fixedEndDate ?? endDateValue;
   }
 
 
@@ -278,7 +305,8 @@ export class DateRangePickerComponent implements ControlValueAccessor, OnChanges
 
 
   private setDatesAndPropagateChanges(startDate: Date, endDate: Date) {
-    if (startDate && DateStringLibrary.compareDates(this.startDate, startDate) === 0 &&
+    if (!this.fixedEndDate &&
+        startDate && DateStringLibrary.compareDates(this.startDate, startDate) === 0 &&
         endDate && DateStringLibrary.compareDates(this.endDate, endDate) === 0) {
       return;
     }

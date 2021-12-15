@@ -2,7 +2,8 @@
 
   <mat-date-range-input [rangePicker]="picker" [class.invalid-date-picker]="showError"
     [comparisonStart]="getDateForComparison(comparisonStartDate)"
-    [comparisonEnd]="getDateForComparison(comparisonEndDate)">
+    [comparisonEnd]="getDateForComparison(comparisonEndDate)"
+    [min]="minDate" [max]="maxDate ?? fixedEndDate">
 
     <input type="text" #inputStartDate matStartDate
       autocomplete="off" maxlength="11"
@@ -16,7 +17,7 @@
     <input type="text" #inputEndDate matEndDate
       autocomplete="off" maxlength="11"
       placeholder="Fecha final"
-      [disabled]="disabled"
+      [disabled]="disabled || fixedEndDate"
       [ngModel]="endDate"
       (blur)="onBlur()"
       (change)="onInputsChange(inputStartDate.value, inputEndDate.value)"
@@ -47,23 +48,27 @@
 
     </emp-ng-month-picker>
 
-    <mat-divider class="appended-container-divider"></mat-divider>
+    <ng-container *ngIf="displaySelectionType">
 
-    <div class="appended-container-footer">
+      <mat-divider class="appended-container-divider"></mat-divider>
 
-      <emp-ng-select name="selectionType"
-        [(ngModel)]="selectedSelectionType"
-        [items]="selectionTypeList"
-        bindValue="name"
-        [style.marginLeft.px]="8"
-        (changes)="onSelectionTypeChanges($event)">
-      </emp-ng-select>
+      <div class="appended-container-footer">
 
-      <button class="btn-base" (click)="onClearDates()">
-        Limpiar
-      </button>
+        <emp-ng-select name="selectionType"
+          [(ngModel)]="selectedSelectionType"
+          [items]="selectionTypeList"
+          bindValue="name"
+          [style.marginLeft.px]="8"
+          (changes)="onSelectionTypeChanges($event)">
+        </emp-ng-select>
 
-    </div>
+        <button class="btn-base" (click)="onClearDates()">
+          Limpiar
+        </button>
+
+      </div>
+
+    </ng-container>
 
   </div>
 
