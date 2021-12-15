@@ -43,9 +43,15 @@
     <mat-sidenav #sidenavRight [(opened)]="displayAsideRight" mode="over" position="end" disableClose="true"
       class="sidenav-right">
 
+      <button class="toolbar-item btn-collapse-sidenav-right"
+        title="Cerrar herramienta"
+        (click)="onCloseAsideRight()">
+        <mat-icon>last_page</mat-icon>
+      </button>
+
       <container-element [ngSwitch]="toolSelected">
 
-        <emp-fa-balances-tool *ngSwitchCase="'Balances'" (closeEvent)="onCloseAsideRight()" >
+        <emp-fa-balances-tool *ngSwitchCase="'Balances'">
 
         </emp-fa-balances-tool>
 
