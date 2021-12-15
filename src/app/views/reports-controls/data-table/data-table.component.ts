@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { EventInfo } from '@app/core';
 
 import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType,
-         SummaryItemTypeList, GroupItemTypeList, TotalItemTypeList } from '@app/models';
+         SummaryItemTypeList, GroupItemTypeList, TotalItemTypeList, EntryItemTypeList } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -38,6 +38,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() dataTable: DataTable = EmptyDataTable;
 
+  @Input() selectedEntry: DataTableEntry = null;
+
   @Input() commandExecuted = true;
 
   @Input() controlsAligned = false;
@@ -47,8 +49,6 @@ export class DataTableComponent implements OnChanges {
   @Input() clickableEntry = false;
 
   @Input() formatFieldName = 'format';
-
-  @Input() selectedEntry: DataTableEntry = null;
 
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
 
@@ -68,6 +68,7 @@ export class DataTableComponent implements OnChanges {
 
   totalItemTypeList = TotalItemTypeList;
 
+  entryItemTypeList = EntryItemTypeList;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.dataTable) {
@@ -98,7 +99,7 @@ export class DataTableComponent implements OnChanges {
 
 
   onRowClicked(entry: DataTableEntry) {
-    if (this.clickableEntry) {
+    if (this.clickableEntry && EntryItemTypeList.includes(entry['itemType'])) {
       this.emitDataEntryClicked(entry);
     }
   }
@@ -147,7 +148,9 @@ export class DataTableComponent implements OnChanges {
 
 
   private emitDataEntryClicked(entry: DataTableEntry) {
-    sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, { entry });
+    if (window.getSelection().toString().length <= 0) {
+      sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, { entry });
+    }
   }
 
 }

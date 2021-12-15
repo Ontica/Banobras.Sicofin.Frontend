@@ -54,6 +54,12 @@ export type DataTableItemType = 'Entry' | 'Summary' | 'Group' | 'Total' |
   'BalanceTotalGroupDebtor';
 
 
+export const EntryItemTypeList: DataTableItemType[] = [
+  'Entry',
+  'BalanceEntry',
+];
+
+
 export const SummaryItemTypeList: DataTableItemType[] = [
   'Summary',
   'BalanceSummary',

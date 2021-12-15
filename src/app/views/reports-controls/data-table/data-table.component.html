@@ -61,7 +61,7 @@
                       'item-type-group':   groupItemTypeList.includes(row['itemType']),
                       'item-type-total':   totalItemTypeList.includes(row['itemType']),
                       'row-selected':      row === selectedEntry,
-                      'selectable-row':    clickableEntry}"
+                      'selectable-row':    clickableEntry && entryItemTypeList.includes(row['itemType'])}"
           (click)="onRowClicked(row)">
         </tr>
 

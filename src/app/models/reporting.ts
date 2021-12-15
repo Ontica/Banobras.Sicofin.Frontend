@@ -5,6 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { DateString } from "@app/core";
+
 export enum ReportGroup {
   ReportesFiscales = 'ReportesFiscales',
   ReportesRegulatorios = 'ReportesRegulatorios',
@@ -39,4 +41,5 @@ export enum FileType {
   Excel = 'Excel',
   PDF = 'PDF',
   Xml = 'Xml',
+  HTML = 'HTML',
 }
