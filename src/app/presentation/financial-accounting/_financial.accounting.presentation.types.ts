@@ -27,7 +27,7 @@ import { SelectorType as AccountChartStateSelector } from './account-chart.prese
 export { SelectorType as AccountChartStateSelector } from './account-chart.presentation.handler';
 
 import { SelectorType as ReportingStateSelector } from './reporting.presentation.handler';
-export { SelectorType as ReportingtStateSelector } from './reporting.presentation.handler';
+export { SelectorType as ReportingStateSelector } from './reporting.presentation.handler';
 
 import { SelectorType as VoucherStateSelector } from './voucher.presentation.handler';
 export { SelectorType as VoucherStateSelector } from './voucher.presentation.handler';

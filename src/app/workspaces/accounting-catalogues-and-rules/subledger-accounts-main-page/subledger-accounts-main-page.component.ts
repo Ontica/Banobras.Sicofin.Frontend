@@ -83,7 +83,6 @@ export class SubledgerAccountsMainPageComponent {
       case SubledgerAccountsViewerEventType.SEARCH_SUBLEDGERS_ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.subledgerAccountCommand, 'event.payload.subledgerAccountCommand');
         this.subledgerAccountCommand = event.payload.subledgerAccountCommand;
-        console.log(this.subledgerAccountCommand);
         this.searchSubledgerAccounts(event.payload.subledgerAccountCommand as SearchSubledgerAccountCommand);
         return;
       case SubledgerAccountsViewerEventType.EXPORT_DATA_BUTTON_CLICKED:

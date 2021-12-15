@@ -56,7 +56,7 @@ export class VoucherPrintableComponentViewerComponent implements OnChanges {
 
     this.vouchersData.getVoucherForPrint(this.voucherId)
       .toPromise()
-      .then(x => this.url = x.url ? x.url + '#view=fitH' : '')
+      .then(x => this.url = x.url)
       .finally(() => this.isLoading = false);
   }
 

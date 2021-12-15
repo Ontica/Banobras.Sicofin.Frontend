@@ -79,7 +79,7 @@ export class FinancialReportDesignerComponent implements OnChanges {
         return;
 
       case FinancialReportDesignerControlsEventType.SAVE_BUTTON_CLICKED:
-        this.messageBox.showInDevelopment('Guardar reporte', this.dataSource.data);
+        this.messageBox.showInDevelopment('Guardar reporte');
         return;
 
       case FinancialReportDesignerControlsEventType.EXECUTE_BUTTON_CLICKED:

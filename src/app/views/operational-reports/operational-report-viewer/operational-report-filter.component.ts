@@ -15,7 +15,7 @@ import { AccountsChartMasterData, EmptyOperationalReportCommand, OperationalRepo
          ReportPayloadType, ReportType, SendTypesList } from '@app/models';
 
 import { AccountChartStateSelector,
-         ReportingtStateSelector } from '@app/presentation/exported.presentation.types';
+         ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -128,7 +128,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     combineLatest([
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
-      this.helper.select<ReportType[]>(ReportingtStateSelector.REPORT_TYPES_LIST),
+      this.helper.select<ReportType[]>(ReportingStateSelector.REPORT_TYPES_LIST),
     ])
     .subscribe(([x, y]) => {
       this.accountsChartMasterDataList = x;
