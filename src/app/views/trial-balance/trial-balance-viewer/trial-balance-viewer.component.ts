@@ -13,9 +13,9 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { Balance, BalanceCommand, BalanceEntry,
-         EmptyTrialBalance, FileReport, getEmptyBalanceCommand, getEmptyTrialBalanceCommand,
-         TrialBalance, TrialBalanceCommand, TrialBalanceEntry } from '@app/models';
+import { Balance, BalanceCommand, BalanceEntry, EmptyTrialBalance, FileReport, getEmptyBalanceCommand,
+         getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
+         TrialBalanceEntry } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -33,7 +33,6 @@ import { TrialBalanceFilterEventType } from './trial-balance-filter.component';
 
 
 export enum TrialBalanceViewerEventType {
-  CLOSE_BUTTON_CLICKED = 'TrialBalanceViewerComponent.Event.CloseButtonClicked',
   SELECT_ENTRY_CLICKED = 'TrialBalanceViewerComponent.Event.SelectEntryClicked',
   UNSELECT_ENTRY = 'TrialBalanceViewerComponent.Event.UnselectEntry',
 }
@@ -62,7 +61,7 @@ export class TrialBalanceViewerComponent {
 
   command: BalanceCommand | TrialBalanceCommand = getEmptyTrialBalanceCommand();
 
-  data: TrialBalance | Balance = EmptyTrialBalance;
+  data: Balance | TrialBalance = EmptyTrialBalance;
 
   displayExportModal = false;
 
@@ -71,11 +70,6 @@ export class TrialBalanceViewerComponent {
 
   constructor(private balancesDataService: BalancesDataService,
               private messageBox: MessageBoxService) { }
-
-
-  onCloseButtonClicked() {
-    sendEvent(this.trialBalanceViewerEvent, TrialBalanceViewerEventType.CLOSE_BUTTON_CLICKED);
-  }
 
 
   onFilterEvent(event) {

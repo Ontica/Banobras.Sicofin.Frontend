@@ -18,6 +18,8 @@
 // needed for external services interaction.
 //
 
+export * from './account-statement';
+
 export * from './accounts-chart';
 
 export * from './balances-store';

@@ -1,0 +1,74 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  [style.padding.px]="0" [style.margin.px]="0"
+  (keydown.enter)="$event.preventDefault()">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+      <div fxLayout="row" fxLayout.lt-sm="column">
+
+        <div *ngIf="!displayInitialPeriod" fxFlex="none">
+
+          <label>Fecha:</label>
+          <emp-ng-datepicker name="date"
+            [(ngModel)]="formData.initialPeriod.fromDate"
+            [showError]="!formData.initialPeriod.fromDate">
+
+          </emp-ng-datepicker>
+
+        </div>
+
+        <div *ngIf="displayInitialPeriod" fxFlex="none">
+
+          <label>Periodo inicial:</label>
+          <emp-ng-date-range-picker name="initialPeriod"
+            [(startDate)]="formData.initialPeriod.fromDate"
+            [(endDate)]="formData.initialPeriod.toDate"
+            [minDate]="initialPeriodMinDate"
+            [fixedEndDate]="initialPeriodFixedDate"
+            [displaySelectionType]="false"
+            [showError]="!formData.initialPeriod.fromDate ||
+                          !formData.initialPeriod.toDate">
+
+          </emp-ng-date-range-picker>
+
+        </div>
+
+        <div fxFlex="none" *ngIf="periodsRequired">
+
+          <label>Periodo final:</label>
+          <emp-ng-date-range-picker name="finalPeriod" #finalPeriodRangePicker
+            [(startDate)]="formData.finalPeriod.fromDate"
+            [(endDate)]="formData.finalPeriod.toDate"
+            [minDate]="finalPeriodMinDate"
+            [fixedEndDate]="finalPeriodFixedDate"
+            [displaySelectionType]="false"
+            [showError]="!formData.finalPeriod.fromDate ||
+                          !formData.finalPeriod.toDate">
+
+          </emp-ng-date-range-picker>
+
+        </div>
+
+        <div fxFlex="28px" fxFlex.lt-md="none" [style.paddingTop.px]="13">
+
+          <button [class.btn-icon-action]="form.valid"
+            [class.btn-icon]="form.invalid"
+            [disabled]="form.invalid"
+            (click)="onBuildAccountStatementClicked()"
+            title="Generar balanza">
+
+            <mat-icon>search</mat-icon>
+
+          </button>
+
+        </div>
+
+      </div>
+
+  </div>
+
+</form>
+
+<mat-divider [style.margin]="'8px -8px'">
+
+</mat-divider>

@@ -13,10 +13,6 @@
 
     </div>
 
-    <div *ngIf="isQuickQuery" class="card-header-options">
-      <mat-icon class="card-icon" (click)="onCloseButtonClicked()">close</mat-icon>
-    </div>
-
   </div>
 
   <div class="card-body" [style.padding]="isQuickQuery ? '8px' : '0'">
@@ -40,6 +36,7 @@
 
       <emp-fa-data-table fxFlex
         [dataTable]="data"
+        [clickableEntry]="true"
         [commandExecuted]="commandExecuted"
         [controlsAligned]="isQuickQuery"
         (dataTableEvent)="onDataTableEvent($event)">

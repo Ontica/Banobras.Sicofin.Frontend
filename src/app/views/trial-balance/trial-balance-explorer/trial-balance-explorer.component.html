@@ -1,12 +1,23 @@
 <div class="explorer" fxLayoutGap="32px" [ngClass]="{'fluid': isQuickQuery}">
 
-  <div class="primary">
+  <div class="primary" [fxHide.xs.notebook]="displayAccountStatementViewer">
 
     <emp-fa-trial-balance-viewer
       [isQuickQuery]="isQuickQuery"
       (trialBalanceViewerEvent)="onTrialBalanceViewerEvent($event)">
 
     </emp-fa-trial-balance-viewer>
+
+  </div>
+
+  <div class="secondary" *ngIf="displayAccountStatementViewer">
+
+    <emp-fa-account-statement-viewer
+      [command]="command"
+      [entry]="entrySelected"
+      (closeEvent)="onCloseAccountStatementViewer()">
+
+    </emp-fa-account-statement-viewer>
 
   </div>
 

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -19,29 +19,40 @@ export class TrialBalanceExplorerComponent {
 
   @Input() isQuickQuery = false;
 
-  @Output() closeEvent = new EventEmitter<void>();
+  displayAccountStatementViewer = false;
+
+  command = null;
+
+  entrySelected = null;
 
 
   onTrialBalanceViewerEvent(event: EventInfo) {
     switch (event.type as TrialBalanceViewerEventType) {
-      case TrialBalanceViewerEventType.CLOSE_BUTTON_CLICKED:
-        this.closeEvent.emit();
-        return;
-
       case TrialBalanceViewerEventType.SELECT_ENTRY_CLICKED:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        console.log('SELECT_ENTRY_CLICKED', event.payload);
+
+        this.command = event.payload.command;
+        this.entrySelected = event.payload.entry;
+        this.displayAccountStatementViewer = true;
+
         return;
 
       case TrialBalanceViewerEventType.UNSELECT_ENTRY:
-        console.log('UNSELECT_ENTRY');
+        this.onCloseAccountStatementViewer();
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  onCloseAccountStatementViewer() {
+    this.displayAccountStatementViewer = false;
+    this.command = null;
+    this.entrySelected = null;
   }
 
 }
