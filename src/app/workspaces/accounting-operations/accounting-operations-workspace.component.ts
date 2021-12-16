@@ -13,7 +13,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptySearchVouchersCommand, EmptyVoucher, FileReport, mapVoucherDescriptorFromVoucher,
+import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherDescriptorFromVoucher,
          mapVoucherStageFromViewName, SearchVouchersCommand, Voucher, VoucherDescriptor,
          VouchersOperationCommand, VouchersOperationResult, VouchersOperationType} from '@app/models';
 
@@ -32,6 +32,7 @@ import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
 
 import { VoucherTabbedViewEventType } from '@app/views/vouchers/voucher-tabbed-view/voucher-tabbed-view.component';
+
 import { DomSanitizer } from '@angular/platform-browser';
 
 type AccountingOperationModalOptions = 'VoucherCreator' | 'VouchersImporter';

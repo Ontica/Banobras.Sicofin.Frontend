@@ -134,8 +134,9 @@ $grid-footer-background-color: $disabled-color;
 $grid-border: 0;
 $grid-even-background-color: $white;
 $grid-odd-background-color: #f4f4f4 !default;
-$grid-selected-background-color: $disabled-color;
-$grid-hover-background-color: $disabled-color;
+$grid-hover-background-color: #fafafa;
+$grid-selected-background-color: #f7fcfb;
+$grid-selected-hover-background-color: #f3fcfb;
 
 //
 // Designer

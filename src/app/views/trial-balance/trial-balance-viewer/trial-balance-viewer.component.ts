@@ -45,6 +45,8 @@ export class TrialBalanceViewerComponent {
 
   @Input() isQuickQuery = false;
 
+  @Input() selectedEntry = null;
+
   @Output() trialBalanceViewerEvent = new EventEmitter<EventInfo>();
 
   balanceTypeName = '';
@@ -122,7 +124,7 @@ export class TrialBalanceViewerComponent {
 
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        this.emitEntrySelected(event.payload.entry);
+        this.emitEntryClicked(event.payload.entry);
         return;
 
       default:
@@ -247,7 +249,7 @@ export class TrialBalanceViewerComponent {
   }
 
 
-  private emitEntrySelected(entry: BalanceEntry | TrialBalanceEntry) {
+  private emitEntryClicked(entry: BalanceEntry | TrialBalanceEntry) {
     const payload = {
       command: this.command,
       entry,

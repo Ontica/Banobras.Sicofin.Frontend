@@ -4,6 +4,7 @@
 
     <emp-fa-trial-balance-viewer
       [isQuickQuery]="isQuickQuery"
+      [selectedEntry]="selectedEntry"
       (trialBalanceViewerEvent)="onTrialBalanceViewerEvent($event)">
 
     </emp-fa-trial-balance-viewer>
@@ -14,7 +15,7 @@
 
     <emp-fa-account-statement-viewer
       [command]="command"
-      [entry]="entrySelected"
+      [entry]="selectedEntry"
       (closeEvent)="onCloseAccountStatementViewer()">
 
     </emp-fa-account-statement-viewer>

@@ -23,7 +23,7 @@ export class TrialBalanceExplorerComponent {
 
   command = null;
 
-  entrySelected = null;
+  selectedEntry = null;
 
 
   onTrialBalanceViewerEvent(event: EventInfo) {
@@ -33,7 +33,7 @@ export class TrialBalanceExplorerComponent {
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
 
         this.command = event.payload.command;
-        this.entrySelected = event.payload.entry;
+        this.selectedEntry = event.payload.entry;
         this.displayAccountStatementViewer = true;
 
         return;
@@ -52,7 +52,7 @@ export class TrialBalanceExplorerComponent {
   onCloseAccountStatementViewer() {
     this.displayAccountStatementViewer = false;
     this.command = null;
-    this.entrySelected = null;
+    this.selectedEntry = null;
   }
 
 }

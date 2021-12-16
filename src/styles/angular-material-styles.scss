@@ -307,7 +307,11 @@ table.mat-table {
       }
 
       &.row-selected {
-        background-color: $selected-control-background-color;
+        background-color: $grid-selected-background-color;
+
+        &:hover {
+          background-color: $grid-selected-hover-background-color;
+        }
       }
 
       &.item-type-summary {
@@ -362,7 +366,7 @@ table.mat-table {
     }
 
     &.mat-row:hover {
-      background-color: $selected-control-background-color;
+      background-color: $grid-hover-background-color;
 
       &.item-type-total {
         background-color: $grid-footer-background-color;
