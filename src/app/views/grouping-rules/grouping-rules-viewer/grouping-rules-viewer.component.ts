@@ -87,8 +87,8 @@ export class GroupingRulesViewerComponent {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
-        Assertion.assertValue(event.payload, 'event.payload');
-        this.setText(event.payload);
+        Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
+        this.setText(event.payload.displayedEntriesMessage as string);
         return;
 
       case DataTableEventType.EXPORT_DATA:
@@ -154,15 +154,14 @@ export class GroupingRulesViewerComponent {
   }
 
 
-  private setText(itemsDisplayed?: number) {
+  private setText(displayedEntriesMessage?: string) {
     if (!this.commandExecuted) {
       this.cardHint = 'Selecciona los filtros';
       return;
     }
 
-    if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.groupingRuleData.entries.length) {
-      this.cardHint = `${this.rulesSetName} - ${itemsDisplayed} de ` +
-        `${this.groupingRuleData.entries.length} registros mostrados`;
+    if (displayedEntriesMessage) {
+      this.cardHint = `${this.rulesSetName} - ${displayedEntriesMessage}`;
       return;
     }
 

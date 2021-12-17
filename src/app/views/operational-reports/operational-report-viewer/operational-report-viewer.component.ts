@@ -95,8 +95,8 @@ export class OperationalReportViewerComponent implements OnChanges {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
-        Assertion.assertValue(event.payload, 'event.payload');
-        this.setText(event.payload);
+        Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
+        this.setText(event.payload.displayedEntriesMessage as string);
         return;
 
       case DataTableEventType.EXPORT_DATA:
@@ -175,15 +175,14 @@ export class OperationalReportViewerComponent implements OnChanges {
   }
 
 
-  private setText(itemsDisplayed?: number) {
+  private setText(displayedEntriesMessage?: string) {
     if (!this.commandExecuted) {
       this.cardHint =  'Seleccionar los filtros';
       return;
     }
 
-    if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.operationalReport.entries.length) {
-      this.cardHint = `${this.selectedReportType.name} - ${itemsDisplayed} de ` +
-        `${this.operationalReport.entries.length} registros mostrados`;
+    if (displayedEntriesMessage) {
+      this.cardHint = `${this.selectedReportType.name} - ${displayedEntriesMessage}`;
       return;
     }
 

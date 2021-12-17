@@ -88,8 +88,8 @@ export class FinancialReportViewerComponent {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
-        Assertion.assertValue(event.payload, 'event.payload');
-        this.setText(event.payload);
+        Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
+        this.setText(event.payload.displayedEntriesMessage as string);
         return;
 
       case DataTableEventType.EXPORT_DATA:
@@ -176,15 +176,14 @@ export class FinancialReportViewerComponent {
   }
 
 
-  private setText(itemsDisplayed?: number) {
+  private setText(displayedEntriesMessage?: string) {
     if (!this.commandExecuted) {
       this.cardHint =  'Selecciona los filtros';
       return;
     }
 
-    if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.financialReport.entries.length) {
-      this.cardHint = `${this.financialReportTypeName} - ${itemsDisplayed} de ` +
-        `${this.financialReport.entries.length} registros mostrados`;
+    if (displayedEntriesMessage) {
+      this.cardHint = `${this.financialReportTypeName} - ${displayedEntriesMessage}`;
       return;
     }
 

@@ -50,6 +50,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() formatFieldName = 'format';
 
+  @Input() countOnlyEntries = false;
+
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
 
   columns: DataTableColumn[] = [];
@@ -76,6 +78,20 @@ export class DataTableComponent implements OnChanges {
       this.initDataSource();
       this.scrollToTop();
     }
+  }
+
+
+  get entriesTotal() {
+    return this.countOnlyEntries ?
+      this.dataTable.entries.filter(x => EntryItemTypeList.includes(x['itemType'])).length :
+      this.dataTable.entries.length;
+  }
+
+
+  get filteredEntriesTotal() {
+    return this.countOnlyEntries ?
+      this.dataSource.filteredData.filter(x => EntryItemTypeList.includes(x['itemType'])).length :
+      this.dataSource.filteredData.length;
   }
 
 
@@ -142,8 +158,25 @@ export class DataTableComponent implements OnChanges {
 
 
   private emitCountFilteredEntries() {
-    sendEvent(this.dataTableEvent, DataTableEventType.COUNT_FILTERED_ENTRIES,
-      this.dataSource.filteredData.length);
+    const entriesTotal = this.entriesTotal;
+    const filteredEntriesTotal = this.filteredEntriesTotal;
+
+    const payload = {
+      entriesTotal,
+      filteredEntriesTotal,
+      displayedEntriesMessage: this.displayedEntriesMessage(entriesTotal, filteredEntriesTotal),
+    };
+
+    sendEvent(this.dataTableEvent, DataTableEventType.COUNT_FILTERED_ENTRIES, payload);
+  }
+
+
+  private displayedEntriesMessage(entriesTotal: number, filteredEntriesTotal: number) {
+    if (filteredEntriesTotal !== entriesTotal) {
+      return `${filteredEntriesTotal} de ${entriesTotal} registros mostrados`;
+    }
+
+    return `${entriesTotal} registros encontrados`;
   }
 
 

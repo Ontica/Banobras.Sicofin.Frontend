@@ -7,7 +7,8 @@
 
 import { BalanceCommand, BalanceEntry } from './balances';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableCommand } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableCommand,
+         DataTableItemType } from './data-table';
 
 import { getEmptyTrialBalanceCommand, TrialBalanceCommand, TrialBalanceEntry } from './trial-balances';
 
@@ -27,6 +28,7 @@ export interface AccountStatementCommand extends DataTableCommand {
 
 export interface AccountStatementEntry extends DataTableEntry {
   voucherId: number;
+  itemType: DataTableItemType;
 }
 
 

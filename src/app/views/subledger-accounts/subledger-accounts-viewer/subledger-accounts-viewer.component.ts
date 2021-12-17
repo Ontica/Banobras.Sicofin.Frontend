@@ -77,8 +77,8 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
-        Assertion.assertValue(event.payload, 'event.payload');
-        this.setText(event.payload);
+        Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
+        this.setText(event.payload.displayedEntriesMessage as string);
         return;
 
       case DataTableEventType.EXPORT_DATA:
@@ -100,15 +100,14 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
   }
 
 
-  private setText(itemsDisplayed?: number) {
+  private setText(displayedEntriesMessage?: string) {
     if (!this.commandExecuted) {
       this.cardHint = 'Selecciona los filtros';
       return;
     }
 
-    if (typeof itemsDisplayed === 'number' && itemsDisplayed !== this.subledgerAccountData.entries.length) {
-      this.cardHint = `${this.accountChartName} - ${itemsDisplayed} de ` +
-        `${this.subledgerAccountData.entries.length} registros mostrados`;
+    if (displayedEntriesMessage) {
+      this.cardHint = `${this.accountChartName} - ${displayedEntriesMessage}`;
       return;
     }
 
