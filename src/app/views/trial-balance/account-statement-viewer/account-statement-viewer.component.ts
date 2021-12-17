@@ -12,7 +12,8 @@ import { Assertion } from '@app/core';
 import { BalancesDataService, VouchersDataService } from '@app/data-services';
 
 import { AccountStatement, AccountStatementCommand, AccountStatementEntry, BalanceCommand, BalanceEntry,
-         EmptyAccountStatement, FileReport, TrialBalanceCommand, TrialBalanceEntry } from '@app/models';
+         EmptyAccountStatement, EntryItemTypeList, FileReport, TrialBalanceCommand,
+         TrialBalanceEntry } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -36,6 +37,8 @@ export class AccountStatementViewerComponent implements OnChanges {
   @Input() command: BalanceCommand | TrialBalanceCommand;
 
   @Output() closeEvent = new EventEmitter<void>();
+
+  cardHint = 'Cargando...';
 
   isLoading = false;
   submitted = false;
@@ -65,11 +68,8 @@ export class AccountStatementViewerComponent implements OnChanges {
   }
 
 
-  get hintText() {
-    if (!this.commandExecuted) {
-      return 'Cargando...';
-    }
-    return this.accountStatement.title ?? '';
+  get entriesTotal(): number {
+    return this.accountStatement?.entries?.filter(x => EntryItemTypeList.includes(x.itemType)).length;
   }
 
 
@@ -105,6 +105,11 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   onDataTableEvent(event) {
     switch (event.type as DataTableEventType) {
+
+      case DataTableEventType.COUNT_FILTERED_ENTRIES:
+        Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
+        this.setText(event.payload.displayedEntriesMessage as string);
+        return;
 
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
@@ -155,8 +160,8 @@ export class AccountStatementViewerComponent implements OnChanges {
     this.balancesDataService.getAccountStatement(this.accountStatementCommand)
       .toPromise()
       .then(x => {
-        this.setAccountStatementData(x);
         this.commandExecuted = true;
+        this.setAccountStatementData(x);
       })
       .catch(e => this.onCloseButtonClicked())
       .finally(() => this.setSubmitted(false));
@@ -187,6 +192,22 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   private setAccountStatementData(accountStatement: AccountStatement) {
     this.accountStatement = accountStatement;
+    this.setText();
+  }
+
+
+  private setText(displayedEntriesMessage?: string) {
+    if (!this.commandExecuted) {
+      this.cardHint = 'Cargando...';
+      return;
+    }
+
+    if (displayedEntriesMessage) {
+      this.cardHint = `${this.accountStatement.title} - ${displayedEntriesMessage}`;
+      return;
+    }
+
+    this.cardHint = `${this.accountStatement.title} - ${this.entriesTotal} registros encontrados`;
   }
 
 
