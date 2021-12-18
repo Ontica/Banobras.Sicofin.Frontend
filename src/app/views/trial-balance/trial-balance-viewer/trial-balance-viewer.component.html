@@ -36,7 +36,7 @@
 
       <emp-fa-data-table fxFlex
         [dataTable]="data"
-        [clickableEntry]="true"
+        [clickableEntry]="balanceType.hasAccountStatement"
         [commandExecuted]="commandExecuted"
         [controlsAligned]="isQuickQuery"
         [selectedEntry]="selectedEntry"
@@ -52,7 +52,7 @@
 
 
 <emp-fa-export-report-modal *ngIf="displayExportModal"
-  [title]="'Exportar ' + balanceTypeName.toLowerCase()"
+  [title]="'Exportar ' + balanceType.name.toLowerCase()"
   [fileUrl]="excelFileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 

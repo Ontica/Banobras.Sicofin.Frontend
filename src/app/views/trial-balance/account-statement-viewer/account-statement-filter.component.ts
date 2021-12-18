@@ -9,8 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { EventInfo } from '@app/core';
 
-import { AccountStatementCommand, BalanceCommand, BalanceEntry, BalanceType, TrialBalanceCommand,
-         TrialBalanceEntry, TrialBalanceType } from '@app/models';
+import { AccountStatementCommand, BalanceCommand, BalanceEntry, BalanceTypes, TrialBalanceCommand,
+         TrialBalanceEntry, TrialBalanceTypes } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -50,22 +50,22 @@ export class AccountStatementFilterComponent implements OnChanges {
   }
 
 
-  get trialBalanceType(): BalanceType | TrialBalanceType {
+  get trialBalanceType(): BalanceTypes | TrialBalanceTypes {
     return this.command.trialBalanceType;
   }
 
 
   get periodsRequired(): boolean {
-    return [TrialBalanceType.BalanzaValorizadaComparativa]
-      .includes(this.trialBalanceType as TrialBalanceType);
+    return [TrialBalanceTypes.BalanzaValorizadaComparativa]
+      .includes(this.trialBalanceType as TrialBalanceTypes);
   }
 
 
   get displayInitialPeriod() {
-    return ![BalanceType.SaldosPorCuenta,
-             BalanceType.SaldosPorAuxiliar,
-             TrialBalanceType.SaldosPorCuenta,
-             TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceType);
+    return ![BalanceTypes.SaldosPorCuenta,
+             BalanceTypes.SaldosPorAuxiliar,
+             TrialBalanceTypes.SaldosPorCuenta,
+             TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceType);
   }
 
 

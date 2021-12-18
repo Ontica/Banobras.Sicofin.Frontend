@@ -12,7 +12,7 @@ import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './
 import { ExchangeRate } from './exchange-rates';
 
 
-export enum TrialBalanceType {
+export enum TrialBalanceTypes {
   AnaliticoDeCuentas                = 'AnaliticoDeCuentas',
   Balanza                           = 'Balanza',
   BalanzaValorizadaComparativa      = 'BalanzaValorizadaComparativa',
@@ -24,15 +24,59 @@ export enum TrialBalanceType {
 }
 
 
-export const TrialBalanceTypeList: Identifiable[] = [
-  {uid: TrialBalanceType.AnaliticoDeCuentas,                name: 'Analítico de cuentas'},
-  {uid: TrialBalanceType.BalanzaConContabilidadesEnCascada, name: 'Balanza con contabilidades en cascada'},
-  {uid: TrialBalanceType.BalanzaValorizadaComparativa,      name: 'Balanza de comparación entre períodos'},
-  {uid: TrialBalanceType.Balanza,                           name: 'Balanza tradicional'},
-  {uid: TrialBalanceType.BalanzaConsolidadaPorMoneda,       name: 'Balanza consolidada en moneda origen'},
-  {uid: TrialBalanceType.BalanzaValorizadaEnDolares,        name: 'Balanza valorizada en dólares'},
-  {uid: TrialBalanceType.SaldosPorAuxiliar,                 name: 'Saldos por auxiliar'},
-  {uid: TrialBalanceType.SaldosPorCuenta,                   name: 'Saldos por cuenta'},
+export interface TrialBalanceType extends Identifiable {
+  hasAccountStatement?: boolean;
+}
+
+
+export const EmptyTrialBalanceType: TrialBalanceType = {
+  uid: '',
+  name: '',
+  hasAccountStatement: false,
+};
+
+
+export const TrialBalanceTypeList: TrialBalanceType[] = [
+  {
+    uid: TrialBalanceTypes.AnaliticoDeCuentas,
+    name: 'Analítico de cuentas',
+    hasAccountStatement: true
+  },
+  {
+    uid: TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
+    name: 'Balanza con contabilidades en cascada',
+    hasAccountStatement: true
+  },
+  {
+    uid: TrialBalanceTypes.BalanzaValorizadaComparativa,
+    name: 'Balanza de comparación entre períodos',
+    hasAccountStatement: false
+  },
+  {
+    uid: TrialBalanceTypes.Balanza,
+    name: 'Balanza tradicional',
+    hasAccountStatement: true
+  },
+  {
+    uid: TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
+    name: 'Balanza consolidada en moneda origen',
+    hasAccountStatement: false
+  },
+  {
+    uid: TrialBalanceTypes.BalanzaValorizadaEnDolares,
+    name: 'Balanza valorizada en dólares',
+    hasAccountStatement: false
+  },
+  {
+    uid: TrialBalanceTypes.SaldosPorAuxiliar,
+    name: 'Saldos por auxiliar',
+    hasAccountStatement: true
+  },
+  {
+    uid: TrialBalanceTypes.SaldosPorCuenta,
+    name: 'Saldos por cuenta',
+    hasAccountStatement: true
+  },
 ];
 
 
@@ -116,7 +160,7 @@ export interface TrialBalanceCommand extends DataTableCommand {
   showCascadeBalances?: boolean;
   subledgerAccount?: string;
   toAccount?: string;
-  trialBalanceType: TrialBalanceType;
+  trialBalanceType: TrialBalanceTypes;
   useDefaultValuation?: boolean;
   useValuation?: boolean;
   withAverageBalance?: boolean;

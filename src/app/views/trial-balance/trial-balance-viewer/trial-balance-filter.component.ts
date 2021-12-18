@@ -15,7 +15,8 @@ import { ExchangeRatesDataService } from '@app/data-services';
 
 import { AccountsChartMasterData, BalancesTypeList, getEmptyTrialBalanceCommand, getLevelsListFromPattern,
          mapToValidTrialBalanceCommandPeriod, resetExchangeRateValues, TrialBalanceCommand,
-         TrialBalanceCommandPeriod, TrialBalanceType, TrialBalanceTypeList } from '@app/models';
+         TrialBalanceCommandPeriod, TrialBalanceTypes, TrialBalanceTypeList,
+         TrialBalanceType } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -49,7 +50,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
 
-  trialBalanceTypeList: Identifiable[] = TrialBalanceTypeList;
+  trialBalanceTypeList: TrialBalanceType[] = TrialBalanceTypeList;
 
   levelsList: Identifiable[] = [];
 
@@ -83,97 +84,99 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get exchangeRatesDisabled(): boolean {
-    return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.BalanzaConsolidadaPorMoneda,
-            TrialBalanceType.BalanzaValorizadaComparativa,
-            TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.AnaliticoDeCuentas,
+            TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
+            TrialBalanceTypes.BalanzaValorizadaComparativa,
+            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get exchangeRatesRequired(): boolean {
-    return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.BalanzaValorizadaComparativa,
-            TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.AnaliticoDeCuentas,
+            TrialBalanceTypes.BalanzaValorizadaComparativa,
+            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get useDefaultValuationDisabled(): boolean {
-    return [TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get showCascadeBalancesDisabled(): boolean {
-    return [TrialBalanceType.BalanzaConContabilidadesEnCascada,
-            TrialBalanceType.BalanzaConsolidadaPorMoneda,
-            TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
+            TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
+            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get showCascadeBalancesRequired(): boolean {
-    return [TrialBalanceType.BalanzaConContabilidadesEnCascada]
+    return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada]
               .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get withSubledgerAccountDisabled(): boolean {
-    return [TrialBalanceType.BalanzaConContabilidadesEnCascada,
-            TrialBalanceType.BalanzaConsolidadaPorMoneda,
-            TrialBalanceType.BalanzaValorizadaComparativa,
-            TrialBalanceType.BalanzaValorizadaEnDolares,
-            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
+            TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
+            TrialBalanceTypes.BalanzaValorizadaComparativa,
+            TrialBalanceTypes.BalanzaValorizadaEnDolares,
+            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get withSubledgerAccountRequired(): boolean {
-    return [TrialBalanceType.BalanzaValorizadaComparativa,
-            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.BalanzaValorizadaComparativa,
+            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get periodsRequired(): boolean {
-    return [TrialBalanceType.BalanzaValorizadaComparativa]
+    return [TrialBalanceTypes.BalanzaValorizadaComparativa]
             .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayInitialPeriod() {
-    return ![TrialBalanceType.SaldosPorCuenta,
-             TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+    return ![TrialBalanceTypes.SaldosPorCuenta,
+             TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displaySubledgerAccount() {
-    return [TrialBalanceType.SaldosPorCuenta,
-            TrialBalanceType.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.SaldosPorCuenta,
+            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayToAccount() {
-    return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.Balanza,
-            TrialBalanceType.BalanzaConContabilidadesEnCascada,
-            TrialBalanceType.BalanzaConsolidadaPorMoneda,
-            TrialBalanceType.BalanzaValorizadaComparativa,
-            TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.AnaliticoDeCuentas,
+            TrialBalanceTypes.Balanza,
+            TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
+            TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
+            TrialBalanceTypes.BalanzaValorizadaComparativa,
+            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayLevel(): boolean {
-    return ![TrialBalanceType.BalanzaConContabilidadesEnCascada,
-             TrialBalanceType.BalanzaConsolidadaPorMoneda,
-             TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return ![TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
+             TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
+             TrialBalanceTypes.BalanzaValorizadaEnDolares]
+              .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayWithAverageBalance(): boolean {
-    return ![TrialBalanceType.BalanzaConsolidadaPorMoneda,
-             TrialBalanceType.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return ![TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
+             TrialBalanceTypes.BalanzaValorizadaEnDolares]
+              .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayWithSectorization(): boolean {
-    return [TrialBalanceType.AnaliticoDeCuentas,
-            TrialBalanceType.Balanza].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.AnaliticoDeCuentas,
+            TrialBalanceTypes.Balanza].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -313,7 +316,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     }
 
     const payload = {
-      trialBalanceTypeName: this.trialBalanceTypeSelected.name,
+      trialBalanceType: this.trialBalanceTypeSelected,
       trialBalanceCommand: this.getTrialBalanceCommandData(),
     };
 

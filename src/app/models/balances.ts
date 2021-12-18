@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from '.';
+import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry, TrialBalanceType } from '.';
 
 import { AccountDescriptor } from './accounts-chart';
 
@@ -21,15 +21,15 @@ export interface AccountBalance {
 }
 
 
-export enum BalanceType {
+export enum BalanceTypes {
   SaldosPorCuenta   = 'SaldosPorCuenta',
   SaldosPorAuxiliar = 'SaldosPorAuxiliar',
 }
 
 
-export const BalanceTypeList: Identifiable[] = [
-  { uid: BalanceType.SaldosPorCuenta,   name: 'Saldos por cuenta' },
-  { uid: BalanceType.SaldosPorAuxiliar, name: 'Saldos por auxiliar' },
+export const BalanceTypeList: TrialBalanceType[] = [
+  { uid: BalanceTypes.SaldosPorCuenta,   name: 'Saldos por cuenta',   hasAccountStatement: true },
+  { uid: BalanceTypes.SaldosPorAuxiliar, name: 'Saldos por auxiliar', hasAccountStatement: true },
 ];
 
 
@@ -47,7 +47,7 @@ export interface BalanceEntry extends DataTableEntry {
 
 export interface BalanceCommand extends DataTableCommand {
   accountsChartUID: string;
-  trialBalanceType: BalanceType;
+  trialBalanceType: BalanceTypes;
   balancesType?: string;
   fromAccount?: string;
   initialPeriod?: {

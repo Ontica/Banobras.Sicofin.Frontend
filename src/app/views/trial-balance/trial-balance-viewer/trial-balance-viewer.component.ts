@@ -13,9 +13,9 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { Balance, BalanceCommand, BalanceEntry, EmptyTrialBalance, FileReport, getEmptyBalanceCommand,
-         getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
-         TrialBalanceEntry } from '@app/models';
+import { Balance, BalanceCommand, BalanceEntry, EmptyTrialBalance, EmptyTrialBalanceType, FileReport,
+         getEmptyBalanceCommand, getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
+         TrialBalanceEntry, TrialBalanceType} from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -49,7 +49,7 @@ export class TrialBalanceViewerComponent {
 
   @Output() trialBalanceViewerEvent = new EventEmitter<EventInfo>();
 
-  balanceTypeName = '';
+  balanceType: TrialBalanceType = EmptyTrialBalanceType;
 
   cardHint = 'Seleccionar los filtros';
 
@@ -83,18 +83,18 @@ export class TrialBalanceViewerComponent {
 
     switch (event.type as TrialBalanceFilterEventType | BalanceQuickFilterEventType) {
       case BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED:
-        Assertion.assertValue(event.payload.trialBalanceTypeName, 'event.payload.trialBalanceTypeName');
+        Assertion.assertValue(event.payload.trialBalanceType, 'event.payload.trialBalanceType');
         Assertion.assertValue(event.payload.balanceCommand, 'event.payload.balanceCommand');
 
-        this.setBalanceTypeName(event.payload.trialBalanceTypeName);
+        this.setBalanceTypeName(event.payload.trialBalanceType);
         this.executeGetBalance(event.payload.balanceCommand as BalanceCommand);
         return;
 
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
-        Assertion.assertValue(event.payload.trialBalanceTypeName, 'event.payload.trialBalanceTypeName');
+        Assertion.assertValue(event.payload.trialBalanceType, 'event.payload.trialBalanceType');
         Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
 
-        this.setBalanceTypeName(event.payload.trialBalanceTypeName);
+        this.setBalanceTypeName(event.payload.trialBalanceType);
         this.executeGetTrialBalance(event.payload.trialBalanceCommand as TrialBalanceCommand);
         return;
 
@@ -216,8 +216,8 @@ export class TrialBalanceViewerComponent {
   }
 
 
-  private setBalanceTypeName(balanceTypeName: string) {
-    this.balanceTypeName = balanceTypeName ?? '';
+  private setBalanceTypeName(balanceType: TrialBalanceType) {
+    this.balanceType = balanceType ?? EmptyTrialBalanceType;
   }
 
 
@@ -228,11 +228,11 @@ export class TrialBalanceViewerComponent {
     }
 
     if (displayedEntriesMessage) {
-      this.cardHint = `${this.balanceTypeName} - ${displayedEntriesMessage}`;
+      this.cardHint = `${this.balanceType.name} - ${displayedEntriesMessage}`;
       return;
     }
 
-    this.cardHint = `${this.balanceTypeName} - ${this.data.entries.length} registros encontrados`;
+    this.cardHint = `${this.balanceType.name} - ${this.data.entries.length} registros encontrados`;
   }
 
 

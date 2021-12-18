@@ -11,8 +11,8 @@ import { DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalanceCommand, BalanceType, BalanceTypeList,
-         getEmptyBalanceCommand } from '@app/models';
+import { AccountsChartMasterData, BalanceCommand, BalanceTypes, BalanceTypeList, getEmptyBalanceCommand,
+         TrialBalanceType} from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -34,7 +34,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  balanceTypeList: Identifiable[] = BalanceTypeList;
+  balanceTypeList: TrialBalanceType[] = BalanceTypeList;
 
   isLoading = false;
 
@@ -63,17 +63,17 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
 
   get displayFromAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceType.SaldosPorCuenta;
+    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuenta;
   }
 
 
   get displaySubledgerAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceType.SaldosPorAuxiliar;
+    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorAuxiliar;
   }
 
 
   get displayWithSubledgerAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceType.SaldosPorCuenta;
+    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuenta;
   }
 
 
@@ -86,7 +86,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
   onBuildBalanceClicked() {
     const payload = {
-      trialBalanceTypeName: this.trialBalanceTypeSelected.name,
+      trialBalanceType: this.trialBalanceTypeSelected,
       balanceCommand: this.getBalanceCommandData(),
     };
 
