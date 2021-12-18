@@ -62,7 +62,8 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   ngOnChanges() {
     if (!!this.command && !!this.entry) {
-      this.accountStatementCommand = this.buildAccountStatementCommand();
+      this.buildAccountStatementCommand();
+      this.resetAccountStatementData();
       this.getAccountStatement();
     }
   }
@@ -150,14 +151,6 @@ export class AccountStatementViewerComponent implements OnChanges {
   }
 
 
-  private buildAccountStatementCommand(): AccountStatementCommand {
-    return {
-      command: this.command,
-      entry: this.entry,
-    };
-  }
-
-
   private getAccountStatement() {
     this.setSubmitted(true);
 
@@ -190,6 +183,20 @@ export class AccountStatementViewerComponent implements OnChanges {
       .toPromise()
       .then(x => this.voucherFile = x)
       .finally(() => this.isLoading = false);
+  }
+
+
+  private buildAccountStatementCommand() {
+    this.accountStatementCommand = {
+      command: this.command,
+      entry: this.entry,
+    };
+  }
+
+
+  private resetAccountStatementData() {
+    this.commandExecuted = false;
+    this.setAccountStatementData(EmptyAccountStatement);
   }
 
 

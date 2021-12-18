@@ -52,6 +52,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() countOnlyEntries = false;
 
+  @Input() notCommandExecutedText = 'No se ha invocado la consulta.';
+
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
 
   columns: DataTableColumn[] = [];

@@ -68,7 +68,7 @@
       </table>
 
       <div *ngIf="!commandExecuted" class="text-not-found">
-        No se ha invocado la consulta.
+        {{notCommandExecutedText}}
       </div>
 
       <div *ngIf="commandExecuted && dataTable.entries.length === 0" class="text-not-found">
