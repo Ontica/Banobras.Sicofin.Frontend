@@ -136,6 +136,10 @@ export class AccountStatementViewerComponent implements OnChanges {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        if (this.submitted) {
+          return;
+        }
+
         this.exportAccountStatementToExcel();
         return;
 
@@ -169,10 +173,9 @@ export class AccountStatementViewerComponent implements OnChanges {
 
 
   private exportAccountStatementToExcel() {
-    setTimeout(() => {
-      this.excelFileUrl = 'en desarrollo';
-      this.messageBox.showInDevelopment('Exportar estado de cuenta', this.command);
-    }, 500);
+    this.balancesDataService.exportAccountStatementToExcel(this.accountStatementCommand)
+      .toPromise()
+      .then(x => this.excelFileUrl = x.url);
   }
 
 

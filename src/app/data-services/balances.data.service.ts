@@ -21,21 +21,21 @@ export class BalancesDataService {
   constructor(private http: HttpService) { }
 
 
-  exportTrialBalanceToExcel(trialBalanceCommand: TrialBalanceCommand): Observable<FileReport> {
-    Assertion.assertValue(trialBalanceCommand, 'trialBalanceCommand');
-
-    const path = `v2/financial-accounting/trial-balance/excel`;
-
-    return this.http.post<FileReport>(path, trialBalanceCommand);
-  }
-
-
   getLedgersAccountsBalances(standardAccountUID: string): Observable<AccountBalance[]> {
     Assertion.assertValue(standardAccountUID, 'standardAccountUID');
 
     const path = `v2/financial-accounting/balances/${standardAccountUID}`;
 
     return this.http.get<AccountBalance[]>(path);
+  }
+
+
+  exportTrialBalanceToExcel(trialBalanceCommand: TrialBalanceCommand): Observable<FileReport> {
+    Assertion.assertValue(trialBalanceCommand, 'trialBalanceCommand');
+
+    const path = `v2/financial-accounting/trial-balance/excel`;
+
+    return this.http.post<FileReport>(path, trialBalanceCommand);
   }
 
 
@@ -54,6 +54,15 @@ export class BalancesDataService {
     const path = `v2/financial-accounting/trial-balance`;
 
     return this.http.post<TrialBalance>(path, trialBalanceCommand);
+  }
+
+
+  exportAccountStatementToExcel(accountStatementCommand: AccountStatementCommand): Observable<FileReport> {
+    Assertion.assertValue(accountStatementCommand, 'accountStatementCommand');
+
+    const path = `v2/financial-accounting/balance-voucher/excel`;
+
+    return this.http.post<FileReport>(path, accountStatementCommand);
   }
 
 
