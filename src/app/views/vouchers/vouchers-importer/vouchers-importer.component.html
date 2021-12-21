@@ -63,7 +63,7 @@
                   <emp-ng-select
                     [formControlName]="controls.voucherTypeUID"
                     [items]="voucherTypesList"
-                    [loading]="isLoading"
+                    [loading]="isLoadingDataLists"
                     [showError]="formHandler.showInvalidControl(controls.voucherTypeUID)">
                   </emp-ng-select>
                 </div>
@@ -124,7 +124,7 @@
                   <emp-ng-select
                     [formControlName]="controls.accountsChartUID"
                     [items]="accountsChartMasterDataList"
-                    [loading]="isLoading"
+                    [loading]="isLoadingDataLists"
                     [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
                     (changes)="onAccountChartChanges($event)">
                   </emp-ng-select>
@@ -197,7 +197,7 @@
 
             <emp-fa-importer-details-table fxFlex="100"
               [importVouchersResult]="importVouchersResult"
-              [canSelect]="isExcelImport"
+              [selectionType]="importerDetailsSelectionType"
               [commandExecuted]="executedDryRun"
               [descriptionColumnText]="descriptionColumnText"
               [showItemsStatus]="!isDataBaseImport || importVouchersResult.isRunning"

@@ -28,7 +28,7 @@ import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { combineLatest, Observable } from 'rxjs';
 
-import { ImporterDetailsTableEventType } from './importer-details-table.component';
+import { ImporterDetailsSelectionType, ImporterDetailsTableEventType } from './importer-details-table.component';
 
 export enum VouchersImporterEventType {
   CLOSE_MODAL_CLICKED  = 'VouchersImporterComponent.Event.CloseModalClicked',
@@ -65,6 +65,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   isFormInvalidated = false;
 
   isLoading = false;
+  isLoadingDataLists = false;
   isLoadingAccountingDates = false;
 
   importTypes = ImportTypes;
@@ -75,6 +76,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   selectedImportType = ImportTypes.excelFile;
   selectedFileType: FileType = 'excel';
+
+  importerDetailsSelectionType: ImporterDetailsSelectionType = ImporterDetailsSelectionType.MULTI;
 
   importVouchersResult: ImportVouchersResult = EmptyImportVouchersResult;
   selectedPartsToImport: ImportVouchersTotals[] = [];
@@ -126,7 +129,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   get isReadyForSubmit() {
     if (this.isDataBaseImport) {
       return this.executedDryRun && !this.importVouchersResult.isRunning &&
-        this.importVouchersResult.voucherTotals.length > 0;
+        this.selectedPartsToImport.length === 1;
     }
 
     if (this.isExcelImport) {
@@ -157,14 +160,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
 
   onImportTypeChange() {
-    this.file = null;
-    this.selectedFileType = null;
-    this.selectedFileType = this.isExcelImport ? 'excel' : this.selectedFileType;
-    this.selectedFileType = this.isTxtImport ? 'txt' : this.selectedFileType;
-
-    this.accountingDatesList = [];
-    this.hasValueDate = false;
-
+    this.resetFileAndDateFields();
+    this.setImporterDetailsSelectionType();
     this.resetImportVouchersResult();
     this.resetForm();
     this.validateRequiredFormFields();
@@ -203,6 +200,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
 
   onGetStatusImportVouchersFromDatabase() {
+    this.resetImportVouchersResult();
     this.dryRunImportVouchers(this.importVouchersData.getStatusImportVouchersFromDatabase());
   }
 
@@ -262,7 +260,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
 
   private loadDataLists() {
-    this.isLoading = true;
+    this.isLoadingDataLists = true;
 
     combineLatest([
       this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
@@ -271,7 +269,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     .subscribe(([a, b]) => {
       this.voucherTypesList = a;
       this.accountsChartMasterDataList = b;
-      this.isLoading = false;
+      this.isLoadingDataLists = false;
     });
   }
 
@@ -327,6 +325,32 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
+  private resetFileAndDateFields() {
+    this.file = null;
+
+    this.selectedFileType = null;
+    this.selectedFileType = this.isExcelImport ? 'excel' : this.selectedFileType;
+    this.selectedFileType = this.isTxtImport ? 'txt' : this.selectedFileType;
+
+    this.accountingDatesList = [];
+    this.hasValueDate = false;
+  }
+
+
+  private setImporterDetailsSelectionType() {
+    this.importerDetailsSelectionType = ImporterDetailsSelectionType.NONE;
+
+    if (this.isExcelImport) {
+      this.importerDetailsSelectionType = ImporterDetailsSelectionType.MULTI;
+      return;
+    }
+
+    if (this.isDataBaseImport) {
+      this.importerDetailsSelectionType = ImporterDetailsSelectionType.UNIQUE;
+    }
+  }
+
+
   private validateRequiredFormFields() {
     if (this.isDataBaseImport) {
       this.formHandler.clearControlValidators(this.controls.voucherTypeUID);
@@ -361,6 +385,15 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       voucherTypeUID: formModel.voucherTypeUID,
     };
 
+    this.validateFieldsByImportType(data);
+
+    return data;
+  }
+
+
+  private validateFieldsByImportType(data: ImportVouchersCommand) {
+    const formModel = this.formHandler.form.getRawValue();
+
     if (this.isExcelImport) {
       data.accountsChartUID = formModel.accountsChartUID;
       data.accountingDate = formModel.accountingDate;
@@ -371,7 +404,9 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       data.accountsChartUID = formModel.accountsChartUID;
     }
 
-    return data;
+    if (this.isDataBaseImport) {
+      data.processOnly = this.selectedPartsToImport.map(x => x.uid);
+    }
   }
 
 
@@ -385,16 +420,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   private hasErrorSubmitImportVouchers(): boolean {
     if (this.setAndReturnIsFormInvalidated() || !this.isReadyForSubmit ||
         this.importVouchersResult.hasErrors) {
-
-      if (this.isDataBaseImport && this.importVouchersResult.isRunning) {
-        this.messageBox.show('El importador de pólizas ya está en ejecución.', 'Importador de pólizas');
-        return true;
-      }
-
-      if (this.executedDryRun) {
-        this.messageBox.showError('Se encontraron errores en los datos.');
-      }
-
+      this.showErrorMessage();
       return true;
     }
 
@@ -409,6 +435,27 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
+  private showErrorMessage() {
+    if (!this.executedDryRun) {
+      return;
+    }
+
+    if (this.importVouchersResult.hasErrors) {
+      this.messageBox.showError('Se encontraron errores en los datos.');
+      return;
+    }
+
+    if (this.isDataBaseImport && this.importVouchersResult.isRunning) {
+      this.messageBox.show('El importador de pólizas ya está en ejecución.', 'Importador de pólizas');
+      return;
+    }
+
+    if ((this.isDataBaseImport || this.isExcelImport ) && this.selectedPartsToImport.length === 0) {
+      this.messageBox.showError('Seleccione los datos a importar.');
+    }
+  }
+
+
   private dryRunImportVouchers(importObservable: Observable<ImportVouchersResult>) {
     this.isLoading = true;
 
@@ -416,7 +463,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       .toPromise()
       .then(x => {
         this.executedDryRun = true;
-        this.importVouchersResult = x;
+        this.importVouchersResult = x ?? EmptyImportVouchersResult;
         this.resolveDryRunImportVoucherResponse();
       })
       .finally(() => this.isLoading = false);

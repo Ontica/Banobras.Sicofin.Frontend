@@ -6,12 +6,20 @@
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let row" class="column-action-check">
-        <mat-checkbox
+        <mat-checkbox *ngIf="isMultiSelection" class="no-label"
           [checked]="selection.isSelected(row)"
           [disabled]="importVouchersResult.hasErrors"
-          (click)="$event.stopPropagation()"
-          (change)="onCheckClicked(row)">
+          (change)="onRowSelectionClicked(row)"
+          (click)="$event.stopPropagation()">
+
         </mat-checkbox>
+
+        <mat-radio-button *ngIf="isUniqueSelection" class="no-label"
+          [checked]="selection.isSelected(row)"
+          (change)="onRowSelectionClicked(row)"
+          (click)="$event.stopPropagation()">
+
+        </mat-radio-button>
       </td>
     </ng-container>
 

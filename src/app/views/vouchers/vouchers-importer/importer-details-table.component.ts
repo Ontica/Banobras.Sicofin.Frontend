@@ -24,6 +24,12 @@ export enum ImporterDetailsTableEventType {
   CHECK_CLICKED = 'ImporterDetailsTableComponent.Event.CheckClicked',
 }
 
+export enum ImporterDetailsSelectionType {
+  NONE = 'NONE',
+  UNIQUE = 'UNIQUE',
+  MULTI = 'MULTI',
+}
+
 @Component({
   selector: 'emp-fa-importer-details-table',
   templateUrl: './importer-details-table.component.html',
@@ -34,7 +40,7 @@ export class ImporterDetailsTableComponent implements OnChanges {
 
   @Input() commandExecuted = false;
 
-  @Input() canSelect = false;
+  @Input() selectionType: ImporterDetailsSelectionType = ImporterDetailsSelectionType.NONE;
 
   @Input() descriptionColumnText = 'Parte';
 
@@ -54,20 +60,30 @@ export class ImporterDetailsTableComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.importVouchersResult || changes.canSelect) {
+    if (changes.importVouchersResult || changes.selectionType) {
       this.dataSource = new MatTableDataSource(this.importVouchersResult?.voucherTotals || []);
       this.resetColumns();
-      this.selectAllRows();
+      this.resetSelection();
     }
   }
 
 
-  onCheckClicked(row: ImportVouchersTotals) {
-    if (this.selection.isSelected(row)) {
-      this.selection.deselect(row);
-    } else {
-      this.selection.select(row);
-    }
+  get selectionRequired(){
+    return ImporterDetailsSelectionType.NONE !== this.selectionType;
+  }
+
+
+  get isMultiSelection(){
+    return ImporterDetailsSelectionType.MULTI === this.selectionType;
+  }
+
+  get isUniqueSelection(){
+    return ImporterDetailsSelectionType.UNIQUE === this.selectionType;
+  }
+
+
+  onRowSelectionClicked(row: ImportVouchersTotals) {
+    this.selection.toggle(row);
 
     sendEvent(this.importerDetailsTableEvent,
       ImporterDetailsTableEventType.CHECK_CLICKED, {selection: this.selection.selected});
@@ -89,7 +105,7 @@ export class ImporterDetailsTableComponent implements OnChanges {
   private resetColumns() {
     this.displayedColumns = [];
 
-    if (this.canSelect) {
+    if (this.selectionRequired) {
       this.displayedColumns = ['action'];
     }
 
@@ -105,8 +121,24 @@ export class ImporterDetailsTableComponent implements OnChanges {
   }
 
 
+  private resetSelection() {
+    this.selection.clear();
+
+    if (this.isUniqueSelection) {
+      this.selection = new SelectionModel<ImportVouchersTotals>(false, []);
+      return;
+    }
+
+    if (this.isMultiSelection) {
+      this.selection = new SelectionModel<ImportVouchersTotals>(true, []);
+      this.selectAllRows();
+    }
+  }
+
+
   private selectAllRows() {
-    if (this.canSelect && !this.importVouchersResult.hasErrors) {
+
+    if (this.selectionRequired && !this.importVouchersResult.hasErrors) {
       this.importVouchersResult.voucherTotals.forEach(x => this.selection.select(x));
 
       setTimeout(() => {

@@ -730,13 +730,17 @@ table.mat-table.emp-designer {
 //
 
 .mat-checkbox {
+  .mat-checkbox-frame {
+    background: $white !important;
+  }
+
   .mat-checkbox-label {
     font-size: 9pt;
     margin-right: 8px;
   }
 
-  .mat-checkbox-frame {
-    background: $white !important;
+  &.no-label .mat-checkbox-label {
+    margin-right: 0;
   }
 
   &.mat-checkbox-checked,
@@ -805,6 +809,10 @@ table.mat-table.emp-designer {
 .mat-radio-button .mat-radio-inner-circle {
   color: $checkbox-background-color !important;
   background-color: $checkbox-background-color !important;
+}
+
+.no-label .mat-radio-label-content {
+  padding-left: 0;
 }
 
 //
