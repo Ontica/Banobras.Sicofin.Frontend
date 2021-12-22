@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-
+export * from './accounting-calendars.data.service';
 export * from './accounts-chart.data.service';
 export * from './balances-store.data.service';
 export * from './balances.data.service';
