@@ -62,7 +62,7 @@ export class ExternalProcessSubmitterComponent {
 
 
   onExecuteExternalProcessClicked() {
-    if(this.submitted) {
+    if (this.submitted) {
       return;
     }
 

@@ -56,16 +56,6 @@ export const AccountingDashboardsViews: View[] = [
     title: 'Reportes fiscales',
     url: '/tableros/reportes-fiscales'
   },
-  // {
-  //   name: 'AccountingDashboards.FinancialFacts',
-  //   title: 'Indicadores financieros',
-  //   url: '/tableros/indicadores-financieros'
-  // },
-  // {
-  //   name: 'AccountingDashboards.Alerts',
-  //   title: 'Alertas',
-  //   url: '/tableros/alertas'
-  // }
 ];
 
 
@@ -94,12 +84,7 @@ export const AccountingCataloguesAndRulesViews: View[] = [
     name: 'AccountingCataloguesAndRulesViews.ReportsDesigner',
     title: 'Configuración de reportes',
     url: '/reglas-y-catalogos/configuracion-de-reportes'
-  }
-  // {
-  //   name: 'AccountingCataloguesAndRulesViews.AccountingRules',
-  //   title: 'Reglas contabilizadoras',
-  //   url: '/reglas-y-catalogos/reglas-contabilizadoras'
-  // },
+  },
 ];
 
 
@@ -108,6 +93,11 @@ export const AccountingSystemManagementViews: View[] = [
     name: 'AccountingSystemManagementViews.BalanceGeneration',
     title: 'Generación de saldos',
     url: '/administracion/generacion-de-saldos'
+  },
+  {
+    name: 'AccountingSystemManagementViews.ControlPanel',
+    title: 'Panel de control',
+    url: '/administracion/panel-de-control',
   }
 ];
 

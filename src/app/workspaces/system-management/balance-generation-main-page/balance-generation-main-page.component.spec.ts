@@ -7,22 +7,22 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SystemManagementWorkspaceComponent } from './system-management-workspace.component';
+import { BalanceGenerationMainPageComponent } from './balance-generation-main-page.component';
 
 
-describe('SystemManagementWorkspaceComponent', () => {
-  let component: SystemManagementWorkspaceComponent;
-  let fixture: ComponentFixture<SystemManagementWorkspaceComponent>;
+describe('BalanceGenerationMainPageComponent', () => {
+  let component: BalanceGenerationMainPageComponent;
+  let fixture: ComponentFixture<BalanceGenerationMainPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SystemManagementWorkspaceComponent ]
+      declarations: [ BalanceGenerationMainPageComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SystemManagementWorkspaceComponent);
+    fixture = TestBed.createComponent(BalanceGenerationMainPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

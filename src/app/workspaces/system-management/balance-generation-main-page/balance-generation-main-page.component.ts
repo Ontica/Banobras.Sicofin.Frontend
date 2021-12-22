@@ -33,10 +33,10 @@ import {
 
 
 @Component({
-  selector: 'emp-fa-system-management-workspace',
-  templateUrl: './system-management-workspace.component.html'
+  selector: 'emp-fa-balance-generation-main-page',
+  templateUrl: './balance-generation-main-page.component.html'
 })
-export class SystemManagementWorkspaceComponent {
+export class BalanceGenerationMainPageComponent {
 
   displayBalanceSetCreator = false;
   displayBalanceSetTabbedView = false;
@@ -103,7 +103,6 @@ export class SystemManagementWorkspaceComponent {
         return;
     }
   }
-
 
 
   onStoredBalanceSetTabbedViewEvent(event: EventInfo): void {

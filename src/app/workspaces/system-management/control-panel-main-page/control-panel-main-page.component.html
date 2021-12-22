@@ -1,0 +1,56 @@
+<div class="explorer" fxLayoutGap="32px">
+
+  <div class="primary">
+
+    <emp-ng-card
+      title="Panel de control"
+      hint="seleccione una opción"
+      [showCardHeaderFlat]="true"
+      [disableClose]="true">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1rem" fxLayoutGap.lt-md="1rem"
+          class="card-info-container">
+
+          <div class="card-info" fxFlex="50" fxLayoutAlign="space-around center">
+            <div fxFlex>
+              <span class="card-info-title">Periodos</span>
+              <span class="card-info-hint">Edición de fechas de los calendarios.</span>
+            </div>
+
+            <button class="btn-primary" fxFlex="none"
+              (click)="displayAccountingCalendarsEditor = true">
+              Periodos
+            </button>
+
+          </div>
+
+          <div class="card-info" fxFlex="50" fxLayoutAlign="space-around center">
+            <div fxFlex>
+              <span class="card-info-title">Procesos externos</span>
+              <span class="card-info-hint">Ejecución de procesos externos (Rentabilidad, etc.)</span>
+            </div>
+            <button class="btn-primary" fxFlex="none"
+              (click)="displayExternalProcessesEditor = true">
+              Procesos
+            </button>
+          </div>
+
+        </div>
+
+    </emp-ng-card>
+
+  </div>
+
+</div>
+
+
+<emp-fa-accounting-calendars-editor *ngIf="displayAccountingCalendarsEditor"
+  (closeEvent)="displayAccountingCalendarsEditor = false">
+
+</emp-fa-accounting-calendars-editor>
+
+
+<emp-fa-external-process-submitter *ngIf="displayExternalProcessesEditor"
+  (closeEvent)="displayExternalProcessesEditor = false">
+
+</emp-fa-external-process-submitter>

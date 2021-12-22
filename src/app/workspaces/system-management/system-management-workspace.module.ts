@@ -14,11 +14,16 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 
 import { SharedModule } from '@app/shared/shared.module';
 
-import { SystemManagementWorkspaceComponent } from './system-management-workspace.component';
-
 import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
 import { BalancesGenerationModule } from '@app/views/balances-generation/balances-generation.module';
+import { ProcessesModule } from '@app/views/processes/processes.module';
 import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+
+import {
+  BalanceGenerationMainPageComponent
+} from './balance-generation-main-page/balance-generation-main-page.component';
+
+import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-page.component';
 
 
 @NgModule({
@@ -33,11 +38,13 @@ import { ReportsControlsModule } from '@app/views/reports-controls/reports-contr
 
     SystemManagementWorkspaceRoutingModule,
     BalancesGenerationModule,
+    ProcessesModule,
     ReportsControlsModule,
   ],
 
   declarations: [
-    SystemManagementWorkspaceComponent
+    BalanceGenerationMainPageComponent,
+    ControlPanelMainPageComponent,
   ],
 
   exports: [

@@ -156,6 +156,11 @@ export const ROUTES_LIBRARY = {
     parent: 'administracion',
     path: 'generacion-de-saldos',
   },
+  administracion_panel_de_control: {
+    permission: PermissionsLibrary.ROUTE_ADMINISTRACION,
+    parent: 'administracion',
+    path: 'panel-de-control',
+  },
 
   // #endregion
 

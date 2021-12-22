@@ -11,14 +11,23 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES_LIBRARY } from '@app/models';
 
-import { SystemManagementWorkspaceComponent } from './system-management-workspace.component';
+import {
+  BalanceGenerationMainPageComponent
+} from './balance-generation-main-page/balance-generation-main-page.component';
+
+import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-page.component';
 
 
 const routes: Routes = [
   {
     data: { permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission },
     path: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
-    component: SystemManagementWorkspaceComponent,
+    component: BalanceGenerationMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.administracion_panel_de_control.permission },
+    path: ROUTES_LIBRARY.administracion_panel_de_control.path,
+    component: ControlPanelMainPageComponent,
   },
   {
     path: '',
