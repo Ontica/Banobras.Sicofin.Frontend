@@ -204,6 +204,10 @@ table.mat-table {
       justify-content: center;
     }
 
+    &.column-action-check {
+      width: 32px;
+    }
+
     &:first-of-type {
       padding-left: 10px;
     }
@@ -526,6 +530,10 @@ table.mat-table.emp-designer {
     margin: 8px 8px 8px 0;
   }
 
+  &.horizontal-slim {
+    margin: 0 8px 8px 0;
+  }
+
   &.vertical {
     margin: 12px 8px 0 0;
     height: $control-height;
@@ -798,6 +806,10 @@ table.mat-table.emp-designer {
   font-size: 9pt !important;
 }
 
+.no-label .mat-radio-label-content {
+  padding-left: 0;
+}
+
 .mat-radio-button.mat-radio-checked .mat-radio-outer-circle {
   border-color: $checkbox-background-color !important;
 }
@@ -809,10 +821,6 @@ table.mat-table.emp-designer {
 .mat-radio-button .mat-radio-inner-circle {
   color: $checkbox-background-color !important;
   background-color: $checkbox-background-color !important;
-}
-
-.no-label .mat-radio-label-content {
-  padding-left: 0;
 }
 
 //
