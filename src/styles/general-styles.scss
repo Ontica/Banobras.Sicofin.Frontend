@@ -644,3 +644,30 @@ ul.info-list {
     padding-bottom: 1em;
   }
 }
+
+// card-info
+
+.card-info-container {
+  padding: 16px;
+}
+
+.card-info {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+  background-color: #fafafa;
+  padding: 16px;
+  border-radius: 3px;
+}
+
+.card-info-title {
+  display: block;
+  margin-bottom: 6px;
+  color: $primary-color;
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.card-info-hint {
+  color: #808080;
+  font-size: 9pt;
+  font-weight: 400;
+}

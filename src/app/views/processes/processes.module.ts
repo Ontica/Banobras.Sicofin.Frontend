@@ -21,6 +21,10 @@ import {
   AccountingCalendarsEditorComponent
 } from './accounting-calendars-editor/accounting-calendars-editor.component';
 
+import {
+  ExternalProcessSubmitterComponent
+} from './external-process-submitter/external-process-submitter.component';
+
 
 @NgModule({
   imports: [
@@ -34,9 +38,11 @@ import {
   ],
   declarations: [
     AccountingCalendarsEditorComponent,
+    ExternalProcessSubmitterComponent,
   ],
   exports: [
     AccountingCalendarsEditorComponent,
+    ExternalProcessSubmitterComponent,
   ],
 })
 export class ProcessesModule { }

@@ -32,6 +32,8 @@ export * from './data-table';
 
 export * from './exchange-rates';
 
+export * from './external-process';
+
 export * from './financial-reports';
 
 export * from './grouping-rules';

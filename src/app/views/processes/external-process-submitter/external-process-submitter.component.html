@@ -1,0 +1,107 @@
+<emp-ng-modal-window [config]="{width:'300px'}">
+
+  <emp-ng-card
+    title="Procesos externos"
+    hint='Información de los procesos.'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding" [empNgSpinnerHost]="spinner">
+
+      <emp-ng-spinner #spinner [visible]="submitted">
+
+      </emp-ng-spinner>
+
+      <form [formGroup]="formHandler.form" autocomplete="off" class="form-section"
+          (keydown.enter)="$event.preventDefault()">
+
+        <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+          <div fxLayout="row">
+
+            <div fxFlex="100">
+
+              <label>Proceso:</label>
+
+              <emp-ng-select name="externalProcessType"
+                [formControlName]="controls.externalProcessType"
+                [items]="externalProcessTypeList"
+                [showError]="formHandler.showInvalidControl(controls.externalProcessType)">
+              </emp-ng-select>
+
+            </div>
+
+          </div>
+
+          <mat-divider class="horizontal-slim">
+
+          </mat-divider>
+
+          <div *ngIf="!externalProcessType" class="instruction-text">
+            Seleccione el proceso a ejecutar.
+          </div>
+
+
+          <ng-container *ngIf="externalProcessType">
+
+            <div fxLayout="row" fxLayout.lt-md="column">
+
+              <div fxFlex="50">
+                <label>Año:</label>
+                <input type="text" class="text-box" empNgInteger
+                  [formControlName]="controls.anio"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.anio)">
+              </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column">
+
+              <div fxFlex="50" fxFlex.lt-md="none">
+                <label>Mes:</label>
+                <input type="text" class="text-box" empNgInteger
+                  [formControlName]="controls.mes"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.mes)">
+              </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column">
+
+              <div fxFlex="50" fxFlex.lt-md="none">
+                <label>Metodología:</label>
+                <input type="text" class="text-box" empNgInteger
+                  [formControlName]="controls.metodologia"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.metodologia)">
+              </div>
+
+            </div>
+
+          </ng-container>
+
+          <mat-divider class="horizontal-slim">
+
+          </mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button (click)="onExecuteExternalProcessClicked()"
+                [class.btn]="!formHandler.isValid"
+                [class.btn-action]="formHandler.isValid">
+                Ejecutar
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>
