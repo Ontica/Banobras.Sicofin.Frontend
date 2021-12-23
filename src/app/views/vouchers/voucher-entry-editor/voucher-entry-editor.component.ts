@@ -172,7 +172,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       }
 
       if (this.subledgerAccountRequired) {
-        return 'Seleccionar';
+        return 'Buscar auxiliar';
       }
       return 'No aplica';
     }

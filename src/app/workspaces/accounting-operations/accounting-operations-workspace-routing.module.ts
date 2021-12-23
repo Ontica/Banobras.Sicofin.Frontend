@@ -11,29 +11,29 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES_LIBRARY } from '@app/models';
 
-import { AccountingOperationsWorkspaceComponent } from './accounting-operations-workspace.component';
+import { VouchersMainPageComponent } from './vouchers-main-page/vouchers-main-page.component';
 
 
 const routes: Routes = [
   {
     data: { permission: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.permission },
     path: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.path,
-    component: AccountingOperationsWorkspaceComponent,
+    component: VouchersMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.operacion_contable_mesa_de_control.permission },
     path: ROUTES_LIBRARY.operacion_contable_mesa_de_control.path,
-    component: AccountingOperationsWorkspaceComponent,
+    component: VouchersMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.operacion_contable_polizas_en_libros.permission },
     path: ROUTES_LIBRARY.operacion_contable_polizas_en_libros.path,
-    component: AccountingOperationsWorkspaceComponent,
+    component: VouchersMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.permission },
     path: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.path,
-    component: AccountingOperationsWorkspaceComponent,
+    component: VouchersMainPageComponent,
   },
   {
     path: '',

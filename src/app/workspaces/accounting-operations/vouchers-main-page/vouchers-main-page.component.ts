@@ -17,7 +17,7 @@ import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherDescriptorFromVouch
          mapVoucherStageFromViewName, SearchVouchersCommand, Voucher, VoucherDescriptor,
          VouchersOperationCommand, VouchersOperationResult, VouchersOperationType} from '@app/models';
 
-import { View } from '../main-layout';
+import { View } from '@app/workspaces/main-layout';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -35,14 +35,14 @@ import { VoucherTabbedViewEventType } from '@app/views/vouchers/voucher-tabbed-v
 
 import { DomSanitizer } from '@angular/platform-browser';
 
-type AccountingOperationModalOptions = 'VoucherCreator' | 'VouchersImporter';
+type VouchersMainPageModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
 
 @Component({
-  selector: 'emp-fa-accounting-operations-workspace',
-  templateUrl: './accounting-operations-workspace.component.html'
+  selector: 'emp-fa-vouchers-main-page',
+  templateUrl: './vouchers-main-page.component.html'
 })
-export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy {
+export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   currentView: View;
 
@@ -54,7 +54,7 @@ export class AccountingOperationsWorkspaceComponent implements OnInit, OnDestroy
 
   displayVoucherTabbedView = false;
 
-  displayOptionModalSelected: AccountingOperationModalOptions = null;
+  displayOptionModalSelected: VouchersMainPageModalOptions = null;
 
   isLoading = false;
 

@@ -17,8 +17,9 @@ import { SharedModule } from '@app/shared/shared.module';
 import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 import { VouchersModule } from '@app/views/vouchers/vouchers.module';
 
-import { AccountingOperationsWorkspaceComponent } from './accounting-operations-workspace.component';
 import { AccountingOperationsWorkspaceRoutingModule } from './accounting-operations-workspace-routing.module';
+
+import { VouchersMainPageComponent } from './vouchers-main-page/vouchers-main-page.component';
 
 
 @NgModule({
@@ -37,7 +38,7 @@ import { AccountingOperationsWorkspaceRoutingModule } from './accounting-operati
   ],
 
   declarations: [
-    AccountingOperationsWorkspaceComponent
+    VouchersMainPageComponent,
   ],
 
   exports: [

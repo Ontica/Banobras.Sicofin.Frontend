@@ -6,22 +6,22 @@
  */
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { AccountingOperationsWorkspaceComponent } from './accounting-operations-workspace.component';
+import { VouchersMainPageComponent } from './vouchers-main-page.component';
 
 
-describe('AccountingOperationsWorkspaceComponent', () => {
-  let component: AccountingOperationsWorkspaceComponent;
-  let fixture: ComponentFixture<AccountingOperationsWorkspaceComponent>;
+describe('VouchersMainPageComponent', () => {
+  let component: VouchersMainPageComponent;
+  let fixture: ComponentFixture<VouchersMainPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ AccountingOperationsWorkspaceComponent ]
+      declarations: [ VouchersMainPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccountingOperationsWorkspaceComponent);
+    fixture = TestBed.createComponent(VouchersMainPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
