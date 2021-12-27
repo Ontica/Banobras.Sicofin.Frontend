@@ -24,7 +24,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FileType } from '@app/shared/form-controls/file-control/file-control-data';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
 import { combineLatest, Observable } from 'rxjs';
 
@@ -58,6 +58,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   @Output() vouchersImporterEvent = new EventEmitter<EventInfo>();
 
+  title = 'Importador de pólizas';
   file = null;
 
   formHandler: FormHandler;
@@ -238,24 +239,12 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let observable: any = null;
-
-    switch (this.selectedImportType) {
-      case ImportTypes.excelFile:
-        observable = this.importVouchersData.importVouchersFromExcelFile(this.file.file, this.getFormData());
-        break;
-      case ImportTypes.txtFile:
-        observable = this.importVouchersData.importVouchersFromTextFile(this.file.file, this.getFormData());
-        break;
-      case ImportTypes.dataBase:
-        observable = this.importVouchersData.importVouchersFromDatabase(this.getFormData());
-        break;
-      default:
-        console.log(`Unhandled import type ${this.selectedImportType}`);
-        return;
+    if (this.isDataBaseImport) {
+      this.showConfirmMessage();
+      return;
     }
 
-    this.importVouchers(observable);
+    this.executeImportVouchers();
   }
 
 
@@ -446,7 +435,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     }
 
     if (this.isDataBaseImport && this.importVouchersResult.isRunning) {
-      this.messageBox.show('El importador de pólizas ya está en ejecución.', 'Importador de pólizas');
+      this.messageBox.show('El importador de pólizas ya está en ejecución.', this.title);
       return;
     }
 
@@ -467,6 +456,50 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
         this.resolveDryRunImportVoucherResponse();
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private showConfirmMessage() {
+    this.messageBox.confirm(this.getConfirmMessage(), this.title)
+      .toPromise()
+      .then(x => {
+        if (x) {
+          this.executeImportVouchers();
+        }
+      });
+  }
+
+
+  private getConfirmMessage(): string {
+    const vouchersTotal = this.selectedPartsToImport.reduce((s, c) => s + c.vouchersCount, 0);
+    const partsToImport = '<ul class="info-list">' +
+      this.selectedPartsToImport.map(x => '<li>' + x.description + '</li>').join('') + '</ul>';
+
+    return `Esta operación importará ` +
+           `<strong>${FormatLibrary.numberWithCommas(vouchersTotal)} pólizas</strong> ` +
+           `desde: <br><br>${partsToImport} <br>¿Importo las pólizas?`;
+  }
+
+
+  private executeImportVouchers() {
+    let observable: any = null;
+
+    switch (this.selectedImportType) {
+      case ImportTypes.excelFile:
+        observable = this.importVouchersData.importVouchersFromExcelFile(this.file.file, this.getFormData());
+        break;
+      case ImportTypes.txtFile:
+        observable = this.importVouchersData.importVouchersFromTextFile(this.file.file, this.getFormData());
+        break;
+      case ImportTypes.dataBase:
+        observable = this.importVouchersData.importVouchersFromDatabase(this.getFormData());
+        break;
+      default:
+        console.log(`Unhandled import type ${this.selectedImportType}`);
+        return;
+    }
+
+    this.importVouchers(observable);
   }
 
 
@@ -494,8 +527,9 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
     if (this.isDataBaseImport) {
       this.importVouchersResult = response;
+      this.selectedPartsToImport = [];
       message = `Se ha iniciado la importacion de pólizas de sistemas tranversales.`;
-      this.messageBox.show(message, 'Importador de pólizas');
+      this.messageBox.show(message, this.title);
       return;
     }
 
@@ -508,7 +542,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     }
 
     message = `Se han importado ${response.vouchersCount} pólizas.`;
-    this.messageBox.show(message, 'Importador de pólizas');
+    this.messageBox.show(message, this.title);
     sendEvent(this.vouchersImporterEvent, VouchersImporterEventType.VOUCHERS_IMPORTED);
   }
 
