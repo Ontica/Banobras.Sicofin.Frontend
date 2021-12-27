@@ -81,3 +81,6 @@ export const TotalItemTypeList: DataTableItemType[] = [
   'BalanceTotalConsolidatedByLedger',
   'BalanceTotalConsolidated',
 ];
+
+
+export const ClickeableItemTypeList: DataTableItemType[] = [...EntryItemTypeList, ...SummaryItemTypeList];

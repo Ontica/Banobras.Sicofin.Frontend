@@ -13,7 +13,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { EventInfo } from '@app/core';
 
 import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType,
-         SummaryItemTypeList, GroupItemTypeList, TotalItemTypeList, EntryItemTypeList } from '@app/models';
+         SummaryItemTypeList, GroupItemTypeList, TotalItemTypeList, EntryItemTypeList,
+         ClickeableItemTypeList } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -74,6 +75,8 @@ export class DataTableComponent implements OnChanges {
 
   entryItemTypeList = EntryItemTypeList;
 
+  clickeableItemTypeList = ClickeableItemTypeList;
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.dataTable) {
       this.filter = '';
@@ -117,7 +120,7 @@ export class DataTableComponent implements OnChanges {
 
 
   onRowClicked(entry: DataTableEntry) {
-    if (this.clickableEntry && EntryItemTypeList.includes(entry['itemType'])) {
+    if (this.clickableEntry && ClickeableItemTypeList.includes(entry['itemType'])) {
       this.emitDataEntryClicked(entry);
     }
   }
