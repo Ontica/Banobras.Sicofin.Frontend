@@ -6,24 +6,12 @@
 
       <div fxLayout="row" fxLayout.lt-sm="column">
 
-        <div *ngIf="!displayInitialPeriod" fxFlex="none">
+        <div fxFlex="none">
 
-          <label>Fecha:</label>
-          <emp-ng-datepicker name="date"
-            [(ngModel)]="formData.initialPeriod.fromDate"
-            [showError]="!formData.initialPeriod.fromDate">
-
-          </emp-ng-datepicker>
-
-        </div>
-
-        <div *ngIf="displayInitialPeriod" fxFlex="none">
-
-          <label>Periodo inicial:</label>
+          <label>{{periodsRequired ? 'Periodo inicial:': 'Periodo:'}}</label>
           <emp-ng-date-range-picker name="initialPeriod"
             [(startDate)]="formData.initialPeriod.fromDate"
             [(endDate)]="formData.initialPeriod.toDate"
-            [minDate]="initialPeriodMinDate"
             [fixedEndDate]="initialPeriodFixedDate"
             [displaySelectionType]="false"
             [showError]="!formData.initialPeriod.fromDate ||
@@ -39,7 +27,6 @@
           <emp-ng-date-range-picker name="finalPeriod" #finalPeriodRangePicker
             [(startDate)]="formData.finalPeriod.fromDate"
             [(endDate)]="formData.finalPeriod.toDate"
-            [minDate]="finalPeriodMinDate"
             [fixedEndDate]="finalPeriodFixedDate"
             [displaySelectionType]="false"
             [showError]="!formData.finalPeriod.fromDate ||

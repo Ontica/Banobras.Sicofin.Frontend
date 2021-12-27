@@ -35,11 +35,7 @@ export class AccountStatementFilterComponent implements OnChanges {
     finalPeriod: {fromDate: null, toDate: null},
   };
 
-  initialPeriodMinDate = null;
-
   initialPeriodFixedDate = null;
-
-  finalPeriodMinDate = null;
 
   finalPeriodFixedDate = null;
 
@@ -61,14 +57,6 @@ export class AccountStatementFilterComponent implements OnChanges {
   }
 
 
-  get displayInitialPeriod() {
-    return ![BalanceTypes.SaldosPorCuenta,
-             BalanceTypes.SaldosPorAuxiliar,
-             TrialBalanceTypes.SaldosPorCuenta,
-             TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceType);
-  }
-
-
   onBuildAccountStatementClicked() {
     const payload = { accountStatementCommand: this.buildAccountStatementCommand() };
 
@@ -81,7 +69,6 @@ export class AccountStatementFilterComponent implements OnChanges {
     this.formData.initialPeriod.fromDate = this.command.initialPeriod?.fromDate;
     this.formData.initialPeriod.toDate = this.command.initialPeriod?.toDate;
 
-    this.initialPeriodMinDate = command.initialPeriod.fromDate;
     this.initialPeriodFixedDate = command.initialPeriod.toDate;
   }
 
@@ -90,7 +77,6 @@ export class AccountStatementFilterComponent implements OnChanges {
     this.formData.finalPeriod.fromDate = command.finalPeriod?.fromDate ?? null;
     this.formData.finalPeriod.toDate = command.finalPeriod?.toDate ?? null;
 
-    this.finalPeriodMinDate = command.finalPeriod?.fromDate ?? null;
     this.finalPeriodFixedDate = command.finalPeriod?.toDate ?? null;
   }
 

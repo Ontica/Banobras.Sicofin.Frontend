@@ -7,9 +7,11 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry, TrialBalanceType } from '.';
-
 import { AccountDescriptor } from './accounts-chart';
+
+import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
+
+import { TrialBalanceType } from './trial-balances';
 
 
 export interface AccountBalance {
