@@ -63,17 +63,17 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
 
   get displayFromAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuenta;
+    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
   }
 
 
   get displaySubledgerAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorAuxiliar;
+    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorAuxiliarConsultaRapida;
   }
 
 
   get displayWithSubledgerAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuenta;
+    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
   }
 
 

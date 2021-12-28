@@ -24,14 +24,22 @@ export interface AccountBalance {
 
 
 export enum BalanceTypes {
-  SaldosPorCuenta   = 'SaldosPorCuenta',
-  SaldosPorAuxiliar = 'SaldosPorAuxiliar',
+  SaldosPorCuentaConsultaRapida   = 'SaldosPorCuentaConsultaRapida',
+  SaldosPorAuxiliarConsultaRapida = 'SaldosPorAuxiliarConsultaRapida',
 }
 
 
 export const BalanceTypeList: TrialBalanceType[] = [
-  { uid: BalanceTypes.SaldosPorCuenta,   name: 'Saldos por cuenta',   hasAccountStatement: true },
-  { uid: BalanceTypes.SaldosPorAuxiliar, name: 'Saldos por auxiliar', hasAccountStatement: true },
+  {
+    uid: BalanceTypes.SaldosPorCuentaConsultaRapida,
+    name: 'Saldos por cuenta',
+    hasAccountStatement: true
+  },
+  {
+    uid: BalanceTypes.SaldosPorAuxiliarConsultaRapida,
+    name: 'Saldos por auxiliar',
+    hasAccountStatement: true
+  },
 ];
 
 
