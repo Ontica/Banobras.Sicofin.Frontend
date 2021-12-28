@@ -2,9 +2,9 @@
   [style.padding.px]="0" [style.margin.px]="0"
   (keydown.enter)="$event.preventDefault()">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div fxLayout="column" fxLayoutGap="0.5rem">
 
-      <div fxLayout="row" fxLayout.lt-sm="column">
+      <div fxLayout="row wrap">
 
         <div fxFlex="none">
 
@@ -15,7 +15,7 @@
             [fixedEndDate]="initialPeriodFixedDate"
             [displaySelectionType]="false"
             [showError]="!formData.initialPeriod.fromDate ||
-                          !formData.initialPeriod.toDate">
+                         !formData.initialPeriod.toDate">
 
           </emp-ng-date-range-picker>
 
@@ -30,13 +30,13 @@
             [fixedEndDate]="finalPeriodFixedDate"
             [displaySelectionType]="false"
             [showError]="!formData.finalPeriod.fromDate ||
-                          !formData.finalPeriod.toDate">
+                         !formData.finalPeriod.toDate">
 
           </emp-ng-date-range-picker>
 
         </div>
 
-        <div fxFlex="28px" fxFlex.lt-md="none" [style.paddingTop.px]="13">
+        <div fxFlex="28px" [style.paddingTop.px]="13">
 
           <button [class.btn-icon-action]="form.valid"
             [class.btn-icon]="form.invalid"
