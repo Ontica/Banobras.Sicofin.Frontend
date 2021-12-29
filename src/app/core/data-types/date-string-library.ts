@@ -81,7 +81,7 @@ export class DateStringLibrary {
     }
 
     const date = this.toDate(value);
-    var firstDate = moment().date(1).month(date.getMonth()).year(date.getFullYear());
+    const firstDate = moment().date(1).month(date.getMonth()).year(date.getFullYear());
     return this.mapDateStringFromMoment(firstDate);
   }
 

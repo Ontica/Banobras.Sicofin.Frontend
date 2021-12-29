@@ -19,8 +19,6 @@ import { Balance, BalanceCommand, BalanceEntry, EmptyTrialBalance, EmptyTrialBal
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
 import {
@@ -70,8 +68,7 @@ export class TrialBalanceViewerComponent {
   excelFileUrl = '';
 
 
-  constructor(private balancesDataService: BalancesDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private balancesDataService: BalancesDataService) { }
 
 
   onFilterEvent(event) {
@@ -146,14 +143,11 @@ export class TrialBalanceViewerComponent {
           return;
         }
 
-        if (this.isQuickQuery) {
-          this.messageBox.showInDevelopment('Exportar reporte', this.command);
-        } else {
-          const observable =
-            this.balancesDataService.exportTrialBalanceToExcel(this.command as TrialBalanceCommand);
-          this.exportDataToExcel(observable);
-        }
+        const observable = this.isQuickQuery ?
+          this.balancesDataService.exportBalanceToExcel(this.command as BalanceCommand) :
+          this.balancesDataService.exportTrialBalanceToExcel(this.command as TrialBalanceCommand);
 
+        this.exportDataToExcel(observable);
         return;
 
       default:

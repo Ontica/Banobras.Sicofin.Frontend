@@ -30,12 +30,12 @@ export class BalancesDataService {
   }
 
 
-  exportTrialBalanceToExcel(trialBalanceCommand: TrialBalanceCommand): Observable<FileReport> {
-    Assertion.assertValue(trialBalanceCommand, 'trialBalanceCommand');
+  exportBalanceToExcel(balanceCommand: BalanceCommand): Observable<FileReport> {
+    Assertion.assertValue(balanceCommand, 'balanceCommand');
 
-    const path = `v2/financial-accounting/trial-balance/excel`;
+    const path = 'v2/financial-accounting/balance/excel';
 
-    return this.http.post<FileReport>(path, trialBalanceCommand);
+    return this.http.post<FileReport>(path, balanceCommand);
   }
 
 
@@ -45,6 +45,15 @@ export class BalancesDataService {
     const path = `v2/financial-accounting/balance`;
 
     return this.http.post<Balance>(path, balanceCommand);
+  }
+
+
+  exportTrialBalanceToExcel(trialBalanceCommand: TrialBalanceCommand): Observable<FileReport> {
+    Assertion.assertValue(trialBalanceCommand, 'trialBalanceCommand');
+
+    const path = 'v2/financial-accounting/trial-balance/excel';
+
+    return this.http.post<FileReport>(path, trialBalanceCommand);
   }
 
 
