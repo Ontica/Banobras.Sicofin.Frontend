@@ -7,7 +7,8 @@
 
 import { Empty, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableColumnType } from './data-table';
+import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
+         DataTableEntry } from './data-table';
 
 
 export interface Subledger {
@@ -33,7 +34,7 @@ export interface SubledgerAccount {
 }
 
 
-export interface SubledgerAccountDescriptor {
+export interface SubledgerAccountDescriptor extends DataTableEntry {
   id: number;
   number: string;
   name: string;
@@ -54,7 +55,7 @@ export interface SubledgerAccountFields {
 }
 
 
-export interface SearchSubledgerAccountCommand {
+export interface SearchSubledgerAccountCommand extends DataTableCommand {
   accountsChartUID: string;
   ledgerUID?: string;
   typeUID?: string;

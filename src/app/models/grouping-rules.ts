@@ -7,17 +7,18 @@
 
 import { DateString } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableColumnType } from './data-table';
+import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
+         DataTableEntry } from './data-table';
 
 
-export interface GroupingRuleCommand {
+export interface GroupingRuleCommand extends DataTableCommand{
   accountsChartUID: string;
   rulesSetUID?: string;
   date?: DateString;
 }
 
 
-export interface GroupingRule {
+export interface GroupingRule extends DataTableEntry {
   uid: string;
   code: string;
   concept: string;

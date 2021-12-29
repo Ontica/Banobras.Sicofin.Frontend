@@ -88,15 +88,21 @@ export class DataTableComponent implements OnChanges {
 
   get entriesTotal() {
     return this.countOnlyEntries ?
-      this.dataTable.entries.filter(x => EntryItemTypeList.includes(x['itemType'])).length :
+      this.dataTable.entries.filter(x => EntryItemTypeList.includes(x.itemType)).length :
       this.dataTable.entries.length;
   }
 
 
   get filteredEntriesTotal() {
     return this.countOnlyEntries ?
-      this.dataSource.filteredData.filter(x => EntryItemTypeList.includes(x['itemType'])).length :
+      this.dataSource.filteredData.filter(x => EntryItemTypeList.includes(x.itemType)).length :
       this.dataSource.filteredData.length;
+  }
+
+
+  isClickableEntry(entry: DataTableEntry) {
+    return !!entry.clickableEntry ||
+           this.clickableEntry && ClickeableItemTypeList.includes(entry.itemType);
   }
 
 
@@ -120,7 +126,7 @@ export class DataTableComponent implements OnChanges {
 
 
   onRowClicked(entry: DataTableEntry) {
-    if (this.clickableEntry && ClickeableItemTypeList.includes(entry['itemType'])) {
+    if (this.isClickableEntry(entry)) {
       this.emitDataEntryClicked(entry);
     }
   }

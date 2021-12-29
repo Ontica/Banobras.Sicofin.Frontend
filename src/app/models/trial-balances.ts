@@ -170,7 +170,7 @@ export interface TrialBalanceCommand extends DataTableCommand {
 
 
 export interface TrialBalanceEntry extends DataTableEntry {
-  uid: string;
+  hasAccountStatement?: boolean;
 }
 
 

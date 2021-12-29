@@ -51,7 +51,7 @@ export interface Balance extends DataTable {
 
 
 export interface BalanceEntry extends DataTableEntry {
-  uid: string;
+  hasAccountStatement?: boolean;
 }
 
 

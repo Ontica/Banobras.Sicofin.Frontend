@@ -28,7 +28,8 @@ export interface DataTableColumn {
 
 
 export interface DataTableEntry {
-
+  itemType?: DataTableItemType;
+  clickableEntry?: boolean;
 }
 
 
