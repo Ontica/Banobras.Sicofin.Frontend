@@ -75,6 +75,17 @@ export class DateStringLibrary {
   }
 
 
+  static getFirstDayOfMonthFromDateString(value: DateString): DateString {
+    if (!this.isDate(value)) {
+      return '';
+    }
+
+    const date = this.toDate(value);
+    var firstDate = moment().date(1).month(date.getMonth()).year(date.getFullYear());
+    return this.mapDateStringFromMoment(firstDate);
+  }
+
+
   static mapDateStringFromMoment(date: moment.Moment): DateString {
     return date.format('YYYY-MM-DD');
   }
