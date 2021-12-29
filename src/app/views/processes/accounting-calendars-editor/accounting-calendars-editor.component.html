@@ -14,7 +14,7 @@
       <form #form="ngForm" autocomplete="off" class="form-section" [style.paddingBottom.px]="4"
           (keydown.enter)="$event.preventDefault()">
 
-        <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+        <div fxLayout="column" fxLayoutGap="0.5rem">
 
           <div fxLayout="row">
 
@@ -75,14 +75,22 @@
               Al calendario seleccionado no se le han agregado fechas.
             </div>
 
-            <div *ngFor="let date of accountingCalendarSelected.openedAccountingDates"
-              fxLayout="row" fxLayoutAlign="space-between center" class="date-item">
+            <div [style.paddingRight.px]="8">
 
-              {{date | dateTimeFormat}}
+              <div fxLayout="column" fxLayoutGap="0.5rem" class="date-container">
 
-              <button mat-icon-button (click)="onRemoveDateClicked(date)">
-                <mat-icon title="Eliminar fecha"> delete </mat-icon>
-              </button>
+                <div *ngFor="let date of accountingCalendarSelected.openedAccountingDates"
+                  fxLayout="row" fxLayoutAlign="space-between center" class="date-item">
+
+                  {{date | dateTimeFormat}}
+
+                  <button mat-icon-button (click)="onRemoveDateClicked(date)">
+                    <mat-icon title="Eliminar fecha"> delete </mat-icon>
+                  </button>
+
+                </div>
+
+              </div>
 
             </div>
 

@@ -17,9 +17,12 @@ import { AccountingCalendar } from '@app/models';
   selector: 'emp-fa-accounting-calendars-editor',
   templateUrl: './accounting-calendars-editor.component.html',
   styles: [`
+    .date-container {
+      max-height: 392px;
+      overflow: auto;
+    }
     .date-item {
       padding: 4px 1px 4px 8px;
-      margin-right: 8px;
       border-radius: 2px;
       border-left: 4px solid #235b4e;
       background: #f6f6f6;
