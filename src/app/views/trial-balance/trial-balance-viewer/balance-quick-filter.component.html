@@ -48,8 +48,9 @@
           <label>Fecha:</label>
 
           <emp-ng-datepicker name="date" required
-            [(ngModel)]="balanceCommand.initialPeriod.fromDate"
-            [showError]="!balanceCommand.initialPeriod.fromDate">
+            [(ngModel)]="balanceCommand.initialPeriod.toDate"
+            [showError]="!balanceCommand.initialPeriod.toDate"
+            (valueChange)="onDatepickerInitialPeriodToDateChange($event)">
 
           </emp-ng-datepicker>
 

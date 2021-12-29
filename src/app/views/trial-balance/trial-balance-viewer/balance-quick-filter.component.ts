@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { DateStringLibrary, EventInfo, Identifiable } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -46,7 +46,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.balanceCommand.initialPeriod.fromDate = DateStringLibrary.today();
+    this.setInitialPeriodDefault();
     this.loadAccountsCharts();
   }
 
@@ -84,6 +84,11 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onDatepickerInitialPeriodToDateChange(toDate: DateString) {
+    this.validateValueOfInitPeriodFromDate(toDate);
+  }
+
+
   onBuildBalanceClicked() {
     const payload = {
       trialBalanceType: this.trialBalanceTypeSelected,
@@ -94,20 +99,9 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getBalanceCommandData(): BalanceCommand {
-    const data: BalanceCommand = {
-      accountsChartUID: this.balanceCommand.accountsChartUID,
-      trialBalanceType: this.balanceCommand.trialBalanceType,
-      fromAccount: this.balanceCommand.fromAccount,
-      subledgerAccount: this.balanceCommand.subledgerAccount,
-      initialPeriod: {
-        fromDate: this.balanceCommand.initialPeriod.fromDate,
-        toDate: this.balanceCommand.initialPeriod.fromDate,
-      },
-      withSubledgerAccount: this.balanceCommand.withSubledgerAccount,
-    };
-
-    return data;
+  private setInitialPeriodDefault() {
+    this.balanceCommand.initialPeriod.toDate = DateStringLibrary.today();
+    this.validateValueOfInitPeriodFromDate(this.balanceCommand.initialPeriod.toDate);
   }
 
 
@@ -119,6 +113,28 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
         this.accountsChartMasterDataList = x;
         this.isLoading = false;
       });
+  }
+
+
+  private validateValueOfInitPeriodFromDate(toDate: DateString) {
+    this.balanceCommand.initialPeriod.fromDate = DateStringLibrary.getFirstDayOfMonthFromDateString(toDate);
+  }
+
+
+  private getBalanceCommandData(): BalanceCommand {
+    const data: BalanceCommand = {
+      accountsChartUID: this.balanceCommand.accountsChartUID,
+      trialBalanceType: this.balanceCommand.trialBalanceType,
+      fromAccount: this.balanceCommand.fromAccount,
+      subledgerAccount: this.balanceCommand.subledgerAccount,
+      initialPeriod: {
+        fromDate: this.balanceCommand.initialPeriod.fromDate,
+        toDate: this.balanceCommand.initialPeriod.toDate,
+      },
+      withSubledgerAccount: this.balanceCommand.withSubledgerAccount,
+    };
+
+    return data;
   }
 
 }

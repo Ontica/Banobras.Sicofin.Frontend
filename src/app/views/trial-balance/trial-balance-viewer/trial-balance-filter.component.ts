@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { Assertion, DateString, EventInfo, Identifiable } from '@app/core';
+import { Assertion, DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -193,7 +193,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
              !!this.trialBalanceCommand.initialPeriod.toDate;
     }
 
-    return !!this.trialBalanceCommand.initialPeriod.fromDate;
+    return !!this.trialBalanceCommand.initialPeriod.toDate;
   }
 
 
@@ -236,6 +236,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
     this.trialBalanceCommand.useValuation = this.exchangeRatesRequired;
     this.trialBalanceCommand.useDefaultValuation = this.exchangeRatesRequired;
+
+    this.validateValueOfInitPeriodFromDate(this.trialBalanceCommand.initialPeriod.toDate);
   }
 
 
@@ -249,6 +251,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.accountChartSelected = accountChart;
     this.setLevelsList();
     this.validateFieldToClear();
+  }
+
+
+  onDatepickerInitialPeriodToDateChange(toDate: DateString) {
+    this.validateValueOfInitPeriodFromDate(toDate);
   }
 
 
@@ -324,6 +331,51 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  private loadAccountsCharts() {
+    this.isLoading = true;
+
+    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
+      .subscribe(x => {
+        this.accountsChartMasterDataList = x;
+        this.setLevelsList();
+        this.isLoading = false;
+      });
+  }
+
+
+  private setLevelsList(){
+    if (!this.accountChartSelected) {
+      this.levelsList = [];
+      return;
+    }
+
+    this.levelsList = getLevelsListFromPattern(this.accountChartSelected.accountsPattern,
+                                               this.accountChartSelected.accountNumberSeparator,
+                                               this.accountChartSelected.maxAccountLevel);
+  }
+
+
+  private validateFieldToClear() {
+    this.trialBalanceCommand.ledgers = this.accountChartSelected.ledgers
+      .filter(x => this.trialBalanceCommand.ledgers.includes(x.uid))
+      .map(x => x.uid);
+
+    this.trialBalanceCommand.level =
+      this.levelsList.filter(x => this.trialBalanceCommand.level + '' === x.uid).length > 0 ?
+      this.trialBalanceCommand.level : null;
+  }
+
+
+  private validateValueOfInitPeriodFromDate(toDate: DateString) {
+    if (this.displayInitialPeriod) {
+      return;
+    }
+
+    this.trialBalanceCommand.initialPeriod.fromDate =
+      DateStringLibrary.getFirstDayOfMonthFromDateString(toDate);
+  }
+
+
   private getTrialBalanceCommandData(): TrialBalanceCommand {
     const data: TrialBalanceCommand = {
       trialBalanceType: this.trialBalanceCommand.trialBalanceType,
@@ -331,7 +383,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       ledgers: this.trialBalanceCommand.ledgers,
       initialPeriod: {
         fromDate: this.trialBalanceCommand.initialPeriod.fromDate,
-        toDate: this.getInitPeriodToDate(),
+        toDate: this.trialBalanceCommand.initialPeriod.toDate,
       },
       fromAccount: this.trialBalanceCommand.fromAccount,
       showCascadeBalances: this.trialBalanceCommand.showCascadeBalances,
@@ -349,12 +401,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.validateCommandFields(data);
     this.validateExchangeRatesFields(data);
     return data;
-  }
-
-
-  private getInitPeriodToDate() {
-    return this.displayInitialPeriod ? this.trialBalanceCommand.initialPeriod.toDate :
-      this.trialBalanceCommand.initialPeriod.fromDate;
   }
 
 
@@ -394,41 +440,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
                                                                this.trialBalanceCommand.useDefaultValuation);
       }
     }
-  }
-
-
-  private loadAccountsCharts() {
-    this.isLoading = true;
-
-    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
-      .subscribe(x => {
-        this.accountsChartMasterDataList = x;
-        this.setLevelsList();
-        this.isLoading = false;
-      });
-  }
-
-
-  private setLevelsList(){
-    if (!this.accountChartSelected) {
-      this.levelsList = [];
-      return;
-    }
-
-    this.levelsList = getLevelsListFromPattern(this.accountChartSelected.accountsPattern,
-                                               this.accountChartSelected.accountNumberSeparator,
-                                               this.accountChartSelected.maxAccountLevel);
-  }
-
-
-  private validateFieldToClear() {
-    this.trialBalanceCommand.ledgers = this.accountChartSelected.ledgers
-      .filter(x => this.trialBalanceCommand.ledgers.includes(x.uid))
-      .map(x => x.uid);
-
-    this.trialBalanceCommand.level =
-      this.levelsList.filter(x => this.trialBalanceCommand.level + '' === x.uid).length > 0 ?
-      this.trialBalanceCommand.level : null;
   }
 
 }
