@@ -316,6 +316,14 @@ table.mat-table {
         &:hover {
           background-color: $grid-selected-hover-background-color;
         }
+
+        &.item-type-total {
+          background-color: darken($grid-footer-background-color, 3%);
+        }
+
+        &.item-type-total:hover {
+          background-color: darken($grid-footer-background-color, 5%);
+        }
       }
 
       &.item-type-summary {

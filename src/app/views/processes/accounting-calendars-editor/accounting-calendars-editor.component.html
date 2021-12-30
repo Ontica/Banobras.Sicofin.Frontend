@@ -32,69 +32,62 @@
 
           </div>
 
-
           <mat-divider class="horizontal-slim">
 
           </mat-divider>
 
+          <div fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="8">
 
-          <div *ngIf="!accountingCalendarSelected" class="instruction-text">
-            Seleccione el calendario a editar.
+            <div fxFlex="none">
+
+              <emp-ng-datepicker name="date" required
+                [(ngModel)]="dateToAdd"
+                [disabled]="!accountingCalendarSelected">
+
+              </emp-ng-datepicker>
+
+            </div>
+
+            <div fxFlex="none">
+
+              <button title="Agregar"
+                [class.btn-icon-action]="accountingCalendarSelected && form.valid"
+                [class.btn-icon]="!accountingCalendarSelected || form.invalid"
+                [disabled]="!accountingCalendarSelected || form.invalid"
+                (click)="onAddDateClicked()">
+
+                <mat-icon>add</mat-icon>
+
+              </button>
+
+            </div>
+
           </div>
 
+          <div *ngIf="!accountingCalendarSelected || accountingCalendarSelected?.openedAccountingDates.length === 0 "
+            class="instruction-text">
+            {{!accountingCalendarSelected ? 'Seleccione el calendario a editar.' :
+              'Al calendario seleccionado no se le han agregado fechas.'}}
+          </div>
 
-          <ng-container *ngIf="accountingCalendarSelected">
+          <div *ngIf="accountingCalendarSelected?.openedAccountingDates.length > 0" [style.paddingRight.px]="8">
 
-            <div fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="8">
+            <div fxLayout="column" fxLayoutGap="0.5rem" class="date-container">
 
-              <div fxFlex="none">
+              <div *ngFor="let date of accountingCalendarSelected.openedAccountingDates"
+                fxLayout="row" fxLayoutAlign="space-between center" class="date-item">
 
-                <emp-ng-datepicker name="date" required [(ngModel)]="dateToAdd">
+                {{date | dateTimeFormat}}
 
-                </emp-ng-datepicker>
-
-              </div>
-
-              <div fxFlex="none">
-
-                <button title="Agregar"
-                  [class.btn-icon-action]="form.valid"
-                  [class.btn-icon]="form.invalid"
-                  [disabled]="form.invalid"
-                  (click)="onAddDateClicked()">
-
-                  <mat-icon>add</mat-icon>
-
+                <button mat-icon-button (click)="onRemoveDateClicked(date)">
+                  <mat-icon title="Eliminar fecha"> delete </mat-icon>
                 </button>
 
               </div>
 
             </div>
 
-            <div *ngIf="accountingCalendarSelected.openedAccountingDates.length === 0" class="instruction-text">
-              Al calendario seleccionado no se le han agregado fechas.
-            </div>
-
-            <div [style.paddingRight.px]="8">
-
-              <div fxLayout="column" fxLayoutGap="0.5rem" class="date-container">
-
-                <div *ngFor="let date of accountingCalendarSelected.openedAccountingDates"
-                  fxLayout="row" fxLayoutAlign="space-between center" class="date-item">
-
-                  {{date | dateTimeFormat}}
-
-                  <button mat-icon-button (click)="onRemoveDateClicked(date)">
-                    <mat-icon title="Eliminar fecha"> delete </mat-icon>
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </ng-container>
+          </div>
 
         </div>
 

@@ -63,7 +63,6 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
 
   onAccountingCalendarChanges() {
-    this.accountingCalendarSelected = null;
     this.dateToAdd = null;
 
     if (!!this.accountingCalendarUID) {
@@ -100,6 +99,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
     this.accountingCalendarsData.getAccountingCalendar(accountingCalendarUID)
       .toPromise()
       .then(x => this.accountingCalendarSelected = x)
+      .catch(e => this.accountingCalendarSelected = null)
       .finally(() => this.isLoading = false);
   }
 
