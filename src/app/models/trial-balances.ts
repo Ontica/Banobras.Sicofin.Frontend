@@ -40,7 +40,7 @@ export const TrialBalanceTypeList: TrialBalanceType[] = [
   {
     uid: TrialBalanceTypes.AnaliticoDeCuentas,
     name: 'Analítico de cuentas',
-    hasAccountStatement: true
+    hasAccountStatement: false
   },
   {
     uid: TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
