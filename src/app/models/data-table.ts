@@ -84,4 +84,4 @@ export const TotalItemTypeList: DataTableItemType[] = [
 ];
 
 
-export const ClickeableItemTypeList: DataTableItemType[] = [...EntryItemTypeList, ...SummaryItemTypeList];
+export const ClickeableItemTypeList: DataTableItemType[] = [...EntryItemTypeList];

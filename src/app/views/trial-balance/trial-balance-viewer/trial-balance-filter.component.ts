@@ -15,8 +15,7 @@ import { ExchangeRatesDataService } from '@app/data-services';
 
 import { AccountsChartMasterData, BalancesTypeList, getEmptyTrialBalanceCommand, getLevelsListFromPattern,
          mapToValidTrialBalanceCommandPeriod, resetExchangeRateValues, TrialBalanceCommand,
-         TrialBalanceCommandPeriod, TrialBalanceTypes, TrialBalanceTypeList,
-         TrialBalanceType } from '@app/models';
+         TrialBalanceCommandPeriod, TrialBalanceTypes, TrialBalanceTypeList } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -50,7 +49,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   trialBalanceCommand: TrialBalanceCommand = getEmptyTrialBalanceCommand();
 
-  trialBalanceTypeList: TrialBalanceType[] = TrialBalanceTypeList;
+  trialBalanceTypeList: Identifiable[] = TrialBalanceTypeList;
 
   levelsList: Identifiable[] = [];
 

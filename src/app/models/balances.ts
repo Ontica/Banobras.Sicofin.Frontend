@@ -11,8 +11,6 @@ import { AccountDescriptor } from './accounts-chart';
 
 import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
-import { TrialBalanceType } from './trial-balances';
-
 
 export interface AccountBalance {
   ledger: Identifiable;
@@ -29,16 +27,14 @@ export enum BalanceTypes {
 }
 
 
-export const BalanceTypeList: TrialBalanceType[] = [
+export const BalanceTypeList: Identifiable[] = [
   {
     uid: BalanceTypes.SaldosPorCuentaConsultaRapida,
     name: 'Saldos por cuenta',
-    hasAccountStatement: true
   },
   {
     uid: BalanceTypes.SaldosPorAuxiliarConsultaRapida,
     name: 'Saldos por auxiliar',
-    hasAccountStatement: true
   },
 ];
 

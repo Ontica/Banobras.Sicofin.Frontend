@@ -9,13 +9,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, Empty, EventInfo, Identifiable } from '@app/core';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { Balance, BalanceCommand, BalanceEntry, EmptyTrialBalance, EmptyTrialBalanceType, FileReport,
-         getEmptyBalanceCommand, getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
-         TrialBalanceEntry, TrialBalanceType} from '@app/models';
+import { Balance, BalanceCommand, BalanceEntry, EmptyTrialBalance, FileReport, getEmptyBalanceCommand,
+         getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
+         TrialBalanceEntry } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -47,7 +47,7 @@ export class TrialBalanceViewerComponent {
 
   @Output() trialBalanceViewerEvent = new EventEmitter<EventInfo>();
 
-  balanceType: TrialBalanceType = EmptyTrialBalanceType;
+  balanceType: Identifiable = Empty;
 
   cardHint = 'Seleccionar los filtros';
 
@@ -210,8 +210,8 @@ export class TrialBalanceViewerComponent {
   }
 
 
-  private setBalanceTypeName(balanceType: TrialBalanceType) {
-    this.balanceType = balanceType ?? EmptyTrialBalanceType;
+  private setBalanceTypeName(balanceType: Identifiable) {
+    this.balanceType = balanceType ?? Empty;
   }
 
 

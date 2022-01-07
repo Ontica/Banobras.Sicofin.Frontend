@@ -24,58 +24,38 @@ export enum TrialBalanceTypes {
 }
 
 
-export interface TrialBalanceType extends Identifiable {
-  hasAccountStatement?: boolean;
-}
-
-
-export const EmptyTrialBalanceType: TrialBalanceType = {
-  uid: '',
-  name: '',
-  hasAccountStatement: false,
-};
-
-
-export const TrialBalanceTypeList: TrialBalanceType[] = [
+export const TrialBalanceTypeList: Identifiable[] = [
   {
     uid: TrialBalanceTypes.AnaliticoDeCuentas,
     name: 'Analítico de cuentas',
-    hasAccountStatement: false
   },
   {
     uid: TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
     name: 'Balanza con contabilidades en cascada',
-    hasAccountStatement: true
   },
   {
     uid: TrialBalanceTypes.BalanzaValorizadaComparativa,
     name: 'Balanza de comparación entre períodos',
-    hasAccountStatement: false
   },
   {
     uid: TrialBalanceTypes.Balanza,
     name: 'Balanza tradicional',
-    hasAccountStatement: true
   },
   {
     uid: TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
     name: 'Balanza consolidada en moneda origen',
-    hasAccountStatement: false
   },
   {
     uid: TrialBalanceTypes.BalanzaValorizadaEnDolares,
     name: 'Balanza valorizada en dólares',
-    hasAccountStatement: false
   },
   {
     uid: TrialBalanceTypes.SaldosPorAuxiliar,
     name: 'Saldos por auxiliar',
-    hasAccountStatement: true
   },
   {
     uid: TrialBalanceTypes.SaldosPorCuenta,
     name: 'Saldos por cuenta',
-    hasAccountStatement: true
   },
 ];
 

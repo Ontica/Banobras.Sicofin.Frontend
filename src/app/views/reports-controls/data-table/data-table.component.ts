@@ -75,8 +75,6 @@ export class DataTableComponent implements OnChanges {
 
   entryItemTypeList = EntryItemTypeList;
 
-  clickeableItemTypeList = ClickeableItemTypeList;
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.dataTable) {
       this.filter = '';
@@ -101,8 +99,7 @@ export class DataTableComponent implements OnChanges {
 
 
   isClickableEntry(entry: DataTableEntry) {
-    return !!entry.clickableEntry ||
-           this.clickableEntry && ClickeableItemTypeList.includes(entry.itemType);
+    return !!entry.clickableEntry || (this.clickableEntry && ClickeableItemTypeList.includes(entry.itemType));
   }
 
 

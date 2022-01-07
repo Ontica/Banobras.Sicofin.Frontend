@@ -11,8 +11,8 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/cor
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalanceCommand, BalanceTypes, BalanceTypeList, getEmptyBalanceCommand,
-         TrialBalanceType} from '@app/models';
+import { AccountsChartMasterData, BalanceCommand, BalanceTypes, BalanceTypeList,
+         getEmptyBalanceCommand } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -34,7 +34,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  balanceTypeList: TrialBalanceType[] = BalanceTypeList;
+  balanceTypeList: Identifiable[] = BalanceTypeList;
 
   isLoading = false;
 
