@@ -1,9 +1,11 @@
 <div class="row">
 
-  <mat-date-range-input [rangePicker]="picker" [class.invalid-date-picker]="showError"
+  <mat-date-range-input [rangePicker]="picker"
     [comparisonStart]="getDateForComparison(comparisonStartDate)"
     [comparisonEnd]="getDateForComparison(comparisonEndDate)"
-    [min]="minDate" [max]="maxDate ?? fixedEndDate">
+    [min]="minDate" [max]="maxDate ?? fixedEndDate"
+    [class.invalid-date-picker]="showError"
+    [class.disabled-date-picker]="disabled">
 
     <input type="text" #inputStartDate matStartDate
       autocomplete="off" maxlength="11"

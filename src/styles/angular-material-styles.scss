@@ -687,6 +687,11 @@ table.mat-table.emp-designer {
   }
 }
 
+.disabled-date-picker .mat-date-range-input-container {
+  color: $control-disabled-color;
+  background: $control-disabled-background;
+}
+
 .invalid-date-picker .mat-date-range-input-container {
   border-left: 5px solid $warning-color !important;
 }
