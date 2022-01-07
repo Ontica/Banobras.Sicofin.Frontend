@@ -9,9 +9,9 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, DateString, HttpService, Identifiable } from '@app/core';
+import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { AccountingCalendar } from '@app/models';
+import { AccountingCalendar, AccountingCalendarPeriodFields  } from '@app/models';
 
 
 @Injectable()
@@ -36,21 +36,24 @@ export class AccountingCalendarsDataService {
   }
 
 
-  addDateToAccountingCalendar(calendarUID: string, date: DateString): Observable<AccountingCalendar> {
+  addPeriodToAccountingCalendar(calendarUID: string, periodFields: AccountingCalendarPeriodFields):
+    Observable<AccountingCalendar> {
     Assertion.assertValue(calendarUID, 'calendarUID');
-    Assertion.assertValue(date, 'date');
+    Assertion.assertValue(periodFields, 'periodFields');
 
-    const path = `v2/financial-accounting/catalogues/accounting-calendars/${calendarUID}/add-date/${date}`;
+    const path = `v2/financial-accounting/catalogues/accounting-calendars/${calendarUID}/add-period`;
 
-    return this.http.post<AccountingCalendar>(path);
+    return this.http.post<AccountingCalendar>(path, periodFields);
   }
 
 
-  removeDateFromAccountingCalendar(calendarUID: string, date: DateString): Observable<AccountingCalendar> {
+  removePeriodFromAccountingCalendar(calendarUID: string,
+                                     periodUID: string): Observable<AccountingCalendar> {
     Assertion.assertValue(calendarUID, 'calendarUID');
-    Assertion.assertValue(date, 'date');
+    Assertion.assertValue(periodUID, 'periodUID');
 
-    const path = `v2/financial-accounting/catalogues/accounting-calendars/${calendarUID}/remove-date/${date}`;
+    const path = `v2/financial-accounting/catalogues/accounting-calendars/${calendarUID}` +
+      `/remove-period/${periodUID}`;
 
     return this.http.delete<AccountingCalendar>(path);
   }

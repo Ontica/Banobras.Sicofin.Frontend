@@ -7,33 +7,26 @@
 
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-import { DateString } from '@app/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Assertion } from '@app/core';
 
 import { AccountingCalendarsDataService } from '@app/data-services';
 
-import { AccountingCalendar } from '@app/models';
+import { AccountingCalendar, AccountingCalendarPeriod, AccountingCalendarPeriodFields } from '@app/models';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
+import { FormHandler } from '@app/shared/utils';
+
+enum AccountingCalendarsEditorFormControls {
+  periodName = 'periodName',
+  period = 'period',
+}
 
 @Component({
   selector: 'emp-fa-accounting-calendars-editor',
   templateUrl: './accounting-calendars-editor.component.html',
-  styles: [`
-    .date-container {
-      max-height: 392px;
-      overflow: auto;
-    }
-    .date-item {
-      padding: 4px 1px 4px 8px;
-      border-radius: 2px;
-      border-left: 4px solid #235b4e;
-      background: #f6f6f6;
-    }
-    .date-item button {
-      height: 24px;
-      width: 24px;
-      line-height: 24px;
-      margin-right: 1px;
-    }
-  `],
 })
 export class AccountingCalendarsEditorComponent implements OnInit {
 
@@ -47,13 +40,25 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
   accountingCalendarSelected: AccountingCalendar = null;
 
-  dateToAdd: DateString = null;
+  formHandler: FormHandler;
 
-  constructor(private accountingCalendarsData: AccountingCalendarsDataService){}
+  controls = AccountingCalendarsEditorFormControls;
+
+  constructor(private accountingCalendarsData: AccountingCalendarsDataService,
+              private messageBox: MessageBoxService){
+    this.initForm();
+  }
 
 
   ngOnInit(): void {
     this.getAccountingCalendars();
+  }
+
+
+  get isFormValid() {
+    return this.formHandler.isValid &&
+           !!this.formHandler.getControl(this.controls.period).value.fromDate &&
+           !!this.formHandler.getControl(this.controls.period).value.toDate;
   }
 
 
@@ -63,7 +68,8 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
 
   onAccountingCalendarChanges() {
-    this.dateToAdd = null;
+    this.formHandler.resetForm();
+    this.formHandler.disableForm(!this.accountingCalendarUID);
 
     if (!!this.accountingCalendarUID) {
       this.getAccountingCalendar(this.accountingCalendarUID);
@@ -71,15 +77,55 @@ export class AccountingCalendarsEditorComponent implements OnInit {
   }
 
 
-  onAddDateClicked() {
-    if (!!this.dateToAdd) {
-      this.addDateToAccountingCalendar(this.accountingCalendarSelected.uid, this.dateToAdd);
+  onAddPeriodClicked() {
+    if (this.isFormValid) {
+      this.addPeriodToAccountingCalendar(this.accountingCalendarSelected.uid, this.getFormData());
     }
   }
 
 
-  onRemoveDateClicked(date: DateString) {
-    this.removeDateFromAccountingCalendar(this.accountingCalendarSelected.uid, date);
+  onRemovePeriodClicked(period: AccountingCalendarPeriod) {
+    const message = this.getConfirmMessage(period);
+
+    this.messageBox.confirm(message, 'Eliminar periodo', 'DeleteCancel')
+      .toPromise()
+      .then(x => {
+        if (x) {
+          this.removePeriodFromAccountingCalendar(this.accountingCalendarSelected.uid, period.uid);
+        }
+      });
+  }
+
+
+  private initForm() {
+    if (this.formHandler) {
+      return;
+    }
+
+    this.formHandler = new FormHandler(
+      new FormGroup({
+        periodName: new FormControl('', Validators.required),
+        period: new FormControl(null, Validators.required),
+      })
+    );
+
+    this.formHandler.disableForm(true);
+  }
+
+
+  private getFormData(): AccountingCalendarPeriodFields {
+    Assertion.assert(this.formHandler.form.valid,
+      'Programming error: form must be validated before command execution.');
+
+    const formModel = this.formHandler.form.getRawValue();
+
+    const data: AccountingCalendarPeriodFields = {
+      period: formModel.periodName ?? '',
+      fromDate: formModel.period?.fromDate ?? '',
+      toDate: formModel.period?.toDate ?? '',
+    };
+
+    return data;
   }
 
 
@@ -104,26 +150,34 @@ export class AccountingCalendarsEditorComponent implements OnInit {
   }
 
 
-  private addDateToAccountingCalendar(accountingCalendarUID: string, date: DateString) {
+  private addPeriodToAccountingCalendar(accountingCalendarUID: string,
+                                        periodFields: AccountingCalendarPeriodFields) {
     this.isLoading = true;
 
-    this.accountingCalendarsData.addDateToAccountingCalendar(accountingCalendarUID, date)
+    this.accountingCalendarsData.addPeriodToAccountingCalendar(accountingCalendarUID, periodFields)
       .toPromise()
       .then(x => {
         this.accountingCalendarSelected = x;
-        this.dateToAdd = null;
+        this.formHandler.resetForm();
       })
       .finally(() => this.isLoading = false);
   }
 
 
-  private removeDateFromAccountingCalendar(accountingCalendarUID: string, date: DateString) {
+  private removePeriodFromAccountingCalendar(accountingCalendarUID: string, periodUID: string) {
     this.isLoading = true;
 
-    this.accountingCalendarsData.removeDateFromAccountingCalendar(accountingCalendarUID, date)
+    this.accountingCalendarsData.removePeriodFromAccountingCalendar(accountingCalendarUID, periodUID)
       .toPromise()
       .then(x => this.accountingCalendarSelected = x)
       .finally(() => this.isLoading = false);
+  }
+
+
+  private getConfirmMessage(period: AccountingCalendarPeriod): string {
+    return `Esta operación eliminará el periodo <strong>${period.period}</strong> del calendario ` +
+           `<strong>${this.accountingCalendarSelected.name}</strong>` +
+           `<br><br>¿Elimino el periodo?`;
   }
 
 }

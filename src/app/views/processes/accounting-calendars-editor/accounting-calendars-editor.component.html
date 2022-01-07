@@ -1,4 +1,4 @@
-<emp-ng-modal-window [config]="{width:'500px'}">
+<emp-ng-modal-window [config]="{width:'600px'}">
 
   <emp-ng-card
     title="Editor de periodos"
@@ -11,7 +11,7 @@
 
       </emp-ng-spinner>
 
-      <form #form="ngForm" autocomplete="off" class="form-section" [style.paddingBottom.px]="4"
+      <form [formGroup]="formHandler.form" autocomplete="off" class="form-section" [style.paddingBottom.px]="4"
           (keydown.enter)="$event.preventDefault()">
 
         <div fxLayout="column" fxLayoutGap="0.5rem">
@@ -23,7 +23,7 @@
               <label>Calendario:</label>
 
               <emp-ng-select name="accountingCalendarUID"
-                [(ngModel)]="accountingCalendarUID"
+                [(ngModel)]="accountingCalendarUID" [ngModelOptions]="{standalone: true}"
                 [items]="accountingCalendarsList"
                 (changes)="onAccountingCalendarChanges()">
               </emp-ng-select>
@@ -38,23 +38,31 @@
 
           <div fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="8">
 
+            <div fxFlex>
+
+              <input type="text" class="text-box" name="period"
+                placeholder="Nombre del periodo"
+                [formControlName]="controls.periodName">
+
+            </div>
+
+
             <div fxFlex="none">
 
-              <emp-ng-datepicker name="date" required
-                [(ngModel)]="dateToAdd"
-                [disabled]="!accountingCalendarSelected">
+              <emp-ng-date-range-picker name="period"
+                [formControlName]="controls.period">
 
-              </emp-ng-datepicker>
+              </emp-ng-date-range-picker>
 
             </div>
 
             <div fxFlex="none">
 
               <button title="Agregar"
-                [class.btn-icon-action]="accountingCalendarSelected && form.valid"
-                [class.btn-icon]="!accountingCalendarSelected || form.invalid"
-                [disabled]="!accountingCalendarSelected || form.invalid"
-                (click)="onAddDateClicked()">
+                [class.btn-icon-action]="accountingCalendarSelected && isFormValid"
+                [class.btn-icon]="!accountingCalendarSelected || !isFormValid"
+                [disabled]="!accountingCalendarSelected || !isFormValid"
+                (click)="onAddPeriodClicked()">
 
                 <mat-icon>add</mat-icon>
 
@@ -64,22 +72,32 @@
 
           </div>
 
-          <div *ngIf="!accountingCalendarSelected || accountingCalendarSelected?.openedAccountingDates.length === 0 "
+          <mat-divider class="horizontal-slim">
+
+          </mat-divider>
+
+          <div *ngIf="!accountingCalendarSelected || accountingCalendarSelected?.periods.length === 0 "
             class="instruction-text">
             {{!accountingCalendarSelected ? 'Seleccione el calendario a editar.' :
               'Al calendario seleccionado no se le han agregado fechas.'}}
           </div>
 
-          <div *ngIf="accountingCalendarSelected?.openedAccountingDates.length > 0" [style.paddingRight.px]="8">
+          <div *ngIf="accountingCalendarSelected?.periods.length > 0" [style.paddingRight.px]="8">
 
-            <div fxLayout="column" fxLayoutGap="0.5rem" class="date-container">
+            <div fxLayout="column" fxLayoutGap="0.5rem" class="simple-list-container">
 
-              <div *ngFor="let date of accountingCalendarSelected.openedAccountingDates"
-                fxLayout="row" fxLayoutAlign="space-between center" class="date-item">
+              <div *ngFor="let period of accountingCalendarSelected.periods"
+                fxLayout="row" fxLayoutAlign="space-between center" class="simple-list-item">
 
-                {{date | dateTimeFormat}}
+                <div fxFlex="300px">
+                  <strong>{{period.period}}</strong>
+                </div>
 
-                <button mat-icon-button (click)="onRemoveDateClicked(date)">
+                <div fxFlex="180px" class="detail text-align-center">
+                  {{period.fromDate | dateTimeFormat}} - {{period.toDate | dateTimeFormat}}
+                </div>
+
+                <button fxFlex="24px" mat-icon-button (click)="onRemovePeriodClicked(period)">
                   <mat-icon title="Eliminar fecha"> delete </mat-icon>
                 </button>
 

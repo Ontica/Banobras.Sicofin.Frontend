@@ -10,5 +10,20 @@ import { DateString } from '@app/core';
 export interface AccountingCalendar {
   uid: string;
   name: string;
-  openedAccountingDates: DateString[];
+  periods: AccountingCalendarPeriod[];
+}
+
+
+export interface AccountingCalendarPeriod {
+  uid: string;
+  period: string;
+  fromDate: DateString;
+  toDate: DateString;
+}
+
+
+export interface AccountingCalendarPeriodFields {
+  period: string;
+  fromDate: DateString;
+  toDate: DateString;
 }
