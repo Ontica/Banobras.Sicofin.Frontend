@@ -20,7 +20,7 @@ export enum TrialBalanceTypes {
   SaldosPorCuenta                   = 'SaldosPorCuenta',
   SaldosPorAuxiliar                 = 'SaldosPorAuxiliar',
   BalanzaConContabilidadesEnCascada = 'BalanzaConContabilidadesEnCascada',
-  BalanzaConsolidadaPorMoneda       = 'BalanzaConsolidadaPorMoneda'
+  BalanzaEnColumnasPorMoneda        = 'BalanzaEnColumnasPorMoneda'
 }
 
 
@@ -42,8 +42,8 @@ export const TrialBalanceTypeList: Identifiable[] = [
     name: 'Balanza tradicional',
   },
   {
-    uid: TrialBalanceTypes.BalanzaConsolidadaPorMoneda,
-    name: 'Balanza consolidada en moneda origen',
+    uid: TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+    name: 'Balanza en columnas por moneda origen',
   },
   {
     uid: TrialBalanceTypes.BalanzaValorizadaEnDolares,
