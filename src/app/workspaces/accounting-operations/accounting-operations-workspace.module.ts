@@ -15,9 +15,14 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+import { TransactionSlipsModule } from '@app/views/transaction-slips/transaction-slips.module';
 import { VouchersModule } from '@app/views/vouchers/vouchers.module';
 
 import { AccountingOperationsWorkspaceRoutingModule } from './accounting-operations-workspace-routing.module';
+
+import {
+  TransactionSlipsMainPageComponent
+} from './transaction-slips-main-page/transaction-slips-main-page.component';
 
 import { VouchersMainPageComponent } from './vouchers-main-page/vouchers-main-page.component';
 
@@ -34,15 +39,13 @@ import { VouchersMainPageComponent } from './vouchers-main-page/vouchers-main-pa
 
     AccountingOperationsWorkspaceRoutingModule,
     ReportsControlsModule,
+    TransactionSlipsModule,
     VouchersModule,
   ],
 
   declarations: [
+    TransactionSlipsMainPageComponent,
     VouchersMainPageComponent,
-  ],
-
-  exports: [
-
   ]
 
 })

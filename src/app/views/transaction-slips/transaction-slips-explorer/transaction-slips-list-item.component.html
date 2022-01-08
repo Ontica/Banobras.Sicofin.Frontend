@@ -1,0 +1,59 @@
+<div class="list-header" *ngIf="displayHeader" style="padding: 6px 24px 6px 8px;">
+
+  <div class="list-header-container">
+
+    <div fxLayout="row" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" fxLayoutAlign="start center">
+
+      <div fxFlex="10%" class="nowrap">
+        No. volante<br>
+        Área
+      </div>
+
+      <div fxFlex="15%">
+        <span class="nowrap">Fecha de elaboración</span> <br>
+        Elaboró
+      </div>
+
+      <div fxFlex="15%">
+        <span class="nowrap">Fecha de afectación</span> <br>
+        Importe
+      </div>
+
+      <div fxFlex> Concepto </div>
+
+      <div fxFlex="80px"> Estado </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" *ngIf="!displayHeader">
+
+  <div fxFlex="10%">
+    <div class="list-item-text-highlight nowrap" (click)="onTransactionSlipClicked()">
+      <strong><a>{{transactionSlip.slipNumber}}</a></strong>
+    </div>
+    <div>{{transactionSlip.functionalArea}}</div>
+  </div>
+
+  <div fxFlex="15%">
+    <div><strong>{{transactionSlip?.recordingDate | dateTimeFormat}}</strong></div>
+    <div>{{transactionSlip.elaboratedBy}}</div>
+  </div>
+
+  <div fxFlex="15%">
+    <div><strong>{{transactionSlip?.accountingDate | dateTimeFormat}}</strong></div>
+    <div>{{transactionSlip.controlTotal | number : '1.2-2'}}</div>
+  </div>
+
+  <div fxFlex>
+    <div>{{transactionSlip.concept}}</div>
+  </div>
+
+  <div fxFlex="80px">
+    <div>{{transactionSlip.statusName}}</div>
+  </div>
+
+</div>

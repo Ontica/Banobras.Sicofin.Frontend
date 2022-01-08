@@ -11,6 +11,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES_LIBRARY } from '@app/models';
 
+import {
+  TransactionSlipsMainPageComponent
+} from './transaction-slips-main-page/transaction-slips-main-page.component';
+
 import { VouchersMainPageComponent } from './vouchers-main-page/vouchers-main-page.component';
 
 
@@ -34,6 +38,11 @@ const routes: Routes = [
     data: { permission: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.permission },
     path: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.path,
     component: VouchersMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.operacion_contable_volantes.permission },
+    path: ROUTES_LIBRARY.operacion_contable_volantes.path,
+    component: TransactionSlipsMainPageComponent,
   },
   {
     path: '',

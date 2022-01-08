@@ -31,6 +31,12 @@ export const AccountingOperationViews: View[] = [
     title: 'Todas las pólizas',
     menuTitle: 'Todas las pólizas',
     url: '/operacion-contable/todas-las-polizas'
+  },
+  {
+    name: 'AccountingOperation.TransactionSlips',
+    title: 'Volantes',
+    menuTitle: 'Volantes',
+    url: '/operacion-contable/volantes'
   }
 ];
 

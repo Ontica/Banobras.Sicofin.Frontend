@@ -50,6 +50,8 @@ export * from './reporting';
 
 export * from './subledgers';
 
+export * from './transaction-slips';
+
 export * from './trial-balances';
 
 export * from './vouchers';

@@ -1,0 +1,15 @@
+<div class="explorer" fxLayoutGap="32px">
+
+  <div class="primary" [fxHide.xs.notebook]="displayTransactionSlipTabbedView">
+
+    <emp-fa-transaction-slips-explorer
+      (transactionSlipsExplorerEvent)="onTransactionSlipsExplorerEvent($event)">
+    </emp-fa-transaction-slips-explorer>
+
+  </div>
+
+  <div class="secondary priority" *ngIf="displayTransactionSlipTabbedView">
+
+  </div>
+
+</div>

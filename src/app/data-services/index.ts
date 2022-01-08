@@ -16,4 +16,5 @@ export * from './import-vouchers.data.service';
 export * from './operational-reports.data.service';
 export * from './rules.data.service';
 export * from './subledgers.data.service';
+export * from './transaction-slips.data.service';
 export * from './vouchers.data.service';

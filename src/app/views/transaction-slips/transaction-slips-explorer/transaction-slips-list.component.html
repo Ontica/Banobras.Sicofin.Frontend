@@ -1,0 +1,58 @@
+
+<div fxLayout="column" fxFlexFill>
+
+  <div #controlsContainer *ngIf="transactionSlipsList.length > 0" fxFlex="none">
+
+      <mat-divider>
+
+      </mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="list-selection-header"
+        [style.minHeight.px]="42">
+
+        <div fxFlex fxLayoutAlign="end">
+
+          <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
+
+        </div>
+
+      </div>
+
+  </div>
+
+  <div #headerContainer fxFlex="none">
+
+    <emp-fa-transaction-slips-list-item
+      [displayHeader]="true">
+
+    </emp-fa-transaction-slips-list-item>
+
+  </div>
+
+  <div #listContainer fxFlex>
+
+    <cdk-virtual-scroll-viewport itemSize="25">
+
+        <div *ngFor="let transactionSlip of transactionSlipsList"
+          class="list-item" [class.list-item-selected]="transactionSlip.uid === selectedTransactionSlip.uid">
+
+          <div class="list-item-container">
+
+            <emp-fa-transaction-slips-list-item
+              [transactionSlip]="transactionSlip"
+              (transactionSlipsListItemEvent)="onTransactionSlipsListItemEvent($event)">
+            </emp-fa-transaction-slips-list-item>
+
+          </div>
+
+        </div>
+
+        <div *ngIf="transactionSlipsList.length === 0" class="text-not-found">
+          {{textNotFound}}
+        </div>
+
+    </cdk-virtual-scroll-viewport>
+
+  </div>
+
+</div>

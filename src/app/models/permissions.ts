@@ -77,6 +77,11 @@ export const ROUTES_LIBRARY = {
     parent: 'operacion-contable',
     path: 'todas-las-polizas',
   },
+  operacion_contable_volantes: {
+    permission: PermissionsLibrary.ROUTE_OPERACION_CONTABLE,
+    parent: 'operacion-contable',
+    path: 'volantes',
+  },
 
   // #endregion
 

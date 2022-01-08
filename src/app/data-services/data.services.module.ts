@@ -18,6 +18,7 @@ import { ImportVouchersDataService } from './import-vouchers.data.service';
 import { OperationalReportsDataService } from './operational-reports.data.service';
 import { RulesDataService } from './rules.data.service';
 import { SubledgerDataService } from './subledgers.data.service';
+import { TransactionSlipsDataService } from './transaction-slips.data.service';
 import { VouchersDataService } from './vouchers.data.service';
 
 import { FileDownloadService } from './file-services/file-download.service';
@@ -39,6 +40,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     OperationalReportsDataService,
     RulesDataService,
     SubledgerDataService,
+    TransactionSlipsDataService,
     VouchersDataService,
 
     { provide: SAVER, useFactory: getSaver }

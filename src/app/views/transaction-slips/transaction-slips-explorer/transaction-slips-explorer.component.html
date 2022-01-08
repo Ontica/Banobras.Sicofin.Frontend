@@ -1,0 +1,42 @@
+<emp-ng-spinner #spinner [visible]="isLoadingTransaction"></emp-ng-spinner>
+
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Explorador de volantes
+      <div class="card-hint" empNgProgressText
+           loadingText="Cargando volantes"
+           [finalText]="cardHint"
+           [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div fxLayout="column" fxFlexFill>
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <emp-fa-transaction-slips-filter fxFlex="none"
+        (transactionSlipsFilterEvent)="onTransactionSlipsFilterEvent($event)">
+
+      </emp-fa-transaction-slips-filter>
+
+      <emp-fa-transaction-slips-list fxFlex
+        [transactionSlipsList]="transactionSlipsList"
+        [selectedTransactionSlip]="selectedTransactionSlip"
+        [textNotFound]="textNotFound"
+        (transactionSlipsListEvent)="onTransactionSlipsListEvent($event)">
+
+      </emp-fa-transaction-slips-list>
+
+  </div>
+
+</div>

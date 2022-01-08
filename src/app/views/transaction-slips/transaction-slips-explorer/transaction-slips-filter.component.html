@@ -1,0 +1,98 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  (keydown.enter)="$event.preventDefault()">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem">
+
+    <div fxLayout="row">
+
+      <div fxFlex="50">
+
+        <label>Catálogo:</label>
+
+        <emp-ng-select name="accountsChartUID" #accountsChartUID="ngModel" required
+          [(ngModel)]="formData.accountsChartUID"
+          [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
+          [showError]="accountsChartUID.invalid"
+          (changes)="onAccountChartChanges($event)">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex>
+
+        <label>Sistema:</label>
+
+        <emp-ng-select name="systemUID" #systemUID="ngModel" required
+          [(ngModel)]="formData.systemUID"
+          [items]="transactionalSystemsList"
+          [loading]="isLoading"
+          [showError]="systemUID.invalid">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+
+        <button title="Buscar"
+          [class.btn-icon-action]="form.valid && periodFieldsValid"
+          [class.btn-icon]="form.invalid || !periodFieldsValid"
+          [disabled]="form.invalid || !periodFieldsValid"
+          (click)="onSearchTransactionSlipsClicked()">
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div fxFlex="none">
+
+        <label>Periodo:</label>
+
+        <emp-ng-date-range-picker name="initialPeriod"
+          [(startDate)]="formData.fromDate"
+          [(endDate)]="formData.toDate"
+          [displaySelectionType]="false"
+          [showError]="!formData.fromDate || !formData.toDate">
+
+        </emp-ng-date-range-picker>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="start end">
+
+        <emp-ng-select name="dateSearchField" #dateSearchField="ngModel" fxFlex="100" required
+          [(ngModel)]="formData.dateSearchField"
+          [items]="dateSearchFieldList"
+          [showError]="dateSearchField.invalid">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="25">
+
+        <label>Estado:</label>
+
+        <emp-ng-select name="status" #status="ngModel" required
+          [(ngModel)]="formData.status"
+          [items]="statusList"
+          [loading]="isLoading"
+          [showError]="status.invalid"
+          (changes)="onStatusChanges($event)">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="25">
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
