@@ -20,6 +20,7 @@ export enum SelectorType {
   TRANSACTION_TYPES_LIST = 'FA.Vouchers.Selector.TransactionTypes.List',
   VOUCHER_TYPES_LIST = 'FA.Vouchers.Selector.VoucherTypes.List',
   VOUCHER_SPECIAL_CASE_TYPES_LIST = 'FA.Vouchers.Selector.VoucherSpecialCaseTypes.List',
+  TRANSACTIONAL_SYSTEMS_LIST = 'FA.Vouchers.Selector.TransactionalSystems.List',
 }
 
 
@@ -29,6 +30,7 @@ const initialState: StateValues = [
   { key: SelectorType.TRANSACTION_TYPES_LIST, value: [] },
   { key: SelectorType.VOUCHER_TYPES_LIST, value: [] },
   { key: SelectorType.VOUCHER_SPECIAL_CASE_TYPES_LIST, value: [] },
+  { key: SelectorType.TRANSACTIONAL_SYSTEMS_LIST, value: [] },
 ];
 
 
@@ -70,6 +72,11 @@ export class VoucherPresentationHandler extends AbstractPresentationHandler {
 
       case SelectorType.VOUCHER_SPECIAL_CASE_TYPES_LIST:
         provider = () => this.data.getVoucherSpecialCaseTypes();
+
+        return super.selectFirst<U>(selectorType, provider);
+
+      case SelectorType.TRANSACTIONAL_SYSTEMS_LIST:
+        provider = () => this.data.getTransactionalSystems();
 
         return super.selectFirst<U>(selectorType, provider);
 

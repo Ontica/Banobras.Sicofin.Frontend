@@ -67,6 +67,13 @@ export class VouchersDataService {
   }
 
 
+  getTransactionalSystems(): Observable<Identifiable[]> {
+    const path = `v2/financial-accounting/vouchers/transactional-systems`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   getVoucher(voucherId: number): Observable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
 
