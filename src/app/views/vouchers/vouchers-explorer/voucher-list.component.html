@@ -82,9 +82,9 @@
 
   <div #listContainer fxFlex>
 
-    <cdk-virtual-scroll-viewport itemSize="25">
+    <cdk-virtual-scroll-viewport itemSize="75">
 
-        <div *ngFor="let voucher of voucherList"
+        <div *cdkVirtualFor="let voucher of voucherList"
           class="list-item" [class.list-item-selected]="isSelected(voucher)">
 
           <div class="list-item-container">

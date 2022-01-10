@@ -31,9 +31,9 @@
 
   <div #listContainer fxFlex>
 
-    <cdk-virtual-scroll-viewport itemSize="25">
+    <cdk-virtual-scroll-viewport itemSize="45">
 
-        <div *ngFor="let transactionSlip of transactionSlipsList"
+        <div *cdkVirtualFor="let transactionSlip of transactionSlipsList"
           class="list-item" [class.list-item-selected]="transactionSlip.uid === selectedTransactionSlip.uid">
 
           <div class="list-item-container">
