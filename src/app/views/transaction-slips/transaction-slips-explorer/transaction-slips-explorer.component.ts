@@ -5,14 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnChanges } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { EventInfo } from '@app/core';
 
-import { TransactionSlipsDataService } from '@app/data-services';
-
-import { EmptySearchTransactionSlipsCommand, EmptyTransactionSlip, SearchTransactionSlipsCommand,
-         TransactionSlip, TransactionSlipDescriptor } from '@app/models';
+import { EmptyTransactionSlip, TransactionSlip, TransactionSlipDescriptor } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -21,37 +18,32 @@ import { TransactionSlipsFilterEventType } from './transaction-slips-filter.comp
 import { TransactionSlipsListEventType } from './transaction-slips-list.component';
 
 export enum TransactionSlipsExplorerEventType {
-  TRANSACTION_SLIP_SELECTED = 'TransactionSlipsExplorerComponent.Event.TransactionSlipSelected',
+  SEARCH_TRANSACTION_SLIPS = 'TransactionSlipsExplorerComponent.Event.SearchTransactionSlips',
+  EXPORT_TRANSACTION_SLIPS = 'TransactionSlipsExplorerComponent.Event.ExportTransactionSlips',
+  SELECT_TRANSACTION_SLIP = 'TransactionSlipsExplorerComponent.Event.SelectTransactionSlip',
 }
 
 @Component({
   selector: 'emp-fa-transaction-slips-explorer',
   templateUrl: './transaction-slips-explorer.component.html',
 })
-export class TransactionSlipsExplorerComponent implements OnInit {
+export class TransactionSlipsExplorerComponent implements OnChanges {
+
+  @Input() transactionSlipsList: TransactionSlipDescriptor[] = [];
 
   @Input() selectedTransactionSlip: TransactionSlip = EmptyTransactionSlip;
 
+  @Input() isLoading = false;
+
+  @Input() commandExecuted = false;
+
   @Output() transactionSlipsExplorerEvent = new EventEmitter<EventInfo>();
 
-  command: SearchTransactionSlipsCommand = Object.assign({}, EmptySearchTransactionSlipsCommand);
+  cardHint = 'Seleccionar los filtros';
 
-  transactionSlipsList: TransactionSlipDescriptor[] = [];
+  textNotFound = 'No se ha invocado la búsqueda de volantes.';
 
-  cardHint = '';
-
-  textNotFound = '';
-
-  isLoading = false;
-
-  isLoadingTransaction = false;
-
-  commandExecuted = false;
-
-  constructor(private transactionSlipsData: TransactionSlipsDataService) {}
-
-
-  ngOnInit(): void {
+  ngOnChanges() {
     this.setText();
   }
 
@@ -60,10 +52,8 @@ export class TransactionSlipsExplorerComponent implements OnInit {
     switch (event.type as TransactionSlipsFilterEventType) {
 
       case TransactionSlipsFilterEventType.SEARCH_TRANSACTION_SLIPS_CLICKED:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
-        this.command = Object.assign({}, event.payload.command);
-        this.clearSearchData();
-        this.searchTransactionSlips();
+        sendEvent(this.transactionSlipsExplorerEvent,
+          TransactionSlipsExplorerEventType.SEARCH_TRANSACTION_SLIPS, event.payload);
         return;
 
       default:
@@ -77,13 +67,13 @@ export class TransactionSlipsExplorerComponent implements OnInit {
     switch (event.type as TransactionSlipsListEventType) {
 
       case TransactionSlipsListEventType.EXPORT_BUTTON_CLICKED:
-        console.log('EXPORT_DATA', this.command);
+        sendEvent(this.transactionSlipsExplorerEvent,
+          TransactionSlipsExplorerEventType.EXPORT_TRANSACTION_SLIPS);
         return;
 
       case TransactionSlipsListEventType.TRANSACTION_SLIP_CLICKED:
-        Assertion.assertValue(event.payload.transactionSlip, 'event.payload.transactionSlip');
-        Assertion.assertValue(event.payload.transactionSlip.uid, 'event.payload.transactionSlip.uid');
-        this.getTransactionSlip(event.payload.transactionSlip.uid);
+        sendEvent(this.transactionSlipsExplorerEvent,
+          TransactionSlipsExplorerEventType.SELECT_TRANSACTION_SLIP, event.payload);
         return;
 
       default:
@@ -93,67 +83,21 @@ export class TransactionSlipsExplorerComponent implements OnInit {
   }
 
 
-  private setText(displayedEntriesMessage?: string) {
+  private setText() {
     if (!this.commandExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       this.textNotFound = 'No se ha invocado la búsqueda de volantes.';
       return;
     }
 
-    this.textNotFound = 'No se encontraron volantes con el filtro proporcionado.';
-
-    if (displayedEntriesMessage) {
-      this.cardHint = displayedEntriesMessage;
+    if (this.isLoading) {
+      this.cardHint = `Cargando volantes`;
+      this.textNotFound = 'Cargando volantes...';
       return;
     }
 
     this.cardHint = `${this.transactionSlipsList.length} registros encontrados`;
-  }
-
-
-  private clearSearchData() {
-    this.commandExecuted = false;
-    this.setTransactionSlipsList([]);
-  }
-
-
-  private searchTransactionSlips() {
-    if (!this.command.accountsChartUID) {
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.transactionSlipsData.searchTransactionSlips(this.command)
-      .toPromise()
-      .then(x => {
-        this.commandExecuted = true;
-        this.setTransactionSlipsList(x);
-        this.emitSelectedTransactionSlip(EmptyTransactionSlip);
-      })
-      .finally(() => this.isLoading = false);
-  }
-
-
-  private getTransactionSlip(transactionSlipUID: string) {
-    this.isLoadingTransaction = true;
-
-    this.transactionSlipsData.getTransactionSlip(transactionSlipUID)
-      .toPromise()
-      .then(x => this.emitSelectedTransactionSlip(x))
-      .finally(() => this.isLoadingTransaction = false);
-  }
-
-
-  private setTransactionSlipsList(transactionSlipsList: TransactionSlipDescriptor[]) {
-    this.transactionSlipsList = transactionSlipsList;
-    this.setText();
-  }
-
-
-  private emitSelectedTransactionSlip(transactionSlip: TransactionSlip) {
-    sendEvent(this.transactionSlipsExplorerEvent, TransactionSlipsExplorerEventType.TRANSACTION_SLIP_SELECTED,
-      {transactionSlip});
+    this.textNotFound = 'No se encontraron volantes con el filtro proporcionado.';
   }
 
 }

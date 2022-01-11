@@ -9,7 +9,10 @@ import { Component } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
-import { EmptyTransactionSlip, TransactionSlip } from '@app/models';
+import { TransactionSlipsDataService } from '@app/data-services';
+
+import { EmptySearchTransactionSlipsCommand, EmptyTransactionSlip, SearchTransactionSlipsCommand,
+         TransactionSlip, TransactionSlipDescriptor } from '@app/models';
 
 import {
   TransactionSlipTabbedViewComponentEventType
@@ -26,16 +29,47 @@ import {
 })
 export class TransactionSlipsMainPageComponent {
 
+  command: SearchTransactionSlipsCommand = Object.assign({}, EmptySearchTransactionSlipsCommand);
+
+  transactionSlipsList: TransactionSlipDescriptor[] = [];
+
   selectedTransactionSlip: TransactionSlip = EmptyTransactionSlip;
 
+  commandExecuted = false;
+
+  isLoading = false;
+
+  isLoadingTransaction = false;
+
   displayTransactionSlipTabbedView = false;
+
+  constructor(private transactionSlipsData: TransactionSlipsDataService) {}
+
 
   onTransactionSlipsExplorerEvent(event: EventInfo): void {
     switch (event.type as TransactionSlipsExplorerEventType) {
 
-      case TransactionSlipsExplorerEventType.TRANSACTION_SLIP_SELECTED:
+      case TransactionSlipsExplorerEventType.SEARCH_TRANSACTION_SLIPS:
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+
+        this.command = Object.assign({}, event.payload.command);
+        this.transactionSlipsList = [];
+        this.searchTransactionSlips();
+
+        return;
+
+      case TransactionSlipsExplorerEventType.EXPORT_TRANSACTION_SLIPS:
+        console.log('EXPORT_DATA', this.command);
+
+        return;
+
+
+      case TransactionSlipsExplorerEventType.SELECT_TRANSACTION_SLIP:
         Assertion.assertValue(event.payload.transactionSlip, 'event.payload.transactionSlip');
-        this.setSelectedTransactionSlip(event.payload.transactionSlip as TransactionSlip);
+        Assertion.assertValue(event.payload.transactionSlip.uid, 'event.payload.transactionSlip.uid');
+
+        this.getTransactionSlip(event.payload.transactionSlip.uid);
+
         return;
 
       default:
@@ -56,6 +90,34 @@ export class TransactionSlipsMainPageComponent {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private searchTransactionSlips() {
+    if (!this.command.accountsChartUID) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.transactionSlipsData.searchTransactionSlips(this.command)
+      .toPromise()
+      .then(x => {
+        this.commandExecuted = true;
+        this.transactionSlipsList = x;
+        this.setSelectedTransactionSlip(EmptyTransactionSlip);
+      })
+      .finally(() => this.isLoading = false);
+  }
+
+
+  private getTransactionSlip(transactionSlipUID: string) {
+    this.isLoadingTransaction = true;
+
+    this.transactionSlipsData.getTransactionSlip(transactionSlipUID)
+      .toPromise()
+      .then(x => this.setSelectedTransactionSlip(x))
+      .finally(() => this.isLoadingTransaction = false);
   }
 
 

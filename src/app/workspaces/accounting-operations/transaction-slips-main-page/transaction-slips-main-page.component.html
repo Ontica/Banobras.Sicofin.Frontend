@@ -1,9 +1,16 @@
+<emp-ng-spinner #spinner [visible]="isLoadingTransaction">
+
+</emp-ng-spinner>
+
 <div class="explorer" fxLayoutGap="32px">
 
   <div class="primary" [fxHide.xs.notebook]="displayTransactionSlipTabbedView">
 
     <emp-fa-transaction-slips-explorer
+      [transactionSlipsList]="transactionSlipsList"
       [selectedTransactionSlip]="selectedTransactionSlip"
+      [isLoading]="isLoading"
+      [commandExecuted]="commandExecuted"
       (transactionSlipsExplorerEvent)="onTransactionSlipsExplorerEvent($event)">
     </emp-fa-transaction-slips-explorer>
 
