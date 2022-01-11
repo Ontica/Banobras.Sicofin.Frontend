@@ -53,7 +53,7 @@ export class TransactionSlipsMainPageComponent {
         Assertion.assertValue(event.payload.command, 'event.payload.command');
 
         this.command = Object.assign({}, event.payload.command);
-        this.transactionSlipsList = [];
+        this.resetTransactionSlipData();
         this.searchTransactionSlips();
 
         return;
@@ -105,7 +105,6 @@ export class TransactionSlipsMainPageComponent {
       .then(x => {
         this.commandExecuted = true;
         this.transactionSlipsList = x;
-        this.setSelectedTransactionSlip(EmptyTransactionSlip);
       })
       .finally(() => this.isLoading = false);
   }
@@ -118,6 +117,11 @@ export class TransactionSlipsMainPageComponent {
       .toPromise()
       .then(x => this.setSelectedTransactionSlip(x))
       .finally(() => this.isLoadingTransaction = false);
+  }
+
+  private resetTransactionSlipData() {
+    this.transactionSlipsList = [];
+    this.setSelectedTransactionSlip(EmptyTransactionSlip);
   }
 
 
