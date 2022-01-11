@@ -3,12 +3,19 @@
   <div class="primary" [fxHide.xs.notebook]="displayTransactionSlipTabbedView">
 
     <emp-fa-transaction-slips-explorer
+      [selectedTransactionSlip]="selectedTransactionSlip"
       (transactionSlipsExplorerEvent)="onTransactionSlipsExplorerEvent($event)">
     </emp-fa-transaction-slips-explorer>
 
   </div>
 
   <div class="secondary priority" *ngIf="displayTransactionSlipTabbedView">
+
+    <emp-fa-transaction-slip-tabbed-view
+      [transactionSlip]="selectedTransactionSlip"
+      (transactionSlipTabbedViewEvent)="onTransactionSlipTabbedViewEvent($event)">
+
+    </emp-fa-transaction-slip-tabbed-view>
 
   </div>
 

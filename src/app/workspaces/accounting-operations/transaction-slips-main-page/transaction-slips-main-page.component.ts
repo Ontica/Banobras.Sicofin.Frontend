@@ -7,14 +7,17 @@
 
 import { Component } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, isEmpty } from '@app/core';
 
-import { EmptyTransactionSlipDescriptor, TransactionSlipDescriptor } from '@app/models';
+import { EmptyTransactionSlip, TransactionSlip } from '@app/models';
+
+import {
+  TransactionSlipTabbedViewComponentEventType
+} from '@app/views/transaction-slips/transaction-slip-tabbed-view/transaction-slip-tabbed-view.component';
 
 import {
   TransactionSlipsExplorerEventType
 } from '@app/views/transaction-slips/transaction-slips-explorer/transaction-slips-explorer.component';
-
 
 
 @Component({
@@ -23,7 +26,7 @@ import {
 })
 export class TransactionSlipsMainPageComponent {
 
-  selectedTransactionSlip: TransactionSlipDescriptor = EmptyTransactionSlipDescriptor;
+  selectedTransactionSlip: TransactionSlip = EmptyTransactionSlip;
 
   displayTransactionSlipTabbedView = false;
 
@@ -32,7 +35,7 @@ export class TransactionSlipsMainPageComponent {
 
       case TransactionSlipsExplorerEventType.TRANSACTION_SLIP_SELECTED:
         Assertion.assertValue(event.payload.transactionSlip, 'event.payload.transactionSlip');
-        this.setSelectedTransactionSlip(event.payload.transactionSlip as TransactionSlipDescriptor);
+        this.setSelectedTransactionSlip(event.payload.transactionSlip as TransactionSlip);
         return;
 
       default:
@@ -42,9 +45,23 @@ export class TransactionSlipsMainPageComponent {
   }
 
 
-  private setSelectedTransactionSlip(transactionSlip: TransactionSlipDescriptor) {
+  onTransactionSlipTabbedViewEvent(event: EventInfo) {
+    switch (event.type as TransactionSlipTabbedViewComponentEventType) {
+
+      case TransactionSlipTabbedViewComponentEventType.CLOSE_BUTTON_CLICKED:
+        this.setSelectedTransactionSlip(EmptyTransactionSlip);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  private setSelectedTransactionSlip(transactionSlip: TransactionSlip) {
     this.selectedTransactionSlip = transactionSlip;
-    this.displayTransactionSlipTabbedView = !!this.selectedTransactionSlip.uid;
+    this.displayTransactionSlipTabbedView = !isEmpty(this.selectedTransactionSlip.header);
   }
 
 }

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from '@app/core';
+import { DateString, Empty, Identifiable } from '@app/core';
 
 import { DateSearchField } from './vouchers';
 
@@ -39,13 +39,13 @@ export const TransactionSlipStatusList: Identifiable[] = [
 
 
 export interface SearchTransactionSlipsCommand {
-    accountsChartUID: string;
-    systemUID: string;
-    fromDate: DateString;
-    toDate: DateString;
-    dateSearchField: DateSearchField;
-    status: TransactionSlipStatus;
-    keywords?: string;
+  accountsChartUID: string;
+  systemUID: string;
+  fromDate: DateString;
+  toDate: DateString;
+  dateSearchField: DateSearchField;
+  status: TransactionSlipStatus;
+  keywords?: string;
 }
 
 
@@ -85,3 +85,40 @@ export const EmptyTransactionSlipDescriptor: TransactionSlipDescriptor = {
   accountingVoucherId: 0,
   statusName: '',
 };
+
+
+export interface TransactionSlip {
+  header: TransactionSlipDescriptor;
+  entries: TransactionSlipEntry[];
+  issues: TransactionSlipIssue[];
+  voucher: Identifiable;
+}
+
+
+export const EmptyTransactionSlip: TransactionSlip = {
+  header: EmptyTransactionSlipDescriptor,
+  entries: [],
+  issues: [],
+  voucher: Empty,
+};
+
+
+export interface TransactionSlipEntry {
+  uid: string;
+  entryNumber: number;
+  accountNumber: string;
+  sectorCode: string;
+  subledgerAccount: string;
+  currencyCode: string;
+  functionalArea: string;
+  description: string;
+  exchangeRate: number;
+  debit: number;
+  credit: number;
+  issues: TransactionSlipIssue[];
+}
+
+
+export interface TransactionSlipIssue {
+  description: string;
+}

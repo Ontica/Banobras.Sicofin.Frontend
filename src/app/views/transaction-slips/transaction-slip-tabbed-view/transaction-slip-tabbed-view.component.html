@@ -1,0 +1,62 @@
+<emp-ng-card [title]="title"
+             [hint]="hint"
+             (cardClose)="onClose()">
+
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+
+      <mat-tab label="Información">
+
+        <emp-fa-transaction-slip-view
+          [transactionSlip]="transactionSlip.header"
+          [displayVoucherData]="displayVoucherData">
+
+        </emp-fa-transaction-slip-view>
+
+      </mat-tab>
+
+
+     <mat-tab label="Movimientos">
+
+       <ng-template matTabContent>
+
+          <emp-fa-transaction-slip-entry-table
+            [transactionSlipEntryList]="transactionSlip.entries"
+            [showErrors]="displayIssuesData">
+
+          </emp-fa-transaction-slip-entry-table>
+
+       </ng-template>
+
+      </mat-tab>
+
+
+      <mat-tab label="Log" *ngIf="displayIssuesData">
+
+        <ng-template matTabContent>
+
+          <emp-fa-transaction-slip-issues-table
+            [transactionSlipIssueList]="transactionSlip.issues">
+
+          </emp-fa-transaction-slip-issues-table>
+
+        </ng-template>
+
+      </mat-tab>
+
+
+      <mat-tab label="Impresión" *ngIf="displayVoucherData">
+
+        <ng-template matTabContent>
+
+          <emp-fa-voucher-printable-viewer
+            [voucherId]="voucherId">
+
+          </emp-fa-voucher-printable-viewer>
+
+        </ng-template>
+
+      </mat-tab>
+
+  </mat-tab-group>
+
+</emp-ng-card>

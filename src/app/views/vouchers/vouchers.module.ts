@@ -62,6 +62,7 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
   ],
   exports: [
     VoucherCreatorComponent,
+    VoucherPrintableComponentViewerComponent,
     VouchersExplorerComponent,
     VouchersImporterComponent,
     VoucherTabbedViewComponent,

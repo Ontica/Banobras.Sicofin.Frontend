@@ -1,0 +1,86 @@
+<form #form="ngForm" (keydown.enter)="$event.preventDefault()" autocomplete="off" class="form-section">
+
+  <fieldset [disabled]="true">
+
+    <div fxLayout="column" fxLayoutGap="0.75rem">
+
+      <div fxLayout="row">
+
+        <div [fxFlex]="100/3">
+          <label>Número de volante:</label>
+          <input type="text" name="slipNumber" class="text-box" [value]="transactionSlip.slipNumber">
+        </div>
+
+        <div [fxFlex]="100/3">
+          <label>Estado:</label>
+          <input type="text" name="statusName" class="text-box" [value]="transactionSlip.statusName">
+        </div>
+
+        <div fxFlex fxLayoutAlign="end">
+          <div fxFlex="120px">
+            <label>Fecha de afectación:</label>
+            <input type="text" name="accountingDate" class="text-box"
+              [value]="transactionSlip.accountingDate | dateTimeFormat">
+          </div>
+
+        </div>
+
+      </div>
+
+      <div fxLayout="row">
+
+        <div [fxFlex]="100">
+          <label>Concepto:</label>
+          <textarea class="text-area" name="concept" empNgTextareaAutoresize rows="1"
+            [value]="transactionSlip.concept">
+
+          </textarea>
+        </div>
+
+      </div>
+
+      <div fxLayout="row">
+
+        <div fxFlex>
+          <label>Área:</label>
+          <input type="text" name="functionalArea" class="text-box"
+            [value]="transactionSlip.functionalArea">
+        </div>
+
+        <div [fxFlex]="100/3">
+          <label>Elaboró:</label>
+          <input type="text" name="elaboratedBy" class="text-box"
+            [value]="transactionSlip.elaboratedBy">
+        </div>
+
+        <div fxFlex fxLayoutAlign="end">
+          <div fxFlex="120px">
+            <label>Fecha de elaboración:</label>
+            <input type="text" name="recordingDate" class="text-box"
+              [value]="transactionSlip.recordingDate | dateTimeFormat">
+          </div>
+        </div>
+
+      </div>
+
+      <div fxLayout="row">
+
+        <div [fxFlex]="100/3">
+          <label>Importe:</label>
+          <input type="text" name="controlTotal" class="text-box"
+            [value]="transactionSlip.controlTotal | number : '1.2-2'">
+        </div>
+
+        <div [fxFlex]="100/3" *ngIf="displayVoucherData">
+          <label>Póliza:</label>
+          <input type="text" name="accountingVoucherId" class="text-box"
+            [value]="transactionSlip.accountingVoucherId">
+        </div>
+
+      </div>
+
+    </div>
+
+  </fieldset>
+
+</form>

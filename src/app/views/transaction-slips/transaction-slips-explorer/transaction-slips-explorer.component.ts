@@ -5,14 +5,14 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
 import { TransactionSlipsDataService } from '@app/data-services';
 
-import { EmptySearchTransactionSlipsCommand, EmptyTransactionSlipDescriptor, SearchTransactionSlipsCommand,
-         TransactionSlipDescriptor } from '@app/models';
+import { EmptySearchTransactionSlipsCommand, EmptyTransactionSlip, SearchTransactionSlipsCommand,
+         TransactionSlip, TransactionSlipDescriptor } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -30,13 +30,13 @@ export enum TransactionSlipsExplorerEventType {
 })
 export class TransactionSlipsExplorerComponent implements OnInit {
 
+  @Input() selectedTransactionSlip: TransactionSlip = EmptyTransactionSlip;
+
   @Output() transactionSlipsExplorerEvent = new EventEmitter<EventInfo>();
 
   command: SearchTransactionSlipsCommand = Object.assign({}, EmptySearchTransactionSlipsCommand);
 
   transactionSlipsList: TransactionSlipDescriptor[] = [];
-
-  selectedTransactionSlip: TransactionSlipDescriptor = EmptyTransactionSlipDescriptor;
 
   cardHint = '';
 
@@ -83,8 +83,7 @@ export class TransactionSlipsExplorerComponent implements OnInit {
       case TransactionSlipsListEventType.TRANSACTION_SLIP_CLICKED:
         Assertion.assertValue(event.payload.transactionSlip, 'event.payload.transactionSlip');
         Assertion.assertValue(event.payload.transactionSlip.uid, 'event.payload.transactionSlip.uid');
-
-        this.selectedTransactionSlip = event.payload.transactionSlip as TransactionSlipDescriptor;
+        this.getTransactionSlip(event.payload.transactionSlip.uid);
         return;
 
       default:
@@ -95,13 +94,13 @@ export class TransactionSlipsExplorerComponent implements OnInit {
 
 
   private setText(displayedEntriesMessage?: string) {
-    this.textNotFound = this.commandExecuted ? 'No se encontraron volantes con el filtro proporcionado.' :
-      'No se ha invocado la búsqueda de volantes.';
-
     if (!this.commandExecuted) {
       this.cardHint = 'Seleccionar los filtros';
+      this.textNotFound = 'No se ha invocado la búsqueda de volantes.';
       return;
     }
+
+    this.textNotFound = 'No se encontraron volantes con el filtro proporcionado.';
 
     if (displayedEntriesMessage) {
       this.cardHint = displayedEntriesMessage;
@@ -130,9 +129,19 @@ export class TransactionSlipsExplorerComponent implements OnInit {
       .then(x => {
         this.commandExecuted = true;
         this.setTransactionSlipsList(x);
-        this.emitSelectedTransactionSlips(EmptyTransactionSlipDescriptor);
+        this.emitSelectedTransactionSlip(EmptyTransactionSlip);
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private getTransactionSlip(transactionSlipUID: string) {
+    this.isLoadingTransaction = true;
+
+    this.transactionSlipsData.getTransactionSlip(transactionSlipUID)
+      .toPromise()
+      .then(x => this.emitSelectedTransactionSlip(x))
+      .finally(() => this.isLoadingTransaction = false);
   }
 
 
@@ -142,7 +151,7 @@ export class TransactionSlipsExplorerComponent implements OnInit {
   }
 
 
-  private emitSelectedTransactionSlips(transactionSlip: TransactionSlipDescriptor) {
+  private emitSelectedTransactionSlip(transactionSlip: TransactionSlip) {
     sendEvent(this.transactionSlipsExplorerEvent, TransactionSlipsExplorerEventType.TRANSACTION_SLIP_SELECTED,
       {transactionSlip});
   }
