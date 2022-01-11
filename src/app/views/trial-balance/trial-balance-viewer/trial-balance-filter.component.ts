@@ -86,26 +86,26 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get exchangeRatesRequired(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get useDefaultValuationDisabled(): boolean {
-    return [TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+    return [TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get showCascadeBalancesDisabled(): boolean {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
@@ -119,7 +119,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.BalanzaValorizadaEnDolares,
+            TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
@@ -154,21 +154,21 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.BalanzaValorizadaEnDolares].includes(this.trialBalanceCommand.trialBalanceType);
+            TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayLevel(): boolean {
     return ![TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
              TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-             TrialBalanceTypes.BalanzaValorizadaEnDolares]
+             TrialBalanceTypes.BalanzaDolarizada]
               .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
 
   get displayWithAverageBalance(): boolean {
     return ![TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-             TrialBalanceTypes.BalanzaValorizadaEnDolares]
+             TrialBalanceTypes.BalanzaDolarizada]
               .includes(this.trialBalanceCommand.trialBalanceType);
   }
 
