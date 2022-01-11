@@ -40,7 +40,7 @@ export class TransactionSlipTabbedViewComponent implements OnChanges {
 
 
   get displayIssuesData(): boolean {
-    return this.transactionSlip.issues.length > 0;
+    return this.transactionSlip.issues && this.transactionSlip.issues.length > 0;
   }
 
 
