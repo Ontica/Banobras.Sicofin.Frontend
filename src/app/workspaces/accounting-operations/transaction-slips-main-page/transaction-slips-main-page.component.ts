@@ -12,7 +12,7 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 import { TransactionSlipsDataService } from '@app/data-services';
 
 import { EmptySearchTransactionSlipsCommand, EmptyTransactionSlip, SearchTransactionSlipsCommand,
-         TransactionSlip, TransactionSlipDescriptor } from '@app/models';
+         TransactionSlip, TransactionSlipDescriptor, TransactionSlipExportationType } from '@app/models';
 
 import {
   TransactionSlipTabbedViewComponentEventType
@@ -43,6 +43,8 @@ export class TransactionSlipsMainPageComponent {
 
   displayTransactionSlipTabbedView = false;
 
+  fileUrl = '';
+
   constructor(private transactionSlipsData: TransactionSlipsDataService) {}
 
 
@@ -59,10 +61,11 @@ export class TransactionSlipsMainPageComponent {
         return;
 
       case TransactionSlipsExplorerEventType.EXPORT_TRANSACTION_SLIPS:
-        console.log('EXPORT_DATA', this.command);
+        Assertion.assertValue(event.payload.exportationType, 'event.payload.exportationType');
+
+        this.exportTransactionSlips(event.payload.exportationType as TransactionSlipExportationType);
 
         return;
-
 
       case TransactionSlipsExplorerEventType.SELECT_TRANSACTION_SLIP:
         Assertion.assertValue(event.payload.transactionSlip, 'event.payload.transactionSlip');
@@ -107,6 +110,15 @@ export class TransactionSlipsMainPageComponent {
         this.transactionSlipsList = x;
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private exportTransactionSlips(exportationType: TransactionSlipExportationType) {
+    this.fileUrl = '';
+
+    this.transactionSlipsData.exportTransactionSlips(exportationType, this.command)
+      .toPromise()
+      .then(x => this.fileUrl = x.url);
   }
 
 

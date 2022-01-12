@@ -11,7 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { SearchTransactionSlipsCommand, TransactionSlip, TransactionSlipDescriptor } from '@app/models';
+import { FileReport, SearchTransactionSlipsCommand, TransactionSlip, TransactionSlipDescriptor,
+         TransactionSlipExportationType } from '@app/models';
 
 
 @Injectable()
@@ -26,6 +27,17 @@ export class TransactionSlipsDataService {
     const path = `v2/financial-accounting/transaction-slips`;
 
     return this.http.post<TransactionSlipDescriptor[]>(path, command);
+  }
+
+
+  exportTransactionSlips(exportationType: TransactionSlipExportationType,
+                         command: SearchTransactionSlipsCommand): Observable<FileReport> {
+    Assertion.assertValue(exportationType, 'exportationType');
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/transaction-slips/export/${exportationType}`;
+
+    return this.http.post<FileReport>(path, command);
   }
 
 

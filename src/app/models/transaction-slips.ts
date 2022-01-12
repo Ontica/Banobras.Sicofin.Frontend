@@ -7,6 +7,8 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
+import { ExportationType, FileType } from './reporting';
+
 import { DateSearchField } from './vouchers';
 
 
@@ -85,6 +87,18 @@ export const EmptyTransactionSlipDescriptor: TransactionSlipDescriptor = {
   accountingVoucherId: 0,
   statusName: '',
 };
+
+
+export enum TransactionSlipExportationType {
+  slips = 'slips',
+  issues = 'issues',
+}
+
+
+export const TransactionSlipExportationTypesList: ExportationType[] = [
+  {uid: 'slips', name: 'Volantes', fileType: FileType.Excel},
+  {uid: 'issues', name: 'Log de errores', fileType: FileType.Excel},
+];
 
 
 export interface TransactionSlip {

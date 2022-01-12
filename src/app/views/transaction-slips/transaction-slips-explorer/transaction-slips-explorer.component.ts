@@ -9,9 +9,14 @@ import { Component, Output, EventEmitter, Input, OnChanges } from '@angular/core
 
 import { EventInfo } from '@app/core';
 
-import { EmptyTransactionSlip, TransactionSlip, TransactionSlipDescriptor } from '@app/models';
+import { EmptyTransactionSlip, ExportationType, TransactionSlip, TransactionSlipDescriptor,
+         TransactionSlipExportationTypesList } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
+
+import {
+  ExportReportModalEventType
+} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { TransactionSlipsFilterEventType } from './transaction-slips-filter.component';
 
@@ -33,6 +38,8 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
 
   @Input() selectedTransactionSlip: TransactionSlip = EmptyTransactionSlip;
 
+  @Input() fileUrl = '';
+
   @Input() isLoading = false;
 
   @Input() commandExecuted = false;
@@ -42,6 +49,11 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
   cardHint = 'Seleccionar los filtros';
 
   textNotFound = 'No se ha invocado la búsqueda de volantes.';
+
+  displayExportModal = false;
+
+  exportationTypesList: ExportationType[] = TransactionSlipExportationTypesList;
+
 
   ngOnChanges() {
     this.setText();
@@ -67,13 +79,31 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
     switch (event.type as TransactionSlipsListEventType) {
 
       case TransactionSlipsListEventType.EXPORT_BUTTON_CLICKED:
-        sendEvent(this.transactionSlipsExplorerEvent,
-          TransactionSlipsExplorerEventType.EXPORT_TRANSACTION_SLIPS);
+        this.setDisplayExportModal(true);
         return;
 
       case TransactionSlipsListEventType.TRANSACTION_SLIP_CLICKED:
         sendEvent(this.transactionSlipsExplorerEvent,
           TransactionSlipsExplorerEventType.SELECT_TRANSACTION_SLIP, event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExportReportModalEvent(event) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayExportModal(false);
+        return;
+
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        sendEvent(this.transactionSlipsExplorerEvent,
+          TransactionSlipsExplorerEventType.EXPORT_TRANSACTION_SLIPS, event.payload);
         return;
 
       default:
@@ -98,6 +128,12 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
 
     this.cardHint = `${this.transactionSlipsList.length} registros encontrados`;
     this.textNotFound = 'No se encontraron volantes con el filtro proporcionado.';
+  }
+
+
+  private setDisplayExportModal(display) {
+    this.displayExportModal = display;
+    this.fileUrl = '';
   }
 
 }
