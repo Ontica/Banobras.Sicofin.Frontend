@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { EventInfo } from '@app/core';
 
-import { FileType } from '@app/models';
+import { DefaultExportationType, ExportationType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -30,11 +30,11 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
 
   @Input() fileUrl = '';
 
-  @Input() fileTypes: FileType[] = [FileType.Excel];
+  @Input() exportationTypes: ExportationType[] = [DefaultExportationType];
 
   @Output() exportReportModalEvent = new EventEmitter<EventInfo>();
 
-  selectedFileType = null;
+  selectedExportationType: ExportationType = null;
 
   working = false;
 
@@ -62,18 +62,18 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
 
 
   onExportButtonClicked() {
-    if (this.selectedFileType === null) {
+    if (this.selectedExportationType === null) {
       return;
     }
 
     this.working = true;
     sendEvent(this.exportReportModalEvent, ExportReportModalEventType.EXPORT_BUTTON_CLICKED,
-      {fileType: this.selectedFileType});
+      {exportationType: this.selectedExportationType.uid});
   }
 
 
   private setDefaultSelectedFileType() {
-    this.selectedFileType = this.fileTypes.length > 0 ? this.fileTypes[0] : null;
+    this.selectedExportationType = this.exportationTypes.length > 0 ? this.exportationTypes[0] : null;
   }
 
 }

@@ -8,26 +8,26 @@
 
     <div class="card-body-padding">
 
-        <ng-container *ngIf="fileTypes.length > 1">
+        <ng-container *ngIf="exportationTypes.length > 1">
 
           <div [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
             Seleccionar el tipo de exportación:
           </div>
 
-          <mat-radio-group [(ngModel)]="selectedFileType" [disabled]="working || hasFileUrl">
-            <mat-radio-button *ngFor="let type of fileTypes"
+          <mat-radio-group [(ngModel)]="selectedExportationType" [disabled]="working || hasFileUrl">
+            <mat-radio-button *ngFor="let type of exportationTypes"
               [value]="type">
-              {{type}}
+              {{type.name}}
             </mat-radio-button>
           </mat-radio-group>
 
         </ng-container>
 
-        <div *ngIf="fileTypes.length > 0" [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
-          {{message || 'Se generará la exportación a '+ selectedFileType +' con el último filtro consultado.'}}
+        <div *ngIf="exportationTypes.length > 0" [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
+          {{message || 'Se generará la exportación a '+ selectedExportationType.fileType +' con el último filtro consultado.'}}
         </div>
 
-        <div *ngIf="fileTypes.length === 0" [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
+        <div *ngIf="exportationTypes.length === 0" [style.paddingTop.px]="16" [style.paddingBottom.px]="8">
           No se han definido tipos de exportación.
         </div>
 
@@ -40,9 +40,9 @@
           <div fxFlex="none" fxLayoutAlign="start center">
 
             <button *ngIf="!working && !hasFileUrl"
-              [class.btn]="selectedFileType === null"
-              [class.btn-action]="selectedFileType !== null"
-              [disabled]="selectedFileType === null"
+              [class.btn]="selectedExportationType === null"
+              [class.btn-action]="selectedExportationType !== null"
+              [disabled]="selectedExportationType === null"
               (click)="onExportButtonClicked()">
               Exportar
             </button>
@@ -57,7 +57,7 @@
           <div fxFlex fxLayoutAlign="end center" [style.marginRight.px]="8">
 
             <a *ngIf="fileUrl" [href]="fileUrl" target="_blank">
-              El archivo {{selectedFileType}} esta listo. Haga clic para descargarlo.</a>
+              El archivo {{selectedExportationType.fileType}} esta listo. Haga clic para descargarlo.</a>
 
             <div *ngIf="working" [style.width.px]="242"
               empNgProgressText

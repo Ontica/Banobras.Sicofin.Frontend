@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString } from "@app/core";
+import { Identifiable } from '@app/core';
 
 export enum ReportGroup {
   ReportesFiscales = 'ReportesFiscales',
@@ -43,3 +43,15 @@ export enum FileType {
   Xml = 'Xml',
   HTML = 'HTML',
 }
+
+
+export interface ExportationType extends Identifiable {
+  fileType: FileType;
+}
+
+
+export const DefaultExportationType: ExportationType = {
+  uid: FileType.Excel,
+  name: FileType.Excel,
+  fileType: FileType.Excel,
+};

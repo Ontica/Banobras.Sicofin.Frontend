@@ -12,7 +12,7 @@ import { Assertion } from '@app/core';
 import { OperationalReportsDataService } from '@app/data-services';
 
 import { OperationalReportCommand, EmptyOperationalReport, EmptyOperationalReportCommand,
-         OperationalReport, FileType, ReportGroup, ReportType } from '@app/models';
+         OperationalReport, FileType, ReportGroup, ReportType, ExportationType } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -48,6 +48,8 @@ export class OperationalReportViewerComponent implements OnChanges {
 
   selectedReportType: ReportType = null;
 
+  exportationTypesList: ExportationType[] = [];
+
   displayExportModal = false;
 
   fileUrl = '';
@@ -78,8 +80,7 @@ export class OperationalReportViewerComponent implements OnChanges {
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
         this.operationalReportCommand = event.payload.operationalReportCommand as OperationalReportCommand;
-        this.selectedReportType = event.payload.reportType as ReportType;
-
+        this.setReportType(event.payload.reportType as ReportType);
         this.setOperationalReportData(EmptyOperationalReport, false);
         this.getOperationalReport();
         return;
@@ -121,8 +122,8 @@ export class OperationalReportViewerComponent implements OnChanges {
         if (this.submitted) {
           return;
         }
-        Assertion.assertValue(event.payload.fileType, 'event.payload.fileType');
-        this.exportOperationalReport(event.payload.fileType as FileType);
+        Assertion.assertValue(event.payload.exportationType, 'event.payload.exportationType');
+        this.exportOperationalReport(event.payload.exportationType as FileType);
         return;
 
       default:
@@ -200,6 +201,13 @@ export class OperationalReportViewerComponent implements OnChanges {
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
     this.fileUrl = '';
+  }
+
+
+  private setReportType(reportType: ReportType) {
+    this.selectedReportType = reportType;
+    this.exportationTypesList = !this.selectedReportType?.exportTo ? [] :
+      this.selectedReportType.exportTo.map(x => Object.create({uid: x, name: x, fileType: x}));
   }
 
 }
