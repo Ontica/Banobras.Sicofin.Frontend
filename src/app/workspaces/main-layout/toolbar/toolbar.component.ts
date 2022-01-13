@@ -17,6 +17,8 @@ import { MainUIStateAction, MainUIStateSelector } from '@app/presentation/export
 
 import { TOOL } from '../config-data';
 
+import { PermissionsLibrary } from '@app/models';
+
 
 @Component({
   selector: 'emp-ng-toolbar',
@@ -24,6 +26,8 @@ import { TOOL } from '../config-data';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
+
+  permissions = PermissionsLibrary;
 
   displayAsideRight = false;
 

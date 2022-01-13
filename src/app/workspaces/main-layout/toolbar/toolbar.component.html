@@ -1,7 +1,7 @@
 
 <div class="toolbar-container">
 
-  <button
+  <button *empNgHasPermission="permissions.MODULE_BALANCE_EXPLORER"
     class="toolbar-item"
     title="Consultar saldos"
     [ngClass]="{'activate': this.displayAsideRight}"
