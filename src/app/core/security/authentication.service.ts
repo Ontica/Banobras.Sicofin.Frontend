@@ -7,7 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { DEFAULT_ROUTE, DEFAULT_URL, ROUTES_LIST, UNAUTHORIZED_ROUTE, getPermissionsList } from '@app/models';
+import { DEFAULT_ROUTE, DEFAULT_URL, ROUTES_LIST, UNAUTHORIZED_ROUTE } from '@app/models';
 
 import { Assertion } from '../general/assertion';
 
@@ -63,7 +63,6 @@ export class AuthenticationService {
 
 
   private setSession(sessionToken: SessionToken, principalData: PrincipalData){
-    principalData.permissions = getPermissionsList(); // Tmp
     const defaultRoute =  this.getDefaultRoute(principalData.permissions);
 
     const principal = new Principal(sessionToken,
