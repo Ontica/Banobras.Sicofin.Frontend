@@ -11,7 +11,8 @@
         <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1rem" fxLayoutGap.lt-md="1rem"
           class="card-info-container">
 
-          <div class="card-info" fxFlex="50" fxLayoutAlign="space-around center">
+          <div *empNgHasPermission="permissions.FEATURE_ACCOUNTING_CALENDARS_EDITION"
+            class="card-info" fxFlex="50" fxLayoutAlign="space-around center">
             <div fxFlex>
               <span class="card-info-title">Periodos</span>
               <span class="card-info-hint">Edición de fechas de los calendarios.</span>
@@ -24,7 +25,8 @@
 
           </div>
 
-          <div class="card-info" fxFlex="50" fxLayoutAlign="space-around center">
+          <div *empNgHasPermission="permissions.FEATURE_EXTERNAL_PROCESS_EXECUTION"
+            class="card-info" fxFlex="50" fxLayoutAlign="space-around center">
             <div fxFlex>
               <span class="card-info-title">Procesos externos</span>
               <span class="card-info-hint">Ejecución de procesos externos (Rentabilidad, etc.).</span>

@@ -16,7 +16,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { ImportVouchersDataService, VouchersDataService } from '@app/data-services';
 
 import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals,
-         ImportVouchersCommand } from '@app/models';
+         ImportVouchersCommand, PermissionsLibrary } from '@app/models';
 
 import { AccountChartStateSelector, VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -57,6 +57,8 @@ enum ImportTypes {
 export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   @Output() vouchersImporterEvent = new EventEmitter<EventInfo>();
+
+  permissions = PermissionsLibrary;
 
   title = 'Importador de pólizas';
   file = null;
