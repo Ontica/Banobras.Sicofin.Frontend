@@ -2,27 +2,31 @@
 
   <ul>
 
-    <li *empNgHasPermission="permissions.MENU_OPERACION_CONTABLE">
-      <a routerLink='/operacion-contable' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
-        PÓLIZAS
+    <li *empNgHasPermission="routes.operacion_contable.permission">
+      <a [routerLink]='getUrlFromRoutePath(routes.operacion_contable.path)' routerLinkActive='selected'
+        [routerLinkActiveOptions]="{exact:false}">
+        {{ getMenuTitleFromLayoutType('AccountingOperation') }}
       </a>
     </li>
 
-    <li *empNgHasPermission="permissions.MENU_TABLEROS">
-      <a routerLink='/tableros' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
-        SALDOS Y REPORTES
+    <li *empNgHasPermission="routes.tableros.permission">
+      <a [routerLink]='getUrlFromRoutePath(routes.tableros.path)' routerLinkActive='selected'
+        [routerLinkActiveOptions]="{exact:false}">
+        {{ getMenuTitleFromLayoutType('AccountingDashboards') }}
       </a>
     </li>
 
-    <li *empNgHasPermission="permissions.MENU_REGLAS_Y_CATALOGOS">
-      <a routerLink='/reglas-y-catalogos' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
-        REGLAS Y CATÁLOGOS
+    <li *empNgHasPermission="routes.reglas_y_catalogos.permission">
+      <a [routerLink]='getUrlFromRoutePath(routes.reglas_y_catalogos.path)' routerLinkActive='selected'
+        [routerLinkActiveOptions]="{exact:false}">
+        {{ getMenuTitleFromLayoutType('AccountingCataloguesAndRules') }}
       </a>
     </li>
 
-    <li *empNgHasPermission="permissions.MENU_ADMINISTRACION">
-      <a routerLink='/administracion' routerLinkActive='selected' [routerLinkActiveOptions]="{exact:false}">
-        ADMINISTRACIÓN
+    <li *empNgHasPermission="routes.administracion.permission">
+      <a [routerLink]='getUrlFromRoutePath(routes.administracion.path)' routerLinkActive='selected'
+        [routerLinkActiveOptions]="{exact:false}">
+        {{ getMenuTitleFromLayoutType('Management') }}
       </a>
     </li>
 

@@ -7,7 +7,11 @@
 
 import { Component } from '@angular/core';
 
-import { PermissionsLibrary } from '@app/models';
+import { ROUTES_LIBRARY } from '@app/models';
+
+import { LayoutType } from '../common-models';
+
+import { APP_LAYOUTS } from '../config-data';
 
 @Component({
   selector: 'emp-ng-main-menu',
@@ -15,5 +19,17 @@ import { PermissionsLibrary } from '@app/models';
   styleUrls: ['./main-menu.component.scss']
 })
 export class MainMenuComponent {
-  permissions = PermissionsLibrary;
+
+  routes = ROUTES_LIBRARY;
+
+  getMenuTitleFromLayoutType(layoutType: LayoutType): string {
+    const layout = APP_LAYOUTS.filter(x => x.name === layoutType).shift();
+    return layout?.defaultTitle.toUpperCase();
+  }
+
+
+  getUrlFromRoutePath(path: string): string {
+    return '/' + path;
+  }
+
 }
