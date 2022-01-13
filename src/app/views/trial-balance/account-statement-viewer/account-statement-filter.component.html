@@ -8,7 +8,7 @@
 
         <div fxFlex="none">
 
-          <label>{{periodsRequired ? 'Periodo inicial:': 'Periodo:'}}</label>
+          <label>{{periodsRequired ? 'Período inicial:': 'Período:'}}</label>
           <emp-ng-date-range-picker name="initialPeriod"
             [(startDate)]="formData.initialPeriod.fromDate"
             [(endDate)]="formData.initialPeriod.toDate"
@@ -23,7 +23,7 @@
 
         <div fxFlex="none" *ngIf="periodsRequired">
 
-          <label>Periodo final:</label>
+          <label>Período final:</label>
           <emp-ng-date-range-picker name="finalPeriod" #finalPeriodRangePicker
             [(startDate)]="formData.finalPeriod.fromDate"
             [(endDate)]="formData.finalPeriod.toDate"

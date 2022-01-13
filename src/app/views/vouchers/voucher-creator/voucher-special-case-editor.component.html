@@ -21,7 +21,7 @@
         </div>
 
         <div [fxFlex]="100/3" *ngIf="voucherSpecialCaseType?.askForVoucherNumberField">
-          <label>Número de poliza:</label>
+          <label>Número de póliza:</label>
           <input type="text" class="text-box" empNgNumeration
             [formControlName]="controls.onVoucherNumber"
             [class.invalid-control]="formHandler.showInvalidControl(controls.onVoucherNumber)">

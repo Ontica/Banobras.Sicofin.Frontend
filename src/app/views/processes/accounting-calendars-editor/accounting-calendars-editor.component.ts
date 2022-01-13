@@ -87,7 +87,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
   onRemovePeriodClicked(period: AccountingCalendarPeriod) {
     const message = this.getConfirmMessage(period);
 
-    this.messageBox.confirm(message, 'Eliminar periodo', 'DeleteCancel')
+    this.messageBox.confirm(message, 'Eliminar período', 'DeleteCancel')
       .toPromise()
       .then(x => {
         if (x) {
@@ -175,9 +175,9 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
 
   private getConfirmMessage(period: AccountingCalendarPeriod): string {
-    return `Esta operación eliminará el periodo <strong>${period.period}</strong> del calendario ` +
+    return `Esta operación eliminará el período <strong>${period.period}</strong> del calendario ` +
            `<strong>${this.accountingCalendarSelected.name}</strong>` +
-           `<br><br>¿Elimino el periodo?`;
+           `<br><br>¿Elimino el período?`;
   }
 
 }

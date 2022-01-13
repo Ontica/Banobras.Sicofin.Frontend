@@ -530,7 +530,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     if (this.isDataBaseImport) {
       this.importVouchersResult = response;
       this.selectedPartsToImport = [];
-      message = `Se ha iniciado la importacion de pólizas de sistemas tranversales.`;
+      message = `Se ha iniciado la importación de pólizas de sistemas tranversales.`;
       this.messageBox.show(message, this.title);
       return;
     }
