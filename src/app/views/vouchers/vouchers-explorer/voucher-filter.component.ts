@@ -95,6 +95,11 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get isFormValid() {
+    return !!this.filter.accountsChartUID && this.isDateSearchFieldValid;
+  }
+
+
   onShowFiltersClicked(){
     this.showFilters = !this.showFilters;
     this.showFiltersChange.emit(this.showFilters);

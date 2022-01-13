@@ -36,9 +36,9 @@
       <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
 
         <button title="Buscar"
-          [class.btn-icon-action]="form.valid && isDateSearchFieldValid"
-          [class.btn-icon]="form.invalid || !isDateSearchFieldValid"
-          [disabled]="form.invalid || !isDateSearchFieldValid"
+          [class.btn-icon-action]="isFormValid"
+          [class.btn-icon]="!isFormValid"
+          [disabled]="!isFormValid"
           (click)="onSearchVoucherClicked()">
           <mat-icon>search</mat-icon>
 
@@ -132,27 +132,18 @@
 
         </div>
 
-        <ng-container #initialPeriodSection>
+        <ng-container #periodSection>
 
           <div fxFlex="none">
 
-            <label>Del día:</label>
+            <label>Periodo:</label>
 
-            <emp-ng-datepicker name="fromDate"
-              [(ngModel)]="filter.fromDate">
+            <emp-ng-date-range-picker name="period"
+              [(startDate)]="filter.fromDate"
+              [(endDate)]="filter.toDate"
+              [displaySelectionType]="false">
 
-            </emp-ng-datepicker>
-
-          </div>
-
-          <div fxFlex="none">
-
-            <label>Al día:</label>
-
-            <emp-ng-datepicker name="toDate"
-              [(ngModel)]="filter.toDate">
-
-            </emp-ng-datepicker>
+            </emp-ng-date-range-picker>
 
           </div>
 
