@@ -62,6 +62,7 @@ export interface BalanceCommand extends DataTableCommand {
   };
   subledgerAccount?: string;
   withSubledgerAccount?: boolean;
+  withAllAccounts?: boolean;
 }
 
 
@@ -74,5 +75,6 @@ export function getEmptyBalanceCommand(): BalanceCommand {
     initialPeriod: {fromDate: '', toDate: ''},
     subledgerAccount: '',
     withSubledgerAccount: false,
+    withAllAccounts: false,
   };
 }

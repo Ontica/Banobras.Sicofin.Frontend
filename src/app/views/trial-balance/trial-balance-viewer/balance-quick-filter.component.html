@@ -87,9 +87,19 @@
 
       </div>
 
-      <div fxLayout="row" *ngIf="displayWithSubledgerAccount">
+      <div fxLayout="row">
 
         <div fxFlex="25">
+
+          <mat-checkbox name="withAllAccounts"
+            [(ngModel)]="balanceCommand.withAllAccounts"
+            (click)="$event.stopPropagation">
+            Con todas las cuentas
+          </mat-checkbox>
+
+        </div>
+
+        <div fxFlex="25" *ngIf="displayWithSubledgerAccount">
 
           <mat-checkbox name="withSubledgerAccount"
             [(ngModel)]="balanceCommand.withSubledgerAccount"

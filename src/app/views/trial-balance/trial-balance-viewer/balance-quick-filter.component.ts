@@ -81,6 +81,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
     this.balanceCommand.fromAccount = '';
     this.balanceCommand.subledgerAccount = '';
     this.balanceCommand.withSubledgerAccount = this.displaySubledgerAccount;
+    this.balanceCommand.withAllAccounts = false;
   }
 
 
@@ -132,6 +133,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
         toDate: this.balanceCommand.initialPeriod.toDate,
       },
       withSubledgerAccount: this.balanceCommand.withSubledgerAccount,
+      withAllAccounts: this.balanceCommand.withAllAccounts,
     };
 
     return data;
