@@ -6,6 +6,7 @@
  */
 
 import { Layout } from './common';
+
 import { MenuItem, createMenuItemForView } from './menu-item';
 
 
@@ -23,7 +24,7 @@ export const DefaultNavigationHeader: NavigationHeader = {
 };
 
 
-export function buildNavigationHeader(layout: Layout, title?: string): NavigationHeader {
+export function buildNavigationHeader(layout: Layout, permissions: string[], title?: string): NavigationHeader {
   const navHeader: NavigationHeader = {
     title: title || layout.defaultTitle,
     hint: layout.hint,
@@ -33,7 +34,9 @@ export function buildNavigationHeader(layout: Layout, title?: string): Navigatio
   for (const view of layout.views) {
     const menuItem = createMenuItemForView(view);
 
-    navHeader.mainMenu.push(menuItem);
+    if (permissions.includes(view.permission)) {
+      navHeader.mainMenu.push(menuItem);
+    }
   }
 
   return navHeader;

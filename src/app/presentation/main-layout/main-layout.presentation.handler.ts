@@ -7,7 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Assertion, Exception } from '@app/core';
+import { Assertion, Exception, SessionService } from '@app/core';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
@@ -55,7 +55,7 @@ const initialState: StateValues = [
 @Injectable()
 export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
 
-  constructor() {
+  constructor(private session: SessionService) {
     super({
       initialState,
       selectors: SelectorType,
@@ -148,7 +148,7 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
     if (value && 'url' in value) {
       const layout = APP_LAYOUTS.find(x => x.name === this.state.layout.name);
 
-      const navHeader = buildNavigationHeader(layout, value.title);
+      const navHeader = buildNavigationHeader(layout, this.session.getPrincipal().permissions, value.title);
 
       this.setValue(SelectorType.NAVIGATION_HEADER, navHeader);
 

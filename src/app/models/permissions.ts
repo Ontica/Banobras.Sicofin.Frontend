@@ -77,7 +77,7 @@ export const ROUTES_LIBRARY = {
     parent: 'operacion-contable',
     path: 'polizas-en-libros',
   },
-  operacion_contable_todos_los_polizas: {
+  operacion_contable_todas_las_polizas: {
     permission: PermissionsLibrary.ROUTE_ACCOUNTING_OPERATIONS,
     parent: 'operacion-contable',
     path: 'todas-las-polizas',
@@ -117,16 +117,6 @@ export const ROUTES_LIBRARY = {
     parent: 'tableros',
     path: 'reportes-fiscales',
   },
-  tableros_indicadores_financieros: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_DASHBOARDS,
-    parent: 'tableros',
-    path: 'indicadores-financieros',
-  },
-  tableros_alertas: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_DASHBOARDS,
-    parent: 'tableros',
-    path: 'alertas',
-  },
 
   // #endregion
 
@@ -142,6 +132,11 @@ export const ROUTES_LIBRARY = {
     parent: 'reglas-y-catalogos',
     path: 'auxiliares',
   },
+  reglas_y_catalogos_datos_operacion: {
+    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
+    parent: 'reglas-y-catalogos',
+    path: 'datos-operacion',
+  },
   reglas_y_catalogos_agrupaciones: {
     permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
     parent: 'reglas-y-catalogos',
@@ -151,16 +146,6 @@ export const ROUTES_LIBRARY = {
     permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
     parent: 'reglas-y-catalogos',
     path: 'configuracion-de-reportes',
-  },
-  reglas_y_catalogos_datos_operacion: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
-    parent: 'reglas-y-catalogos',
-    path: 'datos-operacion',
-  },
-  reglas_y_catalogos_reglas_contabilizadoras: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
-    parent: 'reglas-y-catalogos',
-    path: 'reglas-contabilizadoras',
   },
   // #endregion
 

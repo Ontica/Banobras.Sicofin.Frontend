@@ -21,6 +21,8 @@ import { Claim, Identity, SessionToken } from '../security/security-types';
 
 import { LocalStorageService } from './local-storage.service';
 
+import { ROUTES_LIST } from '@app/models';
+
 
 @Injectable()
 export class SessionService {
@@ -97,6 +99,19 @@ export class SessionService {
   hasPermission(permission: string): boolean {
     return this.principal.permissions &&
       this.principal.permissions.filter(x =>  x === permission).length > 0;
+  }
+
+
+  getFirstValidRouteInModule(permission: string): string {
+    const route = ROUTES_LIST.find(x => x.permission === permission);
+    const routesInModule = ROUTES_LIST.filter(x => route.parent === x.parent);
+    const validRouteInModule = routesInModule.find(x => this.principal.permissions.includes(x.permission));
+
+    if (!!validRouteInModule) {
+      return validRouteInModule.parent +  '/' + validRouteInModule.path;
+    }
+
+    return null;
   }
 
 

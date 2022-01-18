@@ -23,6 +23,7 @@ export interface View {
   url: string;
   menuTitle?: string;
   disabled?: boolean;
+  permission?: string;
 }
 
 

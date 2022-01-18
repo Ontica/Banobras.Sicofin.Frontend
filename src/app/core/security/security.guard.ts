@@ -7,7 +7,10 @@
 
 import { Injectable } from '@angular/core';
 
-import { Router, CanActivate, CanActivateChild, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, CanActivate, CanActivateChild, ActivatedRouteSnapshot,
+         NavigationEnd } from '@angular/router';
+
+import { filter, take } from 'rxjs/operators';
 
 import { SessionService } from '../general/session.service';
 
@@ -15,8 +18,12 @@ import { SessionService } from '../general/session.service';
 @Injectable()
 export class SecurityGuard implements CanActivate, CanActivateChild {
 
+  isRoutingInitialized = false;
+
   constructor(private router: Router,
-              private session: SessionService) { }
+              private session: SessionService) {
+    this.initRouting();
+  }
 
 
   canActivate() {
@@ -29,8 +36,12 @@ export class SecurityGuard implements CanActivate, CanActivateChild {
       return false;
     }
 
-    if (!this.session.hasPermission(childRoute.data.permission)) {
-      this.router.navigateByUrl('unauthorized');
+    if (!!childRoute.data.permission && !this.session.hasPermission(childRoute.data.permission)) {
+      const firstValidRouteInModule = this.isRoutingInitialized ?
+        this.session.getFirstValidRouteInModule(childRoute.data.permission) : null;
+
+      this.router.navigateByUrl(firstValidRouteInModule ?? 'unauthorized');
+
       return false;
     }
 
@@ -47,6 +58,13 @@ export class SecurityGuard implements CanActivate, CanActivateChild {
     }
 
     return true;
+  }
+
+
+  private initRouting() {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd), take(1))
+      .subscribe((events: NavigationEnd) => this.isRoutingInitialized = !!events.urlAfterRedirects);
   }
 
 }

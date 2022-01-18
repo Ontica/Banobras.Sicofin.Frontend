@@ -35,8 +35,8 @@ const routes: Routes = [
     component: VouchersMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.permission },
-    path: ROUTES_LIBRARY.operacion_contable_todos_los_polizas.path,
+    data: { permission: ROUTES_LIBRARY.operacion_contable_todas_las_polizas.permission },
+    path: ROUTES_LIBRARY.operacion_contable_todas_las_polizas.path,
     component: VouchersMainPageComponent,
   },
   {
