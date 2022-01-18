@@ -24,6 +24,7 @@ export enum VouchersExplorerEventType {
   EXECUTE_VOUCHERS_OPERATION_CLICKED = 'VouchersExplorerComponent.Event.ExecuteVouchersOperationClicked',
   CREATE_VOUCHER_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.CreateVoucherButtonClicked',
   IMPORT_VOUCHERS_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.ImportVouchersButtonClicked',
+  EXPORT_VOUCHERS_BUTTON_CLICKED = 'VouchersExplorerComponent.Event.ExportVouchersButtonClicked',
 }
 
 
@@ -124,6 +125,12 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
 
         sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXECUTE_VOUCHERS_OPERATION_CLICKED,
           event.payload);
+
+        return;
+
+      case VoucherListEventType.EXPORT_BUTTON_CLICKED:
+
+        sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED);
 
         return;
 

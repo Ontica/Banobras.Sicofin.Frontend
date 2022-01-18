@@ -3,14 +3,14 @@
 
   <div #controlsContainer *ngIf="voucherList.length > 0" fxFlex="none">
 
-    <div *ngIf="selection.selected.length > 0" [@expandCollapse]>
-
       <mat-divider>
 
       </mat-divider>
 
-      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="16px" class="list-selection-header"
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="list-selection-header"
         [style.minHeight.px]="42">
+
+        <ng-container *ngIf="selection.selected.length > 0">
 
           <div fxFlex="none">
 
@@ -24,7 +24,7 @@
 
           </div>
 
-          <div fxFlex="160px">
+          <div fxFlex="150px">
 
             <emp-ng-select name="operation"
               [config]="{bindByValue: false, selectFirst: true}"
@@ -35,7 +35,7 @@
 
           </div>
 
-          <div fxFlex="70" *ngIf="operationSelected?.assignToRequired">
+          <div fxFlex="calc(100% - 540px)" *ngIf="operationSelected?.assignToRequired">
 
             <emp-ng-select name="editor"
               [config]="{bindByValue: false,
@@ -53,7 +53,7 @@
 
           </div>
 
-          <div fxFlex="none">
+          <div fxFlex="98px">
 
             <button class="btn" (click)="onExecuteOperationClicked()">
               Ejecutar
@@ -61,11 +61,24 @@
 
           </div>
 
-          <div fxFlex> </div>
+        </ng-container>
+
+        <div fxFlex>
+
+          <mat-divider *ngIf="selection.selected.length > 0"
+            vertical="true" class="vertical" [style.marginTop.px]="0">
+
+          </mat-divider>
+
+        </div>
+
+        <div fxFlex="93px" fxLayoutAlign="end">
+
+          <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
+
+        </div>
 
       </div>
-
-    </div>
 
   </div>
 

@@ -20,6 +20,7 @@
        <ng-template matTabContent>
 
           <emp-fa-transaction-slip-entry-table
+            [transactionSlipUID]="transactionSlip.header.uid"
             [transactionSlipEntryList]="transactionSlip.entries ?? []"
             [showErrors]="displayIssuesData">
 

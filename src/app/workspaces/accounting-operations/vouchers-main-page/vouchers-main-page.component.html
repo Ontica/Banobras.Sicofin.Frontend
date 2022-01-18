@@ -43,3 +43,11 @@
   </ng-container>
 
 </emp-ng-modal-window>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  title="Exportar pólizas"
+  [fileUrl]="excelFileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

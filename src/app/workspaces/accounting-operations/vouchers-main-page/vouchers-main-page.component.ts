@@ -25,6 +25,8 @@ import { VouchersDataService } from '@app/data-services';
 
 import { ArrayLibrary } from '@app/shared/utils';
 
+import { ExportReportModalEventType } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
 
 import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer/vouchers-importer.component';
@@ -32,8 +34,6 @@ import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
 
 import { VoucherTabbedViewEventType } from '@app/views/vouchers/voucher-tabbed-view/voucher-tabbed-view.component';
-
-import { DomSanitizer } from '@angular/platform-browser';
 
 type VouchersMainPageModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
@@ -56,6 +56,10 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   displayOptionModalSelected: VouchersMainPageModalOptions = null;
 
+  displayExportModal = false;
+
+  excelFileUrl = '';
+
   isLoading = false;
 
   isLoadingVoucher = false;
@@ -64,8 +68,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
-              private messageBox: MessageBoxService,
-              private sanitized: DomSanitizer) {
+              private messageBox: MessageBoxService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
 
@@ -115,6 +118,32 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
         Assertion.assertValue(event.payload.command.vouchers, 'event.payload.command.vouchers');
         this.bulkOperationVouchers(event.payload.operation as VouchersOperationType,
                                    event.payload.command);
+        return;
+
+      case VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED:
+        this.setDisplayExportModal(true);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExportReportModalEvent(event) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayExportModal(false);
+        return;
+
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        if (!this.searchVouchersCommand.accountsChartUID ) {
+          return;
+        }
+
+        this.exportVouchersToExcel();
         return;
 
       default:
@@ -220,6 +249,15 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
+  private exportVouchersToExcel() {
+    setTimeout(() => {
+      this.excelFileUrl = 'data-dummy';
+      this.messageBox.showInDevelopment('Exportar pólizas',
+        {type: 'EXPORT_VOUCHERS', command: this.searchVouchersCommand});
+    }, 500);
+  }
+
+
   private getVoucher(idVoucher: number) {
     this.isLoadingVoucher = true;
 
@@ -273,6 +311,12 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   private setSelectedVoucher(voucher: Voucher) {
     this.selectedVoucher = voucher;
     this.displayVoucherTabbedView = this.selectedVoucher && this.selectedVoucher.id > 0;
+  }
+
+
+  private setDisplayExportModal(display) {
+    this.displayExportModal = display;
+    this.excelFileUrl = '';
   }
 
 

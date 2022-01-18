@@ -42,6 +42,7 @@ import { VoucherListItemEventType } from './voucher-list-item.component';
 export enum VoucherListEventType {
   VOUCHER_CLICKED                    = 'VoucherListComponent.Event.VoucherClicked',
   EXECUTE_VOUCHERS_OPERATION_CLICKED = 'VoucherListComponent.Event.ExecuteVouchersOperationClicked',
+  EXPORT_BUTTON_CLICKED              = 'VoucherListComponent.Event.ExportButtonClicked',
 }
 
 
@@ -141,7 +142,6 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-
   onOperationChanges(operation: VouchersOperation) {
     this.editorSelected = null;
 
@@ -158,6 +158,11 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.showConfirmMessage();
+  }
+
+
+  onExportButtonClicked() {
+    sendEvent(this.voucherListEvent, VoucherListEventType.EXPORT_BUTTON_CLICKED);
   }
 
 

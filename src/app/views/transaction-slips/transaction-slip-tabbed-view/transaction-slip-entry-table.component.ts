@@ -9,11 +9,16 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+
 import { TransactionSlipEntry, TransactionSlipIssue } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import {
+  ExportReportModalEventType
+} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+
 
 @Component({
   selector: 'emp-fa-transaction-slip-entry-table',
@@ -23,6 +28,8 @@ export class TransactionSlipEntryTableComponent implements OnChanges {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
+  @Input() transactionSlipUID = '';
+
   @Input() transactionSlipEntryList: TransactionSlipEntry[] = [];
 
   @Input() showErrors = false;
@@ -30,6 +37,10 @@ export class TransactionSlipEntryTableComponent implements OnChanges {
   displayedColumns: string[] = [];
 
   dataSource: TableVirtualScrollDataSource<TransactionSlipEntry>;
+
+  displayExportModal = false;
+
+  fileUrl = '';
 
   constructor(private messageBox: MessageBoxService) { }
 
@@ -41,8 +52,39 @@ export class TransactionSlipEntryTableComponent implements OnChanges {
   }
 
 
+  onExportButtonClicked() {
+    this.setDisplayExportModal(true);
+  }
+
+
+  onExportReportModalEvent(event) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayExportModal(false);
+        return;
+
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        this.exportTransactionSlipEntries();
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   onShowErrorsClicked(row: TransactionSlipEntry) {
     this.showMessage(row.description, row.issues);
+  }
+
+
+  private exportTransactionSlipEntries() {
+    setTimeout(() => {
+      this.fileUrl = 'data-dummy';
+      this.messageBox.showInDevelopment('Exportar movimientos', this.transactionSlipUID);
+    }, 500);
   }
 
 
@@ -72,6 +114,12 @@ export class TransactionSlipEntryTableComponent implements OnChanges {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(-1);
     }
+  }
+
+
+  private setDisplayExportModal(display) {
+    this.displayExportModal = display;
+    this.fileUrl = '';
   }
 
 }
