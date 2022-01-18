@@ -62,6 +62,12 @@ export const AccountingDashboardsViews: View[] = [
     permission: ROUTES_LIBRARY.tableros_reportes_regulatorios.permission,
   },
   {
+    name: 'AccountingDashboards.BalanceReconciliation',
+    title: 'Conciliaciones',
+    url: '/tableros/conciliaciones',
+    permission: ROUTES_LIBRARY.tableros_conciliaciones.permission,
+  },
+  {
     name: 'AccountingDashboards.OperationalReports',
     title: 'Reportes operativos',
     url: '/tableros/reportes-operativos',

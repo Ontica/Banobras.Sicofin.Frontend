@@ -1,0 +1,19 @@
+<div class="explorer" fxLayoutGap="32px">
+
+  <div class="primary">
+
+    <emp-fa-imported-data-viewer
+      dataType="conciliaciones"
+      [typeRequired]="true"
+      [multiFiles]="true"
+      [data]="balanceSheetData"
+      [excelFileUrl]="excelFileUrl"
+      [dataImportedResult]="dataImportedResult"
+      [isLoading]="isLoading"
+      (importedDataViewerEvent)="onImportedDataViewerEvent($event)">
+
+    </emp-fa-imported-data-viewer>
+
+  </div>
+
+</div>

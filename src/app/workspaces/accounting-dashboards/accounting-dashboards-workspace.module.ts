@@ -18,9 +18,10 @@ import { FinancialReportsModule } from '@app/views/financial-reports/financial-r
 import { OperationalReportsModule } from '@app/views/operational-reports/operational-reports.module';
 import { TrialBalanceModule } from '@app/views/trial-balance/trial-balance.module';
 
-import { AccountingDashboardsWorkspaceComponent } from './accounting-dashboards-workspace.component';
+import { BalanceReconciliationMainPageComponent } from './balance-reconciliation-main-page/balance-reconciliation-main-page.component';
 import { FinancialReportsMainPageComponent } from './financial-reports-main-page/financial-reports-main-page.component';
 import { OperationalReportsMainPageComponent } from './operational-reports-main-page/operational-reports-main-page.component';
+import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-balance-main-page.component';
 
 
@@ -37,11 +38,12 @@ import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-b
     AccountingDashboardsWorkspaceRoutingModule,
     FinancialReportsModule,
     OperationalReportsModule,
+    ReportsControlsModule,
     TrialBalanceModule,
   ],
 
   declarations: [
-    AccountingDashboardsWorkspaceComponent,
+    BalanceReconciliationMainPageComponent,
     FinancialReportsMainPageComponent,
     OperationalReportsMainPageComponent,
     TrialBalanceMainPageComponent,

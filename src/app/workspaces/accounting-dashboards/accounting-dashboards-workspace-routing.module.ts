@@ -11,7 +11,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES_LIBRARY } from '@app/models';
 
-import { AccountingDashboardsWorkspaceComponent } from './accounting-dashboards-workspace.component';
+import { BalanceReconciliationMainPageComponent } from './balance-reconciliation-main-page/balance-reconciliation-main-page.component';
 
 import { FinancialReportsMainPageComponent } from './financial-reports-main-page/financial-reports-main-page.component';
 
@@ -32,6 +32,11 @@ const routes: Routes = [
     component: FinancialReportsMainPageComponent,
   },
   {
+    data: { permission: ROUTES_LIBRARY.tableros_conciliaciones.permission },
+    path: ROUTES_LIBRARY.tableros_conciliaciones.path,
+    component: BalanceReconciliationMainPageComponent,
+  },
+  {
     data: { permission: ROUTES_LIBRARY.tableros_reportes_operativos.permission },
     path: ROUTES_LIBRARY.tableros_reportes_operativos.path,
     component: OperationalReportsMainPageComponent,
@@ -40,16 +45,6 @@ const routes: Routes = [
     data: { permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission },
     path: ROUTES_LIBRARY.tableros_reportes_fiscales.path,
     component: OperationalReportsMainPageComponent,
-  },
-  {
-    data: { permission: ROUTES_LIBRARY.tableros_indicadores_financieros.permission },
-    path: ROUTES_LIBRARY.tableros_indicadores_financieros.path,
-    component: AccountingDashboardsWorkspaceComponent,
-  },
-  {
-    data: { permission: ROUTES_LIBRARY.tableros_alertas.permission },
-    path: ROUTES_LIBRARY.tableros_alertas.path,
-    component: AccountingDashboardsWorkspaceComponent,
   },
   {
     path: '',
