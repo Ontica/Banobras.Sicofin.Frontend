@@ -1,0 +1,71 @@
+<div class="card card-border">
+
+  <div class="card-header card-header-flat">
+
+    <div class="card-title">
+      Visualizador de {{dataType}}
+
+      <div class="card-hint" empNgProgressText
+        loadingText="Cargando"
+        [finalText]="cardHint"
+        [isLoading]="isLoading">
+      </div>
+
+    </div>
+
+    <div class="card-header-options">
+
+      <button class="btn"
+        (click)="displayImportModal = true">
+        Importar {{dataType}}
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="card-body" [empNgSpinnerHost]="spinner">
+
+    <div fxLayout="column" fxFlexFill>
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <emp-fa-imported-data-filter fxFlex="none"
+        [dataType]="dataType"
+        [periodRequired]="periodRequired"
+        [typeRequired]="typeRequired"
+        [typeList]="typeList"
+        (importDataFilterEvent)="onImportedDataFilterEvent($event)">
+
+      </emp-fa-imported-data-filter>
+
+      <emp-fa-data-table fxFlex
+        [dataTable]="data"
+        [commandExecuted]="commandExecuted"
+        (dataTableEvent)="onDataTableEvent($event)">
+
+      </emp-fa-data-table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<emp-fa-data-importer *ngIf="displayImportModal"
+  [dataType]="dataType"
+  [multiFiles]="multiFiles"
+  (dataImporterEvent)="onDataImporterEvent($event)">
+
+</emp-fa-data-importer>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  [title]="'Exportar ' + dataType"
+  [fileUrl]="excelFileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

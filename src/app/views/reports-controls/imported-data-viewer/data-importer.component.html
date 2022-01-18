@@ -1,0 +1,85 @@
+<emp-ng-modal-window [config]="{width:'750px'}">
+
+  <emp-ng-card
+    [title]="'Importador de ' + dataType"
+    [hint]="'Se importarán los ' + dataType +' contenidos en el archivo a SICOFIN'"
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <form #form="ngForm" (keydown.enter)="$event.preventDefault()"
+        autocomplete="off" class="form-section">
+
+        <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
+          fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+          <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="end">
+
+            <div fxFlex="none">
+
+              <label>Fecha:</label>
+              <emp-ng-datepicker name="fromDate"
+                [(ngModel)]="date"
+                [showError]="!date">
+
+              </emp-ng-datepicker>
+
+            </div>
+
+            <div fxFlex="none" fxFlexAlign="end" [style.paddingBottom.px]="2">
+
+              <button class="btn" [style.width.px]="157"
+                [disabled]="showGetFormatError"
+                (click)="onGetFormatClicked()">
+                Obtener formato
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div fxLayout="row" fxLayout.lt-md="column">
+
+            <div fxFlex="100">
+
+              <label> {{multiFiles ? 'Archivos:' : 'Archivo:'}}</label>
+              <emp-ng-file-control
+                [(fileControl)]="fileControlData"
+                [showError]="showFileError"
+                [config]="{filesTypes: ['excel'], autoUpload: true, maxFiles: multiFiles ? 6 : 1,
+                           placeholder: 'Elija o arrastre ' + ( multiFiles ? 'los archivos' : 'el archivo' ) + ' excel.'}">
+
+              </emp-ng-file-control>
+
+            </div>
+
+          </div>
+
+          <mat-divider class="horizontal"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button [style.width.px]="157"
+                [class.btn]="showImportDataError"
+                [class.btn-action]="!showImportDataError"
+                [disabled]="showImportDataError"
+                (click)="onImportDataClicked()">
+                Importar datos
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

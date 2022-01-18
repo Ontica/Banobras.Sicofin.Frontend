@@ -13,15 +13,21 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
 
+import { DataImporterComponent } from './imported-data-viewer/data-importer.component';
 import { DataTableComponent } from './data-table/data-table.component';
 import { DataTableControlsComponent } from './data-table/data-table-controls.component';
 import { ExportReportModalComponent } from './export-report-modal/export-report-modal.component';
+import { ImportedDataFilterComponent } from './imported-data-viewer/imported-data-filter.component';
+import { ImportedDataViewerComponent } from './imported-data-viewer/imported-data-viewer.component';
 
 @NgModule({
   declarations: [
+    DataImporterComponent,
     DataTableComponent,
     DataTableControlsComponent,
     ExportReportModalComponent,
+    ImportedDataFilterComponent,
+    ImportedDataViewerComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +42,7 @@ import { ExportReportModalComponent } from './export-report-modal/export-report-
     DataTableComponent,
     DataTableControlsComponent,
     ExportReportModalComponent,
+    ImportedDataViewerComponent,
   ]
 })
 export class ReportsControlsModule { }

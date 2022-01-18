@@ -1,0 +1,61 @@
+<form #form="ngForm" autocomplete="off" class="form-section form-container"
+  (keydown.enter)="$event.preventDefault()">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div *ngIf="!periodRequired" fxFlex="none">
+
+        <label>Fecha:</label>
+        <emp-ng-datepicker name="fromDate" required
+          [(ngModel)]="formData.fromDate"
+          [showError]="!formData.fromDate">
+
+        </emp-ng-datepicker>
+
+      </div>
+
+      <div fxFlex="none" *ngIf="periodRequired">
+
+        <label>Periodo:</label>
+        <emp-ng-date-range-picker name="toDate" required
+          [(startDate)]="formData.fromDate"
+          [(endDate)]="formData.toDate"
+          [showError]="!formData.fromDate || !formData.toDate">
+
+        </emp-ng-date-range-picker>
+
+      </div>
+
+      <div fxFlex="25" *ngIf="typeRequired">
+
+        <label>Tipo:</label>
+
+        <emp-ng-select name="type"
+          [(ngModel)]="formData.type"
+          [items]="typeList"
+          placeholder="Todos">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button [title]="'Consultar ' + dataType"
+          [class.btn-icon]="!isFormValid"
+          [class.btn-icon-action]="isFormValid"
+          [disabled]="!isFormValid"
+          (click)="onSearchImportedDataClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
