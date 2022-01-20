@@ -123,7 +123,10 @@
 
                     <ng-template #optionTemplate let-item="item">
                       <div class="item">
-                        <span class="item-highlight">{{item.number}}</span> <br>
+                        <div fxLayoutAlign="start center">
+                          <span class="item-highlight">{{item.number}}</span>
+                          <span *ngIf="item.suspended" class="tag-error tag-small">Suspendido</span>
+                        </div>
                         <span class="item-text-xs">{{item.name}}</span>
                       </div>
                     </ng-template>
