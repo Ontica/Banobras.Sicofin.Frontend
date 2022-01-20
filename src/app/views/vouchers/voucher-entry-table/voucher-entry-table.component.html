@@ -83,7 +83,7 @@
 
           <mat-icon [ngClass]="canReviewVoucher ? 'icon-warning' : 'icon-success'">info</mat-icon>
           <span>
-            {{canReviewVoucher ? 'La póliza NO está balanceada' : 'La póliza está balanceada correctamente.'}}
+            {{canReviewVoucher ? 'La póliza no está balanceada o tiene inconsistencias.' : 'La póliza está balanceada y tiene datos correctos.'}}
           </span>
           <div fxFlex></div>
           <button *ngIf="canReviewVoucher" class="btn-action"
