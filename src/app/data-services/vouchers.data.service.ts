@@ -172,6 +172,15 @@ export class VouchersDataService {
   }
 
 
+  sendVoucherToSupervision(voucherId: number): Observable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/send-to-supervisor`;
+
+    return this.http.post<Voucher>(path);
+  }
+
+
   closeVoucher(voucherId: number): Observable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
 

@@ -5,15 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
 import { EmptyVoucher, isOpenVoucher, Voucher, VoucherFields } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -46,11 +44,10 @@ export class VoucherEditorComponent implements OnChanges {
 
   submitted = false;
 
-  constructor(private vouchersData: VouchersDataService,
-              private messageBox: MessageBoxService) {}
+  constructor(private vouchersData: VouchersDataService) {}
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges() {
     this.formEditionMode = false;
     this.voucherFieldsValid = false;
     this.voucherFields = null;
@@ -102,7 +99,7 @@ export class VoucherEditorComponent implements OnChanges {
 
       case VoucherSubmitterEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
-        this.messageBox.showInDevelopment('Enviar a supervisión', event);
+        this.sendVoucherToSupervision();
         return;
 
       case VoucherSubmitterEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
@@ -138,9 +135,7 @@ export class VoucherEditorComponent implements OnChanges {
 
     this.vouchersData.updateVoucher(this.voucher.id, voucherFields)
       .toPromise()
-      .then(x => {
-        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
-      })
+      .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x}))
       .finally(() => this.submitted = false);
   }
 
@@ -150,9 +145,18 @@ export class VoucherEditorComponent implements OnChanges {
 
     this.vouchersData.deleteVoucher(this.voucher.id)
       .toPromise()
-      .then(x => {
-        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_DELETED, {voucher: this.voucher});
-      })
+      .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_DELETED,
+        {voucher: this.voucher}))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private sendVoucherToSupervision() {
+    this.submitted = true;
+
+    this.vouchersData.sendVoucherToSupervision(this.voucher.id)
+      .toPromise()
+      .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x}))
       .finally(() => this.submitted = false);
   }
 
@@ -162,9 +166,7 @@ export class VoucherEditorComponent implements OnChanges {
 
     this.vouchersData.closeVoucher(this.voucher.id)
       .toPromise()
-      .then(x => {
-        sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x});
-      })
+      .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x}))
       .finally(() => this.submitted = false);
   }
 
