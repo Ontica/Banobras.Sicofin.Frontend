@@ -13,6 +13,15 @@ import { AbstractPresentationHandler, StateValues } from '@app/core/presentation
 
 import { VouchersDataService } from '@app/data-services';
 
+import { EmptyVoucherFilterData } from '@app/models';
+
+import { Assertion } from '@app/core';
+
+
+export enum ActionType {
+  SET_LIST_FILTER_DATA = 'FA.Vouchers.Action.SetListFilterData',
+}
+
 
 export enum SelectorType {
   EVENT_TYPES_LIST = 'FA.Vouchers.Selector.EventTypes.List',
@@ -21,6 +30,7 @@ export enum SelectorType {
   VOUCHER_TYPES_LIST = 'FA.Vouchers.Selector.VoucherTypes.List',
   VOUCHER_SPECIAL_CASE_TYPES_LIST = 'FA.Vouchers.Selector.VoucherSpecialCaseTypes.List',
   TRANSACTIONAL_SYSTEMS_LIST = 'FA.Vouchers.Selector.TransactionalSystems.List',
+  LIST_FILTER_DATA = 'FA.Vouchers.Selectors.VouchersListFilterData',
 }
 
 
@@ -31,6 +41,7 @@ const initialState: StateValues = [
   { key: SelectorType.VOUCHER_TYPES_LIST, value: [] },
   { key: SelectorType.VOUCHER_SPECIAL_CASE_TYPES_LIST, value: [] },
   { key: SelectorType.TRANSACTIONAL_SYSTEMS_LIST, value: [] },
+  { key: SelectorType.LIST_FILTER_DATA, value: EmptyVoucherFilterData },
 ];
 
 
@@ -41,6 +52,7 @@ export class VoucherPresentationHandler extends AbstractPresentationHandler {
     super({
       initialState,
       selectors: SelectorType,
+      actions: ActionType,
     });
   }
 
@@ -82,6 +94,24 @@ export class VoucherPresentationHandler extends AbstractPresentationHandler {
 
       default:
         return super.select<U>(selectorType, params);
+    }
+  }
+
+
+  dispatch(actionType: ActionType, params?: any): void {
+    switch (actionType) {
+
+      case ActionType.SET_LIST_FILTER_DATA:
+        Assertion.assertValue(params.filterData, 'payload.filterData');
+
+        const filterData = params?.filterData || this.getValue(SelectorType.LIST_FILTER_DATA);
+
+        this.setValue(SelectorType.LIST_FILTER_DATA, filterData);
+
+        return;
+
+      default:
+        throw this.unhandledCommandOrActionType(actionType);
     }
   }
 

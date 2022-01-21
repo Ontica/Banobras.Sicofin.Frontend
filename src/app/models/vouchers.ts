@@ -7,6 +7,8 @@
 
 import { Assertion, DateString, Empty, Identifiable } from '@app/core';
 
+import { AccountsChartMasterData } from './accounts-chart';
+
 import { EmptyLedgerAccount, EmptyLedgerAccountSectorRule, LedgerAccount,
          LedgerAccountSectorRule } from './ledgers';
 
@@ -125,6 +127,20 @@ export const EmptySearchVouchersCommand: SearchVouchersCommand = {
   keywords: '',
   ledgerUID: '',
   editorType: EditorType.ElaboratedBy,
+};
+
+
+export interface VoucherFilterData {
+  command: SearchVouchersCommand,
+  accountChart: AccountsChartMasterData,
+  editor: Identifiable,
+}
+
+
+export const EmptyVoucherFilterData: VoucherFilterData = {
+  command: Object.assign({}, EmptySearchVouchersCommand),
+  accountChart: null,
+  editor: null,
 };
 
 

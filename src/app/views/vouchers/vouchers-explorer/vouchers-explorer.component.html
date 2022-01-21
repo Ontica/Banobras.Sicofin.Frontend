@@ -37,6 +37,7 @@
       </emp-ng-spinner>
 
       <emp-fa-voucher-filter fxFlex="none"
+        [voucherFilterData]="voucherFilterData"
         [(showFilters)]="showFilters"
         (voucherFilterEvent)="onChangeFilter($event)">
 

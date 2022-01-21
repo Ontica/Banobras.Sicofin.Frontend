@@ -9,7 +9,8 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnIni
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyVoucher, SearchVouchersCommand, Voucher, VoucherDescriptor } from '@app/models';
+import { EmptyVoucher, EmptyVoucherFilterData, Voucher, VoucherDescriptor,
+         VoucherFilterData } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -33,6 +34,8 @@ export enum VouchersExplorerEventType {
   templateUrl: './vouchers-explorer.component.html',
 })
 export class VouchersExplorerComponent implements OnInit, OnChanges {
+
+  @Input() voucherFilterData: VoucherFilterData = Object.assign({}, EmptyVoucherFilterData);
 
   @Input() voucherList: VoucherDescriptor[] = [];
 
@@ -76,7 +79,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
         this.searching = true;
 
         sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.FILTER_CHANGED,
-          event.payload as SearchVouchersCommand);
+          event.payload as VoucherFilterData);
 
         return;
 
@@ -86,7 +89,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
         this.searching = false;
 
         sendEvent(this.vouchersExplorerEvent, VouchersExplorerEventType.FILTER_CLEARED,
-          event.payload as SearchVouchersCommand);
+          event.payload as VoucherFilterData);
 
         return;
 

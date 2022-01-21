@@ -5,6 +5,7 @@
   <div class="primary" [fxHide.xs.notebook]="displayVoucherTabbedView">
 
     <emp-fa-vouchers-explorer
+      [voucherFilterData]="voucherFilterData"
       [voucherList]="voucherList"
       [selectedVoucher]="selectedVoucher"
       [isLoading]="isLoading"

@@ -11,11 +11,12 @@ import { Assertion, EventInfo, StringLibrary } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
+import { MainUIStateSelector, VoucherAction,
+         VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptySearchVouchersCommand, EmptyVoucher, mapVoucherDescriptorFromVoucher,
-         mapVoucherStageFromViewName, SearchVouchersCommand, Voucher, VoucherDescriptor,
-         VouchersOperationCommand, VouchersOperationResult, VouchersOperationType} from '@app/models';
+import { EmptyVoucher, EmptyVoucherFilterData, mapVoucherDescriptorFromVoucher, mapVoucherStageFromViewName,
+         Voucher, VoucherDescriptor, VoucherFilterData, VouchersOperationCommand, VouchersOperationResult,
+         VouchersOperationType } from '@app/models';
 
 import { View } from '@app/workspaces/main-layout';
 
@@ -46,7 +47,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   currentView: View;
 
-  searchVouchersCommand: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
+  voucherFilterData: VoucherFilterData = Object.assign({}, EmptyVoucherFilterData);
 
   voucherList: VoucherDescriptor[] = [];
 
@@ -76,6 +77,9 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptionHelper.select<View>(MainUIStateSelector.CURRENT_VIEW)
       .subscribe(x => this.onCurrentViewChanged(x));
+
+    this.subscriptionHelper.select<VoucherFilterData>(VoucherStateSelector.LIST_FILTER_DATA)
+      .subscribe(x => this.voucherFilterData = x);
   }
 
 
@@ -139,7 +143,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (!this.searchVouchersCommand.accountsChartUID ) {
+        if (!this.voucherFilterData.command.accountsChartUID ) {
           return;
         }
 
@@ -217,13 +221,19 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   private onCurrentViewChanged(newView: View) {
     this.currentView = newView;
-    this.applyVoucherFilter(this.searchVouchersCommand);
+
+    const currentFilterData =
+      this.uiLayer.selectValue<VoucherFilterData>(VoucherStateSelector.LIST_FILTER_DATA);
+
+    this.applyVoucherFilter(currentFilterData);
   }
 
 
-  private applyVoucherFilter(newFilter: SearchVouchersCommand) {
-    this.searchVouchersCommand =  Object.assign({}, newFilter,
+  private applyVoucherFilter(newFilterData: VoucherFilterData) {
+    const command = Object.assign({}, newFilterData.command,
       {stage: mapVoucherStageFromViewName(this.currentView.name)});
+    const filterData = Object.assign({}, newFilterData, {command});
+    this.uiLayer.dispatch(VoucherAction.SET_LIST_FILTER_DATA, { filterData });
   }
 
 
@@ -233,13 +243,13 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
 
   private searchVouchers() {
-    if (!this.searchVouchersCommand.accountsChartUID) {
+    if (!this.voucherFilterData.command.accountsChartUID) {
       return;
     }
 
     this.isLoading = true;
 
-    this.vouchersData.searchVouchers(this.searchVouchersCommand)
+    this.vouchersData.searchVouchers(this.voucherFilterData.command)
       .toPromise()
       .then(x => {
         this.setVoucherListData(x);
@@ -253,7 +263,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.excelFileUrl = 'data-dummy';
       this.messageBox.showInDevelopment('Exportar pólizas',
-        {type: 'EXPORT_VOUCHERS', command: this.searchVouchersCommand});
+        {type: 'EXPORT_VOUCHERS', command: this.voucherFilterData.command});
     }, 500);
   }
 
@@ -263,9 +273,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
     this.vouchersData.getVoucher(idVoucher)
       .toPromise()
-      .then(x => {
-        this.setSelectedVoucher(x);
-      })
+      .then(x => this.setSelectedVoucher(x))
       .finally(() => this.isLoadingVoucher = false);
   }
 
@@ -289,7 +297,6 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   private setVoucherListData(voucherList: VoucherDescriptor[]) {
     this.voucherList = voucherList;
-    this.searchVouchersCommand = Object.assign({}, this.searchVouchersCommand);
   }
 
 

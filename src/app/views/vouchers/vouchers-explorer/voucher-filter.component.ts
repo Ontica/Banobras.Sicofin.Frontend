@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
@@ -25,8 +26,8 @@ import { sendEvent } from '@app/shared/utils';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, DateSearchFieldList, SearchVouchersCommand,
-         VoucherStage, EditorTypeList, EmptySearchVouchersCommand } from '@app/models';
+import { AccountsChartMasterData, DateSearchFieldList, SearchVouchersCommand, VoucherStage, EditorTypeList,
+         EmptySearchVouchersCommand, VoucherFilterData, EmptyVoucherFilterData } from '@app/models';
 
 
 export enum VoucherFilterEventType {
@@ -40,7 +41,9 @@ export enum VoucherFilterEventType {
   templateUrl: './voucher-filter.component.html',
   animations: [expandCollapse],
 })
-export class VoucherFilterComponent implements OnInit, OnDestroy {
+export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
+
+  @Input() voucherFilterData: VoucherFilterData = Object.assign({}, EmptyVoucherFilterData);
 
   @Input() showFilters = false;
 
@@ -48,14 +51,13 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   @Output() voucherFilterEvent = new EventEmitter<EventInfo>();
 
-  filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
-
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
   dateSearchFieldList: Identifiable[] = DateSearchFieldList;
   editorTypeList: Identifiable[] = EditorTypeList;
   transactionTypesList: Identifiable[] = [];
   voucherTypesList: Identifiable[] = [];
 
+  filter: SearchVouchersCommand = Object.assign({}, EmptySearchVouchersCommand);
   accountChartSelected: AccountsChartMasterData = null;
   editorSelected: Identifiable = null;
 
@@ -71,6 +73,15 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
+  }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.voucherFilterData) {
+      this.filter = Object.assign({}, this.voucherFilterData.command);
+      this.accountChartSelected = this.voucherFilterData.accountChart ?? null;
+      this.editorSelected = this.voucherFilterData.editor ?? null;
+    }
   }
 
 
@@ -125,7 +136,7 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
 
   onSearchVoucherClicked() {
     sendEvent(this.voucherFilterEvent, VoucherFilterEventType.SEARCH_VOUCHERS_CLICKED,
-      this.getSearchVoucherCommand());
+      this.getVoucherFilterData());
   }
 
 
@@ -143,7 +154,7 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
       this.transactionTypesList = y;
       this.voucherTypesList = z;
 
-      this.setAndEmitDefaultFilter();
+      this.validateEmitFirstFilter();
       this.isLoading = false;
     });
   }
@@ -175,6 +186,13 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  private validateEmitFirstFilter() {
+    if (!this.filter.accountsChartUID) {
+      this.setAndEmitDefaultFilter();
+    }
+  }
+
+
   private setAndEmitDefaultFilter() {
     this.setDefaultFieldsSelected();
 
@@ -182,7 +200,7 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
       { accountsChartUID: this.filter.accountsChartUID });
 
     sendEvent(this.voucherFilterEvent, VoucherFilterEventType.CLEAR_VOUCHERS_CLICKED,
-      this.getSearchVoucherCommand());
+      this.getVoucherFilterData());
   }
 
 
@@ -191,6 +209,17 @@ export class VoucherFilterComponent implements OnInit, OnDestroy {
     this.editorSelected = null;
     this.filter.accountsChartUID = this.accountChartSelected?.uid ?? '';
     this.filter.editorUID = '';
+  }
+
+
+  private getVoucherFilterData(): VoucherFilterData {
+    const payload: VoucherFilterData = {
+      command: this.getSearchVoucherCommand(),
+      accountChart: this.accountChartSelected,
+      editor: this.editorSelected,
+    };
+
+    return payload;
   }
 
 

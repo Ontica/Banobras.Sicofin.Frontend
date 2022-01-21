@@ -8,7 +8,10 @@
 
 /* Actions */
 
-export type FAActions = '';
+import { ActionType as VoucherAction } from './voucher.presentation.handler';
+export { ActionType as VoucherAction } from './voucher.presentation.handler';
+
+export type FAActions = VoucherAction;
 
 
 /* Commands */
