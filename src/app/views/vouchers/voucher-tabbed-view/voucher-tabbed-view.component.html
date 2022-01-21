@@ -8,6 +8,7 @@
 
       <emp-fa-voucher-editor
         [voucher]="voucher"
+        [canEditVoucher]="canEditVoucher"
         (voucherEditorEvent)="onVoucherEditorEvent($event)">
 
       </emp-fa-voucher-editor>
@@ -18,6 +19,7 @@
 
       <emp-fa-voucher-entries-editor
         [voucher]="voucher"
+        [canEditVoucher]="canEditVoucher"
         (voucherEntriesEditorEvent)="onVoucherEntriesEditorEvent($event)">
 
       </emp-fa-voucher-entries-editor>

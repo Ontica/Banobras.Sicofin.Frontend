@@ -5,13 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { EmptyVoucher, isOpenVoucher, Voucher, VoucherFields } from '@app/models';
+import { EmptyVoucher, Voucher, VoucherFields } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -34,6 +34,8 @@ export class VoucherEditorComponent implements OnChanges {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
+  @Input() canEditVoucher = false;
+
   @Output() voucherEditorEvent = new EventEmitter<EventInfo>();
 
   formEditionMode = false;
@@ -47,15 +49,12 @@ export class VoucherEditorComponent implements OnChanges {
   constructor(private vouchersData: VouchersDataService) {}
 
 
-  ngOnChanges() {
-    this.formEditionMode = false;
-    this.voucherFieldsValid = false;
-    this.voucherFields = null;
-  }
-
-
-  get canEditVoucher(): boolean {
-    return isOpenVoucher(this.voucher.status);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.voucher) {
+      this.formEditionMode = false;
+      this.voucherFieldsValid = false;
+      this.voucherFields = null;
+    }
   }
 
 

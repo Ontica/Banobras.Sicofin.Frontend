@@ -11,8 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { EmptyVoucher, EmptyVoucherEntry, isOpenVoucher, Voucher, VoucherEntry,
-         VoucherEntryFields } from '@app/models';
+import { EmptyVoucher, EmptyVoucherEntry, Voucher, VoucherEntry, VoucherEntryFields } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -35,6 +34,8 @@ export class VoucherEntriesEditorComponent {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
+  @Input() canEditVoucher = false;
+
   @Output() voucherEntriesEditorEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
@@ -45,11 +46,6 @@ export class VoucherEntriesEditorComponent {
 
   constructor(private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {}
-
-
-  get canEditVoucher(): boolean {
-    return isOpenVoucher(this.voucher.status);
-  }
 
 
   onAddVoucherEntryClicked() {

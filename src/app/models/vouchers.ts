@@ -197,6 +197,7 @@ export const VoucherEntryTypeList: Identifiable[] = [
 
 
 export interface VoucherActions {
+  editVoucher?: boolean;
   reviewVoucher?: boolean;
   sendToLedger?: boolean;
   sendToSupervisor?: boolean;
@@ -204,6 +205,7 @@ export interface VoucherActions {
 
 
 export const EmptyVoucherActions: VoucherActions = {
+  editVoucher: false,
   reviewVoucher: false,
   sendToLedger: false,
   sendToSupervisor: false,
@@ -246,11 +248,6 @@ export const EmptyVoucher: Voucher = {
   entries: [],
   actions: EmptyVoucherActions,
 };
-
-
-export function isOpenVoucher(status: string): boolean {
-  return status === 'Pendiente';
-}
 
 
 export function mapVoucherDescriptorFromVoucher(voucher: Voucher): VoucherDescriptor {
