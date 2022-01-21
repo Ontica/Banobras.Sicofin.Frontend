@@ -222,6 +222,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
   private getConfirmTitle(): string {
     switch (this.operationSelected.uid as VouchersOperationType) {
       case VouchersOperationType.close:
+      case VouchersOperationType.sendToSupervisor:
       case VouchersOperationType.delete:
       case VouchersOperationType.print:
         return `${this.operationSelected.name} las pólizas`;
@@ -240,6 +241,10 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
       case VouchersOperationType.close:
         operation = 'enviará al diario';
         question = '¿Envío al diario las pólizas?';
+        break;
+      case VouchersOperationType.sendToSupervisor:
+        operation = 'enviará al supervisor';
+        question = '¿Envío al supervisor las pólizas?';
         break;
       case VouchersOperationType.delete:
         operation = 'eliminará';

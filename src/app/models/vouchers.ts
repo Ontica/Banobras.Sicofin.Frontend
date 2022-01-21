@@ -65,6 +65,7 @@ export const EditorTypeList: Identifiable[] = [
 
 export enum VouchersOperationType {
   close = 'close',
+  sendToSupervisor = 'send-to-supervisor',
   delete = 'delete',
   print = 'print',
   reasign = 'reasign',
@@ -77,10 +78,11 @@ export interface VouchersOperation extends Identifiable {
 
 
 export const VouchersOperationList: VouchersOperation[] = [
-  {uid: VouchersOperationType.close,   name: 'Enviar al diario'},
-  {uid: VouchersOperationType.reasign, name: 'Reasignar a', assignToRequired: true},
-  {uid: VouchersOperationType.delete,  name: 'Eliminar'},
-  {uid: VouchersOperationType.print,   name: 'Imprimir'},
+  {uid: VouchersOperationType.close,            name: 'Enviar al diario'},
+  {uid: VouchersOperationType.sendToSupervisor, name: 'Enviar al supervisor'},
+  {uid: VouchersOperationType.reasign,          name: 'Reasignar a', assignToRequired: true},
+  {uid: VouchersOperationType.delete,           name: 'Eliminar'},
+  {uid: VouchersOperationType.print,            name: 'Imprimir'},
 ];
 
 
