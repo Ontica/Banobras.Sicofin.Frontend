@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
@@ -28,9 +28,21 @@ export enum BalanceQuickFilterEventType {
 })
 export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
+  @Input() balanceCommand: BalanceCommand = getEmptyBalanceCommand();
+
   @Output() balanceQuickFilterEvent = new EventEmitter<EventInfo>();
 
-  balanceCommand: BalanceCommand = getEmptyBalanceCommand();
+  formData = {
+    accountsChartUID: '',
+    trialBalanceType: '',
+    balancesType: '',
+    fromAccount: '',
+    fromDate: null,
+    toDate: null,
+    subledgerAccount: '',
+    withSubledgerAccount: false,
+    withAllAccounts: false,
+  };
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
@@ -46,7 +58,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.setInitialPeriodDefault();
+    this.initFormData();
     this.loadAccountsCharts();
   }
 
@@ -57,31 +69,31 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
 
   get trialBalanceTypeSelected(): Identifiable {
-    return !this.balanceCommand.trialBalanceType ? null :
-      this.balanceTypeList.find(x => x.uid === this.balanceCommand.trialBalanceType);
+    return !this.formData.trialBalanceType ? null :
+      this.balanceTypeList.find(x => x.uid === this.formData.trialBalanceType);
   }
 
 
   get displayFromAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
+    return this.formData.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
   }
 
 
   get displaySubledgerAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorAuxiliarConsultaRapida;
+    return this.formData.trialBalanceType === BalanceTypes.SaldosPorAuxiliarConsultaRapida;
   }
 
 
   get displayWithSubledgerAccount(): boolean {
-    return this.balanceCommand.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
+    return this.formData.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
   }
 
 
   onBalanceTypeChange() {
-    this.balanceCommand.fromAccount = '';
-    this.balanceCommand.subledgerAccount = '';
-    this.balanceCommand.withSubledgerAccount = this.displaySubledgerAccount;
-    this.balanceCommand.withAllAccounts = false;
+    this.formData.fromAccount = '';
+    this.formData.subledgerAccount = '';
+    this.formData.withSubledgerAccount = this.displaySubledgerAccount;
+    this.formData.withAllAccounts = false;
   }
 
 
@@ -100,40 +112,63 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private setInitialPeriodDefault() {
-    this.balanceCommand.initialPeriod.toDate = DateStringLibrary.today();
-    this.validateValueOfInitPeriodFromDate(this.balanceCommand.initialPeriod.toDate);
-  }
-
-
   private loadAccountsCharts() {
     this.isLoading = true;
 
     this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
       .subscribe(x => {
         this.accountsChartMasterDataList = x;
+        this.setDefaultFields();
         this.isLoading = false;
       });
   }
 
 
+  private initFormData() {
+    this.formData = {
+      accountsChartUID: this.balanceCommand.accountsChartUID,
+      trialBalanceType: this.balanceCommand.trialBalanceType,
+      balancesType: this.balanceCommand.balancesType,
+      fromAccount: this.balanceCommand.fromAccount,
+
+      fromDate: this.balanceCommand.initialPeriod.fromDate,
+      toDate: this.balanceCommand.initialPeriod.toDate,
+
+      subledgerAccount: this.balanceCommand.subledgerAccount,
+      withSubledgerAccount: this.balanceCommand.withSubledgerAccount,
+      withAllAccounts: this.balanceCommand.withAllAccounts,
+    };
+  }
+
+
+  private setDefaultFields() {
+    if (!this.formData.accountsChartUID) {
+      this.formData.accountsChartUID = this.accountsChartMasterDataList[0].uid ?? null;
+      this.formData.trialBalanceType = this.balanceTypeList[0].uid as BalanceTypes ?? null;
+
+      this.formData.toDate = DateStringLibrary.today();
+      this.validateValueOfInitPeriodFromDate(this.formData.toDate);
+    }
+  }
+
+
   private validateValueOfInitPeriodFromDate(toDate: DateString) {
-    this.balanceCommand.initialPeriod.fromDate = DateStringLibrary.getFirstDayOfMonthFromDateString(toDate);
+    this.formData.fromDate = DateStringLibrary.getFirstDayOfMonthFromDateString(toDate);
   }
 
 
   private getBalanceCommandData(): BalanceCommand {
     const data: BalanceCommand = {
-      accountsChartUID: this.balanceCommand.accountsChartUID,
-      trialBalanceType: this.balanceCommand.trialBalanceType,
-      fromAccount: this.balanceCommand.fromAccount,
-      subledgerAccount: this.balanceCommand.subledgerAccount,
+      accountsChartUID: this.formData.accountsChartUID,
+      trialBalanceType: this.formData.trialBalanceType as BalanceTypes,
+      fromAccount: this.formData.fromAccount,
+      subledgerAccount: this.formData.subledgerAccount,
       initialPeriod: {
-        fromDate: this.balanceCommand.initialPeriod.fromDate,
-        toDate: this.balanceCommand.initialPeriod.toDate,
+        fromDate: this.formData.fromDate,
+        toDate: this.formData.toDate,
       },
-      withSubledgerAccount: this.balanceCommand.withSubledgerAccount,
-      withAllAccounts: this.balanceCommand.withAllAccounts,
+      withSubledgerAccount: this.formData.withSubledgerAccount,
+      withAllAccounts: this.formData.withAllAccounts,
     };
 
     return data;

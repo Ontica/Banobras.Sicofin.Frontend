@@ -10,10 +10,9 @@
           <label>Tipo de consulta:</label>
 
           <emp-ng-select name="trialBalanceType" required
-            [config]="{selectFirst: true}"
-            [(ngModel)]="balanceCommand.trialBalanceType"
+            [(ngModel)]="formData.trialBalanceType"
             [items]="balanceTypeList"
-            [showError]="!balanceCommand.trialBalanceType"
+            [showError]="!formData.trialBalanceType"
             (changes)="onBalanceTypeChange()">
           </emp-ng-select>
 
@@ -24,9 +23,9 @@
           <label>Cuenta:</label>
 
           <input type="text" class="text-box" name="fromAccount" required
-            [(ngModel)]="balanceCommand.fromAccount"
-            [class.invalid-control]="!balanceCommand.fromAccount"
-            (keyup.escape)="balanceCommand.fromAccount = ''">
+            [(ngModel)]="formData.fromAccount"
+            [class.invalid-control]="!formData.fromAccount"
+            (keyup.escape)="formData.fromAccount = ''">
 
         </div>
 
@@ -35,9 +34,9 @@
           <label>Auxiliar:</label>
 
           <input type="text" class="text-box" name="subledgerAccount" required
-            [(ngModel)]="balanceCommand.subledgerAccount"
-            [class.invalid-control]="!balanceCommand.subledgerAccount"
-            (keyup.escape)="balanceCommand.subledgerAccount = ''">
+            [(ngModel)]="formData.subledgerAccount"
+            [class.invalid-control]="!formData.subledgerAccount"
+            (keyup.escape)="formData.subledgerAccount = ''">
 
         </div>
 
@@ -48,8 +47,8 @@
           <label>Fecha:</label>
 
           <emp-ng-datepicker name="date" required
-            [(ngModel)]="balanceCommand.initialPeriod.toDate"
-            [showError]="!balanceCommand.initialPeriod.toDate"
+            [(ngModel)]="formData.toDate"
+            [showError]="!formData.toDate"
             (valueChange)="onDatepickerInitialPeriodToDateChange($event)">
 
           </emp-ng-datepicker>
@@ -61,11 +60,10 @@
           <label>Grupo de contabilidades:</label>
 
           <emp-ng-select name="accountsChartUID" required
-            [config]="{selectFirst: true}"
-            [(ngModel)]="balanceCommand.accountsChartUID"
+            [(ngModel)]="formData.accountsChartUID"
             [items]="accountsChartMasterDataList"
             [loading]="isLoading"
-            [showError]="!balanceCommand.accountsChartUID">
+            [showError]="!formData.accountsChartUID">
           </emp-ng-select>
 
         </div>
@@ -92,7 +90,7 @@
         <div fxFlex="25">
 
           <mat-checkbox name="withAllAccounts"
-            [(ngModel)]="balanceCommand.withAllAccounts"
+            [(ngModel)]="formData.withAllAccounts"
             (click)="$event.stopPropagation">
             Incluir cuentas sin saldo
           </mat-checkbox>
@@ -102,7 +100,7 @@
         <div fxFlex="25" *ngIf="displayWithSubledgerAccount">
 
           <mat-checkbox name="withSubledgerAccount"
-            [(ngModel)]="balanceCommand.withSubledgerAccount"
+            [(ngModel)]="formData.withSubledgerAccount"
             (click)="$event.stopPropagation">
             Con Auxiliares
           </mat-checkbox>

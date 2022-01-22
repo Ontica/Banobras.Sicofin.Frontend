@@ -13,14 +13,25 @@ import { AbstractPresentationHandler, StateValues } from '@app/core/presentation
 
 import { OperationalReportsDataService } from '@app/data-services';
 
+import { EmptyBalanceData } from '@app/models';
+
+import { Assertion } from '@app/core';
+
+
+export enum ActionType {
+  SET_BALANCE_EXPLORER_DATA = 'FA.OperationalReport.Action.SetBalanceExplorerData',
+}
+
 
 export enum SelectorType {
   REPORT_TYPES_LIST = 'FA.OperationalReport.Selector.ReportTypes.List',
+  BALANCE_EXPLORER_DATA = 'FA.OperationalReport.Selectors.BalanceExplorer.Data',
 }
 
 
 const initialState: StateValues = [
   { key: SelectorType.REPORT_TYPES_LIST, value: [] },
+  { key: SelectorType.BALANCE_EXPLORER_DATA, value: EmptyBalanceData },
 ];
 
 
@@ -31,6 +42,7 @@ export class ReportingPresentationHandler extends AbstractPresentationHandler {
     super({
       initialState,
       selectors: SelectorType,
+      actions: ActionType,
     });
   }
 
@@ -47,6 +59,24 @@ export class ReportingPresentationHandler extends AbstractPresentationHandler {
       default:
         return super.select<U>(selectorType, params);
 
+    }
+  }
+
+
+  dispatch(actionType: ActionType, params?: any): void {
+    switch (actionType) {
+
+      case ActionType.SET_BALANCE_EXPLORER_DATA:
+        Assertion.assertValue(params.balanceData, 'payload.balanceData');
+
+        const balanceData = params?.balanceData || this.getValue(SelectorType.BALANCE_EXPLORER_DATA);
+
+        this.setValue(SelectorType.BALANCE_EXPLORER_DATA, balanceData);
+
+        return;
+
+      default:
+        throw this.unhandledCommandOrActionType(actionType);
     }
   }
 

@@ -30,6 +30,7 @@
       </emp-fa-trial-balance-filter>
 
       <emp-fa-balance-quick-filter fxFlex="none" *ngIf="isQuickQuery"
+        [balanceCommand]="balanceCommand"
         (balanceQuickFilterEvent)="onFilterEvent($event)">
 
       </emp-fa-balance-quick-filter>

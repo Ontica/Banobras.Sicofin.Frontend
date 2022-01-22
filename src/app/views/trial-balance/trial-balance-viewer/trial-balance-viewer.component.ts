@@ -5,17 +5,21 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 import { Assertion, Empty, EventInfo, Identifiable } from '@app/core';
 
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
 import { BalancesDataService } from '@app/data-services';
 
-import { Balance, BalanceCommand, BalanceEntry, EmptyTrialBalance, FileReport, getEmptyBalanceCommand,
-         getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
+import { Balance, BalanceCommand, BalanceData, BalanceEntry, EmptyTrialBalance, FileReport,
+         getEmptyBalanceCommand, getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
          TrialBalanceEntry } from '@app/models';
+
+import { ReportingAction, ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -39,7 +43,7 @@ export enum TrialBalanceViewerEventType {
   selector: 'emp-fa-trial-balance-viewer',
   templateUrl: './trial-balance-viewer.component.html',
 })
-export class TrialBalanceViewerComponent {
+export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   @Input() isQuickQuery = false;
 
@@ -67,8 +71,33 @@ export class TrialBalanceViewerComponent {
 
   excelFileUrl = '';
 
+  subscriptionHelper: SubscriptionHelper;
 
-  constructor(private balancesDataService: BalancesDataService) { }
+
+  constructor(private uiLayer: PresentationLayer,
+              private balancesDataService: BalancesDataService) {
+    this.subscriptionHelper = uiLayer.createSubscriptionHelper();
+  }
+
+
+  ngOnInit() {
+    if (this.isQuickQuery) {
+      this.subscriptionHelper.select<BalanceData>(ReportingStateSelector.BALANCE_EXPLORER_DATA)
+        .subscribe(x => this.setInitData(x));
+    }
+  }
+
+
+  ngOnDestroy() {
+    if (this.isQuickQuery) {
+      this.subscriptionHelper.destroy();
+    }
+  }
+
+
+  get balanceCommand(): BalanceCommand {
+    return this.command as BalanceCommand;
+  }
 
 
   onFilterEvent(event) {
@@ -195,6 +224,7 @@ export class TrialBalanceViewerComponent {
   private setData(data: Balance | TrialBalance) {
     this.data = data;
     this.setText();
+    this.saveDataInState();
   }
 
 
@@ -202,6 +232,28 @@ export class TrialBalanceViewerComponent {
     this.commandExecuted = false;
     this.setData(EmptyTrialBalance);
     sendEvent(this.trialBalanceViewerEvent, TrialBalanceViewerEventType.UNSELECT_ENTRY);
+  }
+
+
+  private setInitData(balanceData: BalanceData) {
+    this.data = balanceData.balance;
+    this.command = balanceData.balance.command;
+    this.commandExecuted = balanceData.commandExecuted;
+    this.setBalanceTypeName(balanceData.balanceType);
+    this.setText();
+  }
+
+
+  private saveDataInState() {
+    if (this.isQuickQuery) {
+      const balanceData: BalanceData = {
+        balance: this.data as Balance,
+        balanceType: this.balanceType,
+        commandExecuted: this.commandExecuted,
+      };
+
+      this.uiLayer.dispatch(ReportingAction.SET_BALANCE_EXPLORER_DATA, {balanceData});
+    }
   }
 
 

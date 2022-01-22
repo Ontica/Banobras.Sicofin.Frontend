@@ -11,7 +11,10 @@
 import { ActionType as VoucherAction } from './voucher.presentation.handler';
 export { ActionType as VoucherAction } from './voucher.presentation.handler';
 
-export type FAActions = VoucherAction;
+import { ActionType as ReportingAction } from './reporting.presentation.handler';
+export { ActionType as ReportingAction } from './reporting.presentation.handler';
+
+export type FAActions = VoucherAction | ReportingAction;
 
 
 /* Commands */

@@ -46,6 +46,13 @@ export interface Balance extends DataTable {
 }
 
 
+export const EmptyBalance: Balance = {
+  command: getEmptyBalanceCommand(),
+  columns: [],
+  entries: [],
+};
+
+
 export interface BalanceEntry extends DataTableEntry {
   hasAccountStatement?: boolean;
 }
@@ -78,3 +85,17 @@ export function getEmptyBalanceCommand(): BalanceCommand {
     withAllAccounts: false,
   };
 }
+
+
+export interface BalanceData {
+  balance: Balance;
+  balanceType: Identifiable;
+  commandExecuted: boolean;
+}
+
+
+export const EmptyBalanceData: BalanceData = {
+  balance: EmptyBalance,
+  balanceType: null,
+  commandExecuted: false,
+};
