@@ -46,7 +46,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  balanceTypeList: Identifiable[] = BalanceTypeList;
+  balanceTypeList: Identifiable[] = BalanceTypeList ?? [];
 
   isLoading = false;
 
@@ -117,7 +117,7 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
     this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
       .subscribe(x => {
-        this.accountsChartMasterDataList = x;
+        this.accountsChartMasterDataList = x ?? [];
         this.setDefaultFields();
         this.isLoading = false;
       });
@@ -143,8 +143,10 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
 
   private setDefaultFields() {
     if (!this.formData.accountsChartUID) {
-      this.formData.accountsChartUID = this.accountsChartMasterDataList[0].uid ?? null;
-      this.formData.trialBalanceType = this.balanceTypeList[0].uid as BalanceTypes ?? null;
+      this.formData.accountsChartUID = this.accountsChartMasterDataList[0] ?
+        this.accountsChartMasterDataList[0].uid : null;
+      this.formData.trialBalanceType = this.balanceTypeList[0] ?
+        this.balanceTypeList[0].uid as BalanceTypes : null;
 
       this.formData.toDate = DateStringLibrary.today();
       this.validateValueOfInitPeriodFromDate(this.formData.toDate);
