@@ -133,9 +133,9 @@ export const EmptySearchVouchersCommand: SearchVouchersCommand = {
 
 
 export interface VoucherFilterData {
-  command: SearchVouchersCommand,
-  accountChart: AccountsChartMasterData,
-  editor: Identifiable,
+  command: SearchVouchersCommand;
+  accountChart: AccountsChartMasterData;
+  editor: Identifiable;
 }
 
 

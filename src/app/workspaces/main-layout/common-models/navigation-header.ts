@@ -24,7 +24,9 @@ export const DefaultNavigationHeader: NavigationHeader = {
 };
 
 
-export function buildNavigationHeader(layout: Layout, permissions: string[], title?: string): NavigationHeader {
+export function buildNavigationHeader(layout: Layout,
+                                      permissions: string[],
+                                      title?: string): NavigationHeader {
   const navHeader: NavigationHeader = {
     title: title || layout.defaultTitle,
     hint: layout.hint,

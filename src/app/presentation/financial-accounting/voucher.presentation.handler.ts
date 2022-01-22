@@ -30,7 +30,7 @@ export enum SelectorType {
   VOUCHER_TYPES_LIST = 'FA.Vouchers.Selector.VoucherTypes.List',
   VOUCHER_SPECIAL_CASE_TYPES_LIST = 'FA.Vouchers.Selector.VoucherSpecialCaseTypes.List',
   TRANSACTIONAL_SYSTEMS_LIST = 'FA.Vouchers.Selector.TransactionalSystems.List',
-  LIST_FILTER_DATA = 'FA.Vouchers.Selectors.VouchersListFilterData',
+  LIST_FILTER_DATA = 'FA.Vouchers.Selectors.VouchersListFilter.Data',
 }
 
 
