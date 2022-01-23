@@ -43,7 +43,7 @@ export class VoucherTabbedViewComponent implements OnChanges {
 
 
   get canEditVoucher(): boolean {
-    return this.voucher.status === 'Pendiente' && this.voucher.actions.editVoucher;
+    return this.voucher.actions.editVoucher;
   }
 
 
