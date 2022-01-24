@@ -87,22 +87,22 @@
 
       <div fxLayout="row">
 
-        <div fxFlex="25">
-
-          <mat-checkbox name="withAllAccounts"
-            [(ngModel)]="formData.withAllAccounts"
-            (click)="$event.stopPropagation">
-            Incluir cuentas sin saldo
-          </mat-checkbox>
-
-        </div>
-
         <div fxFlex="25" *ngIf="displayWithSubledgerAccount">
 
           <mat-checkbox name="withSubledgerAccount"
             [(ngModel)]="formData.withSubledgerAccount"
             (click)="$event.stopPropagation">
             Con Auxiliares
+          </mat-checkbox>
+
+        </div>
+
+        <div fxFlex="25">
+
+          <mat-checkbox name="withAllAccounts"
+            [(ngModel)]="formData.withAllAccounts"
+            (click)="$event.stopPropagation">
+            Incluir cuentas sin saldo
           </mat-checkbox>
 
         </div>
