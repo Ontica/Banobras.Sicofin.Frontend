@@ -31,8 +31,7 @@
           [(ngModel)]="subledgerAccountsForm.ledger"
           [items]="subledgerAccountsForm.accountChart?.ledgers"
           [showError]="ledger.invalid"
-          [placeholder]="subledgerAccountsForm.accountChart ?
-            'Todas para el grupo seleccionado' : 'Seleccione el grupo'"
+          [placeholder]="subledgerAccountsForm.accountChart ? 'Seleccionar' : 'Seleccione el grupo'"
           bindLabel="fullName"
           (changes)="onLedgerChanges()">
         </emp-ng-select>

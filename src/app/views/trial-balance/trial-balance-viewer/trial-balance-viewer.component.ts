@@ -125,6 +125,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
         return;
 
       case TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED:
+      case BalanceQuickFilterEventType.CLEAR_BALANCE_CLICKED:
         this.setBalanceTypeName(null);
         this.clearCommand();
         return;

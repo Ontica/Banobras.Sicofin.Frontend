@@ -107,6 +107,27 @@
 
         </div>
 
+        <div fxFlex>
+
+        </div>
+
+        <ng-container #clearFilterSection>
+
+          <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0">
+
+          </mat-divider>
+
+          <div fxFlex="117px" fxLayoutAlign="space-around end">
+
+            <button class="btn-base" (click)="onClearFilters()" fxFlex="100%" [style.marginRight.px]="0">
+              Limpiar
+              <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+            </button>
+
+          </div>
+
+        </ng-container>
+
       </div>
 
   </div>

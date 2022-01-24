@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
@@ -20,13 +20,14 @@ import { sendEvent } from '@app/shared/utils';
 
 export enum BalanceQuickFilterEventType {
   BUILD_BALANCE_CLICKED = 'BalanceQuickFilterComponent.Event.BuildBalanceClicked',
+  CLEAR_BALANCE_CLICKED = 'BalanceQuickFilterComponent.Event.ClearBalanceClicked',
 }
 
 @Component({
   selector: 'emp-fa-balance-quick-filter',
   templateUrl: './balance-quick-filter.component.html',
 })
-export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
+export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() balanceCommand: BalanceCommand = getEmptyBalanceCommand();
 
@@ -57,8 +58,13 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit() {
+  ngOnChanges() {
     this.initFormData();
+    this.setDefaultFields();
+  }
+
+
+  ngOnInit() {
     this.loadAccountsCharts();
   }
 
@@ -112,6 +118,11 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onClearFilters() {
+    sendEvent(this.balanceQuickFilterEvent, BalanceQuickFilterEventType.CLEAR_BALANCE_CLICKED);
+  }
+
+
   private loadAccountsCharts() {
     this.isLoading = true;
 
@@ -130,10 +141,8 @@ export class BalanceQuickFilterComponent implements OnInit, OnDestroy {
       trialBalanceType: this.balanceCommand.trialBalanceType,
       balancesType: this.balanceCommand.balancesType,
       fromAccount: this.balanceCommand.fromAccount,
-
       fromDate: this.balanceCommand.initialPeriod.fromDate,
       toDate: this.balanceCommand.initialPeriod.toDate,
-
       subledgerAccount: this.balanceCommand.subledgerAccount,
       withSubledgerAccount: this.balanceCommand.withSubledgerAccount,
       withAllAccounts: this.balanceCommand.withAllAccounts,
