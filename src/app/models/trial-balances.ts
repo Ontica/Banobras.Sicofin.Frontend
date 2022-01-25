@@ -68,10 +68,16 @@ export enum BalancesType {
 }
 
 
-export const BalancesTypeList: Identifiable[] = [
+export const BalancesTypeForTrialBalanceList: Identifiable[] = [
   {uid: 'WithCurrentBalanceOrMovements', name: 'Cuentas con saldo actual o movimientos'},
   {uid: 'WithCurrentBalance', name: 'Cuentas con saldo actual'},
   {uid: 'WithMovements', name: 'Cuentas con movimientos'},
+  {uid: 'AllAccounts', name: 'Todas las cuentas'}
+];
+
+
+export const BalancesTypeForBalanceList: Identifiable[] = [
+  {uid: 'WithCurrentBalance', name: 'Cuentas con saldo actual'},
   {uid: 'AllAccounts', name: 'Todas las cuentas'}
 ];
 
