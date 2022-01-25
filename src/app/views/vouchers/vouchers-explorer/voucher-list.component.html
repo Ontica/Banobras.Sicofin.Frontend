@@ -1,7 +1,7 @@
 
 <div fxLayout="column" fxFlexFill>
 
-  <div #controlsContainer *ngIf="voucherList.length > 0" fxFlex="none">
+  <div #controlsContainer *ngIf="voucherList.length > 0 && selection.selected.length > 0" fxFlex="none">
 
       <mat-divider>
 
@@ -35,8 +35,8 @@
 
           </div>
 
-          <div fxFlex="calc(100% - 570px)" *ngIf="operationSelected?.assignToRequired">
-
+          <div fxFlex="calc(100% - 460px)" *ngIf="operationSelected?.assignToRequired">
+          <!-- fxFlex="calc(100% - 570px)" -->
             <emp-ng-select name="editor"
               [config]="{bindByValue: false,
                         clearable: true,
@@ -65,18 +65,18 @@
 
         <div fxFlex>
 
-          <mat-divider *ngIf="selection.selected.length > 0"
+          <!-- <mat-divider *ngIf="selection.selected.length > 0"
             vertical="true" class="vertical" [style.marginTop.px]="0">
 
-          </mat-divider>
+          </mat-divider> -->
 
         </div>
 
-        <div fxFlex="93px" fxLayoutAlign="end">
+        <!-- <div fxFlex="93px" fxLayoutAlign="end">
 
           <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
 
-        </div>
+        </div> -->
 
       </div>
 
