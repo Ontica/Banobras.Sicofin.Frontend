@@ -12,7 +12,6 @@ import { EmpIntegerDirective } from './integer.directive';
 import { EmpNumerationDirective } from './numeration.directive';
 import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive';
 import { HasPermissionDirective } from './has-permission.directive';
-import { PeriodRequiredValidatorDirective } from './period-required-validator.directive';
 import { ResizableDirective } from './resizable.directive';
 import { BreakpointDirective } from './notebook-breakpoint.directive';
 import { NotebookBreakPointsProvider } from './notebook-breakpoint';
@@ -31,7 +30,6 @@ import { NotebookBreakPointsProvider } from './notebook-breakpoint';
     EmpNumerationDirective,
     EmpTextareaAutoresizeDirective,
     HasPermissionDirective,
-    PeriodRequiredValidatorDirective,
     ResizableDirective,
   ],
 
@@ -42,7 +40,6 @@ import { NotebookBreakPointsProvider } from './notebook-breakpoint';
     EmpNumerationDirective,
     EmpTextareaAutoresizeDirective,
     HasPermissionDirective,
-    PeriodRequiredValidatorDirective,
     ResizableDirective,
   ],
 
