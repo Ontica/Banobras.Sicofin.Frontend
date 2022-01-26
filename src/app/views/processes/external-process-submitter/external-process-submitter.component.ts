@@ -5,11 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, Identifiable } from '@app/core';
+import { Assertion, Identifiable, Validate } from '@app/core';
 
 import { FormHandler } from '@app/shared/utils';
 
@@ -17,23 +17,27 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { ExternalProcessDataService } from '@app/data-services';
 
-import { ExternalProcessTypeList, ExternalProcessTypes,
+import { ConcilacionSICExternalProcessCommand, ExternalProcessTypeList, ExternalProcessTypes,
          RentabilidadExternalProcessCommand } from '@app/models';
 
 enum ExternalProcessSubmitterFormControls {
-  externalProcessType = 'externalProcessType',
   anio = 'anio',
   mes = 'mes',
   metodologia = 'metodologia',
+  periodo = 'periodo',
 }
 
 @Component({
   selector: 'emp-fa-external-process-submitter',
   templateUrl: './external-process-submitter.component.html',
 })
-export class ExternalProcessSubmitterComponent {
+export class ExternalProcessSubmitterComponent implements OnInit {
+
+  @Input() externalProcessType: ExternalProcessTypes = ExternalProcessTypes.Rentabilidad;
 
   @Output() closeEvent = new EventEmitter<void>();
+
+  title = 'Procesos externos';
 
   formHandler: FormHandler;
 
@@ -47,12 +51,22 @@ export class ExternalProcessSubmitterComponent {
 
   constructor(private externalProcessData: ExternalProcessDataService,
               private messageBox: MessageBoxService) {
-    this.initForm();
   }
 
 
-  get externalProcessType(): ExternalProcessTypes {
-    return this.formHandler.getControl(this.controls.externalProcessType).value ?? null;
+  get isRentabilidadType() {
+    return this.externalProcessType === ExternalProcessTypes.Rentabilidad;
+  }
+
+
+  get isConciliacionSICType() {
+    return this.externalProcessType === ExternalProcessTypes.ConciliacionSIC;
+  }
+
+
+  ngOnInit(): void {
+    this.title = ExternalProcessTypeList.find(x => x.uid === this.externalProcessType).name;
+    this.initForm();
   }
 
 
@@ -78,11 +92,14 @@ export class ExternalProcessSubmitterComponent {
   private executeExternalProcess() {
     this.submitted = true;
 
-    this.externalProcessData.executeExternalProcess(this.externalProcessType, this.getFormData())
+    const command = this.isRentabilidadType ? this.getRentabilidadExternalProcessCommand() :
+      this.getConcilacionSICExternalProcessCommand();
+
+    this.externalProcessData.executeExternalProcess(this.externalProcessType, command)
       .toPromise()
       .then(x => {
         this.formHandler.resetForm();
-        this.messageBox.show(x, 'Procesos externos');
+        this.messageBox.show(x, this.title);
       })
       .finally(() => this.submitted = false);
   }
@@ -95,16 +112,43 @@ export class ExternalProcessSubmitterComponent {
 
     this.formHandler = new FormHandler(
       new FormGroup({
-        externalProcessType: new FormControl('', Validators.required),
-        anio: new FormControl('', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]),
-        mes: new FormControl('', [Validators.required, Validators.min(1), Validators.max(12)]),
-        metodologia: new FormControl('', Validators.required),
+        anio: new FormControl(''),
+        mes: new FormControl(''),
+        metodologia: new FormControl(''),
+        periodo: new FormControl(),
       })
     );
+
+    this.initValidators();
   }
 
 
-  private getFormData(): RentabilidadExternalProcessCommand {
+  private initValidators() {
+    if (this.isRentabilidadType) {
+      this.formHandler.clearControlValidators(this.controls.periodo);
+
+      this.formHandler.setControlValidators(this.controls.anio,
+        [Validators.required, Validators.minLength(4), Validators.maxLength(4)]);
+
+      this.formHandler.setControlValidators(this.controls.mes,
+        [Validators.required, Validators.min(1), Validators.max(12)]);
+
+      this.formHandler.setControlValidators(this.controls.metodologia, Validators.required);
+      return;
+    }
+
+    if (this.isConciliacionSICType) {
+      this.formHandler.clearControlValidators(this.controls.anio);
+      this.formHandler.clearControlValidators(this.controls.mes);
+      this.formHandler.clearControlValidators(this.controls.metodologia);
+
+      this.formHandler.setControlValidators(this.controls.periodo,
+        [Validators.required, Validate.periodRequired]);
+    }
+  }
+
+
+  private getRentabilidadExternalProcessCommand(): RentabilidadExternalProcessCommand {
     Assertion.assert(this.formHandler.form.valid,
       'Programming error: form must be validated before command execution.');
 
@@ -114,6 +158,21 @@ export class ExternalProcessSubmitterComponent {
       anio: formModel.anio ?? '',
       mes: formModel.mes ?? '',
       metodologia: formModel.metodologia ?? '',
+    };
+
+    return data;
+  }
+
+
+  private getConcilacionSICExternalProcessCommand(): ConcilacionSICExternalProcessCommand {
+    Assertion.assert(this.formHandler.form.valid,
+      'Programming error: form must be validated before command execution.');
+
+    const formModel = this.formHandler.form.getRawValue();
+
+    const data: ConcilacionSICExternalProcessCommand = {
+      fechaInicio: formModel.periodo.fromDate ?? '',
+      fechaFin: formModel.periodo.toDate ?? '',
     };
 
     return data;

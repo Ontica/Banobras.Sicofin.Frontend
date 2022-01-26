@@ -7,7 +7,7 @@
 
 import { Component } from '@angular/core';
 
-import { PermissionsLibrary } from '@app/models';
+import { ExternalProcessTypes, PermissionsLibrary } from '@app/models';
 
 @Component({
   selector: 'emp-fa-control-panel-main-page',
@@ -20,5 +20,21 @@ export class ControlPanelMainPageComponent {
   displayAccountingCalendarsEditor = false;
 
   displayExternalProcessesEditor = false;
+
+  externalProcessType: ExternalProcessTypes = null;
+
+  externalProcessTypes = ExternalProcessTypes;
+
+
+  openExternalProcessesEditor(externalProcessType: ExternalProcessTypes) {
+    this.displayExternalProcessesEditor = true;
+    this.externalProcessType = externalProcessType;
+  }
+
+
+  closeExternalProcessesEditor() {
+    this.displayExternalProcessesEditor = false;
+    this.externalProcessType = null;
+  }
 
 }

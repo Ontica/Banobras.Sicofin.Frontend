@@ -1,8 +1,8 @@
-<emp-ng-modal-window [config]="{width:'300px'}">
+<emp-ng-modal-window>
 
   <emp-ng-card
-    title="Procesos externos"
-    hint='Información de los procesos.'
+    [title]="title"
+    hint='Información del proceso.'
     (cardClose)="onClose()">
 
     <div class="card-body-padding" [empNgSpinnerHost]="spinner">
@@ -16,36 +16,11 @@
 
         <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
 
-          <div fxLayout="row">
-
-            <div fxFlex="100">
-
-              <label>Proceso:</label>
-
-              <emp-ng-select name="externalProcessType"
-                [formControlName]="controls.externalProcessType"
-                [items]="externalProcessTypeList"
-                [showError]="formHandler.showInvalidControl(controls.externalProcessType)">
-              </emp-ng-select>
-
-            </div>
-
-          </div>
-
-          <mat-divider class="horizontal-slim">
-
-          </mat-divider>
-
-          <div *ngIf="!externalProcessType" class="instruction-text">
-            Seleccione el proceso a ejecutar.
-          </div>
-
-
-          <ng-container *ngIf="externalProcessType">
+          <ng-container *ngIf="isRentabilidadType">
 
             <div fxLayout="row" fxLayout.lt-md="column">
 
-              <div fxFlex="50">
+              <div fxFlex>
                 <label>Año:</label>
                 <input type="text" class="text-box" empNgInteger
                   [formControlName]="controls.anio"
@@ -56,7 +31,7 @@
 
             <div fxLayout="row" fxLayout.lt-md="column">
 
-              <div fxFlex="50" fxFlex.lt-md="none">
+              <div fxFlex>
                 <label>Mes:</label>
                 <input type="text" class="text-box" empNgInteger
                   [formControlName]="controls.mes"
@@ -67,11 +42,32 @@
 
             <div fxLayout="row" fxLayout.lt-md="column">
 
-              <div fxFlex="50" fxFlex.lt-md="none">
+              <div fxFlex>
                 <label>Metodología:</label>
                 <input type="text" class="text-box" empNgInteger
                   [formControlName]="controls.metodologia"
                   [class.invalid-control]="formHandler.showInvalidControl(controls.metodologia)">
+              </div>
+
+            </div>
+
+          </ng-container>
+
+          <ng-container *ngIf="isConciliacionSICType">
+
+            <div fxLayout="row" fxLayout.lt-md="column">
+
+              <div fxFlex="225px">
+
+                <label>Período:</label>
+
+                <emp-ng-date-range-picker
+                  [formControlName]="controls.periodo"
+                  [displaySelectionType]="false"
+                  [showError]="formHandler.showInvalidControl(controls.periodo)">
+
+                </emp-ng-date-range-picker>
+
               </div>
 
             </div>
