@@ -11,43 +11,26 @@
         <div class="card-info-container"
           fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign="space-between">
 
-          <div *empNgHasPermission="permissions.FEATURE_ACCOUNTING_CALENDARS_EDITION"
-            class="card-info" fxFlex="0 1 calc(50% - 8px)" fxFlex.lt-md="100" fxLayoutAlign="space-around center">
-            <div fxFlex>
-              <span class="card-info-title">Períodos</span>
-              <span class="card-info-hint">Edición de fechas de los calendarios.</span>
+          <ng-container *ngFor="let option of controlPanelOptionList">
+
+            <div *empNgHasPermission="option.permission"
+              class="card-info" fxFlex="0 1 calc(50% - 8px)" fxFlex.lt-md="100" fxLayoutAlign="space-around center">
+
+              <div fxFlex>
+
+                <span class="card-info-title">{{option.title}}</span>
+                <span class="card-info-hint">{{option.description}}</span>
+
+              </div>
+
+              <button class="btn-primary" fxFlex="120px"
+                (click)="onClickControlPanelOption(option)">
+                {{option.actionTitle}}
+              </button>
+
             </div>
 
-            <button class="btn-primary" fxFlex="120px"
-              (click)="displayAccountingCalendarsEditor = true">
-              Períodos
-            </button>
-
-          </div>
-
-          <div *empNgHasPermission="permissions.FEATURE_EXTERNAL_PROCESS_EXECUTION"
-            class="card-info" fxFlex="0 1 calc(50% - 8px)" fxFlex.lt-md="100" fxLayoutAlign="space-around center">
-            <div fxFlex>
-              <span class="card-info-title">Rentabilidad</span>
-              <span class="card-info-hint">Ejecución de proceso de rentabilidad.</span>
-            </div>
-            <button class="btn-primary" fxFlex="120px"
-              (click)="openExternalProcessesEditor(externalProcessTypes.Rentabilidad)">
-              Rentabilidad
-            </button>
-          </div>
-
-          <div *empNgHasPermission="permissions.FEATURE_EXTERNAL_PROCESS_EXECUTION"
-            class="card-info" fxFlex="0 1 calc(50% - 8px)" fxFlex.lt-md="100" fxLayoutAlign="space-around center">
-            <div fxFlex>
-              <span class="card-info-title">Concilación de cartera</span>
-              <span class="card-info-hint">Ejecución de proceso de concilación de cartera.</span>
-            </div>
-            <button class="btn-primary" fxFlex="120px"
-              (click)="openExternalProcessesEditor(externalProcessTypes.ConciliacionSIC)">
-              Concilación
-            </button>
-          </div>
+          </ng-container>
 
         </div>
 
@@ -66,6 +49,6 @@
 
 <emp-fa-external-process-submitter *ngIf="displayExternalProcessesEditor"
   [externalProcessType]="externalProcessType"
-  (closeEvent)="closeExternalProcessesEditor()">
+  (closeEvent)="onCloseExternalProcessSubmitterEvent()">
 
 </emp-fa-external-process-submitter>

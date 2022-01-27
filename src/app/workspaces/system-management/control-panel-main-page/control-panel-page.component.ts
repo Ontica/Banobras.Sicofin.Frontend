@@ -7,7 +7,10 @@
 
 import { Component } from '@angular/core';
 
-import { ExternalProcessTypes, PermissionsLibrary } from '@app/models';
+import { ExternalProcessTypes } from '@app/models';
+
+import { ControlPanelOption, ControlPanelOptionList } from './control-panel-config';
+
 
 @Component({
   selector: 'emp-fa-control-panel-main-page',
@@ -15,24 +18,46 @@ import { ExternalProcessTypes, PermissionsLibrary } from '@app/models';
 })
 export class ControlPanelMainPageComponent {
 
-  permissions = PermissionsLibrary;
-
   displayAccountingCalendarsEditor = false;
 
   displayExternalProcessesEditor = false;
 
+  controlPanelOptionList = ControlPanelOptionList;
+
   externalProcessType: ExternalProcessTypes = null;
 
-  externalProcessTypes = ExternalProcessTypes;
+
+  onClickControlPanelOption(option: ControlPanelOption) {
+    switch (option.type) {
+      case 'AccountingCalendars':
+        this.displayAccountingCalendarsEditor = true;
+        return;
+
+      case 'ExternalProcessRentabilidad':
+      case 'ExternalProcessConciliacionSIC':
+        this.openExternalProcessesEditor(option.externalProcessType);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${option.type}`);
+        return;
+    }
+
+  }
 
 
-  openExternalProcessesEditor(externalProcessType: ExternalProcessTypes) {
+  onCloseExternalProcessSubmitterEvent() {
+    this.closeExternalProcessesEditor();
+  }
+
+
+  private openExternalProcessesEditor(externalProcessType: ExternalProcessTypes) {
     this.displayExternalProcessesEditor = true;
     this.externalProcessType = externalProcessType;
   }
 
 
-  closeExternalProcessesEditor() {
+  private closeExternalProcessesEditor() {
     this.displayExternalProcessesEditor = false;
     this.externalProcessType = null;
   }
