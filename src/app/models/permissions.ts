@@ -20,7 +20,10 @@ export enum PermissionsLibrary {
 
   FEATURE_DATABASE_IMPORT = 'feature-database-import',
   FEATURE_ACCOUNTING_CALENDARS_EDITION = 'feature-accounting-calendars-edition',
-  FEATURE_EXTERNAL_PROCESS_EXECUTION = 'feature-external-process-execution',
+  FEATURE_EP_RENTABILIDAD = 'feature-ep-rentabilidad',
+  FEATURE_EP_CONCILIACION_SIC = 'feature-ep-conciliacion-sic',
+  FEATURE_EP_EXPORTACION_SALDOS_MENSUALES = 'feature-ep-exportacion-saldos-mensuales',
+  FEATURE_EP_EXPORTACION_SALDOS_DIARIOS = 'feature-ep-exportacion-saldos-diarios',
 }
 
 

@@ -39,7 +39,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Ejecución de proceso de rentabilidad.' ,
     actionTitle: 'Rentabilidad',
     type: 'ExternalProcessRentabilidad',
-    permission: PermissionsLibrary.FEATURE_EXTERNAL_PROCESS_EXECUTION,
+    permission: PermissionsLibrary.FEATURE_EP_RENTABILIDAD,
     externalProcessType: ExternalProcessTypes.Rentabilidad,
   },
   {
@@ -47,7 +47,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Ejecución de proceso de conciliación de cartera.' ,
     actionTitle: 'Conciliación',
     type: 'ExternalProcessConciliacionSIC',
-    permission: PermissionsLibrary.FEATURE_EXTERNAL_PROCESS_EXECUTION,
+    permission: PermissionsLibrary.FEATURE_EP_CONCILIACION_SIC,
     externalProcessType: ExternalProcessTypes.ConciliacionSIC,
   },
   {
@@ -55,7 +55,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Proceso de exportación de saldos mensuales.' ,
     actionTitle: 'Exportar',
     type: 'ExternalProcessExportacionSaldosMensuales',
-    permission: PermissionsLibrary.FEATURE_EXTERNAL_PROCESS_EXECUTION,
+    permission: PermissionsLibrary.FEATURE_EP_EXPORTACION_SALDOS_MENSUALES,
     externalProcessType: ExternalProcessTypes.ExportacionSaldosMensuales,
   },
   {
@@ -63,7 +63,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Proceso de exportación de saldos diarios.' ,
     actionTitle: 'Exportar',
     type: 'ExternalProcessExportacionSaldosDiarios',
-    permission: PermissionsLibrary.FEATURE_EXTERNAL_PROCESS_EXECUTION,
+    permission: PermissionsLibrary.FEATURE_EP_EXPORTACION_SALDOS_DIARIOS,
     externalProcessType: ExternalProcessTypes.ExportacionSaldosDiarios,
   },
 ];
