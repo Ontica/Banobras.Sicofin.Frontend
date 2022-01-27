@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { ConcilacionSICExternalProcessCommand, ExternalProcessTypes,
+import { ConcilacionSICExternalProcessCommand, ExportBalancesCommand, ExternalProcessTypes,
          RentabilidadExternalProcessCommand } from '@app/models';
 
 
@@ -30,6 +30,15 @@ export class ExternalProcessDataService {
     const path = `v2/financial-accounting/integration/external-processes/${externalProcessType}`;
 
     return this.http.post<string>(path, externalProcessCommand);
+  }
+
+
+  exportBalances(exportBalancesCommand: ExportBalancesCommand): Observable<string> {
+    Assertion.assertValue(exportBalancesCommand, 'exportBalancesCommand');
+
+    const path = `v2/financial-accounting/integration/export-balances`;
+
+    return this.http.post<string>(path, exportBalancesCommand);
   }
 
 }

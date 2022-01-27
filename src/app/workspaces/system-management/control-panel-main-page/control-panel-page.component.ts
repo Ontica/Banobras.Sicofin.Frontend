@@ -35,6 +35,8 @@ export class ControlPanelMainPageComponent {
 
       case 'ExternalProcessRentabilidad':
       case 'ExternalProcessConciliacionSIC':
+      case 'ExternalProcessExportacionSaldosMensuales':
+      case 'ExternalProcessExportacionSaldosDiarios':
         this.openExternalProcessesEditor(option.externalProcessType);
         return;
 

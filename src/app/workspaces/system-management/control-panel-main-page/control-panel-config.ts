@@ -10,7 +10,10 @@ import { ExternalProcessTypes, PermissionsLibrary } from '@app/models';
 
 type ControlPanelOptionType = 'AccountingCalendars' |
                               'ExternalProcessRentabilidad' |
-                              'ExternalProcessConciliacionSIC';
+                              'ExternalProcessConciliacionSIC' |
+                              'ExternalProcessExportacionSaldosMensuales' |
+                              'ExternalProcessExportacionSaldosDiarios';
+
 
 
 export interface ControlPanelOption {
@@ -46,5 +49,21 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     type: 'ExternalProcessConciliacionSIC',
     permission: PermissionsLibrary.FEATURE_EXTERNAL_PROCESS_EXECUTION,
     externalProcessType: ExternalProcessTypes.ConciliacionSIC,
+  },
+  {
+    title: 'Exportación de saldos mensuales',
+    description: 'Proceso de exportación de saldos mensuales.' ,
+    actionTitle: 'Exportar',
+    type: 'ExternalProcessExportacionSaldosMensuales',
+    permission: PermissionsLibrary.FEATURE_EXTERNAL_PROCESS_EXECUTION,
+    externalProcessType: ExternalProcessTypes.ExportacionSaldosMensuales,
+  },
+  {
+    title: 'Exportación de saldos diarios',
+    description: 'Proceso de exportación de saldos diarios.' ,
+    actionTitle: 'Exportar',
+    type: 'ExternalProcessExportacionSaldosDiarios',
+    permission: PermissionsLibrary.FEATURE_EXTERNAL_PROCESS_EXECUTION,
+    externalProcessType: ExternalProcessTypes.ExportacionSaldosDiarios,
   },
 ];

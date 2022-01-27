@@ -23,8 +23,8 @@
               <div fxFlex>
                 <label>Año:</label>
                 <input type="text" class="text-box" empNgInteger
-                  [formControlName]="controls.anio"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.anio)">
+                  [formControlName]="controls.year"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.year)">
               </div>
 
             </div>
@@ -34,8 +34,8 @@
               <div fxFlex>
                 <label>Mes:</label>
                 <input type="text" class="text-box" empNgInteger
-                  [formControlName]="controls.mes"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.mes)">
+                  [formControlName]="controls.month"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.month)">
               </div>
 
             </div>
@@ -45,8 +45,8 @@
               <div fxFlex>
                 <label>Metodología:</label>
                 <input type="text" class="text-box" empNgInteger
-                  [formControlName]="controls.metodologia"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.metodologia)">
+                  [formControlName]="controls.methodology"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.methodology)">
               </div>
 
             </div>
@@ -62,11 +62,47 @@
                 <label>Período:</label>
 
                 <emp-ng-date-range-picker
-                  [formControlName]="controls.periodo"
+                  [formControlName]="controls.period"
                   [displaySelectionType]="false"
-                  [showError]="formHandler.showInvalidControl(controls.periodo)">
+                  [showError]="formHandler.showInvalidControl(controls.period)">
 
                 </emp-ng-date-range-picker>
+
+              </div>
+
+            </div>
+
+          </ng-container>
+
+          <ng-container *ngIf="isExportacionSaldosMensualesType || isExportacionSaldosDiariosType">
+
+            <div fxLayout="row" fxLayout.lt-md="column" *ngIf="isExportacionSaldosMensualesType">
+
+              <div fxFlex>
+
+                <label>Tipo de saldo:</label>
+
+                <emp-ng-select
+                  [formControlName]="controls.balanceType"
+                  [items]="balanceTypesForMonthlyExportList"
+                  [showError]="formHandler.showInvalidControl(controls.balanceType)">
+                </emp-ng-select>
+
+              </div>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column">
+
+              <div fxFlex="none">
+
+                <label>Fecha:</label>
+
+                <emp-ng-datepicker
+                  [formControlName]="controls.date"
+                  [showError]="formHandler.showInvalidControl(controls.date)">
+
+                </emp-ng-datepicker>
 
               </div>
 

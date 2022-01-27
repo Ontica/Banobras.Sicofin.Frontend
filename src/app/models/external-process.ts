@@ -11,6 +11,8 @@ import { DateString, Identifiable } from '@app/core';
 export enum ExternalProcessTypes {
   Rentabilidad = 'procesar-rentabilidad',
   ConciliacionSIC = 'procesar-conciliacion-sic',
+  ExportacionSaldosMensuales = 'procesar-exportacion-saldos-mensuales',
+  ExportacionSaldosDiarios = 'procesar-exportacion-saldos-diarios',
 }
 
 
@@ -22,6 +24,14 @@ export const ExternalProcessTypeList: Identifiable[] = [
   {
     uid: ExternalProcessTypes.ConciliacionSIC,
     name: 'Concilación de SIC',
+  },
+  {
+    uid: ExternalProcessTypes.ExportacionSaldosMensuales,
+    name: 'Exportación de saldos mensuales',
+  },
+  {
+    uid: ExternalProcessTypes.ExportacionSaldosDiarios,
+    name: 'Exportación de saldos diarios',
   },
 ];
 
@@ -37,3 +47,22 @@ export interface ConcilacionSICExternalProcessCommand {
   fechaInicio: DateString;
   fechaFin: DateString;
 }
+
+
+export enum BalanceType {
+  Diario = 'Diario',
+  MensualPorMayor = 'MensualPorMayor',
+  MensualConsolidado = 'MensualConsolidado'
+}
+
+
+export interface ExportBalancesCommand {
+  balanceType: BalanceType;
+  fecha: DateString;
+}
+
+
+export const BalanceTypesForMonthlyExportList: Identifiable[] = [
+  {uid: BalanceType.MensualPorMayor, name: 'Por contabilidad'},
+  {uid: BalanceType.MensualConsolidado, name: 'Consolidado'},
+];
