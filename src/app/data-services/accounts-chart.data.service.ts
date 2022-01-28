@@ -11,7 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { Account, AccountsChart, AccountsChartMasterData, AccountsSearchCommand, FileReport } from '@app/models';
+import { Account, AccountsChart, AccountsChartMasterData, AccountsSearchCommand,
+         FileReport } from '@app/models';
 
 
 @Injectable()
@@ -62,6 +63,13 @@ export class AccountsChartDataService {
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}`;
 
     return this.http.post<AccountsChart>(path, searchCommand);
+  }
+
+
+  cleanUpAccounts(): Observable<string> {
+    const path = `v2/financial-accounting/accounts-charts/cleanup`;
+
+    return this.http.post<string>(path);
   }
 
 }

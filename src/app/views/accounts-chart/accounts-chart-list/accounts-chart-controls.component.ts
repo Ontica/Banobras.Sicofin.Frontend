@@ -14,7 +14,8 @@ import { AccountsChart, EmptyAccountsChart } from '@app/models';
 import { sendEvent } from '@app/shared/utils';
 
 export enum AccountsChartControlsEventType {
-  EXPORT_BUTTON_CLICKED = 'AccountsChartControlsComponent.Event.ExportButtonClicked',
+  EXPORT_BUTTON_CLICKED        = 'AccountsChartControlsComponent.Event.ExportButtonClicked',
+  CLEAN_UP_DATA_BUTTON_CLICKED = 'AccountsChartControlsComponent.Event.CleanUpDataButtonClicked',
 }
 
 @Component({
@@ -30,6 +31,11 @@ export class AccountsChartControlsComponent{
 
   onExportButtonClicked() {
     sendEvent(this.accountsChartControlsEvent, AccountsChartControlsEventType.EXPORT_BUTTON_CLICKED);
+  }
+
+
+  onCleanUpButtonClicked() {
+    sendEvent(this.accountsChartControlsEvent, AccountsChartControlsEventType.CLEAN_UP_DATA_BUTTON_CLICKED);
   }
 
 }

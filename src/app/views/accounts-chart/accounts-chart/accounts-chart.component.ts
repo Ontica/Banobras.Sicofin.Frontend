@@ -14,6 +14,8 @@ import { AccountsChartDataService } from '@app/data-services';
 import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart,
          EmptyAccountsSearchCommand } from '@app/models';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 import { sendEvent } from '@app/shared/utils';
 
 import {
@@ -38,6 +40,8 @@ export class AccountsChartComponent {
 
   cardHint = 'Editor y visualizador de los catálogos de cuentas';
 
+  isLoadingAccounts = false;
+
   isLoading = false;
 
   submitted = false;
@@ -54,7 +58,8 @@ export class AccountsChartComponent {
 
   showFilters = false;
 
-  constructor(private accountsChartData: AccountsChartDataService) { }
+  constructor(private accountsChartData: AccountsChartDataService,
+              private messageBox: MessageBoxService) { }
 
 
   onAccountsChartFilterEvent(event) {
@@ -102,6 +107,10 @@ export class AccountsChartComponent {
         this.setDisplayExportModal(true);
         break;
 
+      case AccountsChartListEventType.CLEAN_UP_ACCOUNT_DATA:
+        this.cleanUpAccounts();
+        break;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -132,7 +141,7 @@ export class AccountsChartComponent {
 
 
   private searchAccounts(accountsChartUID: string, searchCommand: AccountsSearchCommand) {
-    this.setSubmitted(true);
+    this.setLoadingAccounts(true);
 
     this.accountsChartData.searchAccounts(accountsChartUID, searchCommand)
       .toPromise()
@@ -140,7 +149,7 @@ export class AccountsChartComponent {
         this.setAccountData(x);
         this.showFilters = false;
       })
-      .finally(() => this.setSubmitted(false));
+      .finally(() => this.setLoadingAccounts(false));
   }
 
 
@@ -151,6 +160,16 @@ export class AccountsChartComponent {
       .then(x => {
         this.excelFileUrl = x.url;
       });
+  }
+
+
+  private cleanUpAccounts() {
+    this.setSubmitted(true);
+
+    this.accountsChartData.cleanUpAccounts()
+      .toPromise()
+      .then(x => this.messageBox.show(x, 'Limpiar cuentas'))
+      .finally(() => this.setSubmitted(false));
   }
 
 
@@ -179,6 +198,12 @@ export class AccountsChartComponent {
   private setSubmitted(submitted: boolean) {
     this.isLoading = submitted;
     this.submitted = submitted;
+  }
+
+
+  private setLoadingAccounts(loading: boolean) {
+    this.isLoadingAccounts = loading;
+    this.setSubmitted(loading);
   }
 
 

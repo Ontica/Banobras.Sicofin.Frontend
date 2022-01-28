@@ -10,9 +10,21 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
+      <div fxFlex="none">
 
-        <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
+        <button class="btn" [style.marginRight.px]="8" (click)="onCleanUpButtonClicked()">
+          Limpiar cuentas
+        </button>
+
+        <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0">
+
+        </mat-divider>
+
+        <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
+
+          <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
+
+        </div>
 
       </div>
 
