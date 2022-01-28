@@ -27,7 +27,8 @@
         <emp-ng-select name="financialReportType" required
           [(ngModel)]="financialReportCommand.financialReportType"
           [items]="financialReportTypeList"
-          [showError]="!financialReportCommand.financialReportType">
+          [showError]="!financialReportCommand.financialReportType"
+          (changes)="onFinancialReportTypeChanges($event)">
         </emp-ng-select>
 
       </div>

@@ -11,8 +11,9 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { FinancialReportCommand, EmptyFinancialReport, EmptyFinancialReportCommand,
-         FinancialReport, FinancialReportEntry, EmptyFinancialReportBreakdown} from '@app/models';
+import { FinancialReportCommand, EmptyFinancialReport, EmptyFinancialReportCommand, FinancialReport,
+         FinancialReportEntry, EmptyFinancialReportBreakdown, ReportType, ExportationType,
+         FileType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -36,8 +37,6 @@ export class FinancialReportViewerComponent {
 
   @Output() financialReportViewerEvent = new EventEmitter<EventInfo>();
 
-  financialReportTypeName = '';
-
   cardHint = 'Seleccionar los filtros';
 
   isLoading = false;
@@ -50,9 +49,13 @@ export class FinancialReportViewerComponent {
 
   financialReportCommand: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
 
+  financialReportType: ReportType = null;
+
+  exportationTypesList: ExportationType[] = [];
+
   displayExportModal = false;
 
-  excelFileUrl = '';
+  fileUrl = '';
 
   selectedFinancialReportBreakdown = EmptyFinancialReportBreakdown;
 
@@ -70,10 +73,10 @@ export class FinancialReportViewerComponent {
 
       case FinancialReportFilterEventType.BUILD_FINANCIAL_REPORT_CLICKED:
         Assertion.assertValue(event.payload.financialReportCommand, 'event.payload.financialReportCommand');
-        Assertion.assertValue(event.payload.financialReportTypeName, 'event.payload.financialReportTypeName');
+        Assertion.assertValue(event.payload.financialReportType, 'event.payload.financialReportType');
 
         this.financialReportCommand = event.payload.financialReportCommand as FinancialReportCommand;
-        this.financialReportTypeName = event.payload.financialReportTypeName;
+        this.setReportType(event.payload.financialReportType as ReportType);
         this.getFinancialReport();
         return;
 
@@ -119,8 +122,8 @@ export class FinancialReportViewerComponent {
         if (this.submitted || !this.financialReportCommand.accountsChartUID ) {
           return;
         }
-
-        this.exportFinancialReportToExcel();
+        Assertion.assertValue(event.payload.exportationType, 'event.payload.exportationType');
+        this.exportFinancialReport(event.payload.exportationType as FileType);
         return;
 
       default:
@@ -141,10 +144,12 @@ export class FinancialReportViewerComponent {
   }
 
 
-  private exportFinancialReportToExcel() {
-    this.financialReportsData.exportFinancialReportToExcel(this.financialReportCommand)
+  private exportFinancialReport(exportTo: FileType) {
+    const financialReportCommand = Object.assign({}, this.financialReportCommand, {exportTo});
+
+    this.financialReportsData.exportFinancialReport(financialReportCommand)
       .toPromise()
-      .then(x => this.excelFileUrl = x.url)
+      .then(x => this.fileUrl = x.url)
       .catch(() => this.setDisplayExportModal(false));
   }
 
@@ -183,11 +188,11 @@ export class FinancialReportViewerComponent {
     }
 
     if (displayedEntriesMessage) {
-      this.cardHint = `${this.financialReportTypeName} - ${displayedEntriesMessage}`;
+      this.cardHint = `${this.financialReportType.name} - ${displayedEntriesMessage}`;
       return;
     }
 
-    this.cardHint = `${this.financialReportTypeName} - ${this.financialReport.entries.length} ` +
+    this.cardHint = `${this.financialReportType.name} - ${this.financialReport.entries.length} ` +
       `registros encontrados`;
   }
 
@@ -200,7 +205,14 @@ export class FinancialReportViewerComponent {
 
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
-    this.excelFileUrl = '';
+    this.fileUrl = '';
+  }
+
+
+  private setReportType(reportType: ReportType) {
+    this.financialReportType = reportType;
+    this.exportationTypesList = !this.financialReportType?.exportTo ? [] :
+      this.financialReportType.exportTo.map(x => Object.create({uid: x, name: x, fileType: x}));
   }
 
 }

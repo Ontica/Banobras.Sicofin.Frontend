@@ -7,13 +7,13 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyFinancialReportCommand, FinancialReportCommand } from '@app/models';
+import { AccountsChartMasterData, EmptyFinancialReportCommand, FinancialReportCommand, ReportType } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -32,11 +32,13 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   @Output() financialReportFilterEvent = new EventEmitter<EventInfo>();
 
-  accountsChartMasterDataList: AccountsChartMasterData[] = [];
-
   financialReportCommand: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
 
-  financialReportTypeList: Identifiable[] = [];
+  selectedFinancialReportType: ReportType = null;
+
+  accountsChartMasterDataList: AccountsChartMasterData[] = [];
+
+  financialReportTypeList: ReportType[] = [];
 
   isLoading = false;
 
@@ -67,13 +69,15 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onBuildFinancialReportClicked() {
-    const financialReportTypeName = this.financialReportTypeList
-      .filter(x => x.uid === this.financialReportCommand.financialReportType);
+  onFinancialReportTypeChanges(reportType: ReportType) {
+    this.selectedFinancialReportType = reportType ?? null;
+  }
 
+
+  onBuildFinancialReportClicked() {
     const payload = {
       financialReportCommand: Object.assign({}, this.financialReportCommand),
-      financialReportTypeName: financialReportTypeName ? financialReportTypeName[0].name : '',
+      financialReportType: this.selectedFinancialReportType,
     };
 
     sendEvent(this.financialReportFilterEvent,

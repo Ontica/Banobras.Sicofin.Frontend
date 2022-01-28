@@ -44,8 +44,9 @@
 
 
 <emp-fa-export-report-modal *ngIf="displayExportModal"
-  [title]="'Exportar ' + financialReportTypeName"
-  [fileUrl]="excelFileUrl"
+  [title]="'Exportar ' + financialReportType.name"
+  [fileUrl]="fileUrl"
+  [exportationTypes]="exportationTypesList"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
 </emp-fa-export-report-modal>

@@ -9,6 +9,8 @@ import { DateString } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
 
+import { FileType } from './reporting';
+
 
 export interface FinancialReport extends DataTable {
   command: FinancialReportCommand;
@@ -21,6 +23,7 @@ export interface FinancialReportCommand extends DataTableCommand {
   financialReportType: string;
   accountsChartUID: string;
   date: DateString;
+  exportTo?: FileType;
 }
 
 

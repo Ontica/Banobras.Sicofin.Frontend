@@ -17,9 +17,9 @@ export enum ReportGroup {
 export interface ReportType {
   uid: string;
   name: string;
-  group: string;
-  accountsCharts: string[];
-  payloadType: ReportPayloadType;
+  group?: string;
+  accountsCharts?: string[];
+  payloadType?: ReportPayloadType;
   exportTo: FileType[];
 }
 
