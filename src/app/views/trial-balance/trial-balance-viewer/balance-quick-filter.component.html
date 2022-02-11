@@ -1,59 +1,9 @@
 <form #form="ngForm" autocomplete="off" class="form-section form-container"
   [style.padding.px]="0" [style.margin.px]="0" (keydown.enter)="$event.preventDefault()">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-sm="0.5rem">
 
       <div fxLayout="row" fxLayout.lt-sm="column">
-
-        <div fxFlex="25">
-
-          <label>Tipo de consulta:</label>
-
-          <emp-ng-select name="trialBalanceType" required
-            [(ngModel)]="formData.trialBalanceType"
-            [items]="balanceTypeList"
-            [showError]="!formData.trialBalanceType"
-            (changes)="onBalanceTypeChange()">
-          </emp-ng-select>
-
-        </div>
-
-        <div fxFlex="25" *ngIf="displayFromAccount">
-
-          <label>Cuenta:</label>
-
-          <input type="text" class="text-box" name="fromAccount" required
-            [(ngModel)]="formData.fromAccount"
-            [class.invalid-control]="!formData.fromAccount"
-            (keyup.escape)="formData.fromAccount = ''">
-
-        </div>
-
-        <div fxFlex="25" *ngIf="displaySubledgerAccount">
-
-          <label>Auxiliar:</label>
-
-          <input type="text" class="text-box" name="subledgerAccount" required
-            [(ngModel)]="formData.subledgerAccount"
-            [class.invalid-control]="!formData.subledgerAccount"
-            (keyup.escape)="formData.subledgerAccount = ''">
-
-        </div>
-
-        <div fxFlex></div>
-
-        <div fxFlex="none">
-
-          <label>Fecha:</label>
-
-          <emp-ng-datepicker name="date" required
-            [(ngModel)]="formData.toDate"
-            [showError]="!formData.toDate"
-            (valueChange)="onDatepickerInitialPeriodToDateChange($event)">
-
-          </emp-ng-datepicker>
-
-        </div>
 
         <div fxFlex="25">
 
@@ -68,8 +18,59 @@
 
         </div>
 
+        <div fxFlex="25">
 
-        <div fxFlex="28px" fxFlex.lt-md="none" [style.paddingTop.px]="13">
+          <label>Tipo de consulta:</label>
+
+          <emp-ng-select name="trialBalanceType" required
+            [(ngModel)]="formData.trialBalanceType"
+            [items]="balanceTypeList"
+            [showError]="!formData.trialBalanceType"
+            (changes)="onBalanceTypeChange()">
+          </emp-ng-select>
+
+        </div>
+
+        <div fxFlex>
+
+          <ng-container *ngIf="displayFromAccount">
+
+            <label>Cuenta:</label>
+
+            <input type="text" class="text-box" name="fromAccount" required
+              [(ngModel)]="formData.fromAccount"
+              [class.invalid-control]="!formData.fromAccount"
+              (keyup.escape)="formData.fromAccount = ''">
+
+          </ng-container>
+
+          <ng-container *ngIf="displaySubledgerAccount">
+
+            <label>Auxiliar:</label>
+
+            <input type="text" class="text-box" name="subledgerAccount" required
+              [(ngModel)]="formData.subledgerAccount"
+              [class.invalid-control]="!formData.subledgerAccount"
+              (keyup.escape)="formData.subledgerAccount = ''">
+
+          </ng-container>
+
+        </div>
+
+        <div fxFlex="none">
+
+          <label>Fecha:</label>
+
+          <emp-ng-datepicker name="date" required
+            [(ngModel)]="formData.toDate"
+            [showError]="!formData.toDate"
+            (valueChange)="onDatepickerInitialPeriodToDateChange($event)">
+
+          </emp-ng-datepicker>
+
+        </div>
+
+        <div fxFlex="28px" fxFlex.lt-sm="none" [style.paddingTop.px]="13">
 
           <button [class.btn-icon-action]="form.valid"
             [class.btn-icon]="form.invalid"
@@ -85,19 +86,29 @@
 
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row" fxLayout.lt-sm="column">
 
-        <div fxFlex="25" *ngIf="displayWithSubledgerAccount">
+        <div fxFlex="50">
 
-          <mat-checkbox name="withSubledgerAccount"
+          <label>Contabilidad:</label>
+
+          <emp-ng-select name="ledger"
+            [config]="{clearable: true, multiple: true}"
+            [(ngModel)]="formData.ledgers"
+            [items]="accountChartSelected?.ledgers"
+            bindLabel="fullName"
+            [placeholder]="accountChartSelected ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'">
+          </emp-ng-select>
+
+        </div>
+
+        <div fxFlex fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
+
+          <mat-checkbox name="withSubledgerAccount" *ngIf="displayWithSubledgerAccount"
             [(ngModel)]="formData.withSubledgerAccount"
             (click)="$event.stopPropagation">
             Con Auxiliares
           </mat-checkbox>
-
-        </div>
-
-        <div fxFlex="25">
 
           <mat-checkbox name="withAllAccounts"
             [(ngModel)]="formData.withAllAccounts"
@@ -107,17 +118,13 @@
 
         </div>
 
-        <div fxFlex>
+        <div fxFlex="none" #clearFilterSection>
 
-        </div>
-
-        <ng-container #clearFilterSection>
-
-          <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0">
+          <mat-divider vertical="true" class="vertical" [style.marginTop.px]="12">
 
           </mat-divider>
 
-          <div fxFlex="117px" fxLayoutAlign="space-around end">
+          <div fxFlex="100px" fxFlex.lt-sm="100" fxLayoutAlign="space-around start" [style.marginTop.px]="12">
 
             <button class="btn-base" (click)="onClearFilters()" fxFlex="100%" [style.marginRight.px]="0">
               Limpiar
@@ -126,7 +133,7 @@
 
           </div>
 
-        </ng-container>
+        </div>
 
       </div>
 

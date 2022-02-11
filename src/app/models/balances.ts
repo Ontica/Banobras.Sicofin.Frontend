@@ -61,6 +61,7 @@ export interface BalanceEntry extends DataTableEntry {
 export interface BalanceCommand extends DataTableCommand {
   accountsChartUID: string;
   trialBalanceType: BalanceTypes;
+  ledgers: string[];
   balancesType?: string;
   fromAccount?: string;
   initialPeriod?: {
@@ -77,6 +78,7 @@ export function getEmptyBalanceCommand(): BalanceCommand {
   return {
     accountsChartUID: '',
     trialBalanceType: null,
+    ledgers: [],
     balancesType: '',
     fromAccount: '',
     initialPeriod: {fromDate: '', toDate: ''},

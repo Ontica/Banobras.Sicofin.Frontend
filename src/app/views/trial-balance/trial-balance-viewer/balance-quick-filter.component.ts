@@ -34,8 +34,9 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   @Output() balanceQuickFilterEvent = new EventEmitter<EventInfo>();
 
   formData = {
-    accountsChartUID: '',
     trialBalanceType: '',
+    accountsChartUID: '',
+    ledgers: [],
     balancesType: '',
     fromAccount: '',
     fromDate: null,
@@ -77,6 +78,11 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   get trialBalanceTypeSelected(): Identifiable {
     return !this.formData.trialBalanceType ? null :
       this.balanceTypeList.find(x => x.uid === this.formData.trialBalanceType);
+  }
+
+  get accountChartSelected(): AccountsChartMasterData {
+    return !this.formData.accountsChartUID ? null :
+      this.accountsChartMasterDataList.find(x => x.uid === this.formData.accountsChartUID);
   }
 
 
@@ -137,8 +143,9 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   private initFormData() {
     this.formData = {
-      accountsChartUID: this.balanceCommand.accountsChartUID,
       trialBalanceType: this.balanceCommand.trialBalanceType,
+      accountsChartUID: this.balanceCommand.accountsChartUID,
+      ledgers: this.balanceCommand.ledgers,
       balancesType: this.balanceCommand.balancesType,
       fromAccount: this.balanceCommand.fromAccount,
       fromDate: this.balanceCommand.initialPeriod.fromDate,
@@ -170,8 +177,9 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   private getBalanceCommandData(): BalanceCommand {
     const data: BalanceCommand = {
-      accountsChartUID: this.formData.accountsChartUID,
       trialBalanceType: this.formData.trialBalanceType as BalanceTypes,
+      accountsChartUID: this.formData.accountsChartUID,
+      ledgers: this.formData.ledgers,
       fromAccount: this.formData.fromAccount,
       subledgerAccount: this.formData.subledgerAccount,
       initialPeriod: {
