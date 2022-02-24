@@ -101,6 +101,11 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
+  onAccountChartChanges() {
+    this.validateLedgersToClear();
+  }
+
+
   onBalanceTypeChange() {
     this.formData.fromAccount = '';
     this.formData.subledgerAccount = '';
@@ -172,6 +177,13 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   private validateValueOfInitPeriodFromDate(toDate: DateString) {
     this.formData.fromDate = DateStringLibrary.getFirstDayOfMonthFromDateString(toDate);
+  }
+
+
+  private validateLedgersToClear() {
+    this.formData.ledgers = this.accountChartSelected.ledgers
+      .filter(x => this.formData.ledgers.includes(x.uid))
+      .map(x => x.uid);
   }
 
 

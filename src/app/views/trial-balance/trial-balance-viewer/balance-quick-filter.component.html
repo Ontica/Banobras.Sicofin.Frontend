@@ -13,7 +13,8 @@
             [(ngModel)]="formData.accountsChartUID"
             [items]="accountsChartMasterDataList"
             [loading]="isLoading"
-            [showError]="!formData.accountsChartUID">
+            [showError]="!formData.accountsChartUID"
+            (changes)="onAccountChartChanges()">
           </emp-ng-select>
 
         </div>
