@@ -22,19 +22,17 @@
 
       </div>
 
-      <div fxFlex>
+      <div fxFlex fxLayoutAlign="start end">
 
-        <label>Contabilidad:</label>
+        <div class="input-search-container">
 
-        <emp-ng-select name="ledger" #ledger="ngModel" required
-          [config]="{bindByValue: false}"
-          [(ngModel)]="subledgerAccountsForm.ledger"
-          [items]="subledgerAccountsForm.accountChart?.ledgers"
-          [showError]="ledger.invalid"
-          [placeholder]="subledgerAccountsForm.accountChart ? 'Seleccionar' : 'Seleccione el grupo'"
-          bindLabel="fullName"
-          (changes)="onLedgerChanges()">
-        </emp-ng-select>
+          <input type="text" class="text-box" name="keywords" #keywords="ngModel" required
+            placeholder="Buscar auxiliares..."
+            [(ngModel)]="subledgerAccountsForm.keywords"
+            [class.invalid-control]="keywords.invalid"
+            (keyup.escape)="onClearKeyword()">
+
+        </div>
 
       </div>
 
@@ -59,31 +57,34 @@
 
       <div [fxFlex]="50">
 
+        <label>Contabilidad:</label>
+
+        <emp-ng-select name="ledger" #ledger="ngModel"
+          [config]="{bindByValue: false, clearable: true}"
+          [(ngModel)]="subledgerAccountsForm.ledger"
+          [items]="subledgerAccountsForm.accountChart?.ledgers"
+          [placeholder]="subledgerAccountsForm.accountChart ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'"
+          bindLabel="fullName"
+          (changes)="onLedgerChanges()">
+        </emp-ng-select>
+
+      </div>
+
+      <div [fxFlex]="50">
+
         <label>Tipo de auxiliar:</label>
 
         <emp-ng-select name="subledgerType" #subledgerType="ngModel"
           [config]="{clearable: true, bindByValue: false, notFoundText: subledgerAccountsForm.ledger ?
-                    'No se encontraron registros' : 'Seleccionar una contabilidad'}"
+                    'No se encontraron registros' : 'Seleccione una contabilidad'}"
           [(ngModel)]="subledgerAccountsForm.type"
           [items]="subledgerAccountsForm.ledger?.subledgerAccountsTypes"
-          [showError]="subledgerType.invalid"
           placeholder="Todos">
         </emp-ng-select>
 
       </div>
 
-      <div [fxFlex]="50" fxLayoutAlign="start end">
 
-        <div class="input-search-container">
-
-          <input type="text" class="text-box" name="keywords"
-            placeholder="Buscar auxiliares..."
-            [(ngModel)]="subledgerAccountsForm.keywords"
-            (keyup.escape)="onClearKeyword()">
-
-        </div>
-
-      </div>
 
     </div>
 
