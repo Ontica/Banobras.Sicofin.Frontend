@@ -223,10 +223,10 @@
                     Concepto presupuestal:
                     <span class="warning-text">
                       {{formHandler.showInvalidControl(controls.budgetConcept) ?
-                      '(máximo 6 caracteres permitidos)' : ''}}
+                      '(máximo 6 dígitos permitidos)' : ''}}
                     </span>
                   </label>
-                  <input type="text" class="text-box"
+                  <input type="text" class="text-box" empNgInteger
                     [formControlName]="controls.budgetConcept"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.budgetConcept)">
                 </div>
@@ -254,10 +254,10 @@
                     Número de verificación:
                     <span class="warning-text">
                       {{formHandler.showInvalidControl(controls.verificationNumber) ?
-                      '(máximo 6 caracteres permitidos)' : ''}}
+                      '(máximo 6 dígitos permitidos)' : ''}}
                     </span>
                   </label>
-                  <input type="text" class="text-box"
+                  <input type="text" class="text-box" empNgInteger
                     [formControlName]="controls.verificationNumber"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.verificationNumber)">
                 </div>
