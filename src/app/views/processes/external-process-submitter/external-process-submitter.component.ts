@@ -17,17 +17,17 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { ExternalProcessDataService } from '@app/data-services';
 
-import { BalanceType, BalanceTypesForMonthlyExportList, ConcilacionSICExternalProcessCommand,
-         ExportBalancesCommand, ExternalProcessTypeList, ExternalProcessTypes,
-         RentabilidadExternalProcessCommand } from '@app/models';
+import { ConcilacionSICExternalProcessCommand, ExportBalancesCommand, ExternalProcessTypeList,
+         ExternalProcessTypes, RentabilidadExternalProcessCommand, StoreInto,
+         StoreIntoForMonthlyExportList } from '@app/models';
 
 enum ExternalProcessSubmitterFormControls {
   year = 'year',
   month = 'month',
   methodology = 'methodology',
   period = 'period',
+  storeInto = 'storeInto',
   date = 'date',
-  balanceType = 'balanceType',
 }
 
 @Component({
@@ -50,7 +50,7 @@ export class ExternalProcessSubmitterComponent implements OnInit {
 
   externalProcessTypeList: Identifiable[] = ExternalProcessTypeList;
 
-  balanceTypesForMonthlyExportList: Identifiable[] = BalanceTypesForMonthlyExportList;
+  storeIntoForMonthlyExportList: Identifiable[] = StoreIntoForMonthlyExportList;
 
   externalProcessTypes = ExternalProcessTypes;
 
@@ -164,8 +164,8 @@ export class ExternalProcessSubmitterComponent implements OnInit {
         month: new FormControl(),
         methodology: new FormControl(),
         period: new FormControl(),
+        storeInto: new FormControl(this.isExportacionSaldosDiariosType ? StoreInto.Diario : null),
         date: new FormControl(),
-        balanceType: new FormControl(this.isExportacionSaldosDiariosType ? BalanceType.Diario : null),
       })
     );
 
@@ -192,8 +192,8 @@ export class ExternalProcessSubmitterComponent implements OnInit {
     }
 
     if (this.isExportacionSaldosMensualesType || this.isExportacionSaldosDiariosType) {
+      this.formHandler.setControlValidators(this.controls.storeInto, Validators.required);
       this.formHandler.setControlValidators(this.controls.date, Validators.required);
-      this.formHandler.setControlValidators(this.controls.balanceType, Validators.required);
     }
   }
 
@@ -236,8 +236,8 @@ export class ExternalProcessSubmitterComponent implements OnInit {
     const formModel = this.formHandler.form.getRawValue();
 
     const data: ExportBalancesCommand = {
-      balanceType: formModel.balanceType ?? null,
-      fecha: formModel.date ?? '',
+      storeInto: formModel.storeInto ?? null,
+      toDate: formModel.date ?? '',
     };
 
     return data;

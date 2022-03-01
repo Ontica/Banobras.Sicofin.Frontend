@@ -49,20 +49,20 @@ export interface ConcilacionSICExternalProcessCommand {
 }
 
 
-export enum BalanceType {
+export enum StoreInto {
   Diario = 'Diario',
-  MensualPorMayor = 'MensualPorMayor',
+  MensualPorContabilidad = 'MensualPorContabilidad',
   MensualConsolidado = 'MensualConsolidado'
 }
 
 
 export interface ExportBalancesCommand {
-  balanceType: BalanceType;
-  fecha: DateString;
+  storeInto: StoreInto;
+  toDate: DateString;
 }
 
 
-export const BalanceTypesForMonthlyExportList: Identifiable[] = [
-  {uid: BalanceType.MensualPorMayor, name: 'Por contabilidad'},
-  {uid: BalanceType.MensualConsolidado, name: 'Consolidado'},
+export const StoreIntoForMonthlyExportList: Identifiable[] = [
+  {uid: StoreInto.MensualPorContabilidad, name: 'Por contabilidad'},
+  {uid: StoreInto.MensualConsolidado, name: 'Consolidado'},
 ];
