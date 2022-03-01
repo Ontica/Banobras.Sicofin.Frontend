@@ -14,9 +14,16 @@ export enum PermissionsLibrary {
   MODULE_BALANCE_EXPLORER = 'module-balance-explorer',
 
   ROUTE_ACCOUNTING_OPERATIONS = 'route-accounting-operations',
-  ROUTE_ACCOUNTING_DASHBOARDS = 'route-accounting-dashboards',
+
+  ROUTE_SALDOS_Y_BALANZAS = 'route-saldos-y-balanzas',
+  ROUTE_REPORTES_REGULATORIOS = 'route-reportes-regulatorios',
+  ROUTE_CONCILIACIONES = 'route-conciliaciones',
+  ROUTE_REPORTES_OPERATIVOS = 'route-reportes-operativos',
+  ROUTE_REPORTES_FISCALES = 'route-reportes-fiscales',
+
   ROUTE_ACCOUNTING_CATALOGUES_AND_RULES = 'route-accounting-catalogues-and-rules',
   ROUTE_SYSTEM_MANAGEMENT = 'route-system-management',
+  ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',
 
   FEATURE_DATABASE_IMPORT = 'feature-database-import',
   FEATURE_ACCOUNTING_CALENDARS_EDITION = 'feature-accounting-calendars-edition',
@@ -96,27 +103,27 @@ export const ROUTES_LIBRARY = {
   // #region accounting-dashboards-routing module
 
   tableros_saldos_y_balanzas: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_DASHBOARDS,
+    permission: PermissionsLibrary.ROUTE_SALDOS_Y_BALANZAS,
     parent: 'tableros',
     path: 'saldos-y-balanzas',
   },
   tableros_reportes_regulatorios: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_DASHBOARDS,
+    permission: PermissionsLibrary.ROUTE_REPORTES_REGULATORIOS,
     parent: 'tableros',
     path: 'reportes-regulatorios',
   },
   tableros_conciliaciones: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_DASHBOARDS,
+    permission: PermissionsLibrary.ROUTE_CONCILIACIONES,
     parent: 'tableros',
     path: 'conciliaciones',
   },
   tableros_reportes_operativos: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_DASHBOARDS,
+    permission: PermissionsLibrary.ROUTE_REPORTES_OPERATIVOS,
     parent: 'tableros',
     path: 'reportes-operativos',
   },
   tableros_reportes_fiscales: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_DASHBOARDS,
+    permission: PermissionsLibrary.ROUTE_REPORTES_FISCALES,
     parent: 'tableros',
     path: 'reportes-fiscales',
   },
@@ -154,8 +161,13 @@ export const ROUTES_LIBRARY = {
 
   // #region system-management-routing module
 
-  administracion_generacion_de_saldos: {
+  administracion_panel_de_control: {
     permission: PermissionsLibrary.ROUTE_SYSTEM_MANAGEMENT,
+    parent: 'administracion',
+    path: 'panel-de-control',
+  },
+  administracion_generacion_de_saldos: {
+    permission: PermissionsLibrary.ROUTE_GENERACION_DE_SALDOS,
     parent: 'administracion',
     path: 'generacion-de-saldos',
   },
@@ -163,11 +175,6 @@ export const ROUTES_LIBRARY = {
     permission: PermissionsLibrary.ROUTE_SYSTEM_MANAGEMENT,
     parent: 'administracion',
     path: 'tipos-de-cambio',
-  },
-  administracion_panel_de_control: {
-    permission: PermissionsLibrary.ROUTE_SYSTEM_MANAGEMENT,
-    parent: 'administracion',
-    path: 'panel-de-control',
   },
 
   // #endregion

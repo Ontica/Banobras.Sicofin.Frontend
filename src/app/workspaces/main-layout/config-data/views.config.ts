@@ -118,17 +118,17 @@ export const AccountingCataloguesAndRulesViews: View[] = [
 
 export const AccountingSystemManagementViews: View[] = [
   {
+    name: 'AccountingSystemManagementViews.ControlPanel',
+    title: 'Panel de control',
+    url: '/administracion/panel-de-control',
+    permission: ROUTES_LIBRARY.administracion_panel_de_control.permission,
+  },
+  {
     name: 'AccountingSystemManagementViews.BalanceGeneration',
     title: 'Generación de saldos',
     url: '/administracion/generacion-de-saldos',
     permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission,
   },
-  {
-    name: 'AccountingSystemManagementViews.ControlPanel',
-    title: 'Panel de control',
-    url: '/administracion/panel-de-control',
-    permission: ROUTES_LIBRARY.administracion_panel_de_control.permission,
-  }
 ];
 
 

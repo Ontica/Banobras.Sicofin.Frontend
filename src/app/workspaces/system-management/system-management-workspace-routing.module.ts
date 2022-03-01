@@ -20,18 +20,18 @@ import { ControlPanelMainPageComponent } from './control-panel-main-page/control
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission },
-    path: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
-    component: BalanceGenerationMainPageComponent,
-  },
-  {
     data: { permission: ROUTES_LIBRARY.administracion_panel_de_control.permission },
     path: ROUTES_LIBRARY.administracion_panel_de_control.path,
     component: ControlPanelMainPageComponent,
   },
   {
+    data: { permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission },
+    path: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
+    component: BalanceGenerationMainPageComponent,
+  },
+  {
     path: '',
-    redirectTo: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
+    redirectTo: ROUTES_LIBRARY.administracion_panel_de_control.path,
     pathMatch: 'full',
   },
 ];
