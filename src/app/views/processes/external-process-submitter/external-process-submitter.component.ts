@@ -18,8 +18,8 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { ExternalProcessDataService } from '@app/data-services';
 
 import { ConcilacionSICExternalProcessCommand, ExportBalancesCommand, ExternalProcessTypeList,
-         ExternalProcessTypes, RentabilidadExternalProcessCommand, StoreInto,
-         StoreIntoForMonthlyExportList } from '@app/models';
+         ExternalProcessTypes, RentabilidadExternalProcessCommand, StoreBalancesInto,
+         StoreBalancesIntoForMonthlyExportList } from '@app/models';
 
 enum ExternalProcessSubmitterFormControls {
   year = 'year',
@@ -50,7 +50,7 @@ export class ExternalProcessSubmitterComponent implements OnInit {
 
   externalProcessTypeList: Identifiable[] = ExternalProcessTypeList;
 
-  storeIntoForMonthlyExportList: Identifiable[] = StoreIntoForMonthlyExportList;
+  storeBalancesIntoForMonthlyExportList: Identifiable[] = StoreBalancesIntoForMonthlyExportList;
 
   externalProcessTypes = ExternalProcessTypes;
 
@@ -164,7 +164,7 @@ export class ExternalProcessSubmitterComponent implements OnInit {
         month: new FormControl(),
         methodology: new FormControl(),
         period: new FormControl(),
-        storeInto: new FormControl(this.isExportacionSaldosDiariosType ? StoreInto.Diario : null),
+        storeInto: new FormControl(this.isExportacionSaldosDiariosType ? StoreBalancesInto.Diario : null),
         date: new FormControl(),
       })
     );
