@@ -57,8 +57,13 @@ export class VoucherCreatorComponent {
   constructor(private vouchersData: VouchersDataService) {}
 
 
-  get isSpecialCase() {
+  get isSpecialCase(): boolean {
     return this.selectedCreatorCase === VoucherCreatorCases.Special;
+  }
+
+
+  get allowAllLedgersSelection(): boolean {
+    return !!this.selectedVoucherType?.allowAllLedgersSelection;
   }
 
 

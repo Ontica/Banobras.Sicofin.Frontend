@@ -19,10 +19,10 @@
       <div [fxFlex]="100/3">
         <label>Tipo de contabilidad:</label>
         <emp-ng-select
-          [formControlName]="controls.accountsChart"
+          [formControlName]="controls.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [showError]="formHandler.showInvalidControl(controls.accountsChart)"
+          [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
           (changes)="onAccountChartChanges($event)">
         </emp-ng-select>
       </div>
@@ -30,9 +30,10 @@
       <div [fxFlex]="100/3">
         <label>Contabilidad:</label>
         <emp-ng-select
+          [config]="{clearable: allowAllLedgersSelection}"
           [formControlName]="controls.ledgerUID"
           [items]="accountChartSelected?.ledgers"
-          [placeholder]="accountChartSelected ? 'Seleccionar' : 'Seleccione el tipo de contabilidad'"
+          [placeholder]="ledgerPlaceholder"
           [showError]="formHandler.showInvalidControl(controls.ledgerUID)">
         </emp-ng-select>
       </div>

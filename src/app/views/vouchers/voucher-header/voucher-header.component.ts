@@ -33,7 +33,7 @@ export enum VoucherHeaderEventType {
 
 enum VoucherHeaderFormControls {
   voucherTypeUID = 'voucherTypeUID',
-  accountsChart = 'accountsChart',
+  accountsChartUID = 'accountsChartUID',
   ledgerUID = 'ledgerUID',
   concept = 'concept',
   functionalAreaId = 'functionalAreaId',
@@ -51,6 +51,8 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() editionMode = true;
 
   @Input() isSpecialCase = false;
+
+  @Input() allowAllLedgersSelection = false;
 
   @Output() voucherHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -91,6 +93,10 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.isSpecialCase) {
       this.setFormData();
     }
+
+    if (changes.allowAllLedgersSelection) {
+      this.validateRequiredFormFields();
+    }
   }
 
 
@@ -106,6 +112,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   get hasEntries() {
     return this.voucher.entries.length > 0;
+  }
+
+
+  get ledgerPlaceholder(): string {
+    if (this.allowAllLedgersSelection) {
+      return 'Todas'
+    }
+
+    return this.accountChartSelected ? 'Seleccionar' : 'Seleccione el tipo de contabilidad';
   }
 
 
@@ -198,7 +213,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.formHandler = new FormHandler(
       new FormGroup({
         voucherTypeUID: new FormControl('', Validators.required),
-        accountsChart: new FormControl('', Validators.required),
+        accountsChartUID: new FormControl('', Validators.required),
         ledgerUID: new FormControl('', Validators.required),
         concept: new FormControl('', Validators.required),
         functionalAreaId: new FormControl('', Validators.required),
@@ -207,6 +222,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     this.formHandler.form.valueChanges.subscribe(v => this.emitChanges());
+  }
+
+
+  private validateRequiredFormFields() {
+    if (this.allowAllLedgersSelection) {
+      this.formHandler.clearControlValidators(this.controls.ledgerUID);
+    } else {
+      this.formHandler.setControlValidators(this.controls.ledgerUID, Validators.required)
+    }
   }
 
 
@@ -228,7 +252,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     this.formHandler.form.reset({
       voucherTypeUID: this.voucher.voucherType.uid || '',
-      accountsChart: this.voucher.accountsChart.uid || '',
+      accountsChartUID: this.voucher.accountsChart.uid || '',
       ledgerUID: this.voucher.ledger.uid || '',
       concept: this.voucher.concept || '',
       functionalAreaId: this.voucher.functionalArea.uid || '',
@@ -256,7 +280,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   private validateDisabledFieldsByHasEntries() {
     if (this.editionMode) {
-      this.formHandler.disableControl(this.controls.accountsChart, this.hasEntries);
+      this.formHandler.disableControl(this.controls.accountsChartUID, this.hasEntries);
       this.formHandler.disableControl(this.controls.ledgerUID, this.hasEntries);
     }
   }
@@ -281,7 +305,9 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     const data: VoucherFields = {
       voucherTypeUID: formModel.voucherTypeUID ?? '',
+      accountsChartUID: formModel.accountsChartUID ?? '',
       ledgerUID: formModel.ledgerUID ?? '',
+      generateAllAccountsChartVouchers: this.allowAllLedgersSelection && !formModel.ledgerUID,
       concept: formModel.concept ?? '',
       functionalAreaId: formModel.functionalAreaId ?? '',
       accountingDate: formModel.accountingDate ?? '',

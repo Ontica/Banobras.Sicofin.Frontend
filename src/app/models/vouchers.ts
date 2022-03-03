@@ -275,6 +275,7 @@ export enum VoucherCreatorCases {
 
 
 export interface VoucherSpecialCaseType extends Identifiable {
+  allowAllLedgersSelection: boolean;
   askForCalculationDateField: boolean;
   askForVoucherNumberField: boolean;
   calculationDateFieldName: string;
@@ -283,8 +284,10 @@ export interface VoucherSpecialCaseType extends Identifiable {
 
 export interface VoucherFields {
   voucherTypeUID: string;
-  concept: string;
+  accountsChartUID: string;
   ledgerUID: string;
+  generateAllAccountsChartVouchers: boolean;
+  concept: string;
   functionalAreaId: number;
   accountingDate: string;
   calculationDate?: DateString;
