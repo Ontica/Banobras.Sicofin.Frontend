@@ -25,6 +25,7 @@ import { VoucherSpecialCaseEditorComponent,
 export enum VoucherCreatorEventType {
   CLOSE_MODAL_CLICKED = 'VoucherCreatorComponent.Event.CloseModalClicked',
   VOUCHER_CREATED = 'VoucherCreatorComponent.Event.VoucherCreated',
+  ALL_VOUCHERS_CREATED = 'VoucherCreatorComponent.Event.AllVouchersCreated',
 }
 
 @Component({
@@ -67,6 +68,11 @@ export class VoucherCreatorComponent {
   }
 
 
+  get generateAllAccountsChartVouchers(): boolean {
+    return this.allowAllLedgersSelection && !this.voucherFields.ledgerUID;
+  }
+
+
   get readyForSubmit() {
     if (this.isSpecialCase && !this.voucherSpecialCaseFieldsValid) {
       return false;
@@ -98,13 +104,17 @@ export class VoucherCreatorComponent {
       return;
     }
 
-    let observable = this.vouchersData.createVoucher(this.voucherFields);
+    let observable: Observable<Voucher | string> = this.vouchersData.createVoucher(this.voucherFields);
 
     if (this.isSpecialCase) {
       observable = this.vouchersData.createVoucherSpecialCase(this.voucherFields);
     }
 
-    this.createVoucher(observable);
+    if (this.generateAllAccountsChartVouchers) {
+      observable = this.vouchersData.createAllVouchersSpecialCase(this.voucherFields);
+    }
+
+    this.executeCreateVoucher(observable);
   }
 
 
@@ -161,13 +171,17 @@ export class VoucherCreatorComponent {
   }
 
 
-  private createVoucher(createVoucherObserbable: Observable<Voucher>) {
+  private executeCreateVoucher(observable: Observable<Voucher | string>) {
     this.submitted = true;
 
-    createVoucherObserbable
+    observable
       .toPromise()
       .then(x => {
-        sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.VOUCHER_CREATED, {voucher: x});
+        if (this.generateAllAccountsChartVouchers) {
+          sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.ALL_VOUCHERS_CREATED, {message: x});
+        } else {
+          sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.VOUCHER_CREATED, {voucher: x});
+        }
         this.onClose();
       })
       .finally(() => this.submitted = false);

@@ -286,7 +286,6 @@ export interface VoucherFields {
   voucherTypeUID: string;
   accountsChartUID: string;
   ledgerUID: string;
-  generateAllAccountsChartVouchers: boolean;
   concept: string;
   functionalAreaId: number;
   accountingDate: string;

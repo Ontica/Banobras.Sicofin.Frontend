@@ -307,7 +307,6 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       voucherTypeUID: formModel.voucherTypeUID ?? '',
       accountsChartUID: formModel.accountsChartUID ?? '',
       ledgerUID: formModel.ledgerUID ?? '',
-      generateAllAccountsChartVouchers: this.allowAllLedgersSelection && !formModel.ledgerUID,
       concept: formModel.concept ?? '',
       functionalAreaId: formModel.functionalAreaId ?? '',
       accountingDate: formModel.accountingDate ?? '',

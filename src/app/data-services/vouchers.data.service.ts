@@ -153,6 +153,15 @@ export class VouchersDataService {
   }
 
 
+  createAllVouchersSpecialCase(voucherFields: VoucherFields): Observable<string> {
+    Assertion.assertValue(voucherFields, 'voucherFields');
+
+    const path = `v2/financial-accounting/vouchers/special-case/create-all-vouchers`;
+
+    return this.http.post<string>(path, voucherFields);
+  }
+
+
   updateVoucher(voucherId: number, voucherFields: VoucherFields): Observable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherFields, 'voucherFields');

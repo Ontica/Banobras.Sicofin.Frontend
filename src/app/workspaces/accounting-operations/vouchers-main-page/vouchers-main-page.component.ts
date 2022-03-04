@@ -169,6 +169,11 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
         this.insertVoucherToList(event.payload.voucher);
         return;
 
+      case VoucherCreatorEventType.ALL_VOUCHERS_CREATED:
+        Assertion.assertValue(event.payload.message, 'event.payload.message');
+        this.messageBox.show(event.payload.message, 'Nuevas pólizas');
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
