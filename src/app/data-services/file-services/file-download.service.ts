@@ -6,9 +6,13 @@
  */
 
 import { Inject, Injectable } from '@angular/core';
+
 import { HttpService } from '@app/core';
+
 import { Observable } from 'rxjs';
+
 import { reportHttpProgress, Progress } from './http-progress';
+
 import { Saver, SAVER } from './saver.provider';
 
 
@@ -20,7 +24,8 @@ export class FileDownloadService {
   constructor(private http: HttpService,
               @Inject(SAVER) private save: Saver) { }
 
-  download(url: string, filename?: string): Observable<Progress> {
+
+  downloadWithProgress(url: string, filename?: string): Observable<Progress> {
 
     return this.http.get(url, {reportProgress: true,
                                observe: 'events',
@@ -29,4 +34,22 @@ export class FileDownloadService {
         reportHttpProgress(blob => this.save(blob, filename))
       );
   }
+
+
+  download(url: string, filename?: string) {
+    let link = document.createElement('a');
+    link.style.display = 'none';
+    link.href = url;
+
+    if (filename) {
+      link.setAttribute('download', filename);
+    } else {
+      link.setAttribute('target', '_blank');
+    }
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
 }
