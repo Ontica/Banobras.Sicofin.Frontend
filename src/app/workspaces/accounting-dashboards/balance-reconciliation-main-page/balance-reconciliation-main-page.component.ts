@@ -5,11 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { Assertion, DateString, EventInfo } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyDataTable, DataTable } from '@app/models';
+import { EmptyDataTable, DataTable, ReconciliationType, InputDatasetsCommand, ReconciliationDatasets,
+         ImportInputDatasetCommand, InputDataset, mapToReconciliationImportInputDatasetCommand,
+         mapToReconciliationInputDatasetsCommand, ReconciliationImportInputDatasetCommand} from '@app/models';
+
+import { ReconciliationDataService } from '@app/data-services';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -17,23 +21,32 @@ import {
   ImportedDataViewerEventType
 } from '@app/views/reports-controls/imported-data-viewer/imported-data-viewer.component';
 
+
 @Component({
   selector: 'emp-fa-balance-reconciliation-main-page',
   templateUrl: './balance-reconciliation-main-page.component.html',
 })
-export class BalanceReconciliationMainPageComponent {
+export class BalanceReconciliationMainPageComponent implements OnInit {
 
-  balanceSheetData: DataTable = Object.assign({}, EmptyDataTable);
+  reconciliationTypeList: ReconciliationType[] = [];
+
+  reconciliationDatasets: ReconciliationDatasets;
+
+  reconciliationDataResult: DataTable = Object.assign({}, EmptyDataTable);
 
   excelFileUrl = '';
-
-  dataImportedResult = null;
 
   submitted = false;
 
   isLoading = false;
 
-  constructor(private messageBox: MessageBoxService) { }
+  constructor(private reconciliationData: ReconciliationDataService,
+              private messageBox: MessageBoxService) { }
+
+
+  ngOnInit() {
+    this.getReconciliationTypes();
+  }
 
 
   onImportedDataViewerEvent(event: EventInfo){
@@ -41,28 +54,46 @@ export class BalanceReconciliationMainPageComponent {
       return;
     }
 
+    let command = null;
+
     switch (event.type as ImportedDataViewerEventType) {
 
       case ImportedDataViewerEventType.SEARCH_DATA:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
-        this.searchBalanceSheetData(event.payload.command);
+        this.searchReconciliationData(event.payload.command);
         return;
 
-      case ImportedDataViewerEventType.GET_FORMAT:
-        Assertion.assertValue(event.payload.date, 'event.payload.date');
-        this.getBalanceFormat(event.payload.date as DateString);
+      case ImportedDataViewerEventType.GET_INPUT_DATASET:
+        Assertion.assertValue(event.payload.command.typeUID, 'event.payload.command.typeUID');
+        Assertion.assertValue(event.payload.command.date, 'event.payload.command.date');
+
+        command = mapToReconciliationInputDatasetsCommand(event.payload.command as InputDatasetsCommand);
+        this.getReconciliationInputDatasets(command);
         return;
 
-      case ImportedDataViewerEventType.IMPORT_DATA:
-        Assertion.assertValue(event.payload.date, 'event.payload.date');
-        Assertion.assertValue(event.payload.files, 'event.payload.files');
-        this.dataImportedResult = null;
-        this.importBalanceSheetFromExcel(event.payload.date as DateString, event.payload.files as File[]);
+      case ImportedDataViewerEventType.CLEAR_INPUT_DATASET:
+        this.reconciliationDatasets = null;
+        return;
+
+      case ImportedDataViewerEventType.IMPORT_DATASET:
+        Assertion.assertValue(event.payload.file, 'event.payload.file');
+        Assertion.assertValue(event.payload.command.typeUID, 'event.payload.command.typeUID');
+        Assertion.assertValue(event.payload.command.datasetType, 'event.payload.command.datasetType');
+        Assertion.assertValue(event.payload.command.date, 'event.payload.command.date');
+
+        command =
+          mapToReconciliationImportInputDatasetCommand(event.payload.command as ImportInputDatasetCommand);
+        this.importInputDatasetFromFile(event.payload.file as File, command);
+        return;
+
+      case ImportedDataViewerEventType.DELETE_DATASET:
+        Assertion.assertValue(event.payload.iputDataset.uid, 'event.payload.iputDataset.uid');
+        this.showConfirmDeleteDataSet(event.payload.iputDataset as InputDataset);
         return;
 
       case ImportedDataViewerEventType.EXPORT_DATA:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
-        this.exportBalanceSheetData(event.payload.command);
+        this.exportReconciliationData(event.payload.command);
         return;
 
       default:
@@ -72,39 +103,68 @@ export class BalanceReconciliationMainPageComponent {
   }
 
 
-  private searchBalanceSheetData(command) {
+  private getReconciliationTypes() {
+    this.setSubmitted(true);
+    this.reconciliationData.getReconciliationTypes()
+      .toPromise()
+      .then(x => this.reconciliationTypeList = x)
+      .finally(() => this.setSubmitted(false));
+  }
+
+
+  private getReconciliationInputDatasets(command: InputDatasetsCommand) {
+    this.setSubmitted(true);
+    this.reconciliationData.getReconciliationInputDatasets(command)
+      .toPromise()
+      .then(x => this.reconciliationDatasets = x)
+      .finally(() => this.setSubmitted(false));
+  }
+
+
+  private importInputDatasetFromFile(file: File, command: ReconciliationImportInputDatasetCommand) {
+    this.setSubmitted(true);
+    this.reconciliationData.importInputDatasetFromFile(file, command)
+      .toPromise()
+      .then(x => this.reconciliationDatasets = x)
+      .finally(() => this.setSubmitted(false));
+  }
+
+
+  private showConfirmDeleteDataSet(inputDataset: InputDataset) {
+    const message = `Esta operación eliminara el archivo <strong> ${inputDataset.datasetTypeName}</strong>.
+                     <br><br>¿Elimino el archivo?`;
+
+    this.messageBox.confirm(message, 'Eliminar Archivo', 'DeleteCancel')
+      .toPromise()
+      .then(x => {
+        if (x) {
+          this.deleteInputDataset(inputDataset.uid);
+        }
+      });
+  }
+
+
+  private deleteInputDataset(inputDatasetUID: string) {
+    this.setSubmitted(true);
+    this.reconciliationData.deleteInputDataset(inputDatasetUID)
+      .toPromise()
+      .then(x => this.reconciliationDatasets = x)
+      .finally(() => this.setSubmitted(false));
+  }
+
+
+  private searchReconciliationData(command) {
     this.setSubmitted(true);
     setTimeout(() => {
       this.messageBox.showInDevelopment('Consultar conciliaciones', command);
-      this.balanceSheetData = Object.assign({}, EmptyDataTable,
+      this.reconciliationDataResult = Object.assign({}, EmptyDataTable,
         {command, columns: [{field: 'uid', title: ''}]});
       this.setSubmitted(false);
     }, 500);
   }
 
 
-  private getBalanceFormat(date: DateString) {
-    this.setSubmitted(true);
-
-    setTimeout(() => {
-      this.messageBox.showInDevelopment('obtener formato de datos a conciliar', date);
-      this.setSubmitted(false);
-    }, 500);
-  }
-
-
-  private importBalanceSheetFromExcel(date: DateString, files: File[]) {
-    this.setSubmitted(true);
-
-    setTimeout(() => {
-      this.dataImportedResult = {success: true};
-      this.setSubmitted(false);
-      this.messageBox.showInDevelopment('Importar datos a conciliar', {date, files});
-    }, 500);
-  }
-
-
-  private exportBalanceSheetData(command) {
+  private exportReconciliationData(command) {
     this.submitted = true;
 
     setTimeout(() => {

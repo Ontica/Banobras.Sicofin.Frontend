@@ -5,10 +5,12 @@
     <emp-fa-imported-data-viewer
       dataType="conciliaciones"
       [typeRequired]="true"
+      [importTypeRequired]="true"
       [multiFiles]="true"
-      [data]="balanceSheetData"
+      [typeList]="reconciliationTypeList"
+      [importerDatasets]="reconciliationDatasets"
+      [data]="reconciliationDataResult"
       [excelFileUrl]="excelFileUrl"
-      [dataImportedResult]="dataImportedResult"
       [isLoading]="isLoading"
       (importedDataViewerEvent)="onImportedDataViewerEvent($event)">
 
