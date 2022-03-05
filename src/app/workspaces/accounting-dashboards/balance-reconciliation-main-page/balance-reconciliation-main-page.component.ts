@@ -9,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyDataTable, DataTable, ReconciliationType, InputDatasetsCommand, ReconciliationDatasets,
+import { ReconciliationType, InputDatasetsCommand, ReconciliationDatasets,
          ImportInputDatasetCommand, InputDataset, mapToReconciliationImportInputDatasetCommand,
-         mapToReconciliationInputDatasetsCommand, ReconciliationImportInputDatasetCommand} from '@app/models';
+         mapToReconciliationInputDatasetsCommand, ReconciliationImportInputDatasetCommand, ReconciliationData,
+         EmptyReconciliationData, ReconciliationInputDatasetsCommand, mapToReconciliationCommand,
+         ExecuteDatasetsCommand} from '@app/models';
 
 import { ReconciliationDataService } from '@app/data-services';
 
@@ -32,7 +34,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
   reconciliationDatasets: ReconciliationDatasets;
 
-  reconciliationDataResult: DataTable = Object.assign({}, EmptyDataTable);
+  reconciliationDataTable: ReconciliationData = Object.assign({}, EmptyReconciliationData);
 
   excelFileUrl = '';
 
@@ -58,9 +60,11 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
     switch (event.type as ImportedDataViewerEventType) {
 
-      case ImportedDataViewerEventType.SEARCH_DATA:
+      case ImportedDataViewerEventType.EXECUTE_DATA:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
-        this.searchReconciliationData(event.payload.command);
+
+        command = mapToReconciliationCommand(event.payload.command as ExecuteDatasetsCommand);
+        this.executeReconciliation(command);
         return;
 
       case ImportedDataViewerEventType.GET_INPUT_DATASET:
@@ -153,14 +157,12 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   }
 
 
-  private searchReconciliationData(command) {
+  private executeReconciliation(command: ReconciliationInputDatasetsCommand) {
     this.setSubmitted(true);
-    setTimeout(() => {
-      this.messageBox.showInDevelopment('Consultar conciliaciones', command);
-      this.reconciliationDataResult = Object.assign({}, EmptyDataTable,
-        {command, columns: [{field: 'uid', title: ''}]});
-      this.setSubmitted(false);
-    }, 500);
+    this.reconciliationData.executeReconciliation(command)
+      .toPromise()
+      .then(x => this.reconciliationDataTable = x)
+      .finally(() => this.setSubmitted(false));
   }
 
 

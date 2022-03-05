@@ -11,7 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { InputDatasetsCommand, ReconciliationDatasets, ReconciliationImportInputDatasetCommand,
+import { InputDatasetsCommand, ReconciliationData, ReconciliationDatasets,
+         ReconciliationImportInputDatasetCommand, ReconciliationInputDatasetsCommand,
          ReconciliationType } from '@app/models';
 
 
@@ -25,6 +26,15 @@ export class ReconciliationDataService {
     const path = `v2/financial-accounting/reconciliation/reconciliation-types`;
 
     return this.http.get<ReconciliationType[]>(path);
+  }
+
+
+  executeReconciliation(command: ReconciliationInputDatasetsCommand): Observable<ReconciliationData> {
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/reconciliation`;
+
+    return this.http.post<ReconciliationData>(path, command);
   }
 
 

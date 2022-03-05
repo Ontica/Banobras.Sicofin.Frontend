@@ -56,10 +56,3 @@ export const DefaultExportationType: ExportationType = {
   name: FileType.Excel,
   fileType: FileType.Excel,
 };
-
-
-export interface ImportedDataCommand {
-  fromDate?: DateString;
-  toDate?: DateString;
-  type?: string;
-}

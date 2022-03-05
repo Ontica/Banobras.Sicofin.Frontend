@@ -40,6 +40,8 @@ export * from './grouping-rules';
 
 export * from './import-vouchers';
 
+export * from './imported-data';
+
 export * from './ledgers';
 
 export * from './operational-reports';

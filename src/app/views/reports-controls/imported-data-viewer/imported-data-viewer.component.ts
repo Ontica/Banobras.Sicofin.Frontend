@@ -25,7 +25,7 @@ import { DataImporterEventType } from './data-importer.component';
 import { ImportedDataFilterEventType } from './imported-data-filter.component';
 
 export enum ImportedDataViewerEventType {
-  SEARCH_DATA         = 'ImportedDataViewerComponent.Event.SearchData',
+  EXECUTE_DATA        = 'ImportedDataViewerComponent.Event.ExecuteData',
   GET_INPUT_DATASET   = 'ImportedDataViewerComponent.Event.GetInputDataSet',
   CLEAR_INPUT_DATASET = 'ImportedDataViewerComponent.Event.ClearInputDataSet',
   IMPORT_DATASET      = 'ImportedDataViewerComponent.Event.ImportDataSet',
@@ -110,15 +110,14 @@ export class ImportedDataViewerComponent implements OnChanges {
   onImportedDataFilterEvent(event) {
     switch (event.type as ImportedDataFilterEventType) {
 
-      case ImportedDataFilterEventType.SEARCH_DATA_CLICKED:
+      case ImportedDataFilterEventType.EXECUTE_DATA_CLICKED:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
 
         this.commandExecuted = false;
         this.data = Object.assign({}, EmptyDataTable);
 
         this.command = event.payload.command;
-        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.SEARCH_DATA,
-          event.payload);
+        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.EXECUTE_DATA, event.payload);
         return;
 
       default:

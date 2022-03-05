@@ -9,12 +9,12 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { ImportedDataCommand } from '@app/models';
+import { ExecuteDatasetsCommand } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
 export enum ImportedDataFilterEventType {
-  SEARCH_DATA_CLICKED = 'ImportedDataFilterComponent.Event.SearchDataClicked',
+  EXECUTE_DATA_CLICKED = 'ImportedDataFilterComponent.Event.ExecutehDataClicked',
 }
 
 @Component({
@@ -50,7 +50,7 @@ export class ImportedDataFilterComponent implements OnInit {
       command: this.getCommand(),
     };
 
-    sendEvent(this.importDataFilterEvent, ImportedDataFilterEventType.SEARCH_DATA_CLICKED, payload);
+    sendEvent(this.importDataFilterEvent, ImportedDataFilterEventType.EXECUTE_DATA_CLICKED, payload);
   }
 
 
@@ -63,8 +63,8 @@ export class ImportedDataFilterComponent implements OnInit {
   }
 
 
-  private getCommand(): ImportedDataCommand {
-    let data: ImportedDataCommand = {
+  private getCommand(): ExecuteDatasetsCommand {
+    let data: ExecuteDatasetsCommand = {
       fromDate: this.formData.fromDate,
     };
 
@@ -73,7 +73,7 @@ export class ImportedDataFilterComponent implements OnInit {
     }
 
     if (this.typeRequired) {
-      data.type = this.formData.type;
+      data.typeUID = this.formData.type;
     }
 
     return data;

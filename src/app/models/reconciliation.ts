@@ -7,55 +7,10 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { FileData, FileTypeAccepted } from '@app/shared/form-controls/file-control/file-control-data';
+import { DataTable, DataTableColumn, DataTableEntry } from './data-table';
 
-import { FileType as ReportingFileType } from './reporting';
-
-
-export interface InputDatasetsCommand {
-  typeUID: string;
-  date: DateString;
-}
-
-
-export interface InputDatasetType {
-  name: string;
-  type: string;
-  fileType: ReportingFileType;
-  optional: boolean;
-  count: number;
-}
-
-
-export interface InputDataset {
-  uid: string;
-  datasetType: string;
-  datasetTypeName: string;
-  elaborationDate: DateString;
-  elaboratedBy: DateString;
-  fileType: ReportingFileType;
-  fileSize: number;
-  url: string;
-}
-
-
-export interface ImportDatasets {
-  loaded: InputDataset[];
-  missing: InputDatasetType[];
-}
-
-
-export const EmptyImportDatasets: ImportDatasets = {
-  loaded: [],
-  missing: [],
-};
-
-
-export interface ImportInputDatasetCommand {
-  typeUID?: string;
-  datasetType?: string;
-  date: DateString;
-}
+import { ExecuteDatasetsCommand, ImportDatasets, ImportInputDatasetCommand, InputDataset,
+         InputDatasetsCommand, InputDatasetType } from './imported-data';
 
 
 export interface ReconciliationType extends Identifiable {
@@ -64,10 +19,30 @@ export interface ReconciliationType extends Identifiable {
 }
 
 
+export interface ReconciliationCommand {
+  reconciliationTypeUID: string;
+  date: DateString;
+}
+
+
 export interface ReconciliationInputDatasetsCommand {
   reconciliationTypeUID: string;
   date: DateString;
 }
+
+
+export interface ReconciliationData extends DataTable {
+  command: ReconciliationCommand;
+  columns: DataTableColumn[];
+  entries: DataTableEntry[];
+}
+
+
+export const EmptyReconciliationData: ReconciliationData = {
+  command: {reconciliationTypeUID: '', date: ''},
+  columns: [],
+  entries: [],
+};
 
 
 export interface ReconciliationImportInputDatasetCommand {
@@ -80,6 +55,16 @@ export interface ReconciliationImportInputDatasetCommand {
 export interface ReconciliationDatasets extends ImportDatasets {
   loaded: InputDataset[];
   missing: InputDatasetType[];
+}
+
+
+export function mapToReconciliationCommand(command: ExecuteDatasetsCommand): ReconciliationCommand {
+  const reconciliationCommand: ReconciliationCommand = {
+    reconciliationTypeUID: command.typeUID,
+    date: command.fromDate,
+  };
+
+  return reconciliationCommand;
 }
 
 
@@ -103,31 +88,4 @@ export function mapToReconciliationImportInputDatasetCommand(command: ImportInpu
   };
 
   return reconciliationInputDatasetCommand;
-}
-
-
-export function mapToFileDataFromInputDataset(data: InputDataset): FileData {
-  const fileData: FileData = {
-    uid: data.uid,
-    tag: data.datasetTypeName,
-    file: null,
-    name: data.datasetTypeName,
-    size: data.fileSize ?? 0,
-    type: getFileTypeFromReportingFileType(data.fileType),
-    url: data.url,
-  };
-
-  return fileData;
-}
-
-
-function getFileTypeFromReportingFileType(fileType: ReportingFileType) {
-  switch (fileType) {
-    case ReportingFileType.Csv:
-      return FileTypeAccepted.csv;
-    case ReportingFileType.Excel:
-      return FileTypeAccepted.excel;
-    default:
-      return FileTypeAccepted.all;
-  }
 }
