@@ -57,7 +57,10 @@
 
 <emp-fa-data-importer *ngIf="displayImportModal"
   [dataType]="dataType"
+  [importTypeRequired]="importTypeRequired"
   [multiFiles]="multiFiles"
+  [importTypeList]="typeList"
+  [importerDatasets]="importerDatasets"
   (dataImporterEvent)="onDataImporterEvent($event)">
 
 </emp-fa-data-importer>

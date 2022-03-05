@@ -39,6 +39,7 @@ export interface FileReport {
 
 export enum FileType {
   Excel = 'Excel',
+  Csv = 'Csv',
   PDF = 'PDF',
   Xml = 'Xml',
   HTML = 'HTML',
@@ -61,11 +62,4 @@ export interface ImportedDataCommand {
   fromDate?: DateString;
   toDate?: DateString;
   type?: string;
-}
-
-
-export interface DataToImport {
-  date?: DateString;
-  file?: File;
-  files?: File[];
 }

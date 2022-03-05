@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { DateStringLibrary, EventInfo, Identifiable } from '@app/core';
+import { EventInfo, Identifiable } from '@app/core';
 
 import { ImportedDataCommand } from '@app/models';
 
@@ -45,15 +45,6 @@ export class ImportedDataFilterComponent implements OnInit {
   }
 
 
-  get isFormValid() {
-    if (this.periodRequired) {
-      return !!this.formData.fromDate && !!this.formData.toDate;
-    }
-
-    return !!this.formData.fromDate;
-  }
-
-
   onSearchImportedDataClicked() {
     const payload = {
       command: this.getCommand(),
@@ -65,7 +56,7 @@ export class ImportedDataFilterComponent implements OnInit {
 
   private initFormData() {
     this.formData = {
-      fromDate: this.periodRequired ? null : DateStringLibrary.today(),
+      fromDate: null,
       toDate: null,
       type: null,
     };

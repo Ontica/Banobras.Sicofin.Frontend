@@ -1,4 +1,4 @@
-<emp-ng-modal-window [config]="{width:'750px'}">
+<emp-ng-modal-window [config]="{width:'600px'}">
 
   <emp-ng-card
     [title]="'Importador de ' + dataType"
@@ -13,62 +13,64 @@
         <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
           fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
-          <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="end">
+          <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between">
 
-            <div fxFlex="none">
+            <div fxFlex="50">
 
-              <label>Fecha:</label>
-              <emp-ng-datepicker name="fromDate"
-                [(ngModel)]="date"
-                [showError]="!date">
+              <ng-container *ngIf="importTypeRequired">
 
-              </emp-ng-datepicker>
+                <label>Tipo:</label>
+
+                <emp-ng-select name="importType"
+                  [config]="{bindByValue: false}"
+                  [(ngModel)]="formData.importType"
+                  [items]="importTypeList"
+                  [showError]="!formData.importType"
+                  (changes)="onFilterChanges()">
+                </emp-ng-select>
+
+              </ng-container>
 
             </div>
 
-            <div fxFlex="none" fxFlexAlign="end" [style.paddingBottom.px]="2">
+            <div fxflex="none" fxFlexAlign="end">
 
-              <button class="btn" [style.width.px]="157"
-                [disabled]="showGetFormatError"
-                (click)="onGetFormatClicked()">
-                Obtener formato
-              </button>
+              <div fxFlex="none">
+
+                <label>Fecha:</label>
+                <emp-ng-datepicker name="fromDate"
+                  [(ngModel)]="formData.date"
+                  [showError]="!formData.date"
+                  (valueChange)="onFilterChanges()">
+
+                </emp-ng-datepicker>
+
+              </div>
 
             </div>
 
           </div>
-
 
           <div fxLayout="row" fxLayout.lt-md="column">
 
             <div fxFlex="100">
 
-              <label> {{multiFiles ? 'Archivos:' : 'Archivo:'}}</label>
-              <emp-ng-file-control
+              <div class="section-title"> {{multiFiles ? 'Archivos:' : 'Archivo:'}} </div>
+
+              <div class="instruction-text" *ngIf="!!instructionMessage"> {{instructionMessage}} </div>
+
+              <emp-ng-file-control *ngIf="commandExecuted && importerDatasets"
                 [(fileControl)]="fileControlData"
-                [showError]="showFileError"
-                [config]="{filesTypes: ['excel'], autoUpload: true, maxFiles: multiFiles ? 6 : 1,
-                           placeholder: 'Elija o arrastre ' + ( multiFiles ? 'los archivos' : 'el archivo' ) + ' excel.'}">
+                [config]="{filesTypes: filesTypesValid,
+                           autoUpload: false,
+                           maxFiles: multiFiles ? filesTotal : 1,
+                           tagRequired: importTypeRequired,
+                           tagDefault: tagDefault,
+                           tagsList: tagList,
+                           placeholder: fileControlPlaceholder}"
+                (fileControlEvent)="onFileControlEvent($event)">
 
               </emp-ng-file-control>
-
-            </div>
-
-          </div>
-
-          <mat-divider class="horizontal"></mat-divider>
-
-          <div fxLayout="row">
-
-            <div fxFlex fxLayoutAlign="end center">
-
-              <button [style.width.px]="157"
-                [class.btn]="showImportDataError"
-                [class.btn-action]="!showImportDataError"
-                [disabled]="showImportDataError"
-                (click)="onImportDataClicked()">
-                Importar datos
-              </button>
 
             </div>
 

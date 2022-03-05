@@ -117,7 +117,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   get ledgerPlaceholder(): string {
     if (this.allowAllLedgersSelection) {
-      return 'Todas'
+      return 'Todas';
     }
 
     return this.accountChartSelected ? 'Seleccionar' : 'Seleccione el tipo de contabilidad';
@@ -229,7 +229,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     if (this.allowAllLedgersSelection) {
       this.formHandler.clearControlValidators(this.controls.ledgerUID);
     } else {
-      this.formHandler.setControlValidators(this.controls.ledgerUID, Validators.required)
+      this.formHandler.setControlValidators(this.controls.ledgerUID, Validators.required);
     }
   }
 

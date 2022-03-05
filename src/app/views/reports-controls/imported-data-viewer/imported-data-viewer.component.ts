@@ -9,7 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
-import { DataTable, DataTableCommand, EmptyDataTable } from '@app/models';
+import { DataTable, DataTableCommand, EmptyDataTable, EmptyImportDatasets,
+         ImportDatasets } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -24,10 +25,12 @@ import { DataImporterEventType } from './data-importer.component';
 import { ImportedDataFilterEventType } from './imported-data-filter.component';
 
 export enum ImportedDataViewerEventType {
-  SEARCH_DATA = 'ImportedDataViewerComponent.Event.SearchData',
-  GET_FORMAT = 'ImportedDataViewerComponent.Event.GetFormat',
-  IMPORT_DATA = 'ImportedDataViewerComponent.Event.ImportData',
-  EXPORT_DATA = 'ImportedDataViewerComponent.Event.ExportData',
+  SEARCH_DATA         = 'ImportedDataViewerComponent.Event.SearchData',
+  GET_INPUT_DATASET   = 'ImportedDataViewerComponent.Event.GetInputDataSet',
+  CLEAR_INPUT_DATASET = 'ImportedDataViewerComponent.Event.ClearInputDataSet',
+  IMPORT_DATASET      = 'ImportedDataViewerComponent.Event.ImportDataSet',
+  DELETE_DATASET      = 'ImportedDataViewerComponent.Event.DeleteDataSet',
+  EXPORT_DATA         = 'ImportedDataViewerComponent.Event.ExportData',
 }
 
 @Component({
@@ -42,6 +45,8 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() typeRequired = false;
 
+  @Input() importTypeRequired = false;
+
   @Input() multiFiles = false;
 
   @Input() data: DataTable = Object.assign({}, EmptyDataTable);
@@ -50,9 +55,9 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() isLoading = false;
 
-  @Input() dataImportedResult = null;
-
   @Input() typeList: Identifiable[] = [];
+
+  @Input() importerDatasets: ImportDatasets = EmptyImportDatasets;
 
   @Output() importedDataViewerEvent = new EventEmitter<EventInfo>();
 
@@ -72,10 +77,6 @@ export class ImportedDataViewerComponent implements OnChanges {
       this.commandExecuted = true;
       this.setText();
     }
-
-    if (changes.dataImportedResult && this.dataImportedResult?.success) {
-      this.displayImportModal = false;
-    }
   }
 
 
@@ -84,17 +85,19 @@ export class ImportedDataViewerComponent implements OnChanges {
 
       case DataImporterEventType.CLOSE_MODAL_CLICKED:
         this.displayImportModal = false;
+        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.CLEAR_INPUT_DATASET);
         return;
 
-      case DataImporterEventType.GET_FORMAT_CLICKED:
-        Assertion.assertValue(event.payload.date, 'event.payload.date');
-        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.GET_FORMAT, event.payload);
+      case DataImporterEventType.INPUT_DATASET_COMMAND_CHANGED:
+        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.GET_INPUT_DATASET, event.payload);
         return;
 
-      case DataImporterEventType.IMPORT_DATA_CLICKED:
-        Assertion.assert(event.payload.file || event.payload.files, 'files required');
-        Assertion.assertValue(event.payload.date, 'event.payload.date');
-        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.IMPORT_DATA, event.payload);
+      case DataImporterEventType.IMPORT_DATASET_CLICKED:
+        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.IMPORT_DATASET, event.payload);
+        return;
+
+      case DataImporterEventType.DELETE_DATASET_CLICKED:
+        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.DELETE_DATASET, event.payload);
         return;
 
       default:
@@ -176,7 +179,6 @@ export class ImportedDataViewerComponent implements OnChanges {
 
     this.cardHint = `${this.data.entries.length} registros encontrados`;
   }
-
 
 
   private setDisplayExportModal(display) {
