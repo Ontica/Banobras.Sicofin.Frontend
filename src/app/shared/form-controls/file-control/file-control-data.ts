@@ -9,16 +9,21 @@ import { Progress } from '@app/data-services/file-services/http-progress';
 
 import { Observable } from 'rxjs';
 
+
+export const CsvFileTypeException = 'application/vnd.ms-excel'; // csv, xls
+
+
 export enum FileTypeAccepted {
   all = '*',
   pdf = 'application/pdf',
-  excel = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
+  excel = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  csv = '.csv, text/csv',
   image = 'image/*',
   txt = 'text/plain',
 }
 
 
-export type FileType = 'all' | 'pdf' | 'excel' | 'txt' | 'image';
+export type FileType = 'all' | 'pdf' | 'excel' | 'csv' | 'txt' | 'image';
 
 
 export interface FileControlConfig {
@@ -29,6 +34,9 @@ export interface FileControlConfig {
   placeholder?: string;
   placeholderReadonly?: string;
   showFileInfo?: boolean;
+  tagDefault?: any;
+  tagsList?: any[];
+  tagRequired?: boolean;
   textAccion?: string;
   textSave?: string;
 }
@@ -42,6 +50,9 @@ export const DefaultFileControlConfig: FileControlConfig = {
   placeholder: 'Elija un archivo o arrástrelo y suéltelo aquí.',
   placeholderReadonly: 'No se han agregado archivos.',
   showFileInfo: true,
+  tagDefault: null,
+  tagsList: [],
+  tagRequired: false,
   textAccion: 'Agregar archivo',
   textSave: 'Guardar archivo',
 };
@@ -68,6 +79,7 @@ export class FileData {
   sizeString?: string;
   fileIcon?: string;
   file?: File;
+  tag?: string;
   download$?: Observable<Progress>;
 }
 
@@ -81,6 +93,7 @@ export const EmptyFileData: FileData = {
   menuOptions: [],
   sizeString: '',
   fileIcon: '',
+  tag: '',
   file: null,
 };
 

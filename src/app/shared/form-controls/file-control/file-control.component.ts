@@ -5,12 +5,12 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Output, EventEmitter, Input, OnChanges } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { FormatLibrary } from '@app/shared/utils';
 
-import { DefaultFileControlConfig, FileData, FileControlActions, FileControlConfig,
-         FileControlMenuOptions, FileTypeAccepted, FileType } from './file-control-data';
+import { DefaultFileControlConfig, FileData, FileControlActions, FileControlConfig, FileControlMenuOptions,
+         FileTypeAccepted, FileType, CsvFileTypeException } from './file-control-data';
 
 @Component({
   selector: 'emp-ng-file-control',
@@ -49,9 +49,20 @@ export class FileControlComponent implements OnChanges {
 
   idFileControl: string = 'idFile' + Math.random().toString(16).slice(2);
 
-  ngOnChanges() {
-    this.setAcceptedFilesTypes();
-    this.setFilesSaved();
+  tagFileSelected = null;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.config) {
+      this.setAcceptedFilesTypes();
+
+      if (changes.config.previousValue?.tagDefault !== changes.config.currentValue?.tagDefault) {
+        this.setTagFile();
+      }
+    }
+
+    if (changes.fileControl) {
+      this.setFilesSaved();
+    }
   }
 
   handleFileInput(fileInput) {
@@ -114,6 +125,7 @@ export class FileControlComponent implements OnChanges {
     } else {
       this.validateAndSetAcceptedFileType('pdf', FileTypeAccepted.pdf);
       this.validateAndSetAcceptedFileType('excel', FileTypeAccepted.excel);
+      this.validateAndSetAcceptedFileType('csv', FileTypeAccepted.csv);
       this.validateAndSetAcceptedFileType('image', FileTypeAccepted.image);
       this.validateAndSetAcceptedFileType('txt', FileTypeAccepted.txt);
     }
@@ -147,6 +159,10 @@ export class FileControlComponent implements OnChanges {
     this.filesToUpload = [];
   }
 
+  private setTagFile() {
+    this.tagFileSelected = this.fileControlConfig.tagRequired ? this.fileControlConfig.tagDefault : null;
+  }
+
   private getMenuOptions(file: FileData): FileControlMenuOptions[] {
     if (file.uid) {
       const options: FileControlMenuOptions[] = [];
@@ -178,7 +194,8 @@ export class FileControlComponent implements OnChanges {
       return 'emp-pdf-file';
     }
 
-    if (FileTypeAccepted.excel.includes(type)) {
+    if (FileTypeAccepted.excel.includes(type) || FileTypeAccepted.csv.includes(type) ||
+        CsvFileTypeException === type) {
       return 'emp-xls-file';
     }
 
@@ -200,6 +217,10 @@ export class FileControlComponent implements OnChanges {
 
     if (FileTypeAccepted.excel.includes(file.type)) {
       return this.isValidFileType('excel', file);
+    }
+
+    if (FileTypeAccepted.csv.includes(file.type) || CsvFileTypeException === file.type) {
+      return this.isValidFileType('csv', file);
     }
 
     if (file.type.startsWith('image/')) {
@@ -235,6 +256,7 @@ export class FileControlComponent implements OnChanges {
       type: file.type,
       size: file.size,
       sizeString: FormatLibrary.formatBytes(file.size),
+      tag: this.tagFileSelected,
       fileIcon: this.getFileIcon(file.type),
       menuOptions: this.getMenuOptions(file)
     };

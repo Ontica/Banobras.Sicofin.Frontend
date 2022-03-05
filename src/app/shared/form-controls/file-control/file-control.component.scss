@@ -9,6 +9,7 @@
 
 $area-height: 30px;
 $area-width: 30px;
+$tag-area-width: 225px;
 $line-height: 24px;
 $space: 4px;
 $border-radius: 3px;
@@ -82,7 +83,7 @@ input[type="file"] {
     &.show-info {
       width: 100%;
 
-      &.multiple {
+      &.multiple:not(.tag-required) {
         width: calc(100% / 3);
       }
     }
@@ -121,28 +122,63 @@ input[type="file"] {
     .file-download-progress {
       padding-top: $space;
     }
-  }
 
-  .file-add {
-    border: solid 1px $border-color-dark;
-    border-radius: $border-radius;
-    width: $area-width;
-    height: $area-height;
-    padding: calc((#{$area-width} - #{$line-height}) / 2 - 1px);
-    margin: $space 0;
+    &.tag-required:not(:last-child) {
+      border-bottom: dashed 1px $border-color-dark;
+      border-radius: 0;
+    }
 
-    label {
-      display: flex;
-      font-size: $line-height;
-      line-height: $line-height;
+    &.tag-required .file-info {
+      width: calc(100% - 2 * #{$area-width} - #{$tag-area-width} - 3 * #{$space});
     }
   }
 
-  .placeholder {
-    color: $border-color-dark;
-    font-size: 9pt;
-    margin: auto 0;
-    padding-left: $space;
+  .file-add-section {
+    display: flex;
+    width: 100%;
+
+    .file-add {
+      border: solid 1px $border-color-dark;
+      border-radius: $border-radius;
+      width: $area-width;
+      height: $area-height;
+      padding: calc((#{$area-width} - #{$line-height}) / 2 - 1px);
+      margin: $space 0;
+
+      label {
+        display: flex;
+        font-size: $line-height;
+        line-height: $line-height;
+      }
+    }
+
+    .placeholder {
+      color: $border-color-dark;
+      width: calc(100% - #{$area-width} - #{$tag-area-width});
+      font-size: 9pt;
+      margin: auto 0;
+      padding-left: $space;
+    }
+
+    &.multiple:not(.tag-required) {
+      width: calc(100% / 3);
+
+      .placeholder {
+        width: 100%;
+      }
+    }
+  }
+}
+
+
+.file-tag-container {
+  width: $tag-area-width;
+  min-height: 18px;
+  align-self: center;
+
+  .tag-info {
+    text-align: center;
+    margin: 0 0 0 auto;
   }
 }
 

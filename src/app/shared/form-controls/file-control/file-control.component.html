@@ -3,7 +3,8 @@
 
   <div class="file-area" *ngFor="let file of filesToUpload" [title]="file.name"
     [class.show-info]="fileControlConfig.showFileInfo"
-    [class.multiple]="fileControlConfig.maxFiles > 1">
+    [class.multiple]="fileControlConfig.maxFiles > 1"
+    [class.tag-required]="fileControlConfig.tagRequired">
 
     <div class="file-icon">
       <span>
@@ -51,6 +52,18 @@
         </ng-container>
       </div>
 
+      <div *ngIf="fileControlConfig.tagRequired" class="file-tag-container">
+        <div class="tag-info tag-small" *ngIf="file.uid && file.tag">{{file.tag}}</div>
+
+        <emp-ng-select name="tag" *ngIf="!file.uid"
+          bindLabel="name"
+          bindValue="type"
+          [(ngModel)]="file.tag"
+          [items]="fileControlConfig.tagsList"
+          [showError]="!file.tag">
+        </emp-ng-select>
+      </div>
+
       <div *ngIf="!file.uid && !fileControlConfig.autoUpload" class="file-menu-btn file-menu-btn-right"
         (click)="onClickFileOptions(file, 'SAVE')" [title]="fileControlConfig.textSave">
         <mat-icon>cloud_upload</mat-icon>
@@ -67,15 +80,31 @@
 
   </div>
 
-  <div class="file-add" *ngIf="!readonly && ( !filesToUpload || fileControlConfig.maxFiles > filesToUpload.length )"
-    [title]="fileControlConfig.textAccion">
-    <label [for]="idFileControl">
-      <mat-icon>add</mat-icon>
-    </label>
-  </div>
+  <div class="file-add-section" *ngIf="!readonly && ( !filesToUpload || fileControlConfig.maxFiles > filesToUpload.length )"
+    [ngClass]="{'tag-required': fileControlConfig.tagRequired,
+                'multiple': fileControlConfig.maxFiles > 1}">
 
-  <div class="placeholder" *ngIf="!filesToUpload?.length">
-    {{readonly ? fileControlConfig.placeholderReadonly : fileControlConfig.placeholder}}
+    <div class="file-add"
+      [title]="fileControlConfig.textAccion">
+      <label [for]="idFileControl">
+        <mat-icon>add</mat-icon>
+      </label>
+    </div>
+
+    <div class="placeholder">
+      {{readonly ? fileControlConfig.placeholderReadonly : fileControlConfig.placeholder}}
+    </div>
+
+    <div class="file-tag-container" *ngIf="fileControlConfig.tagRequired">
+      <emp-ng-select name="tag"
+        bindLabel="name"
+        bindValue="type"
+        [(ngModel)]="tagFileSelected"
+        [items]="fileControlConfig.tagsList"
+        [showError]="!tagFileSelected">
+      </emp-ng-select>
+    </div>
+
   </div>
 
 </div>
