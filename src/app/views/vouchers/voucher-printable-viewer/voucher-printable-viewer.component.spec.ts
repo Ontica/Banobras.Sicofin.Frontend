@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VoucherPrintableComponentViewerComponent } from './voucher-printable-viewer.component';
+import { VoucherPrintableViewerComponent } from './voucher-printable-viewer.component';
 
-describe('VoucherPrintableComponentViewerComponent', () => {
-  let component: VoucherPrintableComponentViewerComponent;
-  let fixture: ComponentFixture<VoucherPrintableComponentViewerComponent>;
+describe('VoucherPrintableViewerComponent', () => {
+  let component: VoucherPrintableViewerComponent;
+  let fixture: ComponentFixture<VoucherPrintableViewerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ VoucherPrintableComponentViewerComponent ]
+      declarations: [ VoucherPrintableViewerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VoucherPrintableComponentViewerComponent);
+    fixture = TestBed.createComponent(VoucherPrintableViewerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

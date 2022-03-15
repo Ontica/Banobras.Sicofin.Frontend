@@ -30,7 +30,7 @@ import { VouchersDataService } from '@app/data-services';
     }`
   ],
 })
-export class VoucherPrintableComponentViewerComponent implements OnChanges {
+export class VoucherPrintableViewerComponent implements OnChanges {
 
   @Input() voucherId: number;
 
