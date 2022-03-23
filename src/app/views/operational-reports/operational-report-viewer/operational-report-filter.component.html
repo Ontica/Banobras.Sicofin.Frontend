@@ -32,7 +32,7 @@
 
       </div>
 
-      <div fxFlex="120px">
+      <div [fxFlex]="displayLedgerAndPeriod ? '225px' : '120px'">
 
         <ng-container *ngIf="displayDate">
 
@@ -43,6 +43,20 @@
             [showError]="!operationalReportCommand.toDate">
 
           </emp-ng-datepicker>
+
+        </ng-container>
+
+        <ng-container *ngIf="displayLedgerAndPeriod">
+
+          <label>Período:</label>
+
+          <emp-ng-date-range-picker name="period"
+            [(startDate)]="operationalReportCommand.fromDate"
+            [(endDate)]="operationalReportCommand.toDate"
+            [showError]="!operationalReportCommand.fromDate ||
+                          !operationalReportCommand.toDate">
+
+          </emp-ng-date-range-picker>
 
         </ng-container>
 
@@ -64,9 +78,9 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="displayLedgerAndPeriod">
+    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="displayLedgerAndPeriod || displayAccountAndWithSubledgerAccount">
 
-        <div fxFlex="50">
+        <div fxFlex="50" *ngIf="displayLedgerAndPeriod">
 
           <label>Contabilidad:</label>
 
@@ -80,19 +94,30 @@
 
         </div>
 
-        <div fxFlex="none">
+        <ng-container *ngIf="displayAccountAndWithSubledgerAccount">
 
-          <label>Período:</label>
+          <div fxFlex>
 
-          <emp-ng-date-range-picker name="period"
-            [(startDate)]="operationalReportCommand.fromDate"
-            [(endDate)]="operationalReportCommand.toDate"
-            [showError]="!operationalReportCommand.fromDate ||
-                          !operationalReportCommand.toDate">
+            <label>Cuenta:</label>
 
-          </emp-ng-date-range-picker>
+            <input type="text" class="text-box" name="fromAccount" required
+              [(ngModel)]="operationalReportCommand.accountNumber"
+              [class.invalid-control]="!operationalReportCommand.accountNumber"
+              (keyup.escape)="operationalReportCommand.accountNumber = ''">
 
-        </div>
+          </div>
+
+          <div fxFlex="261px" fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
+
+            <mat-checkbox name="withSubledgerAccount"
+              [(ngModel)]="operationalReportCommand.withSubledgerAccount"
+              (click)="$event.stopPropagation">
+              Con Auxiliares
+            </mat-checkbox>
+
+          </div>
+
+        </ng-container>
 
     </div>
 

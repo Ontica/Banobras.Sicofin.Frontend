@@ -76,7 +76,13 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   get displayLedgerAndPeriod() {
-    return this.selectedReportType?.payloadType === ReportPayloadType.LedgerAndPeriod;
+    return [ReportPayloadType.LedgerAccountWithSubledgerAccountAndPeriod,
+            ReportPayloadType.LedgerAndPeriod].includes(this.selectedReportType?.payloadType);
+  }
+
+  get displayAccountAndWithSubledgerAccount() {
+    return ReportPayloadType.LedgerAccountWithSubledgerAccountAndPeriod ===
+           this.selectedReportType?.payloadType;
   }
 
 
@@ -108,6 +114,8 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     this.operationalReportCommand.toDate = null;
     this.operationalReportCommand.fromDate = null;
     this.operationalReportCommand.ledgers = [];
+    this.operationalReportCommand.accountNumber = null;
+    this.operationalReportCommand.withSubledgerAccount = false;
   }
 
 
@@ -169,6 +177,11 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
     if (this.displayDateAndSendType) {
       data.sendType = this.operationalReportCommand.sendType ?? null;
+    }
+
+    if (this.displayAccountAndWithSubledgerAccount) {
+      data.accountNumber = this.operationalReportCommand.accountNumber ?? null;
+      data.withSubledgerAccount = this.operationalReportCommand.withSubledgerAccount;
     }
 
     return data;

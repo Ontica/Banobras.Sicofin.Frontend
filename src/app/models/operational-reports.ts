@@ -30,6 +30,8 @@ export interface OperationalReportCommand extends DataTableCommand {
   ledgers?: string[];
   fromDate?: DateString;
   toDate: DateString;
+  accountNumber?: string;
+  withSubledgerAccount?: boolean;
   exportTo?: FileType;
   sendType?: SendTypes;
 }

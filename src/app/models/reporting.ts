@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from '@app/core';
+import { Identifiable } from '@app/core';
 
 export enum ReportGroup {
   ReportesFiscales = 'ReportesFiscales',
@@ -28,6 +28,7 @@ export enum ReportPayloadType {
   AccountsChartAndDate = 'AccountsChartAndDate',
   LedgerAndPeriod = 'LedgerAndPeriod',
   DateAndSendType = 'DateAndSendType',
+  LedgerAccountWithSubledgerAccountAndPeriod = 'LedgerAccountWithSubledgerAccountAndPeriod',
 }
 
 
