@@ -13,7 +13,7 @@ import { ReportGroup } from '@app/models';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { View } from '@app/workspaces/main-layout';
+import { View } from '@app/main-layout';
 
 @Component({
   selector: 'emp-fa-operational-reports-main-page',

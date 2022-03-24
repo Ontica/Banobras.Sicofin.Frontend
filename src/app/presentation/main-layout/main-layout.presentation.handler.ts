@@ -12,9 +12,9 @@ import { Assertion, Exception, SessionService } from '@app/core';
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
 import { NavigationHeader, DefaultNavigationHeader, buildNavigationHeader, Layout, View, DefaultView,
-         ViewActionType } from '@app/workspaces/main-layout/common-models';
+         ViewActionType } from '@app/main-layout/common-models';
 
-import { APP_LAYOUTS, APP_VIEWS, TOOL, TOOLS_LIST } from '@app/workspaces/main-layout/config-data';
+import { APP_LAYOUTS, APP_VIEWS, TOOL, TOOLS_LIST } from '@app/main-layout/config-data';
 
 
 export enum ActionType {

@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/workspaces/main-layout';
+import { ROUTES_LIBRARY } from '@app/main-layout';
 
 import { BalanceReconciliationMainPageComponent } from './balance-reconciliation-main-page/balance-reconciliation-main-page.component';
 

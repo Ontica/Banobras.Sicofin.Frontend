@@ -18,7 +18,7 @@ import { EmptyVoucher, EmptyVoucherFilterData, mapVoucherDescriptorFromVoucher, 
          Voucher, VoucherDescriptor, VoucherFilterData, VouchersOperationCommand, VouchersOperationResult,
          VouchersOperationType } from '@app/models';
 
-import { View } from '@app/workspaces/main-layout';
+import { View } from '@app/main-layout';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 

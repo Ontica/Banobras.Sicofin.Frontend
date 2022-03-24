@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from '@app/core';
 
-import { APP_CONFIG } from '@app/workspaces/main-layout';
+import { APP_CONFIG } from '@app/main-layout';
 
 type ShowPasswordMode = 'icon' | 'check';
 

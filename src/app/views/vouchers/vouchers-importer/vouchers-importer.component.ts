@@ -26,7 +26,7 @@ import { FileType } from '@app/shared/form-controls/file-control/file-control-da
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
-import { PermissionsLibrary } from '@app/workspaces/main-layout';
+import { PermissionsLibrary } from '@app/main-layout';
 
 import { combineLatest, Observable } from 'rxjs';
 

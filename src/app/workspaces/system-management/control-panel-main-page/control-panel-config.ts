@@ -7,7 +7,7 @@
 
 import { ExternalProcessTypes } from '@app/models';
 
-import { PermissionsLibrary } from '@app/workspaces/main-layout';
+import { PermissionsLibrary } from '@app/main-layout';
 
 
 type ControlPanelOptionType = 'AccountingCalendars' |

@@ -21,7 +21,7 @@ import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { View } from '@app/workspaces/main-layout';
+import { View } from '@app/main-layout';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
