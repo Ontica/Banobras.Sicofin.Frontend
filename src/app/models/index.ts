@@ -46,8 +46,6 @@ export * from './ledgers';
 
 export * from './operational-reports';
 
-export * from './permissions';
-
 export * from './reconciliation';
 
 export * from './reporting';

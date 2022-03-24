@@ -10,6 +10,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -24,13 +26,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 
 import {
@@ -91,8 +92,9 @@ export const DATE_FORMATS = {
 
   imports: [
     ClipboardModule,
-    ScrollingModule,
     MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
     MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
@@ -103,25 +105,26 @@ export const DATE_FORMATS = {
     MatListModule,
     MatMenuModule,
     MatMomentDateModule,
+    MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,
     MatRippleModule,
     MatSidenavModule,
-    MatStepperModule,
-    MatTabsModule,
-    MatTooltipModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatProgressBarModule,
     MatSliderModule,
     MatSnackBarModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatTooltipModule,
+    ScrollingModule,
     TableVirtualScrollModule,
   ],
 
   exports: [
     ClipboardModule,
-    ScrollingModule,
     MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
     MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
@@ -132,18 +135,18 @@ export const DATE_FORMATS = {
     MatListModule,
     MatMenuModule,
     MatMomentDateModule,
+    MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,
     MatRippleModule,
     MatSidenavModule,
-    MatStepperModule,
-    MatTabsModule,
-    MatTooltipModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatProgressBarModule,
     MatSliderModule,
     MatSnackBarModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatTooltipModule,
+    ScrollingModule,
     TableVirtualScrollModule,
   ],
 

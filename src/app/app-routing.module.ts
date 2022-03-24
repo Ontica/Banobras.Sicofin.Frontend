@@ -11,7 +11,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SecurityGuard } from './core';
 
-import { DEFAULT_URL, ROUTES_LIBRARY } from './models';
+import { DEFAULT_URL, ROUTES_LIBRARY } from '@app/workspaces/main-layout';
 
 import { MainLayoutComponent, NoContentComponent } from './workspaces/main-layout';
 

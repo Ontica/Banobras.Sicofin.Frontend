@@ -40,13 +40,11 @@ $margin-size-small: 8px;
 
 .workarea {
   @include expand;
+
+  height: calc(100vh - 212px);
 }
 
 .sidenav-left {
-  background-color: $secondary-color;
-  color: $white;
-  font-size: 10pt;
-  padding: 20px 12px;
   width: 300px;
 }
 
@@ -60,11 +58,4 @@ $margin-size-small: 8px;
   bottom: 0;
   margin-left: calc((#{$margin-size} + #{$toolbar-item-size}) * -1);
   margin-bottom: $margin-size;
-}
-
-.footer {
-  display: none;
-  height: 40px;
-  padding: $margin-size;
-  border-top: 1px inset $border-color-light;
 }

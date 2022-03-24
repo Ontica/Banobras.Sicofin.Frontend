@@ -22,12 +22,25 @@
 }
 
 .nav-bar li {
+  border-bottom: 2px solid white;
   color: $secondary-color-light;
   padding: 5px 16px;
   white-space: nowrap;
+  margin-right: 5px;
+}
 
-  .selected {
+.nav-bar li:last-of-type {
+  margin-right: 0;
+}
+
+.nav-bar li.selected {
+  border-bottom: 2px solid $primary-color;
+  transition: 0.3s ease-out;
+  font-weight: 700;
+
+  a {
     color: $primary-color;
+    font-weight: 600;
   }
 }
 
@@ -42,11 +55,13 @@ a:visited {
   text-decoration: none;
 }
 
-.nav-bar a:hover {
-  border-bottom: 2px solid $primary-color;
+.mat-menu-item.selected {
+  background: rgba(0, 0, 0, 0.04);
+  color: $primary-color;
+  font-weight: 600;
 }
 
-.selected {
-  border-bottom: 2px solid $primary-color;
-  font-weight: 700 !important;
+.nav-bar li:hover a,
+.mat-menu-trigger.active a {
+  color: $primary-color;
 }

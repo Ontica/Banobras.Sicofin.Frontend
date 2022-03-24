@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from '@app/core';
 
+import { APP_CONFIG } from '@app/workspaces/main-layout';
+
 type ShowPasswordMode = 'icon' | 'check';
 
 @Component({
@@ -21,6 +23,8 @@ type ShowPasswordMode = 'icon' | 'check';
   styleUrls: ['./user-login.component.scss'],
 })
 export class UserLoginComponent implements OnInit {
+
+  appLayoutData = APP_CONFIG.data;
 
   showPasswordModeSelected: ShowPasswordMode = 'check';
 
@@ -39,8 +43,7 @@ export class UserLoginComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    this.authenticationService.logout()
-        .then((x: boolean) => this.reloadPage(x));
+    this.logout();
   }
 
   toggleShowPassword() {
@@ -68,10 +71,10 @@ export class UserLoginComponent implements OnInit {
   }
 
 
-  private reloadPage(mustReload: boolean) {
-    if (mustReload) {
-      window.location.reload();
-    }
+  private logout() {
+    this.submitted = true;
+    this.authenticationService.logout()
+      .finally(() => this.submitted = false);
   }
 
 }

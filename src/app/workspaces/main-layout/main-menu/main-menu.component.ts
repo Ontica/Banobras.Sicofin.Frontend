@@ -7,29 +7,29 @@
 
 import { Component } from '@angular/core';
 
-import { ROUTES_LIBRARY } from '@app/models';
+import { Router } from '@angular/router';
 
-import { LayoutType } from '../common-models';
+import { Layout } from '../common-models';
 
-import { APP_LAYOUTS } from '../config-data';
+import { APP_CONFIG, APP_LAYOUTS } from '../config-data';
 
 @Component({
   selector: 'emp-ng-main-menu',
   templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss']
+  styleUrls: ['./main-menu.component.scss'],
 })
 export class MainMenuComponent {
 
-  routes = ROUTES_LIBRARY;
+  appLayoutConfig = APP_CONFIG.layout;
 
-  getMenuTitleFromLayoutType(layoutType: LayoutType): string {
-    const layout = APP_LAYOUTS.filter(x => x.name === layoutType).shift();
-    return layout?.defaultTitle.toUpperCase();
-  }
+  layouts: Layout[] = APP_LAYOUTS;
+
+  constructor(private router: Router) {}
 
 
-  getUrlFromRoutePath(path: string): string {
-    return '/' + path;
+  isLayoutSelected(layout: Layout) {
+    return this.router.isActive(layout.url,
+      {paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'});
   }
 
 }

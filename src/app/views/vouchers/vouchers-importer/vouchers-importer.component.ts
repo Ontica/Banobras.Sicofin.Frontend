@@ -16,7 +16,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { ImportVouchersDataService, VouchersDataService } from '@app/data-services';
 
 import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals,
-         ImportVouchersCommand, PermissionsLibrary } from '@app/models';
+         ImportVouchersCommand } from '@app/models';
 
 import { AccountChartStateSelector, VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -25,6 +25,8 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { FileType } from '@app/shared/form-controls/file-control/file-control-data';
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
+
+import { PermissionsLibrary } from '@app/workspaces/main-layout';
 
 import { combineLatest, Observable } from 'rxjs';
 

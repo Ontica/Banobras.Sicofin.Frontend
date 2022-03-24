@@ -17,8 +17,12 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
-  margin: 8px;
-  height: calc(100vh - 196px + 68px);
+  padding: 8px;
+  height: 100%;
+
+  > :not(:last-child) {
+    margin-right: 32px
+  }
 
   .primary {
     flex: 1 1 600px;
@@ -74,6 +78,7 @@
 .explorer.fluid {
   height: 100%;
   margin: 0;
+  padding: 0;
   background-color: #f4f6f6;
 
   .primary,

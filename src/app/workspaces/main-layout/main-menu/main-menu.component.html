@@ -1,34 +1,51 @@
 <div class="nav-bar">
 
-  <ul>
+  <ul *ngIf="appLayoutConfig.displaySubMenu">
 
-    <li *empNgHasPermission="routes.operacion_contable.permission">
-      <a [routerLink]='getUrlFromRoutePath(routes.operacion_contable.path)' routerLinkActive='selected'
-        [routerLinkActiveOptions]="{exact:false}">
-        {{ getMenuTitleFromLayoutType('AccountingOperation') }}
-      </a>
-    </li>
+    <ng-container *ngFor="let layout of layouts">
 
-    <li *empNgHasPermission="routes.tableros.permission">
-      <a [routerLink]='getUrlFromRoutePath(routes.tableros.path)' routerLinkActive='selected'
+      <li *empNgHasPermission="layout.permission"
+        routerLinkActive='selected'
         [routerLinkActiveOptions]="{exact:false}">
-        {{ getMenuTitleFromLayoutType('AccountingDashboards') }}
-      </a>
-    </li>
 
-    <li *empNgHasPermission="routes.reglas_y_catalogos.permission">
-      <a [routerLink]='getUrlFromRoutePath(routes.reglas_y_catalogos.path)' routerLinkActive='selected'
-        [routerLinkActiveOptions]="{exact:false}">
-        {{ getMenuTitleFromLayoutType('AccountingCataloguesAndRules') }}
-      </a>
-    </li>
+        <a [routerLink]='layout.url'>
+          {{ layout.defaultTitle | uppercase }}
+        </a>
 
-    <li *empNgHasPermission="routes.administracion.permission">
-      <a [routerLink]='getUrlFromRoutePath(routes.administracion.path)' routerLinkActive='selected'
-        [routerLinkActiveOptions]="{exact:false}">
-        {{ getMenuTitleFromLayoutType('Management') }}
-      </a>
-    </li>
+      </li>
+
+    </ng-container>
+
+  </ul>
+
+
+  <ul *ngIf="!appLayoutConfig.displaySubMenu">
+
+    <ng-container *ngFor="let layout of layouts">
+
+      <li *empNgHasPermission="layout.permission"
+        [matMenuTriggerFor]="items" #menuT="matMenuTrigger"
+        [ngClass]="{'active': menuT.menuOpen, 'selected': isLayoutSelected(layout)}">
+
+        <a> {{ layout.defaultTitle | uppercase }} </a>
+
+      </li>
+
+      <mat-menu #items="matMenu">
+
+        <ng-container *ngFor="let view of layout.views">
+
+          <button mat-menu-item *empNgHasPermission="view.permission"
+            [routerLink]='view.url'
+            routerLinkActive='selected'>
+            {{ view.title | uppercase }}
+          </button>
+
+        </ng-container>
+
+      </mat-menu>
+
+    </ng-container>
 
   </ul>
 

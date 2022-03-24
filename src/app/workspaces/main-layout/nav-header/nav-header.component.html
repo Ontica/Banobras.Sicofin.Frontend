@@ -1,7 +1,27 @@
-<div class="menu-bar">
+<div *ngIf="appLayoutConfig.displaySubMenu" class="menu-bar"
+  [class.menu-bar-priority]="!appLayoutConfig.displayHeader">
   <emp-ng-nav-menu
       class="menu"
       [items]="navigationHeader.mainMenu"
       (navMenuItemClick)="onClickMenu($event)">
   </emp-ng-nav-menu>
+</div>
+
+<div class="header" *ngIf="appLayoutConfig.displayHeader">
+  <div class="title">
+    {{navigationHeader.title}}
+    <div class="breadcrumb" *ngIf="navigationHeader.hint">
+      <span class="breadcrumb-divider">|</span>
+      {{navigationHeader.hint}}
+      {{navigationHeader.title ? ' - ' + navigationHeader.title : ''}}
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <button class="btn-header" *ngFor="let action of navigationHeader.actions"
+      (click)="onActionButtonClicked(action)">
+      {{action.name}}
+      <mat-icon *ngIf="action.icon">{{action.icon}}</mat-icon>
+    </button>
+  </div>
 </div>

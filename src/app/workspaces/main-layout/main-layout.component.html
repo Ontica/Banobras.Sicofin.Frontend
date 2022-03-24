@@ -10,24 +10,26 @@
 
   <mat-sidenav-container>
 
-    <mat-sidenav #sidenavLeft class="sidenav-left" mode="side" disableClose="true">
+
+    <mat-sidenav #sidenavLeft class="sidenav-left" mode="side" disableClose="true"
+      [opened]="appLayoutConfig.displayAsideLeft">
 
     </mat-sidenav>
 
 
     <mat-sidenav-content #sidenavContent class="content">
 
-      <div [style.margin-left.px]="sidenavLeft.opened ? 6 : 0">
+      <div fxLayout="column" fxFlexFill>
 
-        <emp-ng-nav-bar>
+        <emp-ng-nav-bar fxFlex="none">
 
         </emp-ng-nav-bar>
 
-        <emp-ng-navigation-header (action)="onAction($event)">
+        <emp-ng-header fxFlex="none" (action)="onAction($event)">
 
-        </emp-ng-navigation-header>
+        </emp-ng-header>
 
-        <div class="workarea">
+        <div class="workarea" fxFlex>
 
           <router-outlet>
 
@@ -35,13 +37,17 @@
 
         </div>
 
+        <emp-ng-footer fxFlex="none" *ngIf="appLayoutConfig.displayFooter">
+
+        </emp-ng-footer>
+
       </div>
 
     </mat-sidenav-content>
 
 
-    <mat-sidenav #sidenavRight [(opened)]="displayAsideRight" mode="over" position="end" disableClose="true"
-      class="sidenav-right">
+    <mat-sidenav #sidenavRight class="sidenav-right" mode="over" position="end" disableClose="true"
+      [(opened)]="displayAsideRight">
 
       <button class="toolbar-item btn-collapse-sidenav-right"
         title="Cerrar herramienta"
@@ -60,9 +66,5 @@
     </mat-sidenav>
 
   </mat-sidenav-container>
-
-  <footer class="footer">
-
-  </footer>
 
 </div>

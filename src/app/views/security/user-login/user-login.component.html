@@ -10,9 +10,9 @@
 
 
         <div class="authentication-section-welcome">
-          <strong>Sistema de Contabilidad Financiera</strong>
-          <div class="hint">Secretaría de Hacienda y Crédito Público</div>
-          <div class="hint-bold">Banco Nacional de Obras y Servicios Públicos S.N.C.</div>
+          <strong>{{appLayoutData.name}}</strong>
+          <div class="hint">{{appLayoutData.hint}}</div>
+          <div class="hint-bold" *ngIf="appLayoutData.organization">{{appLayoutData.organization}}</div>
         </div>
 
 

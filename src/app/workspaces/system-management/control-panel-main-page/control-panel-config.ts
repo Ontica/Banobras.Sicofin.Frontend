@@ -5,7 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { ExternalProcessTypes, PermissionsLibrary } from '@app/models';
+import { ExternalProcessTypes } from '@app/models';
+
+import { PermissionsLibrary } from '@app/workspaces/main-layout';
 
 
 type ControlPanelOptionType = 'AccountingCalendars' |

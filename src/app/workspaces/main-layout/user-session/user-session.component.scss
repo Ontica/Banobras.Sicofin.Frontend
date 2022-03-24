@@ -5,22 +5,46 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import "../../../../styles/variables";
+@import "../top-bar/top-bar.component.scss";
+
+.toolbar-item {
+  margin-right: 0;
+}
 
 .container {
-  text-align: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+  margin-left: 16px;
 }
 
 .user-name {
   text-transform: uppercase;
   font-size: 10pt;
+  line-height: 10pt;
+  padding-bottom: 8px;
 }
 
 .logout {
   font-size: 8pt;
+  line-height: 8pt;
   text-decoration: underline;
 }
 
 .logout:hover {
   color: $text-color-dark;
+}
+
+.menu-user-name-info {
+  font-size: 12pt;
+  font-weight: 600;
+  padding: 0 16px;
+  line-height: $toolbar-item-size;
+  min-height: $toolbar-item-size;
+}
+
+.menu-user-toggle {
+  margin-left: 16px;
 }

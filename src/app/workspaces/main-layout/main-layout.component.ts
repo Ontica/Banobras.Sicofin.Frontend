@@ -17,7 +17,7 @@ import { PresentationState } from '@app/core/presentation';
 
 import { MainUIStateAction, MainUIStateSelector } from '@app/core/presentation/presentation-types';
 
-import { TOOL } from './config-data';
+import { APP_CONFIG, TOOL } from './config-data';
 
 
 @Component({
@@ -27,7 +27,11 @@ import { TOOL } from './config-data';
 })
 export class MainLayoutComponent implements OnDestroy {
 
+  appLayoutConfig = APP_CONFIG.layout;
+
   spinnerService = null;
+
+  displayAsideLeft = false;
 
   displayAsideRight = false;
 
@@ -69,7 +73,7 @@ export class MainLayoutComponent implements OnDestroy {
 
 
   onAction(action: string) {
-
+    console.log(action);
   }
 
 }

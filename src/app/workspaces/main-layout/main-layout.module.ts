@@ -16,6 +16,7 @@ import { SharedDirectivesModule } from '@app/shared/directives/shared-directives
 import { SharedFormControlsModule } from '@app/shared/form-controls/shared-form-controls.module';
 import { SharedIndicatorsModule } from '@app/shared/indicators/shared-indicators.module';
 
+import { FooterComponent } from './footer/footer.component';
 import { MainLayoutComponent } from './main-layout.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -23,9 +24,9 @@ import { NavigationHeaderComponent } from './nav-header/nav-header.component';
 import { NavigationMenuComponent } from './nav-menu/nav-menu.component';
 import { NoContentComponent } from './no-content.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ToolsModule } from '@app/views/tools/tools.module';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { UserSessionComponent } from './user-session/user-session.component';
-import { ToolsModule } from '@app/views/tools/tools.module';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { ToolsModule } from '@app/views/tools/tools.module';
   ],
 
   declarations: [
+    FooterComponent,
     MainLayoutComponent,
     MainMenuComponent,
     NavBarComponent,

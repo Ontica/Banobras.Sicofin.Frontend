@@ -8,31 +8,41 @@
 @import "../../../../styles/general-styles";
 
 .header {
-  background: $primary-color;
-  min-height: 52px;
-
-  > div {
-    margin-left: 42px;
-  }
-
-  padding-bottom: 8px;
-  padding-top: 8px;
+  background: -prefix-linear-gradient(top, $primary-color-dark, $primary-color);
+  background: linear-gradient(to top, $primary-color-dark, $primary-color);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 36px;
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   color: $white;
-  font-size: 16pt;
-  font-weight: 200;
+  font-size: 12pt;
+  font-weight: 600;
   min-width: 160px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  max-width: calc(100% - 150px);
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
 
   .breadcrumb {
     color: $white;
     font-size: $font-size-hint;
     font-weight: 400;
     text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .breadcrumb-divider {
+    font-size: 14pt;
+    padding: 0 16px;
   }
 
   i {
@@ -46,22 +56,21 @@
 .menu-bar {
   @include row;
 
+  background: $secondary-color;
   align-items: center;
   justify-content: space-between;
-  background: -prefix-linear-gradient(top, $primary-color-dark, $primary-color);
-  background: linear-gradient(to top, $primary-color-dark, $primary-color);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
-  padding-bottom: 8px;
-  padding-top: 8px;
+  padding: 8px 36px;
   height: 42px;
 
   select.select-box {
     background-color: #edeef0;
   }
-}
 
-.menu {
-  margin-left: 42px !important;
+  &.menu-bar-priority {
+    background: -prefix-linear-gradient(top, $primary-color-dark, $primary-color);
+    background: linear-gradient(to top, $primary-color-dark, $primary-color);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+  }
 }
 
 a {
@@ -77,4 +86,43 @@ a:hover {
 .label {
   color: $white;
   font-size: 10pt;
+}
+
+.action-buttons {
+  display: flex;
+}
+
+button.btn-header {
+  @include input-button-settings;
+
+  text-transform: none;
+  background-color: rgba($secondary-color, 25%);
+  color: $white;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  height: 40px;
+  border-radius: 3px;
+
+  .mat-icon {
+    color: $white;
+    padding-left: 8px;
+  }
+}
+
+button.btn-header:last-child {
+  margin-right: 0;
+}
+
+button.btn-header:hover {
+  background-color: rgba($secondary-color, 55%);
+  transition: 0.3s ease-out;
+}
+
+@media (max-width: 800px) {
+  .breadcrumb {
+    display: none;
+  }
 }

@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/models';
+import { ROUTES_LIBRARY } from '@app/workspaces/main-layout';
 
 import {
   TransactionSlipsMainPageComponent

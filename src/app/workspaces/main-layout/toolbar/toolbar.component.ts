@@ -15,9 +15,7 @@ import { PresentationState } from '@app/core/presentation';
 
 import { MainUIStateAction, MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { TOOL } from '../config-data';
-
-import { PermissionsLibrary } from '@app/models';
+import { PermissionsLibrary, TOOL } from '../config-data';
 
 
 @Component({
@@ -50,7 +48,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
 
-  onCloseAsideRight(tool: TOOL) {
+  onToolClicked(tool: TOOL) {
     this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, tool);
   }
 

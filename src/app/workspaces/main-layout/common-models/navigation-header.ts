@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Layout } from './common';
+import { Layout, View, ViewAction } from './common';
 
 import { MenuItem, createMenuItemForView } from './menu-item';
 
@@ -14,23 +14,27 @@ export interface NavigationHeader {
   title: string;
   hint: string;
   mainMenu: MenuItem[];
+  actions: ViewAction[];
 }
 
 
 export const DefaultNavigationHeader: NavigationHeader = {
   title: '',
   hint: '',
-  mainMenu: []
+  mainMenu: [],
+  actions: [],
 };
 
 
 export function buildNavigationHeader(layout: Layout,
                                       permissions: string[],
-                                      title?: string): NavigationHeader {
+                                      title?: string,
+                                      actions?: ViewAction[]): NavigationHeader {
   const navHeader: NavigationHeader = {
     title: title || layout.defaultTitle,
     hint: layout.hint,
-    mainMenu: []
+    mainMenu: [],
+    actions,
   };
 
   for (const view of layout.views) {

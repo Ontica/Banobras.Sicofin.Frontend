@@ -5,4 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import "../top-bar/top-bar.component.scss";
+$margin-size: 16px;
+
+.footer {
+  background: white;
+  padding: $margin-size;
+}
+
+.footer-info {
+  text-align: center;
+  min-height: 20px;
+  font-size: 10pt;
+}

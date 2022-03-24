@@ -7,7 +7,8 @@
 
 import { Injectable } from '@angular/core';
 
-import { DEFAULT_ROUTE, DEFAULT_URL, ROUTES_LIST, UNAUTHORIZED_ROUTE } from '@app/models';
+import { APP_CONFIG, DEFAULT_ROUTE, DEFAULT_URL, getAllPermissions, ROUTES_LIST,
+         UNAUTHORIZED_ROUTE } from '@app/workspaces/main-layout';
 
 import { Assertion } from '../general/assertion';
 
@@ -63,6 +64,10 @@ export class AuthenticationService {
 
 
   private setSession(sessionToken: SessionToken, principalData: PrincipalData){
+    if (!APP_CONFIG.layout.enablePermissions) {
+      principalData.permissions = getAllPermissions();
+    }
+
     const defaultRoute =  this.getDefaultRoute(principalData.permissions);
 
     const principal = new Principal(sessionToken,
@@ -97,7 +102,7 @@ export class AuthenticationService {
       return UNAUTHORIZED_ROUTE;
     }
 
-    for (let route of ROUTES_LIST) {
+    for (const route of ROUTES_LIST) {
       if (route.permission === routesValid[0]) {
         return route.parent + '/' + route.path;
       }
