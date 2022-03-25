@@ -23,37 +23,26 @@ import { AlertService } from './alert/alert.service';
 
 
 @NgModule({
-
-  imports: [
-    CommonModule,
-
-    AngularMaterialModule,
-
-    SharedPipesModule
-  ],
-
-  declarations: [
-    CardComponent,
-    MessageBoxComponent,
-    ModalWindowComponent,
-    ExpansionButtonComponent
-  ],
-
-  exports: [
-    CardComponent,
-    MessageBoxComponent,
-    ModalWindowComponent,
-    ExpansionButtonComponent
-  ],
-
-  providers: [
-    AlertService,
-    MessageBoxService,
-  ],
-
-  entryComponents: [
-    MessageBoxComponent
-  ]
-
+    imports: [
+        CommonModule,
+        AngularMaterialModule,
+        SharedPipesModule
+    ],
+    declarations: [
+        CardComponent,
+        MessageBoxComponent,
+        ModalWindowComponent,
+        ExpansionButtonComponent
+    ],
+    exports: [
+        CardComponent,
+        MessageBoxComponent,
+        ModalWindowComponent,
+        ExpansionButtonComponent
+    ],
+    providers: [
+        AlertService,
+        MessageBoxService,
+    ]
 })
 export class SharedContainersModule { }
