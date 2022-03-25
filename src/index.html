@@ -27,34 +27,16 @@
   <base href="/">
 
   <link rel="stylesheet" href="assets/fonts/fonts.css">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="assets/icons/icons.css">
-
 </head>
 <body>
   <emp-ng-root>
-    <style>
-      emp-ng-root {
-        background-color: #ffffff;
-        color: #691C32;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        padding-top: 40vh;
-        text-align: center;
-        font: 16px "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        text-transform: uppercase;
-      }
-    </style>
-
-    <strong style='font-size: 20pt;'>Sistema de Contabilidad Financiera</strong><br/><br/>
-    <strong>Banco Nacional de Obras y Servicios Públicos S.N.C.</strong>
-    <br/><br/><br/>
-    <span style="font:10pt;color:#808080">Cargando componentes ...</span>
+    <div id="emp-app-loading-components">
+      <img src="assets/img/customer/logo.png" alt="logo"/><br/>
+      <strong id="emp-app-loading-title">Sistema de Contabilidad Financiera</strong><br/><br/>
+      <strong>Banco Nacional de Obras y Servicios Públicos S.N.C.</strong><br/><br/><br/>
+      <span id="emp-app-loading">Cargando componentes ...</span>
+    </div>
   </emp-ng-root>
 </body>
 </html>

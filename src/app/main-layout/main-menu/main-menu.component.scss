@@ -29,30 +29,32 @@
   margin-right: 5px;
 }
 
-.nav-bar li:last-of-type {
-  margin-right: 0;
-}
-
 .nav-bar li.selected {
   border-bottom: 2px solid $primary-color;
   transition: 0.3s ease-out;
   font-weight: 700;
-
-  a {
-    color: $primary-color;
-    font-weight: 600;
-  }
 }
 
 .nav-bar li:last-of-type {
+  margin-right: 0;
   border-right: none;
 }
 
-.nav-bar a,
-a:visited {
+.nav-bar li a,
+.nav-bar li a:visited {
   color: $secondary-color-semi-light;
   font-weight: 400;
   text-decoration: none;
+}
+
+.nav-bar li:hover a {
+  color: $primary-color;
+  font-weight: 600;
+}
+
+.nav-bar li.selected a {
+  color: $primary-color;
+  font-weight: 600;
 }
 
 .mat-menu-item.selected {
@@ -61,7 +63,6 @@ a:visited {
   font-weight: 600;
 }
 
-.nav-bar li:hover a,
 .mat-menu-trigger.active a {
   color: $primary-color;
 }
