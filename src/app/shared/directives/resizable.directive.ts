@@ -22,7 +22,7 @@ export class ResizableDirective {
   private newWidth = (wid) => {
     const newWidthSize = Math.max(this.empNgResizableMinWidth, wid);
     this.el.nativeElement.style.width = (newWidthSize) + 'px';
-  }
+  };
 
   private mouseMoveG = (evt) => {
     if (!this.dragging) {
@@ -30,7 +30,7 @@ export class ResizableDirective {
     }
     this.newWidth(evt.clientX - this.el.nativeElement.offsetLeft);
     evt.stopPropagation();
-  }
+  };
 
   private mouseUpG = (evt) => {
     if (!this.dragging) {
@@ -40,7 +40,7 @@ export class ResizableDirective {
     this.dragging = false;
     evt.stopPropagation();
     document.removeEventListener('selectstart', this.disableGlobalSelectEvents);
-  }
+  };
 
   private mouseDown = (evt) => {
     if (this.inDragRegion(evt)) {
@@ -49,7 +49,7 @@ export class ResizableDirective {
       evt.stopPropagation();
       document.addEventListener('selectstart', this.disableGlobalSelectEvents);
     }
-  }
+  };
 
   private mouseMove = (evt) => {
     if (this.inDragRegion(evt) || this.dragging) {
@@ -57,7 +57,7 @@ export class ResizableDirective {
     } else {
       this.el.nativeElement.style.cursor = 'default';
     }
-  }
+  };
 
 
   constructor(private el: ElementRef) {

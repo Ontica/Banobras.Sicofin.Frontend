@@ -8,8 +8,8 @@
 import { BREAKPOINT } from '@angular/flex-layout';
 
 const NOTEBOOK_BREAKPOINT = [{
-  alias: 'xs.notebook',
-  suffix: 'XsNotebook',
+  alias: 'notebook',
+  suffix: 'notebook',
   mediaQuery: '(max-width: 1439px)',
   overlapping: false,
   priority: 1001,

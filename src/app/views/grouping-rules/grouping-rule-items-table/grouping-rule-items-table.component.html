@@ -50,7 +50,7 @@
 
   </table>
 
-  <div *ngIf="dataSource.data.length == 0" class="text-not-found">
+  <div *ngIf="dataSource.data.length === 0" class="text-not-found">
     <p *ngIf="isLoading">Cargando los datos de integración</p>
     <p *ngIf="!isLoading">Este concepto no tiene cuentas u otros conceptos que lo integren.</p>
   </div>

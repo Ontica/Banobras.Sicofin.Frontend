@@ -80,8 +80,8 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
   onClearFilters() {
     this.accountsSearch = Object.assign({}, EmptyAccountsSearchCommand, {
-        keywords: this.accountsSearch.keywords
-      });
+      keywords: this.accountsSearch.keywords
+    });
 
     const payload: any = {
       accountsChart: this.accountChartSelected,
@@ -139,7 +139,7 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
     this.accountsSearch.level =
       this.levelsList.filter(x => this.accountsSearch.level + '' === x.uid).length > 0 ?
-      this.accountsSearch.level : null;
+        this.accountsSearch.level : null;
 
     this.accountsSearch.types = this.accountChartSelected.accountTypes
       .filter(x => this.accountsSearch.types.includes(x.uid))

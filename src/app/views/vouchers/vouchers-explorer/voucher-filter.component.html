@@ -149,12 +149,12 @@
 
           <div fxFlex fxLayoutAlign="start end">
 
-            <emp-ng-select name="dateSearchField"  #dateSearchField="ngModel" [fxFlex]="100"
+            <emp-ng-select name="dateSearchField" [fxFlex]="100"
               [(ngModel)]="filter.dateSearchField"
               [config]="{clearable: true}"
               [items]="dateSearchFieldList"
               [required]="isDateSearchFieldRequired"
-              [showError]="dateSearchField.invalid">
+              [showError]="!isDateSearchFieldValid">
             </emp-ng-select>
 
           </div>

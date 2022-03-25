@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -24,17 +24,12 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
     </mat-checkbox>
   `
 })
-export class CheckboxAllComponent implements OnInit {
+export class CheckboxAllComponent {
 
   @Input() selection: SelectionModel<any>;
   @Input() values = [];
   @Input() text = '';
   @Output() selectionChange = new EventEmitter<SelectionModel<any>>();
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   isChecked(): boolean {
     return this.selection.hasValue() && this.selection.selected.length === this.values.length;

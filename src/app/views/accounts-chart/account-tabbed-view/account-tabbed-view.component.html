@@ -37,7 +37,7 @@
           <tr mat-row *matRowDef="let row; columns: ['fullName', 'sectorRole', 'startDate', 'endDate'];"></tr>
         </table>
 
-        <div *ngIf="sectorRulesDS.data.length == 0" class="text-not-found">
+        <div *ngIf="sectorRulesDS.data.length === 0" class="text-not-found">
           <p>A esta cuenta no se le han asignado sectores.</p>
         </div>
       </div>
@@ -66,7 +66,7 @@
           <tr mat-row *matRowDef="let row; columns: ['fullName', 'startDate', 'endDate'];"></tr>
         </table>
 
-        <div *ngIf="currencyRulesDS.data.length == 0" class="text-not-found">
+        <div *ngIf="currencyRulesDS.data.length === 0" class="text-not-found">
           <p>Esta cuenta no tiene monedas definidas.</p>
         </div>
       </div>
@@ -95,7 +95,7 @@
           <tr mat-row *matRowDef="let row; columns: ['fullName', 'startDate', 'endDate'];"></tr>
         </table>
 
-        <div *ngIf="ledgerRulesDS.data.length == 0" class="text-not-found">
+        <div *ngIf="ledgerRulesDS.data.length === 0" class="text-not-found">
           <p>Esta cuenta no ha sido asignada a ninguna contabilidad.</p>
         </div>
       </div>
@@ -124,7 +124,7 @@
           <tr mat-row *matRowDef="let row; columns: ['areaCodePattern', 'startDate', 'endDate'];"></tr>
         </table>
 
-        <div *ngIf="areaRulesDS.data.length == 0" class="text-not-found">
+        <div *ngIf="areaRulesDS.data.length === 0" class="text-not-found">
           <p>Esta cuenta no tiene áreas de responsabilidad asignadas.</p>
         </div>
       </div>
@@ -165,7 +165,7 @@
         </table>
 
         <div *ngIf="!accountBalancesDS" class="text-not-found">No se ha invocado el calculo de saldos.</div>
-        <div *ngIf="accountBalancesDS?.data?.length == 0" class="text-not-found">Esta cuenta no tiene saldos.</div>
+        <div *ngIf="accountBalancesDS?.data?.length === 0" class="text-not-found">Esta cuenta no tiene saldos.</div>
       </div>
 
     </mat-tab>

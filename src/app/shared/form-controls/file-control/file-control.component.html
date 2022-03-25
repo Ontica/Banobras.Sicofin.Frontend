@@ -45,7 +45,7 @@
 
           <div class="file-download-progress">
             <mat-progress-bar
-              [mode]="download.state == 'PENDING' ? 'buffer' : 'determinate'"
+              [mode]="download.state === 'PENDING' ? 'buffer' : 'determinate'"
               [value]="download.progress">
             </mat-progress-bar>
           </div>

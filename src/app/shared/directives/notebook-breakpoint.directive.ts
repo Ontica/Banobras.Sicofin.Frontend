@@ -9,10 +9,11 @@ import { Directive } from '@angular/core';
 
 import { ShowHideDirective } from '@angular/flex-layout';
 
-const selector = `[fxHide.xs.notebook]`;
+const selector = `[fxHide.notebook]`;
 
-const inputs = ['fxHide.xs.notebook'];
+const inputs = ['fxHide.notebook'];
 
+// eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
 @Directive({selector, inputs})
 export class BreakpointDirective extends ShowHideDirective {
   protected inputs = inputs;

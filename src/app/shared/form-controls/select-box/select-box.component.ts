@@ -103,7 +103,7 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
   @Output() clear = new EventEmitter<boolean>();
   @Output() changes = new EventEmitter<any>();
   @Output() search = new EventEmitter<any>();
-  @Output() blur = new EventEmitter<any>();
+  @Output() unfocus = new EventEmitter<any>();
 
   selectBoxConfig = DefaultSelectBoxConfig;
 
@@ -155,7 +155,8 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
 
     if (Array.isArray(event)) {
       value = event.map(item => this.selectBoxConfig.bindByValue && this.bindValue ?
-                                item[this.bindValue] : item);
+                                item[this.bindValue] :
+                                item);
     } else if (event) {
       value = this.selectBoxConfig.bindByValue && this.bindValue ? event[this.bindValue] : event;
     }
@@ -177,7 +178,7 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
   }
 
   onBlur(event) {
-    this.blur.emit(event);
+    this.unfocus.emit(event);
   }
 
   private selectItemIfUnique() {
@@ -202,7 +203,7 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
     if (this.select && this.select.isOpen) {
       this.select.close();
     }
-  }
+  };
 
   private onScroll = (event: any) => {
     const autoscroll = event.srcElement.classList.contains('ng-dropdown-panel-items');
@@ -212,6 +213,6 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
     if (this.select && this.select.isOpen && !autoscroll && !inputOverflow) {
       this.select.close();
     }
-  }
+  };
 
 }

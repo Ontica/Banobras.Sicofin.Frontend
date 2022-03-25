@@ -104,7 +104,7 @@ export class DataTableComponent implements OnChanges {
 
 
   onDataTableControlsEvent(event: EventInfo) {
-   switch (event.type as DataTableControlsEventType) {
+    switch (event.type as DataTableControlsEventType) {
 
       case DataTableControlsEventType.FILTER_CHANGED:
         this.filter = event.payload.filter as string;

@@ -111,7 +111,8 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
       return;
     }
 
-    this.cardHint = `${this.accountChartName} - ${this.subledgerAccountData.entries.length} registros encontrados`;
+    this.cardHint =
+      `${this.accountChartName} - ${this.subledgerAccountData.entries.length} registros encontrados`;
   }
 
 }

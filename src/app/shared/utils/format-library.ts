@@ -40,7 +40,7 @@ export class FormatLibrary {
       return '';
     }
     return s.charAt(0).toLowerCase() + s.slice(1);
-  }
+  };
 
 
   static formatBytes(bytes, decimals = 2, binaryUnits = false): string {
