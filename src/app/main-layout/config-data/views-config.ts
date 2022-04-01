@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { ROUTES_LIBRARY } from './permissions-config';
+import { PermissionsLibrary as Permissions, ROUTES_LIBRARY } from './permissions-config';
 
 import { View } from '../common-models/common';
 
@@ -16,6 +16,10 @@ export const AccountingOperationViews: View[] = [
     title: 'Mis pólizas pendientes',
     url: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.fullpath,
     permission: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.permission,
+    actions: [
+      {action: 'ActionImport', name: 'Importar pólizas', permission: Permissions.FEATURE_DATABASE_IMPORT},
+      {action: 'ActionCreate', name: 'Nueva póliza', permission: Permissions.ROUTE_ACCOUNTING_OPERATIONS},
+    ]
   },
   {
     name: 'AccountingOperation.ControlDesk',

@@ -17,6 +17,7 @@ export const APP_CONFIG: AppConfig = {
   },
   layout: {
     enablePermissions: true,
+    displayNavbarHeader: false,
     displayMenuUser: false,
     displayChangeLanguage: false,
     displayChangePassword: false,

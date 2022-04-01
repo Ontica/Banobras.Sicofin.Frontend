@@ -9,6 +9,7 @@
 $margin-size: 16px;
 $margin-size-border: 36px;
 $margin-size-small: 8px;
+$min-width-sides: 225px;
 
 .nav-bar {
   @include row;
@@ -24,38 +25,46 @@ $margin-size-small: 8px;
     @include row;
 
     width: auto;
+    min-width: $min-width-sides;
     align-items: center;
     white-space: nowrap;
     margin: 0 $margin-size 0 $margin-size-border;
-  }
-
-  .right-section {
-    min-width: 225px;
-    margin: 0 $margin-size-border 0 $margin-size;
-  }
-
-  .search-and-settings {
-    @include row;
-
-    width: auto;
-    align-items: center;
-
-    > * {
-      margin-left: 16px;
-    }
   }
 
   .logo {
     max-height: 46px;
   }
 
+  .header-container {
+    padding-left: 8px;
+  }
+
+  .header {
+    text-transform: uppercase;
+  }
+
+  .subheader {
+    font-size: 8pt;
+    margin-top: 4px;
+  }
+
   .main-menu {
     margin: 0 $margin-size;
   }
 
+  .right-section {
+    min-width: $min-width-sides;
+    margin: 0 $margin-size-border 0 $margin-size;
+  }
+
   @media only screen and (max-width: 1140px) {
     .left-section {
-      margin: 0 0 0 $margin-size-small;
+      min-width: auto;
+      margin: 0 $margin-size-small;
+    }
+
+    .header-container {
+      display: none;
     }
 
     .main-menu {
@@ -64,7 +73,7 @@ $margin-size-small: 8px;
 
     .right-section {
       min-width: auto;
-      margin: 0 $margin-size-small 0 0;
+      margin: 0 $margin-size-small;
     }
   }
 }

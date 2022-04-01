@@ -19,7 +19,7 @@ import { APP_LAYOUTS, APP_VIEWS, TOOL, TOOLS_LIST } from '@app/main-layout/confi
 
 export enum ActionType {
   SET_CURRENT_VIEW_FROM_URL = 'Empiria.UI-Item.MainUserInterface.SetCurrentViewFromUrl',
-  SET_VIEW_ACTION = 'Empiria.UI-Item.MainUserInterface.SetViewAction',
+  SET_VIEW_ACTION           = 'Empiria.UI-Item.MainUserInterface.SetViewAction',
   SET_IS_PROCESSING_FLAG    = 'Empiria.UI-Item.MainUserInterface.SetIsProcessingFlag',
   SET_TOOL_SELECTED         = 'Empiria.UI-Item.MainUserInterface.SetToolSelectedt',
 }
@@ -29,7 +29,7 @@ export enum SelectorType {
   LAYOUT              = 'Empiria.UI-Item.MainUserInterface.Layout',
   NAVIGATION_HEADER   = 'Empiria.UI-Item.MainUserInterface.NavigationHeader',
   CURRENT_VIEW        = 'Empiria.UI-Item.MainUserInterface.CurrentView',
-  VIEW_ACTION   = 'Empiria.UI-Item.MainUserInterface.ViewAction',
+  VIEW_ACTION         = 'Empiria.UI-Item.MainUserInterface.ViewAction',
   IS_PROCESSING       = 'Empiria.UI-Item.MainUserInterface.IsProcessing',
   TOOL_SELECTED       = 'Empiria.UI-Item.MainUserInterface.ToolSelected',
 }
@@ -157,8 +157,8 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
     if (value && 'url' in value) {
       const layout = APP_LAYOUTS.find(x => x.name === this.state.layout.name);
 
-      const navHeader =
-        buildNavigationHeader(layout, this.session.getPrincipal().permissions, value.title, value.actions);
+      const navHeader = !layout ? DefaultNavigationHeader :
+        buildNavigationHeader(layout, this.session.getPrincipal().permissions, value);
 
       this.setValue(SelectorType.NAVIGATION_HEADER, navHeader);
 

@@ -2,8 +2,15 @@
 
   <div class="left-section">
 
-    <img class="logo" src="assets/img/customer/main-page.logo.png"
-      alt="Banco Nacional de Obras y Servicios Públicos"/>
+    <img class="logo" [alt]="appConfig.data.organization"
+      [src]="appConfig.layout.displayNavbarHeader ? 'assets/img/customer/logo.png' : 'assets/img/customer/main-page.logo.png'"/>
+
+    <div *ngIf="appConfig.layout.displayNavbarHeader" class="header-container">
+      <span class="header">{{appConfig.data.name}}</span>
+      <div class="subheader">
+        {{appConfig.data.hint}} &nbsp; &nbsp; | &nbsp; &nbsp; {{appConfig.data.organization}}
+      </div>
+    </div>
 
   </div>
 

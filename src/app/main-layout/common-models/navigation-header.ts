@@ -28,13 +28,12 @@ export const DefaultNavigationHeader: NavigationHeader = {
 
 export function buildNavigationHeader(layout: Layout,
                                       permissions: string[],
-                                      title?: string,
-                                      actions?: ViewAction[]): NavigationHeader {
+                                      value?: NavigationHeader | View): NavigationHeader {
   const navHeader: NavigationHeader = {
-    title: title || layout.defaultTitle,
+    title: value.title || layout.defaultTitle,
     hint: layout.hint,
     mainMenu: [],
-    actions,
+    actions: value.actions,
   };
 
   for (const view of layout.views) {
