@@ -64,6 +64,16 @@ $font-size-grid-header: $font-size-base * 0.65;
 $font-size-grid: 9pt;
 
 //
+// Layout
+//
+$layout-gradient-initial-color: $primary-color-dark;
+$layout-gradient-final-color: $primary-color;
+$layout-secondary-color: #ddc9a3;
+$layout-secondary-color-dark: #bc955c;
+$toolbar-item-size: 35px;
+$toolbar-icon-size: 32px;
+
+//
 // Elements colors
 //
 $selected-item-text-color: $text-color-dark;

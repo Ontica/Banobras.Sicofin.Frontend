@@ -7,9 +7,6 @@
 
 @import "../../../styles/variables";
 
-$toolbar-item-size: 35px;
-$icon-size: 32px;
-
 .topbar-container {
   display: flex;
   flex-direction: row;
@@ -17,6 +14,10 @@ $icon-size: 32px;
   place-content: stretch flex-end;
   align-items: center;
   text-align: end;
+}
+
+.topbar-height-fixed {
+  height: $toolbar-item-size;
 }
 
 .toolbar-item {
@@ -28,11 +29,11 @@ $icon-size: 32px;
   border-radius: 3px;
 
   .mat-icon {
-    width: $icon-size;
-    height: $icon-size;
-    font-size: $icon-size;
+    width: $toolbar-icon-size;
+    height: $toolbar-icon-size;
+    font-size: $toolbar-icon-size;
     color: $checkbox-background-color;
-    margin-top: calc(($toolbar-item-size - $icon-size) / 2);
+    margin-top: calc(($toolbar-item-size - $toolbar-icon-size) / 2);
   }
 }
 

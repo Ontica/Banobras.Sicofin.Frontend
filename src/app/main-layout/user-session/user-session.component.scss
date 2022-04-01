@@ -37,14 +37,33 @@
   color: $text-color-dark;
 }
 
-.menu-user-name-info {
-  font-size: 12pt;
-  font-weight: 600;
+.menu-user-info-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
   padding: 0 16px;
-  line-height: $toolbar-item-size;
+  font-weight: 600;
   min-height: $toolbar-item-size;
+
+  .menu-user-name {
+    font-size: 12pt;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: $toolbar-item-size;
+  }
 }
 
 .menu-user-toggle {
   margin-left: 16px;
+
+  &.mat-button-toggle-group {
+    height: 24px;
+    align-items: center;
+  }
+
+  .mat-button-toggle-label-content {
+    line-height: 24px !important;
+  }
 }

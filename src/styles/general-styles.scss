@@ -128,15 +128,15 @@ button.btn-warning:hover {
   transition: 0.3s ease-out;
 }
 
-button.btn-secondary {
+button.btn-login {
   @include input-button-settings;
 
-  background-color: $secondary-color;
+  background-color: $layout-secondary-color;
   color: $white;
 }
 
-button.btn-secondary:hover {
-  background-color: $secondary-color-dark;
+button.btn-login:hover {
+  background-color: $layout-secondary-color-dark;
   transition: 0.3s ease-out;
 }
 

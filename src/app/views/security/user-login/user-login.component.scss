@@ -8,6 +8,8 @@
 @import "../../../../styles/variables";
 
 $medium-max-width: 1024px;
+$logo-width: 335px;
+$logo-padding: 20px;
 
 .outer {
   align-items: center;
@@ -24,8 +26,8 @@ $medium-max-width: 1024px;
   align-items: center;
   height: 100%;
   max-width: 450px;
-  background: -prefix-linear-gradient(top, $primary-color-dark, $primary-color);
-  background: linear-gradient(to top, $primary-color-dark, $primary-color);
+  background: -prefix-linear-gradient(top, $layout-gradient-initial-color, $layout-gradient-final-color);
+  background: linear-gradient(to top, $layout-gradient-initial-color, $layout-gradient-final-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
 }
 
@@ -37,39 +39,39 @@ $medium-max-width: 1024px;
   display: flex;
   align-items: center;
   text-align: center;
-  padding: 20px 0;
+  padding: $logo-padding 0;
   margin: 0 -5px;
   background: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
 }
 
 .logo {
-  width: 335px;
+  width: $logo-width;
   height: auto;
   margin: auto;
 }
 
 .authentication-section-welcome {
-  padding: 30px 20px;
+  padding: 30px $logo-padding;
   font-size: 14.5pt;
   text-transform: uppercase;
-  color: $border-color-title;
+  color: $layout-secondary-color;
   line-height: 16pt;
 }
 
 .authentication-section-form {
-  padding: 0 12px 0 20px;
+  padding: 0 12px 0 $logo-padding;
   height: 164px;
 
   input {
-    margin-bottom: 20px;
+    margin-bottom: $logo-padding;
     padding-right: 30px;
   }
 
   .password-field-container {
     position: relative;
     height: 32px;
-    margin-bottom: 20px;
+    margin-bottom: $logo-padding;
   }
 
   .footer-submit-container {
@@ -80,8 +82,8 @@ $medium-max-width: 1024px;
 }
 
 .authentication-section-footer {
-  margin-left: 20px;
-  margin-top: 20px;
+  margin-left: $logo-padding;
+  margin-top: $logo-padding;
   font-size: 10pt;
 }
 
@@ -108,12 +110,12 @@ label {
 }
 
 .inline-error {
-  color: $border-color-title;
+  color: $layout-secondary-color;
   font-size: 10pt;
   font-weight: 400;
   margin: 0 10px 12px 0;
   padding: 4px;
-  border: 1px solid $border-color-title;
+  border: 1px solid $layout-secondary-color;
   border-radius: 1px;
 }
 

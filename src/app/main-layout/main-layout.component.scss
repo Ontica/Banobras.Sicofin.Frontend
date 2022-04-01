@@ -6,7 +6,7 @@
  */
 
 @import "../../styles/general-styles";
-@import "toolbar/toolbar.component.scss";
+@import "top-bar/top-bar.component.scss";
 
 $breakpoint-width: 1600px;
 $margin-size: 16px;
@@ -31,7 +31,7 @@ $margin-size-small: 8px;
   display: none;
   color: $text-color-dark;
   padding: $margin-size;
-  height: 35px;
+  height: $toolbar-item-size;
 }
 
 .content {

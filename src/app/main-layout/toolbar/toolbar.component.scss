@@ -4,5 +4,22 @@
  *
  * See LICENSE.txt in the project root for complete license information.
  */
-
+@import "../../../styles/general-styles.scss";
 @import "../top-bar/top-bar.component.scss";
+
+.toolbar-container {
+  display: flex;
+}
+
+.search-and-settings {
+  @include row;
+
+  width: auto;
+  align-items: center;
+}
+
+@media only screen and (max-width: 1140px) {
+  .search-and-settings {
+    display: none;
+  }
+}

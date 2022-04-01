@@ -8,8 +8,8 @@
 @import "../../../styles/general-styles";
 
 .header {
-  background: -prefix-linear-gradient(top, $primary-color-dark, $primary-color);
-  background: linear-gradient(to top, $primary-color-dark, $primary-color);
+  background: -prefix-linear-gradient(top, $layout-gradient-initial-color, $layout-gradient-final-color);
+  background: linear-gradient(to top, $layout-gradient-initial-color, $layout-gradient-final-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
   min-height: 56px;
   display: flex;
@@ -32,12 +32,12 @@
   overflow: hidden;
 
   .breadcrumb {
-    color: $white;
-    font-size: $font-size-hint;
+    font-size: 10pt;
     font-weight: 400;
     text-transform: uppercase;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-top: 3px;
   }
 
   .breadcrumb-divider {
@@ -56,7 +56,7 @@
 .menu-bar {
   @include row;
 
-  background: $secondary-color;
+  background: $layout-secondary-color;
   align-items: center;
   justify-content: space-between;
   padding: 8px 36px;
@@ -67,8 +67,8 @@
   }
 
   &.menu-bar-priority {
-    background: -prefix-linear-gradient(top, $primary-color-dark, $primary-color);
-    background: linear-gradient(to top, $primary-color-dark, $primary-color);
+    background: -prefix-linear-gradient(top, $layout-gradient-initial-color, $layout-gradient-final-color);
+    background: linear-gradient(to top, $layout-gradient-initial-color, $layout-gradient-final-color);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
   }
 }
@@ -95,15 +95,15 @@ a:hover {
 button.btn-header {
   @include input-button-settings;
 
-  text-transform: none;
-  background-color: rgba($secondary-color, 25%);
+  text-transform: uppercase;
+  background-color: rgba($layout-secondary-color, 25%);
   color: $white;
   min-width: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 16px;
-  height: 40px;
+  height: $toolbar-item-size;
   border-radius: 3px;
 
   .mat-icon {
@@ -117,12 +117,13 @@ button.btn-header:last-child {
 }
 
 button.btn-header:hover {
-  background-color: rgba($secondary-color, 55%);
+  background-color: rgba($layout-secondary-color, 55%);
   transition: 0.3s ease-out;
 }
 
 @media (max-width: 800px) {
-  .breadcrumb {
+  .breadcrumb,
+  .breadcrumb-divider {
     display: none;
   }
 }

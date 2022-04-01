@@ -7,9 +7,13 @@
 
 import { Component } from '@angular/core';
 
+import { APP_CONFIG } from '../config-data';
+
 @Component({
   selector: 'emp-ng-top-bar',
   templateUrl: './top-bar.component.html',
   styleUrls: ['./top-bar.component.scss']
 })
-export class TopBarComponent { }
+export class TopBarComponent {
+  appLayoutConfig = APP_CONFIG.layout;
+}
