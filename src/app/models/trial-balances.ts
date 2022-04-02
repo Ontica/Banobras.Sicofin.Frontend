@@ -24,6 +24,12 @@ export enum TrialBalanceTypes {
 }
 
 
+export enum FileReportVersion {
+  V1 = 'V1',
+  V2 = 'V2',
+}
+
+
 export const TrialBalanceTypeList: Identifiable[] = [
   {
     uid: TrialBalanceTypes.AnaliticoDeCuentas,
@@ -152,6 +158,7 @@ export interface TrialBalanceCommand extends DataTableCommand {
   withAverageBalance?: boolean;
   withSectorization?: boolean;
   withSubledgerAccount?: boolean;
+  exportTo?: FileReportVersion;
 }
 
 
