@@ -27,6 +27,12 @@ export enum BalanceTypes {
 }
 
 
+export enum FileReportVersion {
+  V1 = 'V1',
+  V2 = 'V2',
+}
+
+
 export const BalanceTypeList: Identifiable[] = [
   {
     uid: BalanceTypes.SaldosPorCuentaConsultaRapida,
@@ -71,6 +77,7 @@ export interface BalanceCommand extends DataTableCommand {
   subledgerAccount?: string;
   withSubledgerAccount?: boolean;
   withAllAccounts?: boolean;
+  exportTo?: FileReportVersion;
 }
 
 

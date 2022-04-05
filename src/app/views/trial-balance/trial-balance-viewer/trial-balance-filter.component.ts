@@ -16,7 +16,7 @@ import { ExchangeRatesDataService } from '@app/data-services';
 import { AccountsChartMasterData, getEmptyTrialBalanceCommand, getLevelsListFromPattern,
          mapToValidTrialBalanceCommandPeriod, resetExchangeRateValues, TrialBalanceCommand,
          TrialBalanceCommandPeriod, TrialBalanceTypes, TrialBalanceTypeList, BalancesTypeForBalanceList,
-         BalancesTypeForTrialBalanceList, FileReportVersion } from '@app/models';
+         BalancesTypeForTrialBalanceList } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -414,7 +414,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
     this.validateCommandFields(data);
     this.validateExchangeRatesFields(data);
-    this.validateExportToField(data);
     return data;
   }
 
@@ -454,13 +453,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         data.finalPeriod = mapToValidTrialBalanceCommandPeriod(this.trialBalanceCommand.finalPeriod,
                                                                this.trialBalanceCommand.useDefaultValuation);
       }
-    }
-  }
-
-
-  private validateExportToField(data: TrialBalanceCommand) {
-    if (this.isBalanceSelected) {
-      data.exportTo = FileReportVersion.V2;
     }
   }
 

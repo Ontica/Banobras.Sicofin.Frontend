@@ -11,7 +11,7 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/cor
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalanceCommand, BalanceTypes, BalanceTypeList,
+import { AccountsChartMasterData, BalanceCommand, BalanceTypes, BalanceTypeList, FileReportVersion,
          getEmptyBalanceCommand } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
@@ -200,6 +200,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
       },
       withSubledgerAccount: this.formData.withSubledgerAccount,
       withAllAccounts: this.formData.withAllAccounts,
+      exportTo: FileReportVersion.V2,
     };
 
     return data;
