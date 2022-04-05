@@ -102,7 +102,7 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
     const formModel = this.formHandler.form.getRawValue();
 
     const data = {
-      calculationDate: formModel.calculationDate ?? '',
+      calculationDate: formModel.calculationDate ?? null,
       onVoucherNumber: formModel.onVoucherNumber ?? '',
     };
 

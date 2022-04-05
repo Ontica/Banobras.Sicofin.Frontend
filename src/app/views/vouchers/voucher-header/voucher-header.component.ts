@@ -309,7 +309,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       ledgerUID: formModel.ledgerUID ?? '',
       concept: formModel.concept ?? '',
       functionalAreaId: formModel.functionalAreaId ?? '',
-      accountingDate: formModel.accountingDate ?? '',
+      accountingDate: formModel.accountingDate ?? null,
     };
 
     return data;
