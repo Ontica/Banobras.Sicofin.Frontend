@@ -33,6 +33,7 @@
           [config]="{clearable: allowAllLedgersSelection}"
           [formControlName]="controls.ledgerUID"
           [items]="accountChartSelected?.ledgers"
+          bindLabel="fullName"
           [placeholder]="ledgerPlaceholder"
           [showError]="formHandler.showInvalidControl(controls.ledgerUID)">
         </emp-ng-select>

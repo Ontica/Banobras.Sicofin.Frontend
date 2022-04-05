@@ -23,6 +23,7 @@
             [formControlName]="controls.ledger"
             [items]="ledgerList"
             [showError]="formHandler.showInvalidControl(controls.ledger)"
+            bindLabel="fullName"
             (changes)="onLedgerChanges($event)">
           </emp-ng-select>
         </div>
