@@ -20,7 +20,8 @@ export interface ReportType {
   group?: string;
   accountsCharts?: string[];
   payloadType?: ReportPayloadType;
-  exportTo: FileType[];
+  exportTo: FileType[] | ExportationType[];
+  // exportTo2: ExportationType[]; // TODO: remove
 }
 
 
@@ -49,6 +50,7 @@ export enum FileType {
 
 export interface ExportationType extends Identifiable {
   fileType: FileType;
+  dataset?: string;
 }
 
 

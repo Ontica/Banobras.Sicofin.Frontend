@@ -61,6 +61,21 @@
 
     </div>
 
+    <div fxLayout="row">
+
+      <div fxFlex="none">
+
+        <mat-checkbox name="getAccountsIntegration"
+          [(ngModel)]="financialReportCommand.getAccountsIntegration"
+          (click)="$event.stopPropagation"
+          (change)="onGetAccountsIntegrationChanged()">
+          Generar integración de cuentas
+        </mat-checkbox>
+
+      </div>
+
+    </div>
+
   </div>
 
 </form>

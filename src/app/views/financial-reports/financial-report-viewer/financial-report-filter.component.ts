@@ -13,7 +13,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyFinancialReportCommand, FinancialReportCommand, ReportType } from '@app/models';
+import { AccountsChartMasterData, EmptyFinancialReportCommand, FinancialReportCommand,
+         ReportType } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -21,7 +22,8 @@ import { sendEvent } from '@app/shared/utils';
 
 
 export enum FinancialReportFilterEventType {
-  BUILD_FINANCIAL_REPORT_CLICKED = 'FinancialReportFilterComponent.Event.BuildFinancialReportClicked',
+  BUILD_FINANCIAL_REPORT_CLICKED   = 'FinancialReportFilterComponent.Event.BuildFinancialReportClicked',
+  GET_ACCOUNTS_INTEGRATION_CHANGED = 'FinancialReportFilterComponent.Event.GetAccountsIntegrationChanged',
 }
 
 @Component({
@@ -74,6 +76,16 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onGetAccountsIntegrationChanged() {
+    const payload = {
+      getAccountsIntegration: this.financialReportCommand.getAccountsIntegration
+    };
+
+    sendEvent(this.financialReportFilterEvent,
+      FinancialReportFilterEventType.GET_ACCOUNTS_INTEGRATION_CHANGED, payload);
+  }
+
+
   onBuildFinancialReportClicked() {
     const payload = {
       financialReportCommand: Object.assign({}, this.financialReportCommand),
@@ -101,8 +113,15 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
     this.financialReportsData.getFinancialReportTypes(accountChartUID)
       .toPromise()
-      .then(x => this.financialReportTypeList = x )
+      .then(x => this.financialReportTypeList = x)
+      // .then(x => this.tmpSetExportTo(x))
       .finally(() => this.isLoading = false);
   }
+
+  // TODO: tmp remove for test
+  // private tmpSetExportTo(x: ReportType[]) {
+  //   x.forEach(y => y.exportTo = y.exportTo2);
+  //   this.financialReportTypeList = x;
+  // }
 
 }

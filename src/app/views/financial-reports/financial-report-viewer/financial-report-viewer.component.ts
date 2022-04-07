@@ -80,6 +80,13 @@ export class FinancialReportViewerComponent {
         this.getFinancialReport();
         return;
 
+      // case FinancialReportFilterEventType.GET_ACCOUNTS_INTEGRATION_CHANGED:
+      //   Assertion.assertValue(event.payload.getAccountsIntegration, 'event.payload.getAccountsIntegration');
+
+      //   this.financialReportCommand.getAccountsIntegration = event.payload.getAccountsIntegration;
+      //   this.setExportationTypesList(this.financialReportType?.exportTo as ExportationType[]);
+      //   return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -211,8 +218,21 @@ export class FinancialReportViewerComponent {
 
   private setReportType(reportType: ReportType) {
     this.financialReportType = reportType;
-    this.exportationTypesList = !this.financialReportType?.exportTo ? [] :
-      this.financialReportType.exportTo.map(x => Object.create({uid: x, name: x, fileType: x}));
+    this.setExportationTypesList(this.financialReportType?.exportTo as ExportationType[]);
+  }
+
+
+  private setExportationTypesList(exportTo: ExportationType[]) {
+    if (!exportTo) {
+      this.exportationTypesList = [];
+      return;
+    }
+
+    if (this.financialReportCommand.getAccountsIntegration) {
+      this.exportationTypesList = exportTo.filter(x => x.dataset === "AccountsIntegration");
+    } else {
+      this.exportationTypesList = exportTo.filter(x => x.dataset !== "AccountsIntegration");
+    }
   }
 
 }
