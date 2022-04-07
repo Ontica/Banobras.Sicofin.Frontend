@@ -23,7 +23,6 @@ import { sendEvent } from '@app/shared/utils';
 
 export enum FinancialReportFilterEventType {
   BUILD_FINANCIAL_REPORT_CLICKED   = 'FinancialReportFilterComponent.Event.BuildFinancialReportClicked',
-  GET_ACCOUNTS_INTEGRATION_CHANGED = 'FinancialReportFilterComponent.Event.GetAccountsIntegrationChanged',
 }
 
 @Component({
@@ -34,13 +33,13 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   @Output() financialReportFilterEvent = new EventEmitter<EventInfo>();
 
-  financialReportCommand: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
+  command: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
 
-  selectedFinancialReportType: ReportType = null;
+  selectedReportType: ReportType = null;
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  financialReportTypeList: ReportType[] = [];
+  reportTypeList: ReportType[] = [];
 
   isLoading = false;
 
@@ -62,34 +61,40 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get periodValid() {
+    if (this.selectedReportType?.show.datePeriod) {
+      return !!this.command.fromDate && !!this.command.toDate;
+    }
+
+    return true;
+  }
+
+
   onAccountsChartChanges(accountChart: AccountsChartMasterData) {
-    this.financialReportCommand.financialReportType = '';
-    this.financialReportTypeList = [];
+    this.resetReportType();
+    this.onReportTypeChanges(null);
+
     if (accountChart.uid) {
       this.getFinancialReportTypes(accountChart.uid);
     }
   }
 
 
-  onFinancialReportTypeChanges(reportType: ReportType) {
-    this.selectedFinancialReportType = reportType ?? null;
+  onReportTypeChanges(reportType: ReportType) {
+    this.selectedReportType = reportType ?? null;
+
+    this.command.financialReportType = reportType?.uid ?? null;
+    this.command.fromDate = '';
+    this.command.toDate = '';
+    this.command.getAccountsIntegration = false;
+    this.command.exportTo = null;
   }
 
 
-  onGetAccountsIntegrationChanged() {
+  onBuildReportClicked() {
     const payload = {
-      getAccountsIntegration: this.financialReportCommand.getAccountsIntegration
-    };
-
-    sendEvent(this.financialReportFilterEvent,
-      FinancialReportFilterEventType.GET_ACCOUNTS_INTEGRATION_CHANGED, payload);
-  }
-
-
-  onBuildFinancialReportClicked() {
-    const payload = {
-      financialReportCommand: Object.assign({}, this.financialReportCommand),
-      financialReportType: this.selectedFinancialReportType,
+      command: this.getReportCommandData(),
+      reportType: this.selectedReportType,
     };
 
     sendEvent(this.financialReportFilterEvent,
@@ -108,20 +113,42 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  private resetReportType() {
+    this.command.financialReportType = '';
+    this.reportTypeList = [];
+  }
+
+
   private getFinancialReportTypes(accountChartUID) {
     this.isLoading = true;
 
     this.financialReportsData.getFinancialReportTypes(accountChartUID)
       .toPromise()
-      .then(x => this.financialReportTypeList = x)
-      // .then(x => this.tmpSetExportTo(x))
+      .then(x => this.reportTypeList = x)
       .finally(() => this.isLoading = false);
   }
 
-  // TODO: tmp remove for test
-  // private tmpSetExportTo(x: ReportType[]) {
-  //   x.forEach(y => y.exportTo = y.exportTo2);
-  //   this.financialReportTypeList = x;
-  // }
+
+  private getReportCommandData(): FinancialReportCommand {
+    const data: FinancialReportCommand = {
+      financialReportType: this.command.financialReportType,
+      accountsChartUID: this.command.accountsChartUID,
+    };
+
+    if (this.selectedReportType?.show.datePeriod) {
+      data.fromDate = this.command.fromDate ?? null;
+      data.toDate = this.command.toDate ?? null;
+    }
+
+    if (this.selectedReportType?.show.singleDate) {
+      data.toDate = this.command.toDate ?? null;
+    }
+
+    if (this.selectedReportType?.show.getAccountsIntegration) {
+      data.getAccountsIntegration = this.command?.getAccountsIntegration ?? false;
+    }
+
+    return data;
+  }
 
 }

@@ -21,7 +21,11 @@ export interface ReportType {
   accountsCharts?: string[];
   payloadType?: ReportPayloadType;
   exportTo: FileType[] | ExportationType[];
-  // exportTo2: ExportationType[]; // TODO: remove
+  show?: {
+    getAccountsIntegration: boolean;
+    datePeriod: boolean;
+    singleDate: boolean;
+  };
 }
 
 

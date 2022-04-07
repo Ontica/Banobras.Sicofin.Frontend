@@ -47,9 +47,9 @@ export class FinancialReportViewerComponent {
 
   financialReport: FinancialReport = Object.assign({}, EmptyFinancialReport);
 
-  financialReportCommand: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
+  command: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
 
-  financialReportType: ReportType = null;
+  reportType: ReportType = null;
 
   exportationTypesList: ExportationType[] = [];
 
@@ -72,20 +72,13 @@ export class FinancialReportViewerComponent {
     switch (event.type as FinancialReportFilterEventType) {
 
       case FinancialReportFilterEventType.BUILD_FINANCIAL_REPORT_CLICKED:
-        Assertion.assertValue(event.payload.financialReportCommand, 'event.payload.financialReportCommand');
-        Assertion.assertValue(event.payload.financialReportType, 'event.payload.financialReportType');
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
-        this.financialReportCommand = event.payload.financialReportCommand as FinancialReportCommand;
-        this.setReportType(event.payload.financialReportType as ReportType);
+        this.command = event.payload.command as FinancialReportCommand;
+        this.setReportType(event.payload.reportType as ReportType);
         this.getFinancialReport();
         return;
-
-      // case FinancialReportFilterEventType.GET_ACCOUNTS_INTEGRATION_CHANGED:
-      //   Assertion.assertValue(event.payload.getAccountsIntegration, 'event.payload.getAccountsIntegration');
-
-      //   this.financialReportCommand.getAccountsIntegration = event.payload.getAccountsIntegration;
-      //   this.setExportationTypesList(this.financialReportType?.exportTo as ExportationType[]);
-      //   return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -126,7 +119,7 @@ export class FinancialReportViewerComponent {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (this.submitted || !this.financialReportCommand.accountsChartUID ) {
+        if (this.submitted || !this.command.accountsChartUID ) {
           return;
         }
         Assertion.assertValue(event.payload.exportationType, 'event.payload.exportationType');
@@ -144,7 +137,7 @@ export class FinancialReportViewerComponent {
     this.setSubmitted(true);
     this.setFinancialReportData(EmptyFinancialReport, false);
 
-    this.financialReportsData.getFinancialReport(this.financialReportCommand)
+    this.financialReportsData.getFinancialReport(this.command)
       .toPromise()
       .then( x => this.setFinancialReportData(x))
       .finally(() => this.setSubmitted(false));
@@ -152,9 +145,9 @@ export class FinancialReportViewerComponent {
 
 
   private exportFinancialReport(exportTo: FileType) {
-    const financialReportCommand = Object.assign({}, this.financialReportCommand, {exportTo});
+    const command = Object.assign({}, this.command, {exportTo});
 
-    this.financialReportsData.exportFinancialReport(financialReportCommand)
+    this.financialReportsData.exportFinancialReport(command)
       .toPromise()
       .then(x => this.fileUrl = x.url)
       .catch(() => this.setDisplayExportModal(false));
@@ -165,7 +158,7 @@ export class FinancialReportViewerComponent {
     this.isLoadingBreakdown = true;
 
     this.financialReportsData.getFinancialReportBreakdown(financialReportEntry.uid,
-                                                          this.financialReportCommand)
+                                                          this.command)
       .toPromise()
       .then(x => {
         this.selectedFinancialReportBreakdown = {
@@ -195,11 +188,11 @@ export class FinancialReportViewerComponent {
     }
 
     if (displayedEntriesMessage) {
-      this.cardHint = `${this.financialReportType.name} - ${displayedEntriesMessage}`;
+      this.cardHint = `${this.reportType.name} - ${displayedEntriesMessage}`;
       return;
     }
 
-    this.cardHint = `${this.financialReportType.name} - ${this.financialReport.entries.length} ` +
+    this.cardHint = `${this.reportType.name} - ${this.financialReport.entries.length} ` +
       `registros encontrados`;
   }
 
@@ -217,8 +210,8 @@ export class FinancialReportViewerComponent {
 
 
   private setReportType(reportType: ReportType) {
-    this.financialReportType = reportType;
-    this.setExportationTypesList(this.financialReportType?.exportTo as ExportationType[]);
+    this.reportType = reportType;
+    this.setExportationTypesList(this.reportType?.exportTo as ExportationType[]);
   }
 
 
@@ -228,7 +221,7 @@ export class FinancialReportViewerComponent {
       return;
     }
 
-    if (this.financialReportCommand.getAccountsIntegration) {
+    if (this.command.getAccountsIntegration) {
       this.exportationTypesList = exportTo.filter(x => x.dataset === "AccountsIntegration");
     } else {
       this.exportationTypesList = exportTo.filter(x => x.dataset !== "AccountsIntegration");

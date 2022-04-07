@@ -5,53 +5,71 @@
 
     <div fxLayout="row" fxLayout.lt-sm="column">
 
-      <div fxFlex>
+      <div fxFlex="50">
 
         <label>Catálogo de cuentas:</label>
 
         <emp-ng-select name="accountsChartUID" required
           [config]="{selectFirst: true}"
-          [(ngModel)]="financialReportCommand.accountsChartUID"
+          [(ngModel)]="command.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [showError]="!financialReportCommand.accountsChartUID"
+          [showError]="!command.accountsChartUID"
           (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
 
       </div>
 
-      <div fxFlex>
+      <div fxFlex="calc(50% - {{selectedReportType?.show.datePeriod ? '225px' : '120px'}})">
 
         <label>Reporte:</label>
 
-        <emp-ng-select name="financialReportType" required
-          [(ngModel)]="financialReportCommand.financialReportType"
-          [items]="financialReportTypeList"
-          [showError]="!financialReportCommand.financialReportType"
-          (changes)="onFinancialReportTypeChanges($event)">
+        <emp-ng-select name="reportType" required
+          [(ngModel)]="command.financialReportType"
+          [items]="reportTypeList"
+          [showError]="!command.financialReportType"
+          (changes)="onReportTypeChanges($event)">
         </emp-ng-select>
 
       </div>
 
-      <div fxFlex="none">
+      <div [fxFlex]="selectedReportType?.show.datePeriod ? '225px' : '120px'">
 
-        <label>Fecha:</label>
+        <ng-container *ngIf="selectedReportType?.show.singleDate">
 
-        <emp-ng-datepicker name="date" required
-          [(ngModel)]="financialReportCommand.date"
-          [showError]="!financialReportCommand.date">
+          <label>Fecha:</label>
 
-        </emp-ng-datepicker>
+          <emp-ng-datepicker name="date" required
+            [(ngModel)]="command.toDate"
+            [showError]="!command.toDate">
+
+          </emp-ng-datepicker>
+
+        </ng-container>
+
+        <ng-container *ngIf="selectedReportType?.show.datePeriod">
+
+          <label>Período:</label>
+
+          <emp-ng-date-range-picker name="period"
+            [(startDate)]="command.fromDate"
+            [(endDate)]="command.toDate"
+            [showError]="!command.fromDate ||
+                         !command.toDate">
+
+          </emp-ng-date-range-picker>
+
+        </ng-container>
 
       </div>
 
       <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
         <button title="Generar reporte"
-          [class.btn-icon]="form.invalid"
-          [class.btn-icon-action]="form.valid"
-          [disabled]="form.invalid"
-          (click)="onBuildFinancialReportClicked()">
+          [class.btn-icon]="form.invalid || !periodValid"
+          [class.btn-icon-action]="form.valid && periodValid"
+          [disabled]="form.invalid || !periodValid"
+          (click)="onBuildReportClicked()">
 
           <mat-icon>search</mat-icon>
 
@@ -61,14 +79,13 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div fxLayout="row" *ngIf="selectedReportType?.show.getAccountsIntegration">
 
       <div fxFlex="none">
 
         <mat-checkbox name="getAccountsIntegration"
-          [(ngModel)]="financialReportCommand.getAccountsIntegration"
-          (click)="$event.stopPropagation"
-          (change)="onGetAccountsIntegrationChanged()">
+          [(ngModel)]="command.getAccountsIntegration"
+          (click)="$event.stopPropagation">
           Generar integración de cuentas
         </mat-checkbox>
 

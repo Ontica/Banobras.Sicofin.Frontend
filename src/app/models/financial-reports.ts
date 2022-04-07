@@ -20,8 +20,9 @@ export interface FinancialReport extends DataTable {
 export interface FinancialReportCommand extends DataTableCommand {
   financialReportType: string;
   accountsChartUID: string;
-  date: DateString;
-  getAccountsIntegration: boolean;
+  fromDate?: DateString;
+  toDate?: DateString;
+  getAccountsIntegration?: boolean;
   exportTo?: string;
 }
 
@@ -56,7 +57,8 @@ export enum FinancialReportItemType {
 export const EmptyFinancialReportCommand: FinancialReportCommand = {
   financialReportType: '',
   accountsChartUID: '',
-  date: '',
+  fromDate: '',
+  toDate: '',
   getAccountsIntegration: false,
 };
 
