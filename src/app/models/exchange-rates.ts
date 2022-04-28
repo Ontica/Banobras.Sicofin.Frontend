@@ -66,6 +66,7 @@ export const ExchangeRateColumns: DataTableColumn[] = [
     field: 'value',
     title: 'Valor',
     type: DataTableColumnType.decimal,
+    digits: 6,
   },
 ];
 
