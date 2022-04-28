@@ -25,6 +25,10 @@ import {
 
 import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-page.component';
 
+import {
+  ExchangeRatesMainPageComponent
+} from './exchange-rates-main-page/exchange-rates-main-page.component';
+
 
 @NgModule({
 
@@ -45,6 +49,7 @@ import { ControlPanelMainPageComponent } from './control-panel-main-page/control
   declarations: [
     BalanceGenerationMainPageComponent,
     ControlPanelMainPageComponent,
+    ExchangeRatesMainPageComponent,
   ],
 
   exports: [

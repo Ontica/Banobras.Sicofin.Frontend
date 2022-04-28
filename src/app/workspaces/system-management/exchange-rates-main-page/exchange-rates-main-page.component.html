@@ -1,0 +1,21 @@
+<div class="explorer">
+
+  <div class="primary">
+
+    <emp-fa-imported-data-viewer
+      dataType="tipos de cambio"
+      [showIconButtonToSubmit]="true"
+      [canImportData]="false"
+      [periodRequired]="true"
+      [typeFieldConfig]="{show: true, required: false, multiple: true, list: exchangeRateTypeList}"
+      [additionalFieldConfig]="{show: true, label: 'Monedas', required: false, multiple: true, list: currenciesList}"
+      [data]="exchangeRateData"
+      [excelFileUrl]="excelFileUrl"
+      [isLoading]="isLoading"
+      (importedDataViewerEvent)="onImportedDataViewerEvent($event)">
+
+    </emp-fa-imported-data-viewer>
+
+  </div>
+
+</div>

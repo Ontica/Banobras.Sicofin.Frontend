@@ -133,6 +133,12 @@ export const AccountingSystemManagementViews: View[] = [
     url: ROUTES_LIBRARY.administracion_generacion_de_saldos.fullpath,
     permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission,
   },
+  {
+    name: 'AccountingSystemManagementViews.ExchangeRates',
+    title: 'Tipos de cambio',
+    url: ROUTES_LIBRARY.administracion_tipos_de_cambio.fullpath,
+    permission: ROUTES_LIBRARY.administracion_tipos_de_cambio.permission,
+  },
 ];
 
 

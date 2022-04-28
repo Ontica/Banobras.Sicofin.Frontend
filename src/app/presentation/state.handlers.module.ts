@@ -13,6 +13,8 @@ import { MainLayoutPresentationHandler } from './main-layout/main-layout.present
 
 import { AccountChartPresentationHandler } from './financial-accounting/account-chart.presentation.handler';
 
+import { ExchangeRatesPresentationHandler } from './financial-accounting/exchange-rates.presentation.handler';
+
 import { ReportingPresentationHandler } from './financial-accounting/reporting.presentation.handler';
 
 import { VoucherPresentationHandler } from './financial-accounting/voucher.presentation.handler';
@@ -22,11 +24,13 @@ import { VoucherPresentationHandler } from './financial-accounting/voucher.prese
   providers: [
     MainLayoutPresentationHandler,
     AccountChartPresentationHandler,
+    ExchangeRatesPresentationHandler,
     ReportingPresentationHandler,
     VoucherPresentationHandler,
 
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccountChartPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: ExchangeRatesPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: ReportingPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: VoucherPresentationHandler, multi: true },
   ]

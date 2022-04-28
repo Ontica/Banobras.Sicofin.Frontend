@@ -17,6 +17,10 @@ import {
 
 import { ControlPanelMainPageComponent } from './control-panel-main-page/control-panel-page.component';
 
+import {
+  ExchangeRatesMainPageComponent
+} from './exchange-rates-main-page/exchange-rates-main-page.component';
+
 
 const routes: Routes = [
   {
@@ -28,6 +32,11 @@ const routes: Routes = [
     data: { permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission },
     path: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
     component: BalanceGenerationMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.administracion_tipos_de_cambio.permission },
+    path: ROUTES_LIBRARY.administracion_tipos_de_cambio.path,
+    component: ExchangeRatesMainPageComponent,
   },
   {
     path: '',
