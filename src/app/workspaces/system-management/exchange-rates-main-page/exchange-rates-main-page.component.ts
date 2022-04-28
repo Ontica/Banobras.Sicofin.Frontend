@@ -82,7 +82,7 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
       case ImportedDataViewerEventType.EXPORT_DATA:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
         command = mapToExchangeRatesSearchCommand(event.payload.command as ExecuteDatasetsCommand);
-        this.exportExchangeRates(command);
+        this.exportExchangeRatesToExcel(command);
         return;
 
       default:
@@ -117,14 +117,10 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private exportExchangeRates(command) {
-    this.submitted = true;
-
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy';
-      this.messageBox.showInDevelopment('Exportar tipos de cambio', command);
-      this.submitted = false;
-    }, 500);
+  private exportExchangeRatesToExcel(command) {
+    this.exchangeRatesData.exportExchangeRatesToExcel(command)
+      .toPromise()
+      .then(x => this.excelFileUrl = x.url);
   }
 
 

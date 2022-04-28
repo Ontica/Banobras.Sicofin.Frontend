@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, DateString, HttpService, Identifiable } from '@app/core';
 
-import { ExchangeRate, ExchangeRatesSearchCommand  } from '@app/models';
+import { ExchangeRate, ExchangeRateDescriptor, ExchangeRatesSearchCommand, FileReport } from '@app/models';
 
 
 @Injectable()
@@ -43,12 +43,21 @@ export class ExchangeRatesDataService {
   }
 
 
-  searchExchangeRates(command: ExchangeRatesSearchCommand): Observable<any> {
+  searchExchangeRates(command: ExchangeRatesSearchCommand): Observable<ExchangeRateDescriptor> {
     Assertion.assertValue(command, 'command');
 
     const path = 'v2/financial-accounting/exchange-rates';
 
-    return this.http.post<any>(path, command);
+    return this.http.post<ExchangeRateDescriptor>(path, command);
+  }
+
+
+  exportExchangeRatesToExcel(command: ExchangeRatesSearchCommand): Observable<FileReport> {
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/exchange-rates/excel`;
+
+    return this.http.post<FileReport>(path, command);
   }
 
 }
