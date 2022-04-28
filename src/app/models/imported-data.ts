@@ -5,15 +5,33 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
 
 import { FileData, FileTypeAccepted } from '@app/shared/form-controls/file-control/file-control-data';
 
 import { FileType as ReportingFileType } from './reporting';
 
+export interface FieldConfig {
+  show: boolean;
+  label?: string;
+  list: Identifiable[];
+  required: boolean;
+  multiple?: boolean;
+}
+
+
+export const DefaultFieldConfig: FieldConfig = {
+  show: true,
+  label: '',
+  list: [],
+  required: true,
+  multiple: false,
+}
+
 
 export interface ExecuteDatasetsCommand {
-  typeUID?: string;
+  typeUID?: string | string[];
+  additionalUID?: string | string[];
   fromDate?: DateString;
   toDate?: DateString;
 }

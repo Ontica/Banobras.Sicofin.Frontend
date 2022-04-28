@@ -5,54 +5,73 @@
 
     <div fxLayout="row" fxLayout.lt-sm="column">
 
-      <div fxFlex="25" *ngIf="typeRequired">
+      <div [fxFlex]="additionalFieldConfig.show ? null : 25" *ngIf="typeFieldConfig.show">
 
-        <label>Tipo:</label>
+        <label>{{typeFieldConfig?.label ?? 'Tipo'}}:</label>
 
-        <emp-ng-select name="type" required
+        <emp-ng-select name="type" [required]="typeFieldConfig.required"
+          [config]="{multiple: !!typeFieldConfig.multiple, clearable: !!typeFieldConfig.multiple}"
           [(ngModel)]="formData.type"
-          [items]="typeList"
-          [showError]="!formData.type"
+          [items]="typeFieldConfig.list"
+          [showError]="typeFieldConfig.required ? !formData.type : false"
           placeholder="Todos">
         </emp-ng-select>
 
       </div>
 
-      <div fxflex="none">
+      <div [fxFlex]="typeFieldConfig.show ? null : 25" *ngIf="additionalFieldConfig.show">
 
-        <ng-container *ngIf="!periodRequired">
+        <label>{{additionalFieldConfig?.label ?? 'Filtro'}}:</label>
 
-          <label>Fecha:</label>
-          <emp-ng-datepicker name="fromDate" required
-            [(ngModel)]="formData.fromDate"
-            [showError]="!formData.fromDate">
-
-          </emp-ng-datepicker>
-
-        </ng-container>
-
-        <ng-container *ngIf="periodRequired">
-
-          <label>Periodo:</label>
-          <emp-ng-date-range-picker name="toDate" required
-            [(startDate)]="formData.fromDate"
-            [(endDate)]="formData.toDate"
-            [showError]="!formData.fromDate || !formData.toDate">
-
-          </emp-ng-date-range-picker>
-
-        </ng-container>
+        <emp-ng-select name="additional" [required]="additionalFieldConfig.required"
+          [config]="{multiple: !!additionalFieldConfig.multiple, clearable: !!additionalFieldConfig.multiple}"
+          [(ngModel)]="formData.additional"
+          [items]="additionalFieldConfig.list"
+          [showError]="additionalFieldConfig.required ? !formData.additional : false"
+          placeholder="Todos">
+        </emp-ng-select>
 
       </div>
 
-      <div fxFlex="none" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+      <div fxflex="none" *ngIf="!periodRequired">
 
-        <button [title]="'Consultar ' + dataType"
-          [class.btn]="form.invalid"
-          [class.btn-action]="form.valid"
-          [disabled]="form.invalid"
+        <label>Fecha:</label>
+        <emp-ng-datepicker name="fromDate" required
+          [(ngModel)]="formData.fromDate"
+          [showError]="!formData.fromDate">
+
+        </emp-ng-datepicker>
+
+      </div>
+
+      <div fxFlex="225px" *ngIf="periodRequired">
+
+        <label>Periodo:</label>
+        <emp-ng-date-range-picker name="toDate" required
+          [(startDate)]="formData.fromDate"
+          [(endDate)]="formData.toDate"
+          [showError]="!formData.fromDate || !formData.toDate">
+
+        </emp-ng-date-range-picker>
+
+      </div>
+
+      <div fxFlex="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button *ngIf="!showIconButtonToSubmit"
+          [class.btn]="form.invalid || !isPeriodValid"
+          [class.btn-action]="form.valid && isPeriodValid"
+          [disabled]="form.invalid || !isPeriodValid"
           (click)="onSearchImportedDataClicked()">
           Procesar
+        </button>
+
+        <button [title]="'Consultar ' + dataType" *ngIf="showIconButtonToSubmit"
+          [class.btn-icon]="form.invalid || !isPeriodValid"
+          [class.btn-icon-action]="form.valid && isPeriodValid"
+          [disabled]="form.invalid || !isPeriodValid"
+          (click)="onSearchImportedDataClicked()">
+          <mat-icon>search</mat-icon>
         </button>
 
       </div>

@@ -15,7 +15,12 @@
 
     <div class="card-header-options">
 
-      <button class="btn"
+      <button class="btn" *ngIf="canEditData"
+        (click)="onEditDataClicked()">
+        Edición de {{dataType}}
+      </button>
+
+      <button class="btn" *ngIf="canImportData"
         (click)="displayImportModal = true">
         Importar {{dataType}}
       </button>
@@ -34,9 +39,10 @@
 
       <emp-fa-imported-data-filter fxFlex="none"
         [dataType]="dataType"
+        [showIconButtonToSubmit]="showIconButtonToSubmit"
         [periodRequired]="periodRequired"
-        [typeRequired]="typeRequired"
-        [typeList]="typeList"
+        [typeFieldConfig]="typeFieldConfig"
+        [additionalFieldConfig]="additionalFieldConfig"
         (importDataFilterEvent)="onImportedDataFilterEvent($event)">
 
       </emp-fa-imported-data-filter>
@@ -58,8 +64,8 @@
 <emp-fa-data-importer *ngIf="displayImportModal"
   [dataType]="dataType"
   [importTypeRequired]="importTypeRequired"
+  [importTypeList]="importTypeRequired ? typeFieldConfig.list : []"
   [multiFiles]="multiFiles"
-  [importTypeList]="typeList"
   [importerDatasets]="importerDatasets"
   (dataImporterEvent)="onDataImporterEvent($event)">
 

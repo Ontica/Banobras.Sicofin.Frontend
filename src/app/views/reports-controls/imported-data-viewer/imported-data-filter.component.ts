@@ -7,9 +7,9 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EventInfo } from '@app/core';
 
-import { ExecuteDatasetsCommand } from '@app/models';
+import { ExecuteDatasetsCommand, FieldConfig } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -25,11 +25,13 @@ export class ImportedDataFilterComponent implements OnInit {
 
   @Input() dataType = '';
 
-  @Input() typeRequired = false;
+  @Input() showIconButtonToSubmit = false;
+
+  @Input() typeFieldConfig: FieldConfig;
+
+  @Input() additionalFieldConfig: FieldConfig;
 
   @Input() periodRequired = false;
-
-  @Input() typeList: Identifiable[] = [];
 
   @Output() importDataFilterEvent = new EventEmitter<EventInfo>();
 
@@ -37,11 +39,21 @@ export class ImportedDataFilterComponent implements OnInit {
     fromDate: null,
     toDate: null,
     type: null,
+    additional: null,
   };
 
 
   ngOnInit(): void {
     this.initFormData();
+  }
+
+
+  get isPeriodValid(): boolean {
+    if (!this.periodRequired) {
+      return true;
+    }
+
+    return !!this.formData.fromDate && !!this.formData.toDate;
   }
 
 
@@ -59,6 +71,7 @@ export class ImportedDataFilterComponent implements OnInit {
       fromDate: null,
       toDate: null,
       type: null,
+      additional: null,
     };
   }
 
@@ -72,8 +85,12 @@ export class ImportedDataFilterComponent implements OnInit {
       data.toDate = this.formData.toDate;
     }
 
-    if (this.typeRequired) {
+    if (this.typeFieldConfig.show) {
       data.typeUID = this.formData.type;
+    }
+
+    if (this.additionalFieldConfig.show) {
+      data.additionalUID = this.formData.additional;
     }
 
     return data;

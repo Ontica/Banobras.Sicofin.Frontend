@@ -60,7 +60,7 @@ export interface ReconciliationDatasets extends ImportDatasets {
 
 export function mapToReconciliationCommand(command: ExecuteDatasetsCommand): ReconciliationCommand {
   const reconciliationCommand: ReconciliationCommand = {
-    reconciliationTypeUID: command.typeUID,
+    reconciliationTypeUID: command.typeUID as string,
     date: command.fromDate,
   };
 

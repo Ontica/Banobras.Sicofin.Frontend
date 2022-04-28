@@ -7,10 +7,10 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
-import { DataTable, DataTableCommand, EmptyDataTable, EmptyImportDatasets,
-         ImportDatasets } from '@app/models';
+import { DataTable, DataTableCommand, DefaultFieldConfig, EmptyDataTable, EmptyImportDatasets,
+         FieldConfig, ImportDatasets } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -31,6 +31,7 @@ export enum ImportedDataViewerEventType {
   IMPORT_DATASET      = 'ImportedDataViewerComponent.Event.ImportDataSet',
   DELETE_DATASET      = 'ImportedDataViewerComponent.Event.DeleteDataSet',
   EXPORT_DATA         = 'ImportedDataViewerComponent.Event.ExportData',
+  EDIT_DATA_CLICKED   = 'ImportedDataViewerComponent.Event.EditDataClicked',
 }
 
 @Component({
@@ -41,9 +42,17 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() dataType = '';
 
+  @Input() showIconButtonToSubmit = false;
+
+  @Input() canImportData = true;
+
+  @Input() canEditData = false;
+
   @Input() periodRequired = false;
 
-  @Input() typeRequired = false;
+  @Input() typeFieldConfig: FieldConfig = Object.assign({}, DefaultFieldConfig);
+
+  @Input() additionalFieldConfig: FieldConfig = Object.assign({}, DefaultFieldConfig, {show: false});
 
   @Input() importTypeRequired = false;
 
@@ -54,8 +63,6 @@ export class ImportedDataViewerComponent implements OnChanges {
   @Input() excelFileUrl = '';
 
   @Input() isLoading = false;
-
-  @Input() typeList: Identifiable[] = [];
 
   @Input() importerDatasets: ImportDatasets = EmptyImportDatasets;
 
@@ -162,6 +169,11 @@ export class ImportedDataViewerComponent implements OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  onEditDataClicked() {
+    sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.EDIT_DATA_CLICKED);
   }
 
 

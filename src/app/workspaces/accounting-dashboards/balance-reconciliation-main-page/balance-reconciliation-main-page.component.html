@@ -4,10 +4,9 @@
 
     <emp-fa-imported-data-viewer
       dataType="conciliaciones"
-      [typeRequired]="true"
+      [typeFieldConfig]="{show: true, required: true, list: reconciliationTypeList}"
       [importTypeRequired]="true"
       [multiFiles]="true"
-      [typeList]="reconciliationTypeList"
       [importerDatasets]="reconciliationDatasets"
       [data]="reconciliationDataTable"
       [excelFileUrl]="excelFileUrl"
