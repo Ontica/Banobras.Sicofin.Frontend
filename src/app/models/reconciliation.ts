@@ -47,14 +47,14 @@ export const EmptyReconciliationData: ReconciliationData = {
 
 export interface ReconciliationImportInputDatasetCommand {
   reconciliationTypeUID?: string;
-  datasetType?: string;
+  datasetKind?: string;
   date: DateString;
 }
 
 
 export interface ReconciliationDatasets extends ImportDatasets {
-  loaded: InputDataset[];
-  missing: InputDatasetType[];
+  loadedDatasets: InputDataset[];
+  missingDatasetKinds: InputDatasetType[];
 }
 
 
@@ -83,7 +83,7 @@ export function mapToReconciliationImportInputDatasetCommand(command: ImportInpu
   : ReconciliationImportInputDatasetCommand {
   const reconciliationInputDatasetCommand: ReconciliationImportInputDatasetCommand = {
     reconciliationTypeUID: command.typeUID,
-    datasetType: command.datasetType,
+    datasetKind: command.datasetKind,
     date: command.date,
   };
 

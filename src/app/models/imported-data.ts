@@ -54,31 +54,32 @@ export interface InputDatasetType {
 
 export interface InputDataset {
   uid: string;
-  datasetType: string;
-  datasetTypeName: string;
+  datasetFamily: string;
+  datasetKind: string;
   elaborationDate: DateString;
   elaboratedBy: DateString;
   fileType: ReportingFileType;
+  fileName: string;
   fileSize: number;
   url: string;
 }
 
 
 export interface ImportDatasets {
-  loaded: InputDataset[];
-  missing: InputDatasetType[];
+  loadedDatasets: InputDataset[];
+  missingDatasetKinds: InputDatasetType[];
 }
 
 
 export const EmptyImportDatasets: ImportDatasets = {
-  loaded: [],
-  missing: [],
+  loadedDatasets: [],
+  missingDatasetKinds: [],
 };
 
 
 export interface ImportInputDatasetCommand {
   typeUID?: string;
-  datasetType?: string;
+  datasetKind?: string;
   date: DateString;
 }
 
@@ -86,9 +87,9 @@ export interface ImportInputDatasetCommand {
 export function mapToFileDataFromInputDataset(data: InputDataset): FileData {
   const fileData: FileData = {
     uid: data.uid,
-    tag: data.datasetTypeName,
+    tag: data.datasetKind,
     file: null,
-    name: data.datasetTypeName,
+    name: data.fileName,
     size: data.fileSize ?? 0,
     type: getFileTypeFromReportingFileType(data.fileType),
     url: data.url,

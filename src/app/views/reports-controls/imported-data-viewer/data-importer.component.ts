@@ -77,37 +77,37 @@ export class DataImporterComponent implements OnChanges{
 
 
   get filesTotal(): number {
-    return this.importerDatasets.missing.length === 0 ? this.importerDatasets.loaded.length :
-      this.importerDatasets.loaded.length + 1;
+    return this.importerDatasets.missingDatasetKinds.length === 0 ? this.importerDatasets.loadedDatasets.length :
+      this.importerDatasets.loadedDatasets.length + 1;
   }
 
 
   get tagDefault(): string {
-    return this.importerDatasets.missing.length > 0 ? this.importerDatasets.missing[0].type : null;
+    return this.importerDatasets.missingDatasetKinds.length > 0 ? this.importerDatasets.missingDatasetKinds[0].type : null;
   }
 
 
   get tagList(): InputDatasetType[] {
-    return this.importerDatasets.missing.length > 0 ? this.importerDatasets.missing : [];
+    return this.importerDatasets.missingDatasetKinds.length > 0 ? this.importerDatasets.missingDatasetKinds : [];
   }
 
 
   get filesTypesValid(): FileType[] {
-    let filesValid: FileType[] = [];
+    let validFiles: FileType[] = [];
 
     if (this.importTypeRequired) {
-      if (this.importerDatasets.missing.filter(x => 'excel' === x.fileType.toLowerCase()).length > 0) {
-        filesValid.push('excel');
+      if (this.importerDatasets.missingDatasetKinds.filter(x => 'excel' === x.fileType.toLowerCase()).length > 0) {
+        validFiles.push('excel');
       }
 
-      if (this.importerDatasets.missing.filter(x => 'csv' === x.fileType.toLowerCase()).length > 0) {
-        filesValid.push('csv');
+      if (this.importerDatasets.missingDatasetKinds.filter(x => 'csv' === x.fileType.toLowerCase()).length > 0) {
+        validFiles.push('csv');
       }
     } else {
-      filesValid.push('excel');
+      validFiles.push('excel');
     }
 
-    return filesValid;
+    return validFiles;
   }
 
 
@@ -148,8 +148,8 @@ export class DataImporterComponent implements OnChanges{
         return;
 
       case 'REMOVE':
-        const iputDataset = this.importerDatasets.loaded.find(x => x.uid === event.file.uid);
-        sendEvent(this.dataImporterEvent, DataImporterEventType.DELETE_DATASET_CLICKED, {iputDataset});
+        const inputDataset = this.importerDatasets.loadedDatasets.find(x => x.uid === event.file.uid);
+        sendEvent(this.dataImporterEvent, DataImporterEventType.DELETE_DATASET_CLICKED, {inputDataset});
         return;
     }
   }
@@ -179,7 +179,7 @@ export class DataImporterComponent implements OnChanges{
 
   private setFileControlDataFromDataset() {
     this.fileControlData = [];
-    this.importerDatasets.loaded.forEach(x => this.fileControlData.push(mapToFileDataFromInputDataset(x)));
+    this.importerDatasets.loadedDatasets.forEach(x => this.fileControlData.push(mapToFileDataFromInputDataset(x)));
   }
 
 
@@ -190,7 +190,7 @@ export class DataImporterComponent implements OnChanges{
 
     if (this.importTypeRequired) {
       command.typeUID = this.formData.importType.uid;
-      command.datasetType = this.importTypeRequired ? fileData.tag : null;
+      command.datasetKind = this.importTypeRequired ? fileData.tag : null;
     }
 
     const payload = {

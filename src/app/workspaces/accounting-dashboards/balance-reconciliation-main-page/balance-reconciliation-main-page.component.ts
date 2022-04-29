@@ -82,7 +82,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
       case ImportedDataViewerEventType.IMPORT_DATASET:
         Assertion.assertValue(event.payload.file, 'event.payload.file');
         Assertion.assertValue(event.payload.command.typeUID, 'event.payload.command.typeUID');
-        Assertion.assertValue(event.payload.command.datasetType, 'event.payload.command.datasetType');
+        Assertion.assertValue(event.payload.command.datasetKind, 'event.payload.command.datasetKind');
         Assertion.assertValue(event.payload.command.date, 'event.payload.command.date');
 
         command =
@@ -91,8 +91,8 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
         return;
 
       case ImportedDataViewerEventType.DELETE_DATASET:
-        Assertion.assertValue(event.payload.iputDataset.uid, 'event.payload.iputDataset.uid');
-        this.showConfirmDeleteDataSet(event.payload.iputDataset as InputDataset);
+        Assertion.assertValue(event.payload.inputDataset.uid, 'event.payload.inputDataset.uid');
+        this.showConfirmDeleteDataSet(event.payload.inputDataset as InputDataset);
         return;
 
       case ImportedDataViewerEventType.EXPORT_DATA:
@@ -135,8 +135,8 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
 
   private showConfirmDeleteDataSet(inputDataset: InputDataset) {
-    const message = `Esta operación eliminara el archivo <strong> ${inputDataset.datasetTypeName}</strong>.
-                     <br><br>¿Elimino el archivo?`;
+    const message = `Esta operación eliminará el archivo <strong> ${inputDataset.fileName}</strong>.
+                     <br><br>¿Procedo con la eliminación del archivo?`;
 
     this.messageBox.confirm(message, 'Eliminar Archivo', 'DeleteCancel')
       .toPromise()

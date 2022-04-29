@@ -41,7 +41,7 @@ export class ReconciliationDataService {
   getReconciliationInputDatasets(command: InputDatasetsCommand): Observable<ReconciliationDatasets> {
     Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/reconciliation/input-datasets`;
+    const path = `v2/financial-accounting/reconciliation/datasets`;
 
     return this.http.post<ReconciliationDatasets>(path, command);
   }
@@ -56,16 +56,16 @@ export class ReconciliationDataService {
     formData.append('media', file);
     formData.append('command', JSON.stringify(command));
 
-    const path = `v2/financial-accounting/reconciliation/input-datasets/import-from-file`;
+    const path = `v2/financial-accounting/reconciliation/datasets/import-from-file`;
 
     return this.http.post<ReconciliationDatasets>(path, formData);
   }
 
 
-  deleteInputDataset(inputDatasetUID: string): Observable<ReconciliationDatasets> {
-    Assertion.assertValue(inputDatasetUID, 'inputDatasetUID');
+  deleteInputDataset(datasetUID: string): Observable<ReconciliationDatasets> {
+    Assertion.assertValue(datasetUID, 'datasetUID');
 
-    const path = `v2/financial-accounting/reconciliation/input-datasets/${inputDatasetUID}`;
+    const path = `v2/financial-accounting/reconciliation/datasets/${datasetUID}`;
 
     return this.http.delete<ReconciliationDatasets>(path);
   }

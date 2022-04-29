@@ -23,7 +23,7 @@ export const ExternalProcessTypeList: Identifiable[] = [
   },
   {
     uid: ExternalProcessTypes.ConciliacionSIC,
-    name: 'Concilación de SIC',
+    name: 'Conciliación del sistema SIC',
   },
   {
     uid: ExternalProcessTypes.ExportacionSaldosMensuales,
