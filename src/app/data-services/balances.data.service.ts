@@ -66,21 +66,21 @@ export class BalancesDataService {
   }
 
 
-  exportAccountStatementToExcel(accountStatementCommand: AccountStatementCommand): Observable<FileReport> {
-    Assertion.assertValue(accountStatementCommand, 'accountStatementCommand');
+  exportAccountStatementToExcel(command: AccountStatementCommand): Observable<FileReport> {
+    Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/balance-voucher/excel`;
+    const path = `v2/financial-accounting/account-statement/excel`;
 
-    return this.http.post<FileReport>(path, accountStatementCommand);
+    return this.http.post<FileReport>(path, command);
   }
 
 
-  getAccountStatement(accountStatementCommand: AccountStatementCommand): Observable<AccountStatement> {
-    Assertion.assertValue(accountStatementCommand, 'accountStatementCommand');
+  getAccountStatement(command: AccountStatementCommand): Observable<AccountStatement> {
+    Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/balance-voucher`;
+    const path = `v2/financial-accounting/account-statement`;
 
-    return this.http.post<AccountStatement>(path, accountStatementCommand);
+    return this.http.post<AccountStatement>(path, command);
   }
 
 }
