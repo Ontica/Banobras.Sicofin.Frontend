@@ -28,6 +28,7 @@ export interface ReconciliationCommand {
 export interface ReconciliationInputDatasetsCommand {
   reconciliationTypeUID: string;
   date: DateString;
+  exportTo?: string;
 }
 
 

@@ -9,11 +9,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { ReconciliationType, InputDatasetsCommand, ReconciliationDatasets,
-         ImportInputDatasetCommand, InputDataset, mapToReconciliationImportInputDatasetCommand,
-         mapToReconciliationInputDatasetsCommand, ReconciliationImportInputDatasetCommand, ReconciliationData,
-         EmptyReconciliationData, ReconciliationInputDatasetsCommand, mapToReconciliationCommand,
-         ExecuteDatasetsCommand, ReconciliationCommand } from '@app/models';
+import { ReconciliationType, InputDatasetsCommand, ReconciliationDatasets, ImportInputDatasetCommand,
+         InputDataset, mapToReconciliationImportInputDatasetCommand, mapToReconciliationInputDatasetsCommand,
+         ReconciliationImportInputDatasetCommand, ReconciliationData, EmptyReconciliationData,
+         ReconciliationInputDatasetsCommand, mapToReconciliationCommand, ExecuteDatasetsCommand,
+         ReconciliationCommand } from '@app/models';
 
 import { ReconciliationDataService } from '@app/data-services';
 
@@ -40,7 +40,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
   reconciliationDataTable: ReconciliationData = Object.assign({}, EmptyReconciliationData);
 
-  excelFileUrl = '';
+  fileUrl = '';
 
   submitted = false;
 
@@ -73,7 +73,12 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
         return;
 
       case ImportedDataViewerEventType.EXPORT_DATA:
-        this.exportReconciliationData(this.reconciliationCommand);
+        Assertion.assertValue(event.payload.exportationType, 'event.payload.exportationType');
+
+        const reconciliationCommand = Object.assign({}, this.reconciliationCommand,
+          {exportTo: event.payload.exportationType});
+
+        this.exportReconciliation(reconciliationCommand);
         return;
 
       case ImportedDataViewerEventType.GET_INPUT_DATASET:
@@ -174,14 +179,10 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   }
 
 
-  private exportReconciliationData(command) {
-    this.submitted = true;
-
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy';
-      this.messageBox.showInDevelopment('Exportar conciliaciones', command);
-      this.submitted = false;
-    }, 500);
+  private exportReconciliation(command: ReconciliationInputDatasetsCommand) {
+    this.reconciliationData.exportReconciliation(command)
+      .toPromise()
+      .then(x => this.fileUrl = x.url);
   }
 
 
