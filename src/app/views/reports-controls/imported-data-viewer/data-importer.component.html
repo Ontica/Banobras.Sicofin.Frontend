@@ -22,7 +22,7 @@
                 <label>Tipo:</label>
 
                 <emp-ng-select name="importType"
-                  [config]="{bindByValue: false}"
+                  [config]="{bindByValue: false, selectFirst: true}"
                   [(ngModel)]="formData.importType"
                   [items]="importTypeList"
                   [showError]="!formData.importType"

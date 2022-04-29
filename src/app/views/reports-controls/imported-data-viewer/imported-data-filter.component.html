@@ -10,11 +10,13 @@
         <label>{{typeFieldConfig?.label ?? 'Tipo'}}:</label>
 
         <emp-ng-select name="type" [required]="typeFieldConfig.required"
-          [config]="{multiple: !!typeFieldConfig.multiple, clearable: !!typeFieldConfig.multiple}"
+          [config]="{selectFirst: !typeFieldConfig.multiple,
+                     multiple: !!typeFieldConfig.multiple,
+                     clearable: !!typeFieldConfig.multiple}"
           [(ngModel)]="formData.type"
           [items]="typeFieldConfig.list"
           [showError]="typeFieldConfig.required ? !formData.type : false"
-          placeholder="Todos">
+          [placeholder]="typeFieldConfig.required ? 'Seleccionar' : 'Todos'">
         </emp-ng-select>
 
       </div>
