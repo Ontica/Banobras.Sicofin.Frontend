@@ -9,8 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { DataTable, DataTableCommand, DefaultFieldConfig, EmptyDataTable, EmptyImportDatasets,
-         FieldConfig, ImportDatasets } from '@app/models';
+import { DataTable, DataTableCommand, DefaultExportationType, DefaultFieldConfig, EmptyDataTable,
+         EmptyImportDatasets, ExportationType, FieldConfig, ImportDatasets } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -58,13 +58,15 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() multiFiles = false;
 
+  @Input() exportationTypeDefault = true;
+
   @Input() commandExecuted = false;
 
   @Input() command: DataTableCommand = {};
 
   @Input() data: DataTable = Object.assign({}, EmptyDataTable);
 
-  @Input() excelFileUrl = '';
+  @Input() fileUrl = '';
 
   @Input() isLoading = false;
 
@@ -73,6 +75,8 @@ export class ImportedDataViewerComponent implements OnChanges {
   @Output() importedDataViewerEvent = new EventEmitter<EventInfo>();
 
   cardHint = 'Seleccionar los filtros';
+
+  exportationTypesList: ExportationType[] = [];
 
   displayImportModal = false;
 
@@ -118,6 +122,7 @@ export class ImportedDataViewerComponent implements OnChanges {
 
       case ImportedDataFilterEventType.EXECUTE_DATA_CLICKED:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
+        this.setExtortationType(event.payload.typeSelected?.exportTo as ExportationType[]);
         sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.EXECUTE_DATA, event.payload);
         return;
 
@@ -155,8 +160,12 @@ export class ImportedDataViewerComponent implements OnChanges {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.EXPORT_DATA,
-          {command: this.command});
+        const payload = {
+          command: this.command,
+          exportationType: event.payload.exportationType,
+        };
+
+        sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.EXPORT_DATA, payload);
         return;
 
       default:
@@ -188,7 +197,17 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
-    this.excelFileUrl = '';
+    this.fileUrl = '';
+  }
+
+
+  private setExtortationType(exportTo: ExportationType[]) {
+    if (this.exportationTypeDefault) {
+      this.exportationTypesList = [DefaultExportationType];
+      return;
+    }
+
+    this.exportationTypesList = exportTo ?? [];
   }
 
 }

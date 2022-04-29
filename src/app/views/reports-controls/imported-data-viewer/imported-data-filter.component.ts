@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { EventInfo, Identifiable } from '@app/core';
 
 import { ExecuteDatasetsCommand, FieldConfig } from '@app/models';
 
@@ -60,6 +60,7 @@ export class ImportedDataFilterComponent implements OnInit {
   onSearchImportedDataClicked() {
     const payload = {
       command: this.getCommand(),
+      typeSelected: this.getTypeSelected(),
     };
 
     sendEvent(this.importDataFilterEvent, ImportedDataFilterEventType.EXECUTE_DATA_CLICKED, payload);
@@ -94,6 +95,15 @@ export class ImportedDataFilterComponent implements OnInit {
     }
 
     return data;
+  }
+
+
+  private getTypeSelected(): Identifiable {
+    if (!this.typeFieldConfig.show || this.typeFieldConfig.multiple) {
+      return null;
+    }
+
+    return this.formData.type ? this.typeFieldConfig.list.find(x => x.uid === this.formData.type) : null;
   }
 
 }
