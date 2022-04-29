@@ -6,9 +6,12 @@
       dataType="tipos de cambio"
       [showIconButtonToSubmit]="true"
       [canImportData]="false"
+      [canEditData]="true"
       [periodRequired]="true"
       [typeFieldConfig]="{show: true, required: false, multiple: true, list: exchangeRateTypeList}"
       [additionalFieldConfig]="{show: true, label: 'Monedas', required: false, multiple: true, list: currenciesList}"
+      [command]="command"
+      [commandExecuted]="commandExecuted"
       [data]="exchangeRateData"
       [excelFileUrl]="excelFileUrl"
       [isLoading]="isLoading"
@@ -19,3 +22,9 @@
   </div>
 
 </div>
+
+<emp-fa-exchange-rates-editor *ngIf="displayExchangeRatesEditor"
+  [exchangeRateTypeList]="exchangeRateTypeList"
+  (exchangeRatesEditorEvent)="onExchangeRatesEditorEvent($event)">
+
+</emp-fa-exchange-rates-editor>

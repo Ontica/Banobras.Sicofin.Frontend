@@ -96,3 +96,19 @@ export function mapToExchangeRatesSearchCommand(command: ExecuteDatasetsCommand)
 
   return exchangeRatesSearchCommand;
 }
+
+
+export interface ExchangeRateValues {
+  exchangeRateTypeUID: string;
+  date: DateString;
+  values?: ExchangeRateValue[];
+}
+
+
+export interface ExchangeRateValue {
+  toCurrencyUID: string;
+  toCurrency?: string;
+  value: number;
+  hasValue?: boolean;
+  valueEdited?: string;
+}

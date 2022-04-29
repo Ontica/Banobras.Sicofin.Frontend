@@ -16,6 +16,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { SystemManagementWorkspaceRoutingModule } from './system-management-workspace-routing.module';
 import { BalancesGenerationModule } from '@app/views/balances-generation/balances-generation.module';
+import { ExchangeRatesModule } from '@app/views/exchange-rates/exchange-rates.module';
 import { ProcessesModule } from '@app/views/processes/processes.module';
 import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 
@@ -42,6 +43,7 @@ import {
 
     SystemManagementWorkspaceRoutingModule,
     BalancesGenerationModule,
+    ExchangeRatesModule,
     ProcessesModule,
     ReportsControlsModule,
   ],

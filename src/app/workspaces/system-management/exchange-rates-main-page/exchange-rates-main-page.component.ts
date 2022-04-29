@@ -17,8 +17,6 @@ import { ExchangeRatesStateSelector } from '@app/presentation/exported.presentat
 
 import { ExchangeRatesDataService } from '@app/data-services';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { EmptyExchangeRateData, ExchangeRatesSearchCommand, ExchangeRateData, ExecuteDatasetsCommand,
          mapToExchangeRatesSearchCommand } from '@app/models';
 
@@ -26,12 +24,22 @@ import {
   ImportedDataViewerEventType
 } from '@app/views/reports-controls/imported-data-viewer/imported-data-viewer.component';
 
+import {
+  ExchangeRatesEditorEventType
+} from '@app/views/exchange-rates/exchange-rates-editor/exchange-rates-editor.component';
+
 
 @Component({
   selector: 'emp-fa-exchange-rates-main-page',
   templateUrl: './exchange-rates-main-page.component.html',
 })
 export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
+
+  displayExchangeRatesEditor = false;
+
+  commandExecuted = false;
+
+  command: ExchangeRatesSearchCommand = null;
 
   exchangeRateData: ExchangeRateData = Object.assign({}, EmptyExchangeRateData);
 
@@ -48,8 +56,7 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private exchangeRatesData: ExchangeRatesDataService,
-              private messageBox: MessageBoxService) {
+              private exchangeRatesData: ExchangeRatesDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -69,20 +76,43 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let command = null;
-
     switch (event.type as ImportedDataViewerEventType) {
 
       case ImportedDataViewerEventType.EXECUTE_DATA:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
-        command = mapToExchangeRatesSearchCommand(event.payload.command as ExecuteDatasetsCommand);
-        this.searchExchangeRates(command);
+        this.commandExecuted = false;
+        this.exchangeRateData = Object.assign({}, EmptyExchangeRateData);
+        this.command = mapToExchangeRatesSearchCommand(event.payload.command as ExecuteDatasetsCommand);
+        this.searchExchangeRates(this.command);
         return;
 
       case ImportedDataViewerEventType.EXPORT_DATA:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
-        command = mapToExchangeRatesSearchCommand(event.payload.command as ExecuteDatasetsCommand);
-        this.exportExchangeRatesToExcel(command);
+        this.exportExchangeRatesToExcel(this.command);
+        return;
+
+      case ImportedDataViewerEventType.EDIT_DATA_CLICKED:
+        this.displayExchangeRatesEditor = true;
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExchangeRatesEditorEvent(event: EventInfo) {
+    switch (event.type as ExchangeRatesEditorEventType) {
+
+      case ExchangeRatesEditorEventType.CLOSE_MODAL_CLICKED:
+        this.displayExchangeRatesEditor = false;
+        return;
+
+      case ExchangeRatesEditorEventType.DATA_UPDATED:
+        if (this.commandExecuted) {
+          this.searchExchangeRates(this.command);
+        }
+
         return;
 
       default:
@@ -112,7 +142,10 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
 
     this.exchangeRatesData.searchExchangeRates(command)
       .toPromise()
-      .then(x => this.exchangeRateData = Object.assign({}, EmptyExchangeRateData, {entries: x}))
+      .then(x => {
+        this.commandExecuted = true;
+        this.exchangeRateData = Object.assign({}, EmptyExchangeRateData, {entries: x});
+      })
       .finally(() => this.setSubmitted(false));
   }
 

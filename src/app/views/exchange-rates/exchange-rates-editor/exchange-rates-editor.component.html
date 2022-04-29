@@ -1,0 +1,103 @@
+<emp-ng-modal-window [config]="{width:'500px'}">
+
+  <emp-ng-card
+    title="Editor de tipos de cambio"
+    hint='Información del tipo de cambio.'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding" [empNgSpinnerHost]="spinner">
+
+      <emp-ng-spinner #spinner [visible]="isLoading">
+
+      </emp-ng-spinner>
+
+      <form  #form="ngForm" (keydown.enter)="$event.preventDefault()"
+        autocomplete="off" class="form-section">
+
+        <div fxLayout="column">
+
+          <div #ExchangeRatesFilter fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="8">
+
+            <div fxFlex>
+
+              <label>Tipo:</label>
+
+              <emp-ng-select name="exchangeRateType" required
+                [(ngModel)]="formData.exchangeRateType"
+                [items]="exchangeRateTypeList"
+                [showError]="!formData.exchangeRateType"
+                (changes)="onExchangeRatesFilterChanged()">
+              </emp-ng-select>
+
+            </div>
+
+            <div fxFlex="none">
+
+                <label>Fecha:</label>
+                <emp-ng-datepicker name="fromDate" required
+                  [(ngModel)]="formData.date"
+                  [showError]="!formData.date"
+                  (valueChange)="onExchangeRatesFilterChanged()">
+
+                </emp-ng-datepicker>
+
+            </div>
+
+          </div>
+
+          <mat-divider class="horizontal">
+
+          </mat-divider>
+
+          <div *ngIf="!exchangeRateValuesSelected || exchangeRateValuesSelected?.values.length === 0 "
+            class="instruction-text">
+            {{hintText}}
+          </div>
+
+          <div fxLayout="column" fxLayoutGap="0.5rem" *ngIf="exchangeRateValuesSelected?.values.length > 0"
+            class="simple-list-container" [style.paddingRight.px]="8">
+
+            <div *ngFor="let value of exchangeRateValuesSelected.values"
+              fxLayout="row" fxLayoutAlign="space-between center" class="simple-list-item">
+
+              <div fxFlex>
+                <strong>{{value.toCurrency}}</strong>
+              </div>
+
+              <div fxFlex="120px">
+                <input type="text" class="text-box text-align-right"
+                  empNgCurrency empNgCurrencyDisplaySymbol="" [empNgCurrencyFractionDigit]="6"
+                  [name]="value.toCurrencyUID" required
+                  [(ngModel)]="value.valueEdited"
+                  [class.invalid-control]="submitClicked && !value.valueEdited">
+              </div>
+
+            </div>
+
+          </div>
+
+          <mat-divider class="horizontal"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button (click)="onUpdateExchangeRatesClicked()"
+                [class.btn]="!isDataValid"
+                [class.btn-action]="isDataValid">
+                Guardar
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>
