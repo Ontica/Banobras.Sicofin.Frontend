@@ -58,6 +58,10 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() multiFiles = false;
 
+  @Input() commandExecuted = false;
+
+  @Input() command: DataTableCommand = {};
+
   @Input() data: DataTable = Object.assign({}, EmptyDataTable);
 
   @Input() excelFileUrl = '';
@@ -70,18 +74,13 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   cardHint = 'Seleccionar los filtros';
 
-  commandExecuted = false;
-
-  command: DataTableCommand = {};
-
   displayImportModal = false;
 
   displayExportModal = false;
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data && !changes.data.firstChange && this.data.columns.length > 0) {
-      this.commandExecuted = true;
+    if (changes.commandExecuted) {
       this.setText();
     }
   }
@@ -119,11 +118,6 @@ export class ImportedDataViewerComponent implements OnChanges {
 
       case ImportedDataFilterEventType.EXECUTE_DATA_CLICKED:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
-
-        this.commandExecuted = false;
-        this.data = Object.assign({}, EmptyDataTable);
-
-        this.command = event.payload.command;
         sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.EXECUTE_DATA, event.payload);
         return;
 

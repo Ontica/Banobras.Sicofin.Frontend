@@ -13,7 +13,7 @@ import { ReconciliationType, InputDatasetsCommand, ReconciliationDatasets,
          ImportInputDatasetCommand, InputDataset, mapToReconciliationImportInputDatasetCommand,
          mapToReconciliationInputDatasetsCommand, ReconciliationImportInputDatasetCommand, ReconciliationData,
          EmptyReconciliationData, ReconciliationInputDatasetsCommand, mapToReconciliationCommand,
-         ExecuteDatasetsCommand} from '@app/models';
+         ExecuteDatasetsCommand, ReconciliationCommand } from '@app/models';
 
 import { ReconciliationDataService } from '@app/data-services';
 
@@ -33,6 +33,10 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   reconciliationTypeList: ReconciliationType[] = [];
 
   reconciliationDatasets: ReconciliationDatasets;
+
+  reconciliationCommandExecuted = false;
+
+  reconciliationCommand: ReconciliationCommand = null;
 
   reconciliationDataTable: ReconciliationData = Object.assign({}, EmptyReconciliationData);
 
@@ -62,9 +66,14 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
       case ImportedDataViewerEventType.EXECUTE_DATA:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
+        this.reconciliationCommandExecuted = false;
+        this.reconciliationDataTable = Object.assign({}, EmptyReconciliationData);
+        this.reconciliationCommand = mapToReconciliationCommand(event.payload.command as ExecuteDatasetsCommand);
+        this.executeReconciliation(this.reconciliationCommand);
+        return;
 
-        command = mapToReconciliationCommand(event.payload.command as ExecuteDatasetsCommand);
-        this.executeReconciliation(command);
+      case ImportedDataViewerEventType.EXPORT_DATA:
+        this.exportReconciliationData(this.reconciliationCommand);
         return;
 
       case ImportedDataViewerEventType.GET_INPUT_DATASET:
@@ -95,10 +104,6 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
         this.showConfirmDeleteDataSet(event.payload.inputDataset as InputDataset);
         return;
 
-      case ImportedDataViewerEventType.EXPORT_DATA:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
-        this.exportReconciliationData(event.payload.command);
-        return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -161,7 +166,10 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
     this.setSubmitted(true);
     this.reconciliationData.executeReconciliation(command)
       .toPromise()
-      .then(x => this.reconciliationDataTable = x)
+      .then(x => {
+        this.reconciliationCommandExecuted = true;
+        this.reconciliationDataTable = x;
+      })
       .finally(() => this.setSubmitted(false));
   }
 
