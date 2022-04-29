@@ -7,6 +7,8 @@
 
 import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 
+import { FileDownloadService } from '@app/data-services/file-services/file-download.service';
+
 import { FormatLibrary } from '@app/shared/utils';
 
 import { DefaultFileControlConfig, FileData, FileControlActions, FileControlConfig, FileControlMenuOptions,
@@ -50,6 +52,8 @@ export class FileControlComponent implements OnChanges {
   idFileControl: string = 'idFile' + Math.random().toString(16).slice(2);
 
   tagFileSelected = null;
+
+  constructor(private fileDownload: FileDownloadService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.config) {
@@ -97,6 +101,9 @@ export class FileControlComponent implements OnChanges {
     }
     if ('SHOW' === option && !this.validateShowOption(file.type)) {
       return;
+    }
+    if ('DOWNLOAD' === option) {
+      this.downloadFile(file.url);
     }
     this.fileControlEvent.emit({ option, file });
   }
@@ -171,7 +178,9 @@ export class FileControlComponent implements OnChanges {
         options.push({ name: 'Ver', action: 'SHOW', icon: 'visibility' });
       }
 
-      options.push({ name: 'Descargar', action: 'DOWNLOAD', icon: 'file_download' });
+      if (!!file.url) {
+        options.push({ name: 'Descargar', action: 'DOWNLOAD', icon: 'file_download' });
+      }
 
       if (!this.readonly) {
         options.push({ name: 'Eliminar', action: 'REMOVE', icon: 'delete' });
@@ -281,6 +290,10 @@ export class FileControlComponent implements OnChanges {
     }
 
     this.fileControlChange.emit(files);
+  }
+
+  private downloadFile(url: string) {
+    this.fileDownload.download(url);
   }
 
   private removeFile(file) {

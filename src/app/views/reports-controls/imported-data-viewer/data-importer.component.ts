@@ -9,8 +9,6 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { FileDownloadService } from '@app/data-services/file-services/file-download.service';
-
 import { EmptyImportDatasets, ImportDatasets, ImportInputDatasetCommand, InputDatasetsCommand,
          InputDatasetType, mapToFileDataFromInputDataset } from '@app/models';
 
@@ -52,8 +50,6 @@ export class DataImporterComponent implements OnChanges{
   commandExecuted = false;
 
   fileControlData = null;
-
-  constructor(private fileDownload: FileDownloadService) { }
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -143,10 +139,6 @@ export class DataImporterComponent implements OnChanges{
         this.importDataSetClicked(event.file as FileData);
         return;
 
-      case 'DOWNLOAD':
-        this.downloadInputDataset(event.file.url);
-        return;
-
       case 'REMOVE':
         const inputDataset = this.importerDatasets.loadedDatasets.find(x => x.uid === event.file.uid);
         sendEvent(this.dataImporterEvent, DataImporterEventType.DELETE_DATASET_CLICKED, {inputDataset});
@@ -199,11 +191,6 @@ export class DataImporterComponent implements OnChanges{
     };
 
     sendEvent(this.dataImporterEvent, DataImporterEventType.IMPORT_DATASET_CLICKED, payload);
-  }
-
-
-  private downloadInputDataset(url: string) {
-    this.fileDownload.download(url);
   }
 
 }
