@@ -29,7 +29,7 @@ export class ExchangeRatesDataService {
 
 
   getCurrencies(): Observable<Identifiable[]> {
-    const path = `v2/financial-accounting/currencies`;
+    const path = `v2/financial-accounting/catalogues/currencies`;
 
     return this.http.get<Identifiable[]>(path);
   }

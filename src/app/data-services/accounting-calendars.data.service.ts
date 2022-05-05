@@ -21,7 +21,7 @@ export class AccountingCalendarsDataService {
 
 
   getAccountingCalendars(): Observable<Identifiable[]> {
-    const path = `v2/financial-accounting/catalogues/accounting-calendars`;
+    const path = `v2/financial-accounting/accounting-calendars`;
 
     return this.http.get<Identifiable[]>(path);
   }
@@ -30,7 +30,7 @@ export class AccountingCalendarsDataService {
   getAccountingCalendar(calendarUID: string): Observable<AccountingCalendar> {
     Assertion.assertValue(calendarUID, 'calendarUID');
 
-    const path = `v2/financial-accounting/catalogues/accounting-calendars/${calendarUID}`;
+    const path = `v2/financial-accounting/accounting-calendars/${calendarUID}`;
 
     return this.http.get<AccountingCalendar>(path);
   }
@@ -41,7 +41,7 @@ export class AccountingCalendarsDataService {
     Assertion.assertValue(calendarUID, 'calendarUID');
     Assertion.assertValue(periodFields, 'periodFields');
 
-    const path = `v2/financial-accounting/catalogues/accounting-calendars/${calendarUID}/add-period`;
+    const path = `v2/financial-accounting/accounting-calendars/${calendarUID}/add-period`;
 
     return this.http.post<AccountingCalendar>(path, periodFields);
   }
@@ -52,7 +52,7 @@ export class AccountingCalendarsDataService {
     Assertion.assertValue(calendarUID, 'calendarUID');
     Assertion.assertValue(periodUID, 'periodUID');
 
-    const path = `v2/financial-accounting/catalogues/accounting-calendars/${calendarUID}` +
+    const path = `v2/financial-accounting/accounting-calendars/${calendarUID}` +
       `/remove-period/${periodUID}`;
 
     return this.http.delete<AccountingCalendar>(path);
