@@ -86,7 +86,7 @@ export interface AccountDescriptor {
   number: string;
   name: string;
   sector?: string;
-  type: string;
+  type: Identifiable;
   role: AccountRole;
   usesSubledger: boolean;
   usesSector: boolean;
@@ -103,7 +103,7 @@ export const EmptyAccountDescriptor: AccountDescriptor = {
   number: '',
   name: '',
   sector: '',
-  type: '',
+  type: Empty,
   usesSubledger: false,
   usesSector: false,
   role: null,
@@ -131,7 +131,7 @@ export const EmptyAccount: Account = {
   number: '',
   name: '',
   description: '',
-  type: '',
+  type: Empty,
   role: null,
   debtorCreditor: null,
   level: 0,
@@ -182,7 +182,7 @@ export interface AccountHistory {
   number: string;
   name: string;
   description: string;
-  type: string;
+  type: Identifiable;
   role: AccountRole;
   debtorCreditor: DebtorCreditorType;
   startDate: string;

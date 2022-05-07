@@ -94,7 +94,7 @@ export class AccountViewComponent implements OnChanges {
       name: this.account.name,
       description: this.account.description,
       role: this.account.role,
-      type: this.account.type,
+      type: this.account.type.name,
       debtorCreditor: this.account.debtorCreditor,
     });
   }

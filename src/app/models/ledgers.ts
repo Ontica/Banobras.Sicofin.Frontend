@@ -17,7 +17,7 @@ export interface LedgerAccount {
   number: string;
   name: string;
   description: string;
-  accountType: string;
+  accountType: Identifiable;
   role: AccountRole;
   debtorCreditor: DebtorCreditorType;
   level: number;
@@ -33,7 +33,7 @@ export const EmptyLedgerAccount: LedgerAccount = {
   number: '',
   name: '',
   description: '',
-  accountType: '',
+  accountType: Empty,
   role: null,
   debtorCreditor: null,
   level: 0,

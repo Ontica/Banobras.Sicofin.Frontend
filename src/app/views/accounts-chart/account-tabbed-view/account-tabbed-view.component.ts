@@ -7,12 +7,14 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
+import { DateStringLibrary } from '@app/core';
+
+import { MatTableDataSource } from '@angular/material/table';
+
 import { BalancesDataService } from '@app/data-services';
 
 import { Account, AccountBalance, AccountHistory, AccountRole, AreaRule,
          CurrencyRule, EmptyAccount, LedgerRule, SectorRule } from '@app/models';
-
-import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -63,7 +65,14 @@ export class AccountTabbedViewComponent implements OnChanges {
 
   private setTitle() {
     this.title = `${this.account.number}: ${this.account.name}`;
-    this.hint = this.account.accountsChart.name;
+
+    const startDate = DateStringLibrary.format(this.account.startDate);
+
+    this.hint = `<strong>${this.account.accountsChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>` +
+      `${this.account.role} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+      `${this.account.type.name} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+      `${this.account.debtorCreditor} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
+      `${startDate}`;
   }
 
 
