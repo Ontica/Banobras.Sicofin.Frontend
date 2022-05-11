@@ -17,6 +17,8 @@ import { ExchangeRatesStateSelector } from '@app/presentation/exported.presentat
 
 import { ExchangeRatesDataService } from '@app/data-services';
 
+import { PermissionsLibrary } from '@app/main-layout';
+
 import { EmptyExchangeRateData, ExchangeRatesSearchCommand, ExchangeRateData, ExecuteDatasetsCommand,
          mapToExchangeRatesSearchCommand } from '@app/models';
 
@@ -42,6 +44,8 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
   command: ExchangeRatesSearchCommand = null;
 
   exchangeRateData: ExchangeRateData = Object.assign({}, EmptyExchangeRateData);
+
+  permissionToEdit = PermissionsLibrary.FEATURE_EDICION_TIPOS_CAMBIO;
 
   excelFileUrl = '';
 

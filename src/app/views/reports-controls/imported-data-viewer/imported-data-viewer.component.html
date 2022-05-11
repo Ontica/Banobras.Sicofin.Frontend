@@ -13,14 +13,14 @@
 
     </div>
 
-    <div class="card-header-options">
+    <div class="card-header-options" *empNgHasPermission="permissionForOptions">
 
-      <button class="btn" *ngIf="canEditData"
+      <button class="btn" *ngIf="showEditData"
         (click)="onEditDataClicked()">
         Edición de {{dataType}}
       </button>
 
-      <button class="btn" *ngIf="canImportData"
+      <button class="btn" *ngIf="showImportData"
         (click)="displayImportModal = true">
         Importar {{dataType}}
       </button>

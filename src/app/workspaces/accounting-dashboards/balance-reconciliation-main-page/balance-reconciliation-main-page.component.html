@@ -4,6 +4,7 @@
 
     <emp-fa-imported-data-viewer
       dataType="conciliaciones"
+      [permissionForOptions]="permissionToImport"
       [typeFieldConfig]="{show: true, required: true, list: reconciliationTypeList}"
       [importTypeRequired]="true"
       [multiFiles]="true"

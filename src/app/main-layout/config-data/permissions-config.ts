@@ -22,8 +22,11 @@ export enum PermissionsLibrary {
   ROUTE_REPORTES_FISCALES = 'route-reportes-fiscales',
 
   ROUTE_ACCOUNTING_CATALOGUES_AND_RULES = 'route-accounting-catalogues-and-rules',
-  ROUTE_SYSTEM_MANAGEMENT = 'route-system-management',
+  ROUTE_DATOS_OPERACION = 'route-datos-operacion',
+
+  ROUTE_PANEL_CONTROL = 'route-panel-control',
   ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',
+  ROUTE_TIPOS_CAMBIO = 'route-tipos-cambio',
 
   FEATURE_DATABASE_IMPORT = 'feature-database-import',
   FEATURE_ACCOUNTING_CALENDARS_EDITION = 'feature-accounting-calendars-edition',
@@ -31,6 +34,9 @@ export enum PermissionsLibrary {
   FEATURE_EP_CONCILIACION_SIC = 'feature-ep-conciliacion-sic',
   FEATURE_EP_EXPORTACION_SALDOS_MENSUALES = 'feature-ep-exportacion-saldos-mensuales',
   FEATURE_EP_EXPORTACION_SALDOS_DIARIOS = 'feature-ep-exportacion-saldos-diarios',
+  FEATURE_IMPORTACION_CONCILIACIONES = 'feature-importacion-conciliaciones',
+  FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
+  FEATURE_IMPORTACION_DATOS_OPERACION = 'feature-importacion-datos-operacion',
 }
 
 
@@ -161,7 +167,7 @@ export const ROUTES_LIBRARY = {
     fullpath: '/reglas-y-catalogos/auxiliares',
   },
   reglas_y_catalogos_datos_operacion: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
+    permission: PermissionsLibrary.ROUTE_DATOS_OPERACION,
     parent: 'reglas-y-catalogos',
     path: 'datos-operacion',
     fullpath: '/reglas-y-catalogos/datos-operacion',
@@ -183,7 +189,7 @@ export const ROUTES_LIBRARY = {
   // #region system-management-routing module
 
   administracion_panel_de_control: {
-    permission: PermissionsLibrary.ROUTE_SYSTEM_MANAGEMENT,
+    permission: PermissionsLibrary.ROUTE_PANEL_CONTROL,
     parent: 'administracion',
     path: 'panel-de-control',
     fullpath: '/administracion/panel-de-control',
@@ -195,7 +201,7 @@ export const ROUTES_LIBRARY = {
     fullpath: '/administracion/generacion-de-saldos',
   },
   administracion_tipos_de_cambio: {
-    permission: PermissionsLibrary.ROUTE_SYSTEM_MANAGEMENT,
+    permission: PermissionsLibrary.ROUTE_TIPOS_CAMBIO,
     parent: 'administracion',
     path: 'tipos-de-cambio',
     fullpath: '/administracion/tipos-de-cambio',

@@ -17,6 +17,8 @@ import { ReconciliationType, InputDatasetsCommand, ReconciliationDatasets, Impor
 
 import { ReconciliationDataService } from '@app/data-services';
 
+import { PermissionsLibrary } from '@app/main-layout';
+
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import {
@@ -39,6 +41,8 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   reconciliationCommand: ReconciliationCommand = null;
 
   reconciliationDataTable: ReconciliationData = Object.assign({}, EmptyReconciliationData);
+
+  permissionToImport = PermissionsLibrary.FEATURE_IMPORTACION_CONCILIACIONES;
 
   fileUrl = '';
 

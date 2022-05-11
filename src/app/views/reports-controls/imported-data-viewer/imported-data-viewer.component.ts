@@ -9,6 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
+import { PermissionsLibrary } from '@app/main-layout';
+
 import { DataTable, DataTableCommand, DefaultExportationType, DefaultFieldConfig, EmptyDataTable,
          EmptyImportDatasets, ExportationType, FieldConfig, ImportDatasets } from '@app/models';
 
@@ -42,11 +44,13 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() dataType = '';
 
+  @Input() permissionForOptions: PermissionsLibrary = null;
+
   @Input() showIconButtonToSubmit = false;
 
-  @Input() canImportData = true;
+  @Input() showImportData = true;
 
-  @Input() canEditData = false;
+  @Input() showEditData = false;
 
   @Input() periodRequired = false;
 
