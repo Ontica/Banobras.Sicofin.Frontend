@@ -72,8 +72,6 @@ export class AuthenticationService {
 
     const principal = new Principal(sessionToken,
                                     principalData.identity,
-                                    principalData.claims,
-                                    principalData.roles,
                                     principalData.permissions,
                                     defaultRoute);
     this.session.setPrincipal(principal);

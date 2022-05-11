@@ -22,7 +22,7 @@
     <div class="menu-user-info-container"  (click)="$event.stopPropagation();$event.preventDefault();">
       <span class="menu-user-name">{{principal.identity ? principal.identity.name : ''}}</span>
       <span class="tag-info tag-small" [style.marginRight]="0" *ngIf="principal.identity" >
-        {{principal.roles.length > 0 ? principal.roles[0] : 'User'}}
+        User
       </span>
     </div>
 

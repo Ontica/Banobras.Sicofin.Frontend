@@ -6,17 +6,6 @@
  */
 
 
-export interface Claim {
-  readonly type: string;
-  readonly value: any;
-}
-
-
-export class ClaimsList {
-  constructor(public claims: Claim[]) { }
-}
-
-
 export interface Identity {
   readonly username: string;
   readonly email: string;
@@ -34,8 +23,6 @@ export interface SessionToken {
 
 
 export interface PrincipalData {
-  readonly claims: Claim[];
   readonly identity: Identity;
-  readonly roles: string[];
   permissions: string[];
 }
