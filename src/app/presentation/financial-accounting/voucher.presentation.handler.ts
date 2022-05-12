@@ -28,7 +28,6 @@ export enum SelectorType {
   FUNCTIONAL_AREAS_LIST = 'FA.Vouchers.Selector.FunctionalAreas.List',
   TRANSACTION_TYPES_LIST = 'FA.Vouchers.Selector.TransactionTypes.List',
   VOUCHER_TYPES_LIST = 'FA.Vouchers.Selector.VoucherTypes.List',
-  VOUCHER_SPECIAL_CASE_TYPES_LIST = 'FA.Vouchers.Selector.VoucherSpecialCaseTypes.List',
   TRANSACTIONAL_SYSTEMS_LIST = 'FA.Vouchers.Selector.TransactionalSystems.List',
   LIST_FILTER_DATA = 'FA.Vouchers.Selectors.VouchersListFilter.Data',
 }
@@ -39,7 +38,6 @@ const initialState: StateValues = [
   { key: SelectorType.FUNCTIONAL_AREAS_LIST, value: [] },
   { key: SelectorType.TRANSACTION_TYPES_LIST, value: [] },
   { key: SelectorType.VOUCHER_TYPES_LIST, value: [] },
-  { key: SelectorType.VOUCHER_SPECIAL_CASE_TYPES_LIST, value: [] },
   { key: SelectorType.TRANSACTIONAL_SYSTEMS_LIST, value: [] },
   { key: SelectorType.LIST_FILTER_DATA, value: EmptyVoucherFilterData },
 ];
@@ -79,11 +77,6 @@ export class VoucherPresentationHandler extends AbstractPresentationHandler {
 
       case SelectorType.VOUCHER_TYPES_LIST:
         provider = () => this.data.getVoucherTypes();
-
-        return super.selectFirst<U>(selectorType, provider);
-
-      case SelectorType.VOUCHER_SPECIAL_CASE_TYPES_LIST:
-        provider = () => this.data.getVoucherSpecialCaseTypes();
 
         return super.selectFirst<U>(selectorType, provider);
 

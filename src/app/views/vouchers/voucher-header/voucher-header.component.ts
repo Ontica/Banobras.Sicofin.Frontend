@@ -165,7 +165,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     combineLatest([
       this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
-      this.helper.select<VoucherSpecialCaseType[]>(VoucherStateSelector.VOUCHER_SPECIAL_CASE_TYPES_LIST),
+      this.vouchersData.getVoucherSpecialCaseTypes(),
       this.helper.select<Identifiable[]>(VoucherStateSelector.FUNCTIONAL_AREAS_LIST),
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
