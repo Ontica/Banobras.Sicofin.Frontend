@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Directive, HostListener, ElementRef, OnInit, Renderer2, Input } from '@angular/core';
+import { Directive, HostListener, ElementRef, OnInit, Input } from '@angular/core';
 
 import { FormatLibrary } from '../utils';
 
@@ -15,10 +15,9 @@ import { FormatLibrary } from '../utils';
 })
 export class EmpTextareaAutoresizeDirective implements OnInit {
 
-  @Input() maxHeightTextarea = 68;
+  @Input() maxHeightTextarea = 72;
 
-  constructor(private elementRef: ElementRef,
-              private renderer: Renderer2) { }
+  constructor(private elementRef: ElementRef) { }
 
 
   ngOnInit() {
@@ -39,7 +38,8 @@ export class EmpTextareaAutoresizeDirective implements OnInit {
 
 
   private validateResize() {
-    this.renderer.setStyle(this.elementRef.nativeElement, 'max-height', this.maxHeightTextarea + 'px');
+    const maxHeight = !!this.maxHeightTextarea ? this.maxHeightTextarea + 'px' : '';
+    this.elementRef.nativeElement.style.maxHeight = maxHeight;
 
     if (this.elementRef.nativeElement.scrollHeight) {
       setTimeout(() => this.resize());
@@ -49,11 +49,11 @@ export class EmpTextareaAutoresizeDirective implements OnInit {
 
   private resize() {
     const currentHeight = FormatLibrary.stringToNumber(this.elementRef.nativeElement.style.height);
-    if (currentHeight >= this.maxHeightTextarea) {
-      this.renderer.setStyle(this.elementRef.nativeElement, 'overflow', 'auto');
+    if (!!this.maxHeightTextarea && currentHeight >= this.maxHeightTextarea) {
+      this.elementRef.nativeElement.style.overflow = 'auto';
       this.elementRef.nativeElement.style.height = this.maxHeightTextarea + 'px';
     } else {
-      this.renderer.setStyle(this.elementRef.nativeElement, 'overflow', 'hidden');
+      this.elementRef.nativeElement.style.overflow = 'hidden';
       this.elementRef.nativeElement.style.height = 'auto';
       this.elementRef.nativeElement.style.height = this.elementRef.nativeElement.scrollHeight + 'px';
     }
