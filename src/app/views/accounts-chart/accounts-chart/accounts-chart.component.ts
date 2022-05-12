@@ -5,13 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services';
 
-import { AccountsChart, AccountsSearchCommand, EmptyAccountsChart,
+import { Account, AccountsChart, AccountsSearchCommand, EmptyAccount, EmptyAccountsChart,
          EmptyAccountsSearchCommand } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
@@ -21,6 +21,8 @@ import { sendEvent } from '@app/shared/utils';
 import {
   ExportReportModalEventType
 } from '../../reports-controls/export-report-modal/export-report-modal.component';
+
+import { AccountEditionWizardEventType } from '../account-edition/account-edition-wizard.component';
 
 import { AccountsChartFilterEventType } from '../accounts-chart-filter/accounts-chart-filter.component';
 
@@ -35,6 +37,8 @@ export enum AccountsChartEventType {
   templateUrl: './accounts-chart.component.html',
 })
 export class AccountsChartComponent {
+
+  @Input() selectedAccount: Account = EmptyAccount;
 
   @Output() accountsChartEvent = new EventEmitter<EventInfo>();
 
@@ -58,8 +62,34 @@ export class AccountsChartComponent {
 
   showFilters = false;
 
+  displayAccountEditionWizard = false;
+
+
   constructor(private accountsChartData: AccountsChartDataService,
               private messageBox: MessageBoxService) { }
+
+
+  onCreateAccountButtonClicked() {
+    this.displayAccountEditionWizard = true;
+  }
+
+
+  onAccountEditionWizardEvent(event) {
+    switch (event.type as AccountEditionWizardEventType) {
+      case AccountEditionWizardEventType.CLOSE_MODAL_CLICKED:
+        this.displayAccountEditionWizard = false;
+        break;
+
+      case AccountEditionWizardEventType.ACCOUNT_CREATED:
+        Assertion.assertValue(event.payload.account, 'event.payload.account');
+        sendEvent(this.accountsChartEvent, AccountsChartEventType.ACCOUNT_SELECTED, event.payload)
+        break;
+
+      default:
+        break;
+    }
+
+  }
 
 
   onAccountsChartFilterEvent(event) {

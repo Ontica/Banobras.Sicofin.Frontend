@@ -30,7 +30,8 @@
 
     <cdk-virtual-scroll-viewport itemSize="35">
 
-      <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item">
+      <div *cdkVirtualFor="let account of accountsChart.accounts;" class="list-item"
+        [class.list-item-selected]="isSelected(account)">
 
         <div class="list-item-container">
 

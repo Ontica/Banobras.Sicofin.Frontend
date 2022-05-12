@@ -13,6 +13,15 @@
 
     </div>
 
+    <div class="card-header-options">
+
+      <button class="btn-action"
+        (click)="onCreateAccountButtonClicked()">
+        Agregar cuenta
+      </button>
+
+    </div>
+
   </div>
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
@@ -31,6 +40,7 @@
 
       <emp-fa-accounts-chart-list fxFlex
         [accountsChart]="accountsChart"
+        [selectedAccount]="selectedAccount"
         (accountsChartListEvent)="onAccountsChartListEvent($event)">
 
       </emp-fa-accounts-chart-list>
@@ -40,6 +50,11 @@
   </div>
 
 </div>
+
+<emp-fa-account-edition-wizard *ngIf="displayAccountEditionWizard"
+  (accountEditionWizardEvent)="onAccountEditionWizardEvent($event)">
+
+</emp-fa-account-edition-wizard>
 
 <emp-fa-export-report-modal *ngIf="displayExportModal"
   title="Exportar catálogo de cuentas"

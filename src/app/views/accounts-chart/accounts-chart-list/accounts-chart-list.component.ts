@@ -8,11 +8,11 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output,
-         ViewChild } from '@angular/core';
+         SimpleChanges, ViewChild } from '@angular/core';
 
 import { EventInfo, isEmpty } from '@app/core';
 
-import { AccountDescriptor, AccountsChart, EmptyAccountsChart } from '@app/models';
+import { Account, AccountDescriptor, AccountsChart, EmptyAccount, EmptyAccountsChart } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -35,23 +35,34 @@ export class AccountsChartListComponent implements OnChanges {
 
   @Input() accountsChart: AccountsChart = EmptyAccountsChart;
 
+  @Input() selectedAccount: Account = EmptyAccount;
+
   @Output() accountsChartListEvent = new EventEmitter<EventInfo>();
 
   maxLevel = 11;
 
-  ngOnChanges(): void {
-    if (this.virtualScroll) {
-      this.virtualScroll.scrollToIndex(0);
-    }
 
-    if (this.displayAccountsChartList && this.accountsChart.accounts.length > 0) {
-      this.maxLevel = this.accountsChart.accounts
-                      .reduce((prev, current) => (prev.level > current.level) ? prev : current).level;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.accountsChart) {
+      if (this.virtualScroll) {
+        this.virtualScroll.scrollToIndex(0);
+      }
+
+      if (this.displayAccountsChartList && this.accountsChart.accounts.length > 0) {
+        this.maxLevel = this.accountsChart.accounts
+                        .reduce((prev, current) => (prev.level > current.level) ? prev : current).level;
+      }
     }
   }
 
+
   get displayAccountsChartList() {
     return !isEmpty(this.accountsChart);
+  }
+
+
+  isSelected(account: Account) {
+    return (this.selectedAccount.uid === account.uid);
   }
 
 

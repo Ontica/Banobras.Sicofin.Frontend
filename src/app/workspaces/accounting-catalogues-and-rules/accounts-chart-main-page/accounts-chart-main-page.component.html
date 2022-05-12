@@ -2,7 +2,9 @@
 
   <div class="primary priority" [fxHide.lt-lg]="displayAccountChartTabbed">
 
-    <emp-fa-accounts-chart (accountsChartEvent)="onAccountsChartEvent($event)">
+    <emp-fa-accounts-chart
+      [selectedAccount]="selectedAccount"
+      (accountsChartEvent)="onAccountsChartEvent($event)">
 
     </emp-fa-accounts-chart>
 
