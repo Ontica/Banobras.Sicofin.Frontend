@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { Account, AccountsChart, AccountsChartMasterData, AccountsSearchCommand,
-         FileReport } from '@app/models';
+import { Account, AccountEditionCommand, AccountEditionResult, AccountsChart, AccountsChartMasterData,
+         AccountsSearchCommand, FileReport } from '@app/models';
 
 
 @Injectable()
@@ -20,14 +20,6 @@ export class AccountsChartDataService {
 
 
   constructor(private http: HttpService) { }
-
-
-  getAccount(accountsChartUID: string,
-             accountUID: string): Observable<Account> {
-    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
-
-    return this.http.get<Account>(path);
-  }
 
 
   getAccountsChartsList(): Observable<Identifiable[]> {
@@ -44,17 +36,6 @@ export class AccountsChartDataService {
   }
 
 
-  exportAccountsToExcel(accountsChartUID: string,
-                        searchCommand: AccountsSearchCommand): Observable<FileReport> {
-    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
-    Assertion.assertValue(searchCommand, 'searchCommand');
-
-    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/excel`;
-
-    return this.http.post<FileReport>(path, searchCommand);
-  }
-
-
   searchAccounts(accountsChartUID: string,
                  searchCommand: AccountsSearchCommand): Observable<AccountsChart> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
@@ -66,10 +47,38 @@ export class AccountsChartDataService {
   }
 
 
+  exportAccountsToExcel(accountsChartUID: string,
+                        searchCommand: AccountsSearchCommand): Observable<FileReport> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(searchCommand, 'searchCommand');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/excel`;
+
+    return this.http.post<FileReport>(path, searchCommand);
+  }
+
+
   cleanUpAccounts(): Observable<string> {
     const path = `v2/financial-accounting/accounts-charts/cleanup`;
 
     return this.http.post<string>(path);
+  }
+
+
+  getAccount(accountsChartUID: string,
+             accountUID: string): Observable<Account> {
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
+
+    return this.http.get<Account>(path);
+  }
+
+
+  editAccount(command: AccountEditionCommand): Observable<AccountEditionResult> {
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/accounts-charts/process-command`;
+
+    return this.http.post<AccountEditionResult>(path, command);
   }
 
 }

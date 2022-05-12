@@ -63,6 +63,12 @@ export enum DebtorCreditorType {
 }
 
 
+export const DebtorCreditorTypesList: string[] = [
+   DebtorCreditorType.Deudora,
+   DebtorCreditorType.Acreedora,
+];
+
+
 export interface AccountsChart {
   uid: string;
   name: string;

@@ -24,6 +24,8 @@ export * from './account-statement';
 
 export * from './accounts-chart';
 
+export * from './account-edition';
+
 export * from './balances-store';
 
 export * from './balances';

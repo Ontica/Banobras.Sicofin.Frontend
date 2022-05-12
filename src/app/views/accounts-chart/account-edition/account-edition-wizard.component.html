@@ -1,0 +1,304 @@
+<emp-ng-modal-window [config]="{width: '900px'}">
+
+  <emp-ng-card
+    title="Asistente para agregar cuenta"
+    [hint]="stepper.selectedIndex > 0 ? accountNameText : 'Información de la cuenta a crear en SICOFIN'"
+    (cardClose)="onClose()">
+
+    <div [empNgSpinnerHost]="spinner">
+
+      <emp-ng-spinner #spinner [visible]="isLoading || submitted">
+
+      </emp-ng-spinner>
+
+      <mat-stepper #stepper linear labelPosition="bottom">
+
+        <mat-step #infoStep
+          [stepControl]="accountHeader.formHandler.form" [editable]="!accountCreated">
+
+          <ng-template matStepLabel>Información</ng-template>
+          <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
+
+          <div class="section-title"> Información general de la cuenta </div>
+
+          <div class="step-container">
+
+            <emp-fa-account-header #accountHeader
+              [account]="account"
+              [accountsChartMasterDataList]="accountsChartMasterDataList"
+              [selectedAccountChart]="selectedAccountChart"
+              (accountHeaderEvent)="onAccountHeaderEvent($event)">
+
+            </emp-fa-account-header>
+
+          </div>
+
+          <mat-divider class="divider-stepper-margin"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button matStepperNext
+                [class.btn]="!isFormAccountValid"
+                [class.btn-action]="isFormAccountValid"
+                [style.marginRight.px]="8"
+                (click)="accountHeader.invalidateForm()">
+                Siguiente
+              </button>
+
+            </div>
+
+          </div>
+
+        </mat-step>
+
+
+        <mat-step #currenciesStep
+          [stepControl]="accountCurrenciesTable.formHandler.form" [editable]="!accountCreated">
+
+          <ng-template matStepLabel>Monedas</ng-template>
+          <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
+
+          <div class="section-title" [style.marginRight]="0"> Asignación de monedas </div>
+
+          <div class="step-container">
+
+            <emp-fa-account-items-table #accountCurrenciesTable
+              itemType="currencies"
+              [dataList]="selectedAccountChart?.currencies ?? []"
+              (accountItemsTableEvent)="onAccountCurrenciesTableEvent($event)">
+
+            </emp-fa-account-items-table>
+
+          </div>
+
+          <mat-divider class="divider-stepper-margin"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button matStepperPrevious
+                class="btn" [style.marginRight.px]="16" >
+                Anterior
+              </button>
+
+              <button matStepperNext
+                [class.btn]="!isFormCurrenciesValid"
+                [class.btn-action]="isFormCurrenciesValid">
+                Siguiente
+              </button>
+
+            </div>
+
+          </div>
+
+        </mat-step>
+
+
+        <mat-step #sectorsStep *ngIf="sectorsRequired"
+          [stepControl]="accountSectorsTable.formHandler.form" [editable]="!accountCreated">
+
+          <ng-template matStepLabel>Sectores</ng-template>
+          <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
+
+          <div class="section-title" [style.marginRight]="0"> Asignación de sectores </div>
+
+          <div class="step-container">
+
+            <emp-fa-account-items-table #accountSectorsTable
+              itemType="sectors"
+              [dataList]="selectedAccountChart?.sectors ?? []"
+              (accountItemsTableEvent)="onAccountSectorsTableEvent($event)">
+
+            </emp-fa-account-items-table>
+
+          </div>
+
+
+          <mat-divider class="divider-stepper-margin"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button matStepperPrevious
+                class="btn" [style.marginRight.px]="16" >
+                Anterior
+              </button>
+
+              <button matStepperNext
+                [class.btn]="!isFormSectorsValid"
+                [class.btn-action]="isFormSectorsValid">
+                Siguiente
+              </button>
+
+            </div>
+
+          </div>
+
+        </mat-step>
+
+
+        <mat-step #roleForSectorsStep *ngIf="sectorsRequired"
+          [stepControl]="accountRoleForSectorsTable.formHandler.form" [editable]="!accountCreated">
+
+          <ng-template matStepLabel>Rol por sector</ng-template>
+          <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
+
+          <div class="section-title" [style.marginRight]="0"> Sectores que se manejarán a nivel de auxiliar </div>
+
+          <div class="step-container">
+
+            <emp-fa-account-items-table #accountRoleForSectorsTable
+              itemType="sectors"
+              [selectionRequired]="false"
+              [dataList]="selectedSectorsList ?? []"
+              (accountItemsTableEvent)="onAccountRoleForSectorsTableEvent($event)">
+
+            </emp-fa-account-items-table>
+
+          </div>
+
+
+          <mat-divider class="divider-stepper-margin"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button matStepperPrevious
+                class="btn" [style.marginRight.px]="16" >
+                Anterior
+              </button>
+
+              <button matStepperNext
+                [class.btn]="!isFormRoleForSectorsValid"
+                [class.btn-action]="isFormRoleForSectorsValid">
+                Siguiente
+              </button>
+
+            </div>
+
+          </div>
+
+        </mat-step>
+
+        <mat-step #resumenStep [completed]="accountCreated">
+
+          <ng-template matStepLabel>Confirmar</ng-template>
+          <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
+
+          <div class="section-title" [style.marginRight]="0"> Confirmación de información de la cuenta </div>
+          <div class="step-container">
+
+            <ng-container *ngIf="isReadyForDryRun">
+
+              Se analizará la información de la cuenta para realizar la operación: <br><br>
+
+              <table [style.margin]="0">
+                <tr>
+                  <td class='nowrap'> Catálogo de cuentas: </td>
+                  <td><strong>{{selectedAccountChart?.name}}</strong></td>
+                </tr>
+                <tr>
+                  <td class='nowrap'> Cuenta: </td>
+                  <td><strong>{{accountEditionCommand.accountFields?.accountNumber}}: {{accountEditionCommand.accountFields?.name}}</strong></td>
+                </tr>
+                <tr>
+                  <td class='nowrap'> Fecha de alta: </td>
+                  <td> <strong>{{accountEditionCommand.applicationDate | dateTimeFormat }}</strong> </td>
+                </tr>
+              </table>
+
+              <br> ¿Analizo la cuenta?
+
+            </ng-container>
+
+            <ng-container *ngIf="executedDryRun && !accountCreated">
+
+              <ng-container *ngIf="isDryRunResultValid">
+
+                Se realizarán las siguientes acciones: <br><br>
+
+                <ul class="info-list">
+                  <li *ngFor="let action of this.accountEditionResult.actions">{{action}}</li>
+                </ul>
+
+                <br>
+                ¿Realizo las acciones?
+
+              </ng-container>
+
+              <ng-container *ngIf="!isDryRunResultValid">
+
+                No es posible realizar lo operación. <br><br>
+
+                <ul class="info-list">
+                  <li *ngFor="let issue of accountEditionResult.issues">{{issue}}</li>
+                </ul>
+
+              </ng-container>
+
+            </ng-container>
+
+            <ng-container *ngIf="accountCreated">
+
+              Se realizaron las siguientes acciones: <br><br>
+
+              <ul class="info-list">
+                <li *ngFor="let action of this.accountEditionResult.actions">{{action}}</li>
+              </ul>
+
+              <br>
+
+              Operación realizada correctamente.
+
+            </ng-container>
+
+          </div>
+
+          <mat-divider class="divider-stepper-margin"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button matStepperPrevious
+                class="btn" [style.marginRight.px]="8">
+                Anterior
+              </button>
+
+              <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0">
+
+              </mat-divider>
+
+              <button
+                [class.btn]="!isReadyForDryRun"
+                [class.btn-action]="isReadyForDryRun"
+                [style.marginRight.px]="16"
+                (click)="onDryRunDataClicked()">
+                Analizar cuenta
+              </button>
+
+              <button
+                [class.btn]="!isDryRunResultValid || accountCreated "
+                [class.btn-action]="isDryRunResultValid && !accountCreated"
+                (click)="onEditAccountClicked()">
+                {{ isSaved ? 'Guardar cambios' : 'Agregar cuenta' }}
+              </button>
+
+            </div>
+
+          </div>
+
+        </mat-step>
+
+      </mat-stepper>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>
