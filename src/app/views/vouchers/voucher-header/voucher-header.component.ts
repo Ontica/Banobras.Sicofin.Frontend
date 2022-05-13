@@ -120,7 +120,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       return 'Todas';
     }
 
-    return this.accountChartSelected ? 'Seleccionar' : 'Seleccione el tipo de contabilidad';
+    return this.accountChartSelected ? 'Seleccionar' : 'Seleccionar el tipo de contabilidad';
   }
 
 

@@ -262,7 +262,7 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   private showConfirmMessage(eventType: SubledgerAccountHeaderEventType) {
     let confirmType: 'AcceptCancel' | 'DeleteCancel' = 'AcceptCancel';
     let title = 'Activar auxiliar';
-    let message = `Esta operación activara el auxiliar
+    let message = `Esta operación activará el auxiliar
                    <strong> ${this.subledgerAccount.number}: ${this.subledgerAccount.name}</strong>.
                    <br><br>¿Activo al auxiliar?`;
 

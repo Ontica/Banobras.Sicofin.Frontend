@@ -178,7 +178,7 @@
                     empNgCurrencyDisplaySymbol=""
                     [empNgCurrencyFractionDigit]="6"
                     [formControlName]="controls.exchangeRate"
-                    [placeholder]="!currencySelected ? 'Seleccione la moneda' : ''"
+                    [placeholder]="!currencySelected ? 'Seleccionar la moneda' : ''"
                     [ngClass]="!currencySelected ? 'text-align-left' : 'text-align-right'"
                     [class.invalid-control]="formHandler.showInvalidControl(controls.exchangeRate)"
                     (change)="onCalculateBaseCurrencyAmount()">

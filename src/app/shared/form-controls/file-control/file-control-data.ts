@@ -47,7 +47,7 @@ export const DefaultFileControlConfig: FileControlConfig = {
   fileName: null,
   filesTypes: ['all'],
   maxFiles: 1,
-  placeholder: 'Elija un archivo o arrástrelo y suéltelo aquí.',
+  placeholder: 'Elegir un archivo o arrástrarlo y soltarlo aquí.',
   placeholderReadonly: 'No se han agregado archivos.',
   showFileInfo: true,
   tagDefault: null,

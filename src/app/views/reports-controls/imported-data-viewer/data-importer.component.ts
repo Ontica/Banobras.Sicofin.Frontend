@@ -108,7 +108,7 @@ export class DataImporterComponent implements OnChanges{
 
 
   get fileControlPlaceholder(): string {
-    return `Elija o arrastre el archivo ${this.filesTypesValid.length > 0 ? this.filesTypesValid[0] : ''}.`;
+    return `Elegir o arrastrar el archivo ${this.filesTypesValid.length > 0 ? this.filesTypesValid[0] : ''}.`;
   }
 
 

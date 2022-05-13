@@ -37,7 +37,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
   @Output() subledgerAccountsViewerEvent = new EventEmitter<EventInfo>();
 
   accountChartName = '';
-  cardHint = 'Selecciona los filtros';
+  cardHint = 'Seleccionar los filtros';
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -102,7 +102,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
   private setText(displayedEntriesMessage?: string) {
     if (!this.commandExecuted) {
-      this.cardHint = 'Selecciona los filtros';
+      this.cardHint = 'Seleccionar los filtros';
       return;
     }
 

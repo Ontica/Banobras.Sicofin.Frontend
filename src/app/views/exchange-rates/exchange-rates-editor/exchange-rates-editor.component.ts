@@ -54,7 +54,7 @@ export class ExchangeRatesEditorComponent {
       return 'Cargando...';
     }
 
-    return !this.exchangeRateValuesSelected ? 'Seleccione el tipo de cambio a editar.' :
+    return !this.exchangeRateValuesSelected ? 'Seleccionar el tipo de cambio a editar.' :
       'El tipo de cambio seleccionado no tiene monedas asignadas.';
   }
 

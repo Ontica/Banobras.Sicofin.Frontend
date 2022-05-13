@@ -444,7 +444,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     }
 
     if ((this.isDataBaseImport || this.isExcelImport ) && this.selectedPartsToImport.length === 0) {
-      this.messageBox.showError('Seleccione los datos a importar.');
+      this.messageBox.showError('Seleccionar los datos a importar.');
     }
   }
 

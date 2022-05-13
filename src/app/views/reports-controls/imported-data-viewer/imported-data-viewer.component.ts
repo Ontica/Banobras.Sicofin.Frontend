@@ -186,7 +186,7 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   private setText(displayedEntriesMessage?: string) {
     if (!this.commandExecuted) {
-      this.cardHint = 'Selecciona los filtros';
+      this.cardHint = 'Seleccionar los filtros';
       return;
     }
 

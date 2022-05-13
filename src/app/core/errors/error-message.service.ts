@@ -27,7 +27,7 @@ export class ErrorMessageService {
 
   handleClientSideError(error) {
     this.displayConsoleMessage('CLIENT SIDE ERROR', error.message);
-    this.showErrorMessage(`Ocurrió un error de aplicación, consulte la consola para ver mas detalles.`);
+    this.showErrorMessage(`Ocurrió un error de aplicación. Favor de consultar la consola para ver más detalles.`);
   }
 
 
@@ -61,7 +61,7 @@ export class ErrorMessageService {
 
   private handle401Error() {
     if (!this.messageBox.isOpen()) {
-      this.messageBox.showError('Su sesión ha expirado, inicie sesión de nuevo para continuar.')
+      this.messageBox.showError('La sesión ha expirado. Se requiere iniciar una nueva sesión para continuar.')
         .toPromise()
         .then(x => this.router.navigateByUrl('security/login'));
     }

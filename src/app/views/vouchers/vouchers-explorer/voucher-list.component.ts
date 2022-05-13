@@ -153,7 +153,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
   onExecuteOperationClicked() {
     if (!this.operationValid) {
-      this.messageBox.showError('Operación no valida, verifique los datos.');
+      this.messageBox.showError('Operación no válida. Favor de verificar los datos.');
       return;
     }
 
@@ -255,7 +255,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
         question = '¿Imprimo las pólizas?';
         break;
       case VouchersOperationType.reasign:
-        operation = `reasignara a <strong>${this.editorSelected.name}</strong>`;
+        operation = `reasignará a <strong>${this.editorSelected.name}</strong>`;
         question = '¿Reasigno las pólizas?';
         break;
       default:

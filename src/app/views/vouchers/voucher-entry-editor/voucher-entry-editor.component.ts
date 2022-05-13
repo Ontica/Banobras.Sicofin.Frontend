@@ -161,14 +161,14 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       }
       return 'No aplica';
     }
-    return this.readonly ? '' : 'Seleccione la cuenta';
+    return this.readonly ? '' : 'Seleccionar la cuenta';
   }
 
 
   get placeholderSubledgerAccount(): string {
     if (this.formHandler.getControl(this.controls.ledgerAccount).valid) {
       if (this.sectorRequired && this.formHandler.getControl(this.controls.sector).invalid) {
-        return 'Seleccione el sector';
+        return 'Seleccionar el sector';
       }
 
       if (this.subledgerAccountRequired) {
@@ -176,13 +176,13 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       }
       return 'No aplica';
     }
-    return this.readonly ? '' : 'Seleccione la cuenta';
+    return this.readonly ? '' : 'Seleccionar la cuenta';
   }
 
 
   get placeholderCurrency(): string {
     return this.formHandler.getControl(this.controls.ledgerAccount).valid ?
-      'Seleccionar' : 'Seleccione la cuenta';
+      'Seleccionar' : 'Seleccionar la cuenta';
   }
 
 

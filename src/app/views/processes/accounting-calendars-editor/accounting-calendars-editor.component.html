@@ -78,8 +78,8 @@
 
           <div *ngIf="!accountingCalendarSelected || accountingCalendarSelected?.periods.length === 0 "
             class="instruction-text">
-            {{!accountingCalendarSelected ? 'Seleccione el calendario a editar.' :
-              'Al calendario seleccionado no se le han agregado fechas.'}}
+            {{!accountingCalendarSelected ? 'Seleccionar el calendario a editar.' :
+              'No se han agregado fechas al calendario.'}}
           </div>
 
           <div *ngIf="accountingCalendarSelected?.periods.length > 0" [style.paddingRight.px]="8">

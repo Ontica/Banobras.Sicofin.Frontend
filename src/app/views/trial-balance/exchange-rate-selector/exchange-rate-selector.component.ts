@@ -64,7 +64,7 @@ export class ExchangeRateSelectorComponent implements OnChanges {
 
   get exchangeRateTypePlaceholder(): string{
     if (!this.exchangeRateDate) {
-      return 'Seleccione la fecha';
+      return 'Seleccionar la fecha';
     }
 
     return 'Seleccionar';

@@ -76,7 +76,7 @@
 
         <emp-ng-select name="subledgerType" #subledgerType="ngModel"
           [config]="{clearable: true, bindByValue: false, notFoundText: subledgerAccountsForm.ledger ?
-                    'No se encontraron registros' : 'Seleccione una contabilidad'}"
+                    'No se encontraron registros' : 'Seleccionar una contabilidad'}"
           [(ngModel)]="subledgerAccountsForm.type"
           [items]="subledgerAccountsForm.ledger?.subledgerAccountsTypes"
           placeholder="Todos">
