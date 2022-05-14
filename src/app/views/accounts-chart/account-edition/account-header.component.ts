@@ -46,7 +46,7 @@ export class AccountHeaderComponent implements OnInit {
 
   @Input() selectedAccountChart: AccountsChartMasterData = null;
 
-  @Input() editionMode = true;
+  @Input() roleEditionMode = true;
 
   @Output() accountHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -78,6 +78,24 @@ export class AccountHeaderComponent implements OnInit {
   onAccountChartChanges() {
     this.formHandler.getControl(this.controls.role).reset('');
     this.formHandler.getControl(this.controls.accountTypeUID).reset('');
+  }
+
+
+  onApplicationDateChanges(applicationDate) {
+    if (this.isSaved && !this.roleEditionMode) {
+      const isSameDate = DateStringLibrary.compareDates(
+        this.formHandler.getControl(this.controls.startDate).value,
+        applicationDate
+        ) === 0;
+
+      this.formHandler.disableControl(this.controls.accountNumber, !isSameDate);
+      this.formHandler.disableControl(this.controls.role, !isSameDate);
+
+      if (!isSameDate) {
+        this.formHandler.getControl(this.controls.accountNumber).reset(this.account.number);
+        this.formHandler.getControl(this.controls.role).reset(this.account.role);
+      }
+    }
   }
 
 
@@ -114,7 +132,7 @@ export class AccountHeaderComponent implements OnInit {
     this.formHandler.form.reset({
       accountsChartUID: this.selectedAccountChart?.uid ?? '',
       startDate: DateStringLibrary.format(this.account.startDate),
-      applicationDate: DateStringLibrary.today(),
+      applicationDate: '',
       accountNumber: this.account.number,
       name: this.account.name,
       description: this.account.description,
@@ -126,13 +144,19 @@ export class AccountHeaderComponent implements OnInit {
 
 
   private validateDisabledFields() {
-    this.formHandler.disableForm(!this.editionMode);
-
-    if (this.isSaved && this.editionMode) {
+    if (this.isSaved) {
       this.formHandler.disableControl(this.controls.accountsChartUID);
-      this.formHandler.disableControl(this.controls.accountNumber);
       this.formHandler.disableControl(this.controls.startDate);
-      this.formHandler.disableControl(this.controls.role);
+      this.formHandler.disableControl(this.controls.accountNumber);
+
+      if (this.roleEditionMode) {
+        this.formHandler.disableControl(this.controls.name);
+        this.formHandler.disableControl(this.controls.description);
+        this.formHandler.disableControl(this.controls.accountTypeUID);
+        this.formHandler.disableControl(this.controls.debtorCreditor);
+      } else {
+        this.formHandler.disableControl(this.controls.role);
+      }
     }
   }
 

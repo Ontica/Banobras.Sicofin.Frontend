@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
-import { Assertion, DateString, EventInfo, isEmpty } from '@app/core';
+import { Assertion, DateString, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -18,8 +18,9 @@ import { AccountChartStateSelector } from '@app/presentation/exported.presentati
 import { AccountsChartDataService } from '@app/data-services';
 
 import { Account, AccountEditionCommand, AccountEditionCommandType, AccountEditionResult, AccountFields,
-         AccountRole, AccountsChartMasterData, EmptyAccount, EmptyAccountEditionCommand,
-         EmptyAccountEditionResult, Sector, SectorField, SectorRole } from '@app/models';
+         AccountItem, AccountRole, AccountsChartMasterData, EmptyAccount, EmptyAccountEditionCommand,
+         EmptyAccountEditionResult, getAccountEditionTypeName, Sector, SectorField,
+         SectorRole } from '@app/models';
 
 import { AccountHeaderComponent,
          AccountHeaderEventType } from './account-header.component';
@@ -30,7 +31,7 @@ import { AccountItemsTableComponent,
 
 export enum AccountEditionWizardEventType {
   CLOSE_MODAL_CLICKED = 'AccountEditionWizardComponent.Event.CloseModalClicked',
-  ACCOUNT_CREATED = 'AccountEditionWizardComponent.Event.AccountCreated',
+  ACCOUNT_EDITED = 'AccountEditionWizardComponent.Event.AccountEdited',
 }
 
 @Component({
@@ -39,9 +40,12 @@ export enum AccountEditionWizardEventType {
   styles: [`
     .step-container {
       min-height: 265px;
-      max-height: 420px;
       width: 100%;
       margin: auto;
+    }
+
+    .step-list-container {
+      max-height: 365px;
     }
 
     .divider-stepper-margin {
@@ -65,6 +69,10 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
   @Output() accountEditionWizardEvent = new EventEmitter<EventInfo>();
 
+  title = 'Asistente para agregar cuenta';
+
+  accountEditionTypeName = 'Agregar cuenta';
+
   submitted = false;
 
   isLoading = false;
@@ -82,7 +90,13 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
   executedDryRun = false;
 
-  accountCreated = false;
+  accountEdited = false;
+
+  accountCurrenciesList: AccountItem[] = [];
+
+  accountSectorsList: AccountItem[] = [];
+
+  accountSectorsWithSubledgerAccountList: AccountItem[] = [];
 
   helper: SubscriptionHelper;
 
@@ -93,7 +107,12 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.setTitle();
     this.loadDataLists();
+    this.setAccountCurrenciesList();
+    this.setAccountSectorsList();
+    this.setAccountSectorsWithSubledgerAccountList();
+    this.validateApplicationDateToday();
   }
 
 
@@ -102,39 +121,97 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   }
 
 
-  get accountNameText() {
-    return `<strong>${this.selectedAccountChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>` +
-      `${this.accountEditionCommand.accountFields?.accountNumber}: ` +
-      `${this.accountEditionCommand.accountFields?.name}`;
+  get accountNameText(): string {
+    if (this.showInfoStep) {
+      return `<strong>${this.selectedAccountChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>` +
+        `${this.accountEditionCommand.accountFields?.accountNumber}: ` +
+        `${this.accountEditionCommand.accountFields?.name}`;
+    }
+
+    return `<strong>${this.account.accountsChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>` +
+      `${this.account.number}: ` +
+      `${this.account.name}`;
   }
 
 
-  get isSaved() {
+  get isSaved(): boolean {
      return !isEmpty(this.account) ;
   }
 
 
   get sectorsRequired(): boolean {
-    return this.accountEditionCommand?.accountFields?.role === AccountRole.Sectorizada;
+    return this.accountEditionCommand?.accountFields?.role === AccountRole.Sectorizada ||
+      this.account.sectorRules.length !== 0;
+  }
+
+
+  get isRoleEdition(): boolean {
+    return this.accountEditionCommandType === AccountEditionCommandType.UpdateAccountRole;
+  }
+
+
+  get isRemoveCommandType(): boolean {
+    return [AccountEditionCommandType.RemoveAccount,
+            AccountEditionCommandType.RemoveCurrencies,
+            AccountEditionCommandType.RemoveSectors].includes(this.accountEditionCommandType);
+  }
+
+
+  get showInfoStep(): boolean {
+    return [AccountEditionCommandType.UpdateAccountAll,
+            AccountEditionCommandType.CreateAccount,
+            AccountEditionCommandType.UpdateAccountRole,
+            AccountEditionCommandType.UpdateAccount].includes(this.accountEditionCommandType);
+  }
+
+
+  get showCurrenciesStep(): boolean {
+    return [AccountEditionCommandType.UpdateAccountAll,
+            AccountEditionCommandType.CreateAccount,
+            AccountEditionCommandType.AddCurrencies,
+            AccountEditionCommandType.RemoveCurrencies].includes(this.accountEditionCommandType);
+  }
+
+
+  get showSectorsStep(): boolean {
+    return [AccountEditionCommandType.UpdateAccountAll,
+            AccountEditionCommandType.CreateAccount,
+            AccountEditionCommandType.AddSectors,
+            AccountEditionCommandType.RemoveSectors].includes(this.accountEditionCommandType);
   }
 
 
   get isFormAccountValid() : boolean {
+    if (!this.showInfoStep) {
+      return true;
+    }
+
     return !!this.accountHeader?.formHandler?.isValid;
   }
 
 
   get isFormCurrenciesValid() : boolean {
+    if (!this.showCurrenciesStep) {
+      return true;
+    }
+
     return !!this.accountCurrenciesTable?.formHandler?.form.valid;
   }
 
 
   get isFormSectorsValid() : boolean {
+    if (!this.showSectorsStep) {
+      return true;
+    }
+
     return !!this.accountSectorsTable?.formHandler?.form.valid;
   }
 
 
   get isFormRoleForSectorsValid() : boolean {
+    if (!this.showSectorsStep || this.isRemoveCommandType) {
+      return true;
+    }
     return !!this.accountRoleForSectorsTable?.formHandler?.form.valid;
   }
 
@@ -150,7 +227,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
 
   get isReadyForDryRun() {
-    return this.isReadyForSubmit && !this.executedDryRun && !this.accountCreated;
+    return this.isReadyForSubmit && !this.executedDryRun && !this.accountEdited;
   }
 
 
@@ -192,6 +269,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       case AccountItemsTableEventType.FORM_CHANGED:
         Assertion.assertValue(event.payload.items, 'event.payload.items');
         this.accountEditionCommand.currencies = [...[], ...event.payload.items];
+        this.validateSetAplicationDateFromTables(event.payload.applicationDate as DateString);
         this.resetAccountEditionResult();
 
         return;
@@ -209,6 +287,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       case AccountItemsTableEventType.FORM_CHANGED:
         Assertion.assertValue(event.payload.items, 'event.payload.items');
         this.setSectorsWithRoleDefault(event.payload.items);
+        this.validateSetAplicationDateFromTables(event.payload.applicationDate as DateString);
         this.resetAccountEditionResult();
         return;
 
@@ -241,22 +320,24 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.accountEditionCommand.commandType = this.accountEditionCommandType;
-    this.accountEditionCommand.dryRun = true;
-
-    this.editAccount();
+    this.editAccount(this.getAccountEditionCommand(true));
   }
 
 
   onEditAccountClicked() {
-    if (this.submitted || !this.isDryRunResultValid || this.accountCreated) {
+    if (this.submitted || !this.isDryRunResultValid || this.accountEdited) {
       return;
     }
 
-    this.accountEditionCommand.commandType = this.accountEditionCommandType;
-    this.accountEditionCommand.dryRun = false;
+    this.editAccount(this.getAccountEditionCommand(false));
+  }
 
-    this.editAccount();
+
+  private setTitle() {
+    this.accountEditionTypeName = getAccountEditionTypeName(this.accountEditionCommandType);
+    this.title = this.isSaved ?
+      `Asistente para editar cuenta ( ${this.accountEditionTypeName.toLowerCase()} )` :
+      'Asistente para agregar cuenta';
   }
 
 
@@ -272,23 +353,51 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   }
 
 
-  private editAccount() {
+  private editAccount(command: AccountEditionCommand) {
     this.submitted = true;
 
-    this.accountsData.editAccount(this.accountEditionCommand)
+    this.accountsData.editAccount(command)
     .toPromise()
     .then(x => {
       this.accountEditionResult = x;
 
-      if (this.accountEditionCommand.dryRun) {
+      if (command.dryRun) {
         this.executedDryRun = true;
       } else {
-        this.accountCreated = true;
-        sendEvent(this.accountEditionWizardEvent, AccountEditionWizardEventType.ACCOUNT_CREATED,
+        this.accountEdited = true;
+        sendEvent(this.accountEditionWizardEvent, AccountEditionWizardEventType.ACCOUNT_EDITED,
           {account: isEmpty(x.account) ? EmptyAccount : x.account});
       }
     })
     .finally(() => this.submitted = false);
+  }
+
+
+  private setAccountCurrenciesList() {
+    this.accountCurrenciesList = this.account.currencyRules.map(x => Object.create({
+        uid: x.currency.uid,
+        fullName: x.currency.fullName,
+        startDate: x.startDate,
+        endDate: x.endDate,
+      }));
+  }
+
+
+  private setAccountSectorsList() {
+    this.accountSectorsList = this.account.sectorRules.map(x => Object.create({
+        uid: x.sector.uid,
+        fullName: x.sector.fullName,
+        role: x.sectorRole,
+        startDate: x.startDate,
+        endDate: x.endDate,
+      }));
+  }
+
+
+  private setAccountSectorsWithSubledgerAccountList() {
+    this.accountSectorsWithSubledgerAccountList = this.selectedAccountChart.sectors.filter(x =>
+      this.account.sectorRules.find(y => y.uid === x.uid)?.sectorRole === SectorRole.Control
+    )
   }
 
 
@@ -301,6 +410,16 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       this.accountsChartMasterDataList.find(x => x.uid === this.account.accountsChart.uid) :
       this.accountsChartMasterDataList[0];
     this.accountEditionCommand.accountsChartUID = this.selectedAccountChart?.uid ?? '';
+    this.setAccountEditionCommandFromAccount();
+  }
+
+
+  private setAccountEditionCommandFromAccount() {
+    if (this.isSaved && !this.showInfoStep) {
+      this.accountEditionCommand.currencies = this.account.currencyRules.map(x => x.currency.uid);
+      this.setSectorsWithRoleDefault(this.account.sectorRules.map(x => x.sector.uid));
+      this.setRoleForSector(this.account.sectorRules.filter(x => x.sectorRole === 'Control').map(x => x.sector.uid));
+    }
   }
 
 
@@ -319,8 +438,22 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   }
 
 
+  private validateApplicationDateToday() {
+    if (this.accountEditionCommandType === AccountEditionCommandType.RemoveAccount) {
+      this.setApplicationDate(DateStringLibrary.today());
+    }
+  }
+
+
   private setApplicationDate(applicationDate: DateString) {
     this.accountEditionCommand.applicationDate = applicationDate ?? null;
+  }
+
+
+  private validateSetAplicationDateFromTables(applicationDate: DateString) {
+    if (this.isSaved && !this.showInfoStep) {
+      this.setApplicationDate(applicationDate);
+    }
   }
 
 
@@ -351,7 +484,49 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   private resetAccountEditionResult() {
     this.accountEditionResult = EmptyAccountEditionResult;
     this.executedDryRun = false;
-    this.accountCreated = false;
+    this.accountEdited = false;
+  }
+
+
+  private getAccountEditionCommand(dryRun: boolean) {
+    let command: AccountEditionCommand = Object.assign({}, EmptyAccountEditionCommand);
+
+    command.commandType = this.accountEditionCommandType;
+    command.dryRun = dryRun;
+    command.applicationDate = this.accountEditionCommand.applicationDate;
+    command.accountsChartUID = this.accountEditionCommand.accountsChartUID;
+
+    if (this.isSaved) {
+      command.accountUID = this.account.uid;
+    }
+
+    if (this.showInfoStep) {
+      if (this.accountEditionCommandType === AccountEditionCommandType.UpdateAccountRole) {
+        command.newRole = this.accountEditionCommand.accountFields.role;
+      } else {
+        command.accountFields = this.accountEditionCommand.accountFields;
+      }
+    }
+
+    if (this.showCurrenciesStep) {
+      if (this.accountEditionCommandType === AccountEditionCommandType.AddCurrencies) {
+        command.currencies = this.accountEditionCommand.currencies
+          .filter(x => !this.accountCurrenciesList.map(y => y.uid).includes(x));
+      } else {
+         command.currencies = this.accountEditionCommand.currencies;
+      }
+    }
+
+    if (this.showSectorsStep) {
+      if (this.accountEditionCommandType === AccountEditionCommandType.AddSectors) {
+        command.sectors = this.accountEditionCommand.sectors
+          .filter(x => !this.accountSectorsList.map(y => y.uid).includes(x.uid));
+      } else {
+        command.sectors = this.accountEditionCommand.sectors;
+      }
+    }
+
+    return command;
   }
 
 }

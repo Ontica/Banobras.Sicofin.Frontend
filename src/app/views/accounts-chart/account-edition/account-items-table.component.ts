@@ -5,8 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
-         SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -19,6 +18,8 @@ import { EventInfo } from '@app/core';
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
+
+import { AccountItem } from '@app/models';
 
 export enum AccountItemsTableEventType {
   FORM_CHANGED = 'AccountItemsTableComponent.Event.FormChanged',
@@ -34,21 +35,31 @@ enum AccountItemsTableFormControls {
   templateUrl: './account-items-table.component.html',
   styles: [`
     .table-container {
-      max-height: 420px;
+      max-height: 365px;
+      margin-right: 8px;
+    }
+
+    .column-checkbox {
+      padding-top: 4px;
+      padding-bottom: 4px;
     }
   `],
 })
 export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() dataList: any[] = [];
+  @Input() dataList: AccountItem[] = [];
 
-  @Input() selectedList: string[] = [];
+  @Input() selectedList: AccountItem[] = [];
 
-  @Input() itemType: 'currencies' | 'sectors' = 'currencies';
+  @Input() disabledList: AccountItem[] = [];
 
-  @Input() selectionType: 'add' | 'delete' = 'add';
+  @Input() itemType: 'currencies' | 'sectors' | 'roles' = 'currencies';
+
+  @Input() deletingMode = false;
 
   @Input() selectionRequired = true;
+
+  @Input() applicationDateRequired = false;
 
   @Output() accountItemsTableEvent = new EventEmitter<EventInfo>();
 
@@ -60,9 +71,11 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<AccountItem>;
 
-  selection = new SelectionModel<any>(true, []);
+  selection = new SelectionModel<string>(true, []);
+
+  dataDisplayedUIDList: string[] = [];
 
   helper: SubscriptionHelper;
 
@@ -72,13 +85,11 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges() {
     setTimeout(() => {
-      if (changes.dataList || changes.itemType) {
-        this.setFormModel();
-        this.clearSelection();
-        this.setDataTableData();
-      }
+      this.setFormModel();
+      this.setDataTable();
+      this.setSelectionData();
     });
   }
 
@@ -93,23 +104,37 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
-  clearSelection() {
-    this.selection.clear();
-  }
-
-
-  get roleRequired(): boolean {
-    return this.itemType === 'sectors' && this.selectionType !== 'delete';
-  }
-
-
-  get hasEntries() {
+  get hasItems() {
     return !!this.dataSource || this.dataSource?.data.length > 0
   }
 
 
-  get dataForCheckList(): string[] {
-    return this.dataList.map(x => x.uid);
+  get hasDisabledItems() {
+    return this.disabledList.length > 0;
+  }
+
+
+  validateCheckAllChanged(selection) {
+    this.selection = selection;
+
+    if(!this.deletingMode && this.hasDisabledItems) {
+      this.disabledList.forEach(x => this.selection.deselect(x.uid));
+      this.selectedList.forEach(x => this.selection.select(x.uid));
+    }
+  }
+
+
+  showDisabled(uid): boolean {
+    if(this.deletingMode) {
+      return false;
+    }
+
+    return this.disabledList.map(x => x.uid).includes(uid);
+  }
+
+
+  invalidateForm() {
+    this.formHandler.invalidateForm();
   }
 
 
@@ -134,8 +159,7 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   private setFormModel() {
     this.formHandler.form.reset({
-      applicationDate: '',
-      items: [],
+      items: this.deletingMode ? [] : this.selectedList.map(x => x.uid),
     });
     this.validateRequiredFormFields();
   }
@@ -143,29 +167,69 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   private validateRequiredFormFields() {
     if (this.selectionRequired) {
-      this.formHandler.setControlValidators(this.controls.items, [Validators.required, Validators.minLength(1)]);
+      const minLength = this.deletingMode || !this.hasDisabledItems ? 1 : this.selectedList.length + 1;
+      this.formHandler.setControlValidators(this.controls.items, [Validators.required, Validators.minLength(minLength)]);
     } else {
       this.formHandler.clearControlValidators(this.controls.items);
+    }
+
+    if(this.applicationDateRequired) {
+      this.formHandler.setControlValidators(this.controls.applicationDate, Validators.required);
+    } else {
+      this.formHandler.clearControlValidators(this.controls.applicationDate);
     }
   }
 
 
-  private setDataTableData() {
+  private setDataTable() {
     this.setDisplayedColumns();
-    this.dataSource = new MatTableDataSource(this.dataList ?? []);
+
+    if (this.deletingMode) {
+      this.dataSource = new MatTableDataSource(this.selectedList ?? []);
+    } else {
+      const dataListWithSavedData = this.getDataListWithSavedData();
+      this.dataSource = new MatTableDataSource(dataListWithSavedData ?? []);
+    }
+
+    this.dataDisplayedUIDList = this.dataSource.data.map(x => x.uid);
+  }
+
+
+  private setSelectionData() {
+    this.selection.clear();
+
+    if (!this.deletingMode) {
+      this.dataDisplayedUIDList.forEach(x => {
+        if (this.selectedList.map(y => y.uid).includes(x)) {
+          this.selection.select(x);
+        }
+      });
+    }
+  }
+
+
+  private getDataListWithSavedData(): any[] {
+    return this.dataList.map(x => {
+        if (this.selectedList.map(y => y.uid).includes(x.uid)) {
+          return this.selectedList.find(z => z.uid === x.uid);
+        }
+        return x;
+      });
   }
 
 
   private setDisplayedColumns() {
     this.displayedColumns = [...this.displayedColumnsDefault];
 
-    if (this.selectionType !== 'add') {
+    if (this.selectedList.length > 0) {
       if (this.itemType === 'sectors') {
         this.displayedColumns.push('role');
       }
 
-      this.displayedColumns.push('startDate');
-      this.displayedColumns.push('endDate');
+      if (this.itemType !== 'roles') {
+        this.displayedColumns.push('startDate');
+        this.displayedColumns.push('endDate');
+      }
     }
   }
 

@@ -35,7 +35,9 @@
         <label [style.line-height]="'normal'">{{isSaved ? 'Fecha de aplicación:' : 'Fecha de alta:'}}</label>
         <emp-ng-datepicker
           [formControlName]="controls.applicationDate"
-          [showError]="formHandler.showInvalidControl(controls.applicationDate)">
+          [minDate]="isSaved ? account.startDate : null"
+          [showError]="formHandler.showInvalidControl(controls.applicationDate)"
+          (valueChange)="onApplicationDateChanges($event)">
 
         </emp-ng-datepicker>
 

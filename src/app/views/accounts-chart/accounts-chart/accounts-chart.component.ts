@@ -80,15 +80,14 @@ export class AccountsChartComponent {
         this.displayAccountEditionWizard = false;
         break;
 
-      case AccountEditionWizardEventType.ACCOUNT_CREATED:
+      case AccountEditionWizardEventType.ACCOUNT_EDITED:
         Assertion.assertValue(event.payload.account, 'event.payload.account');
-        sendEvent(this.accountsChartEvent, AccountsChartEventType.ACCOUNT_SELECTED, event.payload)
+        sendEvent(this.accountsChartEvent, AccountsChartEventType.ACCOUNT_SELECTED, event.payload);
         break;
 
       default:
         break;
     }
-
   }
 
 
