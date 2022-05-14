@@ -32,6 +32,8 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   @Input() showError = false;
 
+  @Input() minDate = null;
+
   disabled = false;
   date: Date;
 
@@ -87,7 +89,8 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   private validateChange(value: any) {
     if (value) {
-      const date = this.getDateInputValue(value);
+      let date = this.validateMinDate(value);
+      date = this.getDateInputValue(date);
 
       this.setDateAndPropagateChanges(date);
     } else {
@@ -101,8 +104,17 @@ export class DatePickerComponent implements ControlValueAccessor {
   }
 
 
+  private validateMinDate(dateValue) {
+    if (this.minDate && (!dateValue || DateStringLibrary.compareDates(dateValue, this.minDate) === -1) ) {
+      return this.minDate;
+    }
+
+    return dateValue;
+  }
+
+
   private setDateAndPropagateChanges(value: Date) {
-    if (value && DateStringLibrary.compareDates(this.date, value) === 0) {
+    if (!this.minDate && value && DateStringLibrary.compareDates(this.date, value) === 0) {
       return;
     }
 

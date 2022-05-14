@@ -5,6 +5,7 @@
          [disabled]="disabled"
          [matDatepicker]="picker"
          [ngModel]="date"
+         [min]="minDate"
          [class.invalid-control]="showError"
          (blur)="onBlur()"
          (change)="onInputChange(input.value)"
