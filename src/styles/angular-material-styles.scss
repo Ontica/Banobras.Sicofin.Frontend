@@ -80,6 +80,10 @@ a,
   font-weight: 600 !important;
 }
 
+.mat-tab-header-pagination {
+  z-index: 1 !important;
+}
+
 .mat-tab-group {
   height: 100%;
 }
@@ -816,12 +820,12 @@ table.mat-table.emp-designer {
     }
   }
 
-  &:not(.mat-checkbox-login) .mat-checkbox-inner-container {
+  &:not(.mat-checkbox-warning) .mat-checkbox-inner-container {
     margin-top: -4px;
   }
 }
 
-.mat-checkbox.mat-checkbox-login {
+.mat-checkbox.mat-checkbox-warning {
 
   &.mat-checkbox-checked,
   &.mat-checkbox-indeterminate {
@@ -891,7 +895,7 @@ table.mat-table.emp-designer {
   background: $checkbox-background-color !important;
 }
 
-.mat-checkbox.mat-checkbox-login .mat-checkbox-ripple > .mat-ripple-element {
+.mat-checkbox.mat-checkbox-warning .mat-checkbox-ripple > .mat-ripple-element {
   background: $warning-color !important;
 }
 
