@@ -5,16 +5,22 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
 import { FormControl, FormGroup } from '@angular/forms';
-import { DateStringLibrary } from '@app/core';
 
-import { Account, EmptyAccount } from '@app/models';
+import { DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
+import { FormHandler, sendEvent } from '@app/shared/utils';
 
-import { FormHandler } from '@app/shared/utils';
+import { Account, AccountEditionCommandType, AccountEditionTypeList, AccountRole,
+         EmptyAccount } from '@app/models';
 
+import { AccountEditionWizardEventType } from '../account-edition/account-edition-wizard.component';
+
+export enum AccountViewEventType {
+  ACCOUNT_UPDATED = 'AccountViewComponent.Event.AccountUpdated',
+}
 
 enum AccountViewFormControls {
   accountsChart = 'accountsChart',
@@ -28,7 +34,6 @@ enum AccountViewFormControls {
   debtorCreditor = 'debtorCreditor',
 }
 
-
 @Component({
   selector: 'emp-fa-account-view',
   templateUrl: './account-view.component.html',
@@ -37,20 +42,42 @@ export class AccountViewComponent implements OnChanges {
 
   @Input() account: Account = EmptyAccount;
 
+  @Output() accountViewEvent = new EventEmitter<EventInfo>();
+
   formHandler: FormHandler;
 
   controls = AccountViewFormControls;
 
   editionMode = false;
 
-  optionSelected: any = null;
+  accountEditionTypeSelected: AccountEditionCommandType = null;
+
+  accountEditionTypeList: Identifiable[] = [];
+
+  displayAccountEditionWizard = false;
+
 
   constructor() {
     this.initForm();
   }
 
-  ngOnChanges(): void {
+  ngOnChanges() {
     this.enableEditor(false);
+
+    this.accountEditionTypeList = this.hasSectors ?
+      AccountEditionTypeList : this.getAccountEditionTypeListWithoutSectors();
+  }
+
+
+  get hasSectors(): boolean {
+    return this.account.role === AccountRole.Sectorizada ||
+           this.account.sectorRules.length !== 0;
+  }
+
+
+  getAccountEditionTypeListWithoutSectors(): Identifiable[] {
+    return AccountEditionTypeList.filter(x =>
+      ![AccountEditionCommandType.AddSectors.toString(), AccountEditionCommandType.RemoveSectors.toString()].includes(x.uid))
   }
 
 
@@ -61,9 +88,27 @@ export class AccountViewComponent implements OnChanges {
   }
 
 
-  onWizardClicked() {
-    if (this.optionSelected && this.formHandler.isReadyForSubmit) {
-      console.log(this.optionSelected, this.account);
+  onAccountEditionButtonClicked() {
+    if (!!this.accountEditionTypeSelected) {
+      this.displayAccountEditionWizard = true;
+    }
+  }
+
+
+  onAccountEditionWizardEvent(event: EventInfo) {
+    switch (event.type as AccountEditionWizardEventType) {
+
+      case AccountEditionWizardEventType.CLOSE_MODAL_CLICKED:
+        this.displayAccountEditionWizard = false;
+        return;
+
+      case AccountEditionWizardEventType.ACCOUNT_EDITED:
+        sendEvent(this.accountViewEvent, AccountViewEventType.ACCOUNT_UPDATED, event.payload);
+        break;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
     }
   }
 

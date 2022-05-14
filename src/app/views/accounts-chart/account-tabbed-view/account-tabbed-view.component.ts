@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { DateStringLibrary } from '@app/core';
+import { DateStringLibrary, EventInfo } from '@app/core';
 
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -15,6 +15,15 @@ import { BalancesDataService } from '@app/data-services';
 
 import { Account, AccountBalance, AccountHistory, AccountRole, AreaRule,
          CurrencyRule, EmptyAccount, LedgerRule, SectorRule } from '@app/models';
+
+import { AccountViewEventType } from '../account-view/account-view.component';
+
+import { sendEvent } from '@app/shared/utils';
+
+export enum AccountTabbedViewEventType {
+  CLOSE_MODAL_CLICKED = 'AccountTabbedViewComponent.Event.CloseModalClicked',
+  ACCOUNT_UPDATED = 'AccountTabbedViewComponent.Event.AccountUpdated',
+}
 
 
 @Component({
@@ -25,11 +34,12 @@ export class AccountTabbedViewComponent implements OnChanges {
 
   @Input() account: Account = EmptyAccount;
 
-  @Output() closeEvent = new EventEmitter<void>();
+  @Output() accountTabbedViewEvent = new EventEmitter<EventInfo>();
 
   title = '';
   hint = '';
   selectedTabIndex = 0;
+  showSectors = false;
 
   areaRulesDS: MatTableDataSource<AreaRule>;
   currencyRulesDS: MatTableDataSource<CurrencyRule>;
@@ -43,11 +53,12 @@ export class AccountTabbedViewComponent implements OnChanges {
   ngOnChanges() {
     this.setTitle();
     this.setDataSources();
+    this.setShowSectors();
   }
 
 
   onClose() {
-    this.closeEvent.emit();
+    sendEvent(this.accountTabbedViewEvent, AccountTabbedViewEventType.CLOSE_MODAL_CLICKED);
   }
 
 
@@ -57,9 +68,18 @@ export class AccountTabbedViewComponent implements OnChanges {
                             .then(x => this.accountBalancesDS = new MatTableDataSource(x));
   }
 
-  showSectors() {
-    return this.account.role === AccountRole.Sectorizada ||
-           this.account.sectorRules.length !== 0;
+
+  onAccountViewEvent(event: EventInfo) {
+    switch (event.type as AccountViewEventType) {
+
+      case AccountViewEventType.ACCOUNT_UPDATED:
+        sendEvent(this.accountTabbedViewEvent, AccountTabbedViewEventType.ACCOUNT_UPDATED, event.payload);
+        break;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -85,8 +105,9 @@ export class AccountTabbedViewComponent implements OnChanges {
   }
 
 
-  private setSelectedTabIndex() {
-    this.selectedTabIndex = 0;
+  private setShowSectors() {
+    this.showSectors = this.account.role === AccountRole.Sectorizada ||
+      this.account.sectorRules.length !== 0;
   }
 
 }

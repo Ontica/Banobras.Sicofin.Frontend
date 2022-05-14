@@ -4,13 +4,15 @@
 
     <mat-tab label="Información">
 
-      <emp-fa-account-view [account]="account">
+      <emp-fa-account-view
+        [account]="account"
+        (accountViewEvent)="onAccountViewEvent($event)">
 
       </emp-fa-account-view>
 
     </mat-tab>
 
-    <mat-tab *ngIf="showSectors()" label="Sectores">
+    <mat-tab *ngIf="showSectors" label="Sectores">
 
       <div class="scrollable-container mat-elevation-z1">
         <table mat-table [dataSource]="sectorRulesDS">

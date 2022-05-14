@@ -7,9 +7,13 @@
 
 import { Component } from '@angular/core';
 
-import { isEmpty } from '@app/core';
+import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { Account, EmptyAccount } from '@app/models';
+
+import {
+  AccountTabbedViewEventType
+} from '@app/views/accounts-chart/account-tabbed-view/account-tabbed-view.component';
 
 import { AccountsChartEventType } from '@app/views/accounts-chart/accounts-chart/accounts-chart.component';
 
@@ -25,7 +29,7 @@ export class AccountsChartMainPageComponent {
   selectedAccount: Account = EmptyAccount;
 
 
-  onAccountsChartEvent(event) {
+  onAccountsChartEvent(event: EventInfo) {
     switch (event.type as AccountsChartEventType) {
       case AccountsChartEventType.ACCOUNT_SELECTED:
         this.selectedAccount = isEmpty(event.payload.account) ? EmptyAccount : event.payload.account;
@@ -39,9 +43,28 @@ export class AccountsChartMainPageComponent {
     }
   }
 
-  onCloseAccountTabbedView() {
-    this.selectedAccount = EmptyAccount;
-    this.displayAccountChartTabbed = false;
+
+  onAccountTabbedViewEvent(event: EventInfo) {
+    switch (event.type as AccountTabbedViewEventType) {
+      case AccountTabbedViewEventType.CLOSE_MODAL_CLICKED:
+        this.setSelectedAccount(EmptyAccount);
+        break;
+
+      case AccountTabbedViewEventType.ACCOUNT_UPDATED:
+        Assertion.assertValue(event.payload.account, 'event.payload.account');
+        this.setSelectedAccount(event.payload.account);
+        break;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  private setSelectedAccount(account: Account) {
+    this.selectedAccount = isEmpty(account) ? EmptyAccount : account;
+    this.displayAccountChartTabbed = !isEmpty(this.selectedAccount);
   }
 
 }

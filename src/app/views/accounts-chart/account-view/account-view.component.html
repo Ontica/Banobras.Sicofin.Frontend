@@ -39,7 +39,7 @@
 
       <div [fxFlex]="100">
         <label>Nombre:</label>
-        <textarea class="text-area" empNgTextareaAutoresize rows="1"
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
           [formControlName]="controls.name"
           [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
 
@@ -52,7 +52,7 @@
 
       <div [fxFlex]="100">
         <label>Descripción:</label>
-        <textarea class="text-area" empNgTextareaAutoresize rows="1"
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
           [formControlName]="controls.description"
           [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
 
@@ -85,19 +85,19 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100/3">
-        <label>¿Qué de desea hacer con esta cuenta?:</label>
-        <emp-ng-select [(ngModel)]="optionSelected"
+        <label>¿Qué se desea hacer con esta cuenta?:</label>
+        <emp-ng-select [(ngModel)]="accountEditionTypeSelected"
           [ngModelOptions]="{standalone: true}"
-          [items]="[]">
+          [items]="accountEditionTypeList">
 
         </emp-ng-select>
       </div>
 
-      <div fxFlex="50" fxLayoutAlign="start end" [style.paddingBottom.px]="2">
-        <button type="submit"
-          (click)="onWizardClicked()"
-          [class.btn]="optionSelected === null"
-          [class.btn-action]="optionSelected !== null">
+      <div fxFlex="none" fxLayoutAlign="start end" [style.paddingBottom.px]="2">
+        <button
+          [class.btn]="accountEditionTypeSelected === null"
+          [class.btn-action]="accountEditionTypeSelected !== null"
+          (click)="onAccountEditionButtonClicked()">
           Ejecutar el asistente
         </button>
       </div>
@@ -107,3 +107,11 @@
   </div>
 
 </form>
+
+
+<emp-fa-account-edition-wizard *ngIf="displayAccountEditionWizard"
+  [accountEditionCommandType]="accountEditionTypeSelected"
+  [account]="account"
+  (accountEditionWizardEvent)="onAccountEditionWizardEvent($event)">
+
+</emp-fa-account-edition-wizard>
