@@ -37,6 +37,7 @@ export interface SelectBoxConfig {
   selectFirst?: boolean;
   typeToSearchText?: string;
   virtualScroll?: boolean;
+  searchableFields?: string[];
 }
 
 
@@ -60,6 +61,7 @@ const DefaultSelectBoxConfig: SelectBoxConfig = {
   selectFirst: false,
   typeToSearchText: 'Favor de ingresar 5 o más caracteres',
   virtualScroll: false,
+  searchableFields: ['name']
 };
 
 
@@ -112,6 +114,7 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
 
   disabled: boolean;
   value: any = null;
+  useCustomSearchFn = false;
 
   ngOnInit() {
     window.addEventListener('scroll', this.onScroll, true);
@@ -126,6 +129,7 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
       if (this.selectBoxConfig.selectFirst) {
         this.selectFirstItem();
       }
+      this.setSearchField();
     }
   }
 
@@ -181,6 +185,10 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
     this.unfocus.emit(event);
   }
 
+  customSearchFn(term: string, item: any) {
+    return item?.search_field?.toLowerCase().includes(term.toLowerCase());
+  }
+
   private selectItemIfUnique() {
     if (this.items.length !== 1 || this.value !== null) {
       return;
@@ -214,5 +222,17 @@ export class SelectBoxComponent implements OnInit, OnChanges, OnDestroy, Control
       this.select.close();
     }
   };
+
+  private setSearchField() {
+    this.useCustomSearchFn = this.selectBoxConfig.searchableFields.length > 1 && this.items?.length > 0;
+    if (this.useCustomSearchFn) {
+      this.items = this.items.map(item => {
+        item.search_field = '';
+        this.selectBoxConfig.searchableFields.forEach(field => item.search_field += item[field] + ' ');
+        item.search_field = item.search_field.trimEnd();
+        return item;
+      });
+    }
+  }
 
 }

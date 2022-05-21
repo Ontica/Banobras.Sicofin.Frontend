@@ -21,6 +21,7 @@
   [multiple]="selectBoxConfig.multiple"
   [notFoundText]="selectBoxConfig.notFoundText"
   [searchable]="selectBoxConfig.searchable"
+  [searchFn]="useCustomSearchFn ? customSearchFn : null"
   [typeToSearchText]="selectBoxConfig.typeToSearchText"
   [virtualScroll]="selectBoxConfig.virtualScroll"
   (change)="onChangedEvent($event)"
