@@ -123,7 +123,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
   get accountNameText(): string {
     if (this.showInfoStep) {
-      return `<strong>${this.selectedAccountChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>` +
+      return `<strong>${this.selectedAccountChart?.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>` +
         `${this.accountEditionCommand.accountFields?.accountNumber}: ` +
         `${this.accountEditionCommand.accountFields?.name}`;
     }
@@ -395,7 +395,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
 
   private setAccountSectorsWithSubledgerAccountList() {
-    this.accountSectorsWithSubledgerAccountList = this.selectedAccountChart.sectors.filter(x =>
+    this.accountSectorsWithSubledgerAccountList = this.selectedAccountChart?.sectors.filter(x =>
       this.account.sectorRules.find(y => y.uid === x.uid)?.sectorRole === SectorRole.Control
     )
   }
@@ -465,7 +465,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
 
   private setSectorsWithRoleDefault(items: string[]) {
-    this.selectedSectorsList = this.selectedAccountChart.sectors.filter(x => items.includes(x.uid));
+    this.selectedSectorsList = this.selectedAccountChart?.sectors.filter(x => items.includes(x.uid));
     this.accountEditionCommand.sectors = [...[], ...items.map(x => this.getSectorField(x))];
   }
 
