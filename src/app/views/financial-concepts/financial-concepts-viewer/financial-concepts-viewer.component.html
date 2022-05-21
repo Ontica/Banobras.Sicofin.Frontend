@@ -23,16 +23,16 @@
 
       </emp-ng-spinner>
 
-      <emp-fa-grouping-rules-filter fxFlex="none"
-        (groupingRulesFilterEvent)="onGroupingRulesFilterEvent($event)">
+      <emp-fa-financial-concepts-filter fxFlex="none"
+        (financialConceptsFilterEvent)="onFinancialConceptsFilterEvent($event)">
 
-      </emp-fa-grouping-rules-filter>
+      </emp-fa-financial-concepts-filter>
 
       <emp-fa-data-table fxFlex
-        [dataTable]="groupingRuleData"
+        [dataTable]="financialConceptData"
         [commandExecuted]="commandExecuted"
-        [selectedEntry]="selectedGroupingRule"
-        (dataTableEvent)="onGroupingRulesTableEvent($event)">
+        [selectedEntry]="selectedFinancialConcept"
+        (dataTableEvent)="onFinancialConceptsTableEvent($event)">
 
       </emp-fa-data-table>
 
@@ -44,7 +44,7 @@
 
 
 <emp-fa-export-report-modal *ngIf="displayExportModal"
-  [title]="'Exportar ' + rulesSetName"
+  [title]="'Exportar ' + financialConceptsGroupsName"
   [fileUrl]="excelFileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 

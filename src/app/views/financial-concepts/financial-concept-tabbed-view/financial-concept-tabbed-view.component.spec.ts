@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GroupingRuleItemsTableComponent } from './grouping-rule-items-table.component';
+import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-view.component';
 
-describe('GroupingRuleItemsTableComponent', () => {
-  let component: GroupingRuleItemsTableComponent;
-  let fixture: ComponentFixture<GroupingRuleItemsTableComponent>;
+describe('FinancialConceptTabbedViewComponent', () => {
+  let component: FinancialConceptTabbedViewComponent;
+  let fixture: ComponentFixture<FinancialConceptTabbedViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupingRuleItemsTableComponent ]
+      declarations: [ FinancialConceptTabbedViewComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupingRuleItemsTableComponent);
+    fixture = TestBed.createComponent(FinancialConceptTabbedViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

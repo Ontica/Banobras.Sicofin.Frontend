@@ -11,67 +11,67 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { GroupingRuleItem } from '@app/models';
+import { ConceptIntegrationEntry } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
-export enum GroupingRuleItemsTableEventType {
-  UPDATE_GROUPING_RULE_ITEM_CLICKED = 'GroupingRuleItemsTableComponent.Event.UpdateGroupingRuleItemClicked',
-  REMOVE_GROUPING_RULE_ITEM_CLICKED = 'GroupingRuleItemsTableComponent.Event.RemoveGroupingRuleItemClicked',
+export enum ConceptIntegrationEntriesTableEventType {
+  UPDATE_BUTTON_CLICKED = 'ConceptIntegrationEntriesTableComponent.Event.UpdateButtonClicked',
+  REMOVE_BUTTON_CLICKED = 'ConceptIntegrationEntriesTableComponent.Event.RemoveButtonClicked',
 }
 
 @Component({
-  selector: 'emp-fa-grouping-rule-items-table',
-  templateUrl: './grouping-rule-items-table.component.html',
+  selector: 'emp-fa-concept-integration-entries-table',
+  templateUrl: './concept-integration-entries-table.component.html',
 })
-export class GroupingRuleItemsTableComponent implements OnChanges {
+export class ConceptIntegrationEntriesTableComponent implements OnChanges {
 
-  @Input() groupingRuleItemList: GroupingRuleItem[] = [];
+  @Input() conceptIntegrationEntryList: ConceptIntegrationEntry[] = [];
 
   @Input() canEdit = false;
 
   @Input() isLoading = false;
 
-  @Output() groupingRuleItemsTableEvent = new EventEmitter<EventInfo>();
+  @Output() conceptIntegrationEntriesTableEvent = new EventEmitter<EventInfo>();
 
   displayedColumnsDefault: string[] = ['itemCode', 'itemName', 'subledgerAccount', 'sectorCode', 'operator'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<GroupingRuleItem>;
+  dataSource: MatTableDataSource<ConceptIntegrationEntry>;
 
   constructor(private messageBox: MessageBoxService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.groupingRuleItemList) {
-      this.dataSource = new MatTableDataSource(this.groupingRuleItemList);
+    if (changes.conceptIntegrationEntryList) {
+      this.dataSource = new MatTableDataSource(this.conceptIntegrationEntryList);
       this.resetColumns();
     }
   }
 
 
-  onUpdateGroupingRuleItemClicked(groupingRuleItem: GroupingRuleItem) {
+  onUpdateButtonClicked(conceptIntegrationEntry: ConceptIntegrationEntry) {
     if (this.canEdit && window.getSelection().toString().length <= 0) {
-      sendEvent(this.groupingRuleItemsTableEvent,
-        GroupingRuleItemsTableEventType.UPDATE_GROUPING_RULE_ITEM_CLICKED, {groupingRuleItem});
+      sendEvent(this.conceptIntegrationEntriesTableEvent,
+        ConceptIntegrationEntriesTableEventType.UPDATE_BUTTON_CLICKED, {conceptIntegrationEntry});
     }
   }
 
 
-  onRemoveGroupingRuleItemClicked(event, groupingRuleItem: GroupingRuleItem) {
+  onRemoveButtonClicked(event, conceptIntegrationEntry: ConceptIntegrationEntry) {
     event.stopPropagation();
 
-    const message = this.getConfirmMessage(groupingRuleItem);
+    const message = this.getConfirmMessage(conceptIntegrationEntry);
 
     this.messageBox.confirm(message, 'Eliminar integración', 'DeleteCancel')
       .toPromise()
       .then(x => {
         if (x) {
-          sendEvent(this.groupingRuleItemsTableEvent,
-            GroupingRuleItemsTableEventType.REMOVE_GROUPING_RULE_ITEM_CLICKED, {groupingRuleItem});
+          sendEvent(this.conceptIntegrationEntriesTableEvent,
+            ConceptIntegrationEntriesTableEventType.REMOVE_BUTTON_CLICKED, {conceptIntegrationEntry});
         }
       });
   }
@@ -86,19 +86,20 @@ export class GroupingRuleItemsTableComponent implements OnChanges {
   }
 
 
-  private getConfirmMessage(groupingRuleItem: GroupingRuleItem): string {
+  private getConfirmMessage(conceptIntegrationEntry: ConceptIntegrationEntry): string {
     return `
       <table style='margin: 0;'>
         <tr><td class='nowrap'>Clave / Cuenta: </td><td><strong>
-          ${groupingRuleItem.itemCode}
+          ${conceptIntegrationEntry.itemCode}
         </strong></td></tr>
 
         <tr><td class='nowrap'>Descripción: </td><td><strong>
-          ${groupingRuleItem.itemName}
+          ${conceptIntegrationEntry.itemName}
         </strong></td></tr>
 
         <tr><td class='nowrap'>Auxiliar: </td><td><strong>
-          ${!!groupingRuleItem.subledgerAccount.trim() ? groupingRuleItem.subledgerAccount : '-'}
+          ${!!conceptIntegrationEntry.subledgerAccount.trim() ?
+            conceptIntegrationEntry.subledgerAccount : '-'}
         </strong></td></tr>
       </table>
 

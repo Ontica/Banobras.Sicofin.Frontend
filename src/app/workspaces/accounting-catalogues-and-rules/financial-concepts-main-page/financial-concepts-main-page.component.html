@@ -1,0 +1,23 @@
+<div class="explorer">
+
+  <div class="primary" [fxHide.lt-lg]="displayFinancialConceptTabbed">
+
+    <emp-fa-financial-concepts-viewer
+      [selectedFinancialConcept]="selectedFinancialConcept"
+      (financialConceptsViewerEvent)="onFinancialConceptsViewerEvent($event)">
+
+    </emp-fa-financial-concepts-viewer>
+
+  </div>
+
+  <div class="secondary priority" *ngIf="displayFinancialConceptTabbed">
+
+    <emp-fa-financial-concept-tabbed-view
+      [financialConcept]="selectedFinancialConcept"
+      (financialConceptTabbedViewEvent)="onCloseFinancialConceptTabbedView()">
+
+    </emp-fa-financial-concept-tabbed-view>
+
+  </div>
+
+</div>

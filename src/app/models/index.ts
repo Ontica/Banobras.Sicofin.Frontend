@@ -36,9 +36,9 @@ export * from './exchange-rates';
 
 export * from './external-process';
 
-export * from './financial-reports';
+export * from './financial-concepts';
 
-export * from './grouping-rules';
+export * from './financial-reports';
 
 export * from './import-vouchers';
 

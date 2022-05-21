@@ -5,41 +5,41 @@
 
   <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
 
-    <div fxLayout="row" fxLayout.lt-sm="column">
+    <div fxLayout="row" fxLayout.lt-md="column">
 
-      <div fxFlex>
+      <div fxFlex="calc((100% - 156px) / 2)">
 
         <label>Catálogo de cuentas:</label>
 
         <emp-ng-select name="accountChart" required
           [config]="{selectFirst: true, bindByValue: false}"
-          [(ngModel)]="groupingRulesForm.accountChart"
+          [(ngModel)]="financialConceptsForm.accountChart"
           [items]="accountsChartMasterDataList"
-          [showError]="!groupingRulesForm.accountChart"
+          [showError]="!financialConceptsForm.accountChart"
           (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
 
       </div>
 
-      <div fxFlex>
+      <div fxFlex="calc((100% - 156px) / 2)">
 
         <label>Agrupación:</label>
 
-        <emp-ng-select name="rulesSet" required
+        <emp-ng-select name="financialConceptsGroup" required
           [config]="{bindByValue: false}"
-          [(ngModel)]="groupingRulesForm.rulesSet"
-          [items]="rulesSetList"
-          [showError]="!groupingRulesForm.rulesSet">
+          [(ngModel)]="financialConceptsForm.financialConceptsGroup"
+          [items]="financialConceptsGroupsList"
+          [showError]="!financialConceptsForm.financialConceptsGroup">
         </emp-ng-select>
 
       </div>
 
-      <div fxFlex="none" #periodSection>
+      <div fxFlex="120px" fxFlex.lt-md="none" #date>
 
         <label>Fecha:</label>
 
         <emp-ng-datepicker name="date" disabled
-          [(ngModel)]="groupingRulesForm.date">
+          [(ngModel)]="financialConceptsForm.date">
 
         </emp-ng-datepicker>
 
@@ -51,7 +51,7 @@
           [class.btn-icon]="form.invalid"
           [class.btn-icon-action]="form.valid"
           [disabled]="form.invalid"
-          (click)="onSearchGroupingRulesClicked()">
+          (click)="onSearchFinancialConceptsClicked()">
 
           <mat-icon>search</mat-icon>
 

@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GroupingRulesMainPageComponent } from './grouping-rules-main-page.component';
+import { ConceptIntegrationEntriesTableComponent } from './concept-integration-entries-table.component';
 
-describe('GroupingRulesMainPageComponent', () => {
-  let component: GroupingRulesMainPageComponent;
-  let fixture: ComponentFixture<GroupingRulesMainPageComponent>;
+describe('ConceptIntegrationEntriesTableComponent', () => {
+  let component: ConceptIntegrationEntriesTableComponent;
+  let fixture: ComponentFixture<ConceptIntegrationEntriesTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupingRulesMainPageComponent ]
+      declarations: [ ConceptIntegrationEntriesTableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupingRulesMainPageComponent);
+    fixture = TestBed.createComponent(ConceptIntegrationEntriesTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

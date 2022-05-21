@@ -17,8 +17,10 @@ import {
   AccountingCataloguesAndRulesWorkspaceRoutingModule
 } from './accounting-catalogues-and-rules-workspace-routing.module';
 import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
+import { FinancialConceptsModule } from '@app/views/financial-concepts/financial-concepts.module';
 import { FinancialReportsModule } from '@app/views/financial-reports/financial-reports.module';
-import { GroupingRulesModule } from '@app/views/grouping-rules/grouping-rules.module';
+import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger-accounts.module';
 
 import {
   AccountingCataloguesAndRulesWorkspaceComponent
@@ -27,16 +29,14 @@ import {
   AccountsChartMainPageComponent
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
 import {
-  GroupingRulesMainPageComponent
-} from './grouping-rules-main-page/grouping-rules-main-page.component';
+  FinancialConceptsMainPageComponent
+} from './financial-concepts-main-page/financial-concepts-main-page.component';
 import {
   ReportDesignerMainPageComponent
 } from './reports-designer-main-page/reports-designer-main-page.component';
 import {
   SubledgerAccountsMainPageComponent
 } from './subledger-accounts-main-page/subledger-accounts-main-page.component';
-import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
-import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger-accounts.module';
 
 
 @NgModule({
@@ -52,8 +52,8 @@ import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger
 
     AccountingCataloguesAndRulesWorkspaceRoutingModule,
     AccountsChartModule,
+    FinancialConceptsModule,
     FinancialReportsModule,
-    GroupingRulesModule,
     ReportsControlsModule,
     SubledgerAccountsModule,
   ],
@@ -61,7 +61,7 @@ import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger
   declarations: [
     AccountingCataloguesAndRulesWorkspaceComponent,
     AccountsChartMainPageComponent,
-    GroupingRulesMainPageComponent,
+    FinancialConceptsMainPageComponent,
     ReportDesignerMainPageComponent,
     SubledgerAccountsMainPageComponent,
   ],

@@ -20,8 +20,8 @@ import {
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
 
 import {
-  GroupingRulesMainPageComponent
-} from './grouping-rules-main-page/grouping-rules-main-page.component';
+  FinancialConceptsMainPageComponent
+} from './financial-concepts-main-page/financial-concepts-main-page.component';
 
 import {
   ReportDesignerMainPageComponent
@@ -51,7 +51,7 @@ const routes: Routes = [
   {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.permission },
     path: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.path,
-    component: GroupingRulesMainPageComponent,
+    component: FinancialConceptsMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.permission },

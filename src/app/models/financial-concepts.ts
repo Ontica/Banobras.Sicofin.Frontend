@@ -11,14 +11,14 @@ import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
          DataTableEntry } from './data-table';
 
 
-export interface GroupingRuleCommand extends DataTableCommand{
+export interface FinancialConceptCommand extends DataTableCommand {
   accountsChartUID: string;
   rulesSetUID?: string;
   date?: DateString;
 }
 
 
-export interface GroupingRule extends DataTableEntry {
+export interface FinancialConcept extends DataTableEntry {
   uid: string;
   code: string;
   concept: string;
@@ -27,16 +27,21 @@ export interface GroupingRule extends DataTableEntry {
   parentUID: string;
   accountsChartName: string;
   rulesSetName: string;
+
+  accountsChartUID?: string;
+  rulesSetUID?: string;
+  startDate?: DateString;
+  endDate?: DateString;
 }
 
 
-export interface GroupingRuleDataTable extends DataTable {
-  command: GroupingRuleCommand;
-  entries: GroupingRule[];
+export interface FinancialConceptDataTable extends DataTable {
+  command: FinancialConceptCommand;
+  entries: FinancialConcept[];
 }
 
 
-export const DefaultGroupingRulesColumns: DataTableColumn[] = [
+export const DefaultFinancialConceptsColumns: DataTableColumn[] = [
   {
     field: 'code',
     title: 'Clave',
@@ -50,16 +55,16 @@ export const DefaultGroupingRulesColumns: DataTableColumn[] = [
 ];
 
 
-export enum GroupingRuleItemType {
+export enum ConceptIntegrationEntryType {
   Agrupation = 'Agrupation',
   Account = 'Account',
   FixedValue = 'FixedValue',
 }
 
 
-export interface GroupingRuleItem {
+export interface ConceptIntegrationEntry {
   uid: string;
-  type: GroupingRuleItemType;
+  type: ConceptIntegrationEntryType;
   itemName: string;
   itemCode: string;
   subledgerAccount: string;
@@ -68,21 +73,32 @@ export interface GroupingRuleItem {
 }
 
 
-export const EmptyGroupingRuleCommand: GroupingRuleCommand = {
+export const EmptyEmptyConceptIntegrationEntry: ConceptIntegrationEntry = {
+  uid: '',
+  type: ConceptIntegrationEntryType.Account,
+  itemName: '',
+  itemCode: '',
+  subledgerAccount: '',
+  sectorCode: '',
+  operator: '',
+}
+
+
+export const EmptyFinancialConceptCommand: FinancialConceptCommand = {
   accountsChartUID: '',
   rulesSetUID: '',
   date: '',
 };
 
 
-export const EmptyGroupingRuleDataTable: GroupingRuleDataTable = {
-  command: EmptyGroupingRuleCommand,
-  columns: DefaultGroupingRulesColumns,
+export const EmptyFinancialConceptDataTable: FinancialConceptDataTable = {
+  command: EmptyFinancialConceptCommand,
+  columns: DefaultFinancialConceptsColumns,
   entries: [],
 };
 
 
-export const EmptyGroupingRule: GroupingRule = {
+export const EmptyFinancialConcept: FinancialConcept = {
   uid: '',
   code: '',
   concept: '',

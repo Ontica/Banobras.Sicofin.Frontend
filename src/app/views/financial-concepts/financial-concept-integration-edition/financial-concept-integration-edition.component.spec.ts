@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GroupingRulesFilterComponent } from './grouping-rules-filter.component';
+import { FinancialConceptIntegrationEditionComponent } from './financial-concept-integration-edition.component';
 
-describe('GroupingRulesFilterComponent', () => {
-  let component: GroupingRulesFilterComponent;
-  let fixture: ComponentFixture<GroupingRulesFilterComponent>;
+describe('FinancialConceptIntegrationEditionComponent', () => {
+  let component: FinancialConceptIntegrationEditionComponent;
+  let fixture: ComponentFixture<FinancialConceptIntegrationEditionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupingRulesFilterComponent ]
+      declarations: [ FinancialConceptIntegrationEditionComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupingRulesFilterComponent);
+    fixture = TestBed.createComponent(FinancialConceptIntegrationEditionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
