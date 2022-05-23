@@ -106,7 +106,7 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
   private getFinancialConceptCommand(): FinancialConceptCommand {
     const data: FinancialConceptCommand = {
       accountsChartUID: this.financialConceptsForm.accountChart.uid,
-      rulesSetUID: this.financialConceptsForm.financialConceptsGroup.uid,
+      groupUID: this.financialConceptsForm.financialConceptsGroup.uid,
       date:  this.financialConceptsForm.date,
     };
 

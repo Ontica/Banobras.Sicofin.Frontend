@@ -144,7 +144,7 @@ export class FinancialConceptsViewerComponent {
   private getFinancialConcepts() {
     this.setSubmitted(true);
 
-    this.financialConceptsData.getFinancialConcepts(this.financialConceptCommand.rulesSetUID)
+    this.financialConceptsData.getFinancialConcepts(this.financialConceptCommand.groupUID)
       .toPromise()
       .then(x => {
         this.financialConceptData = Object.assign({}, this.financialConceptData,
@@ -157,7 +157,7 @@ export class FinancialConceptsViewerComponent {
 
 
   private exportFinancialConceptsToExcel() {
-    this.financialConceptsData.exportFinancialConceptsToExcel(this.financialConceptCommand.rulesSetUID)
+    this.financialConceptsData.exportFinancialConceptsToExcel(this.financialConceptCommand.groupUID)
       .toPromise()
       .then(x => {
         this.excelFileUrl = x.url;

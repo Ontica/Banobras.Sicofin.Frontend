@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { FileReport, FinancialConcept, ConceptIntegrationEntry } from '@app/models';
+import { FileReport, FinancialConcept, FinancialConceptEntry } from '@app/models';
 
 
 @Injectable()
@@ -22,7 +22,7 @@ export class FinancialConceptsDataService {
   getFinancialConceptsGroups(accountsChartUID: string): Observable<Identifiable[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
-    const path = `v2/financial-accounting/rules/rules-sets-for/${accountsChartUID}/grouping-rules`;
+    const path = `v2/financial-accounting/financial-concepts/account-chart-groups/${accountsChartUID}`;
 
     return this.http.get<Identifiable[]>(path);
   }
@@ -31,7 +31,7 @@ export class FinancialConceptsDataService {
   getFinancialConcepts(financialConceptGroupUID: string): Observable<FinancialConcept[]> {
     Assertion.assertValue(financialConceptGroupUID, 'financialConceptGroupUID');
 
-    const path = `v2/financial-accounting/rules/grouping-rules/${financialConceptGroupUID}`;
+    const path = `v2/financial-accounting/financial-concepts/in-group/${financialConceptGroupUID}`;
 
     return this.http.get<FinancialConcept[]>(path);
   }
@@ -40,18 +40,18 @@ export class FinancialConceptsDataService {
   exportFinancialConceptsToExcel(financialConceptGroupUID: string): Observable<FileReport> {
     Assertion.assertValue(financialConceptGroupUID, 'financialConceptGroupUID');
 
-    const path = `v2/financial-accounting/rules/grouping-rules/${financialConceptGroupUID}/excel`;
+    const path = `v2/financial-accounting/financial-concepts/groups/${financialConceptGroupUID}/excel`;
 
     return this.http.get<FileReport>(path);
   }
 
 
-  getConceptIntegration(financialConceptUID: string): Observable<ConceptIntegrationEntry[]> {
+  getFinancialConceptIntegration(financialConceptUID: string): Observable<FinancialConceptEntry[]> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
 
-    const path = `v2/financial-accounting/rules/grouping-rule-items/${financialConceptUID}`;
+    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}/integration`;
 
-    return this.http.get<ConceptIntegrationEntry[]>(path);
+    return this.http.get<FinancialConceptEntry[]>(path);
   }
 
 }

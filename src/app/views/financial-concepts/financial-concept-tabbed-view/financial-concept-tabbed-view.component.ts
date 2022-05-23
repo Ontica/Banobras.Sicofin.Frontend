@@ -52,7 +52,7 @@ export class FinancialConceptTabbedViewComponent implements OnChanges {
 
   private setTitle() {
     this.title = `${this.financialConcept.code}: ${this.financialConcept.concept}`;
-    this.hint = `${this.financialConcept.accountsChartName} - ${this.financialConcept.rulesSetName}`;
+    this.hint = `${this.financialConcept.accountsChartName} - ${this.financialConcept.groupName}`;
   }
 
 }

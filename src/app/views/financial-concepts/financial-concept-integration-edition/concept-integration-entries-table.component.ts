@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { ConceptIntegrationEntry } from '@app/models';
+import { FinancialConceptEntry } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -28,7 +28,7 @@ export enum ConceptIntegrationEntriesTableEventType {
 })
 export class ConceptIntegrationEntriesTableComponent implements OnChanges {
 
-  @Input() conceptIntegrationEntryList: ConceptIntegrationEntry[] = [];
+  @Input() conceptIntegrationEntryList: FinancialConceptEntry[] = [];
 
   @Input() canEdit = false;
 
@@ -40,7 +40,7 @@ export class ConceptIntegrationEntriesTableComponent implements OnChanges {
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<ConceptIntegrationEntry>;
+  dataSource: MatTableDataSource<FinancialConceptEntry>;
 
   constructor(private messageBox: MessageBoxService) { }
 
@@ -53,7 +53,7 @@ export class ConceptIntegrationEntriesTableComponent implements OnChanges {
   }
 
 
-  onUpdateButtonClicked(conceptIntegrationEntry: ConceptIntegrationEntry) {
+  onUpdateButtonClicked(conceptIntegrationEntry: FinancialConceptEntry) {
     if (this.canEdit && window.getSelection().toString().length <= 0) {
       sendEvent(this.conceptIntegrationEntriesTableEvent,
         ConceptIntegrationEntriesTableEventType.UPDATE_BUTTON_CLICKED, {conceptIntegrationEntry});
@@ -61,7 +61,7 @@ export class ConceptIntegrationEntriesTableComponent implements OnChanges {
   }
 
 
-  onRemoveButtonClicked(event, conceptIntegrationEntry: ConceptIntegrationEntry) {
+  onRemoveButtonClicked(event, conceptIntegrationEntry: FinancialConceptEntry) {
     event.stopPropagation();
 
     const message = this.getConfirmMessage(conceptIntegrationEntry);
@@ -86,7 +86,7 @@ export class ConceptIntegrationEntriesTableComponent implements OnChanges {
   }
 
 
-  private getConfirmMessage(conceptIntegrationEntry: ConceptIntegrationEntry): string {
+  private getConfirmMessage(conceptIntegrationEntry: FinancialConceptEntry): string {
     return `
       <table style='margin: 0;'>
         <tr><td class='nowrap'>Clave / Cuenta: </td><td><strong>

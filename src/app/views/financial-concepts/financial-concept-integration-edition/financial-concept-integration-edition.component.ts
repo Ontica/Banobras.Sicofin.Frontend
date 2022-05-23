@@ -11,7 +11,7 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { ConceptIntegrationEntry, EmptyEmptyConceptIntegrationEntry } from '@app/models';
+import { FinancialConceptEntry, EmptyEmptyConceptIntegrationEntry } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -32,11 +32,11 @@ export class FinancialConceptIntegrationEditionComponent implements OnChanges {
 
   canEdit = false;
 
-  conceptIntegrationEntryList: ConceptIntegrationEntry[] = [];
+  conceptIntegrationEntryList: FinancialConceptEntry[] = [];
 
   displayConceptIntegrationEntryEditor = false;
 
-  selectedConceptIntegrationEntry: ConceptIntegrationEntry = EmptyEmptyConceptIntegrationEntry;
+  selectedConceptIntegrationEntry: FinancialConceptEntry = EmptyEmptyConceptIntegrationEntry;
 
   constructor(private financialConceptsData: FinancialConceptsDataService,
               private messageBox: MessageBoxService) {}
@@ -63,7 +63,7 @@ export class FinancialConceptIntegrationEditionComponent implements OnChanges {
       case ConceptIntegrationEntriesTableEventType.UPDATE_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.conceptIntegrationEntry,
           'event.payload.conceptIntegrationEntry');
-        this.setSelectedConceptIntegrationEntry(event.payload.conceptIntegrationEntry as ConceptIntegrationEntry);
+        this.setSelectedConceptIntegrationEntry(event.payload.conceptIntegrationEntry as FinancialConceptEntry);
         this.messageBox.showInDevelopment('Editar integración', event.payload.conceptIntegrationEntry);
         return;
 
@@ -84,7 +84,7 @@ export class FinancialConceptIntegrationEditionComponent implements OnChanges {
     this.isLoading = true;
     this.conceptIntegrationEntryList = [];
 
-    this.financialConceptsData.getConceptIntegration(this.financialConceptUID)
+    this.financialConceptsData.getFinancialConceptIntegration(this.financialConceptUID)
       .toPromise()
       .then(x => this.conceptIntegrationEntryList = x)
       .finally(() => this.isLoading = false);
@@ -101,7 +101,7 @@ export class FinancialConceptIntegrationEditionComponent implements OnChanges {
   }
 
 
-  private setSelectedConceptIntegrationEntry(conceptIntegrationEntry: ConceptIntegrationEntry,
+  private setSelectedConceptIntegrationEntry(conceptIntegrationEntry: FinancialConceptEntry,
                                              display?: boolean) {
     this.selectedConceptIntegrationEntry = conceptIntegrationEntry;
     this.displayConceptIntegrationEntryEditor = display ?? !isEmpty(this.selectedConceptIntegrationEntry);

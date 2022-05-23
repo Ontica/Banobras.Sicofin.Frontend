@@ -13,7 +13,7 @@ import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
 
 export interface FinancialConceptCommand extends DataTableCommand {
   accountsChartUID: string;
-  rulesSetUID?: string;
+  groupUID?: string;
   date?: DateString;
 }
 
@@ -26,10 +26,10 @@ export interface FinancialConcept extends DataTableEntry {
   level: number;
   parentUID: string;
   accountsChartName: string;
-  rulesSetName: string;
+  groupName: string;
 
   accountsChartUID?: string;
-  rulesSetUID?: string;
+  groupUID?: string;
   startDate?: DateString;
   endDate?: DateString;
 }
@@ -55,16 +55,16 @@ export const DefaultFinancialConceptsColumns: DataTableColumn[] = [
 ];
 
 
-export enum ConceptIntegrationEntryType {
-  Agrupation = 'Agrupation',
+export enum FinancialConceptEntryType {
   Account = 'Account',
-  FixedValue = 'FixedValue',
+  ExternalVariable = 'ExternalVariable',
+  FinancialConceptReference = 'FinancialConceptReference'
 }
 
 
-export interface ConceptIntegrationEntry {
+export interface FinancialConceptEntry {
   uid: string;
-  type: ConceptIntegrationEntryType;
+  type: FinancialConceptEntryType;
   itemName: string;
   itemCode: string;
   subledgerAccount: string;
@@ -73,9 +73,9 @@ export interface ConceptIntegrationEntry {
 }
 
 
-export const EmptyEmptyConceptIntegrationEntry: ConceptIntegrationEntry = {
+export const EmptyEmptyConceptIntegrationEntry: FinancialConceptEntry = {
   uid: '',
-  type: ConceptIntegrationEntryType.Account,
+  type: FinancialConceptEntryType.Account,
   itemName: '',
   itemCode: '',
   subledgerAccount: '',
@@ -86,7 +86,7 @@ export const EmptyEmptyConceptIntegrationEntry: ConceptIntegrationEntry = {
 
 export const EmptyFinancialConceptCommand: FinancialConceptCommand = {
   accountsChartUID: '',
-  rulesSetUID: '',
+  groupUID: '',
   date: '',
 };
 
@@ -106,5 +106,5 @@ export const EmptyFinancialConcept: FinancialConcept = {
   level: 0,
   parentUID: '',
   accountsChartName: '',
-  rulesSetName: '',
+  groupName: '',
 };
