@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 
 import { isEmpty } from '@app/core';
 
-import { EmptyFinancialConcept, FinancialConcept } from '@app/models';
+import { EmptyFinancialConcept, FinancialConceptDescriptor } from '@app/models';
 
 import {
   FinancialConceptsViewerEventType
@@ -25,13 +25,13 @@ export class FinancialConceptsMainPageComponent {
 
   displayFinancialConceptTabbed = false;
 
-  selectedFinancialConcept: FinancialConcept = EmptyFinancialConcept;
+  selectedFinancialConcept: FinancialConceptDescriptor = EmptyFinancialConcept;
 
 
   onFinancialConceptsViewerEvent(event) {
     switch (event.type as FinancialConceptsViewerEventType) {
       case FinancialConceptsViewerEventType.FINANCIAL_CONCEPT_SELECTED:
-        this.setSelectedFinancialConcept(event.payload.financialConcept as FinancialConcept);
+        this.setSelectedFinancialConcept(event.payload.financialConcept as FinancialConceptDescriptor);
         return;
 
       default:
@@ -46,7 +46,7 @@ export class FinancialConceptsMainPageComponent {
   }
 
 
-  private setSelectedFinancialConcept(financialConcept: FinancialConcept) {
+  private setSelectedFinancialConcept(financialConcept: FinancialConceptDescriptor) {
     this.selectedFinancialConcept = financialConcept;
     this.displayFinancialConceptTabbed = !isEmpty(financialConcept);
   }

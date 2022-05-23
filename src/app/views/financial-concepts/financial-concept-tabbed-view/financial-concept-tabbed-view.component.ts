@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { EmptyFinancialConcept, FinancialConcept } from '@app/models';
+import { EmptyFinancialConcept, FinancialConceptDescriptor } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -25,7 +25,7 @@ export enum FinancialConceptTabbedViewEventType {
 })
 export class FinancialConceptTabbedViewComponent implements OnChanges {
 
-  @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
+  @Input() financialConcept: FinancialConceptDescriptor = EmptyFinancialConcept;
 
   @Output() financialConceptTabbedViewEvent = new EventEmitter<EventInfo>();
 
@@ -51,7 +51,7 @@ export class FinancialConceptTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
-    this.title = `${this.financialConcept.code}: ${this.financialConcept.concept}`;
+    this.title = `${this.financialConcept.code}: ${this.financialConcept.name}`;
     this.hint = `${this.financialConcept.accountsChartName} - ${this.financialConcept.groupName}`;
   }
 

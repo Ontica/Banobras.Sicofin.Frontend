@@ -12,7 +12,7 @@ import { Assertion, EventInfo } from '@app/core';
 import { FinancialConceptsDataService } from '@app/data-services';
 
 import { EmptyFinancialConcept, EmptyFinancialConceptCommand, EmptyFinancialConceptDataTable,
-         FinancialConcept, FinancialConceptCommand, FinancialConceptDataTable } from '@app/models';
+         FinancialConceptDescriptor, FinancialConceptCommand, FinancialConceptDataTable } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -37,7 +37,7 @@ export enum FinancialConceptsViewerEventType {
 })
 export class FinancialConceptsViewerComponent {
 
-  @Input() selectedFinancialConcept: FinancialConcept = EmptyFinancialConcept;
+  @Input() selectedFinancialConcept: FinancialConceptDescriptor = EmptyFinancialConcept;
 
   @Output() financialConceptsViewerEvent = new EventEmitter<EventInfo>();
 
@@ -109,7 +109,7 @@ export class FinancialConceptsViewerComponent {
 
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        this.emitFinancialConceptSelected(event.payload.entry as FinancialConcept);
+        this.emitFinancialConceptSelected(event.payload.entry as FinancialConceptDescriptor);
         return;
 
       default:
@@ -144,7 +144,7 @@ export class FinancialConceptsViewerComponent {
   private getFinancialConcepts() {
     this.setSubmitted(true);
 
-    this.financialConceptsData.getFinancialConcepts(this.financialConceptCommand.groupUID)
+    this.financialConceptsData.getFinancialConceptsInGroup(this.financialConceptCommand.groupUID)
       .toPromise()
       .then(x => {
         this.financialConceptData = Object.assign({}, this.financialConceptData,
@@ -193,7 +193,7 @@ export class FinancialConceptsViewerComponent {
   }
 
 
-  private emitFinancialConceptSelected(financialConcept: FinancialConcept) {
+  private emitFinancialConceptSelected(financialConcept: FinancialConceptDescriptor) {
     sendEvent(this.financialConceptsViewerEvent,
       FinancialConceptsViewerEventType.FINANCIAL_CONCEPT_SELECTED, {financialConcept});
   }

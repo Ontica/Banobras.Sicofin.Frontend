@@ -11,13 +11,22 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { FileReport, FinancialConcept, FinancialConceptEntry } from '@app/models';
+import { FileReport, FinancialConcept, FinancialConceptDescriptor, FinancialConceptEntry } from '@app/models';
 
 
 @Injectable()
 export class FinancialConceptsDataService {
 
   constructor(private http: HttpService) { }
+
+  getFinancialConcept(financialConceptUID: string): Observable<FinancialConcept> {
+    Assertion.assertValue(financialConceptUID, 'financialConceptUID');
+
+    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
+
+    return this.http.get<FinancialConcept>(path);
+  }
+
 
   getFinancialConceptsGroups(accountsChartUID: string): Observable<Identifiable[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
@@ -28,12 +37,12 @@ export class FinancialConceptsDataService {
   }
 
 
-  getFinancialConcepts(financialConceptGroupUID: string): Observable<FinancialConcept[]> {
+  getFinancialConceptsInGroup(financialConceptGroupUID: string): Observable<FinancialConceptDescriptor[]> {
     Assertion.assertValue(financialConceptGroupUID, 'financialConceptGroupUID');
 
     const path = `v2/financial-accounting/financial-concepts/in-group/${financialConceptGroupUID}`;
 
-    return this.http.get<FinancialConcept[]>(path);
+    return this.http.get<FinancialConceptDescriptor[]>(path);
   }
 
 

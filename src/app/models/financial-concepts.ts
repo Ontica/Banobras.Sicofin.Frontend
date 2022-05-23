@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
          DataTableEntry } from './data-table';
@@ -18,26 +18,33 @@ export interface FinancialConceptCommand extends DataTableCommand {
 }
 
 
-export interface FinancialConcept extends DataTableEntry {
+export interface FinancialConcept {
   uid: string;
   code: string;
-  concept: string;
+  name: string;
   position: number;
   level: number;
-  parentUID: string;
+  startDate: DateString;
+  endDate: DateString;
+  group: Identifiable;
+  integration: FinancialConceptEntry[]
+}
+
+
+export interface FinancialConceptDescriptor extends DataTableEntry {
+  uid: string;
+  code: string;
+  name: string;
+  position: number;
+  level: number;
   accountsChartName: string;
   groupName: string;
-
-  accountsChartUID?: string;
-  groupUID?: string;
-  startDate?: DateString;
-  endDate?: DateString;
 }
 
 
 export interface FinancialConceptDataTable extends DataTable {
   command: FinancialConceptCommand;
-  entries: FinancialConcept[];
+  entries: FinancialConceptDescriptor[];
 }
 
 
@@ -48,7 +55,7 @@ export const DefaultFinancialConceptsColumns: DataTableColumn[] = [
     type: DataTableColumnType.text_link,
   },
   {
-    field: 'concept',
+    field: 'name',
     title: 'Concepto',
     type: DataTableColumnType.text,
   },
@@ -98,13 +105,12 @@ export const EmptyFinancialConceptDataTable: FinancialConceptDataTable = {
 };
 
 
-export const EmptyFinancialConcept: FinancialConcept = {
+export const EmptyFinancialConcept: FinancialConceptDescriptor = {
   uid: '',
   code: '',
-  concept: '',
+  name: '',
   position: 0,
   level: 0,
-  parentUID: '',
   accountsChartName: '',
   groupName: '',
 };
