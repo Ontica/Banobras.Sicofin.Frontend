@@ -54,13 +54,4 @@ export class FinancialConceptsDataService {
     return this.http.get<FileReport>(path);
   }
 
-
-  getFinancialConceptIntegration(financialConceptUID: string): Observable<FinancialConceptEntry[]> {
-    Assertion.assertValue(financialConceptUID, 'financialConceptUID');
-
-    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}/integration`;
-
-    return this.http.get<FinancialConceptEntry[]>(path);
-  }
-
 }

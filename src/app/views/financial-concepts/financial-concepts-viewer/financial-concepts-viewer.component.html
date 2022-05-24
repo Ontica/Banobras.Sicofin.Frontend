@@ -28,13 +28,14 @@
 
       </emp-fa-financial-concepts-filter>
 
-      <emp-fa-data-table fxFlex
-        [dataTable]="financialConceptData"
+      <emp-fa-financial-concepts-table fxFlex
+        [financialConceptsList]="financialConceptsList"
+        [selectedFinancialConcept]="selectedFinancialConcept"
         [commandExecuted]="commandExecuted"
-        [selectedEntry]="selectedFinancialConcept"
-        (dataTableEvent)="onFinancialConceptsTableEvent($event)">
+        [isLoading]="isLoading"
+        (financialConceptsTableEvent)="onFinancialConceptsTableEvent($event)">
 
-      </emp-fa-data-table>
+      </emp-fa-financial-concepts-table>
 
     </div>
 

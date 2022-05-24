@@ -5,9 +5,9 @@
     </emp-ng-spinner>
 
     <emp-fa-concept-integration-entries-table fxFlex
-      [conceptIntegrationEntryList]="conceptIntegrationEntryList"
+      [conceptIntegrationEntryList]="financialConcept.integration"
       [canEdit]="canEdit"
-      [isLoading]="isLoading"
+      [isLoading]="submitted"
       (conceptIntegrationEntriesTableEvent)="onConceptIntegrationEntriesTableEvent($event)">
 
     </emp-fa-concept-integration-entries-table>

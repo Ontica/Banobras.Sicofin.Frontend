@@ -5,16 +5,24 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from '@app/core';
-
-import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
-         DataTableEntry } from './data-table';
+import { DateString, Empty, Identifiable } from '@app/core';
 
 
-export interface FinancialConceptCommand extends DataTableCommand {
+export interface FinancialConceptCommand {
   accountsChartUID: string;
   groupUID?: string;
   date?: DateString;
+}
+
+
+export interface FinancialConceptDescriptor {
+  uid: string;
+  code: string;
+  name: string;
+  position: number;
+  level: number;
+  accountsChartName: string;
+  groupName: string;
 }
 
 
@@ -27,39 +35,9 @@ export interface FinancialConcept {
   startDate: DateString;
   endDate: DateString;
   group: Identifiable;
+  accountsChart: Identifiable;
   integration: FinancialConceptEntry[]
 }
-
-
-export interface FinancialConceptDescriptor extends DataTableEntry {
-  uid: string;
-  code: string;
-  name: string;
-  position: number;
-  level: number;
-  accountsChartName: string;
-  groupName: string;
-}
-
-
-export interface FinancialConceptDataTable extends DataTable {
-  command: FinancialConceptCommand;
-  entries: FinancialConceptDescriptor[];
-}
-
-
-export const DefaultFinancialConceptsColumns: DataTableColumn[] = [
-  {
-    field: 'code',
-    title: 'Clave',
-    type: DataTableColumnType.text_link,
-  },
-  {
-    field: 'name',
-    title: 'Concepto',
-    type: DataTableColumnType.text,
-  },
-];
 
 
 export enum FinancialConceptEntryType {
@@ -80,17 +58,6 @@ export interface FinancialConceptEntry {
 }
 
 
-export const EmptyEmptyConceptIntegrationEntry: FinancialConceptEntry = {
-  uid: '',
-  type: FinancialConceptEntryType.Account,
-  itemName: '',
-  itemCode: '',
-  subledgerAccount: '',
-  sectorCode: '',
-  operator: '',
-}
-
-
 export const EmptyFinancialConceptCommand: FinancialConceptCommand = {
   accountsChartUID: '',
   groupUID: '',
@@ -98,14 +65,7 @@ export const EmptyFinancialConceptCommand: FinancialConceptCommand = {
 };
 
 
-export const EmptyFinancialConceptDataTable: FinancialConceptDataTable = {
-  command: EmptyFinancialConceptCommand,
-  columns: DefaultFinancialConceptsColumns,
-  entries: [],
-};
-
-
-export const EmptyFinancialConcept: FinancialConceptDescriptor = {
+export const EmptyFinancialConceptDescriptor: FinancialConceptDescriptor = {
   uid: '',
   code: '',
   name: '',
@@ -114,3 +74,28 @@ export const EmptyFinancialConcept: FinancialConceptDescriptor = {
   accountsChartName: '',
   groupName: '',
 };
+
+
+export const EmptyFinancialConcept: FinancialConcept = {
+  uid: '',
+  code: '',
+  name: '',
+  position: 0,
+  level: 0,
+  group: Empty,
+  accountsChart: Empty,
+  startDate: '',
+  endDate: '',
+  integration: [],
+};
+
+
+export const EmptyFinancialConceptEntry: FinancialConceptEntry = {
+  uid: '',
+  type: FinancialConceptEntryType.Account,
+  itemName: '',
+  itemCode: '',
+  subledgerAccount: '',
+  sectorCode: '',
+  operator: '',
+}

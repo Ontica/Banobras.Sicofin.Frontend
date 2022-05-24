@@ -1,0 +1,79 @@
+<div fxLayout="column" fxFlexFill>
+
+  <div #controlsContainer *ngIf="commandExecuted" fxFlex="none">
+
+    <mat-divider>
+
+    </mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" [style.padding.px]="5" [style.margin.px]="3">
+
+      <div fxFlex="25">
+
+        <div class="input-icon-container">
+
+          <input #filterInput type="text" class="text-box" name="filterInput" autocomplete="off"
+            [(ngModel)]="filter"
+            placeholder="Buscar en resultado..."
+            (keyup.enter)="onFilterData()"
+            (keyup.escape)="onClearFilter()">
+
+          <mat-icon class="input-icon" (click)="onFilterData()">search</mat-icon>
+
+        </div>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
+
+        <button class="btn"
+          (click)="onExportButtonClicked()">
+          Exportar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div #tableContainer fxFlex>
+
+    <cdk-virtual-scroll-viewport tvsItemSize="32" headerHeight="40" [bufferMultiplier]="0">
+
+      <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef> Clave </th>
+          <td mat-cell *matCellDef="let row">
+            <a class="item-link nowrap" (click)="onFinancialConceptClicked(row)">
+              {{row.code}}
+            </a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Concepto </th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          class="selectable-row" [class.row-selected]="row.uid === selectedFinancialConcept.uid"></tr>
+      </table>
+
+      <div class="text-not-found" *ngIf="isLoading">
+        Cargando...
+      </div>
+
+      <div class="text-not-found" *ngIf="!isLoading && financialConceptsList.length === 0">
+          {{commandExecuted ?
+          'No se encontraron conceptos para la agrupación seleccionada.' :
+          'No se ha invocado la consulta.'}}
+      </div>
+
+    </cdk-virtual-scroll-viewport>
+
+  </div>
+
+</div>

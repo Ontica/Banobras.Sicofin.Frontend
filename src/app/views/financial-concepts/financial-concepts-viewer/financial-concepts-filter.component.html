@@ -1,7 +1,5 @@
 <form #form="ngForm" autocomplete="off" class="form-section form-container"
-  [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()">
-
-  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+  (keydown.enter)="$event.preventDefault()">
 
   <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
 
@@ -15,6 +13,7 @@
           [config]="{selectFirst: true, bindByValue: false}"
           [(ngModel)]="financialConceptsForm.accountChart"
           [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
           [showError]="!financialConceptsForm.accountChart"
           (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
@@ -29,6 +28,7 @@
           [config]="{bindByValue: false}"
           [(ngModel)]="financialConceptsForm.financialConceptsGroup"
           [items]="financialConceptsGroupsList"
+          [loading]="isLoading"
           [showError]="!financialConceptsForm.financialConceptsGroup">
         </emp-ng-select>
 

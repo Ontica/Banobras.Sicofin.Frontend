@@ -74,7 +74,6 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
     const payload = {
       financialConceptCommand: this.getFinancialConceptCommand(),
       financialConceptsGroupsName: this.financialConceptsForm.financialConceptsGroup.name,
-      accountChartName: this.financialConceptsForm.accountChart.name,
     };
 
     sendEvent(this.financialConceptsFilterEvent,
@@ -84,21 +83,17 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
 
   private loadAccountsCharts() {
     this.isLoading = true;
-
     this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
-      .subscribe(x => {
-        this.accountsChartMasterDataList = x;
-        this.isLoading = false;
-      });
+      .subscribe(x => this.accountsChartMasterDataList = x);
   }
 
 
-  private getFinancialConceptsGroups(accountChartUID) {
+  private getFinancialConceptsGroups(accountChartUID: string) {
     this.isLoading = true;
 
     this.financialConceptsData.getFinancialConceptsGroups(accountChartUID)
       .toPromise()
-      .then(x => this.financialConceptsGroupsList = x )
+      .then(x => this.financialConceptsGroupsList = x)
       .finally(() => this.isLoading = false);
   }
 

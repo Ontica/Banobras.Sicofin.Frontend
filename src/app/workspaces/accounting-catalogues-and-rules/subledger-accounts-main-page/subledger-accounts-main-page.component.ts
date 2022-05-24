@@ -92,7 +92,7 @@ export class SubledgerAccountsMainPageComponent {
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
         Assertion.assertValue(event.payload.subledgerAccount.id, 'event.payload.subledgerAccount.id');
 
-        this.gettSubledgerAccount(event.payload.subledgerAccount.id);
+        this.getSubledgerAccount(event.payload.subledgerAccount.id);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -164,7 +164,7 @@ export class SubledgerAccountsMainPageComponent {
   }
 
 
-  private gettSubledgerAccount(idSubledgerAccount: number) {
+  private getSubledgerAccount(idSubledgerAccount: number) {
     this.isLoadingSubledgerAccount = true;
 
     this.subledgerData.getSubledgerAccount(idSubledgerAccount)

@@ -1,9 +1,14 @@
+<emp-ng-spinner #spinner [visible]="isLoadingFinancialConcept"></emp-ng-spinner>
+
 <div class="explorer">
 
   <div class="primary" [fxHide.lt-lg]="displayFinancialConceptTabbed">
 
     <emp-fa-financial-concepts-viewer
+      [financialConceptsList]="financialConceptsList"
+      [excelFileUrl]="excelFileUrl"
       [selectedFinancialConcept]="selectedFinancialConcept"
+      [isLoading]="isLoading"
       (financialConceptsViewerEvent)="onFinancialConceptsViewerEvent($event)">
 
     </emp-fa-financial-concepts-viewer>

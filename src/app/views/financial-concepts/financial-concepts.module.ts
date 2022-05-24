@@ -18,6 +18,7 @@ import { ReportsControlsModule } from '../reports-controls/reports-controls.modu
 import { ConceptIntegrationEntriesTableComponent } from './financial-concept-integration-edition/concept-integration-entries-table.component';
 import { FinancialConceptIntegrationEditionComponent } from './financial-concept-integration-edition/financial-concept-integration-edition.component';
 import { FinancialConceptsFilterComponent } from './financial-concepts-viewer/financial-concepts-filter.component';
+import { FinancialConceptsTableComponent } from './financial-concepts-viewer/financial-concepts-table.component';
 import { FinancialConceptsViewerComponent } from './financial-concepts-viewer/financial-concepts-viewer.component';
 import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-view/financial-concept-tabbed-view.component';
 
@@ -27,6 +28,7 @@ import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-
     ConceptIntegrationEntriesTableComponent,
     FinancialConceptIntegrationEditionComponent,
     FinancialConceptsFilterComponent,
+    FinancialConceptsTableComponent,
     FinancialConceptsViewerComponent,
     FinancialConceptTabbedViewComponent,
   ],

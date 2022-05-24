@@ -5,20 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { FinancialConceptsDataService } from '@app/data-services';
-
-import { EmptyFinancialConcept, EmptyFinancialConceptCommand, EmptyFinancialConceptDataTable,
-         FinancialConceptDescriptor, FinancialConceptCommand, FinancialConceptDataTable } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { EmptyFinancialConcept, FinancialConcept, FinancialConceptDescriptor } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
-
-import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
 import {
   ExportReportModalEventType
@@ -26,18 +19,28 @@ import {
 
 import { FinancialConceptsFilterEventType } from './financial-concepts-filter.component';
 
+import { FinancialConceptsTableEventType } from './financial-concepts-table.component';
+
 
 export enum FinancialConceptsViewerEventType {
-  FINANCIAL_CONCEPT_SELECTED = 'FinancialConceptsViewerComponent.Event.FinancialConceptSelected',
+  SEARCH_FINANCIAL_CONCEPTS_CLICKED = 'FinancialConceptsViewerComponent.Event.SearchFinancialConceptsClicked',
+  EXPORT_DATA_BUTTON_CLICKED        = 'FinancialConceptsViewerComponent.Event.ExportDataButtonClicked',
+  SELECT_FINANCIAL_CONCEPT_CLICKED  = 'FinancialConceptsViewerComponent.Event.SelectFinancialConceptClicked',
 }
 
 @Component({
   selector: 'emp-fa-financial-concepts-viewer',
   templateUrl: './financial-concepts-viewer.component.html',
 })
-export class FinancialConceptsViewerComponent {
+export class FinancialConceptsViewerComponent implements OnChanges {
 
-  @Input() selectedFinancialConcept: FinancialConceptDescriptor = EmptyFinancialConcept;
+  @Input() financialConceptsList: FinancialConceptDescriptor[] = [];
+
+  @Input() excelFileUrl = '';
+
+  @Input() selectedFinancialConcept: FinancialConcept = EmptyFinancialConcept;
+
+  @Input() isLoading = false;
 
   @Output() financialConceptsViewerEvent = new EventEmitter<EventInfo>();
 
@@ -45,47 +48,29 @@ export class FinancialConceptsViewerComponent {
 
   cardHint = 'Seleccionar los filtros';
 
-  isLoading = false;
-
-  submitted = false;
-
   commandExecuted = false;
-
-  financialConceptData: FinancialConceptDataTable = EmptyFinancialConceptDataTable;
-
-  financialConceptCommand: FinancialConceptCommand = Object.assign({}, EmptyFinancialConceptCommand);
 
   displayExportModal = false;
 
-  excelFileUrl = '';
 
-  displayFinancialConceptCreator = false;
-
-  constructor(private financialConceptsData: FinancialConceptsDataService,
-              private messageBox: MessageBoxService) { }
-
-
-  onAddFinancialConceptClicked() {
-    this.displayFinancialConceptCreator = true;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.financialConceptsList) {
+      this.setText();
+    }
   }
 
 
   onFinancialConceptsFilterEvent(event: EventInfo) {
-    if (this.submitted) {
-      return;
-    }
-
     switch (event.type as FinancialConceptsFilterEventType) {
-
       case FinancialConceptsFilterEventType.SEARCH_FINANCIAL_CONCEPTS_CLICKED:
         Assertion.assertValue(event.payload.financialConceptCommand, 'event.payload.financialConceptCommand');
         Assertion.assertValue(event.payload.financialConceptsGroupsName,
           'event.payload.financialConceptsGroupsName');
 
-        this.commandExecuted = true;
-        this.financialConceptCommand = event.payload.financialConceptCommand as FinancialConceptCommand;
         this.financialConceptsGroupsName = event.payload.financialConceptsGroupsName;
-        this.getFinancialConcepts();
+        this.commandExecuted = true;
+        sendEvent(this.financialConceptsViewerEvent,
+          FinancialConceptsViewerEventType.SEARCH_FINANCIAL_CONCEPTS_CLICKED, event.payload);
         return;
 
       default:
@@ -96,20 +81,23 @@ export class FinancialConceptsViewerComponent {
 
 
   onFinancialConceptsTableEvent(event: EventInfo) {
-    switch (event.type as DataTableEventType) {
+    switch (event.type as FinancialConceptsTableEventType) {
 
-      case DataTableEventType.COUNT_FILTERED_ENTRIES:
-        Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
-        this.setText(event.payload.displayedEntriesMessage as string);
+      case FinancialConceptsTableEventType.ENTRIES_DISPLAYED_TEXT:
+        Assertion.assertValue(event.payload.entriesDisplayedText, 'event.payload.entriesDisplayedText');
+        this.setText(event.payload.entriesDisplayedText);
         return;
 
-      case DataTableEventType.EXPORT_DATA:
+      case FinancialConceptsTableEventType.EXPORT_DATA:
         this.setDisplayExportModal(true);
         return;
 
-      case DataTableEventType.ENTRY_CLICKED:
-        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
-        this.emitFinancialConceptSelected(event.payload.entry as FinancialConceptDescriptor);
+      case FinancialConceptsTableEventType.FINANCIAL_CONCEPT_CLICKED:
+        Assertion.assertValue(event.payload.financialConcept, 'event.payload.financialConcept');
+        sendEvent(this.financialConceptsViewerEvent,
+          FinancialConceptsViewerEventType.SELECT_FINANCIAL_CONCEPT_CLICKED,
+          {financialConcept: event.payload.financialConcept});
+
         return;
 
       default:
@@ -127,41 +115,14 @@ export class FinancialConceptsViewerComponent {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (this.submitted || !this.financialConceptData.command.accountsChartUID) {
-          return;
-        }
-
-        this.exportFinancialConceptsToExcel();
+        sendEvent(this.financialConceptsViewerEvent,
+          FinancialConceptsViewerEventType.EXPORT_DATA_BUTTON_CLICKED);
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-  }
-
-
-  private getFinancialConcepts() {
-    this.setSubmitted(true);
-
-    this.financialConceptsData.getFinancialConceptsInGroup(this.financialConceptCommand.groupUID)
-      .toPromise()
-      .then(x => {
-        this.financialConceptData = Object.assign({}, this.financialConceptData,
-          {command: this.financialConceptCommand, entries: x});
-        this.setText();
-        this.emitFinancialConceptSelected(EmptyFinancialConcept);
-      })
-      .finally(() => this.setSubmitted(false));
-  }
-
-
-  private exportFinancialConceptsToExcel() {
-    this.financialConceptsData.exportFinancialConceptsToExcel(this.financialConceptCommand.groupUID)
-      .toPromise()
-      .then(x => {
-        this.excelFileUrl = x.url;
-      });
   }
 
 
@@ -176,26 +137,14 @@ export class FinancialConceptsViewerComponent {
       return;
     }
 
-    this.cardHint = `${this.financialConceptsGroupsName} - ${this.financialConceptData.entries.length}` +
+    this.cardHint = `${this.financialConceptsGroupsName} - ${this.financialConceptsList.length}` +
       ` registros encontrados`;
-  }
-
-
-  private setSubmitted(submitted: boolean) {
-    this.isLoading = submitted;
-    this.submitted = submitted;
   }
 
 
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
-  }
-
-
-  private emitFinancialConceptSelected(financialConcept: FinancialConceptDescriptor) {
-    sendEvent(this.financialConceptsViewerEvent,
-      FinancialConceptsViewerEventType.FINANCIAL_CONCEPT_SELECTED, {financialConcept});
   }
 
 }

@@ -5,13 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { FinancialConceptEntry, EmptyEmptyConceptIntegrationEntry } from '@app/models';
+import { FinancialConceptEntry, EmptyFinancialConceptEntry, FinancialConcept, EmptyFinancialConcept } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -22,33 +22,24 @@ import { ConceptIntegrationEntriesTableEventType } from './concept-integration-e
   selector: 'emp-fa-financial-concept-integration-edition',
   templateUrl: './financial-concept-integration-edition.component.html',
 })
-export class FinancialConceptIntegrationEditionComponent implements OnChanges {
+export class FinancialConceptIntegrationEditionComponent {
 
-  @Input() financialConceptUID = '';
-
-  isLoading = false;
+  @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
 
   submitted = false;
 
   canEdit = false;
 
-  conceptIntegrationEntryList: FinancialConceptEntry[] = [];
-
   displayConceptIntegrationEntryEditor = false;
 
-  selectedConceptIntegrationEntry: FinancialConceptEntry = EmptyEmptyConceptIntegrationEntry;
+  selectedConceptIntegrationEntry: FinancialConceptEntry = EmptyFinancialConceptEntry;
 
   constructor(private financialConceptsData: FinancialConceptsDataService,
               private messageBox: MessageBoxService) {}
 
 
-  ngOnChanges() {
-    this.getConceptIntegration();
-  }
-
-
   onAddConceptIntegrationEntryClicked() {
-    this.setSelectedConceptIntegrationEntry(EmptyEmptyConceptIntegrationEntry, true);
+    this.setSelectedConceptIntegrationEntry(EmptyFinancialConceptEntry, true);
     this.messageBox.showInDevelopment('Agregar integración');
   }
 
@@ -77,17 +68,6 @@ export class FinancialConceptIntegrationEditionComponent implements OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-  }
-
-
-  private getConceptIntegration() {
-    this.isLoading = true;
-    this.conceptIntegrationEntryList = [];
-
-    this.financialConceptsData.getFinancialConceptIntegration(this.financialConceptUID)
-      .toPromise()
-      .then(x => this.conceptIntegrationEntryList = x)
-      .finally(() => this.isLoading = false);
   }
 
 
