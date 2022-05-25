@@ -11,21 +11,14 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { FileReport, FinancialConcept, FinancialConceptDescriptor, FinancialConceptEntry } from '@app/models';
+import { FileReport, FinancialConcept, FinancialConceptDescriptor,
+         FinancialConceptEditionCommand } from '@app/models';
 
 
 @Injectable()
 export class FinancialConceptsDataService {
 
   constructor(private http: HttpService) { }
-
-  getFinancialConcept(financialConceptUID: string): Observable<FinancialConcept> {
-    Assertion.assertValue(financialConceptUID, 'financialConceptUID');
-
-    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
-
-    return this.http.get<FinancialConcept>(path);
-  }
 
 
   getFinancialConceptsGroups(accountsChartUID: string): Observable<Identifiable[]> {
@@ -52,6 +45,45 @@ export class FinancialConceptsDataService {
     const path = `v2/financial-accounting/financial-concepts/groups/${financialConceptGroupUID}/excel`;
 
     return this.http.get<FileReport>(path);
+  }
+
+
+  getFinancialConcept(financialConceptUID: string): Observable<FinancialConcept> {
+    Assertion.assertValue(financialConceptUID, 'financialConceptUID');
+
+    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
+
+    return this.http.get<FinancialConcept>(path);
+  }
+
+
+
+  insertFinancialConcept(command: FinancialConceptEditionCommand): Observable<FinancialConcept> {
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/financial-concepts`;
+
+    return this.http.post<FinancialConcept>(path, command);
+  }
+
+
+  updateFinancialConcept(financialConceptUID: string,
+                         command: FinancialConceptEditionCommand): Observable<FinancialConcept> {
+    Assertion.assertValue(financialConceptUID, 'financialConceptUID');
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
+
+    return this.http.put<FinancialConcept>(path, command);
+  }
+
+
+  removeFinancialConcept(financialConceptUID: string): Observable<void> {
+    Assertion.assertValue(financialConceptUID, 'financialConceptUID');
+
+    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
+
+    return this.http.delete<void>(path);
   }
 
 }

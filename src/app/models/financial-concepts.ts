@@ -40,6 +40,37 @@ export interface FinancialConcept {
 }
 
 
+export enum PositioningRule {
+  AtStart = 'AtStart',
+  BeforeOffset = 'BeforeOffset',
+  AfterOffset = 'AfterOffset',
+  AtEnd = 'AtEnd',
+  ByPositionValue = 'ByPositionValue',
+}
+
+
+export const PositioningRuleList: Identifiable[] = [
+  {uid: PositioningRule.AtStart,         name: 'Al principio'},
+  {uid: PositioningRule.BeforeOffset,    name: 'Antes de'},
+  {uid: PositioningRule.AfterOffset,     name: 'Despues de'},
+  {uid: PositioningRule.AtEnd,           name: 'Al final'},
+  {uid: PositioningRule.ByPositionValue, name: 'En posición'},
+];
+
+
+export interface FinancialConceptEditionCommand {
+  financialConceptUID?: string;
+  groupUID: string;
+  code: string;
+  name: string;
+  positioningRule: PositioningRule;
+  positioningOffsetConceptUID?: string;
+  position?: number;
+  startDate: DateString;
+  endDate: DateString;
+}
+
+
 export enum FinancialConceptEntryType {
   Account = 'Account',
   ExternalVariable = 'ExternalVariable',

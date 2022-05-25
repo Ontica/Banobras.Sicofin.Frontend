@@ -4,6 +4,16 @@
 
   <mat-tab-group [(selectedIndex)]="selectedTabIndex">
 
+    <mat-tab label="Concepto">
+
+      <emp-fa-financial-concept-editor
+        [financialConcept]="financialConcept"
+        (financialConceptEditorEvent)="onFinancialConceptEditorEvent($event)">
+
+      </emp-fa-financial-concept-editor>
+
+    </mat-tab>
+
     <mat-tab label="Integración">
 
       <emp-fa-financial-concept-integration-edition

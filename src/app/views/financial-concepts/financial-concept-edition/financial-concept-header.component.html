@@ -1,0 +1,181 @@
+<form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner"
+  autocomplete="off" class="form-section" (keydown.enter)="$event.preventDefault()">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+  <div class="section-title"> Información de la agrupación </div>
+
+    <div fxLayout="row">
+
+        <div [fxFlex]="100/3">
+          <label>Catálogo de cuentas:</label>
+          <emp-ng-select
+            [formControlName]="controls.accountsChartUID"
+            [items]="accountsChartMasterDataList"
+            [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
+            (changes)="onAccountsChartChanged($event)">
+          </emp-ng-select>
+        </div>
+
+        <div [fxFlex]="200/3">
+          <label>Agrupación:</label>
+          <emp-ng-select
+            [formControlName]="controls.groupUID"
+            [items]="groupsList"
+            [showError]="formHandler.showInvalidControl(controls.groupUID)"
+            [loading]="isLoadingGroups"
+            [placeholder]="!!formHandler.getControl(controls.accountsChartUID).value ? 'Seleccionar' : 'Seleccionar el catálogo de cuentas'">
+          </emp-ng-select>
+        </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100/3">
+        <label>Posición:</label>
+        <emp-ng-select
+          [formControlName]="controls.positioningRule"
+          [items]="positioningRuleList"
+          [showError]="formHandler.showInvalidControl(controls.positioningRule)"
+          (changes)="onPositioningRuleChanged()">
+        </emp-ng-select>
+      </div>
+
+      <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffsetConcept">
+        <emp-ng-select [fxFlex]="100"
+          [formControlName]="controls.positioningOffsetConceptUID"
+          [items]="financialConceptsList"
+          [loading]="isLoadingFinancialConcepts"
+          [config]="{virtualScroll: true, searchableFields: ['code', 'name']}"
+          [showError]="formHandler.showInvalidControl(controls.positioningOffsetConceptUID)"
+          [placeholder]="!!formHandler.getControl(controls.groupUID).value ? 'Seleccionar' : 'Seleccionar la agrupación'"
+          bindLabel="code">
+          <ng-template #labelTemplate let-item="item">
+            ({{item.code}}) {{item.name}}
+          </ng-template>
+          <ng-template #optionTemplate let-item="item">
+            ({{item.code}}) {{item.name}}
+          </ng-template>
+        </emp-ng-select>
+      </div>
+
+      <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
+
+        <input type="text" class="text-box text-align-right" empNgInteger
+          [formControlName]="controls.position">
+
+      </div>
+
+    </div>
+
+    <div class="section-title"> Información del concepto </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100/3">
+        <label>Clave:</label>
+        <input type="text" class="text-box"
+          [formControlName]="controls.code"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.code)">
+      </div>
+
+      <div fxFlex fxLayoutAlign="end end">
+        <div fxFlex="none">
+          <label>Fecha inicial:</label>
+          <emp-ng-datepicker
+            [formControlName]="controls.startDate"
+            [showError]="formHandler.showInvalidControl(controls.startDate)">
+          </emp-ng-datepicker>
+        </div>
+
+        <div fxFlex="none">
+          <label>Fecha final:</label>
+          <emp-ng-datepicker
+            [formControlName]="controls.endDate"
+            [showError]="formHandler.showInvalidControl(controls.endDate)">
+          </emp-ng-datepicker>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100">
+
+        <label>Concepto:</label>
+        <input type="text" class="text-box"
+          [formControlName]="controls.name"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+
+      </div>
+    </div>
+
+  </div>
+
+  <mat-divider class="horizontal"></mat-divider>
+
+  <div #rowFooter fxLayout="row">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button (click)="onSubmitForm()"
+          [class.btn]="!formHandler.isValid"
+          [class.btn-action]="formHandler.isValid">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved">
+
+      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+
+        <button type="button" class="btn-warning"
+          (click)="onRemoveButtonClicked()">
+          Eliminar
+        </button>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <ng-container *ngIf="editionMode">
+
+          <button (click)="onSubmitForm()"
+            [class.btn]="!formHandler.isValid"
+            [class.btn-action]="formHandler.isValid">
+            Guardar
+          </button>
+
+          <button (click)="enableEditor(false)"
+            class="btn-base uppercase">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
+            Editar
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

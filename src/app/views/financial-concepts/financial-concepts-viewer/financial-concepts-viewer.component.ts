@@ -26,6 +26,7 @@ export enum FinancialConceptsViewerEventType {
   SEARCH_FINANCIAL_CONCEPTS_CLICKED = 'FinancialConceptsViewerComponent.Event.SearchFinancialConceptsClicked',
   EXPORT_DATA_BUTTON_CLICKED        = 'FinancialConceptsViewerComponent.Event.ExportDataButtonClicked',
   SELECT_FINANCIAL_CONCEPT_CLICKED  = 'FinancialConceptsViewerComponent.Event.SelectFinancialConceptClicked',
+  CREATE_FINANCIAL_CONCEPT_CLICKED  = 'FinancialConceptsViewerComponent.Event.CreateFinancialConceptClicked',
 }
 
 @Component({
@@ -57,6 +58,11 @@ export class FinancialConceptsViewerComponent implements OnChanges {
     if (changes.financialConceptsList) {
       this.setText();
     }
+  }
+
+  onCreateFinancialConceptClicked() {
+    sendEvent(this.financialConceptsViewerEvent,
+      FinancialConceptsViewerEventType.CREATE_FINANCIAL_CONCEPT_CLICKED);
   }
 
 

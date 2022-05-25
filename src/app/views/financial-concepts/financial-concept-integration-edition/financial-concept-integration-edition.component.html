@@ -4,6 +4,18 @@
 
     </emp-ng-spinner>
 
+    <div fxFlex="none" fxLayoutAlign="end center" *ngIf="canEdit">
+
+      <button
+        class="btn-action"
+        [style.marginLeft.px]="8"
+        [style.marginBottom.px]="8"
+        (click)="onAddConceptIntegrationEntryClicked()">
+        Agregar integración
+      </button>
+
+    </div>
+
     <emp-fa-concept-integration-entries-table fxFlex
       [conceptIntegrationEntryList]="financialConcept.integration"
       [canEdit]="canEdit"

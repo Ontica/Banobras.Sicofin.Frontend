@@ -19,10 +19,17 @@
 
     <emp-fa-financial-concept-tabbed-view
       [financialConcept]="selectedFinancialConcept"
-      (financialConceptTabbedViewEvent)="onCloseFinancialConceptTabbedView()">
+      (financialConceptTabbedViewEvent)="onFinancialConceptTabbedViewEvent($event)">
 
     </emp-fa-financial-concept-tabbed-view>
 
   </div>
 
 </div>
+
+<emp-fa-financial-concept-creator *ngIf="displayFinancialConceptCreator"
+  [accountsChartUID]="financialConceptCommand.accountsChartUID"
+  [financialConceptsGroupUID]="financialConceptCommand.groupUID"
+  (financialConceptCreatorEvent)="onFinancialConceptCreatorEvent($event)">
+
+</emp-fa-financial-concept-creator>

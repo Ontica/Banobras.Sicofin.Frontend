@@ -16,6 +16,9 @@ import { SharedModule } from '@app/shared/shared.module';
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
 import { ConceptIntegrationEntriesTableComponent } from './financial-concept-integration-edition/concept-integration-entries-table.component';
+import { FinancialConceptCreatorComponent } from './financial-concept-edition/financial-concept-creator.component';
+import { FinancialConceptEditorComponent } from './financial-concept-edition/financial-concept-editor.component';
+import { FinancialConceptHeaderComponent } from './financial-concept-edition/financial-concept-header.component';
 import { FinancialConceptIntegrationEditionComponent } from './financial-concept-integration-edition/financial-concept-integration-edition.component';
 import { FinancialConceptsFilterComponent } from './financial-concepts-viewer/financial-concepts-filter.component';
 import { FinancialConceptsTableComponent } from './financial-concepts-viewer/financial-concepts-table.component';
@@ -26,6 +29,9 @@ import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-
 @NgModule({
   declarations: [
     ConceptIntegrationEntriesTableComponent,
+    FinancialConceptCreatorComponent,
+    FinancialConceptEditorComponent,
+    FinancialConceptHeaderComponent,
     FinancialConceptIntegrationEditionComponent,
     FinancialConceptsFilterComponent,
     FinancialConceptsTableComponent,
@@ -44,6 +50,7 @@ import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-
     ReportsControlsModule,
   ],
   exports: [
+    FinancialConceptCreatorComponent,
     FinancialConceptsViewerComponent,
     FinancialConceptTabbedViewComponent,
   ]

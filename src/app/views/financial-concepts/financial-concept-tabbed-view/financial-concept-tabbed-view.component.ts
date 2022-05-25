@@ -13,8 +13,14 @@ import { EmptyFinancialConcept, FinancialConcept } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
+import {
+  FinancialConceptEditorEventType
+} from '../financial-concept-edition/financial-concept-editor.component';
+
 export enum FinancialConceptTabbedViewEventType {
-  CLOSE_BUTTON_CLICKED = 'FinancialConceptTabbedViewComponent.Event.CloseButtonClicked',
+  CLOSE_BUTTON_CLICKED      = 'FinancialConceptTabbedViewComponent.Event.CloseButtonClicked',
+  FINANCIAL_CONCEPT_UPDATED = 'FinancialConceptTabbedViewComponent.Event.FinancialConceptUpdated',
+  FINANCIAL_CONCEPT_REMOVED = 'FinancialConceptTabbedViewComponent.Event.FinancialConceptRemoved',
 }
 
 @Component({
@@ -31,7 +37,7 @@ export class FinancialConceptTabbedViewComponent implements OnChanges {
 
   hint = '';
 
-  selectedTabIndex = 0;
+  selectedTabIndex = 1;
 
   isLoading = false;
 
@@ -43,6 +49,26 @@ export class FinancialConceptTabbedViewComponent implements OnChanges {
 
   onClose() {
     sendEvent(this.financialConceptTabbedViewEvent, FinancialConceptTabbedViewEventType.CLOSE_BUTTON_CLICKED);
+  }
+
+
+  onFinancialConceptEditorEvent(event: EventInfo) {
+    switch (event.type as FinancialConceptEditorEventType) {
+
+      case FinancialConceptEditorEventType.FINANCIAL_CONCEPT_UPDATED:
+        sendEvent(this.financialConceptTabbedViewEvent,
+          FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_UPDATED, event.payload);
+        return;
+
+      case FinancialConceptEditorEventType.FINANCIAL_CONCEPT_REMOVED:
+        sendEvent(this.financialConceptTabbedViewEvent,
+          FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_REMOVED);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
