@@ -110,7 +110,7 @@ export class FinancialConceptsMainPageComponent {
     switch (event.type as FinancialConceptTabbedViewEventType) {
 
       case FinancialConceptTabbedViewEventType.CLOSE_BUTTON_CLICKED:
-        this.displayFinancialConceptCreator = false;
+        this.displayFinancialConceptTabbed = false;
         return;
 
       case FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_UPDATED:
