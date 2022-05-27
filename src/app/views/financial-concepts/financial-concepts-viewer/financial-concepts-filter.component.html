@@ -10,7 +10,7 @@
         <label>Catálogo de cuentas:</label>
 
         <emp-ng-select name="accountChart" required
-          [config]="{selectFirst: true, bindByValue: false}"
+          [config]="{bindByValue: false}"
           [(ngModel)]="financialConceptsForm.accountChart"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"

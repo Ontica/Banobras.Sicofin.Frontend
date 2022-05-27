@@ -96,8 +96,20 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
     .subscribe(([x, y]) => {
       this.accountsChartMasterDataList = x;
       this.groupsList = y;
+      this.setInitialData();
       this.isLoading = false;
     });
+  }
+
+
+  private setInitialData() {
+    if (this.accountsChartMasterDataList.length > 0) {
+      this.financialConceptsForm.accountChart = this.accountsChartMasterDataList[0];
+
+      if (this.groupsList.length > 0) {
+        this.filterFinancialConceptsGroups(this.financialConceptsForm.accountChart.uid);
+      }
+    }
   }
 
 
