@@ -10,7 +10,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { of, Subject } from 'rxjs';
+import { combineLatest, of, Subject } from 'rxjs';
 
 import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
@@ -21,9 +21,11 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { FinancialConceptsDataService } from '@app/data-services';
 
 import { AccountsChartMasterData, EmptyFinancialConcept, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEditionCommand, PositioningRule, PositioningRuleList } from '@app/models';
+         FinancialConceptEditionCommand, FinancialConceptsGroup, PositioningRule,
+         PositioningRuleList } from '@app/models';
 
-import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector,
+         FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -75,7 +77,9 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  groupsList: Identifiable[] = [];
+  groupsList: FinancialConceptsGroup[] = [];
+
+  filteredGroupsList: FinancialConceptsGroup[] = [];
 
   positioningRuleList: Identifiable[] = PositioningRuleList;
 
@@ -111,7 +115,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   ngOnInit() {
-    this.loadAccountsCharts();
+    this.loadDataLists();
   }
 
 
@@ -273,25 +277,21 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  private loadAccountsCharts() {
+  private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
-      .subscribe(x => {
-        this.accountsChartMasterDataList = x;
-        this.setAccountsChartDefault();
-        this.isLoading = false;
-      });
-  }
-
-
-  private getGroups(accountChartUID) {
-    this.isLoadingGroups = true;
-
-    this.financialConceptsData.getFinancialConceptsGroups(accountChartUID)
-      .toPromise()
-      .then(x => this.groupsList = x )
-      .finally(() => this.isLoadingGroups = false);
+    combineLatest([
+      this.helper.select<AccountsChartMasterData[]>
+        (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
+      this.helper.select<FinancialConceptsGroup[]>
+        (FinancialConceptsStateSelector.FINANCIAL_CONCEPTS_GROUPS_LIST),
+    ])
+    .subscribe(([x, y]) => {
+      this.accountsChartMasterDataList = x;
+      this.groupsList = y;
+      this.setAccountsChartDefault();
+      this.isLoading = false;
+    });
   }
 
 
@@ -335,7 +335,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
     this.formHandler.getControl(this.controls.accountsChartUID).reset(accountsChartUID);
 
     if (!!accountsChartUID) {
-      this.getGroups(accountsChartUID);
+      this.filterFinancialConceptsGroups(accountsChartUID);
     }
   }
 
@@ -345,12 +345,17 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  private validateAccountsChartChanged(accountChartUID: string) {
-    this.groupsList = [];
+  private validateAccountsChartChanged(accountsChartUID: string) {
+    this.filteredGroupsList = [];
 
-    if (!!accountChartUID) {
-      this.getGroups(accountChartUID);
+    if (!!accountsChartUID) {
+      this.filterFinancialConceptsGroups(accountsChartUID);
     }
+  }
+
+
+  private filterFinancialConceptsGroups(accountsChartUID: string) {
+    this.filteredGroupsList = this.groupsList.filter(x => x.accountsChart.uid === accountsChartUID);
   }
 
 

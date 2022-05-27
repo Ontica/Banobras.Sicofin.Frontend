@@ -7,17 +7,19 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { combineLatest } from 'rxjs';
+
+import { EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { FinancialConceptsDataService } from '@app/data-services';
-
-import { AccountsChartMasterData, FinancialConceptCommand } from '@app/models';
-
-import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector,
+         FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { AccountsChartMasterData, FinancialConceptCommand, FinancialConceptsGroup } from '@app/models';
+
 
 export enum FinancialConceptsFilterEventType {
   SEARCH_FINANCIAL_CONCEPTS_CLICKED = 'FinancialConceptsFilterComponent.Event.SearchFinancialConceptsClicked',
@@ -39,20 +41,21 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
     date: '',
   };
 
-  financialConceptsGroupsList: Identifiable[] = [];
+  groupsList: FinancialConceptsGroup[] = [];
+
+  filteredGroupsList: FinancialConceptsGroup[] = [];
 
   isLoading = false;
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer,
-              private financialConceptsData: FinancialConceptsDataService) {
+  constructor(private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
 
   ngOnInit(): void {
-    this.loadAccountsCharts();
+    this.loadDataLists();
   }
 
 
@@ -63,9 +66,9 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
 
   onAccountsChartChanges(accountChart: AccountsChartMasterData) {
     this.financialConceptsForm.financialConceptsGroup = '';
-    this.financialConceptsGroupsList = [];
+    this.filteredGroupsList = [];
     if (accountChart.uid) {
-      this.getFinancialConceptsGroups(accountChart.uid);
+      this.filterFinancialConceptsGroups(accountChart.uid);
     }
   }
 
@@ -81,20 +84,25 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private loadAccountsCharts() {
+  private loadDataLists() {
     this.isLoading = true;
-    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
-      .subscribe(x => this.accountsChartMasterDataList = x);
+
+    combineLatest([
+      this.helper.select<AccountsChartMasterData[]>
+        (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
+      this.helper.select<FinancialConceptsGroup[]>
+        (FinancialConceptsStateSelector.FINANCIAL_CONCEPTS_GROUPS_LIST),
+    ])
+    .subscribe(([x, y]) => {
+      this.accountsChartMasterDataList = x;
+      this.groupsList = y;
+      this.isLoading = false;
+    });
   }
 
 
-  private getFinancialConceptsGroups(accountChartUID: string) {
-    this.isLoading = true;
-
-    this.financialConceptsData.getFinancialConceptsGroups(accountChartUID)
-      .toPromise()
-      .then(x => this.financialConceptsGroupsList = x)
-      .finally(() => this.isLoading = false);
+  private filterFinancialConceptsGroups(accountChartUID: string) {
+    this.filteredGroupsList = this.groupsList.filter(x => x.accountsChart.uid === accountChartUID);
   }
 
 

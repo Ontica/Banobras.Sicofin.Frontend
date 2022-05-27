@@ -8,6 +8,18 @@
 import { DateString, Empty, Identifiable } from '@app/core';
 
 
+export interface FinancialConceptsGroup {
+  uid: string;
+  name: string;
+  accountsChart: Identifiable;
+  startDate: DateString;
+  endDate: DateString;
+  calculationRules: string[];
+  dataColumns: string[];
+  externalVariablesSets: Identifiable[];
+}
+
+
 export interface FinancialConceptCommand {
   accountsChartUID: string;
   groupUID?: string;

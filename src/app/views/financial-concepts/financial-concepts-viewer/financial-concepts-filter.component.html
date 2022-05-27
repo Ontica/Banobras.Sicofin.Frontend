@@ -27,7 +27,7 @@
         <emp-ng-select name="financialConceptsGroup" required
           [config]="{bindByValue: false}"
           [(ngModel)]="financialConceptsForm.financialConceptsGroup"
-          [items]="financialConceptsGroupsList"
+          [items]="filteredGroupsList"
           [loading]="isLoading"
           [showError]="!financialConceptsForm.financialConceptsGroup">
         </emp-ng-select>

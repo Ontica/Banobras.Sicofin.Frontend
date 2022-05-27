@@ -19,13 +19,13 @@ import { Assertion } from '@app/core';
 
 
 export enum ActionType {
-  SET_BALANCE_EXPLORER_DATA = 'FA.OperationalReport.Action.SetBalanceExplorerData',
+  SET_BALANCE_EXPLORER_DATA = 'FA.Reporting.Action.SetBalanceExplorerData',
 }
 
 
 export enum SelectorType {
-  REPORT_TYPES_LIST = 'FA.OperationalReport.Selector.ReportTypes.List',
-  BALANCE_EXPLORER_DATA = 'FA.OperationalReport.Selectors.BalanceExplorer.Data',
+  REPORT_TYPES_LIST = 'FA.Reporting.Selector.ReportTypes.List',
+  BALANCE_EXPLORER_DATA = 'FA.Reporting.Selectors.BalanceExplorer.Data',
 }
 
 

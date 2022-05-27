@@ -23,7 +23,7 @@
           <label>Agrupación:</label>
           <emp-ng-select
             [formControlName]="controls.groupUID"
-            [items]="groupsList"
+            [items]="filteredGroupsList"
             [showError]="formHandler.showInvalidControl(controls.groupUID)"
             [loading]="isLoadingGroups"
             [placeholder]="!!formHandler.getControl(controls.accountsChartUID).value ? 'Seleccionar' : 'Seleccionar el catálogo de cuentas'">

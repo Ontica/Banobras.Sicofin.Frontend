@@ -9,10 +9,10 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, HttpService, Identifiable } from '@app/core';
+import { Assertion, HttpService } from '@app/core';
 
-import { FileReport, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEditionCommand } from '@app/models';
+import { FileReport, FinancialConcept, FinancialConceptDescriptor, FinancialConceptEditionCommand,
+         FinancialConceptsGroup } from '@app/models';
 
 
 @Injectable()
@@ -21,12 +21,10 @@ export class FinancialConceptsDataService {
   constructor(private http: HttpService) { }
 
 
-  getFinancialConceptsGroups(accountsChartUID: string): Observable<Identifiable[]> {
-    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+  getFinancialConceptsGroups(): Observable<FinancialConceptsGroup[]> {
+    const path = `v2/financial-accounting/financial-concepts/groups`;
 
-    const path = `v2/financial-accounting/financial-concepts/account-chart-groups/${accountsChartUID}`;
-
-    return this.http.get<Identifiable[]>(path);
+    return this.http.get<FinancialConceptsGroup[]>(path);
   }
 
 
