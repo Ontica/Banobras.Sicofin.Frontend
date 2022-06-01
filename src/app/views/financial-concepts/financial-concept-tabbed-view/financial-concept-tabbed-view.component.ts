@@ -16,11 +16,13 @@ import { sendEvent } from '@app/shared/utils';
 import {
   FinancialConceptEditorEventType
 } from '../financial-concept-edition/financial-concept-editor.component';
+import { FinancialConceptIntegrationEditionEventType } from '../financial-concept-integration-edition/financial-concept-integration-edition.component';
 
 export enum FinancialConceptTabbedViewEventType {
   CLOSE_BUTTON_CLICKED      = 'FinancialConceptTabbedViewComponent.Event.CloseButtonClicked',
   FINANCIAL_CONCEPT_UPDATED = 'FinancialConceptTabbedViewComponent.Event.FinancialConceptUpdated',
   FINANCIAL_CONCEPT_REMOVED = 'FinancialConceptTabbedViewComponent.Event.FinancialConceptRemoved',
+  FINANCIAL_CONCEPT_INTEGRATION_UPDATED = 'FinancialConceptTabbedViewComponent.Event.FinancialConceptIntegrationUpdated',
 }
 
 @Component({
@@ -63,6 +65,22 @@ export class FinancialConceptTabbedViewComponent implements OnChanges {
       case FinancialConceptEditorEventType.FINANCIAL_CONCEPT_REMOVED:
         sendEvent(this.financialConceptTabbedViewEvent,
           FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_REMOVED);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onFinancialConceptIntegrationEditionEvent(event: EventInfo) {
+    switch (event.type as FinancialConceptIntegrationEditionEventType) {
+
+      case FinancialConceptIntegrationEditionEventType.INTEGRATION_UPDATED:
+        sendEvent(this.financialConceptTabbedViewEvent,
+          FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_INTEGRATION_UPDATED,
+          {financialConcept: this.financialConcept});
         return;
 
       default:

@@ -44,9 +44,8 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onUpdateButtonClicked(row)"
-      [ngClass]="{'item-type-summary': row.type === 'Agrupation',
-                  'selectable-row': canEdit}"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      [ngClass]="{'item-type-summary': row.type === 'Agrupation'}"></tr>
 
   </table>
 

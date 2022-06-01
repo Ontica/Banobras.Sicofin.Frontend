@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConceptIntegrationEntriesTableComponent } from './concept-integration-entries-table.component';
+import { FinancialConceptEntryEditorComponent } from './financial-concept-entry-editor.component';
 
-describe('ConceptIntegrationEntriesTableComponent', () => {
-  let component: ConceptIntegrationEntriesTableComponent;
-  let fixture: ComponentFixture<ConceptIntegrationEntriesTableComponent>;
+describe('FinancialConceptEntryEditorComponent', () => {
+  let component: FinancialConceptEntryEditorComponent;
+  let fixture: ComponentFixture<FinancialConceptEntryEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConceptIntegrationEntriesTableComponent ]
+      declarations: [ FinancialConceptEntryEditorComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConceptIntegrationEntriesTableComponent);
+    fixture = TestBed.createComponent(FinancialConceptEntryEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

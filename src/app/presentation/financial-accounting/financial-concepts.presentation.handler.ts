@@ -16,11 +16,13 @@ import { FinancialConceptsDataService } from '@app/data-services';
 
 export enum SelectorType {
   FINANCIAL_CONCEPTS_GROUPS_LIST = 'FA.FinancialConcepts.Selector.FinancialConceptsGroups.List',
+  EXTERNAL_VARIABLES_SETS_LIST   = 'FA.FinancialConcepts.Selector.ExternalVariablesSets.List',
 }
 
 
 const initialState: StateValues = [
   { key: SelectorType.FINANCIAL_CONCEPTS_GROUPS_LIST, value: [] },
+  { key: SelectorType.EXTERNAL_VARIABLES_SETS_LIST, value: [] },
 ];
 
 
@@ -37,10 +39,17 @@ export class FinancialConceptsPresentationHandler extends AbstractPresentationHa
 
   select<U>(selectorType: SelectorType, params?: any): Observable<U> {
 
+    let provider: () => any;
+
     switch (selectorType) {
 
       case SelectorType.FINANCIAL_CONCEPTS_GROUPS_LIST:
-        const provider = () => this.data.getFinancialConceptsGroups();
+        provider = () => this.data.getFinancialConceptsGroups();
+
+        return super.selectFirst<U>(selectorType, provider);
+
+      case SelectorType.EXTERNAL_VARIABLES_SETS_LIST:
+        provider = () => this.data.getExternalVariablesSets();
 
         return super.selectFirst<U>(selectorType, provider);
 

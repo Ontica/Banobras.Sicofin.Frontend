@@ -110,7 +110,7 @@ export class FinancialConceptsMainPageComponent {
     switch (event.type as FinancialConceptTabbedViewEventType) {
 
       case FinancialConceptTabbedViewEventType.CLOSE_BUTTON_CLICKED:
-        this.displayFinancialConceptTabbed = false;
+        this.setSelectedFinancialConcept(EmptyFinancialConcept);
         return;
 
       case FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_UPDATED:
@@ -122,6 +122,11 @@ export class FinancialConceptsMainPageComponent {
       case FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_REMOVED:
         this.validateRefreshFinancialConcepts();
         this.setSelectedFinancialConcept(EmptyFinancialConcept);
+        return;
+
+      case FinancialConceptTabbedViewEventType.FINANCIAL_CONCEPT_INTEGRATION_UPDATED:
+        Assertion.assertValue(event.payload.financialConcept, 'event.payload.financialConcept');
+        this.getFinancialConcept(event.payload.financialConcept.uid);
         return;
 
       default:

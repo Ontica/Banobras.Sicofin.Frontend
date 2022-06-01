@@ -15,9 +15,10 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
-import { ConceptIntegrationEntriesTableComponent } from './financial-concept-integration-edition/concept-integration-entries-table.component';
 import { FinancialConceptCreatorComponent } from './financial-concept-edition/financial-concept-creator.component';
 import { FinancialConceptEditorComponent } from './financial-concept-edition/financial-concept-editor.component';
+import { FinancialConceptEntriesTableComponent } from './financial-concept-integration-edition/financial-concept-entries-table.component';
+import { FinancialConceptEntryEditorComponent } from './financial-concept-integration-edition/financial-concept-entry-editor.component';
 import { FinancialConceptHeaderComponent } from './financial-concept-edition/financial-concept-header.component';
 import { FinancialConceptIntegrationEditionComponent } from './financial-concept-integration-edition/financial-concept-integration-edition.component';
 import { FinancialConceptsFilterComponent } from './financial-concepts-viewer/financial-concepts-filter.component';
@@ -28,9 +29,10 @@ import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-
 
 @NgModule({
   declarations: [
-    ConceptIntegrationEntriesTableComponent,
     FinancialConceptCreatorComponent,
     FinancialConceptEditorComponent,
+    FinancialConceptEntriesTableComponent,
+    FinancialConceptEntryEditorComponent,
     FinancialConceptHeaderComponent,
     FinancialConceptIntegrationEditionComponent,
     FinancialConceptsFilterComponent,

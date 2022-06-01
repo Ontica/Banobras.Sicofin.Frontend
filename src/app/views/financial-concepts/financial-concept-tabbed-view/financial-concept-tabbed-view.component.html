@@ -17,7 +17,8 @@
     <mat-tab label="Integración">
 
       <emp-fa-financial-concept-integration-edition
-        [financialConcept]="financialConcept">
+        [financialConcept]="financialConcept"
+        (financialConceptIntegrationEditionEvent)="onFinancialConceptIntegrationEditionEvent($event)">
 
       </emp-fa-financial-concept-integration-edition>
 

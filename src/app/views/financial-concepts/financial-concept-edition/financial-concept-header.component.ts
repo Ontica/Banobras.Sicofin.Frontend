@@ -83,7 +83,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
   positioningRuleList: Identifiable[] = PositioningRuleList;
 
-  financialConceptsList: FinancialConceptDescriptor[];
+  financialConceptsList: FinancialConceptDescriptor[] = [];
 
   private unsubscribeGroupUID: Subject<void> = new Subject();
 
@@ -246,7 +246,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
       groupUID: formModel.groupUID ?? '',
       code: formModel.code ?? '',
       name: formModel.name ?? '',
-      positioningRule: formModel.positioningRule,
+      positioningRule: formModel.positioningRule ?? '',
       startDate: formModel.startDate ?? '',
       endDate: formModel.endDate ?? '',
     };

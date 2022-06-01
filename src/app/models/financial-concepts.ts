@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Empty, Identifiable } from '@app/core';
+import { DateString, Empty, Identifiable, isEmpty } from '@app/core';
 
 
 export interface FinancialConceptsGroup {
@@ -17,6 +17,16 @@ export interface FinancialConceptsGroup {
   calculationRules: string[];
   dataColumns: string[];
   externalVariablesSets: Identifiable[];
+}
+
+
+export interface ExternalVariable {
+  uid: string;
+  code: string;
+  name: string;
+  notes: string;
+  position: number;
+  setUID: string;
 }
 
 
@@ -90,6 +100,19 @@ export enum FinancialConceptEntryType {
 }
 
 
+export const FinancialConceptEntryTypeList: Identifiable[] = [
+  {uid: FinancialConceptEntryType.FinancialConceptReference, name: 'Referencia a concepto'},
+  {uid: FinancialConceptEntryType.ExternalVariable,          name: 'Dato operativo'},
+  {uid: FinancialConceptEntryType.Account,                   name: 'Cuenta'},
+];
+
+
+export function getFinancialConceptEntryTypeName(type: FinancialConceptEntryType): string {
+  const financialConceptEntryType = FinancialConceptEntryTypeList.find(x => x.uid === type);
+  return isEmpty(financialConceptEntryType) ? type : financialConceptEntryType.name;
+}
+
+
 export interface FinancialConceptEntry {
   uid: string;
   type: FinancialConceptEntryType;
@@ -98,6 +121,39 @@ export interface FinancialConceptEntry {
   subledgerAccount: string;
   sectorCode: string;
   operator: string;
+}
+
+
+export enum OperatorType {
+  Add = 'Add',
+  Substract = 'Substract',
+  AbsoluteValue = 'AbsoluteValue'
+}
+
+
+export const OperatorTypeList: Identifiable[] = [
+  {uid: OperatorType.Add,           name: '+'},
+  {uid: OperatorType.Substract,     name: '-'},
+  {uid: OperatorType.AbsoluteValue, name: 'Valor absoluto'},
+];
+
+
+export interface FinancialConceptEntryEditionCommand {
+  financialConceptEntryUID?: string;
+  financialConceptUID: string;
+  entryType: FinancialConceptEntryType;
+  referencedFinancialConceptUID?: string;
+  externalVariableCode?: string;
+  accountNumber?: string;
+  subledgerAccountNumber?: string;
+  sectorCode?: string;
+  currencyCode?: string;
+  operator: OperatorType;
+  positioningRule: PositioningRule;
+  positioningOffsetEntryUID?: string;
+  position?: number;
+  calculationRule: string;
+  dataColumn: string;
 }
 
 

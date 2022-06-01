@@ -10,18 +10,25 @@
         class="btn-action"
         [style.marginLeft.px]="8"
         [style.marginBottom.px]="8"
-        (click)="onAddConceptIntegrationEntryClicked()">
-        Agregar integración
+        (click)="onAddFinancialConceptEntryClicked()">
+        Agregar elemento a la integración
       </button>
 
     </div>
 
-    <emp-fa-concept-integration-entries-table fxFlex
-      [conceptIntegrationEntryList]="financialConcept.integration"
+    <emp-fa-financial-concept-entries-table fxFlex
+      [financialConceptEntryList]="financialConcept.integration"
       [canEdit]="canEdit"
       [isLoading]="submitted"
-      (conceptIntegrationEntriesTableEvent)="onConceptIntegrationEntriesTableEvent($event)">
+      (financialConceptEntriesTableEvent)="onFinancialConceptEntriesTableEvent($event)">
 
-    </emp-fa-concept-integration-entries-table>
+    </emp-fa-financial-concept-entries-table>
 
 </div>
+
+<emp-fa-financial-concept-entry-editor *ngIf="displayFinancialConceptEntryEditor"
+  [financialConceptEntry]="selectedFinancialConceptEntry"
+  [financialConcept]="financialConcept"
+  (financialConceptEntryEditorEvent)="onFinancialConceptEntryEditorEvent($event)">
+
+</emp-fa-financial-concept-entry-editor>
