@@ -25,6 +25,7 @@ import { FinancialConceptsFilterComponent } from './financial-concepts-viewer/fi
 import { FinancialConceptsTableComponent } from './financial-concepts-viewer/financial-concepts-table.component';
 import { FinancialConceptsViewerComponent } from './financial-concepts-viewer/financial-concepts-viewer.component';
 import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-view/financial-concept-tabbed-view.component';
+import { ConfirmEditionResultModalComponent } from './financial-concept-integration-edition/confirm-edition-result-modal.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { FinancialConceptTabbedViewComponent } from './financial-concept-tabbed-
     FinancialConceptsTableComponent,
     FinancialConceptsViewerComponent,
     FinancialConceptTabbedViewComponent,
+    ConfirmEditionResultModalComponent,
   ],
   imports: [
     CommonModule,

@@ -1,8 +1,8 @@
 <emp-ng-modal-window [config]="{width:'900px'}">
 
   <emp-ng-card
-    [title]="editionMode ? 'Editar elemento de la integración' : 'Agregar elemento a la integración'"
-    hint='Información del elemento de la integración.'
+    [title]="editionMode ? 'Editar regla de integración' : 'Agregar regla a la integración'"
+    hint='Información de la regla de integración.'
     (cardClose)="onClose()">
 
     <div class="card-body-padding">
@@ -285,9 +285,9 @@
               <div fxFlex fxLayoutAlign="end center">
 
                 <button
-                  [class.btn]="!formHandler.isValid"
-                  [class.btn-action]="formHandler.isValid"
-                  (click)="onSubmitForm()">
+                  [class.btn]="!formHandler.isReadyForSubmit"
+                  [class.btn-action]="formHandler.isReadyForSubmit"
+                  (click)="onSubmitDataClicked()">
                   {{editionMode ? 'Guardar' : 'Agregar'}}
                 </button>
 

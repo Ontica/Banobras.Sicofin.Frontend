@@ -138,10 +138,30 @@ export const OperatorTypeList: Identifiable[] = [
 ];
 
 
-export interface FinancialConceptEntryEditionCommand {
-  financialConceptEntryUID?: string;
-  financialConceptUID: string;
-  entryType: FinancialConceptEntryType;
+export enum FinancialConceptEntryEditionType {
+  InsertAccountRule          = 'InsertAccountRule',
+  InsertConceptReferenceRule = 'InsertConceptReferenceRule',
+  InsertExternalValueRule    = 'InsertExternalValueRule',
+  UpdateAccountRule          = 'UpdateAccountRule',
+  UpdateConceptReferenceRule = 'UpdateConceptReferenceRule',
+  UpdateExternalValueRule    = 'UpdateExternalValueRule',
+}
+
+
+export interface EditionCommand {
+  type: FinancialConceptEntryEditionType;
+  dryRun: boolean;
+}
+
+
+export interface FinancialConceptEntryEditionCommand extends EditionCommand {
+  type: FinancialConceptEntryEditionType;
+  dryRun: boolean;
+  payload: FinancialConceptEntryFields;
+}
+
+
+export interface FinancialConceptEntryFields {
   referencedFinancialConceptUID?: string;
   externalVariableCode?: string;
   accountNumber?: string;
@@ -149,11 +169,35 @@ export interface FinancialConceptEntryEditionCommand {
   sectorCode?: string;
   currencyCode?: string;
   operator: OperatorType;
-  positioningRule: PositioningRule;
-  positioningOffsetEntryUID?: string;
-  position?: number;
   calculationRule: string;
   dataColumn: string;
+  positioning?: Positioning;
+}
+
+
+export interface Positioning {
+  rule: PositioningRule;
+  offsetUID?: string;
+  position?: number;
+}
+
+
+export interface EditionResult {
+  command?: EditionCommand;
+  message: string;
+  actions: string[];
+  issues: string[];
+  warnings: string[];
+}
+
+
+export interface FinancialConceptEntryEditionResult extends EditionResult {
+  command?: FinancialConceptEntryEditionCommand;
+  outcome?: any;
+  message: string;
+  actions: string[];
+  issues: string[];
+  warnings: string[];
 }
 
 

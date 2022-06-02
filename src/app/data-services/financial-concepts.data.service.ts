@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { ExternalVariable, FileReport, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEditionCommand, FinancialConceptEntry, FinancialConceptEntryEditionCommand,
-         FinancialConceptsGroup } from '@app/models';
+         FinancialConceptEditionCommand, FinancialConceptEntryEditionCommand,
+         FinancialConceptEntryEditionResult, FinancialConceptsGroup } from '@app/models';
 
 
 @Injectable()
@@ -101,19 +101,19 @@ export class FinancialConceptsDataService {
 
 
   insertFinancialConceptEntry(financialConceptUID: string,
-                              command: FinancialConceptEntryEditionCommand): Observable<FinancialConceptEntry> {
+                              command: FinancialConceptEntryEditionCommand): Observable<FinancialConceptEntryEditionResult> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
     Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}/integration`;
 
-    return this.http.post<FinancialConceptEntry>(path, command);
+    return this.http.post<FinancialConceptEntryEditionResult>(path, command);
   }
 
 
   updateFinancialConceptEntry(financialConceptUID: string,
                               financialConceptEntryUID: string,
-                              command: FinancialConceptEntryEditionCommand): Observable<FinancialConceptEntry> {
+                              command: FinancialConceptEntryEditionCommand): Observable<FinancialConceptEntryEditionResult> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
     Assertion.assertValue(financialConceptEntryUID, 'financialConceptEntryUID');
     Assertion.assertValue(command, 'command');
@@ -121,7 +121,7 @@ export class FinancialConceptsDataService {
     const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}` +
       `/integration/${financialConceptEntryUID}`;
 
-    return this.http.put<FinancialConceptEntry>(path, command);
+    return this.http.put<FinancialConceptEntryEditionResult>(path, command);
   }
 
 

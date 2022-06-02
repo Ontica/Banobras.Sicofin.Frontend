@@ -19,6 +19,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { sendEvent } from '@app/shared/utils';
 
 export enum FinancialConceptEntriesTableEventType {
+  UPDATE_BUTTON_CLICKED = 'FinancialConceptEntriesTableComponent.Event.UpdateButtonClicked',
   REMOVE_BUTTON_CLICKED = 'FinancialConceptEntriesTableComponent.Event.RemoveButtonClicked',
 }
 
@@ -31,8 +32,6 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
   @Input() financialConceptEntryList: FinancialConceptEntry[] = [];
 
   @Input() canEdit = false;
-
-  @Input() isLoading = false;
 
   @Output() financialConceptEntriesTableEvent = new EventEmitter<EventInfo>();
 
@@ -53,12 +52,20 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
   }
 
 
+  onUpdateButtonClicked(financialConceptEntry: FinancialConceptEntry) {
+    if (this.canEdit && window.getSelection().toString().length <= 0) {
+      sendEvent(this.financialConceptEntriesTableEvent,
+        FinancialConceptEntriesTableEventType.UPDATE_BUTTON_CLICKED, {financialConceptEntry});
+    }
+  }
+
+
   onRemoveButtonClicked(event, financialConceptEntry: FinancialConceptEntry) {
     event.stopPropagation();
 
     const message = this.getConfirmMessage(financialConceptEntry);
 
-    this.messageBox.confirm(message, 'Eliminar elemento de la integración', 'DeleteCancel')
+    this.messageBox.confirm(message, 'Eliminar la regla de la integración', 'DeleteCancel')
       .toPromise()
       .then(x => {
         if (x) {
@@ -84,9 +91,9 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
       <tr><td class='nowrap'>Tipo: </td>
       <td><strong>${getFinancialConceptEntryTypeName(financialConceptEntry.type)}</strong></td></tr>
       <tr><td class='nowrap'>${this.isAccount(financialConceptEntry.type) ? 'Cuenta' : 'Clave'}:</td>
-      <td><strong>${financialConceptEntry.itemCode}</strong></td></tr>
+      <td><strong>${!!financialConceptEntry.itemCode ? financialConceptEntry.itemCode : '-'}</strong></td></tr>
       <tr><td class='nowrap'>Descripción: </td>
-      <td><strong>${financialConceptEntry.itemName}</strong></td></tr>`;
+      <td><strong>${!!financialConceptEntry.itemName ? financialConceptEntry.itemName : '-'}</strong></td></tr>`;
 
     if (this.isAccount(financialConceptEntry.type)) {
       message += `
@@ -95,7 +102,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
     }
     message += `
       </table>
-      <br>¿Elimino el elemento de la integración?`;
+      <br>¿Elimino la regla de la integración?`;
 
     return message;
   }

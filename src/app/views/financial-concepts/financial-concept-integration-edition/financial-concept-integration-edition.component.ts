@@ -5,18 +5,20 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
 import { FinancialConceptEntry, EmptyFinancialConceptEntry, FinancialConcept, EmptyFinancialConcept,
-         FinancialConceptEntryEditionCommand } from '@app/models';
+         FinancialConceptEntryEditionResult, FinancialConceptEntryEditionCommand } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { ConfirmEditionResultModalComponent } from './confirm-edition-result-modal.component';
 
 import { FinancialConceptEntriesTableEventType } from './financial-concept-entries-table.component';
 
@@ -37,6 +39,8 @@ export class FinancialConceptIntegrationEditionComponent {
 
   @Output() financialConceptIntegrationEditionEvent = new EventEmitter<EventInfo>();
 
+  @ViewChild(ConfirmEditionResultModalComponent) resultModal: ConfirmEditionResultModalComponent;
+
   submitted = false;
 
   canEdit = true;
@@ -47,6 +51,11 @@ export class FinancialConceptIntegrationEditionComponent {
 
   constructor(private financialConceptsData: FinancialConceptsDataService,
               private messageBox: MessageBoxService) {}
+
+
+  get isSelectedEntrySaved(): boolean {
+    return !isEmpty(this.selectedFinancialConceptEntry);
+  }
 
 
   onAddFinancialConceptEntryClicked() {
@@ -85,18 +94,9 @@ export class FinancialConceptIntegrationEditionComponent {
         this.setSelectedFinancialConceptEntry(EmptyFinancialConceptEntry);
         return;
 
-      case FinancialConceptEntryEditorEventType.CREATE_FINANCIAL_CONCEPT_ENTRY:
-        Assertion.assertValue(event.payload.financialConceptEntry, 'event.payload.financialConceptEntry');
-        this.insertFinancialConceptEntry(this.financialConcept.uid,
-          event.payload.financialConceptEntry as FinancialConceptEntryEditionCommand);
-        return;
-
-      case FinancialConceptEntryEditorEventType.UPDATE_FINANCIAL_CONCEPT_ENTRY:
-        Assertion.assertValue(event.payload.financialConceptEntryUID, 'event.payload.financialConceptEntryUID');
-        Assertion.assertValue(event.payload.financialConceptEntry, 'event.payload.financialConceptEntry');
-        this.updateFinancialConceptEntry(this.financialConcept.uid,
-          event.payload.financialConceptEntryUID,
-          event.payload.financialConceptEntry as FinancialConceptEntryEditionCommand);
+      case FinancialConceptEntryEditorEventType.INSERT_ENTRY:
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        this.insertFinancialConceptEntry(event.payload.command as FinancialConceptEntryEditionCommand);
         return;
 
       default:
@@ -106,26 +106,34 @@ export class FinancialConceptIntegrationEditionComponent {
   }
 
 
-  private insertFinancialConceptEntry(financialConceptUID: string,
-                                      command: FinancialConceptEntryEditionCommand) {
+  private insertFinancialConceptEntry(command: FinancialConceptEntryEditionCommand) {
     this.submitted = true;
 
-    this.financialConceptsData.insertFinancialConceptEntry(financialConceptUID, command)
+    this.financialConceptsData.insertFinancialConceptEntry(this.financialConcept.uid, command)
       .toPromise()
-      .then(x => this.emitFinancialConceptIntegrationUpdated())
+      .then(x => this.validateEditionResult(x))
       .finally(() => this.submitted = false);
   }
 
 
-  private updateFinancialConceptEntry(financialConceptUID: string,
-                                      financialConceptEntryUID: string,
-                                      command: FinancialConceptEntryEditionCommand) {
-    this.submitted = true;
+  private validateEditionResult(editionResult: FinancialConceptEntryEditionResult) {
+    if (editionResult.command.dryRun) {
+      this.resultModal.validateResult(editionResult)
+        .toPromise()
+        .then(x => {
+          if (x) {
+            this.submitEntryEdition(editionResult.command);
+          }
+        });
+    } else {
+      this.emitIntegrationUpdated(editionResult.message);
+    }
+  }
 
-    this.financialConceptsData.updateFinancialConceptEntry(financialConceptUID, financialConceptEntryUID, command)
-      .toPromise()
-      .then(x => this.emitFinancialConceptIntegrationUpdated())
-      .finally(() => this.submitted = false);
+
+  private submitEntryEdition(command: FinancialConceptEntryEditionCommand) {
+    command.dryRun = false;
+    this.insertFinancialConceptEntry(command);
   }
 
 
@@ -135,13 +143,16 @@ export class FinancialConceptIntegrationEditionComponent {
 
     this.financialConceptsData.removeFinancialConceptEntry(financialConceptUID, financialConceptEntryUID)
       .toPromise()
-      .then(x => this.emitFinancialConceptIntegrationUpdated())
+      .then(x => this.emitIntegrationUpdated('La regla fue eliminada de la agrupación.'))
       .finally(() => this.submitted = false);
   }
 
 
-  private emitFinancialConceptIntegrationUpdated() {
+  private emitIntegrationUpdated(message: string) {
     this.setSelectedFinancialConceptEntry(EmptyFinancialConceptEntry);
+
+    this.messageBox.show(message, 'Operación ejecutada');
+
     sendEvent(this.financialConceptIntegrationEditionEvent,
       FinancialConceptIntegrationEditionEventType.INTEGRATION_UPDATED);
   }

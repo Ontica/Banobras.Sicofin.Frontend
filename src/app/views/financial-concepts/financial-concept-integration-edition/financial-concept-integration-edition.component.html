@@ -11,7 +11,7 @@
         [style.marginLeft.px]="8"
         [style.marginBottom.px]="8"
         (click)="onAddFinancialConceptEntryClicked()">
-        Agregar elemento a la integración
+        Agregar regla
       </button>
 
     </div>
@@ -19,7 +19,6 @@
     <emp-fa-financial-concept-entries-table fxFlex
       [financialConceptEntryList]="financialConcept.integration"
       [canEdit]="canEdit"
-      [isLoading]="submitted"
       (financialConceptEntriesTableEvent)="onFinancialConceptEntriesTableEvent($event)">
 
     </emp-fa-financial-concept-entries-table>
@@ -27,8 +26,13 @@
 </div>
 
 <emp-fa-financial-concept-entry-editor *ngIf="displayFinancialConceptEntryEditor"
-  [financialConceptEntry]="selectedFinancialConceptEntry"
   [financialConcept]="financialConcept"
+  [financialConceptEntry]="selectedFinancialConceptEntry"
+  [isSaved]="isSelectedEntrySaved"
   (financialConceptEntryEditorEvent)="onFinancialConceptEntryEditorEvent($event)">
 
 </emp-fa-financial-concept-entry-editor>
+
+<emp-fa-confirm-edition-result-modal>
+
+</emp-fa-confirm-edition-result-modal>

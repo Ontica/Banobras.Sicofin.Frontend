@@ -26,18 +26,19 @@ import { AccountsChartDataService, FinancialConceptsDataService,
 
 import { AccountDescriptor, AccountsChartMasterData, AccountsSearchCommand, EmptyFinancialConcept,
          EmptyFinancialConceptEntry, ExternalVariable, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEntry, FinancialConceptEntryEditionCommand, FinancialConceptEntryType,
-         FinancialConceptEntryTypeList, FinancialConceptsGroup, OperatorTypeList, PositioningRule,
-         PositioningRuleList, SearchSubledgerAccountCommand, SubledgerAccountDescriptor } from '@app/models';
+         FinancialConceptEntryEditionCommand, FinancialConceptEntry, FinancialConceptEntryFields,
+         FinancialConceptEntryType, FinancialConceptEntryTypeList, FinancialConceptsGroup, OperatorTypeList,
+         Positioning, PositioningRule, PositioningRuleList, SearchSubledgerAccountCommand,
+         SubledgerAccountDescriptor, FinancialConceptEntryEditionType } from '@app/models';
 
 import { AccountChartStateSelector,
          FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
 
 
 export enum FinancialConceptEntryEditorEventType {
-  CLOSE_MODAL_CLICKED            = 'FinancialConceptEntryEditorComponent.Event.CloseModalClicked',
-  CREATE_FINANCIAL_CONCEPT_ENTRY = 'FinancialConceptEntryEditorComponent.Event.CreateFinancialConceptEntry',
-  UPDATE_FINANCIAL_CONCEPT_ENTRY = 'FinancialConceptEntryEditorComponent.Event.UpdateFinancialConceptEntry',
+  CLOSE_MODAL_CLICKED = 'FinancialConceptEntryEditorComponent.Event.CloseModalClicked',
+  INSERT_ENTRY        = 'FinancialConceptEntryEditorComponent.Event.InsertEntry',
+  UPDATE_ENTRY        = 'FinancialConceptEntryEditorComponent.Event.UpdateEntry',
 }
 
 
@@ -68,6 +69,8 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   @Input() financialConceptEntry: FinancialConceptEntry = EmptyFinancialConceptEntry;
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
+
+  @Input() isSaved = false;
 
   @Input() readonly = false;
 
@@ -155,11 +158,6 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  get isSaved(): boolean {
-    return !isEmpty(this.financialConceptEntry);
-  }
-
-
   get isFinancialConceptReferenceType(): boolean {
     return FinancialConceptEntryType.FinancialConceptReference ===
       this.formHandler.getControl(this.controls.entryType).value;
@@ -221,19 +219,17 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  onSubmitForm() {
-    if (!this.formHandler.validateReadyForSubmit()) {
+  onSubmitDataClicked() {
+    if (!this.formHandler.isReadyForSubmit) {
       this.formHandler.invalidateForm();
       return;
     }
 
-    const eventType = this.editionMode ?
-      FinancialConceptEntryEditorEventType.UPDATE_FINANCIAL_CONCEPT_ENTRY :
-      FinancialConceptEntryEditorEventType.CREATE_FINANCIAL_CONCEPT_ENTRY;
+    const eventType = this.isSaved ? FinancialConceptEntryEditorEventType.UPDATE_ENTRY :
+      FinancialConceptEntryEditorEventType.INSERT_ENTRY;
 
     const payload = {
-      financialConceptEntry: this.getFormData(),
-      financialConceptEntryUID: this.financialConceptEntry.uid,
+      command: this.getFinancialConceptEntryEditionCommand(),
     };
 
     sendEvent(this.financialConceptEntryEditorEvent, eventType, payload);
@@ -342,7 +338,6 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
   private setAndValidateFormData() {
     this.setFormData();
-    this.validateDisableForm();
     this.subscribeAccountList();
     this.subscribeSubledgerAccountList();
   }
@@ -354,28 +349,53 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
       operator: this.financialConceptEntry.operator || '',
     });
 
-    this.formHandler.disableForm(false);
+    this.onEntryTypeChanged();
+    this.formHandler.disableControl(this.controls.entryType);
   }
 
 
-  private getFormData(): FinancialConceptEntryEditionCommand {
+  private getFinancialConceptEntryEditionCommand() {
+    const command: FinancialConceptEntryEditionCommand = {
+      type: this.getCommandType(),
+      dryRun: true,
+      payload: this.getFormData(),
+    };
+
+    return command;
+  }
+
+
+  private getCommandType(): FinancialConceptEntryEditionType {
+    if (this.isAccountType) {
+      return this.isSaved ?  FinancialConceptEntryEditionType.UpdateAccountRule :
+        FinancialConceptEntryEditionType.InsertAccountRule;
+    }
+
+    if (this.isExternalVariableType) {
+      return this.isSaved ?  FinancialConceptEntryEditionType.UpdateExternalValueRule :
+        FinancialConceptEntryEditionType.InsertExternalValueRule;
+    }
+
+    if (this.isFinancialConceptReferenceType) {
+      return this.isSaved ?  FinancialConceptEntryEditionType.UpdateConceptReferenceRule :
+        FinancialConceptEntryEditionType.InsertConceptReferenceRule;
+    }
+
+    return null;
+  }
+
+
+  private getFormData(): FinancialConceptEntryFields {
     Assertion.assert(this.formHandler.form.valid,
       'Programming error: form must be validated before command execution.');
 
     const formModel = this.formHandler.form.getRawValue();
 
-    let data: FinancialConceptEntryEditionCommand = {
-      financialConceptUID: this.financialConcept.uid ?? '',
-      entryType: formModel.entryType ?? '',
+    let data: FinancialConceptEntryFields = {
       operator: formModel.operator ?? '',
-      positioningRule: formModel.positioningRule ?? '',
       calculationRule: formModel.calculationRule ?? '',
       dataColumn: formModel.dataColumn ?? '',
     };
-
-    if (this.isSaved) {
-      data.financialConceptEntryUID = this.financialConceptEntry.uid ?? '';
-    }
 
     this.validateFieldsByEntryType(data);
     this.validatePositionsFields(data);
@@ -384,20 +404,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  private validatePositionsFields(data: FinancialConceptEntryEditionCommand) {
-    const formModel = this.formHandler.form.getRawValue();
-
-    if (this.displayPositioningOffsetConcept) {
-      data.positioningOffsetEntryUID = formModel.positioningOffsetEntryUID;
-    }
-
-    if (this.displayPosition) {
-      data.position = +formModel.position;
-    }
-  }
-
-
-  private validateFieldsByEntryType(data: FinancialConceptEntryEditionCommand) {
+  private validateFieldsByEntryType(data: FinancialConceptEntryFields) {
     const formModel = this.formHandler.form.getRawValue();
 
     if (this.isFinancialConceptReferenceType) {
@@ -414,6 +421,25 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
       data.sectorCode = formModel.sector?.code ?? '';
       data.currencyCode = formModel.currency?.code ?? '';
     }
+  }
+
+
+  private validatePositionsFields(data: FinancialConceptEntryFields) {
+    const formModel = this.formHandler.form.getRawValue();
+
+    const positioning: Positioning = {
+      rule: formModel.positioningRule ?? '',
+    }
+
+    if (this.displayPositioningOffsetConcept) {
+      positioning.offsetUID = formModel.positioningOffsetEntryUID;
+    }
+
+    if (this.displayPosition) {
+      positioning.position = +formModel.position;
+    }
+
+    data.positioning = positioning;
   }
 
 
@@ -489,13 +515,6 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
       this.formHandler.setControlValidators(control, Validators.required);
     } else {
       this.formHandler.clearControlValidators(control);
-    }
-  }
-
-
-  private validateDisableForm() {
-    if (this.readonly) {
-      this.formHandler.disableForm(true);
     }
   }
 
