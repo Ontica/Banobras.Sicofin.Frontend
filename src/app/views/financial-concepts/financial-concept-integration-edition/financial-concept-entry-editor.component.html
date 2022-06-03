@@ -87,9 +87,10 @@
                   [formControlName]="controls.externalVariable"
                   [items]="externalVariableList"
                   [loading]="isLoadingExternalVariable"
-                  [config]="{virtualScroll: true, bindByValue: false, searchableFields: ['code', 'name']}"
+                  [config]="{virtualScroll: true, searchableFields: ['code', 'name']}"
                   [showError]="formHandler.showInvalidControl(controls.externalVariable)"
-                  bindLabel="code">
+                  bindLabel="code"
+                  bindValue="code">
                   <ng-template #labelTemplate let-item="item">
                     ({{item.code}}) {{item.name}}
                   </ng-template>
@@ -140,10 +141,10 @@
                 <div [fxFlex]="100/3">
                   <label>Sector:</label>
                   <emp-ng-select
-                    [config]="{clearable: true, bindByValue: false}"
+                    [config]="{clearable: true}"
                     [formControlName]="controls.sector"
                     [items]="selectedAccountChart?.sectors"
-                    bindValue="id"
+                    bindValue="code"
                     bindLabel="code"
                     placeholder="Todos">
                   </emp-ng-select>
@@ -187,9 +188,11 @@
                 <div [fxFlex]="100/3">
                   <label>Moneda:</label>
                   <emp-ng-select
-                    [config]="{clearable: true, bindByValue: false}"
+                    [config]="{clearable: true}"
                     [formControlName]="controls.currency"
                     [items]="selectedAccountChart?.currencies"
+                    bindLabel="fullName"
+                    bindValue="code"
                     placeholder="Todas">
                   </emp-ng-select>
                 </div>

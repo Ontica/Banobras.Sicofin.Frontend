@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { ExternalVariable, FileReport, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEditionCommand, FinancialConceptEntryEditionCommand,
+         FinancialConceptEditionCommand, FinancialConceptEntry, FinancialConceptEntryEditionCommand,
          FinancialConceptEntryEditionResult, FinancialConceptsGroup } from '@app/models';
 
 
@@ -97,6 +97,18 @@ export class FinancialConceptsDataService {
     const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
 
     return this.http.delete<void>(path);
+  }
+
+
+  getFinancialConceptEntry(financialConceptUID: string,
+                           financialConceptEntryUID: string): Observable<FinancialConceptEntry> {
+    Assertion.assertValue(financialConceptUID, 'financialConceptUID');
+    Assertion.assertValue(financialConceptEntryUID, 'financialConceptEntryUID');
+
+    const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}` +
+      `/integration/${financialConceptEntryUID}`;
+
+    return this.http.get<FinancialConceptEntry>(path);
   }
 
 

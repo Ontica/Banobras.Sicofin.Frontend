@@ -5,7 +5,19 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Empty, Identifiable, isEmpty } from '@app/core';
+import { DateString, Empty, FlexibleIdentifiable, Identifiable, isEmpty } from '@app/core';
+
+import { EditionCommand, EditionResult, Positioning, PositioningRule } from './edition-command';
+
+
+export interface ExternalVariable {
+  uid: string;
+  code: string;
+  name: string;
+  notes: string;
+  position: number;
+  setUID: string;
+}
 
 
 export interface FinancialConceptsGroup {
@@ -17,16 +29,6 @@ export interface FinancialConceptsGroup {
   calculationRules: string[];
   dataColumns: string[];
   externalVariablesSets: Identifiable[];
-}
-
-
-export interface ExternalVariable {
-  uid: string;
-  code: string;
-  name: string;
-  notes: string;
-  position: number;
-  setUID: string;
 }
 
 
@@ -58,26 +60,8 @@ export interface FinancialConcept {
   endDate: DateString;
   group: Identifiable;
   accountsChart: Identifiable;
-  integration: FinancialConceptEntry[]
+  integration: FinancialConceptEntryDescriptor[]
 }
-
-
-export enum PositioningRule {
-  AtStart = 'AtStart',
-  BeforeOffset = 'BeforeOffset',
-  AfterOffset = 'AfterOffset',
-  AtEnd = 'AtEnd',
-  ByPositionValue = 'ByPositionValue',
-}
-
-
-export const PositioningRuleList: Identifiable[] = [
-  {uid: PositioningRule.AtStart,         name: 'Al principio'},
-  {uid: PositioningRule.BeforeOffset,    name: 'Antes de'},
-  {uid: PositioningRule.AfterOffset,     name: 'Despues de'},
-  {uid: PositioningRule.AtEnd,           name: 'Al final'},
-  {uid: PositioningRule.ByPositionValue, name: 'En posición'},
-];
 
 
 export interface FinancialConceptEditionCommand {
@@ -113,7 +97,7 @@ export function getFinancialConceptEntryTypeName(type: FinancialConceptEntryType
 }
 
 
-export interface FinancialConceptEntry {
+export interface FinancialConceptEntryDescriptor {
   uid: string;
   type: FinancialConceptEntryType;
   itemName: string;
@@ -121,6 +105,22 @@ export interface FinancialConceptEntry {
   subledgerAccount: string;
   sectorCode: string;
   operator: string;
+}
+
+
+export interface FinancialConceptEntry {
+  uid: string;
+  type: FinancialConceptEntryType;
+  referencedFinancialConcept: FinancialConcept;
+  externalVariable: ExternalVariable;
+  account: FlexibleIdentifiable;
+  subledgerAccount: FlexibleIdentifiable;
+  sectorCode: string;
+  currencyCode: string;
+  operator: string;
+  calculationRule: string;
+  dataColumn: string;
+  positioning: Positioning;
 }
 
 
@@ -148,12 +148,6 @@ export enum FinancialConceptEntryEditionType {
 }
 
 
-export interface EditionCommand {
-  type: FinancialConceptEntryEditionType;
-  dryRun: boolean;
-}
-
-
 export interface FinancialConceptEntryEditionCommand extends EditionCommand {
   type: FinancialConceptEntryEditionType;
   dryRun: boolean;
@@ -175,30 +169,25 @@ export interface FinancialConceptEntryFields {
 }
 
 
-export interface Positioning {
-  rule: PositioningRule;
-  offsetUID?: string;
-  position?: number;
-}
-
-
-export interface EditionResult {
-  command?: EditionCommand;
-  message: string;
-  actions: string[];
-  issues: string[];
-  warnings: string[];
-}
-
-
 export interface FinancialConceptEntryEditionResult extends EditionResult {
-  command?: FinancialConceptEntryEditionCommand;
-  outcome?: any;
+  command: FinancialConceptEntryEditionCommand;
+  commited: boolean;
+  outcome: FinancialConceptEntry;
   message: string;
   actions: string[];
   issues: string[];
   warnings: string[];
 }
+
+
+export const EmptyExternalVariable: ExternalVariable = {
+  uid: '',
+  code: '',
+  name: '',
+  notes: '',
+  position: 1,
+  setUID: '',
+};
 
 
 export const EmptyFinancialConceptCommand: FinancialConceptCommand = {
@@ -236,9 +225,14 @@ export const EmptyFinancialConcept: FinancialConcept = {
 export const EmptyFinancialConceptEntry: FinancialConceptEntry = {
   uid: '',
   type: FinancialConceptEntryType.Account,
-  itemName: '',
-  itemCode: '',
-  subledgerAccount: '',
+  referencedFinancialConcept: EmptyFinancialConcept,
+  externalVariable: EmptyExternalVariable,
+  account: Empty,
+  subledgerAccount: Empty,
   sectorCode: '',
+  currencyCode: '',
   operator: '',
+  calculationRule: '',
+  dataColumn: '',
+  positioning: {rule: PositioningRule.AtEnd},
 }

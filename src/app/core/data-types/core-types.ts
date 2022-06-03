@@ -22,6 +22,16 @@ export const Empty: Identifiable = {
 };
 
 
+export interface FlexibleIdentifiable {
+  id?: number;
+  uid?: string;
+  code?: string;
+  number?: string;
+  name?: string;
+  fullName?: string;
+}
+
+
 export interface PartitionedType {
   type: string;
 }

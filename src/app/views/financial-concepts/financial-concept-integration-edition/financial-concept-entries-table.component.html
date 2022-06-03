@@ -1,5 +1,5 @@
 
-<div class="scrollable-container mat-elevation-z1">
+<div class="fill-table-container" [style.width.%]="100">
 
   <table mat-table [dataSource]="dataSource">
 
@@ -40,8 +40,9 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      [ngClass]="{'item-type-summary': row.type === 'Agrupation'}"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onUpdateButtonClicked(row)"
+      [ngClass]="{'item-type-summary': row.type === 'Agrupation',
+                  'selectable-row': canEdit}"></tr>
 
   </table>
 

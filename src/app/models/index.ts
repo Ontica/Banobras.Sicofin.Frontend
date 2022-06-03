@@ -36,6 +36,8 @@ export * from './exchange-rates';
 
 export * from './external-process';
 
+export * from './edition-command';
+
 export * from './financial-concepts';
 
 export * from './financial-reports';

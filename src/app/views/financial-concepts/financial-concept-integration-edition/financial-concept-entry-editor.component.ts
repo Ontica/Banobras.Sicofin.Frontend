@@ -26,10 +26,10 @@ import { AccountsChartDataService, FinancialConceptsDataService,
 
 import { AccountDescriptor, AccountsChartMasterData, AccountsSearchCommand, EmptyFinancialConcept,
          EmptyFinancialConceptEntry, ExternalVariable, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEntryEditionCommand, FinancialConceptEntry, FinancialConceptEntryFields,
-         FinancialConceptEntryType, FinancialConceptEntryTypeList, FinancialConceptsGroup, OperatorTypeList,
-         Positioning, PositioningRule, PositioningRuleList, SearchSubledgerAccountCommand,
-         SubledgerAccountDescriptor, FinancialConceptEntryEditionType } from '@app/models';
+         FinancialConceptEntryEditionCommand, FinancialConceptEntryFields, FinancialConceptEntryType,
+         FinancialConceptEntryTypeList, FinancialConceptsGroup, OperatorTypeList, Positioning,
+         PositioningRule, PositioningRuleList, SearchSubledgerAccountCommand, SubledgerAccountDescriptor,
+         FinancialConceptEntryEditionType, FinancialConceptEntry } from '@app/models';
 
 import { AccountChartStateSelector,
          FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
@@ -347,10 +347,53 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
     this.formHandler.form.reset({
       entryType: this.financialConceptEntry.type || '',
       operator: this.financialConceptEntry.operator || '',
+      calculationRule: this.financialConceptEntry.calculationRule || '',
+      dataColumn: this.financialConceptEntry.dataColumn || '',
+      positioningRule: this.financialConceptEntry.positioning.rule || '',
+      positioningOffsetEntryUID: this.financialConceptEntry.positioning.offsetUID || '',
+      position: this.financialConceptEntry.positioning.position || '',
     });
+
+    this.setAccountDataFromLists();
+    this.setExternalVariableData();
+    this.setFinancialConceptReferenceData();
 
     this.onEntryTypeChanged();
     this.formHandler.disableControl(this.controls.entryType);
+  }
+
+
+  private setAccountDataFromLists() {
+    if (this.isAccountType) {
+      const account = !!this.financialConceptEntry?.account?.uid ? this.financialConceptEntry.account : null;
+      const subledgerAccount = !!this.financialConceptEntry?.subledgerAccount?.id ?
+        this.financialConceptEntry.subledgerAccount : null;
+
+      this.formHandler.getControl(this.controls.account).reset(account);
+      this.formHandler.getControl(this.controls.subledgerAccount).reset(subledgerAccount);
+      this.formHandler.getControl(this.controls.sector).reset(this.financialConceptEntry.sectorCode);
+      this.formHandler.getControl(this.controls.currency).reset(this.financialConceptEntry.currencyCode);
+    }
+  }
+
+
+  private setExternalVariableData() {
+    if (this.isExternalVariableType) {
+      this.formHandler.getControl(this.controls.externalVariableSet)
+        .reset(this.financialConceptEntry.externalVariable.setUID ?? '');
+      this.formHandler.getControl(this.controls.externalVariable)
+        .reset(this.financialConceptEntry.externalVariable.code ?? '');
+    }
+  }
+
+
+  private setFinancialConceptReferenceData() {
+    if (this.isFinancialConceptReferenceType) {
+      this.formHandler.getControl(this.controls.referencedGroup)
+        .reset(this.financialConceptEntry.referencedFinancialConcept.group.uid);
+      this.formHandler.getControl(this.controls.referencedFinancialConcept)
+        .reset(this.financialConceptEntry.referencedFinancialConcept);
+    }
   }
 
 
@@ -412,14 +455,14 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
     }
 
     if (this.isExternalVariableType) {
-      data.externalVariableCode = formModel.externalVariable.code ?? '';
+      data.externalVariableCode = formModel.externalVariable ?? '';
     }
 
     if (this.isAccountType) {
       data.accountNumber = formModel.account?.number ?? '';
       data.subledgerAccountNumber = formModel.subledgerAccount?.number ?? '';
-      data.sectorCode = formModel.sector?.code ?? '';
-      data.currencyCode = formModel.currency?.code ?? '';
+      data.sectorCode = formModel.sector ?? '';
+      data.currencyCode = formModel.currency ?? '';
     }
   }
 
@@ -444,19 +487,24 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private setPositionRuleListAndDefaultValue() {
-    if (this.financialConcept.integration.length > 0) {
+    const hasRules = this.financialConcept.integration.length > 0;
+
+    if (hasRules) {
       this.positioningRuleList = [...[], ...PositioningRuleList];
-      this.formHandler.getControl(this.controls.positioningRule).reset(PositioningRule.AtEnd);
     } else {
       this.positioningRuleList = PositioningRuleList.filter(x => x.uid === PositioningRule.AtStart);
-      this.formHandler.getControl(this.controls.positioningRule).reset(PositioningRule.AtStart);
+    }
+
+    if (!this.isSaved) {
+      const positioningRule = hasRules ? PositioningRule.AtEnd : PositioningRule.AtStart;
+      this.formHandler.getControl(this.controls.positioningRule).reset(positioningRule);
     }
   }
 
 
   private subscribeAccountList() {
     this.accountList$ = concat(
-      of([]),
+      of(this.getDefaultAccountList()),
       this.accountInput$.pipe(
         filter(keywords => keywords !== null && keywords.length >= this.accountMinTermLength),
         distinctUntilChanged(),
@@ -475,16 +523,9 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  private getAccountChartCommand(keywords: string): AccountsSearchCommand {
-    const command: AccountsSearchCommand = {
-      keywords,
-    };
-    return command;
-  }
-
-
   private subscribeSubledgerAccountList() {
-    this.subledgerAccountList$ = concat([],
+    this.subledgerAccountList$ = concat(
+      of(this.getDefaultSubledgerAccountList()),
       this.subledgerAccountInput$.pipe(
         filter(keywords => keywords !== null && keywords.length >= this.subledgerAccountMinTermLength),
         distinctUntilChanged(),
@@ -498,6 +539,30 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
         ))
       )
     );
+  }
+
+
+  private getDefaultAccountList(): any[] {
+    if (!this.isSaved || !this.financialConceptEntry?.account?.uid) {
+      return [];
+    }
+    return [this.financialConceptEntry.account];
+  }
+
+
+  private getDefaultSubledgerAccountList(): any[] {
+    if (!this.isSaved || !this.financialConceptEntry?.subledgerAccount?.id) {
+      return [];
+    }
+    return [this.financialConceptEntry.subledgerAccount];
+  }
+
+
+  private getAccountChartCommand(keywords: string): AccountsSearchCommand {
+    const command: AccountsSearchCommand = {
+      keywords,
+    };
+    return command;
   }
 
 

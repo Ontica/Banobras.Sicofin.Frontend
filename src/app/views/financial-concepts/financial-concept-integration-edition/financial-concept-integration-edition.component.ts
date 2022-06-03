@@ -11,8 +11,9 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { FinancialConceptEntry, EmptyFinancialConceptEntry, FinancialConcept, EmptyFinancialConcept,
-         FinancialConceptEntryEditionResult, FinancialConceptEntryEditionCommand } from '@app/models';
+import { EmptyFinancialConceptEntry, FinancialConcept, EmptyFinancialConcept,
+         FinancialConceptEntryEditionResult, FinancialConceptEntryEditionCommand,
+         FinancialConceptEntry } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -70,6 +71,12 @@ export class FinancialConceptIntegrationEditionComponent {
 
     switch (event.type as FinancialConceptEntriesTableEventType) {
 
+      case FinancialConceptEntriesTableEventType.UPDATE_BUTTON_CLICKED:
+        Assertion.assertValue(event.payload.financialConceptEntry.uid,
+          'event.payload.financialConceptEntry.uid');
+        this.getFinancialConceptEntry(event.payload.financialConceptEntry.uid);
+        return;
+
       case FinancialConceptEntriesTableEventType.REMOVE_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.financialConceptEntry.uid,
           'event.payload.financialConceptEntry.uid');
@@ -99,10 +106,25 @@ export class FinancialConceptIntegrationEditionComponent {
         this.insertFinancialConceptEntry(event.payload.command as FinancialConceptEntryEditionCommand);
         return;
 
+      case FinancialConceptEntryEditorEventType.UPDATE_ENTRY:
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        this.updateFinancialConceptEntry(event.payload.command as FinancialConceptEntryEditionCommand);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private getFinancialConceptEntry(financialConceptEntryUID: string) {
+    this.submitted = true;
+
+    this.financialConceptsData.getFinancialConceptEntry(this.financialConcept.uid, financialConceptEntryUID)
+      .toPromise()
+      .then(x => this.setSelectedFinancialConceptEntry(x))
+      .finally(() => this.submitted = false);
   }
 
 
@@ -116,8 +138,20 @@ export class FinancialConceptIntegrationEditionComponent {
   }
 
 
+  private updateFinancialConceptEntry(command: FinancialConceptEntryEditionCommand) {
+    this.submitted = true;
+
+    this.financialConceptsData.updateFinancialConceptEntry(this.financialConcept.uid,
+                                                           this.selectedFinancialConceptEntry.uid,
+                                                           command)
+      .toPromise()
+      .then(x => this.validateEditionResult(x))
+      .finally(() => this.submitted = false);
+  }
+
+
   private validateEditionResult(editionResult: FinancialConceptEntryEditionResult) {
-    if (editionResult.command.dryRun) {
+    if (editionResult?.command?.dryRun) {
       this.resultModal.validateResult(editionResult)
         .toPromise()
         .then(x => {
@@ -133,7 +167,12 @@ export class FinancialConceptIntegrationEditionComponent {
 
   private submitEntryEdition(command: FinancialConceptEntryEditionCommand) {
     command.dryRun = false;
-    this.insertFinancialConceptEntry(command);
+
+    if (this.isSelectedEntrySaved) {
+      this.updateFinancialConceptEntry(command);
+    } else {
+      this.insertFinancialConceptEntry(command);
+    }
   }
 
 
@@ -149,9 +188,11 @@ export class FinancialConceptIntegrationEditionComponent {
 
 
   private emitIntegrationUpdated(message: string) {
-    this.setSelectedFinancialConceptEntry(EmptyFinancialConceptEntry);
+    if (!!message) {
+      this.messageBox.show(message, 'Operación ejecutada');
+    }
 
-    this.messageBox.show(message, 'Operación ejecutada');
+    this.setSelectedFinancialConceptEntry(EmptyFinancialConceptEntry);
 
     sendEvent(this.financialConceptIntegrationEditionEvent,
       FinancialConceptIntegrationEditionEventType.INTEGRATION_UPDATED);

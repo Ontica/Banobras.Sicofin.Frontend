@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { FinancialConceptEntry, FinancialConceptEntryType,
+import { FinancialConceptEntryDescriptor, FinancialConceptEntryType,
          getFinancialConceptEntryTypeName } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
@@ -29,7 +29,7 @@ export enum FinancialConceptEntriesTableEventType {
 })
 export class FinancialConceptEntriesTableComponent implements OnChanges {
 
-  @Input() financialConceptEntryList: FinancialConceptEntry[] = [];
+  @Input() financialConceptEntryList: FinancialConceptEntryDescriptor[] = [];
 
   @Input() canEdit = false;
 
@@ -39,7 +39,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
 
   displayedColumns = [...this.displayedColumnsDefault];
 
-  dataSource: MatTableDataSource<FinancialConceptEntry>;
+  dataSource: MatTableDataSource<FinancialConceptEntryDescriptor>;
 
   constructor(private messageBox: MessageBoxService) { }
 
@@ -52,7 +52,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
   }
 
 
-  onUpdateButtonClicked(financialConceptEntry: FinancialConceptEntry) {
+  onUpdateButtonClicked(financialConceptEntry: FinancialConceptEntryDescriptor) {
     if (this.canEdit && window.getSelection().toString().length <= 0) {
       sendEvent(this.financialConceptEntriesTableEvent,
         FinancialConceptEntriesTableEventType.UPDATE_BUTTON_CLICKED, {financialConceptEntry});
@@ -60,7 +60,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
   }
 
 
-  onRemoveButtonClicked(event, financialConceptEntry: FinancialConceptEntry) {
+  onRemoveButtonClicked(event, financialConceptEntry: FinancialConceptEntryDescriptor) {
     event.stopPropagation();
 
     const message = this.getConfirmMessage(financialConceptEntry);
@@ -85,7 +85,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
   }
 
 
-  private getConfirmMessage(financialConceptEntry: FinancialConceptEntry): string {
+  private getConfirmMessage(financialConceptEntry: FinancialConceptEntryDescriptor): string {
     let message =  `
       <table style='margin: 0;'>
       <tr><td class='nowrap'>Tipo: </td>
