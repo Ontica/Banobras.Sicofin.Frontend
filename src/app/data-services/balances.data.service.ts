@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { AccountBalance, AccountStatement, AccountStatementQuery, Balance, BalanceQuery, FileReport,
+import { AccountBalance, AccountStatement, AccountStatementQuery, Balance, BalancesQuery, FileReport,
          TrialBalance, TrialBalanceQuery } from '@app/models';
 
 
@@ -30,7 +30,7 @@ export class BalancesDataService {
   }
 
 
-  exportBalanceToExcel(query: BalanceQuery): Observable<FileReport> {
+  exportBalanceToExcel(query: BalancesQuery): Observable<FileReport> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/balance/excel';
@@ -39,7 +39,7 @@ export class BalancesDataService {
   }
 
 
-  getBalance(query: BalanceQuery): Observable<Balance> {
+  getBalance(query: BalancesQuery): Observable<Balance> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/balance`;

@@ -11,8 +11,8 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/cor
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalanceQuery, BalanceTypes, BalanceTypeList, FileReportVersion,
-         getEmptyBalanceQuery } from '@app/models';
+import { AccountsChartMasterData, BalancesQuery, BalanceTypes, BalanceTypeList, FileReportVersion,
+         getEmptyBalancesQuery } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -29,7 +29,7 @@ export enum BalanceQuickFilterEventType {
 })
 export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() balanceQuery: BalanceQuery = getEmptyBalanceQuery();
+  @Input() balancesQuery: BalancesQuery = getEmptyBalancesQuery();
 
   @Output() balanceQuickFilterEvent = new EventEmitter<EventInfo>();
 
@@ -122,7 +122,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   onBuildBalanceClicked() {
     const payload = {
       trialBalanceType: this.trialBalanceTypeSelected,
-      balanceQuery: this.getBalanceQueryData(),
+      balancesQuery: this.getBalancesQuery(),
     };
 
     sendEvent(this.balanceQuickFilterEvent, BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED, payload);
@@ -148,16 +148,16 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   private initFormData() {
     this.formData = {
-      trialBalanceType: this.balanceQuery.trialBalanceType,
-      accountsChartUID: this.balanceQuery.accountsChartUID,
-      ledgers: this.balanceQuery.ledgers,
-      balancesType: this.balanceQuery.balancesType,
-      fromAccount: this.balanceQuery.fromAccount,
-      fromDate: this.balanceQuery.initialPeriod.fromDate,
-      toDate: this.balanceQuery.initialPeriod.toDate,
-      subledgerAccount: this.balanceQuery.subledgerAccount,
-      withSubledgerAccount: this.balanceQuery.withSubledgerAccount,
-      withAllAccounts: this.balanceQuery.withAllAccounts,
+      trialBalanceType: this.balancesQuery.trialBalanceType,
+      accountsChartUID: this.balancesQuery.accountsChartUID,
+      ledgers: this.balancesQuery.ledgers,
+      balancesType: this.balancesQuery.balancesType,
+      fromAccount: this.balancesQuery.fromAccount,
+      fromDate: this.balancesQuery.initialPeriod.fromDate,
+      toDate: this.balancesQuery.initialPeriod.toDate,
+      subledgerAccount: this.balancesQuery.subledgerAccount,
+      withSubledgerAccount: this.balancesQuery.withSubledgerAccount,
+      withAllAccounts: this.balancesQuery.withAllAccounts,
     };
   }
 
@@ -187,8 +187,8 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  private getBalanceQueryData(): BalanceQuery {
-    const data: BalanceQuery = {
+  private getBalancesQuery(): BalancesQuery {
+    const data: BalancesQuery = {
       trialBalanceType: this.formData.trialBalanceType as BalanceTypes,
       accountsChartUID: this.formData.accountsChartUID,
       ledgers: this.formData.ledgers,

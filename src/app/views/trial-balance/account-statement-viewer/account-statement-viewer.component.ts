@@ -11,7 +11,7 @@ import { Assertion } from '@app/core';
 
 import { BalancesDataService, VouchersDataService } from '@app/data-services';
 
-import { AccountStatement, AccountStatementQuery, AccountStatementEntry, BalanceQuery, BalanceEntry,
+import { AccountStatement, AccountStatementQuery, AccountStatementEntry, BalancesQuery, BalanceEntry,
          EmptyAccountStatement, EntryItemTypeList, FileReport, TrialBalanceQuery,
          TrialBalanceEntry } from '@app/models';
 
@@ -34,7 +34,7 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   @Input() entry: BalanceEntry | TrialBalanceEntry;
 
-  @Input() query: BalanceQuery | TrialBalanceQuery;
+  @Input() query: BalancesQuery | TrialBalanceQuery;
 
   @Output() closeEvent = new EventEmitter<void>();
 

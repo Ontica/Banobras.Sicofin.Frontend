@@ -15,8 +15,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { Balance, BalanceQuery, BalanceData, BalanceEntry, EmptyTrialBalance, FileReport,
-         getEmptyBalanceQuery, getEmptyTrialBalanceQuery, TrialBalance, TrialBalanceQuery,
+import { Balance, BalancesQuery, BalanceData, BalanceEntry, EmptyTrialBalance, FileReport,
+         getEmptyBalancesQuery, getEmptyTrialBalanceQuery, TrialBalance, TrialBalanceQuery,
          TrialBalanceEntry } from '@app/models';
 
 import { ReportingAction, ReportingStateSelector } from '@app/presentation/exported.presentation.types';
@@ -63,7 +63,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   queryExecuted = false;
 
-  query: BalanceQuery | TrialBalanceQuery = getEmptyTrialBalanceQuery();
+  query: BalancesQuery | TrialBalanceQuery = getEmptyTrialBalanceQuery();
 
   data: Balance | TrialBalance = EmptyTrialBalance;
 
@@ -95,8 +95,8 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  get balanceQuery(): BalanceQuery {
-    return this.query as BalanceQuery;
+  get balancesQuery(): BalancesQuery {
+    return this.query as BalancesQuery;
   }
 
 
@@ -110,10 +110,10 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
     switch (event.type as TrialBalanceFilterEventType | BalanceQuickFilterEventType) {
       case BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED:
         Assertion.assertValue(event.payload.trialBalanceType, 'event.payload.trialBalanceType');
-        Assertion.assertValue(event.payload.balanceQuery, 'event.payload.balanceQuery');
+        Assertion.assertValue(event.payload.balancesQuery, 'event.payload.balancesQuery');
 
         this.setBalanceTypeName(event.payload.trialBalanceType);
-        this.executeGetBalance(event.payload.balanceQuery as BalanceQuery);
+        this.executeGetBalance(event.payload.balancesQuery as BalancesQuery);
         return;
 
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
@@ -174,7 +174,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
         }
 
         const observable = this.isQuickQuery ?
-          this.balancesDataService.exportBalanceToExcel(this.query as BalanceQuery) :
+          this.balancesDataService.exportBalanceToExcel(this.query as BalancesQuery) :
           this.balancesDataService.exportTrialBalanceToExcel(this.query as TrialBalanceQuery);
 
         this.exportDataToExcel(observable);
@@ -187,7 +187,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private executeGetBalance(query: BalanceQuery) {
+  private executeGetBalance(query: BalancesQuery) {
     this.query = query;
     const observableBalance = this.balancesDataService.getBalance(this.query);
     this.getData(observableBalance);
@@ -259,7 +259,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   private clearQuery() {
-    this.query = this.isQuickQuery ? getEmptyBalanceQuery() : getEmptyTrialBalanceQuery();
+    this.query = this.isQuickQuery ? getEmptyBalancesQuery() : getEmptyTrialBalanceQuery();
   }
 
 

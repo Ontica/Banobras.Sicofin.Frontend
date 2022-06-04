@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { BalanceQuery, BalanceEntry } from './balances';
+import { BalancesQuery, BalanceEntry } from './balances';
 
 import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
 
@@ -20,7 +20,7 @@ export interface AccountStatement extends DataTable {
 
 
 export interface AccountStatementQuery extends DataTableQuery {
-  query: BalanceQuery | TrialBalanceQuery;
+  query: BalancesQuery | TrialBalanceQuery;
   entry: BalanceEntry | TrialBalanceEntry;
 }
 

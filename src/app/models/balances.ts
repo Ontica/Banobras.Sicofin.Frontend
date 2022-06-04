@@ -46,14 +46,14 @@ export const BalanceTypeList: Identifiable[] = [
 
 
 export interface Balance extends DataTable {
-  query: BalanceQuery;
+  query: BalancesQuery;
   columns: DataTableColumn[];
   entries: BalanceEntry[];
 }
 
 
 export const EmptyBalance: Balance = {
-  query: getEmptyBalanceQuery(),
+  query: getEmptyBalancesQuery(),
   columns: [],
   entries: [],
 };
@@ -64,7 +64,7 @@ export interface BalanceEntry extends DataTableEntry {
 }
 
 
-export interface BalanceQuery extends DataTableQuery {
+export interface BalancesQuery extends DataTableQuery {
   accountsChartUID: string;
   trialBalanceType: BalanceTypes;
   ledgers: string[];
@@ -81,7 +81,7 @@ export interface BalanceQuery extends DataTableQuery {
 }
 
 
-export function getEmptyBalanceQuery(): BalanceQuery {
+export function getEmptyBalancesQuery(): BalancesQuery {
   return {
     accountsChartUID: '',
     trialBalanceType: null,
