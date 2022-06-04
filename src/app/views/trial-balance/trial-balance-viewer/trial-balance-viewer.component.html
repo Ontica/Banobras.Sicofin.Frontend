@@ -30,14 +30,14 @@
       </emp-fa-trial-balance-filter>
 
       <emp-fa-balance-quick-filter fxFlex="none" *ngIf="isQuickQuery"
-        [balanceCommand]="balanceCommand"
+        [balanceQuery]="balanceQuery"
         (balanceQuickFilterEvent)="onFilterEvent($event)">
 
       </emp-fa-balance-quick-filter>
 
       <emp-fa-data-table fxFlex
         [dataTable]="data"
-        [commandExecuted]="commandExecuted"
+        [executed]="queryExecuted"
         [controlsAligned]="isQuickQuery"
         [selectedEntry]="selectedEntry"
         (dataTableEvent)="onDataTableEvent($event)">

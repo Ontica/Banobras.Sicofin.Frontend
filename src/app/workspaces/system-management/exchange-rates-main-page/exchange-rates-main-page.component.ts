@@ -19,8 +19,8 @@ import { ExchangeRatesDataService } from '@app/data-services';
 
 import { PermissionsLibrary } from '@app/main-layout';
 
-import { EmptyExchangeRateData, ExchangeRatesSearchCommand, ExchangeRateData, ExecuteDatasetsCommand,
-         mapToExchangeRatesSearchCommand } from '@app/models';
+import { EmptyExchangeRateData, ExchangeRatesQuery, ExchangeRateData, ExecuteDatasetsCommand,
+         mapToExchangeRatesQuery } from '@app/models';
 
 import {
   ImportedDataViewerEventType
@@ -39,9 +39,9 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
 
   displayExchangeRatesEditor = false;
 
-  commandExecuted = false;
+  queryExecuted = false;
 
-  command: ExchangeRatesSearchCommand = null;
+  query: ExchangeRatesQuery = null;
 
   exchangeRateData: ExchangeRateData = Object.assign({}, EmptyExchangeRateData);
 
@@ -84,14 +84,14 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
 
       case ImportedDataViewerEventType.EXECUTE_DATA:
         Assertion.assertValue(event.payload.command, 'event.payload.command');
-        this.commandExecuted = false;
+        this.queryExecuted = false;
         this.exchangeRateData = Object.assign({}, EmptyExchangeRateData);
-        this.command = mapToExchangeRatesSearchCommand(event.payload.command as ExecuteDatasetsCommand);
-        this.searchExchangeRates(this.command);
+        this.query = mapToExchangeRatesQuery(event.payload.command as ExecuteDatasetsCommand);
+        this.searchExchangeRates(this.query);
         return;
 
       case ImportedDataViewerEventType.EXPORT_DATA:
-        this.exportExchangeRatesToExcel(this.command);
+        this.exportExchangeRatesToExcel(this.query);
         return;
 
       case ImportedDataViewerEventType.EDIT_DATA_CLICKED:
@@ -113,8 +113,8 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case ExchangeRatesEditorEventType.DATA_UPDATED:
-        if (this.commandExecuted) {
-          this.searchExchangeRates(this.command);
+        if (this.queryExecuted) {
+          this.searchExchangeRates(this.query);
         }
 
         return;
@@ -141,21 +141,21 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private searchExchangeRates(command: ExchangeRatesSearchCommand) {
+  private searchExchangeRates(query: ExchangeRatesQuery) {
     this.setSubmitted(true);
 
-    this.exchangeRatesData.searchExchangeRates(command)
+    this.exchangeRatesData.searchExchangeRates(query)
       .toPromise()
       .then(x => {
-        this.commandExecuted = true;
+        this.queryExecuted = true;
         this.exchangeRateData = Object.assign({}, EmptyExchangeRateData, {entries: x});
       })
       .finally(() => this.setSubmitted(false));
   }
 
 
-  private exportExchangeRatesToExcel(command) {
-    this.exchangeRatesData.exportExchangeRatesToExcel(command)
+  private exportExchangeRatesToExcel(query) {
+    this.exchangeRatesData.exportExchangeRatesToExcel(query)
       .toPromise()
       .then(x => this.excelFileUrl = x.url);
   }

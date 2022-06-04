@@ -11,7 +11,7 @@ import { Assertion } from '@app/core';
 
 import { OperationalReportsDataService } from '@app/data-services';
 
-import { OperationalReportCommand, EmptyOperationalReport, EmptyOperationalReportCommand,
+import { OperationalReportQuery, EmptyOperationalReport, EmptyOperationalReportQuery,
          OperationalReport, FileType, ReportGroup, ReportType, ExportationType } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
@@ -44,7 +44,7 @@ export class OperationalReportViewerComponent implements OnChanges {
 
   operationalReport: OperationalReport = Object.assign({}, EmptyOperationalReport);
 
-  operationalReportCommand: OperationalReportCommand = Object.assign({}, EmptyOperationalReportCommand);
+  operationalReportQuery: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
 
   selectedReportType: ReportType = null;
 
@@ -54,7 +54,7 @@ export class OperationalReportViewerComponent implements OnChanges {
 
   fileUrl = '';
 
-  commandExecuted = false;
+  queryExecuted = false;
 
   reportGroups = ReportGroup;
 
@@ -75,11 +75,11 @@ export class OperationalReportViewerComponent implements OnChanges {
     switch (event.type as OperationalReportFilterEventType) {
 
       case OperationalReportFilterEventType.BUILD_OPERATIONAL_REPORT_CLICKED:
-        Assertion.assertValue(event.payload.operationalReportCommand,
-          'event.payload.operationalReportCommand');
+        Assertion.assertValue(event.payload.operationalReportQuery,
+          'event.payload.operationalReportQuery');
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
-        this.operationalReportCommand = event.payload.operationalReportCommand as OperationalReportCommand;
+        this.operationalReportQuery = event.payload.operationalReportQuery as OperationalReportQuery;
         this.setReportType(event.payload.reportType as ReportType);
         this.setOperationalReportData(EmptyOperationalReport, false);
         this.getOperationalReport();
@@ -152,7 +152,7 @@ export class OperationalReportViewerComponent implements OnChanges {
 
   private getOperationalReport() {
     this.setSubmitted(true);
-    this.operationalReportsData.getOperationalReport(this.operationalReportCommand)
+    this.operationalReportsData.getOperationalReport(this.operationalReportQuery)
       .toPromise()
       .then( x => this.setOperationalReportData(x))
       .finally(() => this.setSubmitted(false));
@@ -160,24 +160,24 @@ export class OperationalReportViewerComponent implements OnChanges {
 
 
   private exportOperationalReport(exportTo: FileType) {
-    const operationalReportCommand = Object.assign({}, this.operationalReportCommand, {exportTo});
+    const operationalReportQuery = Object.assign({}, this.operationalReportQuery, {exportTo});
 
-    this.operationalReportsData.exportOperationalReport(operationalReportCommand)
+    this.operationalReportsData.exportOperationalReport(operationalReportQuery)
       .toPromise()
       .then(x => this.fileUrl = x.url)
       .catch(() => this.setDisplayExportModal(false));
   }
 
 
-  private setOperationalReportData(operationalReport: OperationalReport, commandExecuted = true) {
+  private setOperationalReportData(operationalReport: OperationalReport, queryExecuted = true) {
     this.operationalReport = operationalReport;
-    this.commandExecuted = commandExecuted;
+    this.queryExecuted = queryExecuted;
     this.setText();
   }
 
 
   private setText(displayedEntriesMessage?: string) {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint =  'Seleccionar los filtros';
       return;
     }

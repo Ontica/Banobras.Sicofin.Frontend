@@ -11,7 +11,7 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyOperationalReportCommand, OperationalReportCommand, ReportGroup,
+import { AccountsChartMasterData, EmptyOperationalReportQuery, OperationalReportQuery, ReportGroup,
          ReportPayloadType, ReportType, SendTypesList } from '@app/models';
 
 import { AccountChartStateSelector,
@@ -38,7 +38,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  operationalReportCommand: OperationalReportCommand = Object.assign({}, EmptyOperationalReportCommand);
+  operationalReportQuery: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
 
   selectedAccountChart = null;
 
@@ -93,7 +93,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   get periodValid() {
     if (this.displayLedgerAndPeriod) {
-      return !!this.operationalReportCommand.fromDate && !!this.operationalReportCommand.toDate;
+      return !!this.operationalReportQuery.fromDate && !!this.operationalReportQuery.toDate;
     }
 
     return true;
@@ -110,18 +110,18 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   onReportTypeChanges(reportType: ReportType) {
     this.selectedReportType = reportType ?? null;
 
-    this.operationalReportCommand.reportType = reportType?.uid ?? null;
-    this.operationalReportCommand.toDate = null;
-    this.operationalReportCommand.fromDate = null;
-    this.operationalReportCommand.ledgers = [];
-    this.operationalReportCommand.accountNumber = null;
-    this.operationalReportCommand.withSubledgerAccount = false;
+    this.operationalReportQuery.reportType = reportType?.uid ?? null;
+    this.operationalReportQuery.toDate = null;
+    this.operationalReportQuery.fromDate = null;
+    this.operationalReportQuery.ledgers = [];
+    this.operationalReportQuery.accountNumber = null;
+    this.operationalReportQuery.withSubledgerAccount = false;
   }
 
 
   onBuildOperationalReportClicked() {
     const payload = {
-      operationalReportCommand: this.getOperationalReportCommandData(),
+      operationalReportQuery: this.getOperationalReportQuery(),
       reportType: this.selectedReportType,
     };
 
@@ -151,37 +151,37 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   private setDefaultAccountsChartUID() {
     this.selectedAccountChart = this.accountsChartMasterDataList.length > 0 ?
       this.accountsChartMasterDataList[0] : null;
-    this.operationalReportCommand.accountsChartUID = this.selectedAccountChart?.uid;
+    this.operationalReportQuery.accountsChartUID = this.selectedAccountChart?.uid;
   }
 
 
   private setFilteredReportTypeList() {
     this.filteredReportTypeList = this.reportTypeList.filter(x =>
-      x.accountsCharts.includes(this.operationalReportCommand.accountsChartUID) &&
+      x.accountsCharts.includes(this.operationalReportQuery.accountsChartUID) &&
       x.group === this.reportGroup
     );
   }
 
 
-  private getOperationalReportCommandData(): OperationalReportCommand {
-    const data: OperationalReportCommand = {
-      reportType: this.operationalReportCommand.reportType,
-      accountsChartUID: this.operationalReportCommand.accountsChartUID,
-      toDate: this.operationalReportCommand.toDate,
+  private getOperationalReportQuery(): OperationalReportQuery {
+    const data: OperationalReportQuery = {
+      reportType: this.operationalReportQuery.reportType,
+      accountsChartUID: this.operationalReportQuery.accountsChartUID,
+      toDate: this.operationalReportQuery.toDate,
     };
 
     if (this.displayLedgerAndPeriod) {
-      data.ledgers = this.operationalReportCommand.ledgers ?? [];
-      data.fromDate = this.operationalReportCommand.fromDate ?? '';
+      data.ledgers = this.operationalReportQuery.ledgers ?? [];
+      data.fromDate = this.operationalReportQuery.fromDate ?? '';
     }
 
     if (this.displayDateAndSendType) {
-      data.sendType = this.operationalReportCommand.sendType ?? null;
+      data.sendType = this.operationalReportQuery.sendType ?? null;
     }
 
     if (this.displayAccountAndWithSubledgerAccount) {
-      data.accountNumber = this.operationalReportCommand.accountNumber ?? null;
-      data.withSubledgerAccount = this.operationalReportCommand.withSubledgerAccount;
+      data.accountNumber = this.operationalReportQuery.accountNumber ?? null;
+      data.withSubledgerAccount = this.operationalReportQuery.withSubledgerAccount;
     }
 
     return data;

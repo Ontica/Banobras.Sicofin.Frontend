@@ -32,7 +32,7 @@ export interface FinancialConceptsGroup {
 }
 
 
-export interface FinancialConceptCommand {
+export interface FinancialConceptQuery {
   accountsChartUID: string;
   groupUID?: string;
   date?: DateString;
@@ -190,7 +190,7 @@ export const EmptyExternalVariable: ExternalVariable = {
 };
 
 
-export const EmptyFinancialConceptCommand: FinancialConceptCommand = {
+export const EmptyFinancialConceptQuery: FinancialConceptQuery = {
   accountsChartUID: '',
   groupUID: '',
   date: '',

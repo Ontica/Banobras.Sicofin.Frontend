@@ -37,7 +37,7 @@ export class FinancialConceptsTableComponent implements OnChanges {
 
   @Input() selectedFinancialConcept: FinancialConcept = null;
 
-  @Input() commandExecuted = true;
+  @Input() queryExecuted = true;
 
   @Input() isLoading = false;
 

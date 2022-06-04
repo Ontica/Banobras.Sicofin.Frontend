@@ -42,7 +42,7 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
 
   @Input() isLoading = false;
 
-  @Input() commandExecuted = false;
+  @Input() queryExecuted = false;
 
   @Output() transactionSlipsExplorerEvent = new EventEmitter<EventInfo>();
 
@@ -114,7 +114,7 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
 
 
   private setText() {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       this.textNotFound = 'No se ha invocado la búsqueda de volantes.';
       return;

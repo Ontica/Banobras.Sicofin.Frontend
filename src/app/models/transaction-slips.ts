@@ -40,7 +40,7 @@ export const TransactionSlipStatusList: Identifiable[] = [
 ];
 
 
-export interface SearchTransactionSlipsCommand {
+export interface TransactionSlipsQuery {
   accountsChartUID: string;
   systemUID: string;
   fromDate: DateString;
@@ -51,7 +51,7 @@ export interface SearchTransactionSlipsCommand {
 }
 
 
-export const EmptySearchTransactionSlipsCommand: SearchTransactionSlipsCommand = {
+export const EmptyTransactionSlipsQuery: TransactionSlipsQuery = {
   accountsChartUID: '',
   systemUID: '',
   fromDate: '',

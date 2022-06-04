@@ -24,11 +24,11 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { AccountsChartDataService, FinancialConceptsDataService,
          SubledgerDataService } from '@app/data-services';
 
-import { AccountDescriptor, AccountsChartMasterData, AccountsSearchCommand, EmptyFinancialConcept,
+import { AccountDescriptor, AccountsChartMasterData, AccountsQuery, EmptyFinancialConcept,
          EmptyFinancialConceptEntry, ExternalVariable, FinancialConcept, FinancialConceptDescriptor,
          FinancialConceptEntryEditionCommand, FinancialConceptEntryFields, FinancialConceptEntryType,
          FinancialConceptEntryTypeList, FinancialConceptsGroup, OperatorTypeList, Positioning,
-         PositioningRule, PositioningRuleList, SearchSubledgerAccountCommand, SubledgerAccountDescriptor,
+         PositioningRule, PositioningRuleList, SubledgerAccountQuery, SubledgerAccountDescriptor,
          FinancialConceptEntryEditionType, FinancialConceptEntry } from '@app/models';
 
 import { AccountChartStateSelector,
@@ -512,7 +512,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
         tap(() => this.accountLoading = true),
         switchMap(keywords =>
           this.accountsChartData.searchAccounts(this.financialConcept.accountsChart.uid,
-                                                this.getAccountChartCommand(keywords))
+                                                this.getAccountsQuery(keywords))
           .pipe(
             map(x => x.accounts),
             catchError(() => of([])),
@@ -532,7 +532,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
         debounceTime(800),
         tap(() => this.subledgerAccountLoading = true),
         switchMap(keywords =>
-          this.subledgerData.searchSubledgerAccounts(this.getSearchSubledgerAccountCommand(keywords))
+          this.subledgerData.searchSubledgerAccounts(this.getSubledgerAccountQuery(keywords))
           .pipe(
             catchError(() => of([])),
             tap(() => this.subledgerAccountLoading = false)
@@ -558,20 +558,20 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  private getAccountChartCommand(keywords: string): AccountsSearchCommand {
-    const command: AccountsSearchCommand = {
+  private getAccountsQuery(keywords: string): AccountsQuery {
+    const query: AccountsQuery = {
       keywords,
     };
-    return command;
+    return query;
   }
 
 
-  private getSearchSubledgerAccountCommand(keywords: string): SearchSubledgerAccountCommand {
-    const command: SearchSubledgerAccountCommand = {
+  private getSubledgerAccountQuery(keywords: string): SubledgerAccountQuery {
+    const query: SubledgerAccountQuery = {
       accountsChartUID: this.financialConcept.accountsChart.uid,
       keywords,
     };
-    return command;
+    return query;
   }
 
 

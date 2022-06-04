@@ -13,7 +13,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyFinancialReportCommand, FinancialReportCommand,
+import { AccountsChartMasterData, EmptyFinancialReportQuery, FinancialReportQuery,
          ReportType } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
@@ -33,7 +33,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   @Output() financialReportFilterEvent = new EventEmitter<EventInfo>();
 
-  command: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
+  query: FinancialReportQuery = Object.assign({}, EmptyFinancialReportQuery);
 
   selectedReportType: ReportType = null;
 
@@ -63,7 +63,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   get periodValid() {
     if (this.selectedReportType?.show.datePeriod) {
-      return !!this.command.fromDate && !!this.command.toDate;
+      return !!this.query.fromDate && !!this.query.toDate;
     }
 
     return true;
@@ -83,17 +83,17 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   onReportTypeChanges(reportType: ReportType) {
     this.selectedReportType = reportType ?? null;
 
-    this.command.financialReportType = reportType?.uid ?? null;
-    this.command.fromDate = '';
-    this.command.toDate = '';
-    this.command.getAccountsIntegration = false;
-    this.command.exportTo = null;
+    this.query.financialReportType = reportType?.uid ?? null;
+    this.query.fromDate = '';
+    this.query.toDate = '';
+    this.query.getAccountsIntegration = false;
+    this.query.exportTo = null;
   }
 
 
   onBuildReportClicked() {
     const payload = {
-      command: this.getReportCommandData(),
+      query: this.getReportQueryData(),
       reportType: this.selectedReportType,
     };
 
@@ -114,7 +114,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
 
   private resetReportType() {
-    this.command.financialReportType = '';
+    this.query.financialReportType = '';
     this.reportTypeList = [];
   }
 
@@ -129,23 +129,23 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getReportCommandData(): FinancialReportCommand {
-    const data: FinancialReportCommand = {
-      financialReportType: this.command.financialReportType,
-      accountsChartUID: this.command.accountsChartUID,
+  private getReportQueryData(): FinancialReportQuery {
+    const data: FinancialReportQuery = {
+      financialReportType: this.query.financialReportType,
+      accountsChartUID: this.query.accountsChartUID,
     };
 
     if (this.selectedReportType?.show.datePeriod) {
-      data.fromDate = this.command.fromDate ?? null;
-      data.toDate = this.command.toDate ?? null;
+      data.fromDate = this.query.fromDate ?? null;
+      data.toDate = this.query.toDate ?? null;
     }
 
     if (this.selectedReportType?.show.singleDate) {
-      data.toDate = this.command.toDate ?? null;
+      data.toDate = this.query.toDate ?? null;
     }
 
     if (this.selectedReportType?.show.getAccountsIntegration) {
-      data.getAccountsIntegration = this.command?.getAccountsIntegration ?? false;
+      data.getAccountsIntegration = this.query?.getAccountsIntegration ?? false;
     }
 
     return data;

@@ -11,7 +11,7 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, AccountsSearchCommand, EmptyAccountsSearchCommand,
+import { AccountsChartMasterData, AccountsQuery, EmptyAccountsQuery,
          getLevelsListFromPattern } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
@@ -41,7 +41,7 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
   accountChartSelected: AccountsChartMasterData = null;
 
-  accountsSearch: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand);
+  accountsSearch: AccountsQuery = Object.assign({}, EmptyAccountsQuery);
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
@@ -79,13 +79,13 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 
 
   onClearFilters() {
-    this.accountsSearch = Object.assign({}, EmptyAccountsSearchCommand, {
+    this.accountsSearch = Object.assign({}, EmptyAccountsQuery, {
       keywords: this.accountsSearch.keywords
     });
 
     const payload: any = {
       accountsChart: this.accountChartSelected,
-      accountsSearchCommand: Object.assign({}, this.accountsSearch),
+      accountsQuery: Object.assign({}, this.accountsSearch),
     };
 
     sendEvent(this.accountsChartFilterEvent, AccountsChartFilterEventType.CLEAR_ACCOUNTS_CHART_CLICKED,
@@ -96,7 +96,7 @@ export class AccountsChartFilterComponent implements OnInit, OnDestroy {
   onSearchAccountsChartClicked() {
     const payload: any = {
       accountsChart: this.accountChartSelected,
-      accountsSearchCommand: Object.assign({}, this.accountsSearch),
+      accountsQuery: Object.assign({}, this.accountsSearch),
     };
 
     sendEvent(this.accountsChartFilterEvent, AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED,

@@ -41,7 +41,7 @@ export class DataTableComponent implements OnChanges {
 
   @Input() selectedEntry: DataTableEntry = null;
 
-  @Input() commandExecuted = true;
+  @Input() executed = true;
 
   @Input() controlsAligned = false;
 
@@ -53,7 +53,7 @@ export class DataTableComponent implements OnChanges {
 
   @Input() countOnlyEntries = false;
 
-  @Input() notCommandExecutedText = 'No se ha invocado la consulta.';
+  @Input() notQueryExecutedText = 'No se ha invocado la consulta.';
 
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
 

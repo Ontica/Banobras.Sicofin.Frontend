@@ -11,8 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { SubledgerDataService } from '@app/data-services';
 
-import { EmptySubledgerAccount, EmptySearchSubledgerAccountCommand, EmptySubledgerAccountDataTable,
-         SubledgerAccountDescriptor, SearchSubledgerAccountCommand, SubledgerAccountDataTable,
+import { EmptySubledgerAccount, EmptySubledgerAccountQuery, EmptySubledgerAccountDataTable,
+         SubledgerAccountDescriptor, SubledgerAccountQuery, SubledgerAccountDataTable,
          SubledgerAccount, mapSubledgerAccountDescriptorFromSubledgerAccount} from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
@@ -40,15 +40,15 @@ import {
   templateUrl: './subledger-accounts-main-page.component.html',
 })
 export class SubledgerAccountsMainPageComponent {
-  subledgerAccountCommand: SearchSubledgerAccountCommand =
-    Object.assign({}, EmptySearchSubledgerAccountCommand);
+  subledgerAccountQuery: SubledgerAccountQuery =
+    Object.assign({}, EmptySubledgerAccountQuery);
   subledgerAccountData: SubledgerAccountDataTable = Object.assign({}, EmptySubledgerAccountDataTable);
   exportData = '';
   selectedSubledgerAccount: SubledgerAccount = EmptySubledgerAccount;
 
   isLoading = false;
   isLoadingSubledgerAccount = false;
-  commandExecuted = false;
+  queryExecuted = false;
 
   displaySubledgerAccountCreator = false;
   displayExportModal = false;
@@ -66,7 +66,7 @@ export class SubledgerAccountsMainPageComponent {
       case SubledgerAccountCreatorEventType.SUBLEDGER_ACCOUNT_CREATED:
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
         this.insertSubledgerAccountToEntries(event.payload.subledgerAccount);
-        this.commandExecuted = true;
+        this.queryExecuted = true;
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -81,9 +81,9 @@ export class SubledgerAccountsMainPageComponent {
         this.displaySubledgerAccountCreator = true;
         return;
       case SubledgerAccountsViewerEventType.SEARCH_SUBLEDGERS_ACCOUNT_CLICKED:
-        Assertion.assertValue(event.payload.subledgerAccountCommand, 'event.payload.subledgerAccountCommand');
-        this.subledgerAccountCommand = event.payload.subledgerAccountCommand;
-        this.searchSubledgerAccounts(event.payload.subledgerAccountCommand as SearchSubledgerAccountCommand);
+        Assertion.assertValue(event.payload.subledgerAccountQuery, 'event.payload.subledgerAccountQuery');
+        this.subledgerAccountQuery = event.payload.subledgerAccountQuery;
+        this.searchSubledgerAccounts(event.payload.subledgerAccountQuery as SubledgerAccountQuery);
         return;
       case SubledgerAccountsViewerEventType.EXPORT_DATA_BUTTON_CLICKED:
         this.setDisplayExportModal(true);
@@ -107,7 +107,7 @@ export class SubledgerAccountsMainPageComponent {
         this.setDisplayExportModal(false);
         return;
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        this.exportSubledgerAccounts(this.subledgerAccountCommand);
+        this.exportSubledgerAccounts(this.subledgerAccountQuery);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -136,28 +136,27 @@ export class SubledgerAccountsMainPageComponent {
   }
 
 
-  private searchSubledgerAccounts(command: SearchSubledgerAccountCommand) {
+  private searchSubledgerAccounts(query: SubledgerAccountQuery) {
     this.subledgerAccountData = Object.assign({}, EmptySubledgerAccountDataTable);
     this.isLoading = true;
-    this.commandExecuted = false;
+    this.queryExecuted = false;
 
-    this.subledgerData.searchSubledgerAccounts(command)
+    this.subledgerData.searchSubledgerAccounts(query)
       .toPromise()
-      .then(x => {
-        this.subledgerAccountData = Object.assign({}, this.subledgerAccountData, {command, entries: x});
-      })
+      .then(x =>
+        this.subledgerAccountData = Object.assign({}, this.subledgerAccountData, {query, entries: x})
+      )
       .finally(() => {
         this.isLoading = false;
-        this.commandExecuted = true;
+        this.queryExecuted = true;
       });
   }
 
 
-  private exportSubledgerAccounts(subledgerAccountCommand: SearchSubledgerAccountCommand) {
+  private exportSubledgerAccounts(query: SubledgerAccountQuery) {
     setTimeout(() => {
       this.messageBox.showInDevelopment('Exportar auxiliares', {
-        eventType: 'EXPORT_SUBLEDGERS_ACCOUNT',
-        subledgerAccountCommand,
+        eventType: 'EXPORT_SUBLEDGERS_ACCOUNT', query,
       });
       this.exportData = '';
     }, 500);

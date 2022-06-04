@@ -11,7 +11,7 @@
       </emp-ng-spinner>
 
       <emp-fa-account-statement-filter fxFlex="none"
-        [command]="command"
+        [query]="query"
         [entry]="entry"
         (accountStatementFilterEvent)="onFilterEvent($event)">
 
@@ -19,8 +19,8 @@
 
       <emp-fa-data-table fxFlex
         [dataTable]="accountStatement"
-        [commandExecuted]="commandExecuted"
-        [notCommandExecutedText]="'Cargando...'"
+        [executed]="queryExecuted"
+        [notQueryExecutedText]="'Cargando...'"
         [controlsAligned]="true"
         [clickableEntry]="true"
         [countOnlyEntries]="true"

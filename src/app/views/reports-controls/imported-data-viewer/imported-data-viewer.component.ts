@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { PermissionsLibrary } from '@app/main-layout';
 
-import { DataTable, DataTableCommand, DefaultExportationType, DefaultFieldConfig, EmptyDataTable,
+import { DataTable, DataTableQuery, DefaultExportationType, DefaultFieldConfig, EmptyDataTable,
          EmptyImportDatasets, ExportationType, FieldConfig, ImportDatasets } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
@@ -66,7 +66,7 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() commandExecuted = false;
 
-  @Input() command: DataTableCommand = {};
+  @Input() command: DataTableQuery = {};
 
   @Input() data: DataTable = Object.assign({}, EmptyDataTable);
 

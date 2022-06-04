@@ -11,8 +11,8 @@ import { Assertion } from '@app/core';
 
 import { BalancesDataService, VouchersDataService } from '@app/data-services';
 
-import { AccountStatement, AccountStatementCommand, AccountStatementEntry, BalanceCommand, BalanceEntry,
-         EmptyAccountStatement, EntryItemTypeList, FileReport, TrialBalanceCommand,
+import { AccountStatement, AccountStatementQuery, AccountStatementEntry, BalanceQuery, BalanceEntry,
+         EmptyAccountStatement, EntryItemTypeList, FileReport, TrialBalanceQuery,
          TrialBalanceEntry } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
@@ -34,7 +34,7 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   @Input() entry: BalanceEntry | TrialBalanceEntry;
 
-  @Input() command: BalanceCommand | TrialBalanceCommand;
+  @Input() query: BalanceQuery | TrialBalanceQuery;
 
   @Output() closeEvent = new EventEmitter<void>();
 
@@ -42,9 +42,9 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   isLoading = false;
   submitted = false;
-  commandExecuted = false;
+  queryExecuted = false;
 
-  accountStatementCommand: AccountStatementCommand = null;
+  accountStatementQuery: AccountStatementQuery = null;
   accountStatement: AccountStatement = EmptyAccountStatement;
 
   displayExportModal = false;
@@ -61,8 +61,8 @@ export class AccountStatementViewerComponent implements OnChanges {
 
 
   ngOnChanges() {
-    if (!!this.command && !!this.entry) {
-      this.buildAccountStatementCommand();
+    if (!!this.query && !!this.entry) {
+      this.buildAccountStatementQuery();
       this.resetAccountStatementData();
       this.getAccountStatement();
     }
@@ -71,11 +71,6 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   get entriesTotal(): number {
     return this.accountStatement?.entries?.filter(x => EntryItemTypeList.includes(x.itemType)).length;
-  }
-
-
-  get isValidCommand() {
-    return false;
   }
 
 
@@ -92,8 +87,8 @@ export class AccountStatementViewerComponent implements OnChanges {
     switch (event.type as AccountStatementFilterEventType) {
 
       case AccountStatementFilterEventType.BUILD_ACCOUNT_STATEMENT_CLICKED:
-        Assertion.assertValue(event.payload.accountStatementCommand, 'event.payload.accountStatementCommand');
-        this.accountStatementCommand = Object.assign({}, event.payload.accountStatementCommand);
+        Assertion.assertValue(event.payload.accountStatementQuery, 'event.payload.accountStatementQuery');
+        this.accountStatementQuery = Object.assign({}, event.payload.accountStatementQuery);
         this.getAccountStatement();
         return;
 
@@ -154,10 +149,10 @@ export class AccountStatementViewerComponent implements OnChanges {
   private getAccountStatement() {
     this.setSubmitted(true);
 
-    this.balancesDataService.getAccountStatement(this.accountStatementCommand)
+    this.balancesDataService.getAccountStatement(this.accountStatementQuery)
       .toPromise()
       .then(x => {
-        this.commandExecuted = true;
+        this.queryExecuted = true;
         this.setAccountStatementData(x);
       })
       .catch(e => this.onCloseButtonClicked())
@@ -166,7 +161,7 @@ export class AccountStatementViewerComponent implements OnChanges {
 
 
   private exportAccountStatementToExcel() {
-    this.balancesDataService.exportAccountStatementToExcel(this.accountStatementCommand)
+    this.balancesDataService.exportAccountStatementToExcel(this.accountStatementQuery)
       .toPromise()
       .then(x => this.excelFileUrl = x.url);
   }
@@ -186,16 +181,16 @@ export class AccountStatementViewerComponent implements OnChanges {
   }
 
 
-  private buildAccountStatementCommand() {
-    this.accountStatementCommand = {
-      command: this.command,
+  private buildAccountStatementQuery() {
+    this.accountStatementQuery = {
+      query: this.query,
       entry: this.entry,
     };
   }
 
 
   private resetAccountStatementData() {
-    this.commandExecuted = false;
+    this.queryExecuted = false;
     this.setAccountStatementData(EmptyAccountStatement);
   }
 
@@ -207,7 +202,7 @@ export class AccountStatementViewerComponent implements OnChanges {
 
 
   private setText(displayedEntriesMessage?: string) {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint = 'Cargando...';
       return;
     }

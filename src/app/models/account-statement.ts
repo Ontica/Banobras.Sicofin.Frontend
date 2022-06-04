@@ -5,22 +5,22 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { BalanceCommand, BalanceEntry } from './balances';
+import { BalanceQuery, BalanceEntry } from './balances';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableCommand } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
 
-import { getEmptyTrialBalanceCommand, TrialBalanceCommand, TrialBalanceEntry } from './trial-balances';
+import { getEmptyTrialBalanceQuery, TrialBalanceQuery, TrialBalanceEntry } from './trial-balances';
 
 export interface AccountStatement extends DataTable {
-  command: AccountStatementCommand;
+  query: AccountStatementQuery;
   columns: DataTableColumn[];
   entries: AccountStatementEntry[];
   title: string;
 }
 
 
-export interface AccountStatementCommand extends DataTableCommand {
-  command: BalanceCommand | TrialBalanceCommand;
+export interface AccountStatementQuery extends DataTableQuery {
+  query: BalanceQuery | TrialBalanceQuery;
   entry: BalanceEntry | TrialBalanceEntry;
 }
 
@@ -30,14 +30,14 @@ export interface AccountStatementEntry extends DataTableEntry {
 }
 
 
-export const EmptyAccountStatementCommand: AccountStatementCommand = {
-  command: getEmptyTrialBalanceCommand(),
+export const EmptyAccountStatementQuery: AccountStatementQuery = {
+  query: getEmptyTrialBalanceQuery(),
   entry: null,
 };
 
 
 export const EmptyAccountStatement: AccountStatement = {
-  command: EmptyAccountStatementCommand,
+  query: EmptyAccountStatementQuery,
   columns: [],
   entries: [],
   title: '',

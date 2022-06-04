@@ -28,8 +28,8 @@
 </div>
 
 <emp-fa-financial-concept-creator *ngIf="displayFinancialConceptCreator"
-  [accountsChartUID]="financialConceptCommand.accountsChartUID"
-  [financialConceptsGroupUID]="financialConceptCommand.groupUID"
+  [accountsChartUID]="financialConceptQuery.accountsChartUID"
+  [financialConceptsGroupUID]="financialConceptQuery.groupUID"
   (financialConceptCreatorEvent)="onFinancialConceptCreatorEvent($event)">
 
 </emp-fa-financial-concept-creator>

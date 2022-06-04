@@ -155,7 +155,7 @@ export const EmptyAccount: Account = {
 };
 
 
-export interface AccountsSearchCommand {
+export interface AccountsQuery {
   date?: DateString;
   keywords?: string;
   ledger?: string;
@@ -170,7 +170,7 @@ export interface AccountsSearchCommand {
 }
 
 
-export const EmptyAccountsSearchCommand: AccountsSearchCommand = {
+export const EmptyAccountsQuery: AccountsQuery = {
   date: '',
   keywords: '',
   fromAccount: '',

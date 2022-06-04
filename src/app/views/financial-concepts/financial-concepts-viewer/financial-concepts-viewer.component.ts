@@ -49,7 +49,7 @@ export class FinancialConceptsViewerComponent implements OnChanges {
 
   cardHint = 'Seleccionar los filtros';
 
-  commandExecuted = false;
+  queryExecuted = false;
 
   displayExportModal = false;
 
@@ -69,12 +69,12 @@ export class FinancialConceptsViewerComponent implements OnChanges {
   onFinancialConceptsFilterEvent(event: EventInfo) {
     switch (event.type as FinancialConceptsFilterEventType) {
       case FinancialConceptsFilterEventType.SEARCH_FINANCIAL_CONCEPTS_CLICKED:
-        Assertion.assertValue(event.payload.financialConceptCommand, 'event.payload.financialConceptCommand');
+        Assertion.assertValue(event.payload.financialConceptQuery, 'event.payload.financialConceptQuery');
         Assertion.assertValue(event.payload.financialConceptsGroupsName,
           'event.payload.financialConceptsGroupsName');
 
         this.financialConceptsGroupsName = event.payload.financialConceptsGroupsName;
-        this.commandExecuted = true;
+        this.queryExecuted = true;
         sendEvent(this.financialConceptsViewerEvent,
           FinancialConceptsViewerEventType.SEARCH_FINANCIAL_CONCEPTS_CLICKED, event.payload);
         return;
@@ -133,7 +133,7 @@ export class FinancialConceptsViewerComponent implements OnChanges {
 
 
   private setText(displayedEntriesMessage?: string) {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       return;
     }

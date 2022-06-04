@@ -7,17 +7,17 @@
 
 import { DateString } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
+import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './data-table';
 
 
 export interface FinancialReport extends DataTable {
-  command: FinancialReportCommand;
+  query: FinancialReportQuery;
   columns: DataTableColumn[];
   entries: FinancialReportEntry[];
 }
 
 
-export interface FinancialReportCommand extends DataTableCommand {
+export interface FinancialReportQuery extends DataTableQuery {
   financialReportType: string;
   accountsChartUID: string;
   fromDate?: DateString;
@@ -54,7 +54,7 @@ export enum FinancialReportItemType {
 }
 
 
-export const EmptyFinancialReportCommand: FinancialReportCommand = {
+export const EmptyFinancialReportQuery: FinancialReportQuery = {
   financialReportType: '',
   accountsChartUID: '',
   fromDate: '',
@@ -79,7 +79,7 @@ export const EmptyFinancialReportEntry: FinancialReportEntry = {
 
 
 export const EmptyFinancialReport: FinancialReport = {
-  command: EmptyFinancialReportCommand,
+  query: EmptyFinancialReportQuery,
   columns: [],
   entries: [],
 };

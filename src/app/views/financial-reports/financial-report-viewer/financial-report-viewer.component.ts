@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { FinancialReportCommand, EmptyFinancialReport, EmptyFinancialReportCommand, FinancialReport,
+import { FinancialReportQuery, EmptyFinancialReport, EmptyFinancialReportQuery, FinancialReport,
          FinancialReportEntry, EmptyFinancialReportBreakdown, ReportType, ExportationType,
          FileType } from '@app/models';
 
@@ -47,7 +47,7 @@ export class FinancialReportViewerComponent {
 
   financialReport: FinancialReport = Object.assign({}, EmptyFinancialReport);
 
-  command: FinancialReportCommand = Object.assign({}, EmptyFinancialReportCommand);
+  query: FinancialReportQuery = Object.assign({}, EmptyFinancialReportQuery);
 
   reportType: ReportType = null;
 
@@ -59,7 +59,7 @@ export class FinancialReportViewerComponent {
 
   selectedFinancialReportBreakdown = EmptyFinancialReportBreakdown;
 
-  commandExecuted = false;
+  queryExecuted = false;
 
   constructor(private financialReportsData: FinancialReportsDataService) { }
 
@@ -72,10 +72,10 @@ export class FinancialReportViewerComponent {
     switch (event.type as FinancialReportFilterEventType) {
 
       case FinancialReportFilterEventType.BUILD_FINANCIAL_REPORT_CLICKED:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
-        this.command = event.payload.command as FinancialReportCommand;
+        this.query = event.payload.query as FinancialReportQuery;
         this.setReportType(event.payload.reportType as ReportType);
         this.getFinancialReport();
         return;
@@ -119,7 +119,7 @@ export class FinancialReportViewerComponent {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (this.submitted || !this.command.accountsChartUID ) {
+        if (this.submitted || !this.query.accountsChartUID ) {
           return;
         }
         Assertion.assertValue(event.payload.exportationType, 'event.payload.exportationType');
@@ -137,7 +137,7 @@ export class FinancialReportViewerComponent {
     this.setSubmitted(true);
     this.setFinancialReportData(EmptyFinancialReport, false);
 
-    this.financialReportsData.getFinancialReport(this.command)
+    this.financialReportsData.getFinancialReport(this.query)
       .toPromise()
       .then( x => this.setFinancialReportData(x))
       .finally(() => this.setSubmitted(false));
@@ -145,9 +145,9 @@ export class FinancialReportViewerComponent {
 
 
   private exportFinancialReport(exportTo: FileType) {
-    const command = Object.assign({}, this.command, {exportTo});
+    const query = Object.assign({}, this.query, {exportTo});
 
-    this.financialReportsData.exportFinancialReport(command)
+    this.financialReportsData.exportFinancialReport(query)
       .toPromise()
       .then(x => this.fileUrl = x.url)
       .catch(() => this.setDisplayExportModal(false));
@@ -158,7 +158,7 @@ export class FinancialReportViewerComponent {
     this.isLoadingBreakdown = true;
 
     this.financialReportsData.getFinancialReportBreakdown(financialReportEntry.uid,
-                                                          this.command)
+                                                          this.query)
       .toPromise()
       .then(x => {
         this.selectedFinancialReportBreakdown = {
@@ -174,15 +174,15 @@ export class FinancialReportViewerComponent {
   }
 
 
-  private setFinancialReportData(financialReport: FinancialReport, commandExecuted = true) {
+  private setFinancialReportData(financialReport: FinancialReport, queryExecuted = true) {
     this.financialReport = financialReport;
-    this.commandExecuted = commandExecuted;
+    this.queryExecuted = queryExecuted;
     this.setText();
   }
 
 
   private setText(displayedEntriesMessage?: string) {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint =  'Selecciona los filtros';
       return;
     }
@@ -221,7 +221,7 @@ export class FinancialReportViewerComponent {
       return;
     }
 
-    if (this.command.getAccountsIntegration) {
+    if (this.query.getAccountsIntegration) {
       this.exportationTypesList = exportTo.filter(x => x.dataset === "AccountsIntegration");
     } else {
       this.exportationTypesList = exportTo.filter(x => x.dataset !== "AccountsIntegration");

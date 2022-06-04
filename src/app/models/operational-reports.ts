@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
+import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './data-table';
 
 import { FileType } from './reporting';
 
@@ -24,7 +24,7 @@ export const SendTypesList: Identifiable[] = [
 ];
 
 
-export interface OperationalReportCommand extends DataTableCommand {
+export interface OperationalReportQuery extends DataTableQuery {
   reportType: string;
   accountsChartUID: string;
   ledgers?: string[];
@@ -38,7 +38,7 @@ export interface OperationalReportCommand extends DataTableCommand {
 
 
 export interface OperationalReport extends DataTable {
-  command: OperationalReportCommand;
+  query: OperationalReportQuery;
   columns: DataTableColumn[];
   entries: OperationalReportEntry[];
 }
@@ -49,7 +49,7 @@ export interface OperationalReportEntry extends DataTableEntry {
 }
 
 
-export const EmptyOperationalReportCommand: OperationalReportCommand = {
+export const EmptyOperationalReportQuery: OperationalReportQuery = {
   reportType: null,
   accountsChartUID: '',
   toDate: '',
@@ -57,7 +57,7 @@ export const EmptyOperationalReportCommand: OperationalReportCommand = {
 
 
 export const EmptyOperationalReport: OperationalReport = {
-  command: EmptyOperationalReportCommand,
+  query: EmptyOperationalReportQuery,
   columns: [],
   entries: [],
 };

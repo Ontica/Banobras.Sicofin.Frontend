@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { FileReport, OperationalReport, OperationalReportCommand, ReportType } from '@app/models';
+import { FileReport, OperationalReport, OperationalReportQuery, ReportType } from '@app/models';
 
 
 @Injectable()
@@ -27,21 +27,21 @@ export class OperationalReportsDataService {
   }
 
 
-  exportOperationalReport(command: OperationalReportCommand): Observable<FileReport> {
-    Assertion.assertValue(command, 'command');
+  exportOperationalReport(query: OperationalReportQuery): Observable<FileReport> {
+    Assertion.assertValue(query, 'query');
 
-    const path = `v2/financial-accounting/reporting/${command.reportType}/export`;
+    const path = `v2/financial-accounting/reporting/${query.reportType}/export`;
 
-    return this.http.post<FileReport>(path, command);
+    return this.http.post<FileReport>(path, query);
   }
 
 
-  getOperationalReport(command: OperationalReportCommand): Observable<OperationalReport> {
-    Assertion.assertValue(command, 'command');
+  getOperationalReport(query: OperationalReportQuery): Observable<OperationalReport> {
+    Assertion.assertValue(query, 'query');
 
-    const path = `v2/financial-accounting/reporting/${command.reportType}/data`;
+    const path = `v2/financial-accounting/reporting/${query.reportType}/data`;
 
-    return this.http.post<OperationalReport>(path, command);
+    return this.http.post<OperationalReport>(path, query);
   }
 
 }

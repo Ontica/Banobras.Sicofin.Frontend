@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { FileReport, FinancialReport, FinancialReportCommand, FinancialReportDesign,
+import { FileReport, FinancialReport, FinancialReportQuery, FinancialReportDesign,
          ReportType } from '@app/models';
 
 
@@ -21,32 +21,32 @@ export class FinancialReportsDataService {
   constructor(private http: HttpService) { }
 
 
-  exportFinancialReport(command: FinancialReportCommand): Observable<FileReport> {
-    Assertion.assertValue(command, 'command');
+  exportFinancialReport(query: FinancialReportQuery): Observable<FileReport> {
+    Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/financial-reports/export`;
 
-    return this.http.post<FileReport>(path, command);
+    return this.http.post<FileReport>(path, query);
   }
 
 
-  getFinancialReport(command: FinancialReportCommand): Observable<FinancialReport> {
-    Assertion.assertValue(command, 'command');
+  getFinancialReport(query: FinancialReportQuery): Observable<FinancialReport> {
+    Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/financial-reports/generate`;
 
-    return this.http.post<FinancialReport>(path, command);
+    return this.http.post<FinancialReport>(path, query);
   }
 
 
   getFinancialReportBreakdown(financialReportItemUID: string,
-                              command: FinancialReportCommand): Observable<FinancialReport> {
+                              query: FinancialReportQuery): Observable<FinancialReport> {
     Assertion.assertValue(financialReportItemUID, 'financialReportItemUID');
-    Assertion.assertValue(command, 'command');
+    Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/financial-reports/generate/breakdown/${financialReportItemUID}`;
 
-    return this.http.post<FinancialReport>(path, command);
+    return this.http.post<FinancialReport>(path, query);
   }
 
   getFinancialReportTypes(accountsChartUID: string): Observable<ReportType[]> {

@@ -11,7 +11,7 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { TransactionSlipsDataService } from '@app/data-services';
 
-import { EmptySearchTransactionSlipsCommand, EmptyTransactionSlip, SearchTransactionSlipsCommand,
+import { EmptyTransactionSlipsQuery, EmptyTransactionSlip, TransactionSlipsQuery,
          TransactionSlip, TransactionSlipDescriptor, TransactionSlipExportationType } from '@app/models';
 
 import {
@@ -29,13 +29,13 @@ import {
 })
 export class TransactionSlipsMainPageComponent {
 
-  command: SearchTransactionSlipsCommand = Object.assign({}, EmptySearchTransactionSlipsCommand);
+  query: TransactionSlipsQuery = Object.assign({}, EmptyTransactionSlipsQuery);
 
   transactionSlipsList: TransactionSlipDescriptor[] = [];
 
   selectedTransactionSlip: TransactionSlip = EmptyTransactionSlip;
 
-  commandExecuted = false;
+  queryExecuted = false;
 
   isLoading = false;
 
@@ -52,9 +52,9 @@ export class TransactionSlipsMainPageComponent {
     switch (event.type as TransactionSlipsExplorerEventType) {
 
       case TransactionSlipsExplorerEventType.SEARCH_TRANSACTION_SLIPS:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
 
-        this.command = Object.assign({}, event.payload.command);
+        this.query = Object.assign({}, event.payload.query);
         this.resetTransactionSlipData();
         this.searchTransactionSlips();
 
@@ -97,16 +97,16 @@ export class TransactionSlipsMainPageComponent {
 
 
   private searchTransactionSlips() {
-    if (!this.command.accountsChartUID) {
+    if (!this.query.accountsChartUID) {
       return;
     }
 
     this.isLoading = true;
 
-    this.transactionSlipsData.searchTransactionSlips(this.command)
+    this.transactionSlipsData.searchTransactionSlips(this.query)
       .toPromise()
       .then(x => {
-        this.commandExecuted = true;
+        this.queryExecuted = true;
         this.transactionSlipsList = x;
       })
       .finally(() => this.isLoading = false);
@@ -116,7 +116,7 @@ export class TransactionSlipsMainPageComponent {
   private exportTransactionSlips(exportationType: TransactionSlipExportationType) {
     this.fileUrl = '';
 
-    this.transactionSlipsData.exportTransactionSlips(exportationType, this.command)
+    this.transactionSlipsData.exportTransactionSlips(exportationType, this.query)
       .toPromise()
       .then(x => this.fileUrl = x.url);
   }

@@ -15,8 +15,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { Balance, BalanceCommand, BalanceData, BalanceEntry, EmptyTrialBalance, FileReport,
-         getEmptyBalanceCommand, getEmptyTrialBalanceCommand, TrialBalance, TrialBalanceCommand,
+import { Balance, BalanceQuery, BalanceData, BalanceEntry, EmptyTrialBalance, FileReport,
+         getEmptyBalanceQuery, getEmptyTrialBalanceQuery, TrialBalance, TrialBalanceQuery,
          TrialBalanceEntry } from '@app/models';
 
 import { ReportingAction, ReportingStateSelector } from '@app/presentation/exported.presentation.types';
@@ -61,9 +61,9 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   submitted = false;
 
-  commandExecuted = false;
+  queryExecuted = false;
 
-  command: BalanceCommand | TrialBalanceCommand = getEmptyTrialBalanceCommand();
+  query: BalanceQuery | TrialBalanceQuery = getEmptyTrialBalanceQuery();
 
   data: Balance | TrialBalance = EmptyTrialBalance;
 
@@ -95,8 +95,8 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  get balanceCommand(): BalanceCommand {
-    return this.command as BalanceCommand;
+  get balanceQuery(): BalanceQuery {
+    return this.query as BalanceQuery;
   }
 
 
@@ -110,24 +110,24 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
     switch (event.type as TrialBalanceFilterEventType | BalanceQuickFilterEventType) {
       case BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED:
         Assertion.assertValue(event.payload.trialBalanceType, 'event.payload.trialBalanceType');
-        Assertion.assertValue(event.payload.balanceCommand, 'event.payload.balanceCommand');
+        Assertion.assertValue(event.payload.balanceQuery, 'event.payload.balanceQuery');
 
         this.setBalanceTypeName(event.payload.trialBalanceType);
-        this.executeGetBalance(event.payload.balanceCommand as BalanceCommand);
+        this.executeGetBalance(event.payload.balanceQuery as BalanceQuery);
         return;
 
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
         Assertion.assertValue(event.payload.trialBalanceType, 'event.payload.trialBalanceType');
-        Assertion.assertValue(event.payload.trialBalanceCommand, 'event.payload.trialBalanceCommand');
+        Assertion.assertValue(event.payload.trialBalanceQuery, 'event.payload.trialBalanceQuery');
 
         this.setBalanceTypeName(event.payload.trialBalanceType);
-        this.executeGetTrialBalance(event.payload.trialBalanceCommand as TrialBalanceCommand);
+        this.executeGetTrialBalance(event.payload.trialBalanceQuery as TrialBalanceQuery);
         return;
 
       case TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED:
       case BalanceQuickFilterEventType.CLEAR_BALANCE_CLICKED:
         this.setBalanceTypeName(null);
-        this.clearCommand();
+        this.clearQuery();
         return;
 
       default:
@@ -169,13 +169,13 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (this.submitted || !this.command.accountsChartUID ) {
+        if (this.submitted || !this.query.accountsChartUID ) {
           return;
         }
 
         const observable = this.isQuickQuery ?
-          this.balancesDataService.exportBalanceToExcel(this.command as BalanceCommand) :
-          this.balancesDataService.exportTrialBalanceToExcel(this.command as TrialBalanceCommand);
+          this.balancesDataService.exportBalanceToExcel(this.query as BalanceQuery) :
+          this.balancesDataService.exportTrialBalanceToExcel(this.query as TrialBalanceQuery);
 
         this.exportDataToExcel(observable);
         return;
@@ -187,16 +187,16 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private executeGetBalance(command: BalanceCommand) {
-    this.command = command;
-    const observableBalance = this.balancesDataService.getBalance(this.command);
+  private executeGetBalance(query: BalanceQuery) {
+    this.query = query;
+    const observableBalance = this.balancesDataService.getBalance(this.query);
     this.getData(observableBalance);
   }
 
 
-  private executeGetTrialBalance(command: TrialBalanceCommand) {
-    this.command = command;
-    const observableTrialBalance = this.balancesDataService.getTrialBalance(this.command);
+  private executeGetTrialBalance(query: TrialBalanceQuery) {
+    this.query = query;
+    const observableTrialBalance = this.balancesDataService.getTrialBalance(this.query);
     this.getData(observableTrialBalance);
   }
 
@@ -207,7 +207,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
     observable
       .toPromise()
       .then(x => {
-        this.commandExecuted = true;
+        this.queryExecuted = true;
         this.showFilters = false;
         this.setData(x);
       })
@@ -230,7 +230,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   private resetData() {
-    this.commandExecuted = false;
+    this.queryExecuted = false;
     this.setData(EmptyTrialBalance);
     sendEvent(this.trialBalanceViewerEvent, TrialBalanceViewerEventType.UNSELECT_ENTRY);
   }
@@ -238,8 +238,8 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   private setInitData(balanceData: BalanceData) {
     this.data = balanceData.balance;
-    this.command = balanceData.balance.command;
-    this.commandExecuted = balanceData.commandExecuted;
+    this.query = balanceData.balance.query;
+    this.queryExecuted = balanceData.queryExecuted;
     this.setBalanceTypeName(balanceData.balanceType);
     this.setText();
   }
@@ -250,7 +250,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
       const balanceData: BalanceData = {
         balance: this.data as Balance,
         balanceType: this.balanceType,
-        commandExecuted: this.commandExecuted,
+        queryExecuted: this.queryExecuted,
       };
 
       this.uiLayer.dispatch(ReportingAction.SET_BALANCE_EXPLORER_DATA, {balanceData});
@@ -258,8 +258,8 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private clearCommand() {
-    this.command = this.isQuickQuery ? getEmptyBalanceCommand() : getEmptyTrialBalanceCommand();
+  private clearQuery() {
+    this.query = this.isQuickQuery ? getEmptyBalanceQuery() : getEmptyTrialBalanceQuery();
   }
 
 
@@ -269,7 +269,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   private setText(displayedEntriesMessage?: string) {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       return;
     }
@@ -297,7 +297,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   private emitEntryClicked(entry: BalanceEntry | TrialBalanceEntry) {
     const payload = {
-      command: this.command,
+      query: this.query,
       entry,
     };
 

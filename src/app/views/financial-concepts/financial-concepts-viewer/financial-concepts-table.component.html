@@ -1,6 +1,6 @@
 <div fxLayout="column" fxFlexFill>
 
-  <div #controlsContainer *ngIf="commandExecuted" fxFlex="none">
+  <div #controlsContainer *ngIf="queryExecuted" fxFlex="none">
 
     <mat-divider>
 
@@ -67,7 +67,7 @@
       </div>
 
       <div class="text-not-found" *ngIf="!isLoading && financialConceptsList.length === 0">
-          {{commandExecuted ?
+          {{queryExecuted ?
           'No se encontraron conceptos para la agrupación seleccionada.' :
           'No se ha invocado la consulta.'}}
       </div>

@@ -6,13 +6,13 @@
  */
 
 export interface DataTable {
-  command: DataTableCommand;
+  query: DataTableQuery;
   columns: DataTableColumn[];
   entries: DataTableEntry[];
 }
 
 
-export interface DataTableCommand {
+export interface DataTableQuery {
 
 }
 
@@ -34,7 +34,7 @@ export interface DataTableEntry {
 
 
 export const EmptyDataTable: DataTable = {
-  command: {},
+  query: {},
   columns: [],
   entries: [],
 };

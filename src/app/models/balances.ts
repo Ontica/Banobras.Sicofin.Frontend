@@ -9,7 +9,7 @@ import { DateString, Identifiable } from '@app/core';
 
 import { AccountDescriptor } from './accounts-chart';
 
-import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
+import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './data-table';
 
 
 export interface AccountBalance {
@@ -46,14 +46,14 @@ export const BalanceTypeList: Identifiable[] = [
 
 
 export interface Balance extends DataTable {
-  command: BalanceCommand;
+  query: BalanceQuery;
   columns: DataTableColumn[];
   entries: BalanceEntry[];
 }
 
 
 export const EmptyBalance: Balance = {
-  command: getEmptyBalanceCommand(),
+  query: getEmptyBalanceQuery(),
   columns: [],
   entries: [],
 };
@@ -64,7 +64,7 @@ export interface BalanceEntry extends DataTableEntry {
 }
 
 
-export interface BalanceCommand extends DataTableCommand {
+export interface BalanceQuery extends DataTableQuery {
   accountsChartUID: string;
   trialBalanceType: BalanceTypes;
   ledgers: string[];
@@ -81,7 +81,7 @@ export interface BalanceCommand extends DataTableCommand {
 }
 
 
-export function getEmptyBalanceCommand(): BalanceCommand {
+export function getEmptyBalanceQuery(): BalanceQuery {
   return {
     accountsChartUID: '',
     trialBalanceType: null,
@@ -99,12 +99,12 @@ export function getEmptyBalanceCommand(): BalanceCommand {
 export interface BalanceData {
   balance: Balance;
   balanceType: Identifiable;
-  commandExecuted: boolean;
+  queryExecuted: boolean;
 }
 
 
 export const EmptyBalanceData: BalanceData = {
   balance: EmptyBalance,
   balanceType: null,
-  commandExecuted: false,
+  queryExecuted: false,
 };

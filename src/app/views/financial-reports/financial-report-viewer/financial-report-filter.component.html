@@ -11,10 +11,10 @@
 
         <emp-ng-select name="accountsChartUID" required
           [config]="{selectFirst: true}"
-          [(ngModel)]="command.accountsChartUID"
+          [(ngModel)]="query.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [showError]="!command.accountsChartUID"
+          [showError]="!query.accountsChartUID"
           (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
 
@@ -25,9 +25,9 @@
         <label>Reporte:</label>
 
         <emp-ng-select name="reportType" required
-          [(ngModel)]="command.financialReportType"
+          [(ngModel)]="query.financialReportType"
           [items]="reportTypeList"
-          [showError]="!command.financialReportType"
+          [showError]="!query.financialReportType"
           (changes)="onReportTypeChanges($event)">
         </emp-ng-select>
 
@@ -40,8 +40,8 @@
           <label>Fecha:</label>
 
           <emp-ng-datepicker name="date" required
-            [(ngModel)]="command.toDate"
-            [showError]="!command.toDate">
+            [(ngModel)]="query.toDate"
+            [showError]="!query.toDate">
 
           </emp-ng-datepicker>
 
@@ -52,10 +52,10 @@
           <label>Período:</label>
 
           <emp-ng-date-range-picker name="period"
-            [(startDate)]="command.fromDate"
-            [(endDate)]="command.toDate"
-            [showError]="!command.fromDate ||
-                         !command.toDate">
+            [(startDate)]="query.fromDate"
+            [(endDate)]="query.toDate"
+            [showError]="!query.fromDate ||
+                         !query.toDate">
 
           </emp-ng-date-range-picker>
 
@@ -84,7 +84,7 @@
       <div fxFlex="none">
 
         <mat-checkbox name="getAccountsIntegration"
-          [(ngModel)]="command.getAccountsIntegration"
+          [(ngModel)]="query.getAccountsIntegration"
           (click)="$event.stopPropagation">
           Generar integración de cuentas
         </mat-checkbox>

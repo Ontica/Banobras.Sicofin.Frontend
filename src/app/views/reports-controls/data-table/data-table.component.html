@@ -4,7 +4,7 @@
 
   </mat-divider>
 
-  <div #controlsContainer *ngIf="commandExecuted" fxFlex="none">
+  <div #controlsContainer *ngIf="executed" fxFlex="none">
 
     <emp-fa-data-table-controls
       [filter]="filter"
@@ -67,11 +67,11 @@
 
       </table>
 
-      <div *ngIf="!commandExecuted" class="text-not-found">
-        {{notCommandExecutedText}}
+      <div *ngIf="!executed" class="text-not-found">
+        {{notQueryExecutedText}}
       </div>
 
-      <div *ngIf="commandExecuted && dataTable.entries.length === 0" class="text-not-found">
+      <div *ngIf="executed && dataTable.entries.length === 0" class="text-not-found">
         No se encontraron registros con el filtro proporcionado.
       </div>
 

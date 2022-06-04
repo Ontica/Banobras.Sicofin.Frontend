@@ -15,7 +15,7 @@ import { AccountChartStateSelector, VoucherStateSelector } from '@app/presentati
 
 import { sendEvent } from '@app/shared/utils';
 
-import { AccountsChartMasterData, DateSearchField, DateSearchFieldList, SearchTransactionSlipsCommand,
+import { AccountsChartMasterData, DateSearchField, DateSearchFieldList, TransactionSlipsQuery,
          TransactionSlipStatus, TransactionSlipStatusList } from '@app/models';
 import { combineLatest } from 'rxjs';
 
@@ -85,7 +85,7 @@ export class TransactionSlipsFilterComponent implements OnInit, OnDestroy {
   onSearchTransactionSlipsClicked() {
     sendEvent(this.transactionSlipsFilterEvent,
       TransactionSlipsFilterEventType.SEARCH_TRANSACTION_SLIPS_CLICKED,
-      {command: this.getTransactionSlipsCommand()});
+      {query: this.getTransactionSlipsQuery()});
   }
 
 
@@ -119,8 +119,8 @@ export class TransactionSlipsFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getTransactionSlipsCommand(): SearchTransactionSlipsCommand {
-    const command: SearchTransactionSlipsCommand = {
+  private getTransactionSlipsQuery(): TransactionSlipsQuery {
+    const query: TransactionSlipsQuery = {
       accountsChartUID: this.formData.accountsChartUID ?? '',
       systemUID: this.formData.systemUID ?? '',
       fromDate: this.formData.fromDate ?? '',
@@ -129,7 +129,7 @@ export class TransactionSlipsFilterComponent implements OnInit, OnDestroy {
       status: this.formData.status ?? null,
     };
 
-    return command;
+    return query;
   }
 
 }

@@ -11,8 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services';
 
-import { Account, AccountsChart, AccountsSearchCommand, EmptyAccount, EmptyAccountsChart,
-         EmptyAccountsSearchCommand } from '@app/models';
+import { Account, AccountsChart, AccountsQuery, EmptyAccount, EmptyAccountsChart,
+         EmptyAccountsQuery } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -52,7 +52,7 @@ export class AccountsChartComponent {
 
   accountsChart: AccountsChart = EmptyAccountsChart;
 
-  accountsSearchCommand: AccountsSearchCommand = Object.assign({}, EmptyAccountsSearchCommand);
+  accountsQuery: AccountsQuery = Object.assign({}, EmptyAccountsQuery);
 
   selectedAccountChartUID = '';
 
@@ -96,11 +96,11 @@ export class AccountsChartComponent {
 
       case AccountsChartFilterEventType.CLEAR_ACCOUNTS_CHART_CLICKED:
         Assertion.assertValue(event.payload.accountsChart, 'event.payload.accountsChart');
-        Assertion.assertValue(event.payload.accountsSearchCommand, 'event.payload.accountsSearchCommand');
+        Assertion.assertValue(event.payload.accountsQuery, 'event.payload.accountsQuery');
 
         this.selectedAccountChartUID = event.payload.accountsChart.uid;
 
-        this.accountsSearchCommand = event.payload.accountsSearchCommand as AccountsSearchCommand;
+        this.accountsQuery = event.payload.accountsQuery as AccountsQuery;
 
         this.setAccountData(EmptyAccountsChart);
 
@@ -108,13 +108,13 @@ export class AccountsChartComponent {
 
       case AccountsChartFilterEventType.SEARCH_ACCOUNTS_CHART_CLICKED:
         Assertion.assertValue(event.payload.accountsChart, 'event.payload.accountsChart');
-        Assertion.assertValue(event.payload.accountsSearchCommand, 'event.payload.accountsSearchCommand');
+        Assertion.assertValue(event.payload.accountsQuery, 'event.payload.accountsQuery');
 
         this.selectedAccountChartUID = event.payload.accountsChart.uid;
 
-        this.accountsSearchCommand = event.payload.accountsSearchCommand as AccountsSearchCommand;
+        this.accountsQuery = event.payload.accountsQuery as AccountsQuery;
 
-        this.searchAccounts(this.selectedAccountChartUID, this.accountsSearchCommand);
+        this.searchAccounts(this.selectedAccountChartUID, this.accountsQuery);
 
         return;
 
@@ -155,7 +155,7 @@ export class AccountsChartComponent {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (this.submitted || !this.accountsSearchCommand ) {
+        if (this.submitted || !this.accountsQuery ) {
           return;
         }
 
@@ -169,10 +169,10 @@ export class AccountsChartComponent {
   }
 
 
-  private searchAccounts(accountsChartUID: string, searchCommand: AccountsSearchCommand) {
+  private searchAccounts(accountsChartUID: string, accountsQuery: AccountsQuery) {
     this.setLoadingAccounts(true);
 
-    this.accountsChartData.searchAccounts(accountsChartUID, searchCommand)
+    this.accountsChartData.searchAccounts(accountsChartUID, accountsQuery)
       .toPromise()
       .then(x => {
         this.setAccountData(x);
@@ -184,7 +184,7 @@ export class AccountsChartComponent {
 
   private exportAccountsToExcel() {
     this.accountsChartData.exportAccountsToExcel(this.selectedAccountChartUID,
-                                                 this.accountsSearchCommand)
+                                                 this.accountsQuery)
       .toPromise()
       .then(x => {
         this.excelFileUrl = x.url;

@@ -7,7 +7,7 @@
 
 import { Empty, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
+import { DataTable, DataTableColumn, DataTableColumnType, DataTableQuery,
          DataTableEntry } from './data-table';
 
 
@@ -55,7 +55,7 @@ export interface SubledgerAccountFields {
 }
 
 
-export interface SearchSubledgerAccountCommand extends DataTableCommand {
+export interface SubledgerAccountQuery extends DataTableQuery {
   accountsChartUID: string;
   ledgerUID?: string;
   typeUID?: string;
@@ -65,7 +65,7 @@ export interface SearchSubledgerAccountCommand extends DataTableCommand {
 
 
 export interface SubledgerAccountDataTable extends DataTable {
-  command: SearchSubledgerAccountCommand;
+  query: SubledgerAccountQuery;
   entries: SubledgerAccountDescriptor[];
 }
 
@@ -95,7 +95,7 @@ export const EmptySubledgerAccountDescriptor: SubledgerAccountDescriptor = {
 };
 
 
-export const EmptySearchSubledgerAccountCommand: SearchSubledgerAccountCommand = {
+export const EmptySubledgerAccountQuery: SubledgerAccountQuery = {
   accountsChartUID: '',
   ledgerUID: '',
   typeUID: '',
@@ -131,7 +131,7 @@ export const DefaultSubledgerAccountColumns: DataTableColumn[] = [
 
 
 export const EmptySubledgerAccountDataTable: SubledgerAccountDataTable = {
-  command: EmptySearchSubledgerAccountCommand,
+  query: EmptySubledgerAccountQuery,
   columns: DefaultSubledgerAccountColumns,
   entries: [],
 };

@@ -14,7 +14,7 @@
   <div class="secondary" *ngIf="displayAccountStatementViewer">
 
     <emp-fa-account-statement-viewer
-      [command]="command"
+      [query]="query"
       [entry]="selectedEntry"
       (closeEvent)="onCloseAccountStatementViewer()">
 

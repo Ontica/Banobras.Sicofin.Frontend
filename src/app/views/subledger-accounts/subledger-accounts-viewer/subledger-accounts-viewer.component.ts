@@ -32,7 +32,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
   @Input() subledgerAccountData: SubledgerAccountDataTable =
     Object.assign({}, EmptySubledgerAccountDataTable);
-  @Input() commandExecuted = false;
+  @Input() queryExecuted = false;
   @Input() isLoading = false;
   @Output() subledgerAccountsViewerEvent = new EventEmitter<EventInfo>();
 
@@ -58,12 +58,12 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
       case SubledgerAccountsFilterEventType.SEARCH_SUBLEDGER_ACCOUNTS_CLICKED:
         Assertion.assertValue(event.payload.accountChartName, 'event.payload.accountChartName');
-        Assertion.assertValue(event.payload.subledgerAccountCommand, 'event.payload.subledgerAccountCommand');
+        Assertion.assertValue(event.payload.subledgerAccountQuery, 'event.payload.subledgerAccountQuery');
 
         this.accountChartName = event.payload.accountChartName;
         sendEvent(this.subledgerAccountsViewerEvent,
           SubledgerAccountsViewerEventType.SEARCH_SUBLEDGERS_ACCOUNT_CLICKED,
-          {subledgerAccountCommand: event.payload.subledgerAccountCommand});
+          {subledgerAccountQuery: event.payload.subledgerAccountQuery});
         return;
 
       default:
@@ -101,7 +101,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
 
   private setText(displayedEntriesMessage?: string) {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       return;
     }

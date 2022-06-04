@@ -13,7 +13,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { SubledgerDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, SearchSubledgerAccountCommand } from '@app/models';
+import { AccountsChartMasterData, SubledgerAccountQuery } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -78,7 +78,7 @@ export class SubledgerAccountsFilterComponent implements OnInit, OnDestroy {
 
   onSearchSubledgerAccountsClicked() {
     const payload = {
-      subledgerAccountCommand: this.getSubledgerAccountCommand(),
+      subledgerAccountQuery: this.getSubledgerAccountQuery(),
       accountChartName: this.subledgerAccountsForm.accountChart?.name,
     };
 
@@ -98,8 +98,8 @@ export class SubledgerAccountsFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getSubledgerAccountCommand(): SearchSubledgerAccountCommand {
-    const data: SearchSubledgerAccountCommand = {
+  private getSubledgerAccountQuery(): SubledgerAccountQuery {
+    const data: SubledgerAccountQuery = {
       accountsChartUID: this.subledgerAccountsForm.accountChart?.uid || '',
       ledgerUID:  this.subledgerAccountsForm.ledger?.uid || '',
       typeUID: this.subledgerAccountsForm.type?.uid || '',

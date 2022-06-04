@@ -18,7 +18,7 @@ import { AccountChartStateSelector,
 
 import { sendEvent } from '@app/shared/utils';
 
-import { AccountsChartMasterData, FinancialConceptCommand, FinancialConceptsGroup } from '@app/models';
+import { AccountsChartMasterData, FinancialConceptQuery, FinancialConceptsGroup } from '@app/models';
 
 
 export enum FinancialConceptsFilterEventType {
@@ -75,7 +75,7 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
 
   onSearchFinancialConceptsClicked() {
     const payload = {
-      financialConceptCommand: this.getFinancialConceptCommand(),
+      financialConceptQuery: this.getFinancialConceptQuery(),
       financialConceptsGroupsName: this.financialConceptsForm.financialConceptsGroup.name,
     };
 
@@ -118,8 +118,8 @@ export class FinancialConceptsFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getFinancialConceptCommand(): FinancialConceptCommand {
-    const data: FinancialConceptCommand = {
+  private getFinancialConceptQuery(): FinancialConceptQuery {
+    const data: FinancialConceptQuery = {
       accountsChartUID: this.financialConceptsForm.accountChart.uid,
       groupUID: this.financialConceptsForm.financialConceptsGroup.uid,
       date:  this.financialConceptsForm.date,

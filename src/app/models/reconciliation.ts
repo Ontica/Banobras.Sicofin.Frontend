@@ -41,6 +41,7 @@ export interface ReconciliationData extends DataTable {
 
 export const EmptyReconciliationData: ReconciliationData = {
   command: {reconciliationTypeUID: '', date: ''},
+  query: {},
   columns: [],
   entries: [],
 };

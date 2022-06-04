@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableCommand, DataTableEntry } from './data-table';
+import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './data-table';
 
 import { ExchangeRate } from './exchange-rates';
 
@@ -82,7 +82,7 @@ export const BalancesTypeForBalanceList: Identifiable[] = [
 ];
 
 
-export interface TrialBalanceCommandPeriod {
+export interface BalancePeriod {
   exchangeRateDate?: DateString;
   exchangeRateTypeUID?: string;
   fromDate?: DateString;
@@ -92,7 +92,7 @@ export interface TrialBalanceCommandPeriod {
 }
 
 
-export const EmptyTrialBalanceCommandPeriod: TrialBalanceCommandPeriod = {
+export const EmptyBalancePeriod: BalancePeriod = {
   exchangeRateDate: '',
   exchangeRateTypeUID: '',
   fromDate: '',
@@ -102,44 +102,44 @@ export const EmptyTrialBalanceCommandPeriod: TrialBalanceCommandPeriod = {
 };
 
 
-export function resetExchangeRateValues(period: TrialBalanceCommandPeriod) {
+export function resetExchangeRateValues(period: BalancePeriod) {
   period.exchangeRateDate = '';
   period.exchangeRateTypeUID = '';
   period.valuateToCurrrencyUID = '';
 }
 
 
-export function mapToValidTrialBalanceCommandPeriod(
-period: TrialBalanceCommandPeriod, useDefaultValuation: boolean): TrialBalanceCommandPeriod {
-  const trialBalanceCommandPeriod: TrialBalanceCommandPeriod = {
+export function mapToValidBalancePeriod(
+period: BalancePeriod, useDefaultValuation: boolean): BalancePeriod {
+  const balancePeriod: BalancePeriod = {
     fromDate: period.fromDate,
     toDate: period.toDate
   };
 
   if (!useDefaultValuation) {
-    trialBalanceCommandPeriod.exchangeRateDate =  period.exchangeRateDate;
-    trialBalanceCommandPeriod.exchangeRateTypeUID =  period.exchangeRateTypeUID;
-    trialBalanceCommandPeriod.valuateToCurrrencyUID =  period.valuateToCurrrencyUID;
+    balancePeriod.exchangeRateDate =  period.exchangeRateDate;
+    balancePeriod.exchangeRateTypeUID =  period.exchangeRateTypeUID;
+    balancePeriod.valuateToCurrrencyUID =  period.valuateToCurrrencyUID;
   }
 
-  return trialBalanceCommandPeriod;
+  return balancePeriod;
 }
 
 
 export interface TrialBalance extends DataTable {
-  command: TrialBalanceCommand;
+  query: TrialBalanceQuery;
   columns: DataTableColumn[];
   entries: TrialBalanceEntry[];
 }
 
 
-export interface TrialBalanceCommand extends DataTableCommand {
+export interface TrialBalanceQuery extends DataTableQuery {
   accountsChartUID: string;
   balancesType?: string;
   consolidateBalancesToTargetCurrency?: boolean;
-  finalPeriod?: TrialBalanceCommandPeriod;
+  finalPeriod?: BalancePeriod;
   fromAccount?: string;
-  initialPeriod?: TrialBalanceCommandPeriod;
+  initialPeriod?: BalancePeriod;
   ledgers?: string[];
   level?: number;
   sectors?: string[];
@@ -160,14 +160,14 @@ export interface TrialBalanceEntry extends DataTableEntry {
 }
 
 
-export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
+export function getEmptyTrialBalanceQuery(): TrialBalanceQuery {
   return {
     accountsChartUID: '',
     balancesType: '',
     consolidateBalancesToTargetCurrency: false,
-    finalPeriod: Object.assign({}, EmptyTrialBalanceCommandPeriod),
+    finalPeriod: Object.assign({}, EmptyBalancePeriod),
     fromAccount: '',
-    initialPeriod: Object.assign({}, EmptyTrialBalanceCommandPeriod),
+    initialPeriod: Object.assign({}, EmptyBalancePeriod),
     ledgers: [],
     level: 0,
     sectors: [],
@@ -185,7 +185,7 @@ export function getEmptyTrialBalanceCommand(): TrialBalanceCommand {
 
 
 export const EmptyTrialBalance: TrialBalance = {
-  command: getEmptyTrialBalanceCommand(),
+  query: getEmptyTrialBalanceQuery(),
   columns: [],
   entries: [],
 };

@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { Account, AccountEditionCommand, AccountEditionResult, AccountsChart, AccountsChartMasterData,
-         AccountsSearchCommand, FileReport } from '@app/models';
+         AccountsQuery, FileReport } from '@app/models';
 
 
 @Injectable()
@@ -36,25 +36,23 @@ export class AccountsChartDataService {
   }
 
 
-  searchAccounts(accountsChartUID: string,
-                 searchCommand: AccountsSearchCommand): Observable<AccountsChart> {
+  searchAccounts(accountsChartUID: string, query: AccountsQuery): Observable<AccountsChart> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
-    Assertion.assertValue(searchCommand, 'searchCommand');
+    Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}`;
 
-    return this.http.post<AccountsChart>(path, searchCommand);
+    return this.http.post<AccountsChart>(path, query);
   }
 
 
-  exportAccountsToExcel(accountsChartUID: string,
-                        searchCommand: AccountsSearchCommand): Observable<FileReport> {
+  exportAccountsToExcel(accountsChartUID: string, query: AccountsQuery): Observable<FileReport> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
-    Assertion.assertValue(searchCommand, 'searchCommand');
+    Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/excel`;
 
-    return this.http.post<FileReport>(path, searchCommand);
+    return this.http.post<FileReport>(path, query);
   }
 
 

@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableColumnType, DataTableCommand,
+import { DataTable, DataTableColumn, DataTableColumnType, DataTableQuery,
          DataTableEntry } from './data-table';
 
 import { ExecuteDatasetsCommand } from './imported-data';
@@ -22,7 +22,7 @@ export interface ExchangeRate {
 }
 
 
-export interface ExchangeRatesSearchCommand extends DataTableCommand {
+export interface ExchangeRatesQuery extends DataTableQuery {
   fromDate: DateString;
   toDate: DateString;
   exchangeRateTypes?: string[];
@@ -31,7 +31,7 @@ export interface ExchangeRatesSearchCommand extends DataTableCommand {
 
 
 export interface ExchangeRateData extends DataTable {
-  command: ExchangeRatesSearchCommand;
+  query: ExchangeRatesQuery;
   columns: DataTableColumn[];
   entries: ExchangeRateDescriptor[];
 }
@@ -71,7 +71,7 @@ export const ExchangeRateColumns: DataTableColumn[] = [
 ];
 
 
-export const EmptyExchangeRateCommand: ExchangeRatesSearchCommand = {
+export const EmptyExchangeRatesQuery: ExchangeRatesQuery = {
   fromDate: '',
   toDate: '',
   exchangeRateTypes: [],
@@ -80,21 +80,21 @@ export const EmptyExchangeRateCommand: ExchangeRatesSearchCommand = {
 
 
 export const EmptyExchangeRateData: ExchangeRateData = {
-  command: EmptyExchangeRateCommand,
+  query: EmptyExchangeRatesQuery,
   columns: ExchangeRateColumns,
   entries: [],
 };
 
 
-export function mapToExchangeRatesSearchCommand(command: ExecuteDatasetsCommand): ExchangeRatesSearchCommand {
-  const exchangeRatesSearchCommand: ExchangeRatesSearchCommand = {
+export function mapToExchangeRatesQuery(command: ExecuteDatasetsCommand): ExchangeRatesQuery {
+  const exchangeRatesQuery: ExchangeRatesQuery = {
     exchangeRateTypes: !!command.typeUID ? command.typeUID as string[] : [],
     currencies: !!command.additionalUID ? command.additionalUID as string[] : [],
     fromDate: command.fromDate,
     toDate: command.toDate,
   };
 
-  return exchangeRatesSearchCommand;
+  return exchangeRatesQuery;
 }
 
 

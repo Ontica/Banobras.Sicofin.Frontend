@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { SearchSubledgerAccountCommand, SubledgerAccount, SubledgerAccountDescriptor,
+import { SubledgerAccountQuery, SubledgerAccount, SubledgerAccountDescriptor,
          SubledgerAccountFields } from '@app/models';
 
 
@@ -21,12 +21,12 @@ export class SubledgerDataService {
   constructor(private http: HttpService) { }
 
 
-  searchSubledgerAccounts(command: SearchSubledgerAccountCommand): Observable<SubledgerAccountDescriptor[]> {
-    Assertion.assertValue(command, 'command');
+  searchSubledgerAccounts(query: SubledgerAccountQuery): Observable<SubledgerAccountDescriptor[]> {
+    Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/subledger-accounts/search';
 
-    return this.http.post<SubledgerAccountDescriptor[]>(path, command);
+    return this.http.post<SubledgerAccountDescriptor[]>(path, query);
   }
 
 

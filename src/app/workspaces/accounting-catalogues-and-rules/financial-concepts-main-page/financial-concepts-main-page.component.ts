@@ -11,7 +11,7 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { EmptyFinancialConcept, EmptyFinancialConceptCommand, FinancialConcept, FinancialConceptCommand,
+import { EmptyFinancialConcept, EmptyFinancialConceptQuery, FinancialConcept, FinancialConceptQuery,
          FinancialConceptDescriptor } from '@app/models';
 
 import {
@@ -37,7 +37,7 @@ export class FinancialConceptsMainPageComponent {
 
   isLoadingFinancialConcept = false;
 
-  financialConceptCommand: FinancialConceptCommand = Object.assign({}, EmptyFinancialConceptCommand);
+  financialConceptQuery: FinancialConceptQuery = Object.assign({}, EmptyFinancialConceptQuery);
 
   financialConceptsList: FinancialConceptDescriptor[] = [];
 
@@ -56,13 +56,13 @@ export class FinancialConceptsMainPageComponent {
   onFinancialConceptsViewerEvent(event: EventInfo) {
     switch (event.type as FinancialConceptsViewerEventType) {
       case FinancialConceptsViewerEventType.SEARCH_FINANCIAL_CONCEPTS_CLICKED:
-        Assertion.assertValue(event.payload.financialConceptCommand, 'event.payload.financialConceptCommand');
-        this.financialConceptCommand = event.payload.financialConceptCommand as FinancialConceptCommand;
+        Assertion.assertValue(event.payload.financialConceptQuery, 'event.payload.financialConceptQuery');
+        this.financialConceptQuery = event.payload.financialConceptQuery as FinancialConceptQuery;
         this.getFinancialConceptsInGroup();
         return;
 
       case FinancialConceptsViewerEventType.EXPORT_DATA_BUTTON_CLICKED:
-        if (!this.financialConceptCommand.groupUID) {
+        if (!this.financialConceptQuery.groupUID) {
           return;
         }
 
@@ -140,7 +140,7 @@ export class FinancialConceptsMainPageComponent {
     this.setFinancialConceptsListData([]);
     this.isLoading = true;
 
-    this.financialConceptsData.getFinancialConceptsInGroup(this.financialConceptCommand.groupUID)
+    this.financialConceptsData.getFinancialConceptsInGroup(this.financialConceptQuery.groupUID)
       .toPromise()
       .then(x => this.setFinancialConceptsListData(x))
       .finally(() => this.isLoading = false);
@@ -148,7 +148,7 @@ export class FinancialConceptsMainPageComponent {
 
 
   private exportFinancialConceptsToExcel() {
-    this.financialConceptsData.exportFinancialConceptsToExcel(this.financialConceptCommand.groupUID)
+    this.financialConceptsData.exportFinancialConceptsToExcel(this.financialConceptQuery.groupUID)
       .toPromise()
       .then(x => this.excelFileUrl = x.url);
   }
@@ -169,7 +169,7 @@ export class FinancialConceptsMainPageComponent {
 
 
   private validateRefreshFinancialConcepts() {
-    if (this.financialConceptCommand.groupUID === this.selectedFinancialConcept.group.uid){
+    if (this.financialConceptQuery.groupUID === this.selectedFinancialConcept.group.uid){
       this.getFinancialConceptsInGroup();
     }
   }

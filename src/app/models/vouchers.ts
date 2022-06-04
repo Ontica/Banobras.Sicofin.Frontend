@@ -98,13 +98,12 @@ export interface VouchersOperationResult {
 }
 
 
-export interface SearchVouchersCommand {
+export interface VouchersQuery {
   accountsChartUID: string;
   keywords: string;
   number?: string;
   concept?: string;
   ledgerUID?: string;
-
   fromDate?: string;
   toDate?: string;
   dateSearchField?: DateSearchField;
@@ -114,7 +113,6 @@ export interface SearchVouchersCommand {
   voucherTypeUID?: string;
   editorType?: EditorType;
   editorUID?: string;
-
   stage: VoucherStage;
   status?: VoucherStatus;
   orderBy?: string;
@@ -123,7 +121,7 @@ export interface SearchVouchersCommand {
 }
 
 
-export const EmptySearchVouchersCommand: SearchVouchersCommand = {
+export const EmptyVouchersQuery: VouchersQuery = {
   stage: VoucherStage.All,
   accountsChartUID: '',
   keywords: '',
@@ -133,14 +131,14 @@ export const EmptySearchVouchersCommand: SearchVouchersCommand = {
 
 
 export interface VoucherFilterData {
-  command: SearchVouchersCommand;
+  query: VouchersQuery;
   accountChart: AccountsChartMasterData;
   editor: Identifiable;
 }
 
 
 export const EmptyVoucherFilterData: VoucherFilterData = {
-  command: Object.assign({}, EmptySearchVouchersCommand),
+  query: Object.assign({}, EmptyVouchersQuery),
   accountChart: null,
   editor: null,
 };

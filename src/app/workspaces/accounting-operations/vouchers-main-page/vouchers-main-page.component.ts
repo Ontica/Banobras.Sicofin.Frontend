@@ -143,7 +143,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (!this.voucherFilterData.command.accountsChartUID ) {
+        if (!this.voucherFilterData.query.accountsChartUID ) {
           return;
         }
 
@@ -234,10 +234,10 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private applyVoucherFilter(newFilterData: VoucherFilterData) {
-    const command = Object.assign({}, newFilterData.command,
+  private applyVoucherFilter(voucherData: VoucherFilterData) {
+    const query = Object.assign({}, voucherData.query,
       {stage: mapVoucherStageFromViewName(this.currentView.name)});
-    const filterData = Object.assign({}, newFilterData, {command});
+    const filterData = Object.assign({}, voucherData, {query});
     this.uiLayer.dispatch(VoucherAction.SET_LIST_FILTER_DATA, { filterData });
   }
 
@@ -248,13 +248,13 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
 
   private searchVouchers() {
-    if (!this.voucherFilterData.command.accountsChartUID) {
+    if (!this.voucherFilterData.query.accountsChartUID) {
       return;
     }
 
     this.isLoading = true;
 
-    this.vouchersData.searchVouchers(this.voucherFilterData.command)
+    this.vouchersData.searchVouchers(this.voucherFilterData.query)
       .toPromise()
       .then(x => {
         this.setVoucherListData(x);
@@ -268,7 +268,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.excelFileUrl = 'data-dummy';
       this.messageBox.showInDevelopment('Exportar pólizas',
-        {type: 'EXPORT_VOUCHERS', command: this.voucherFilterData.command});
+        {type: 'EXPORT_VOUCHERS', query: this.voucherFilterData.query});
     }, 500);
   }
 

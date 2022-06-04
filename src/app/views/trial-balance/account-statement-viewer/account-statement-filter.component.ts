@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { EventInfo } from '@app/core';
 
-import { AccountStatementCommand, BalanceCommand, BalanceEntry, BalanceTypes, TrialBalanceCommand,
+import { AccountStatementQuery, BalanceQuery, BalanceEntry, BalanceTypes, TrialBalanceQuery,
          TrialBalanceEntry, TrialBalanceTypes } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
@@ -26,7 +26,7 @@ export class AccountStatementFilterComponent implements OnChanges {
 
   @Input() entry: BalanceEntry | TrialBalanceEntry;
 
-  @Input() command: BalanceCommand | TrialBalanceCommand;
+  @Input() query: BalanceQuery | TrialBalanceQuery;
 
   @Output() accountStatementFilterEvent = new EventEmitter<EventInfo>();
 
@@ -41,13 +41,13 @@ export class AccountStatementFilterComponent implements OnChanges {
 
 
   ngOnChanges() {
-    this.setInitialPeriodData(this.command);
-    this.setFinalPeriodData(this.command as TrialBalanceCommand);
+    this.setInitialPeriodData(this.query);
+    this.setFinalPeriodData(this.query as TrialBalanceQuery);
   }
 
 
   get trialBalanceType(): BalanceTypes | TrialBalanceTypes {
-    return this.command.trialBalanceType;
+    return this.query.trialBalanceType;
   }
 
 
@@ -58,35 +58,35 @@ export class AccountStatementFilterComponent implements OnChanges {
 
 
   onBuildAccountStatementClicked() {
-    const payload = { accountStatementCommand: this.buildAccountStatementCommand() };
+    const payload = { accountStatementQuery: this.buildAccountStatementQuery() };
 
     sendEvent(this.accountStatementFilterEvent,
       AccountStatementFilterEventType.BUILD_ACCOUNT_STATEMENT_CLICKED, payload);
   }
 
 
-  private setInitialPeriodData(command: BalanceCommand | TrialBalanceCommand) {
-    this.formData.initialPeriod.fromDate = this.command.initialPeriod?.fromDate;
-    this.formData.initialPeriod.toDate = this.command.initialPeriod?.toDate;
+  private setInitialPeriodData(query: BalanceQuery | TrialBalanceQuery) {
+    this.formData.initialPeriod.fromDate = this.query.initialPeriod?.fromDate;
+    this.formData.initialPeriod.toDate = this.query.initialPeriod?.toDate;
 
-    this.initialPeriodFixedDate = command.initialPeriod.toDate;
+    this.initialPeriodFixedDate = query.initialPeriod.toDate;
   }
 
 
-  private setFinalPeriodData(command: TrialBalanceCommand) {
-    this.formData.finalPeriod.fromDate = command.finalPeriod?.fromDate ?? null;
-    this.formData.finalPeriod.toDate = command.finalPeriod?.toDate ?? null;
+  private setFinalPeriodData(query: TrialBalanceQuery) {
+    this.formData.finalPeriod.fromDate = query.finalPeriod?.fromDate ?? null;
+    this.formData.finalPeriod.toDate = query.finalPeriod?.toDate ?? null;
 
-    this.finalPeriodFixedDate = command.finalPeriod?.toDate ?? null;
+    this.finalPeriodFixedDate = query.finalPeriod?.toDate ?? null;
   }
 
 
-  private buildAccountStatementCommand(): AccountStatementCommand {
+  private buildAccountStatementQuery(): AccountStatementQuery {
     const formData = this.getFormData();
 
-    const command = Object.assign({}, this.command, formData);
+    const query = Object.assign({}, this.query, formData);
 
-    const data: AccountStatementCommand = Object.assign({}, { command, entry: this.entry });
+    const data: AccountStatementQuery = Object.assign({}, { query, entry: this.entry });
 
     return data;
   }
@@ -95,22 +95,22 @@ export class AccountStatementFilterComponent implements OnChanges {
   private getFormData() {
     if (this.periodsRequired) {
       return {
-        initialPeriod: this.getInitialPeriod(this.command),
-        finalPeriod: this.getFinalPeriod(this.command as TrialBalanceCommand),
+        initialPeriod: this.getInitialPeriod(this.query),
+        finalPeriod: this.getFinalPeriod(this.query as TrialBalanceQuery),
       };
     } else {
-      return { initialPeriod: this.getInitialPeriod(this.command) };
+      return { initialPeriod: this.getInitialPeriod(this.query) };
     }
   }
 
 
-  private getInitialPeriod(command: BalanceCommand | TrialBalanceCommand) {
-    return Object.assign({}, command.initialPeriod, this.formData.initialPeriod);
+  private getInitialPeriod(query: BalanceQuery | TrialBalanceQuery) {
+    return Object.assign({}, query.initialPeriod, this.formData.initialPeriod);
   }
 
 
-  private getFinalPeriod(command: TrialBalanceCommand) {
-    return Object.assign({}, command.finalPeriod, this.formData.finalPeriod);
+  private getFinalPeriod(query: TrialBalanceQuery) {
+    return Object.assign({}, query.finalPeriod, this.formData.finalPeriod);
   }
 
 }
