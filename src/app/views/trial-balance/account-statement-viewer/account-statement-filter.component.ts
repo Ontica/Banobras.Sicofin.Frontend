@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { EventInfo } from '@app/core';
 
-import { AccountStatementQuery, BalancesQuery, BalanceEntry, BalanceTypes, TrialBalanceQuery,
+import { AccountStatementQuery, BalanceExplorerQuery, BalanceExplorerEntry, BalanceExplorerTypes, TrialBalanceQuery,
          TrialBalanceEntry, TrialBalanceTypes } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
@@ -24,9 +24,9 @@ export enum AccountStatementFilterEventType {
 })
 export class AccountStatementFilterComponent implements OnChanges {
 
-  @Input() entry: BalanceEntry | TrialBalanceEntry;
+  @Input() entry: BalanceExplorerEntry | TrialBalanceEntry;
 
-  @Input() query: BalancesQuery | TrialBalanceQuery;
+  @Input() query: BalanceExplorerQuery | TrialBalanceQuery;
 
   @Output() accountStatementFilterEvent = new EventEmitter<EventInfo>();
 
@@ -46,7 +46,7 @@ export class AccountStatementFilterComponent implements OnChanges {
   }
 
 
-  get trialBalanceType(): BalanceTypes | TrialBalanceTypes {
+  get trialBalanceType(): BalanceExplorerTypes | TrialBalanceTypes {
     return this.query.trialBalanceType;
   }
 
@@ -65,7 +65,7 @@ export class AccountStatementFilterComponent implements OnChanges {
   }
 
 
-  private setInitialPeriodData(query: BalancesQuery | TrialBalanceQuery) {
+  private setInitialPeriodData(query: BalanceExplorerQuery | TrialBalanceQuery) {
     this.formData.initialPeriod.fromDate = this.query.initialPeriod?.fromDate;
     this.formData.initialPeriod.toDate = this.query.initialPeriod?.toDate;
 
@@ -104,7 +104,7 @@ export class AccountStatementFilterComponent implements OnChanges {
   }
 
 
-  private getInitialPeriod(query: BalancesQuery | TrialBalanceQuery) {
+  private getInitialPeriod(query: BalanceExplorerQuery | TrialBalanceQuery) {
     return Object.assign({}, query.initialPeriod, this.formData.initialPeriod);
   }
 

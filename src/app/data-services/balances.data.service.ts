@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { AccountBalance, AccountStatement, AccountStatementQuery, Balance, BalancesQuery, FileReport,
+import { AccountBalance, AccountStatement, AccountStatementQuery, BalanceExplorerResult, BalanceExplorerQuery, FileReport,
          TrialBalance, TrialBalanceQuery } from '@app/models';
 
 
@@ -30,28 +30,28 @@ export class BalancesDataService {
   }
 
 
-  exportBalanceToExcel(query: BalancesQuery): Observable<FileReport> {
+  exportBalanceExplorerBalancesToExcel(query: BalanceExplorerQuery): Observable<FileReport> {
     Assertion.assertValue(query, 'query');
 
-    const path = 'v2/financial-accounting/balance/excel';
+    const path = 'v2/financial-accounting/balance-explorer/balances/excel';
 
     return this.http.post<FileReport>(path, query);
   }
 
 
-  getBalance(query: BalancesQuery): Observable<Balance> {
+  getBalancesForBalanceExplorer(query: BalanceExplorerQuery): Observable<BalanceExplorerResult> {
     Assertion.assertValue(query, 'query');
 
-    const path = `v2/financial-accounting/balance`;
+    const path = `v2/financial-accounting/balance-explorer/balances`;
 
-    return this.http.post<Balance>(path, query);
+    return this.http.post<BalanceExplorerResult>(path, query);
   }
 
 
   exportTrialBalanceToExcel(query: TrialBalanceQuery): Observable<FileReport> {
     Assertion.assertValue(query, 'query');
 
-    const path = 'v2/financial-accounting/trial-balance/excel';
+    const path = 'v2/financial-accounting/balance-engine/trial-balance/excel';
 
     return this.http.post<FileReport>(path, query);
   }
@@ -60,7 +60,7 @@ export class BalancesDataService {
   getTrialBalance(query: TrialBalanceQuery): Observable<TrialBalance> {
     Assertion.assertValue(query, 'query');
 
-    const path = `v2/financial-accounting/trial-balance`;
+    const path = `v2/financial-accounting/balance-engine/trial-balance`;
 
     return this.http.post<TrialBalance>(path, query);
   }

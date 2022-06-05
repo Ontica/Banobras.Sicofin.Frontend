@@ -21,32 +21,32 @@ export class FinancialReportsDataService {
   constructor(private http: HttpService) { }
 
 
-  exportFinancialReport(query: FinancialReportQuery): Observable<FileReport> {
-    Assertion.assertValue(query, 'query');
+  exportFinancialReport(buildQuery: FinancialReportQuery): Observable<FileReport> {
+    Assertion.assertValue(buildQuery, 'buildQuery');
 
     const path = `v2/financial-accounting/financial-reports/export`;
 
-    return this.http.post<FileReport>(path, query);
+    return this.http.post<FileReport>(path, buildQuery);
   }
 
 
-  getFinancialReport(query: FinancialReportQuery): Observable<FinancialReport> {
-    Assertion.assertValue(query, 'query');
+  getFinancialReport(buildQuery: FinancialReportQuery): Observable<FinancialReport> {
+    Assertion.assertValue(buildQuery, 'buildQuery');
 
     const path = `v2/financial-accounting/financial-reports/generate`;
 
-    return this.http.post<FinancialReport>(path, query);
+    return this.http.post<FinancialReport>(path, buildQuery);
   }
 
 
   getFinancialReportBreakdown(financialReportItemUID: string,
-                              query: FinancialReportQuery): Observable<FinancialReport> {
+                              buildQuery: FinancialReportQuery): Observable<FinancialReport> {
     Assertion.assertValue(financialReportItemUID, 'financialReportItemUID');
-    Assertion.assertValue(query, 'query');
+    Assertion.assertValue(buildQuery, 'buildQuery');
 
     const path = `v2/financial-accounting/financial-reports/generate/breakdown/${financialReportItemUID}`;
 
-    return this.http.post<FinancialReport>(path, query);
+    return this.http.post<FinancialReport>(path, buildQuery);
   }
 
   getFinancialReportTypes(accountsChartUID: string): Observable<ReportType[]> {

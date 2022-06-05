@@ -21,7 +21,7 @@ export interface AccountBalance {
 }
 
 
-export enum BalanceTypes {
+export enum BalanceExplorerTypes {
   SaldosPorCuentaConsultaRapida   = 'SaldosPorCuentaConsultaRapida',
   SaldosPorAuxiliarConsultaRapida = 'SaldosPorAuxiliarConsultaRapida',
 }
@@ -33,40 +33,40 @@ export enum FileReportVersion {
 }
 
 
-export const BalanceTypeList: Identifiable[] = [
+export const BalanceExplorerTypeList: Identifiable[] = [
   {
-    uid: BalanceTypes.SaldosPorCuentaConsultaRapida,
+    uid: BalanceExplorerTypes.SaldosPorCuentaConsultaRapida,
     name: 'Saldos por cuenta',
   },
   {
-    uid: BalanceTypes.SaldosPorAuxiliarConsultaRapida,
+    uid: BalanceExplorerTypes.SaldosPorAuxiliarConsultaRapida,
     name: 'Saldos por auxiliar',
   },
 ];
 
 
-export interface Balance extends DataTable {
-  query: BalancesQuery;
+export interface BalanceExplorerResult extends DataTable {
+  query: BalanceExplorerQuery;
   columns: DataTableColumn[];
-  entries: BalanceEntry[];
+  entries: BalanceExplorerEntry[];
 }
 
 
-export const EmptyBalance: Balance = {
-  query: getEmptyBalancesQuery(),
+export const EmptyBalance: BalanceExplorerResult = {
+  query: emptyBalanceExplorerQuery(),
   columns: [],
   entries: [],
 };
 
 
-export interface BalanceEntry extends DataTableEntry {
+export interface BalanceExplorerEntry extends DataTableEntry {
   hasAccountStatement?: boolean;
 }
 
 
-export interface BalancesQuery extends DataTableQuery {
+export interface BalanceExplorerQuery extends DataTableQuery {
   accountsChartUID: string;
-  trialBalanceType: BalanceTypes;
+  trialBalanceType: BalanceExplorerTypes;
   ledgers: string[];
   balancesType?: string;
   fromAccount?: string;
@@ -81,7 +81,7 @@ export interface BalancesQuery extends DataTableQuery {
 }
 
 
-export function getEmptyBalancesQuery(): BalancesQuery {
+export function emptyBalanceExplorerQuery(): BalanceExplorerQuery {
   return {
     accountsChartUID: '',
     trialBalanceType: null,
@@ -96,14 +96,14 @@ export function getEmptyBalancesQuery(): BalancesQuery {
 }
 
 
-export interface BalanceData {
-  balance: Balance;
+export interface BalanceExplorerData {
+  balance: BalanceExplorerResult;
   balanceType: Identifiable;
   queryExecuted: boolean;
 }
 
 
-export const EmptyBalanceData: BalanceData = {
+export const EmptyBalanceExplorerData: BalanceExplorerData = {
   balance: EmptyBalance,
   balanceType: null,
   queryExecuted: false,

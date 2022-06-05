@@ -28,7 +28,7 @@ export * from './account-edition';
 
 export * from './balances-store';
 
-export * from './balances';
+export * from './balance-explorer';
 
 export * from './data-table';
 

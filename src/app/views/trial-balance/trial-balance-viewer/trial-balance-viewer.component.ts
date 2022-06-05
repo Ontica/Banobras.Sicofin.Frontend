@@ -15,8 +15,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { Balance, BalancesQuery, BalanceData, BalanceEntry, EmptyTrialBalance, FileReport,
-         getEmptyBalancesQuery, getEmptyTrialBalanceQuery, TrialBalance, TrialBalanceQuery,
+import { BalanceExplorerResult, BalanceExplorerQuery, BalanceExplorerData, BalanceExplorerEntry, EmptyTrialBalance, FileReport,
+         emptyBalanceExplorerQuery, getEmptyTrialBalanceQuery, TrialBalance, TrialBalanceQuery,
          TrialBalanceEntry } from '@app/models';
 
 import { ReportingAction, ReportingStateSelector } from '@app/presentation/exported.presentation.types';
@@ -63,9 +63,9 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   queryExecuted = false;
 
-  query: BalancesQuery | TrialBalanceQuery = getEmptyTrialBalanceQuery();
+  query: BalanceExplorerQuery | TrialBalanceQuery = getEmptyTrialBalanceQuery();
 
-  data: Balance | TrialBalance = EmptyTrialBalance;
+  data: BalanceExplorerResult | TrialBalance = EmptyTrialBalance;
 
   displayExportModal = false;
 
@@ -82,7 +82,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.isQuickQuery) {
-      this.subscriptionHelper.select<BalanceData>(ReportingStateSelector.BALANCE_EXPLORER_DATA)
+      this.subscriptionHelper.select<BalanceExplorerData>(ReportingStateSelector.BALANCE_EXPLORER_DATA)
         .subscribe(x => this.setInitData(x));
     }
   }
@@ -95,8 +95,8 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  get balancesQuery(): BalancesQuery {
-    return this.query as BalancesQuery;
+  get balancesQuery(): BalanceExplorerQuery {
+    return this.query as BalanceExplorerQuery;
   }
 
 
@@ -113,7 +113,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
         Assertion.assertValue(event.payload.balancesQuery, 'event.payload.balancesQuery');
 
         this.setBalanceTypeName(event.payload.trialBalanceType);
-        this.executeGetBalance(event.payload.balancesQuery as BalancesQuery);
+        this.executeGetBalance(event.payload.balancesQuery as BalanceExplorerQuery);
         return;
 
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
@@ -174,7 +174,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
         }
 
         const observable = this.isQuickQuery ?
-          this.balancesDataService.exportBalanceToExcel(this.query as BalancesQuery) :
+          this.balancesDataService.exportBalanceExplorerBalancesToExcel(this.query as BalanceExplorerQuery) :
           this.balancesDataService.exportTrialBalanceToExcel(this.query as TrialBalanceQuery);
 
         this.exportDataToExcel(observable);
@@ -187,9 +187,9 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private executeGetBalance(query: BalancesQuery) {
+  private executeGetBalance(query: BalanceExplorerQuery) {
     this.query = query;
-    const observableBalance = this.balancesDataService.getBalance(this.query);
+    const observableBalance = this.balancesDataService.getBalancesForBalanceExplorer(this.query);
     this.getData(observableBalance);
   }
 
@@ -201,7 +201,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private getData(observable: Observable<Balance | TrialBalance>) {
+  private getData(observable: Observable<BalanceExplorerResult | TrialBalance>) {
     this.setSubmitted(true);
 
     observable
@@ -222,7 +222,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private setData(data: Balance | TrialBalance) {
+  private setData(data: BalanceExplorerResult | TrialBalance) {
     this.data = data;
     this.setText();
     this.saveDataInState();
@@ -236,7 +236,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private setInitData(balanceData: BalanceData) {
+  private setInitData(balanceData: BalanceExplorerData) {
     this.data = balanceData.balance;
     this.query = balanceData.balance.query;
     this.queryExecuted = balanceData.queryExecuted;
@@ -247,8 +247,8 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   private saveDataInState() {
     if (this.isQuickQuery) {
-      const balanceData: BalanceData = {
-        balance: this.data as Balance,
+      const balanceData: BalanceExplorerData = {
+        balance: this.data as BalanceExplorerResult,
         balanceType: this.balanceType,
         queryExecuted: this.queryExecuted,
       };
@@ -259,7 +259,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   private clearQuery() {
-    this.query = this.isQuickQuery ? getEmptyBalancesQuery() : getEmptyTrialBalanceQuery();
+    this.query = this.isQuickQuery ? emptyBalanceExplorerQuery() : getEmptyTrialBalanceQuery();
   }
 
 
@@ -295,7 +295,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private emitEntryClicked(entry: BalanceEntry | TrialBalanceEntry) {
+  private emitEntryClicked(entry: BalanceExplorerEntry | TrialBalanceEntry) {
     const payload = {
       query: this.query,
       entry,

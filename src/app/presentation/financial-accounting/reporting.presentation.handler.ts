@@ -13,7 +13,7 @@ import { AbstractPresentationHandler, StateValues } from '@app/core/presentation
 
 import { OperationalReportsDataService } from '@app/data-services';
 
-import { EmptyBalanceData } from '@app/models';
+import { EmptyBalanceExplorerData } from '@app/models';
 
 import { Assertion } from '@app/core';
 
@@ -31,7 +31,7 @@ export enum SelectorType {
 
 const initialState: StateValues = [
   { key: SelectorType.REPORT_TYPES_LIST, value: [] },
-  { key: SelectorType.BALANCE_EXPLORER_DATA, value: EmptyBalanceData },
+  { key: SelectorType.BALANCE_EXPLORER_DATA, value: EmptyBalanceExplorerData },
 ];
 
 

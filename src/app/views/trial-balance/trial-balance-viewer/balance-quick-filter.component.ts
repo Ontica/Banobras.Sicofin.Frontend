@@ -11,8 +11,8 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/cor
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalancesQuery, BalanceTypes, BalanceTypeList, FileReportVersion,
-         getEmptyBalancesQuery } from '@app/models';
+import { AccountsChartMasterData, BalanceExplorerQuery, BalanceExplorerTypes, BalanceExplorerTypeList, FileReportVersion,
+         emptyBalanceExplorerQuery } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -29,7 +29,7 @@ export enum BalanceQuickFilterEventType {
 })
 export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy {
 
-  @Input() balancesQuery: BalancesQuery = getEmptyBalancesQuery();
+  @Input() balancesQuery: BalanceExplorerQuery = emptyBalanceExplorerQuery();
 
   @Output() balanceQuickFilterEvent = new EventEmitter<EventInfo>();
 
@@ -48,7 +48,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  balanceTypeList: Identifiable[] = BalanceTypeList ?? [];
+  balanceTypeList: Identifiable[] = BalanceExplorerTypeList ?? [];
 
   isLoading = false;
 
@@ -87,17 +87,17 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
 
   get displayFromAccount(): boolean {
-    return this.formData.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
+    return this.formData.trialBalanceType === BalanceExplorerTypes.SaldosPorCuentaConsultaRapida;
   }
 
 
   get displaySubledgerAccount(): boolean {
-    return this.formData.trialBalanceType === BalanceTypes.SaldosPorAuxiliarConsultaRapida;
+    return this.formData.trialBalanceType === BalanceExplorerTypes.SaldosPorAuxiliarConsultaRapida;
   }
 
 
   get displayWithSubledgerAccount(): boolean {
-    return this.formData.trialBalanceType === BalanceTypes.SaldosPorCuentaConsultaRapida;
+    return this.formData.trialBalanceType === BalanceExplorerTypes.SaldosPorCuentaConsultaRapida;
   }
 
 
@@ -167,7 +167,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
       this.formData.accountsChartUID = this.accountsChartMasterDataList[0] ?
         this.accountsChartMasterDataList[0].uid : null;
       this.formData.trialBalanceType = this.balanceTypeList[0] ?
-        this.balanceTypeList[0].uid as BalanceTypes : null;
+        this.balanceTypeList[0].uid as BalanceExplorerTypes : null;
 
       this.formData.toDate = DateStringLibrary.today();
       this.validateValueOfInitPeriodFromDate(this.formData.toDate);
@@ -187,9 +187,9 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  private getBalancesQuery(): BalancesQuery {
-    const data: BalancesQuery = {
-      trialBalanceType: this.formData.trialBalanceType as BalanceTypes,
+  private getBalancesQuery(): BalanceExplorerQuery {
+    const data: BalanceExplorerQuery = {
+      trialBalanceType: this.formData.trialBalanceType as BalanceExplorerTypes,
       accountsChartUID: this.formData.accountsChartUID,
       ledgers: this.formData.ledgers,
       fromAccount: this.formData.fromAccount,
