@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -13,7 +13,7 @@ import { FinancialReportsDataService } from '@app/data-services';
 
 import { FinancialReportQuery, EmptyFinancialReport, EmptyFinancialReportQuery, FinancialReport,
          FinancialReportEntry, EmptyFinancialReportBreakdown, ReportType, ExportationType,
-         FileType } from '@app/models';
+         FileType, FinancialReportBreakdown } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -34,6 +34,8 @@ export enum FinancialReportViewerEventType {
   templateUrl: './financial-report-viewer.component.html',
 })
 export class FinancialReportViewerComponent {
+
+  @Input() selectedFinancialReportBreakdown = EmptyFinancialReportBreakdown;
 
   @Output() financialReportViewerEvent = new EventEmitter<EventInfo>();
 
@@ -56,8 +58,6 @@ export class FinancialReportViewerComponent {
   displayExportModal = false;
 
   fileUrl = '';
-
-  selectedFinancialReportBreakdown = EmptyFinancialReportBreakdown;
 
   queryExecuted = false;
 
@@ -161,14 +161,14 @@ export class FinancialReportViewerComponent {
                                                           this.query)
       .toPromise()
       .then(x => {
-        this.selectedFinancialReportBreakdown = {
+        const financialReportBreakdown: FinancialReportBreakdown = {
           financialReportEntry,
           financialReportBreakdown: x,
         };
 
         sendEvent(this.financialReportViewerEvent,
                   FinancialReportViewerEventType.FINANCIAL_REPORT_ENTRY_SELECTED,
-                  {financialReportBreakdown: this.selectedFinancialReportBreakdown});
+                  {financialReportBreakdown});
       })
       .finally(() => this.isLoadingBreakdown = false);
   }

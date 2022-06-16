@@ -27,7 +27,7 @@ export class FinancialReportsMainPageComponent {
 
   displayFinancialReportBreakdown = false;
 
-  selectedFinancialReport: FinancialReportBreakdown = EmptyFinancialReportBreakdown;
+  selectedFinancialReportBreakdown: FinancialReportBreakdown = EmptyFinancialReportBreakdown;
 
 
   onFinancialReportViewerEvent(event) {
@@ -59,8 +59,9 @@ export class FinancialReportsMainPageComponent {
 
 
   setFinancialReportBreakdown(financialReportBreakdown: FinancialReportBreakdown) {
-    this.selectedFinancialReport = financialReportBreakdown;
-    this.displayFinancialReportBreakdown = !isEmpty(this.selectedFinancialReport.financialReportEntry);
+    this.selectedFinancialReportBreakdown = financialReportBreakdown;
+    this.displayFinancialReportBreakdown =
+      !isEmpty(this.selectedFinancialReportBreakdown.financialReportEntry);
   }
 
 }

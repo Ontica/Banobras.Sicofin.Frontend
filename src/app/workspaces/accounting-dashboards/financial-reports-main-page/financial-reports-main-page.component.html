@@ -3,6 +3,7 @@
   <div class="primary" [fxHide.notebook]="displayFinancialReportBreakdown">
 
     <emp-fa-financial-report-viewer
+      [selectedFinancialReportBreakdown]="selectedFinancialReportBreakdown"
       (financialReportViewerEvent)="onFinancialReportViewerEvent($event)">
 
     </emp-fa-financial-report-viewer>
@@ -12,7 +13,7 @@
   <div class="secondary priority" *ngIf="displayFinancialReportBreakdown">
 
     <emp-fa-financial-report-breakdown-tabbed-view
-      [financialReportBreakdown]="selectedFinancialReport"
+      [financialReportBreakdown]="selectedFinancialReportBreakdown"
       (financialReportBreakdownTabbedViewEvent)="onFinancialReportBreakdownTabbedViewEvent($event)">
 
     </emp-fa-financial-report-breakdown-tabbed-view>
