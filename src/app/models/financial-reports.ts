@@ -30,7 +30,7 @@ export interface FinancialReportQuery extends DataTableQuery {
 export interface FinancialReportEntry extends DataTableEntry {
   uid: string;
   accountsChartName: string;
-  rulesSetName: string;
+  groupName: string;
   format: string;
   itemType: FinancialReportItemType;
   groupingRuleUID: string;
@@ -66,7 +66,7 @@ export const EmptyFinancialReportQuery: FinancialReportQuery = {
 export const EmptyFinancialReportEntry: FinancialReportEntry = {
   uid: '',
   accountsChartName: '',
-  rulesSetName: '',
+  groupName: '',
   format: '',
   itemType: FinancialReportItemType.Entry,
   groupingRuleUID: '',

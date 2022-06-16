@@ -46,7 +46,7 @@ export class FinancialReportBreakdownTabbedViewComponent implements OnChanges {
     this.title = `${this.financialReportBreakdown.financialReportEntry.conceptCode}: ` +
       `${this.financialReportBreakdown.financialReportEntry.concept}`;
     this.hint = `${this.financialReportBreakdown.financialReportEntry.accountsChartName}` +
-      ` - ${this.financialReportBreakdown.financialReportEntry.rulesSetName}`;
+      ` - ${this.financialReportBreakdown.financialReportEntry.groupName}`;
   }
 
 }
