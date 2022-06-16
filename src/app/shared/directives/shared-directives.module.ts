@@ -15,6 +15,7 @@ import { HasPermissionDirective } from './has-permission.directive';
 import { ResizableDirective } from './resizable.directive';
 import { BreakpointDirective } from './notebook-breakpoint.directive';
 import { NotebookBreakPointsProvider } from './notebook-breakpoint';
+import { EmpContextMenuDisabledDirective } from './context-menu-disabled.directive';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { NotebookBreakPointsProvider } from './notebook-breakpoint';
 
   declarations: [
     BreakpointDirective,
+    EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
@@ -35,6 +37,7 @@ import { NotebookBreakPointsProvider } from './notebook-breakpoint';
 
   exports: [
     BreakpointDirective,
+    EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
