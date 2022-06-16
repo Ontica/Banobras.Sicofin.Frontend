@@ -13,8 +13,6 @@ import { sendEvent } from '@app/shared/utils';
 
 export enum FinancialReportDesignerControlsEventType {
   FILTER_CHANGED        = 'FinancialReportDesignerControlsComponent.Event.FilterChanged',
-  DISCARD_CHANGES_CLICKED = 'FinancialReportDesignerControlsComponent.Event.Discardchangesclicked',
-  SAVE_BUTTON_CLICKED = 'FinancialReportDesignerControlsComponent.Event.SaveButtonClicked',
   EXECUTE_BUTTON_CLICKED = 'FinancialReportDesignerControlsComponent.Event.ExecuteButtonClicked',
 }
 
@@ -32,11 +30,7 @@ export class FinancialReportDesignerControlsComponent {
 
   @Input() filter = '';
 
-  @Input() readonly = true;
-
   @Output() financialReportDesignerControlsEvent = new EventEmitter<EventInfo>();
-
-  @Output() readonlyChange = new EventEmitter<boolean>();
 
 
   onClearFilter() {
@@ -48,23 +42,6 @@ export class FinancialReportDesignerControlsComponent {
   onFilterData() {
     sendEvent(this.financialReportDesignerControlsEvent,
       FinancialReportDesignerControlsEventType.FILTER_CHANGED, {filter: this.filter});
-  }
-
-
-  onToggleReadonlyClicked() {
-    this.readonly = !this.readonly;
-    this.readonlyChange.emit(this.readonly);
-
-    if (this.readonly) {
-      sendEvent(this.financialReportDesignerControlsEvent,
-        FinancialReportDesignerControlsEventType.DISCARD_CHANGES_CLICKED);
-    }
-  }
-
-
-  onSaveButtonClicked() {
-    sendEvent(this.financialReportDesignerControlsEvent,
-      FinancialReportDesignerControlsEventType.SAVE_BUTTON_CLICKED);
   }
 
 

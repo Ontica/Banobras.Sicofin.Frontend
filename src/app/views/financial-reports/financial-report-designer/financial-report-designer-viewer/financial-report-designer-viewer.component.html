@@ -30,22 +30,13 @@
 
       <mat-divider [style.marginBottom.px]="8"> </mat-divider>
 
-      <emp-fa-financial-report-designer fxFlex *ngIf="commandExecuted"
-        [financialReportDesign]="financialReportDesign">
+      <emp-fa-financial-report-designer fxFlex
+        [financialReportDesign]="financialReportDesign"
+        [isLoading]="isLoading"
+        [queryExecuted]="queryExecuted"
+        (financialReportDesignerEvent)="onFinancialReportDesignerEvent($event)">
 
       </emp-fa-financial-report-designer>
-
-      <div fxFlex *ngIf="isLoading || financialReportDesign.rows.length === 0">
-        <div *ngIf="isLoading" class="text-not-found">
-          Cargando...
-        </div>
-
-        <ng-container *ngIf="!isLoading">
-          <div *ngIf="!commandExecuted" class="text-not-found">
-            No se ha invocado la consulta.
-          </div>
-        </ng-container>
-      </div>
 
     </div>
 

@@ -15,39 +15,32 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
-import {
-  FinancialReportBreakdownTabbedViewComponent
-} from './financial-report-breakdown-tabbed-view/financial-report-breakdown-tabbed-view.component';
-
-import {
-  FinancialReportDesignerComponent
-} from './financial-report-designer/financial-report-designer.component';
-
-import {
-  FinancialReportDesignerControlsComponent
-} from './financial-report-designer/financial-report-designer-controls.component';
-
-import {
-  FinancialReportDesignerViewerComponent
-} from './financial-report-designer/financial-report-designer-viewer.component';
-
+import { FinancialReportBreakdownTabbedViewComponent } from './financial-report-breakdown-tabbed-view/financial-report-breakdown-tabbed-view.component';
+import { FinancialReportDesignerComponent } from './financial-report-designer/financial-report-designer/financial-report-designer.component';
+import { FinancialReportDesignerControlsComponent } from './financial-report-designer/financial-report-designer/financial-report-designer-controls.component';
+import { FinancialReportDesignerGridComponent } from './financial-report-designer/financial-report-designer/financial-report-designer-grid.component';
+import { FinancialReportDesignerViewerComponent } from './financial-report-designer/financial-report-designer-viewer/financial-report-designer-viewer.component';
 import { FinancialReportFilterComponent } from './financial-report-viewer/financial-report-filter.component';
-
-import {
-  FinancialReportSelectorComponent
-} from './financial-report-designer/financial-report-selector.component';
-
+import { FinancialReportSelectorComponent } from './financial-report-designer/financial-report-designer-viewer/financial-report-selector.component';
 import { FinancialReportViewerComponent } from './financial-report-viewer/financial-report-viewer.component';
+import { FixedCellEditorComponent } from './financial-report-designer/financial-report-edition/fixed-cell-editor.component';
+import { FixedRowEditorComponent } from './financial-report-designer/financial-report-edition/fixed-row-editor.component';
+import { RowMenuComponent } from './financial-report-designer/financial-report-edition/row-menu.component';
+
 
 @NgModule({
   declarations: [
     FinancialReportBreakdownTabbedViewComponent,
     FinancialReportDesignerComponent,
     FinancialReportDesignerControlsComponent,
+    FinancialReportDesignerGridComponent,
     FinancialReportDesignerViewerComponent,
     FinancialReportFilterComponent,
     FinancialReportSelectorComponent,
     FinancialReportViewerComponent,
+    FixedCellEditorComponent,
+    FixedRowEditorComponent,
+    RowMenuComponent,
   ],
   imports: [
     CommonModule,

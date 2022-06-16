@@ -1,0 +1,178 @@
+<emp-ng-modal-window [config]="{width:'900px'}">
+
+  <emp-ng-card
+    [title]="isSaved ? 'Editar renglón del reporte' : 'Agregar renglón al reporte'"
+    hint='Información del renglón del reporte.'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <form [formGroup]="formHandler.form"
+        autocomplete="off" class="form-section" (keydown.enter)="$event.preventDefault()">
+
+        <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+          <div #typeSection fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+
+            <div fxFlex="100">
+              <label>Tipo de renglon:</label>
+              <mat-radio-group [formControlName]="controls.type"
+                (change)="onTypeChanged()">
+                <mat-radio-button *ngFor="let type of fixedRowTypeList" [value]="type.uid"
+                  [fxFlex]="100/3" [style.marginLeft]="0">
+                  {{type.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+          </div>
+
+          <ng-container #financialConceptReferenceSection *ngIf="isConceptType">
+
+            <div class="section-title"> Información del concepto de referencia </div>
+
+            <div fxLayout="row">
+
+              <div [fxFlex]="100/3">
+                <label>Agrupación:</label>
+                <emp-ng-select
+                  [formControlName]="controls.group"
+                  [items]="financialReportConfig.financialConceptGroups"
+                  [showError]="formHandler.showInvalidControl(controls.group)">
+                </emp-ng-select>
+              </div>
+
+              <div [fxFlex]="200/3">
+                <label>Concepto:</label>
+                <emp-ng-select
+                  [formControlName]="controls.concept"
+                  [items]="conceptList"
+                  [loading]="isLoading"
+                  [config]="{virtualScroll: true, searchableFields: ['code', 'name']}"
+                  [showError]="formHandler.showInvalidControl(controls.concept)"
+                  bindLabel="code">
+                  <ng-template #labelTemplate let-item="item">
+                    ({{item.code}}) {{item.name}}
+                  </ng-template>
+                  <ng-template #optionTemplate let-item="item">
+                    ({{item.code}}) {{item.name}}
+                  </ng-template>
+                </emp-ng-select>
+              </div>
+
+            </div>
+
+          </ng-container>
+
+          <ng-container #labelSection *ngIf="isLabelType">
+
+            <div class="section-title"> Información de la etiqueta </div>
+
+            <div fxLayout="row">
+
+              <div [fxFlex]="100">
+                <label>Etiqueta:</label>
+                <input type="text" class="text-box"
+                  [formControlName]="controls.label"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.label)">
+              </div>
+
+            </div>
+
+          </ng-container>
+
+          <ng-container #generalFieldsSection>
+
+            <div class="section-title"> Información general </div>
+
+            <div #positionSection fxLayout="row">
+
+              <div [fxFlex]="100/3">
+                <label>Posición:</label>
+                <emp-ng-select
+                  [formControlName]="controls.positioningRule"
+                  [items]="positioningRuleList"
+                  [showError]="formHandler.showInvalidControl(controls.positioningRule)"
+                  (changes)="onPositioningRuleChanged()">
+                </emp-ng-select>
+              </div>
+
+              <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffset">
+                <emp-ng-select [fxFlex]="100"
+                  [formControlName]="controls.positioningOffsetUID"
+                  [items]="financialReportRowList"
+                  [config]="{searchableFields: ['conceptCode', 'concept']}"
+                  [showError]="formHandler.showInvalidControl(controls.positioningOffsetUID)"
+                  [placeholder]="!!formHandler.getControl(controls.group).value ? 'Seleccionar' : 'Seleccionar la agrupación'">
+                  <ng-template #labelTemplate let-item="item">
+                    ({{item.conceptCode}}) {{item.concept}}
+                  </ng-template>
+                  <ng-template #optionTemplate let-item="item">
+                    ({{item.conceptCode}}) {{item.concept}}
+                  </ng-template>
+                </emp-ng-select>
+              </div>
+
+              <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
+
+                <input type="text" class="text-box text-align-right" empNgInteger
+                  [formControlName]="controls.position"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.position)">
+
+              </div>
+
+            </div>
+
+            <div fxLayout="row">
+
+              <div [fxFlex]="100/3">
+                <label>Formato:</label>
+                <emp-ng-select
+                  [formControlName]="controls.format"
+                  [items]="formatList"
+                  [config]="{bindByValue: false}"
+                  [bindLabel]="null"
+                  [showError]="formHandler.showInvalidControl(controls.format)">
+
+                  <ng-template #optionTemplate let-item="item">
+                    <div [class]="item" [style.width.%]="100">{{item}}</div>
+                  </ng-template>
+
+                </emp-ng-select>
+              </div>
+
+            </div>
+
+          </ng-container>
+
+
+          <ng-container #rowFooter>
+
+            <mat-divider class="horizontal"></mat-divider>
+
+            <div fxLayout="row">
+
+              <div fxFlex fxLayoutAlign="end center">
+
+                <button
+                  [class.btn]="!formHandler.isReadyForSubmit"
+                  [class.btn-action]="formHandler.isReadyForSubmit"
+                  (click)="onSubmitDataClicked()">
+                  {{isSaved ? 'Guardar' : 'Agregar'}}
+                </button>
+
+              </div>
+
+            </div>
+
+          </ng-container>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

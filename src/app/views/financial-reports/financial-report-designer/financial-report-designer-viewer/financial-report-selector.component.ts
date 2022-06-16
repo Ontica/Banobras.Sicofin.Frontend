@@ -34,8 +34,8 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
   reportsForm = {
-    accountChart: null,
-    financialReportType: null,
+    accountChartUID: null,
+    financialReportTypeUID: null,
   };
 
   financialReportTypesList: Identifiable[] = [];
@@ -61,7 +61,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
 
 
   onAccountsChartChanges(accountChart: AccountsChartMasterData) {
-    this.reportsForm.financialReportType = '';
+    this.reportsForm.financialReportTypeUID = '';
     this.financialReportTypesList = [];
     if (accountChart.uid) {
       this.getFinancialReportTypesForDesign(accountChart.uid);
@@ -71,8 +71,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
 
   onSearchReportsClicked() {
     const payload = {
-      accountChart: this.reportsForm.accountChart,
-      financialReportType: this.reportsForm.financialReportType,
+      financialReportTypeUID: this.reportsForm.financialReportTypeUID,
     };
 
     sendEvent(this.financialReportSelectorEvent,

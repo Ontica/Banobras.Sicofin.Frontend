@@ -11,11 +11,11 @@
 
         <label>Catálogo de cuentas:</label>
 
-        <emp-ng-select name="accountChart" required
-          [config]="{selectFirst: true, bindByValue: false}"
-          [(ngModel)]="reportsForm.accountChart"
+        <emp-ng-select name="accountChartUID" required
+          [config]="{selectFirst: true}"
+          [(ngModel)]="reportsForm.accountChartUID"
           [items]="accountsChartMasterDataList"
-          [showError]="!reportsForm.accountChart"
+          [showError]="!reportsForm.accountChartUID"
           (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
 
@@ -25,11 +25,10 @@
 
         <label>Reporte:</label>
 
-        <emp-ng-select name="financialReportType" required
-          [config]="{bindByValue: false}"
-          [(ngModel)]="reportsForm.financialReportType"
+        <emp-ng-select name="financialReportTypeUID" required
+          [(ngModel)]="reportsForm.financialReportTypeUID"
           [items]="financialReportTypesList"
-          [showError]="!reportsForm.financialReportType">
+          [showError]="!reportsForm.financialReportTypeUID">
         </emp-ng-select>
 
       </div>

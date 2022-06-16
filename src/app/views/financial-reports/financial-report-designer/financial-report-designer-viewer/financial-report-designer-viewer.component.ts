@@ -7,11 +7,13 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyFinancialReportDesign, FinancialReportDesign } from '@app/models';
+import { EmptyFinancialReportDesign, FinancialReportDesign } from '@app/models';
+
+import { FinancialReportDesignerEventType } from '../financial-report-designer/financial-report-designer.component';
 
 import { FinancialReportSelectorEventType } from './financial-report-selector.component';
 
@@ -32,11 +34,9 @@ export class FinancialReportDesignerViewerComponent {
 
   submitted = false;
 
-  commandExecuted = false;
+  queryExecuted = false;
 
-  selectedAccountsChart: AccountsChartMasterData = null;
-
-  selectedFinancialReportTypes: Identifiable = null;
+  financialReportTypeUID = '';
 
   financialReportDesign: FinancialReportDesign = Object.assign({}, EmptyFinancialReportDesign);
 
@@ -44,7 +44,7 @@ export class FinancialReportDesignerViewerComponent {
   constructor(private financialReportsData: FinancialReportsDataService) { }
 
 
-  onFinancialReportSelectorEvent(event) {
+  onFinancialReportSelectorEvent(event: EventInfo) {
     if (this.submitted) {
       return;
     }
@@ -52,12 +52,8 @@ export class FinancialReportDesignerViewerComponent {
     switch (event.type as FinancialReportSelectorEventType) {
 
       case FinancialReportSelectorEventType.SEARCH_REPORT_CLICKED:
-        Assertion.assertValue(event.payload.accountChart, 'event.payload.accountChart');
-        Assertion.assertValue(event.payload.financialReportType, 'event.payload.financialReportType');
-
-        this.selectedAccountsChart = event.payload.accountChart as AccountsChartMasterData;
-        this.selectedFinancialReportTypes = event.payload.financialReportType as Identifiable;
-
+        Assertion.assertValue(event.payload.financialReportTypeUID, 'event.payload.financialReportTypeUID');
+        this.financialReportTypeUID = event.payload.financialReportTypeUID;
         this.getFinancialReportDesign();
         return;
 
@@ -68,8 +64,17 @@ export class FinancialReportDesignerViewerComponent {
   }
 
 
-  onFinancialReportDesignerEvent(event) {
+  onFinancialReportDesignerEvent(event: EventInfo) {
+    switch (event.type as FinancialReportDesignerEventType) {
 
+      case FinancialReportDesignerEventType.REPORT_UPDATED:
+        this.getFinancialReportDesign();
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -77,24 +82,25 @@ export class FinancialReportDesignerViewerComponent {
     this.setSubmitted(true);
     this.setFinancialReportDesign(EmptyFinancialReportDesign, false);
 
-    this.financialReportsData.getFinancialReportDesign(this.selectedFinancialReportTypes.uid)
+    this.financialReportsData.getFinancialReportDesign(this.financialReportTypeUID)
       .toPromise()
-      .then(x => {
-        this.setFinancialReportDesign(x, true);
+      .then(x => this.setFinancialReportDesign(x, true))
+      .catch(e => this.setFinancialReportDesign(EmptyFinancialReportDesign, true))
+      .finally(() => {
         this.setText();
-      })
-      .finally(() => this.setSubmitted(false));
+        this.setSubmitted(false);
+      });
   }
 
 
   private setText() {
-    if (isEmpty(this.selectedFinancialReportTypes)) {
+    if (isEmpty(this.financialReportDesign.config.reportType)) {
       this.cardHint = 'Favor de seleccionar el reporte';
       return;
     }
 
-    this.cardHint = `${this.selectedAccountsChart.name} | ` +
-      `${this.selectedFinancialReportTypes.name} - ` +
+    this.cardHint = `${this.financialReportDesign.config.accountsChart.name} | ` +
+      `${this.financialReportDesign.config.reportType.name} - ` +
       `${this.financialReportDesign.rows.length} registros encontrados`;
   }
 
@@ -105,9 +111,9 @@ export class FinancialReportDesignerViewerComponent {
   }
 
 
-  private setFinancialReportDesign(financialReportDesign: FinancialReportDesign, commandExecuted: boolean) {
-    this.financialReportDesign = Object.assign({}, financialReportDesign);
-    this.commandExecuted = commandExecuted;
+  private setFinancialReportDesign(financialReportDesign: FinancialReportDesign, queryExecuted: boolean) {
+    this.financialReportDesign = financialReportDesign;
+    this.queryExecuted = queryExecuted;
   }
 
 }

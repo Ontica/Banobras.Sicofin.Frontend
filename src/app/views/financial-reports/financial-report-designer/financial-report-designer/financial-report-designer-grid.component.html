@@ -1,0 +1,90 @@
+<cdk-virtual-scroll-viewport tvsItemSize="28" [headerHeight]="isFixedRows ? 56 : 28" [bufferMultiplier]="0">
+
+  <table mat-table [dataSource]="dataSource" class="emp-designer">
+
+    <ng-container *ngFor="let column of displayedColumnsHeader; let i = index;" [matColumnDef]="column">
+      <th mat-header-cell *matHeaderCellDef class="text-align-center">
+        {{column}}
+      </th>
+    </ng-container>
+
+    <ng-container matColumnDef="number">
+      <th mat-header-cell *matHeaderCellDef></th>
+
+      <td mat-cell *matCellDef="let row; let i = index;" (click)="onSelectRowClicked(row)">
+
+        <emp-fa-row-menu
+          [canEditRows]="isFixedRows"
+          [isSelected]="selectedRow.row === row.row"
+          (rowMenuEvent)="onRowMenuEvent($event)">
+          {{row.row}}
+        </emp-fa-row-menu>
+
+      </td>
+    </ng-container>
+
+    <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column.field">
+
+      <th mat-header-cell *matHeaderCellDef class="nowrap header-bold text-align-center"
+        [style.width.px]="80"
+        [style.minWidth.px]="column.field === 'concept' ? 350 : 80"
+        [style.maxWidth.px]="column.type === COLUMN_TYPE.decimal ? 150 : null">
+        {{column.title}}
+      </th>
+
+      <td mat-cell *matCellDef="let row;"
+        (click)="onCellSelectClicked(row.row, column.column, row[column.field])"
+        [style.minWidth.px]="isFixedCells ? 145 : null"
+        [style.maxWidth.px]="isFixedCells ? 145 : null"
+        [class]="isFixedCells && row[column.field]?.format ? row[column.field].format : ''"
+        [ngClass]="{'text-align-right': column.type === COLUMN_TYPE.decimal,
+                    'nowrap': column.type === COLUMN_TYPE.text_nowrap,
+                    'designer-cell-selected': selectedCell.column === column.column && selectedCell.row === row.row}">
+
+        <ng-container *ngIf="isFixedRows">
+
+          <ng-container [ngSwitch]="column.type">
+
+            <ng-container *ngSwitchCase="COLUMN_TYPE.decimal">
+              {{row[column.field] | empDecimal: column.digits}}
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              {{ row[column.field] }}
+            </ng-container>
+
+          </ng-container>
+
+        </ng-container>
+
+
+        <ng-container *ngIf="isFixedCells">
+          {{ row[column.field]?.label ?? '' }}
+        </ng-container>
+
+      </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsHeader; sticky: true;"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"
+      [hidden]="isFixedCells"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      [class]="row.format ?? ''"
+      [class.fixed-rows-type]="isFixedRows"
+      [class.fixed-cells-type]="isFixedCells"
+      [class.designer-row-selected]="selectedRow.row === row.row"></tr>
+
+  </table>
+
+  <div *ngIf="isLoading" class="text-not-found">
+    Cargando...
+  </div>
+
+  <div class="text-not-found" *ngIf="!isLoading && dataSource?.data?.length === 0">
+    {{queryExecuted ?
+    'No se encontraron datos para el reporte seleccionado.' :
+    'No se ha invocado la consulta.'}}
+  </div>
+
+</cdk-virtual-scroll-viewport>

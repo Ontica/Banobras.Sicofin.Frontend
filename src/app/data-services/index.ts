@@ -12,6 +12,7 @@ export * from './balances.data.service';
 export * from './exchange-rates.data.service';
 export * from './external-process.data.service';
 export * from './financial-concepts.data.service';
+export * from './financial-reports-edition.data.service';
 export * from './financial-reports.data.service';
 export * from './import-vouchers.data.service';
 export * from './operational-reports.data.service';
