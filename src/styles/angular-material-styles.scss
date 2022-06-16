@@ -344,113 +344,6 @@ table.mat-table {
 
     &.mat-row {
       background-color: $white;
-
-      .item-strikethrough {
-        text-decoration: line-through;
-      }
-
-      &.row-selected {
-        background-color: $grid-selected-background-color;
-
-        &:hover {
-          background-color: $grid-selected-hover-background-color;
-        }
-
-        &.item-type-total {
-          background-color: darken($grid-footer-background-color, 3%);
-        }
-
-        &.item-type-total:hover {
-          background-color: darken($grid-footer-background-color, 5%);
-        }
-      }
-
-      &.item-type-summary {
-        font-weight: 600;
-      }
-
-      &.item-type-group {
-        td.mat-cell {
-          font-weight: 600;
-          border-top: 1px solid rgba(0, 0, 0, 0.25);
-          border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-        }
-      }
-
-      &.item-type-total {
-        background-color: lighten($grid-footer-background-color, 2%);
-        font-weight: 600;
-      }
-
-      &.Bold {
-        font-weight: 600;
-      }
-
-      &.Primario {
-        background-color: $designer-primary-color;
-      }
-
-      &.Secundario {
-        background-color: $designer-secondary-color;
-      }
-
-      &.Terciario {
-        background-color: $designer-tertiary-color;
-      }
-
-      &.Cuaternario {
-        background-color: $designer-quaternary-color;
-      }
-
-      &.Gris {
-        background-color: $designer-gray-color;
-      }
-
-      &.Verde {
-        background-color: $designer-green-color;
-      }
-
-      &.VerdeBold {
-        background-color: $designer-green-color;
-        font-weight: 600;
-      }
-    }
-
-    &.mat-row:hover {
-      background-color: $grid-hover-background-color;
-
-      &.item-type-total {
-        background-color: $grid-footer-background-color;
-      }
-
-      &.Primario {
-        background-color: darken($designer-primary-color, 3%);
-      }
-
-      &.Secundario {
-        background-color: darken($designer-secondary-color, 3%);
-      }
-
-      &.Terciario {
-        background-color: darken($designer-tertiary-color, 3%);
-      }
-
-      &.Cuaternario {
-        background-color: darken($designer-quaternary-color, 3%);
-      }
-
-      &.Gris {
-        background-color: darken($designer-gray-color, 1%);
-      }
-
-      &.Verde,
-      &.VerdeBold {
-        background-color: darken($designer-green-color, 3%);
-      }
-    }
-
-    &.selectable-row:hover {
-      cursor: pointer;
     }
   }
 }
@@ -487,6 +380,8 @@ table.mat-table.emp-designer {
     border-right: 1px solid $designer-border-color;
 
     &:first-of-type {
+      user-select: none;
+      cursor: pointer;
       background-color: $designer-bar-background;
       border-left: 1px solid $designer-border-color;
       left: 0;
@@ -494,6 +389,20 @@ table.mat-table.emp-designer {
       text-align: center;
       width: 28px;
       z-index: 2;
+    }
+
+    &:first-of-type:hover {
+      background-color: $designer-border-color;
+    }
+
+    .designer-row-button {
+      cursor: pointer;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      padding: 6px;
     }
 
     input {
