@@ -54,6 +54,7 @@ export class AuthenticationService {
     const principal = this.session.getPrincipal();
 
     if (!principal.isAuthenticated) {
+      this.session.clearSession();
       return Promise.resolve(false);
     }
 

@@ -28,11 +28,12 @@ import { ROUTES_LIST } from '@app/main-layout';
 export class SessionService {
 
   private principal: Principal = Principal.empty;
+
   private data: KeyValue[] = [];
 
   constructor(private appSettingsService: ApplicationSettingsService,
               private localStorage: LocalStorageService) {
-    this.setPrincipalFromLocalStorage();
+    this.tryToRetrieveStoredPrincipalData();
   }
 
 
@@ -96,6 +97,7 @@ export class SessionService {
     }
   }
 
+
   hasPermission(permission: string): boolean {
     return this.principal.permissions &&
       this.principal.permissions.filter(x =>  x === permission).length > 0;
@@ -115,13 +117,28 @@ export class SessionService {
   }
 
 
+  private tryToRetrieveStoredPrincipalData() {
+    try {
+      this.setPrincipalFromLocalStorage();
+    } catch (e) {
+      this.clearSession();
+      console.log(e);
+    }
+  }
+
+
   private setPrincipalFromLocalStorage() {
     const sessionToken = this.getSessionToken();
+    Assertion.assertValue(sessionToken.accessToken, 'sessionToken.accessToken');
 
     if (!!sessionToken && !!sessionToken.accessToken) {
-      const identity =  this.localStorage.get<Identity>('identity');
-      const permissions = this.localStorage.get<string[]>('permissions');
-      const defaultRoute = this.localStorage.get<string>('defaultRoute');
+      const identity =  this.localStorage.get<Identity>('identity') ?? null;
+      const permissions = this.localStorage.get<string[]>('permissions') ?? null;
+      const defaultRoute = this.localStorage.get<string>('defaultRoute') ?? null;
+
+      Assertion.assert(typeof identity.name === 'string', 'corrupted identity, must be a string.');
+      Assertion.assert(permissions instanceof Array, 'corrupted permissions, must be an array of strings.');
+      Assertion.assert(typeof defaultRoute === 'string', 'corrupted defaultRoute, must be a string.');
 
       this.principal = new Principal(sessionToken, identity, permissions, defaultRoute);
     }
