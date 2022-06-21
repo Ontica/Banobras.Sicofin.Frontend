@@ -21,7 +21,7 @@ $warning-color-light: $warning-color;
 $warning-color-dark: #691c32 !default;
 
 $title-color: #bc955c !default;
-$border-color-title: #ddc9a3 !default;
+$title-border-color: #ddc9a3 !default;
 
 $text-color: $secondary-color-semi-light !default;
 $text-color-light: $secondary-color-light !default;
@@ -104,7 +104,6 @@ $form-title-color: $border-color-dark;
 //
 // html controls
 //
-$button-font: 9.5pt $font-family;
 
 $control-font: 9.5pt $font-family-secondary;
 $control-small-font: 8.5pt $font-family-secondary;
@@ -113,6 +112,7 @@ $control-color: $secondary-color-dark;
 $control-label-color: $secondary-color-dark;
 $control-background-color: #fdfdfd;
 $control-border: 1px solid #dfdfdf;
+$control-border-radius: 2px;
 
 $selected-control-background-color: #fafafa;
 $selected-control-color: #343434;
@@ -128,6 +128,7 @@ $control-margin: 2px 8px 2px 0;
 $control-padding: 2px 6px;
 $select-padding: 2px 2px 2px 6px;
 
+$button-font: 9.5pt $font-family;
 $button-color: #fbfbfb;
 $button-selected-color: #e6e6e6;
 
@@ -135,6 +136,8 @@ $button-border: 0 solid #cecece;
 $button-height: 28px;
 
 $checkbox-background-color: #38927d;
+$checkbox-warning-background-color: $warning-color;
+$date-picker-width: 84px;
 
 //
 // grid
@@ -147,6 +150,7 @@ $grid-odd-background-color: #f4f4f4 !default;
 $grid-hover-background-color: #fafafa;
 $grid-selected-background-color: #f7fcfb;
 $grid-selected-hover-background-color: #f3fcfb;
+$grid-row-height: 32px;
 
 //
 // Designer

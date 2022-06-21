@@ -91,7 +91,7 @@
       </label>
     </div>
 
-    <div class="placeholder">
+    <div class="placeholder" [class.placeholder-tag-required]="fileControlConfig.tagRequired">
       {{readonly ? fileControlConfig.placeholderReadonly : fileControlConfig.placeholder}}
     </div>
 

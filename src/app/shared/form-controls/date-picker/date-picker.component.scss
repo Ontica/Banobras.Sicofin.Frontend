@@ -8,7 +8,7 @@
 @import "../../../../styles/general-styles";
 
 .picker {
-  width: 84px !important;
+  width: $date-picker-width !important;
   margin: 2px 0 2px 0 !important;
   border-radius: 2px 0 0 2px !important;
 }

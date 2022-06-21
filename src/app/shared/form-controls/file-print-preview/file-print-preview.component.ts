@@ -7,6 +7,8 @@
 
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
+import { MediaType } from '@app/core';
+
 import { FileReport, FileType } from '@app/models';
 
 
@@ -39,7 +41,7 @@ export class FilePrintPreviewComponent implements OnChanges {
       return;
     }
 
-    if (type === FileType.HTML) {
+    if (type === MediaType.html || type === FileType.HTML) {
       this.openWindowCenter(url);
       return;
     }

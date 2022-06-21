@@ -154,10 +154,14 @@ input[type="file"] {
 
     .placeholder {
       color: $border-color-dark;
-      width: calc(100% - #{$area-width} - #{$tag-area-width});
+      width: calc(100% - #{$area-width});
       font-size: 9pt;
       margin: auto 0;
       padding-left: $space;
+    }
+
+    .placeholder-tag-required {
+      width: calc(100% - #{$area-width} - #{$tag-area-width});
     }
 
     &.multiple:not(.tag-required) {

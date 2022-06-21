@@ -46,7 +46,7 @@ $font-size-xsmall: 9pt;
   min-height: $control-height;
   margin: $control-margin;
   padding: $select-padding;
-  border-radius: 2px;
+  border-radius: $control-border-radius;
   font-family: $primary-font-family;
   border: $control-border;
   outline: none;

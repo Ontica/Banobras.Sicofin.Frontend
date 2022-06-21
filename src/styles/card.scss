@@ -81,13 +81,13 @@
 }
 
 .card-header-raised {
-  border-bottom: 4px solid $border-color-title;
+  border-bottom: 4px solid $title-border-color;
 
   @include raised-header;
 }
 
 .card-header-flat {
-  border-bottom: 4px solid $border-color-title;
+  border-bottom: 4px solid $title-border-color;
 }
 
 .card-shadow {

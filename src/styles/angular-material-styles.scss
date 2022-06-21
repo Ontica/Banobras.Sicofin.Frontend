@@ -244,7 +244,7 @@ table.mat-table {
     }
 
     &.column-action-check {
-      width: 32px;
+      width: $grid-row-height;
     }
 
     &:first-of-type {
@@ -286,7 +286,7 @@ table.mat-table {
 
     &.column-action-check {
       padding: 0;
-      width: 32px;
+      width: $grid-row-height;
       text-align: center;
       vertical-align: middle;
     }
@@ -311,7 +311,7 @@ table.mat-table {
   }
 
   tr {
-    height: 32px;
+    height: $grid-row-height;
 
     &.mat-header-row,
     &.mat-footer-row {
@@ -739,7 +739,7 @@ table.mat-table.emp-designer {
   &.mat-checkbox-checked,
   &.mat-checkbox-indeterminate {
     .mat-checkbox-background {
-      background-color: $warning-color !important;
+      background-color: $checkbox-warning-background-color !important;
     }
   }
 
@@ -805,7 +805,7 @@ table.mat-table.emp-designer {
 }
 
 .mat-checkbox.mat-checkbox-warning .mat-checkbox-ripple > .mat-ripple-element {
-  background: $warning-color !important;
+  background: $checkbox-warning-background-color !important;
 }
 
 //
