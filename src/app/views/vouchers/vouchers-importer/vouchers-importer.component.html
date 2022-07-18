@@ -23,7 +23,7 @@
               (change)="onImportTypeChange()">
               <mat-radio-button [value]="importTypes.excelFile">Archivo Excel</mat-radio-button>
               <mat-radio-button [value]="importTypes.txtFile">Archivo de texto plano</mat-radio-button>
-              <mat-radio-button [value]="importTypes.dataBase" *empNgHasPermission="permissions.FEATURE_DATABASE_IMPORT">
+              <mat-radio-button [value]="importTypes.dataBase" *empNgHasPermission="permissions.FEATURE_IMPORTACION_SISTEMAS_TRANSVERSALES">
                 De sistemas transversales
               </mat-radio-button>
             </mat-radio-group>

@@ -7,13 +7,13 @@
 
 
 export enum PermissionsLibrary {
-  MODULE_ACCOUNTING_OPERATIONS = 'module-accounting-operations',
-  MODULE_ACCOUNTING_DASHBOARDS = 'module-accounting-dashboards',
-  MODULE_ACCOUNTING_CATALOGUES_AND_RULES = 'module-accounting-catalogues-and-rules',
-  MODULE_SYSTEM_MANAGEMENT = 'module-system-management',
-  MODULE_BALANCE_EXPLORER = 'module-balance-explorer',
+  MODULE_OPERACIONES_CONTABLES = 'module-operaciones-contables',
+  MODULE_SALDOS_Y_REPORTES = 'module-saldos-y-reportes',
+  MODULE_REGLAS_Y_CATALOGOS = 'module-reglas-y-catalogos',
+  MODULE_ADMINISTRACION_DE_SISTEMA = 'module-administracion-de-sistema',
+  MODULE_EXPLORADOR_DE_SALDOS = 'module-explorador-de-saldos',
 
-  ROUTE_ACCOUNTING_OPERATIONS = 'route-accounting-operations',
+  ROUTE_OPERACIONES_CONTABLES = 'route-operaciones-contables',
 
   ROUTE_SALDOS_Y_BALANZAS = 'route-saldos-y-balanzas',
   ROUTE_REPORTES_REGULATORIOS = 'route-reportes-regulatorios',
@@ -21,22 +21,22 @@ export enum PermissionsLibrary {
   ROUTE_REPORTES_OPERATIVOS = 'route-reportes-operativos',
   ROUTE_REPORTES_FISCALES = 'route-reportes-fiscales',
 
-  ROUTE_ACCOUNTING_CATALOGUES_AND_RULES = 'route-accounting-catalogues-and-rules',
+  ROUTE_REGLAS_Y_CATALOGOS = 'route-reglas-y-catalogos',
   ROUTE_DATOS_OPERACION = 'route-datos-operacion',
 
   ROUTE_PANEL_CONTROL = 'route-panel-control',
   ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',
   ROUTE_TIPOS_CAMBIO = 'route-tipos-cambio',
 
-  FEATURE_DATABASE_IMPORT = 'feature-database-import',
-  FEATURE_ACCOUNTING_CALENDARS_EDITION = 'feature-accounting-calendars-edition',
+  FEATURE_IMPORTACION_DATOS_OPERACION = 'feature-importacion-datos-operacion',
+  FEATURE_EDICION_CALENDARIOS_CONTABLES = 'feature-edicion-calendarios-contables',
+  FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
+  FEATURE_IMPORTACION_SISTEMAS_TRANSVERSALES = 'feature-importacion-sistemas-transversales',
+  FEATURE_IMPORTACION_CONCILIACIONES = 'feature-importacion-conciliaciones',
   FEATURE_EP_RENTABILIDAD = 'feature-ep-rentabilidad',
   FEATURE_EP_CONCILIACION_SIC = 'feature-ep-conciliacion-sic',
   FEATURE_EP_EXPORTACION_SALDOS_MENSUALES = 'feature-ep-exportacion-saldos-mensuales',
   FEATURE_EP_EXPORTACION_SALDOS_DIARIOS = 'feature-ep-exportacion-saldos-diarios',
-  FEATURE_IMPORTACION_CONCILIACIONES = 'feature-importacion-conciliaciones',
-  FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
-  FEATURE_IMPORTACION_DATOS_OPERACION = 'feature-importacion-datos-operacion',
 }
 
 
@@ -45,25 +45,25 @@ export const ROUTES_LIBRARY = {
   // #region app-routing module
 
   operacion_contable: {
-    permission: PermissionsLibrary.MODULE_ACCOUNTING_OPERATIONS,
+    permission: PermissionsLibrary.MODULE_OPERACIONES_CONTABLES,
     parent: '',
     path: 'operacion-contable',
     fullpath: '/operacion-contable',
   },
   tableros: {
-    permission: PermissionsLibrary.MODULE_ACCOUNTING_DASHBOARDS,
+    permission: PermissionsLibrary.MODULE_SALDOS_Y_REPORTES,
     parent: '',
     path: 'tableros',
     fullpath: '/tableros',
   },
   reglas_y_catalogos: {
-    permission: PermissionsLibrary.MODULE_ACCOUNTING_CATALOGUES_AND_RULES,
+    permission: PermissionsLibrary.MODULE_REGLAS_Y_CATALOGOS,
     parent: '',
     path: 'reglas-y-catalogos',
     fullpath: '/reglas-y-catalogos',
   },
   administracion: {
-    permission: PermissionsLibrary.MODULE_SYSTEM_MANAGEMENT,
+    permission: PermissionsLibrary.MODULE_ADMINISTRACION_DE_SISTEMA,
     parent: '',
     path: 'administracion',
     fullpath: '/administracion',
@@ -85,31 +85,31 @@ export const ROUTES_LIBRARY = {
   // #region accounting-operation-routing module
 
   operacion_contable_mis_polizas_pendientes: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_OPERATIONS,
+    permission: PermissionsLibrary.ROUTE_OPERACIONES_CONTABLES,
     parent: 'operacion-contable',
     path: 'mis-polizas-pendientes',
     fullpath: '/operacion-contable/mis-polizas-pendientes',
   },
   operacion_contable_mesa_de_control: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_OPERATIONS,
+    permission: PermissionsLibrary.ROUTE_OPERACIONES_CONTABLES,
     parent: 'operacion-contable',
     path: 'mesa-de-control',
     fullpath: '/operacion-contable/mesa-de-control',
   },
   operacion_contable_polizas_en_libros: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_OPERATIONS,
+    permission: PermissionsLibrary.ROUTE_OPERACIONES_CONTABLES,
     parent: 'operacion-contable',
     path: 'polizas-en-libros',
     fullpath: '/operacion-contable/polizas-en-libros',
   },
   operacion_contable_todas_las_polizas: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_OPERATIONS,
+    permission: PermissionsLibrary.ROUTE_OPERACIONES_CONTABLES,
     parent: 'operacion-contable',
     path: 'todas-las-polizas',
     fullpath: '/operacion-contable/todas-las-polizas',
   },
   operacion_contable_volantes: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_OPERATIONS,
+    permission: PermissionsLibrary.ROUTE_OPERACIONES_CONTABLES,
     parent: 'operacion-contable',
     path: 'volantes',
     fullpath: '/operacion-contable/volantes',
@@ -155,13 +155,13 @@ export const ROUTES_LIBRARY = {
   // #region accounting-catalogues-and-rules-routing module
 
   reglas_y_catalogos_catalogos_de_cuentas: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
+    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
     path: 'catalogos-de-cuentas',
     fullpath: '/reglas-y-catalogos/catalogos-de-cuentas',
   },
   reglas_y_catalogos_auxiliares: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
+    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
     path: 'auxiliares',
     fullpath: '/reglas-y-catalogos/auxiliares',
@@ -173,13 +173,13 @@ export const ROUTES_LIBRARY = {
     fullpath: '/reglas-y-catalogos/datos-operacion',
   },
   reglas_y_catalogos_agrupaciones: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
+    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
     path: 'agrupaciones',
     fullpath: '/reglas-y-catalogos/agrupaciones',
   },
   reglas_y_catalogos_configuracion_de_reportes: {
-    permission: PermissionsLibrary.ROUTE_ACCOUNTING_CATALOGUES_AND_RULES,
+    permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,
     parent: 'reglas-y-catalogos',
     path: 'configuracion-de-reportes',
     fullpath: '/reglas-y-catalogos/configuracion-de-reportes',

@@ -34,7 +34,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Edición de fechas de los calendarios.' ,
     actionTitle: 'Períodos',
     type: 'AccountingCalendars',
-    permission: PermissionsLibrary.FEATURE_ACCOUNTING_CALENDARS_EDITION,
+    permission: PermissionsLibrary.FEATURE_EDICION_CALENDARIOS_CONTABLES,
   },
   {
     title: 'Rentabilidad',

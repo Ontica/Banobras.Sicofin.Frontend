@@ -17,8 +17,8 @@ export const AccountingOperationViews: View[] = [
     url: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.fullpath,
     permission: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.permission,
     actions: [
-      {action: 'ActionImport', name: 'Importar pólizas', permission: Permissions.FEATURE_DATABASE_IMPORT},
-      {action: 'ActionCreate', name: 'Nueva póliza', permission: Permissions.ROUTE_ACCOUNTING_OPERATIONS},
+      {action: 'ActionImport', name: 'Importar pólizas', permission: Permissions.FEATURE_IMPORTACION_SISTEMAS_TRANSVERSALES},
+      {action: 'ActionCreate', name: 'Nueva póliza', permission: Permissions.ROUTE_OPERACIONES_CONTABLES},
     ]
   },
   {
