@@ -19,9 +19,8 @@ import { sendEvent } from '@app/shared/utils';
 import { AccountsChartControlsEventType } from './accounts-chart-controls.component';
 
 export enum AccountsChartListEventType {
-  ACCOUNT_CLICKED       = 'AccountsChartList.Event.AccountClicked',
-  EXPORT_ACCOUNTS       = 'AccountsChartList.Event.ExportAccounts',
-  CLEAN_UP_ACCOUNT_DATA = 'AccountsChartList.Event.CleanUpAccountData',
+  ACCOUNT_CLICKED = 'AccountsChartList.Event.AccountClicked',
+  EXPORT_ACCOUNTS = 'AccountsChartList.Event.ExportAccounts',
 }
 
 @Component({
@@ -77,12 +76,6 @@ export class AccountsChartListComponent implements OnChanges {
       case AccountsChartControlsEventType.EXPORT_BUTTON_CLICKED:
 
         sendEvent(this.accountsChartListEvent, AccountsChartListEventType.EXPORT_ACCOUNTS);
-
-        return;
-
-      case AccountsChartControlsEventType.CLEAN_UP_DATA_BUTTON_CLICKED:
-
-        sendEvent(this.accountsChartListEvent, AccountsChartListEventType.CLEAN_UP_ACCOUNT_DATA);
 
         return;
 

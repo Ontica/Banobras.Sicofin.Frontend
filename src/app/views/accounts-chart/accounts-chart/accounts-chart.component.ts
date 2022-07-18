@@ -16,8 +16,6 @@ import { PermissionsLibrary } from '@app/main-layout';
 import { Account, AccountsChart, AccountsQuery, EmptyAccount, EmptyAccountsChart,
          EmptyAccountsQuery } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { sendEvent } from '@app/shared/utils';
 
 import {
@@ -69,8 +67,7 @@ export class AccountsChartComponent {
   displayAccountEditionWizard = false;
 
 
-  constructor(private accountsChartData: AccountsChartDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private accountsChartData: AccountsChartDataService) { }
 
 
   onCreateAccountButtonClicked() {
@@ -140,10 +137,6 @@ export class AccountsChartComponent {
         this.setDisplayExportModal(true);
         break;
 
-      case AccountsChartListEventType.CLEAN_UP_ACCOUNT_DATA:
-        this.cleanUpAccounts();
-        break;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -193,16 +186,6 @@ export class AccountsChartComponent {
       .then(x => {
         this.excelFileUrl = x.url;
       });
-  }
-
-
-  private cleanUpAccounts() {
-    this.setSubmitted(true);
-
-    this.accountsChartData.cleanUpAccounts()
-      .toPromise()
-      .then(x => this.messageBox.show(x, 'Limpiar cuentas'))
-      .finally(() => this.setSubmitted(false));
   }
 
 

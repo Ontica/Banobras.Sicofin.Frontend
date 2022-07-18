@@ -56,13 +56,6 @@ export class AccountsChartDataService {
   }
 
 
-  cleanUpAccounts(): Observable<string> {
-    const path = `v2/financial-accounting/accounts-charts/cleanup`;
-
-    return this.http.post<string>(path);
-  }
-
-
   getAccount(accountsChartUID: string,
              accountUID: string): Observable<Account> {
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
