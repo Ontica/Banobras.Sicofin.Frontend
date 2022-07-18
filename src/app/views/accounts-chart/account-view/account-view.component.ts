@@ -11,6 +11,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 import { DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
+import { PermissionsLibrary } from '@app/main-layout';
+
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { Account, AccountEditionCommandType, AccountEditionTypeList, AccountRole,
@@ -43,6 +45,8 @@ export class AccountViewComponent implements OnChanges {
   @Input() account: Account = EmptyAccount;
 
   @Output() accountViewEvent = new EventEmitter<EventInfo>();
+
+  permissions = PermissionsLibrary;
 
   formHandler: FormHandler;
 

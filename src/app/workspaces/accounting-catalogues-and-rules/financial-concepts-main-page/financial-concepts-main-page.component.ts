@@ -5,11 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty } from '@app/core';
+import { Assertion, EventInfo, isEmpty, SessionService } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
+
+import { PermissionsLibrary } from '@app/main-layout';
 
 import { EmptyFinancialConcept, EmptyFinancialConceptQuery, FinancialConcept, FinancialConceptQuery,
          FinancialConceptDescriptor } from '@app/models';
@@ -31,11 +33,13 @@ import {
   selector: 'emp-fa-financial-concepts-main-page',
   templateUrl: './financial-concepts-main-page.component.html',
 })
-export class FinancialConceptsMainPageComponent {
+export class FinancialConceptsMainPageComponent implements OnInit {
 
   isLoading = false;
 
   isLoadingFinancialConcept = false;
+
+  canEditConcepts = false;
 
   financialConceptQuery: FinancialConceptQuery = Object.assign({}, EmptyFinancialConceptQuery);
 
@@ -50,7 +54,13 @@ export class FinancialConceptsMainPageComponent {
   displayFinancialConceptTabbed = false;
 
 
-  constructor(private financialConceptsData: FinancialConceptsDataService) { }
+  constructor(private financialConceptsData: FinancialConceptsDataService,
+              private session: SessionService) { }
+
+
+  ngOnInit() {
+    this.setPermission();
+  }
 
 
   onFinancialConceptsViewerEvent(event: EventInfo) {
@@ -178,6 +188,11 @@ export class FinancialConceptsMainPageComponent {
   private setSelectedFinancialConcept(financialConcept: FinancialConcept) {
     this.selectedFinancialConcept = financialConcept;
     this.displayFinancialConceptTabbed = !isEmpty(financialConcept);
+  }
+
+
+  private setPermission() {
+    this.canEditConcepts = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_CONCEPTOS);
   }
 
 }

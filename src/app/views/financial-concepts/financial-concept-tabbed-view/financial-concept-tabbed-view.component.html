@@ -8,6 +8,7 @@
 
       <emp-fa-financial-concept-editor
         [financialConcept]="financialConcept"
+        [canEdit]="canEdit"
         (financialConceptEditorEvent)="onFinancialConceptEditorEvent($event)">
 
       </emp-fa-financial-concept-editor>
@@ -18,6 +19,7 @@
 
       <emp-fa-financial-concept-integration-edition
         [financialConcept]="financialConcept"
+        [canEdit]="canEdit"
         (financialConceptIntegrationEditionEvent)="onFinancialConceptIntegrationEditionEvent($event)">
 
       </emp-fa-financial-concept-integration-edition>

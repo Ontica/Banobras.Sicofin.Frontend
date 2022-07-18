@@ -28,6 +28,8 @@ export enum PermissionsLibrary {
   ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',
   ROUTE_TIPOS_CAMBIO = 'route-tipos-cambio',
 
+  FEATURE_EDICION_CUENTAS = 'feature-edicion-cuentas',
+  FEATURE_EDICION_CONCEPTOS = 'feature-edicion-conceptos',
   FEATURE_IMPORTACION_DATOS_OPERACION = 'feature-importacion-datos-operacion',
   FEATURE_EDICION_CALENDARIOS_CONTABLES = 'feature-edicion-calendarios-contables',
   FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',

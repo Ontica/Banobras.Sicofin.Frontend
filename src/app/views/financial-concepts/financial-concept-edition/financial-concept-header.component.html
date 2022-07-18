@@ -116,66 +116,70 @@
 
   </div>
 
-  <mat-divider class="horizontal"></mat-divider>
+  <ng-container #rowFooter *ngIf="canEdit">
 
-  <div #rowFooter fxLayout="row">
+    <mat-divider class="horizontal"></mat-divider>
 
-    <ng-container *ngIf="!isSaved">
+    <div fxLayout="row">
 
-      <div fxFlex fxLayoutAlign="end center">
+      <ng-container *ngIf="!isSaved">
 
-        <button (click)="onSubmitForm()"
-          [class.btn]="!formHandler.isValid"
-          [class.btn-action]="formHandler.isValid">
-          Agregar
-        </button>
-
-      </div>
-
-    </ng-container>
-
-    <ng-container *ngIf="isSaved">
-
-      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
-
-        <button type="button" class="btn-warning"
-          (click)="onRemoveButtonClicked()">
-          Eliminar
-        </button>
-
-      </div>
-
-      <div fxFlex fxLayoutAlign="end center">
-
-        <ng-container *ngIf="editionMode">
+        <div fxFlex fxLayoutAlign="end center">
 
           <button (click)="onSubmitForm()"
             [class.btn]="!formHandler.isValid"
             [class.btn-action]="formHandler.isValid">
-            Guardar
+            Agregar
           </button>
 
-          <button (click)="enableEditor(false)"
-            class="btn-base uppercase">
-            Descartar Cambios
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="isSaved">
+
+        <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+
+          <button type="button" class="btn-warning"
+            (click)="onRemoveButtonClicked()">
+            Eliminar
           </button>
 
-        </ng-container>
+        </div>
 
-        <ng-container *ngIf="!editionMode">
+        <div fxFlex fxLayoutAlign="end center">
 
-          <button
-            class="btn-action"
-            (click)="enableEditor(true)">
-            Editar
-          </button>
+          <ng-container *ngIf="editionMode">
 
-        </ng-container>
+            <button (click)="onSubmitForm()"
+              [class.btn]="!formHandler.isValid"
+              [class.btn-action]="formHandler.isValid">
+              Guardar
+            </button>
 
-      </div>
+            <button (click)="enableEditor(false)"
+              class="btn-base uppercase">
+              Descartar Cambios
+            </button>
 
-    </ng-container>
+          </ng-container>
 
-  </div>
+          <ng-container *ngIf="!editionMode">
+
+            <button
+              class="btn-action"
+              (click)="enableEditor(true)">
+              Editar
+            </button>
+
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+  </ng-container>
 
 </form>

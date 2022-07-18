@@ -38,13 +38,13 @@ export class FinancialConceptIntegrationEditionComponent {
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
 
+  @Input() canEdit = false;
+
   @Output() financialConceptIntegrationEditionEvent = new EventEmitter<EventInfo>();
 
   @ViewChild(ConfirmEditionResultModalComponent) resultModal: ConfirmEditionResultModalComponent;
 
   submitted = false;
-
-  canEdit = true;
 
   displayFinancialConceptEntryEditor = false;
 

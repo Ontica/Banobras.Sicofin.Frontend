@@ -9,6 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
+import { PermissionsLibrary } from '@app/main-layout';
+
 import { EmptyFinancialConcept, FinancialConcept, FinancialConceptDescriptor } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
@@ -44,6 +46,8 @@ export class FinancialConceptsViewerComponent implements OnChanges {
   @Input() isLoading = false;
 
   @Output() financialConceptsViewerEvent = new EventEmitter<EventInfo>();
+
+  permissions = PermissionsLibrary;
 
   financialConceptsGroupsName = '';
 

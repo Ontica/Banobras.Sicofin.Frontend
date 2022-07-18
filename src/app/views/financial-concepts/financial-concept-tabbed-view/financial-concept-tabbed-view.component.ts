@@ -16,7 +16,10 @@ import { sendEvent } from '@app/shared/utils';
 import {
   FinancialConceptEditorEventType
 } from '../financial-concept-edition/financial-concept-editor.component';
-import { FinancialConceptIntegrationEditionEventType } from '../financial-concept-integration-edition/financial-concept-integration-edition.component';
+
+import {
+  FinancialConceptIntegrationEditionEventType
+} from '../financial-concept-integration-edition/financial-concept-integration-edition.component';
 
 export enum FinancialConceptTabbedViewEventType {
   CLOSE_BUTTON_CLICKED      = 'FinancialConceptTabbedViewComponent.Event.CloseButtonClicked',
@@ -32,6 +35,8 @@ export enum FinancialConceptTabbedViewEventType {
 export class FinancialConceptTabbedViewComponent implements OnChanges {
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
+
+  @Input() canEdit = false;
 
   @Output() financialConceptTabbedViewEvent = new EventEmitter<EventInfo>();
 

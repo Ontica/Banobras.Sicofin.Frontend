@@ -34,6 +34,8 @@ export class FinancialConceptEditorComponent {
 
   @Output() financialConceptEditorEvent = new EventEmitter<EventInfo>();
 
+  @Input() canEdit = false;
+
   submitted = false;
 
   constructor(private financialConceptsData: FinancialConceptsDataService,

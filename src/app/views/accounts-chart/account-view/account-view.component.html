@@ -80,29 +80,33 @@
 
     </div>
 
-    <mat-divider></mat-divider>
+    <ng-container *empNgHasPermission="permissions.FEATURE_EDICION_CUENTAS">
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+      <mat-divider></mat-divider>
 
-      <div [fxFlex]="100/3">
-        <label>¿Qué se desea hacer con esta cuenta?:</label>
-        <emp-ng-select [(ngModel)]="accountEditionTypeSelected"
-          [ngModelOptions]="{standalone: true}"
-          [items]="accountEditionTypeList">
+      <div fxLayout="row" fxLayout.lt-md="column">
 
-        </emp-ng-select>
+        <div [fxFlex]="100/3">
+          <label>¿Qué se desea hacer con esta cuenta?:</label>
+          <emp-ng-select [(ngModel)]="accountEditionTypeSelected"
+            [ngModelOptions]="{standalone: true}"
+            [items]="accountEditionTypeList">
+
+          </emp-ng-select>
+        </div>
+
+        <div fxFlex="none" fxLayoutAlign="start end" [style.paddingBottom.px]="2">
+          <button
+            [class.btn]="accountEditionTypeSelected === null"
+            [class.btn-action]="accountEditionTypeSelected !== null"
+            (click)="onAccountEditionButtonClicked()">
+            Ejecutar el asistente
+          </button>
+        </div>
+
       </div>
 
-      <div fxFlex="none" fxLayoutAlign="start end" [style.paddingBottom.px]="2">
-        <button
-          [class.btn]="accountEditionTypeSelected === null"
-          [class.btn-action]="accountEditionTypeSelected !== null"
-          (click)="onAccountEditionButtonClicked()">
-          Ejecutar el asistente
-        </button>
-      </div>
-
-    </div>
+    </ng-container>
 
   </div>
 

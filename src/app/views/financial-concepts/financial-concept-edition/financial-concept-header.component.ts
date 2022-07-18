@@ -61,6 +61,8 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
 
+  @Input() canEdit = false;
+
   @Output() financialConceptHeaderEvent = new EventEmitter<EventInfo>();
 
   formHandler: FormHandler;
