@@ -15,6 +15,6 @@ const inputs = ['fxHide.notebook'];
 
 // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
 @Directive({selector, inputs})
-export class BreakpointDirective extends ShowHideDirective {
+export class EmpBreakpointDirective extends ShowHideDirective {
   protected inputs = inputs;
 }

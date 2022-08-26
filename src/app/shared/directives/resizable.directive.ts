@@ -11,7 +11,7 @@ import { Directive, ElementRef, Input } from '@angular/core';
   selector: '[empNgResizable]'
 })
 
-export class ResizableDirective {
+export class EmpResizableDirective {
 
   @Input() empNgResizableGrabWidth = 8;
 

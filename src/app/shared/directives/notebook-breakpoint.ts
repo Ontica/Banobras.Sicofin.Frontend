@@ -15,7 +15,7 @@ const NOTEBOOK_BREAKPOINT = [{
   priority: 1001,
 }];
 
-export const NotebookBreakPointsProvider = {
+export const EmpNotebookBreakPointsProvider = {
   provide: BREAKPOINT,
   useValue: NOTEBOOK_BREAKPOINT,
   multi: true,

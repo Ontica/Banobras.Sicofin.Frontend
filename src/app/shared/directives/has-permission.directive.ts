@@ -15,7 +15,7 @@ import { PermissionsLibrary } from '@app/main-layout';
 @Directive({
   selector: '[empNgHasPermission]'
 })
-export class HasPermissionDirective implements OnInit {
+export class EmpHasPermissionDirective implements OnInit {
 
   @Input() set empNgHasPermission(permission) {
     this.permission = permission;
