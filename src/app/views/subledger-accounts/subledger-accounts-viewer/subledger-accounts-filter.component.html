@@ -1,5 +1,5 @@
-<form #form="ngForm" autocomplete="off" class="form-section form-container"
-  [empNgSpinnerHost]="spinner" (keydown.enter)="$event.preventDefault()">
+<form #form="ngForm" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+  autocomplete="off" class="form-section form-container">
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 

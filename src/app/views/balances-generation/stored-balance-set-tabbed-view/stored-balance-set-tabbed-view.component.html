@@ -8,10 +8,9 @@
 
         <div fxLayout="column" fxFlexFill>
 
-          <form #filterForm="ngForm" fxFlex="none"
-            [style.padding]="0" [style.margin]="0" [style.paddingBottom.px]="8"
+          <form #filterForm="ngForm" empNgFormKeyDownEnter fxFlex="none"
             autocomplete="off" class="form-section form-container"
-            (keydown.enter)="$event.preventDefault()">
+            [style.padding]="0" [style.margin]="0" [style.paddingBottom.px]="8">
 
             <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
 

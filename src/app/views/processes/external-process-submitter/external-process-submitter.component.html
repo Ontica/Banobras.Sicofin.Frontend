@@ -11,8 +11,7 @@
 
       </emp-ng-spinner>
 
-      <form [formGroup]="formHandler.form" autocomplete="off" class="form-section"
-          (keydown.enter)="$event.preventDefault()">
+      <form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
         <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
 

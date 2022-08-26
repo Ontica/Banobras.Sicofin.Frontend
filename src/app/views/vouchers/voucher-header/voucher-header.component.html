@@ -1,5 +1,4 @@
-<form [formGroup]="formHandler.form" autocomplete="off" class="form-section"
-  (keydown.enter)="$event.preventDefault()">
+<form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
   <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
 
@@ -46,7 +45,7 @@
 
       <div [fxFlex]="100">
         <label>Concepto de la póliza:</label>
-        <textarea class="text-area" empNgTextareaAutoresize rows="1"
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
           [formControlName]="controls.concept"
           [class.invalid-control]="formHandler.showInvalidControl(controls.concept)">
 
