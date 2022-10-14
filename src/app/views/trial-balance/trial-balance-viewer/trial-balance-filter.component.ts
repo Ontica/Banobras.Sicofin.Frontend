@@ -92,6 +92,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get exchangeRatesDisabled(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.Valorizacion,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceQuery.trialBalanceType);
   }
@@ -112,6 +113,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get showCascadeBalancesDisabled(): boolean {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.Valorizacion,
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceQuery.trialBalanceType);
   }
@@ -126,6 +128,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get withSubledgerAccountDisabled(): boolean {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.Valorizacion,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceQuery.trialBalanceType);
@@ -159,6 +162,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceTypes.Balanza,
             TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.Valorizacion,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceQuery.trialBalanceType);
   }
@@ -167,6 +171,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get displayLevel(): boolean {
     return ![TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
              TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+             TrialBalanceTypes.Valorizacion,
              TrialBalanceTypes.BalanzaDolarizada]
               .includes(this.trialBalanceQuery.trialBalanceType);
   }
@@ -174,6 +179,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get displayWithAverageBalance(): boolean {
     return ![TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+             TrialBalanceTypes.Valorizacion,
              TrialBalanceTypes.BalanzaDolarizada]
               .includes(this.trialBalanceQuery.trialBalanceType);
   }
