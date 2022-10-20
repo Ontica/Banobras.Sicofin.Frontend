@@ -66,12 +66,6 @@ export const AccountingDashboardsViews: View[] = [
     permission: ROUTES_LIBRARY.tableros_reportes_regulatorios.permission,
   },
   {
-    name: 'AccountingDashboards.BalanceReconciliation',
-    title: 'Conciliaciones',
-    url: ROUTES_LIBRARY.tableros_conciliaciones.fullpath,
-    permission: ROUTES_LIBRARY.tableros_conciliaciones.permission,
-  },
-  {
     name: 'AccountingDashboards.OperationalReports',
     title: 'Reportes operativos',
     url: ROUTES_LIBRARY.tableros_reportes_operativos.fullpath,
@@ -82,6 +76,12 @@ export const AccountingDashboardsViews: View[] = [
     title: 'Reportes fiscales',
     url: ROUTES_LIBRARY.tableros_reportes_fiscales.fullpath,
     permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission,
+  },
+  {
+    name: 'AccountingDashboards.BalanceReconciliation',
+    title: 'Conciliaciones',
+    url: ROUTES_LIBRARY.tableros_conciliaciones.fullpath,
+    permission: ROUTES_LIBRARY.tableros_conciliaciones.permission,
   },
 ];
 
