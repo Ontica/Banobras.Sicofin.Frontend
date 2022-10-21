@@ -92,7 +92,7 @@ export class TransactionSlipEntryTableComponent implements OnChanges {
     this.displayedColumns = [];
 
     this.displayedColumns = ['entryNumber', 'account', 'sector', 'description', 'functionalArea',
-      'currency', 'exchangeRate', 'debit', 'credit'];
+      'verificationNumber', 'currency', 'exchangeRate', 'debit', 'credit'];
 
     if (this.showErrors) {
       this.displayedColumns = [...this.displayedColumns, ...['issuesCount']];

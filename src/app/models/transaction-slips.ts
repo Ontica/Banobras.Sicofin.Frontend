@@ -68,6 +68,7 @@ export interface TransactionSlipDescriptor {
   accountingDate: string;
   recordingDate: string;
   functionalArea: string;
+  verificationNumber: string;
   elaboratedBy: string;
   controlTotal: number;
   accountingVoucherId: number;
@@ -82,6 +83,7 @@ export const EmptyTransactionSlipDescriptor: TransactionSlipDescriptor = {
   accountingDate: '',
   recordingDate: '',
   functionalArea: '',
+  verificationNumber: '',
   elaboratedBy: '',
   controlTotal: 0,
   accountingVoucherId: 0,
@@ -125,6 +127,7 @@ export interface TransactionSlipEntry {
   subledgerAccount: string;
   currencyCode: string;
   functionalArea: string;
+  verificationNumber: string;
   description: string;
   exchangeRate: number;
   debit: number;
