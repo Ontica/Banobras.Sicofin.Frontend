@@ -49,6 +49,7 @@ export interface InputDatasetType {
   fileType: ReportingFileType;
   optional: boolean;
   count: number;
+  templateUrl?: string;
 }
 
 

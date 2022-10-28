@@ -4,7 +4,7 @@
 
     <div fxLayout="row" fxLayout.lt-sm="column">
 
-      <div [fxFlex]="additionalFieldConfig.show ? null : 25" *ngIf="typeFieldConfig.show">
+      <div [fxFlex]="additionalFieldConfig.show ? null : (100/3)" *ngIf="typeFieldConfig.show">
 
         <label>{{typeFieldConfig?.label ?? 'Tipo'}}:</label>
 
@@ -64,7 +64,7 @@
           [class.btn-action]="form.valid && isPeriodValid"
           [disabled]="form.invalid || !isPeriodValid"
           (click)="onSearchImportedDataClicked()">
-          Procesar
+          {{searchButtonText}}
         </button>
 
         <button [title]="'Consultar ' + dataType" *ngIf="showIconButtonToSubmit"

@@ -76,6 +76,8 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() importerDatasets: ImportDatasets = EmptyImportDatasets;
 
+  @Input() searchButtonText = 'Procesar';
+
   @Output() importedDataViewerEvent = new EventEmitter<EventInfo>();
 
   cardHint = 'Seleccionar los filtros';

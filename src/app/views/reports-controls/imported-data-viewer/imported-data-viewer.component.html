@@ -22,7 +22,7 @@
 
       <button class="btn" *ngIf="showImportData"
         (click)="displayImportModal = true">
-        Importar datos operativos
+        Importar {{dataType}}
       </button>
 
     </div>
@@ -43,6 +43,7 @@
         [periodRequired]="periodRequired"
         [typeFieldConfig]="typeFieldConfig"
         [additionalFieldConfig]="additionalFieldConfig"
+        [searchButtonText]="searchButtonText"
         (importDataFilterEvent)="onImportedDataFilterEvent($event)">
 
       </emp-fa-imported-data-filter>

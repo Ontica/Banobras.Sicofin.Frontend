@@ -33,6 +33,8 @@ export class ImportedDataFilterComponent implements OnInit {
 
   @Input() periodRequired = false;
 
+  @Input() searchButtonText = 'Procesar';
+
   @Output() importDataFilterEvent = new EventEmitter<EventInfo>();
 
   formData = {
