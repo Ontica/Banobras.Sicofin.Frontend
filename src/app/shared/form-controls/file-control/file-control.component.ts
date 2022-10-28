@@ -120,6 +120,13 @@ export class FileControlComponent implements OnChanges {
     event.stopPropagation();
   }
 
+  onDownloadTemplateFile() {
+    if (!this.tagFileSelected?.templateUrl) {
+      return;
+    }
+    this.downloadFile(this.tagFileSelected.templateUrl);
+  }
+
   formatBytes(sizeBytes) {
     return FormatLibrary.formatBytes(sizeBytes);
   }
@@ -167,7 +174,12 @@ export class FileControlComponent implements OnChanges {
   }
 
   private setTagFile() {
-    this.tagFileSelected = this.fileControlConfig.tagRequired ? this.fileControlConfig.tagDefault : null;
+    if (this.fileControlConfig.tagRequired) {
+      this.tagFileSelected =
+        this.fileControlConfig.tagsList.find(x => x.type === this.fileControlConfig.tagDefault);
+    } else {
+      this.tagFileSelected = null;
+    }
   }
 
   private getMenuOptions(file: FileData): FileControlMenuOptions[] {
@@ -265,7 +277,7 @@ export class FileControlComponent implements OnChanges {
       type: file.type,
       size: file.size,
       sizeString: FormatLibrary.formatBytes(file.size),
-      tag: this.tagFileSelected,
+      tag: this.tagFileSelected.type,
       fileIcon: this.getFileIcon(file.type),
       menuOptions: this.getMenuOptions(file)
     };

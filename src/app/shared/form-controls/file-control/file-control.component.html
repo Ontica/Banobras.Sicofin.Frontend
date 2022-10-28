@@ -99,10 +99,17 @@
       <emp-ng-select name="tag"
         bindLabel="name"
         bindValue="type"
+        [config]="{bindByValue: false}"
         [(ngModel)]="tagFileSelected"
         [items]="fileControlConfig.tagsList"
         [showError]="!tagFileSelected">
       </emp-ng-select>
+    </div>
+
+    <div *ngIf="!!tagFileSelected?.templateUrl" class="template-file-btn"
+      [title]="fileControlConfig.textTemplate"
+      (click)="onDownloadTemplateFile()">
+      <mat-icon>cloud_download</mat-icon>
     </div>
 
   </div>
