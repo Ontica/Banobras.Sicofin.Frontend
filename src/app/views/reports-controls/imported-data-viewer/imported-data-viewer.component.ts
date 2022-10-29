@@ -64,9 +64,9 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() exportationTypeDefault = true;
 
-  @Input() commandExecuted = false;
+  @Input() queryExecuted = false;
 
-  @Input() command: DataTableQuery = {};
+  @Input() query: DataTableQuery = {};
 
   @Input() data: DataTable = Object.assign({}, EmptyDataTable);
 
@@ -90,7 +90,7 @@ export class ImportedDataViewerComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.commandExecuted) {
+    if (changes.queryExecuted) {
       this.setText();
     }
   }
@@ -104,7 +104,7 @@ export class ImportedDataViewerComponent implements OnChanges {
         sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.CLEAR_INPUT_DATASET);
         return;
 
-      case DataImporterEventType.INPUT_DATASET_COMMAND_CHANGED:
+      case DataImporterEventType.INPUT_DATASET_QUERY_CHANGED:
         sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.GET_INPUT_DATASET, event.payload);
         return;
 
@@ -127,7 +127,7 @@ export class ImportedDataViewerComponent implements OnChanges {
     switch (event.type as ImportedDataFilterEventType) {
 
       case ImportedDataFilterEventType.EXECUTE_DATA_CLICKED:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.setExtortationType(event.payload.typeSelected?.exportTo as ExportationType[]);
         sendEvent(this.importedDataViewerEvent, ImportedDataViewerEventType.EXECUTE_DATA, event.payload);
         return;
@@ -167,7 +167,7 @@ export class ImportedDataViewerComponent implements OnChanges {
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
         const payload = {
-          command: this.command,
+          query: this.query,
           exportationType: event.payload.exportationType,
         };
 
@@ -187,7 +187,7 @@ export class ImportedDataViewerComponent implements OnChanges {
 
 
   private setText(displayedEntriesMessage?: string) {
-    if (!this.commandExecuted) {
+    if (!this.queryExecuted) {
       this.cardHint = 'Seleccionar los filtros';
       return;
     }

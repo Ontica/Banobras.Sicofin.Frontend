@@ -10,7 +10,7 @@ import { DateString, Identifiable } from '@app/core';
 import { DataTable, DataTableColumn, DataTableColumnType, DataTableQuery,
          DataTableEntry } from './data-table';
 
-import { ExecuteDatasetsCommand } from './imported-data';
+import { ExecuteDatasetsQuery } from './imported-data';
 
 export interface ExchangeRate {
   id: number;
@@ -86,12 +86,12 @@ export const EmptyExchangeRateData: ExchangeRateData = {
 };
 
 
-export function mapToExchangeRatesQuery(command: ExecuteDatasetsCommand): ExchangeRatesQuery {
+export function mapToExchangeRatesQuery(query: ExecuteDatasetsQuery): ExchangeRatesQuery {
   const exchangeRatesQuery: ExchangeRatesQuery = {
-    exchangeRateTypes: !!command.typeUID ? command.typeUID as string[] : [],
-    currencies: !!command.additionalUID ? command.additionalUID as string[] : [],
-    fromDate: command.fromDate,
-    toDate: command.toDate,
+    exchangeRateTypes: !!query.typeUID ? query.typeUID as string[] : [],
+    currencies: !!query.additionalUID ? query.additionalUID as string[] : [],
+    fromDate: query.fromDate,
+    toDate: query.toDate,
   };
 
   return exchangeRatesQuery;

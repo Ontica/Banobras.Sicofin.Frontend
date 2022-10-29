@@ -19,7 +19,7 @@ import { ExchangeRatesDataService } from '@app/data-services';
 
 import { PermissionsLibrary } from '@app/main-layout';
 
-import { EmptyExchangeRateData, ExchangeRatesQuery, ExchangeRateData, ExecuteDatasetsCommand,
+import { EmptyExchangeRateData, ExchangeRatesQuery, ExchangeRateData, ExecuteDatasetsQuery,
          mapToExchangeRatesQuery } from '@app/models';
 
 import {
@@ -83,10 +83,10 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
     switch (event.type as ImportedDataViewerEventType) {
 
       case ImportedDataViewerEventType.EXECUTE_DATA:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.queryExecuted = false;
         this.exchangeRateData = Object.assign({}, EmptyExchangeRateData);
-        this.query = mapToExchangeRatesQuery(event.payload.command as ExecuteDatasetsCommand);
+        this.query = mapToExchangeRatesQuery(event.payload.query as ExecuteDatasetsQuery);
         this.searchExchangeRates(this.query);
         return;
 

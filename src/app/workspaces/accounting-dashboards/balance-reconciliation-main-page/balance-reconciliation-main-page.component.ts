@@ -9,10 +9,10 @@ import { Component, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { ReconciliationType, InputDatasetsCommand, ReconciliationDatasets, ImportInputDatasetCommand,
+import { ReconciliationType, InputDatasetsQuery, ReconciliationDatasets, ImportInputDatasetCommand,
          InputDataset, mapToReconciliationImportInputDatasetCommand, mapToReconciliationInputDatasetsCommand,
          ReconciliationImportInputDatasetCommand, ReconciliationData, EmptyReconciliationData,
-         ReconciliationInputDatasetsCommand, mapToReconciliationCommand, ExecuteDatasetsCommand,
+         ReconciliationInputDatasetsCommand, mapToReconciliationCommand, ExecuteDatasetsQuery,
          ReconciliationCommand } from '@app/models';
 
 import { ReconciliationDataService } from '@app/data-services';
@@ -69,10 +69,10 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
     switch (event.type as ImportedDataViewerEventType) {
 
       case ImportedDataViewerEventType.EXECUTE_DATA:
-        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
         this.reconciliationCommandExecuted = false;
         this.reconciliationDataTable = Object.assign({}, EmptyReconciliationData);
-        this.reconciliationCommand = mapToReconciliationCommand(event.payload.command as ExecuteDatasetsCommand);
+        this.reconciliationCommand = mapToReconciliationCommand(event.payload.query as ExecuteDatasetsQuery);
         this.executeReconciliation(this.reconciliationCommand);
         return;
 
@@ -86,10 +86,10 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
         return;
 
       case ImportedDataViewerEventType.GET_INPUT_DATASET:
-        Assertion.assertValue(event.payload.command.typeUID, 'event.payload.command.typeUID');
-        Assertion.assertValue(event.payload.command.date, 'event.payload.command.date');
+        Assertion.assertValue(event.payload.query.typeUID, 'event.payload.query.typeUID');
+        Assertion.assertValue(event.payload.query.date, 'event.payload.query.date');
 
-        command = mapToReconciliationInputDatasetsCommand(event.payload.command as InputDatasetsCommand);
+        command = mapToReconciliationInputDatasetsCommand(event.payload.query as InputDatasetsQuery);
         this.getReconciliationInputDatasets(command);
         return;
 
@@ -130,7 +130,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   }
 
 
-  private getReconciliationInputDatasets(command: InputDatasetsCommand) {
+  private getReconciliationInputDatasets(command: ReconciliationInputDatasetsCommand) {
     this.setSubmitted(true);
     this.reconciliationData.getReconciliationInputDatasets(command)
       .toPromise()

@@ -9,8 +9,8 @@ import { DateString, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableEntry } from './data-table';
 
-import { ExecuteDatasetsCommand, ImportDatasets, ImportInputDatasetCommand, InputDataset,
-         InputDatasetsCommand, InputDatasetType } from './imported-data';
+import { ExecuteDatasetsQuery, ImportDatasets, ImportInputDatasetCommand, InputDataset,
+         InputDatasetsQuery, InputDatasetType } from './imported-data';
 
 
 export interface ReconciliationType extends Identifiable {
@@ -60,21 +60,21 @@ export interface ReconciliationDatasets extends ImportDatasets {
 }
 
 
-export function mapToReconciliationCommand(command: ExecuteDatasetsCommand): ReconciliationCommand {
+export function mapToReconciliationCommand(query: ExecuteDatasetsQuery): ReconciliationCommand {
   const reconciliationCommand: ReconciliationCommand = {
-    reconciliationTypeUID: command.typeUID as string,
-    date: command.fromDate,
+    reconciliationTypeUID: query.typeUID as string,
+    date: query.fromDate,
   };
 
   return reconciliationCommand;
 }
 
 
-export function mapToReconciliationInputDatasetsCommand(command: InputDatasetsCommand)
+export function mapToReconciliationInputDatasetsCommand(query: InputDatasetsQuery)
   : ReconciliationInputDatasetsCommand {
   const reconciliationInputDatasetCommand: ReconciliationInputDatasetsCommand = {
-    reconciliationTypeUID: command.typeUID,
-    date: command.date,
+    reconciliationTypeUID: query.typeUID,
+    date: query.date,
   };
 
   return reconciliationInputDatasetCommand;

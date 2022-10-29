@@ -9,8 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { EmptyImportDatasets, ImportDatasets, ImportInputDatasetCommand, InputDatasetsCommand,
-         InputDatasetType, mapToFileDataFromInputDataset } from '@app/models';
+import { EmptyImportDatasets, ImportDatasets, ImportInputDatasetCommand, InputDatasetsQuery, InputDatasetType,
+         mapToFileDataFromInputDataset } from '@app/models';
 
 import { FileControlActions, FileData,
          FileType } from '@app/shared/form-controls/file-control/file-control-data';
@@ -19,7 +19,7 @@ import { sendEvent } from '@app/shared/utils';
 
 export enum DataImporterEventType {
   CLOSE_MODAL_CLICKED  = 'DataImporterComponent.Event.CloseModalClicked',
-  INPUT_DATASET_COMMAND_CHANGED = 'DataImporterComponent.Event.InputDatasetCommandChanged',
+  INPUT_DATASET_QUERY_CHANGED = 'DataImporterComponent.Event.InputDatasetQueryChanged',
   IMPORT_DATASET_CLICKED = 'DataImporterComponent.Event.ImportDataSetClicked',
   DELETE_DATASET_CLICKED = 'DataImporterComponent.Event.DeleteDataSetClicked',
 }
@@ -124,7 +124,7 @@ export class DataImporterComponent implements OnChanges{
         return;
       }
 
-      this.emitInputDatasetCommand();
+      this.emitInputDatasetQuery();
     });
   }
 
@@ -147,13 +147,13 @@ export class DataImporterComponent implements OnChanges{
   }
 
 
-  private emitInputDatasetCommand() {
-    const command: InputDatasetsCommand = {
+  private emitInputDatasetQuery() {
+    const query: InputDatasetsQuery = {
       typeUID: this.importTypeRequired ? this.formData.importType.uid : '',
       date: this.formData.date,
     };
 
-    sendEvent(this.dataImporterEvent, DataImporterEventType.INPUT_DATASET_COMMAND_CHANGED, {command});
+    sendEvent(this.dataImporterEvent, DataImporterEventType.INPUT_DATASET_QUERY_CHANGED, {query});
   }
 
 

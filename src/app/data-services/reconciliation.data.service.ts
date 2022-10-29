@@ -11,9 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { FileReport, InputDatasetsCommand, ReconciliationData, ReconciliationDatasets,
-         ReconciliationImportInputDatasetCommand, ReconciliationInputDatasetsCommand,
-         ReconciliationType } from '@app/models';
+import { FileReport, ReconciliationData, ReconciliationDatasets, ReconciliationImportInputDatasetCommand,
+         ReconciliationInputDatasetsCommand, ReconciliationType } from '@app/models';
 
 
 @Injectable()
@@ -47,7 +46,7 @@ export class ReconciliationDataService {
   }
 
 
-  getReconciliationInputDatasets(command: InputDatasetsCommand): Observable<ReconciliationDatasets> {
+  getReconciliationInputDatasets(command: ReconciliationInputDatasetsCommand): Observable<ReconciliationDatasets> {
     Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/reconciliation/datasets`;

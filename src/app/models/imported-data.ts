@@ -29,7 +29,7 @@ export const DefaultFieldConfig: FieldConfig = {
 }
 
 
-export interface ExecuteDatasetsCommand {
+export interface ExecuteDatasetsQuery {
   typeUID?: string | string[];
   additionalUID?: string | string[];
   fromDate?: DateString;
@@ -37,7 +37,7 @@ export interface ExecuteDatasetsCommand {
 }
 
 
-export interface InputDatasetsCommand {
+export interface InputDatasetsQuery {
   typeUID: string;
   date: DateString;
 }

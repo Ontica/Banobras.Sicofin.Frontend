@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { ExecuteDatasetsCommand, FieldConfig } from '@app/models';
+import { ExecuteDatasetsQuery, FieldConfig } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -61,7 +61,7 @@ export class ImportedDataFilterComponent implements OnInit {
 
   onSearchImportedDataClicked() {
     const payload = {
-      command: this.getCommand(),
+      query: this.getQuery(),
       typeSelected: this.getTypeSelected(),
     };
 
@@ -79,24 +79,24 @@ export class ImportedDataFilterComponent implements OnInit {
   }
 
 
-  private getCommand(): ExecuteDatasetsCommand {
-    let data: ExecuteDatasetsCommand = {
+  private getQuery(): ExecuteDatasetsQuery {
+    let query: ExecuteDatasetsQuery = {
       fromDate: this.formData.fromDate,
     };
 
     if (this.periodRequired) {
-      data.toDate = this.formData.toDate;
+      query.toDate = this.formData.toDate;
     }
 
     if (this.typeFieldConfig.show) {
-      data.typeUID = this.formData.type;
+      query.typeUID = this.formData.type;
     }
 
     if (this.additionalFieldConfig.show) {
-      data.additionalUID = this.formData.additional;
+      query.additionalUID = this.formData.additional;
     }
 
-    return data;
+    return query;
   }
 
 
