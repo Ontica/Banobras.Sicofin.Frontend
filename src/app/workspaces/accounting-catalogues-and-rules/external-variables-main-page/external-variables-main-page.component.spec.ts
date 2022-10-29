@@ -7,22 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccountingCataloguesAndRulesWorkspaceComponent } from './accounting-catalogues-and-rules-workspace.component';
+import { ExternalVariablesMainPageComponent } from './external-variables-main-page.component';
 
-
-describe('AccountingCataloguesAndRulesWorkspaceComponent', () => {
-  let component: AccountingCataloguesAndRulesWorkspaceComponent;
-  let fixture: ComponentFixture<AccountingCataloguesAndRulesWorkspaceComponent>;
+describe('ExternalVariablesMainPageComponent', () => {
+  let component: ExternalVariablesMainPageComponent;
+  let fixture: ComponentFixture<ExternalVariablesMainPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountingCataloguesAndRulesWorkspaceComponent ]
+      declarations: [ ExternalVariablesMainPageComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccountingCataloguesAndRulesWorkspaceComponent);
+    fixture = TestBed.createComponent(ExternalVariablesMainPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

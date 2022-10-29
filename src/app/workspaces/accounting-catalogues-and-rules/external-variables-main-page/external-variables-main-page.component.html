@@ -1,0 +1,24 @@
+<div class="explorer">
+
+  <div class="primary">
+
+    <emp-fa-imported-data-viewer
+      dataType="valores externos"
+      [permissionForOptions]="permissionToImport"
+      [typeFieldConfig]="{show: true, required: true, list: externalVariableSetList}"
+      [importTypeRequired]="true"
+      [importerDatasets]="externalValuesDatasets"
+      [query]="externalValuesQuery"
+      [queryExecuted]="externalValuesQueryExecuted"
+      [data]="externalValuesData"
+      [exportationTypeDefault]="false"
+      [fileUrl]="fileUrl"
+      [isLoading]="isLoading"
+      searchButtonText="Ver"
+      (importedDataViewerEvent)="onImportedDataViewerEvent($event)">
+
+    </emp-fa-imported-data-viewer>
+
+  </div>
+
+</div>

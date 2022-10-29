@@ -100,10 +100,10 @@ export const AccountingCataloguesAndRulesViews: View[] = [
     permission: ROUTES_LIBRARY.reglas_y_catalogos_auxiliares.permission,
   },
   {
-    name: 'AccountingCataloguesAndRulesViews.OperationsData',
-    title: 'Datos operación',
-    url: ROUTES_LIBRARY.reglas_y_catalogos_datos_operacion.fullpath,
-    permission: ROUTES_LIBRARY.reglas_y_catalogos_datos_operacion.permission,
+    name: 'AccountingCataloguesAndRulesViews.ExternalVariables',
+    title: 'Valores por defecto',
+    url: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.fullpath,
+    permission: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.permission,
   },
   {
     name: 'AccountingCataloguesAndRulesViews.AccountsGroups',

@@ -13,6 +13,7 @@ import { BalancesDataService } from './balances.data.service';
 import { BalancesStoreDataService } from './balances-store.data.service';
 import { ExchangeRatesDataService } from './exchange-rates.data.service';
 import { ExternalProcessDataService } from './external-process.data.service';
+import { ExternalVariablesDataService } from './external-variables.data.service';
 import { FinancialConceptsDataService } from './financial-concepts.data.service';
 import { FinancialReportsDataService } from './financial-reports.data.service';
 import { FinancialReportsEditionDataService } from './financial-reports-edition.data.service';
@@ -36,6 +37,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     BalancesStoreDataService,
     ExchangeRatesDataService,
     ExternalProcessDataService,
+    ExternalVariablesDataService,
     FileDownloadService,
     FinancialConceptsDataService,
     FinancialReportsDataService,

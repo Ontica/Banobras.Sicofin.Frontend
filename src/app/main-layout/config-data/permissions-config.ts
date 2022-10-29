@@ -22,7 +22,7 @@ export enum PermissionsLibrary {
   ROUTE_REPORTES_FISCALES = 'route-reportes-fiscales',
 
   ROUTE_REGLAS_Y_CATALOGOS = 'route-reglas-y-catalogos',
-  ROUTE_DATOS_OPERACION = 'route-datos-operacion',
+  ROUTE_VALORES_EXTERNOS = 'route-valores-externos',
 
   ROUTE_PANEL_CONTROL = 'route-panel-control',
   ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',
@@ -30,7 +30,7 @@ export enum PermissionsLibrary {
 
   FEATURE_EDICION_CUENTAS = 'feature-edicion-cuentas',
   FEATURE_EDICION_CONCEPTOS = 'feature-edicion-conceptos',
-  FEATURE_IMPORTACION_DATOS_OPERACION = 'feature-importacion-datos-operacion',
+  FEATURE_IMPORTACION_VALORES_EXTERNOS = 'feature-importacion-valores-externos',
   FEATURE_EDICION_CALENDARIOS_CONTABLES = 'feature-edicion-calendarios-contables',
   FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
   FEATURE_IMPORTACION_SISTEMAS_TRANSVERSALES = 'feature-importacion-sistemas-transversales',
@@ -168,11 +168,11 @@ export const ROUTES_LIBRARY = {
     path: 'auxiliares',
     fullpath: '/reglas-y-catalogos/auxiliares',
   },
-  reglas_y_catalogos_datos_operacion: {
-    permission: PermissionsLibrary.ROUTE_DATOS_OPERACION,
+  reglas_y_catalogos_valores_externos: {
+    permission: PermissionsLibrary.ROUTE_VALORES_EXTERNOS,
     parent: 'reglas-y-catalogos',
-    path: 'datos-operacion',
-    fullpath: '/reglas-y-catalogos/datos-operacion',
+    path: 'valores-externos',
+    fullpath: '/reglas-y-catalogos/valores-externos',
   },
   reglas_y_catalogos_agrupaciones: {
     permission: PermissionsLibrary.ROUTE_REGLAS_Y_CATALOGOS,

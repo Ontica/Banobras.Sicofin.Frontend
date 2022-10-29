@@ -12,12 +12,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { ROUTES_LIBRARY } from '@app/main-layout';
 
 import {
-  AccountingCataloguesAndRulesWorkspaceComponent
-} from './accounting-catalogues-and-rules-workspace.component';
-
-import {
   AccountsChartMainPageComponent
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
+
+import {
+  ExternalVariablesMainPageComponent
+} from './external-variables-main-page/external-variables-main-page.component';
 
 import {
   FinancialConceptsMainPageComponent
@@ -44,9 +44,9 @@ const routes: Routes = [
     component: SubledgerAccountsMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_datos_operacion.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_datos_operacion.path,
-    component: AccountingCataloguesAndRulesWorkspaceComponent,
+    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.permission },
+    path: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.path,
+    component: ExternalVariablesMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.permission },
@@ -58,11 +58,6 @@ const routes: Routes = [
     path: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.path,
     component: ReportDesignerMainPageComponent,
   },
-  // {
-  //   data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.permission },
-  //   path: ROUTES_LIBRARY.reglas_y_catalogos_reglas_contabilizadoras.path,
-  //   component: AccountingCataloguesAndRulesWorkspaceComponent,
-  // },
   {
     path: '',
     redirectTo: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.path,

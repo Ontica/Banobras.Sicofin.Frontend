@@ -23,11 +23,11 @@ import { ReportsControlsModule } from '@app/views/reports-controls/reports-contr
 import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger-accounts.module';
 
 import {
-  AccountingCataloguesAndRulesWorkspaceComponent
-} from './accounting-catalogues-and-rules-workspace.component';
-import {
   AccountsChartMainPageComponent
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
+import {
+  ExternalVariablesMainPageComponent
+} from './external-variables-main-page/external-variables-main-page.component';
 import {
   FinancialConceptsMainPageComponent
 } from './financial-concepts-main-page/financial-concepts-main-page.component';
@@ -59,8 +59,8 @@ import {
   ],
 
   declarations: [
-    AccountingCataloguesAndRulesWorkspaceComponent,
     AccountsChartMainPageComponent,
+    ExternalVariablesMainPageComponent,
     FinancialConceptsMainPageComponent,
     ReportDesignerMainPageComponent,
     SubledgerAccountsMainPageComponent,
