@@ -40,7 +40,7 @@ export class ExternalVariablesDataService {
   exportExternalValues(query: ExternalValuesQuery): Observable<FileReport> {
     Assertion.assertValue(query, 'query');
 
-    const path = `v2/financial-accounting/financial-concepts/external-values/excel`;
+    const path = `v2/financial-accounting/financial-concepts/external-values/export`;
 
     return this.http.post<FileReport>(path, query);
   }

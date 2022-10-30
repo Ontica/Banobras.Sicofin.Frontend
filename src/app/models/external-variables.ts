@@ -21,6 +21,7 @@ export interface ExternalVariableSet extends Identifiable {
 export interface ExternalValuesQuery {
   externalVariablesSetUID: string;
   date: DateString;
+  exportTo?: string;
 }
 
 
