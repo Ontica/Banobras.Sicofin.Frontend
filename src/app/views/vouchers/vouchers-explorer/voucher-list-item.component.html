@@ -3,7 +3,7 @@
   <div class="list-header-container">
 
     <div fxLayout="row" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" fxLayoutAlign="start center">
-      <div fxflex="20px">
+      <div fxFlex="20px">
         <div *ngIf="voucherList.length > 0">
 
           <emp-ng-check-box-all
@@ -44,7 +44,7 @@
 
 <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" *ngIf="!displayHeader">
 
-  <div fxflex="20px">
+  <div fxFlex="20px">
     <mat-checkbox
       [checked]="selected"
       (click)="$event.stopPropagation()"
