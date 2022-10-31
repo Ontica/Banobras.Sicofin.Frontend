@@ -7,13 +7,13 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, Identifiable } from '@app/core';
 
-import { ExternalVariableSet, InputDatasetsQuery, ImportInputDatasetCommand, InputDataset, ImportDatasets,
-         mapToExternalValuesDatasetsQuery, ExternalValuesDatasetsQuery,
-         mapToExternalValuesImportDatasetCommand, ExternalValuesImportDatasetCommand, ExternalValuesQuery,
-         EmptyExternalValuesData, ExternalValuesData, mapToExternalValuesQuery,
-         ExecuteDatasetsQuery } from '@app/models';
+import { DatasetModes, DatasetModesList, EmptyExternalValuesData, ExecuteDatasetsQuery, ExternalValuesData,
+         ExternalValuesDatasetsQuery, ExternalValuesImportDatasetCommand, ExternalValuesQuery,
+         ExternalVariableSet, ImportDatasets, ImportInputDatasetCommand, InputDataset, InputDatasetsQuery,
+         mapToExternalValuesDatasetsQuery, mapToExternalValuesImportDatasetCommand,
+         mapToExternalValuesQuery } from '@app/models';
 
 import { ExternalVariablesDataService } from '@app/data-services';
 
@@ -45,6 +45,10 @@ export class ExternalVariablesMainPageComponent implements OnInit {
   permissionToImport = PermissionsLibrary.FEATURE_IMPORTACION_VALORES_EXTERNOS;
 
   fileUrl = '';
+
+  datasetModesList: Identifiable[] = DatasetModesList;
+
+  DatasetModes = DatasetModes;
 
   submitted = false;
 

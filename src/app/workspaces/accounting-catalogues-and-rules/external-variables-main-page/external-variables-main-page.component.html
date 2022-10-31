@@ -6,6 +6,8 @@
       dataType="valores externos"
       [permissionForOptions]="permissionToImport"
       [typeFieldConfig]="{show: true, required: true, list: externalVariableSetList}"
+      [additionalFieldConfig]="{show: true, label: 'Incluir', required: false, multiple: false,
+                                list: datasetModesList, defaultValue: DatasetModes.onlyLoadedValues}"
       [importTypeRequired]="true"
       [importerDatasets]="externalValuesDatasets"
       [query]="externalValuesQuery"

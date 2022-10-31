@@ -18,8 +18,27 @@ export interface ExternalVariableSet extends Identifiable {
 }
 
 
+export enum DatasetModes {
+  onlyLoadedValues = 'onlyLoadedValues',
+  allValues        = 'allValues',
+}
+
+
+export const DatasetModesList: Identifiable[] = [
+  {
+    uid: DatasetModes.onlyLoadedValues,
+    name: 'Solo valores importados',
+  },
+  {
+    uid: DatasetModes.allValues,
+    name: 'Lista completa',
+  },
+];
+
+
 export interface ExternalValuesQuery {
   externalVariablesSetUID: string;
+  datasetMode: string;
   date: DateString;
   exportTo?: string;
 }
@@ -40,7 +59,7 @@ export interface ExternalValuesData extends DataTable {
 
 
 export const EmptyExternalValuesData: ExternalValuesData = {
-  query: {externalVariablesSetUID: '', date: ''},
+  query: {externalVariablesSetUID: '', datasetMode: '', date: ''},
   columns: [],
   entries: [],
 };
@@ -57,6 +76,7 @@ export function mapToExternalValuesQuery(query: ExecuteDatasetsQuery): ExternalV
   const externalValuesQuery: ExternalValuesQuery = {
     externalVariablesSetUID: query.typeUID as string,
     date: query.fromDate,
+    datasetMode: query.additionalUID as string,
   };
 
   return externalValuesQuery;
