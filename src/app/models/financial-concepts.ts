@@ -86,7 +86,7 @@ export enum FinancialConceptEntryType {
 
 export const FinancialConceptEntryTypeList: Identifiable[] = [
   {uid: FinancialConceptEntryType.FinancialConceptReference, name: 'Referencia a concepto'},
-  {uid: FinancialConceptEntryType.ExternalVariable,          name: 'Dato operativo'},
+  {uid: FinancialConceptEntryType.ExternalVariable,          name: 'Valor externo'},
   {uid: FinancialConceptEntryType.Account,                   name: 'Cuenta'},
 ];
 

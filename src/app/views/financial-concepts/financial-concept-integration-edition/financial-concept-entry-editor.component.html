@@ -68,7 +68,7 @@
 
           <ng-container #externalVariableSection *ngIf="isExternalVariableType">
 
-            <div class="section-title"> Información del dato operativo </div>
+            <div class="section-title"> Información del valor externo </div>
 
             <div fxLayout="row">
 
@@ -82,7 +82,7 @@
               </div>
 
               <div [fxFlex]="200/3">
-                <label>Dato operativo:</label>
+                <label>Valor externo:</label>
                 <emp-ng-select
                   [formControlName]="controls.externalVariable"
                   [items]="externalVariableList"
