@@ -32,19 +32,15 @@
 
             </div>
 
-            <div fxflex="none" fxFlexAlign="end">
+            <div fxFlex="none" fxFlexAlign="end">
 
-              <div fxFlex="none">
+              <label>Fecha:</label>
+              <emp-ng-datepicker name="fromDate"
+                [(ngModel)]="formData.date"
+                [showError]="!formData.date"
+                (valueChange)="onFilterChanges()">
 
-                <label>Fecha:</label>
-                <emp-ng-datepicker name="fromDate"
-                  [(ngModel)]="formData.date"
-                  [showError]="!formData.date"
-                  (valueChange)="onFilterChanges()">
-
-                </emp-ng-datepicker>
-
-              </div>
+              </emp-ng-datepicker>
 
             </div>
 

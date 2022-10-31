@@ -74,7 +74,7 @@ export class ImportedDataFilterComponent implements OnInit {
       fromDate: null,
       toDate: null,
       type: null,
-      additional: null,
+      additional: this.additionalFieldConfig?.defaultValue ?? null,
     };
   }
 

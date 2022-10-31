@@ -20,7 +20,7 @@
 
       </div>
 
-      <div [fxFlex]="typeFieldConfig.show ? null : 25" *ngIf="additionalFieldConfig.show">
+      <div [fxFlex]="typeFieldConfig.show ? null : (100/3)" *ngIf="additionalFieldConfig.show">
 
         <label>{{additionalFieldConfig?.label ?? 'Filtro'}}:</label>
 
@@ -34,7 +34,7 @@
 
       </div>
 
-      <div fxflex="none" *ngIf="!periodRequired">
+      <div fxFlex="none" *ngIf="!periodRequired">
 
         <label>Fecha:</label>
         <emp-ng-datepicker name="fromDate" required

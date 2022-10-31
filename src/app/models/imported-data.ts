@@ -17,6 +17,7 @@ export interface FieldConfig {
   list: Identifiable[];
   required: boolean;
   multiple?: boolean;
+  defaultValue?: string;
 }
 
 
