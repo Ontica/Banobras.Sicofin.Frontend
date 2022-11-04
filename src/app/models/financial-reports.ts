@@ -13,6 +13,13 @@ import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry,
 import { Positioning } from './edition-command';
 
 
+export interface FinancialReportTypeActions {
+  getAccountsIntegration: boolean;
+  datePeriod: boolean;
+  singleDate: boolean;
+}
+
+
 export interface FinancialReport extends DataTable {
   query: FinancialReportQuery;
   columns: DataTableColumn[];

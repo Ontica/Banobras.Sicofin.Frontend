@@ -31,9 +31,9 @@
 
       </div>
 
-      <div [fxFlex]="displayLedgerAndPeriod ? '225px' : '120px'">
+      <div [fxFlex]="showField.datePeriod ? '225px' : '120px'">
 
-        <ng-container *ngIf="displayDate">
+        <ng-container *ngIf="showField.singleDate">
 
           <label>Fecha:</label>
 
@@ -45,7 +45,7 @@
 
         </ng-container>
 
-        <ng-container *ngIf="displayLedgerAndPeriod">
+        <ng-container *ngIf="showField.datePeriod">
 
           <label>Período:</label>
 
@@ -77,9 +77,10 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="displayLedgerAndPeriod || displayAccountAndWithSubledgerAccount">
+    <div fxLayout="row" fxLayout.lt-sm="column"
+      *ngIf="showField.ledgers || showField.account || showField.withSubledgerAccount">
 
-        <div fxFlex="50" *ngIf="displayLedgerAndPeriod">
+        <div fxFlex="50" *ngIf="showField.ledgers">
 
           <label>Contabilidad:</label>
 
@@ -93,35 +94,32 @@
 
         </div>
 
-        <ng-container *ngIf="displayAccountAndWithSubledgerAccount">
+        <div fxFlex *ngIf="showField.account">
 
-          <div fxFlex>
+          <label>Cuenta:</label>
 
-            <label>Cuenta:</label>
+          <input type="text" class="text-box" name="fromAccount" required
+            [(ngModel)]="operationalReportQuery.accountNumber"
+            [class.invalid-control]="!operationalReportQuery.accountNumber"
+            (keyup.escape)="operationalReportQuery.accountNumber = ''">
 
-            <input type="text" class="text-box" name="fromAccount" required
-              [(ngModel)]="operationalReportQuery.accountNumber"
-              [class.invalid-control]="!operationalReportQuery.accountNumber"
-              (keyup.escape)="operationalReportQuery.accountNumber = ''">
+        </div>
 
-          </div>
+        <div fxFlex="261px" *ngIf="showField.withSubledgerAccount"
+          fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
 
-          <div fxFlex="261px" fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
+          <mat-checkbox name="withSubledgerAccount"
+            [(ngModel)]="operationalReportQuery.withSubledgerAccount"
+            (click)="$event.stopPropagation">
+            Con Auxiliares
+          </mat-checkbox>
 
-            <mat-checkbox name="withSubledgerAccount"
-              [(ngModel)]="operationalReportQuery.withSubledgerAccount"
-              (click)="$event.stopPropagation">
-              Con Auxiliares
-            </mat-checkbox>
-
-          </div>
-
-        </ng-container>
+        </div>
 
     </div>
 
 
-    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="displayDateAndSendType">
+    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="showField.sendType">
 
       <div fxFlex="50">
 

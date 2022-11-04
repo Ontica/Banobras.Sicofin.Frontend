@@ -12,6 +12,26 @@ import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './da
 import { FileType } from './reporting';
 
 
+export interface OperationalReportTypeActions {
+  singleDate: boolean;
+  datePeriod: boolean;
+  ledgers: boolean;
+  account: boolean;
+  withSubledgerAccount: boolean;
+  sendType: boolean;
+}
+
+
+export const EmptyOperationalReportTypeActions: OperationalReportTypeActions = {
+  singleDate: false,
+  datePeriod: false,
+  ledgers: false,
+  account: false,
+  withSubledgerAccount: false,
+  sendType: false,
+}
+
+
 export enum SendTypes {
   N = 'N',
   C = 'C',

@@ -12,8 +12,8 @@ import { Assertion, EventInfo } from '@app/core';
 import { FinancialReportsDataService } from '@app/data-services';
 
 import { FinancialReportQuery, EmptyFinancialReport, EmptyFinancialReportQuery, FinancialReport,
-         FinancialReportEntry, EmptyFinancialReportBreakdown, ReportType, ExportationType,
-         FileType, FinancialReportBreakdown } from '@app/models';
+         FinancialReportEntry, EmptyFinancialReportBreakdown, ReportType, ExportationType, FileType,
+         FinancialReportBreakdown, FinancialReportTypeActions } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -51,7 +51,7 @@ export class FinancialReportViewerComponent {
 
   query: FinancialReportQuery = Object.assign({}, EmptyFinancialReportQuery);
 
-  reportType: ReportType = null;
+  reportType: ReportType<FinancialReportTypeActions> = null;
 
   exportationTypesList: ExportationType[] = [];
 
@@ -76,7 +76,7 @@ export class FinancialReportViewerComponent {
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
         this.query = event.payload.query as FinancialReportQuery;
-        this.setReportType(event.payload.reportType as ReportType);
+        this.setReportType(event.payload.reportType as ReportType<FinancialReportTypeActions>);
         this.getFinancialReport();
         return;
 
@@ -209,7 +209,7 @@ export class FinancialReportViewerComponent {
   }
 
 
-  private setReportType(reportType: ReportType) {
+  private setReportType(reportType: ReportType<FinancialReportTypeActions>) {
     this.reportType = reportType;
     this.setExportationTypesList(this.reportType?.exportTo as ExportationType[]);
   }

@@ -14,26 +14,19 @@ export enum ReportGroup {
 }
 
 
-export interface ReportType {
+export interface ReportType<T> {
   uid: string;
   name: string;
   group?: string;
   accountsCharts?: string[];
-  payloadType?: ReportPayloadType;
+  show: T;
   exportTo: FileType[] | ExportationType[];
-  show?: {
-    getAccountsIntegration: boolean;
-    datePeriod: boolean;
-    singleDate: boolean;
-  };
+  payloadType?: ReportPayloadType;
 }
 
 
 export enum ReportPayloadType {
-  AccountsChartAndDate = 'AccountsChartAndDate',
-  LedgerAndPeriod = 'LedgerAndPeriod',
-  DateAndSendType = 'DateAndSendType',
-  LedgerAccountWithSubledgerAccountAndPeriod = 'LedgerAccountWithSubledgerAccountAndPeriod',
+
 }
 
 
