@@ -43,12 +43,12 @@ export class OperationalReportsMainPageComponent implements OnInit, OnDestroy {
 
   private onCurrentViewChanged(newView: View) {
     switch (newView.name) {
-      case 'AccountingDashboards.FinancialReports':
-        this.reportGroup = ReportGroup.ReportesFiscales;
-        return;
-
       case 'AccountingDashboards.OperationalReports':
         this.reportGroup = ReportGroup.ReportesOperativos;
+        return;
+
+      case 'AccountingDashboards.FiscalReports':
+        this.reportGroup = ReportGroup.ReportesFiscales;
         return;
 
       default:

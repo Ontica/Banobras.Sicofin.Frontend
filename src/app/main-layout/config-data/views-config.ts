@@ -60,7 +60,7 @@ export const AccountingDashboardsViews: View[] = [
     permission: ROUTES_LIBRARY.tableros_saldos_y_balanzas.permission,
   },
   {
-    name: 'AccountingDashboards.AccountGroupsBalances',
+    name: 'AccountingDashboards.FinancialReports',
     title: 'Reportes regulatorios',
     url: ROUTES_LIBRARY.tableros_reportes_regulatorios.fullpath,
     permission: ROUTES_LIBRARY.tableros_reportes_regulatorios.permission,
@@ -72,7 +72,7 @@ export const AccountingDashboardsViews: View[] = [
     permission: ROUTES_LIBRARY.tableros_reportes_operativos.permission,
   },
   {
-    name: 'AccountingDashboards.FinancialReports',
+    name: 'AccountingDashboards.FiscalReports',
     title: 'Reportes fiscales',
     url: ROUTES_LIBRARY.tableros_reportes_fiscales.fullpath,
     permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission,
