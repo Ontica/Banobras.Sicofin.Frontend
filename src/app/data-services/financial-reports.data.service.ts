@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { FileReport, FinancialReport, FinancialReportQuery, FinancialReportDesign, ReportType,
-         FinancialReportTypeActions } from '@app/models';
+         FinancialReportTypeFlags } from '@app/models';
 
 
 @Injectable()
@@ -49,12 +49,12 @@ export class FinancialReportsDataService {
     return this.http.post<FinancialReport>(path, buildQuery);
   }
 
-  getFinancialReportTypes(accountsChartUID: string): Observable<ReportType<FinancialReportTypeActions>[]> {
+  getFinancialReportTypes(accountsChartUID: string): Observable<ReportType<FinancialReportTypeFlags>[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
     const path = `v2/financial-accounting/financial-reports/types/${accountsChartUID}`;
 
-    return this.http.get<ReportType<FinancialReportTypeActions>[]>(path);
+    return this.http.get<ReportType<FinancialReportTypeFlags>[]>(path);
   }
 
   //

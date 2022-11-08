@@ -12,8 +12,7 @@ import { Assertion } from '@app/core';
 import { OperationalReportsDataService } from '@app/data-services';
 
 import { OperationalReportQuery, EmptyOperationalReport, EmptyOperationalReportQuery, OperationalReport,
-         FileType, ReportGroup, ReportType, ExportationType,
-         OperationalReportTypeActions } from '@app/models';
+         FileType, ReportGroup, ReportType, ExportationType, OperationalReportTypeFlags } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -47,7 +46,7 @@ export class OperationalReportViewerComponent implements OnChanges {
 
   operationalReportQuery: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
 
-  selectedReportType: ReportType<OperationalReportTypeActions> = null;
+  selectedReportType: ReportType<OperationalReportTypeFlags> = null;
 
   exportationTypesList: ExportationType[] = [];
 
@@ -81,7 +80,7 @@ export class OperationalReportViewerComponent implements OnChanges {
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
         this.operationalReportQuery = event.payload.operationalReportQuery as OperationalReportQuery;
-        this.setReportType(event.payload.reportType as ReportType<OperationalReportTypeActions>);
+        this.setReportType(event.payload.reportType as ReportType<OperationalReportTypeFlags>);
         this.setOperationalReportData(EmptyOperationalReport, false);
         this.getOperationalReport();
         return;
@@ -205,7 +204,7 @@ export class OperationalReportViewerComponent implements OnChanges {
   }
 
 
-  private setReportType(reportType: ReportType<OperationalReportTypeActions>) {
+  private setReportType(reportType: ReportType<OperationalReportTypeFlags>) {
     this.selectedReportType = reportType;
     this.exportationTypesList = !this.selectedReportType?.exportTo ? [] :
       this.selectedReportType.exportTo.map(x => Object.create({uid: x, name: x, fileType: x}));

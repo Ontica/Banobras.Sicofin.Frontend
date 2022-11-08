@@ -13,7 +13,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyFinancialReportQuery, FinancialReportQuery, FinancialReportTypeActions,
+import { AccountsChartMasterData, EmptyFinancialReportQuery, FinancialReportQuery, FinancialReportTypeFlags,
          ReportType } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
@@ -35,11 +35,11 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   query: FinancialReportQuery = Object.assign({}, EmptyFinancialReportQuery);
 
-  selectedReportType: ReportType<FinancialReportTypeActions> = null;
+  selectedReportType: ReportType<FinancialReportTypeFlags> = null;
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  reportTypeList: ReportType<FinancialReportTypeActions>[] = [];
+  reportTypeList: ReportType<FinancialReportTypeFlags>[] = [];
 
   isLoading = false;
 
@@ -80,7 +80,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onReportTypeChanges(reportType: ReportType<FinancialReportTypeActions>) {
+  onReportTypeChanges(reportType: ReportType<FinancialReportTypeFlags>) {
     this.selectedReportType = reportType ?? null;
 
     this.query.financialReportType = reportType?.uid ?? null;

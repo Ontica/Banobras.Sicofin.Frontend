@@ -12,7 +12,7 @@ import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './da
 import { FileType } from './reporting';
 
 
-export interface OperationalReportTypeActions {
+export interface OperationalReportTypeFlags {
   singleDate: boolean;
   datePeriod: boolean;
   ledgers: boolean;
@@ -22,7 +22,7 @@ export interface OperationalReportTypeActions {
 }
 
 
-export const EmptyOperationalReportTypeActions: OperationalReportTypeActions = {
+export const EmptyOperationalReportTypeFlags: OperationalReportTypeFlags = {
   singleDate: false,
   datePeriod: false,
   ledgers: false,

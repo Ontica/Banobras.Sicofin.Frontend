@@ -11,8 +11,8 @@ import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyOperationalReportQuery, EmptyOperationalReportTypeActions,
-         OperationalReportQuery, OperationalReportTypeActions, ReportGroup, ReportType,
+import { AccountsChartMasterData, EmptyOperationalReportQuery, EmptyOperationalReportTypeFlags,
+         OperationalReportQuery, OperationalReportTypeFlags, ReportGroup, ReportType,
          SendTypesList } from '@app/models';
 
 import { AccountChartStateSelector,
@@ -43,11 +43,11 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   selectedAccountChart = null;
 
-  selectedReportType: ReportType<OperationalReportTypeActions> = null;
+  selectedReportType: ReportType<OperationalReportTypeFlags> = null;
 
-  reportTypeList: ReportType<OperationalReportTypeActions>[] = [];
+  reportTypeList: ReportType<OperationalReportTypeFlags>[] = [];
 
-  filteredReportTypeList: ReportType<OperationalReportTypeActions>[] = [];
+  filteredReportTypeList: ReportType<OperationalReportTypeFlags>[] = [];
 
   sendTypesList: Identifiable[] = SendTypesList;
 
@@ -70,8 +70,8 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get showField(): OperationalReportTypeActions  {
-    return this.selectedReportType?.show ?? EmptyOperationalReportTypeActions;
+  get showField(): OperationalReportTypeFlags  {
+    return this.selectedReportType?.show ?? EmptyOperationalReportTypeFlags;
   }
 
 
@@ -91,7 +91,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onReportTypeChanges(reportType: ReportType<OperationalReportTypeActions>) {
+  onReportTypeChanges(reportType: ReportType<OperationalReportTypeFlags>) {
     this.selectedReportType = reportType ?? null;
 
     this.operationalReportQuery.reportType = reportType?.uid ?? null;
@@ -120,7 +120,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     combineLatest([
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
-      this.helper.select<ReportType<OperationalReportTypeActions>[]>
+      this.helper.select<ReportType<OperationalReportTypeFlags>[]>
         (ReportingStateSelector.REPORT_TYPES_LIST),
     ])
     .subscribe(([x, y]) => {

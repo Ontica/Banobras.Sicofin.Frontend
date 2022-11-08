@@ -13,7 +13,7 @@ import { FinancialReportsDataService } from '@app/data-services';
 
 import { FinancialReportQuery, EmptyFinancialReport, EmptyFinancialReportQuery, FinancialReport,
          FinancialReportEntry, EmptyFinancialReportBreakdown, ReportType, ExportationType, FileType,
-         FinancialReportBreakdown, FinancialReportTypeActions } from '@app/models';
+         FinancialReportBreakdown, FinancialReportTypeFlags } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -51,7 +51,7 @@ export class FinancialReportViewerComponent {
 
   query: FinancialReportQuery = Object.assign({}, EmptyFinancialReportQuery);
 
-  reportType: ReportType<FinancialReportTypeActions> = null;
+  reportType: ReportType<FinancialReportTypeFlags> = null;
 
   exportationTypesList: ExportationType[] = [];
 
@@ -76,7 +76,7 @@ export class FinancialReportViewerComponent {
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
         this.query = event.payload.query as FinancialReportQuery;
-        this.setReportType(event.payload.reportType as ReportType<FinancialReportTypeActions>);
+        this.setReportType(event.payload.reportType as ReportType<FinancialReportTypeFlags>);
         this.getFinancialReport();
         return;
 
@@ -209,7 +209,7 @@ export class FinancialReportViewerComponent {
   }
 
 
-  private setReportType(reportType: ReportType<FinancialReportTypeActions>) {
+  private setReportType(reportType: ReportType<FinancialReportTypeFlags>) {
     this.reportType = reportType;
     this.setExportationTypesList(this.reportType?.exportTo as ExportationType[]);
   }
@@ -221,11 +221,9 @@ export class FinancialReportViewerComponent {
       return;
     }
 
-    if (this.query.getAccountsIntegration) {
-      this.exportationTypesList = exportTo.filter(x => x.dataset === "AccountsIntegration");
-    } else {
-      this.exportationTypesList = exportTo.filter(x => x.dataset !== "AccountsIntegration");
-    }
+    this.exportationTypesList = this.query.getAccountsIntegration ?
+      exportTo.filter(x => x.dataset === "AccountsIntegration") :
+      exportTo.filter(x => x.dataset !== "AccountsIntegration")
   }
 
 }
