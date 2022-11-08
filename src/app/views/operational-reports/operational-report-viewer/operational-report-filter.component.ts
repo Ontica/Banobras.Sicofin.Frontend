@@ -181,6 +181,10 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     if (this.showField.withSubledgerAccount) {
       data.withSubledgerAccount = this.operationalReportQuery.withSubledgerAccount;
     }
+
+    if (this.showField.outputType) {
+      data.outputType = this.operationalReportQuery.outputType;
+    }
   }
 
 }

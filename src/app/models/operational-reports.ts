@@ -19,6 +19,7 @@ export interface OperationalReportTypeFlags {
   account: boolean;
   withSubledgerAccount: boolean;
   sendType: boolean;
+  outputType: boolean;
 }
 
 
@@ -29,6 +30,7 @@ export const EmptyOperationalReportTypeFlags: OperationalReportTypeFlags = {
   account: false,
   withSubledgerAccount: false,
   sendType: false,
+  outputType: false,
 }
 
 
@@ -54,6 +56,7 @@ export interface OperationalReportQuery extends DataTableQuery {
   withSubledgerAccount?: boolean;
   exportTo?: FileType;
   sendType?: SendTypes;
+  outputType?: string;
 }
 
 

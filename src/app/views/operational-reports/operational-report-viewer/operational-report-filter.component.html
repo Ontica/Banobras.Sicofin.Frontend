@@ -31,7 +31,7 @@
 
       </div>
 
-      <div [fxFlex]="showField.datePeriod ? '225px' : '120px'">
+      <div [fxFlex]="showField.datePeriod ? '225px' : '120px'" fxFlex.lt-md="none">
 
         <ng-container *ngIf="showField.singleDate">
 
@@ -105,7 +105,7 @@
 
         </div>
 
-        <div fxFlex="261px" *ngIf="showField.withSubledgerAccount"
+        <div fxFlex="261px" fxFlex.lt-md="none" *ngIf="showField.withSubledgerAccount"
           fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
 
           <mat-checkbox name="withSubledgerAccount"
@@ -119,22 +119,31 @@
     </div>
 
 
-    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="showField.sendType">
+    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="showField.sendType || showField.outputType">
 
-      <div fxFlex="50">
-
-        <div fxFlex>
+      <div fxFlex="50" *ngIf="showField.sendType">
 
         <label>Tipo de envío:</label>
 
-          <emp-ng-select name="sendType" required
-            [config]="{selectFirst: true}"
-            [(ngModel)]="operationalReportQuery.sendType"
-            [items]="sendTypesList"
-            [showError]="!operationalReportQuery.sendType">
-          </emp-ng-select>
+        <emp-ng-select name="sendType" required
+          [config]="{selectFirst: true}"
+          [(ngModel)]="operationalReportQuery.sendType"
+          [items]="sendTypesList"
+          [showError]="!operationalReportQuery.sendType">
+        </emp-ng-select>
 
-        </div>
+      </div>
+
+      <div fxFlex="50" *ngIf="showField.outputType">
+
+        <label>Grupo de cuentas:</label>
+
+        <emp-ng-select name="outputType" required
+          [config]="{selectFirst: true}"
+          [(ngModel)]="operationalReportQuery.outputType"
+          [items]="selectedReportType.outputType ?? []"
+          [showError]="!operationalReportQuery.outputType">
+        </emp-ng-select>
 
       </div>
 

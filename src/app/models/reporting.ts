@@ -21,6 +21,7 @@ export interface ReportType<T> {
   accountsCharts?: string[];
   show: T;
   exportTo: FileType[] | ExportationType[];
+  outputType?: Identifiable[];
   payloadType?: ReportPayloadType;
 }
 
