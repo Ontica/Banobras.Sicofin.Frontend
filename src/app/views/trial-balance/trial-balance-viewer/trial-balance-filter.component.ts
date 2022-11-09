@@ -91,10 +91,10 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get exchangeRatesDisabled(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
+            TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-            TrialBalanceTypes.Valorizacion,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
@@ -112,10 +112,10 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get showCascadeBalancesDisabled(): boolean {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
-            TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-            TrialBalanceTypes.Valorizacion,
             TrialBalanceTypes.BalanzaDolarizada,
-            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.SaldosPorAuxiliar,
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
@@ -127,11 +127,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get withSubledgerAccountDisabled(): boolean {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
-            TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-            TrialBalanceTypes.Valorizacion,
-            TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.BalanzaDolarizada,
-            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.BalanzaValorizadaComparativa,
+            TrialBalanceTypes.SaldosPorAuxiliar,
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
@@ -149,7 +149,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   get displayInitialPeriod() {
     return !this.isBalanceSelected &&
-           ![TrialBalanceTypes.Valorizacion].includes(this.trialBalanceQuery.trialBalanceType);
+           ![TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
@@ -162,27 +162,25 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.Balanza,
             TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
+            TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-            TrialBalanceTypes.Valorizacion,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
   get displayLevel(): boolean {
     return ![TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
+             TrialBalanceTypes.BalanzaDolarizada,
              TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-             TrialBalanceTypes.Valorizacion,
-             TrialBalanceTypes.BalanzaDolarizada]
-              .includes(this.trialBalanceQuery.trialBalanceType);
+             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
   get displayWithAverageBalance(): boolean {
-    return ![TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-             TrialBalanceTypes.Valorizacion,
-             TrialBalanceTypes.BalanzaDolarizada]
-              .includes(this.trialBalanceQuery.trialBalanceType);
+    return ![TrialBalanceTypes.BalanzaDolarizada,
+             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
