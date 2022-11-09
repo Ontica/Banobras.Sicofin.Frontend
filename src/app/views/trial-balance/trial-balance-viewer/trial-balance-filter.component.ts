@@ -148,7 +148,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get displayInitialPeriod() {
-    return !this.isBalanceSelected;
+    return !this.isBalanceSelected &&
+           ![TrialBalanceTypes.Valorizacion].includes(this.trialBalanceQuery.trialBalanceType);
   }
 
 
