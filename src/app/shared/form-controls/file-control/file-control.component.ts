@@ -277,7 +277,7 @@ export class FileControlComponent implements OnChanges {
       type: file.type,
       size: file.size,
       sizeString: FormatLibrary.formatBytes(file.size),
-      tag: this.tagFileSelected.type,
+      tag: this.tagFileSelected?.type ?? '',
       fileIcon: this.getFileIcon(file.type),
       menuOptions: this.getMenuOptions(file)
     };
