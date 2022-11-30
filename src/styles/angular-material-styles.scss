@@ -366,6 +366,7 @@ table.mat-table.emp-designer {
       left: 0;
       position: sticky !important;
       z-index: 101 !important;
+      user-select: none;
     }
 
     &:hover .resize-handle {
@@ -395,7 +396,7 @@ table.mat-table.emp-designer {
       background-color: $designer-border-color;
     }
 
-    .designer-row-button {
+    .designer-button {
       cursor: pointer;
       position: absolute;
       height: 100%;
@@ -426,6 +427,11 @@ table.mat-table.emp-designer {
       th {
         color: #000;
         font-weight: 500;
+
+        &:first-of-type {
+          color: $designer-bar-background;
+          padding: 6px 8px;
+        }
       }
 
       td {

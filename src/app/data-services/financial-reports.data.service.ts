@@ -9,10 +9,10 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, HttpService, Identifiable } from '@app/core';
+import { Assertion, HttpService } from '@app/core';
 
 import { FileReport, FinancialReport, FinancialReportQuery, FinancialReportDesign, ReportType,
-         FinancialReportTypeFlags } from '@app/models';
+         FinancialReportTypeFlags, FinancialReportTypesForDesign} from '@app/models';
 
 
 @Injectable()
@@ -61,12 +61,12 @@ export class FinancialReportsDataService {
   // Designer
   //
 
-  getFinancialReportTypesForDesign(accountsChartUID: string): Observable<Identifiable[]> {
+  getFinancialReportTypesForDesign(accountsChartUID: string): Observable<FinancialReportTypesForDesign[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
     const path = `v2/financial-accounting/financial-reports/design/types/${accountsChartUID}`;
 
-    return this.http.get<Identifiable[]>(path);
+    return this.http.get<FinancialReportTypesForDesign[]>(path);
   }
 
 

@@ -199,32 +199,70 @@ table.mat-table.emp-designer tr.mat-row.fixed-cells-type {
   cursor: pointer;
 
   td.designer-cell-selected {
-    border: 1px solid $designer-row-selected-border-color;
+    border: 1px solid $designer-bar-selected-border-color;
     border-collapse: collapse;
+    background-color: $designer-cell-selected-background-color;
+  }
+
+  td.mat-cell.designer-cell-selected:not(:first-of-type):hover {
+    background-color: $designer-cell-selected-hover-background-color;
   }
 }
 
+
 table.mat-table.emp-designer tr.mat-row.designer-row-selected {
   td {
-    border-top: 1px solid $designer-row-selected-border-color;
-    border-bottom: 1px solid $designer-row-selected-border-color;
+    border-top: 1px solid $designer-bar-selected-border-color;
+    border-bottom: 1px solid $designer-bar-selected-border-color;
   }
 
   td:first-of-type {
-    border-left: 1px solid $designer-row-selected-border-color;
-    border-right: 1px solid $designer-row-selected-border-color;
+    border-left: 1px solid $designer-bar-selected-border-color;
+    border-right: 1px solid $designer-bar-selected-border-color;
   }
 
   td:last-of-type {
-    border-right: 1px solid $designer-row-selected-border-color;
+    border-right: 1px solid $designer-bar-selected-border-color;
   }
 
-  .designer-row-button {
-    background-color: #b3dbd3;
+  .designer-button {
+    background-color: $designer-bar-selected-background-color;
   }
 
-  .designer-row-button:hover,
-  .designer-row-button-active {
-    background-color: hsl(168, 36%, 70%);
+  .designer-button:hover,
+  .designer-button-active {
+    background-color: $designer-bar-selected-hover-background-color;
+  }
+}
+
+table.mat-table.emp-designer {
+
+  tr.designer-columns-header,
+  tr.designer-columns-subheader {
+    th:not(:first-of-type):hover {
+      cursor: pointer;
+      background-color: $designer-border-color;
+    }
+  }
+
+  tr.designer-columns-header {
+    th.designer-column-selected {
+      border: 1px solid $designer-bar-selected-border-color;
+      background-color: $designer-bar-selected-background-color;
+    }
+
+    th.designer-column-selected:hover {
+      background-color: $designer-bar-selected-hover-background-color;
+    }
+  }
+
+  th.designer-column-selected,
+  td.designer-column-selected {
+    border-left: 1px solid $designer-bar-selected-border-color;
+    border-right: 1px solid $designer-bar-selected-border-color;
+  }
+
+  tr:last-of-type td.designer-column-selected {
+    border-bottom: 1px solid $designer-bar-selected-border-color;
   }
 }

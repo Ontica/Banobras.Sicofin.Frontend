@@ -13,7 +13,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData } from '@app/models';
+import { AccountsChartMasterData, FinancialReportTypesForDesign } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -35,10 +35,11 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
 
   reportsForm = {
     accountChartUID: null,
-    financialReportTypeUID: null,
+    financialReportType: null,
+    outputType: null,
   };
 
-  financialReportTypesList: Identifiable[] = [];
+  financialReportTypesList: FinancialReportTypesForDesign[] = [];
 
   isLoading = false;
 
@@ -61,7 +62,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
 
 
   onAccountsChartChanges(accountChart: AccountsChartMasterData) {
-    this.reportsForm.financialReportTypeUID = '';
+    this.reportsForm.financialReportType = null;
     this.financialReportTypesList = [];
     if (accountChart.uid) {
       this.getFinancialReportTypesForDesign(accountChart.uid);
@@ -71,7 +72,8 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
 
   onSearchReportsClicked() {
     const payload = {
-      financialReportTypeUID: this.reportsForm.financialReportTypeUID,
+      financialReportTypeUID: this.reportsForm.financialReportType.uid,
+      outputTypeUID: this.reportsForm.outputType.uid,
     };
 
     sendEvent(this.financialReportSelectorEvent,

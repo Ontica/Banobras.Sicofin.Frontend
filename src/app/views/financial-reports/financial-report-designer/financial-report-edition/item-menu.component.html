@@ -1,4 +1,4 @@
-<div *ngIf="!displayMenu">
+<div *ngIf="!displayMenu" class="designer-button">
 
   <ng-container *ngTemplateOutlet="content">
 
@@ -7,10 +7,10 @@
 </div>
 
 
-<div *ngIf="displayMenu" class="designer-row-button"
+<div *ngIf="displayMenu" class="designer-button"
   #triggerActionMenu="matMenuTrigger"
   [matMenuTriggerFor]="actionMenu"
-  [class.designer-row-button-active]="triggerActionMenu.menuOpen">
+  [class.designer-button-active]="triggerActionMenu.menuOpen">
 
   <ng-container *ngTemplateOutlet="content">
 
@@ -32,17 +32,23 @@
   <ng-template matMenuContent>
 
     <button mat-menu-item empNgContextMenuDisabled (click)="onInsertItemClicked()">
-      Insertar nuevo renglón
+      Insertar
+      <span *ngIf="itemType === 'row'">nuevo renglón</span>
+      <span *ngIf="itemType === 'column'">nueva columna</span>
     </button>
 
     <mat-divider> </mat-divider>
 
     <button mat-menu-item empNgContextMenuDisabled (click)="onUpdateItemClicked()">
-      Editar renglón
+      Editar
+      <span *ngIf="itemType === 'row'">renglón</span>
+      <span *ngIf="itemType === 'column'">columna</span>
     </button>
 
     <button mat-menu-item empNgContextMenuDisabled (click)="onRemoveItemClicked()">
-      Eliminar renglón
+      Eliminar
+      <span *ngIf="itemType === 'row'">renglón</span>
+      <span *ngIf="itemType === 'column'">columna</span>
     </button>
 
   </ng-template>

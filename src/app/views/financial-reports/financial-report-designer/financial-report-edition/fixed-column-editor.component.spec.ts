@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RowMenuComponent } from './row-menu.component';
+import { FixedColumnEditorComponent } from './fixed-column-editor.component';
 
-describe('RowMenuComponent', () => {
-  let component: RowMenuComponent;
-  let fixture: ComponentFixture<RowMenuComponent>;
+describe('FixedColumnEditorComponent', () => {
+  let component: FixedColumnEditorComponent;
+  let fixture: ComponentFixture<FixedColumnEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RowMenuComponent ]
+      declarations: [ FixedColumnEditorComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RowMenuComponent);
+    fixture = TestBed.createComponent(FixedColumnEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

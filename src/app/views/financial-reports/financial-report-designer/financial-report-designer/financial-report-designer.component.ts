@@ -20,7 +20,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import { EmptyFinancialReportDesign, FinancialReportDesign, FinancialReportRow, EmptyFinancialReportRow,
          FinancialReportCell, EmptyFinancialReportCell, FinancialReportEditionCommand,
-         FinancialReportDesignType} from '@app/models';
+         FinancialReportDesignType, FinancialReportColumn, EmptyFinancialReportColumn } from '@app/models';
 
 import { FixedCellEditorEventType } from '../financial-report-edition/fixed-cell-editor.component';
 
@@ -29,6 +29,8 @@ import { FixedRowEditorEventType } from '../financial-report-edition/fixed-row-e
 import { FinancialReportDesignerControlsEventType } from './financial-report-designer-controls.component';
 
 import { FinancialReportDesignerGridEventType } from './financial-report-designer-grid.component';
+
+import { FixedColumnEditorEventType } from '../financial-report-edition/fixed-column-editor.component';
 
 
 export enum FinancialReportDesignerEventType {
@@ -58,12 +60,21 @@ export class FinancialReportDesignerComponent implements OnChanges {
 
   filter = '';
 
+  //ROW
   displayFixedRowEditor = false;
 
   selectedRow: FinancialReportRow =  Object.assign({}, EmptyFinancialReportRow);
 
   rowToEdit: FinancialReportRow =  Object.assign({}, EmptyFinancialReportRow);
 
+  //COLUMN
+  displayFixedColumnEditor = false;
+
+  selectedColumn: FinancialReportColumn =  Object.assign({}, EmptyFinancialReportColumn);
+
+  columnToEdit: FinancialReportColumn =  Object.assign({}, EmptyFinancialReportColumn);
+
+  //CELL
   displayFixedCellEditor = false;
 
   selectedCell: FinancialReportCell =  Object.assign({}, EmptyFinancialReportCell);
@@ -74,7 +85,8 @@ export class FinancialReportDesignerComponent implements OnChanges {
 
 
   @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    if (this.queryExecuted && !this.displayFixedRowEditor && !this.displayFixedCellEditor) {
+    if (this.queryExecuted && !this.displayFixedRowEditor &&
+        !this.displayFixedColumnEditor && !this.displayFixedCellEditor) {
       this.clearSelectedData();
     }
   }
@@ -90,8 +102,16 @@ export class FinancialReportDesignerComponent implements OnChanges {
   onFinancialReportDesignerControlsEvent(event: EventInfo) {
    switch (event.type as FinancialReportDesignerControlsEventType) {
 
+      case FinancialReportDesignerControlsEventType.CLEAR_BUTTON_CLICKED:
+        this.clearSelectedData();
+        return;
+
       case FinancialReportDesignerControlsEventType.FILTER_CHANGED:
         this.filter = event.payload.filter ?? '';
+        return;
+
+      case FinancialReportDesignerControlsEventType.EDIT_HEADER_CLICKED:
+        this.messageBox.showInDevelopment('Editar encabezado del reporte');
         return;
 
       case FinancialReportDesignerControlsEventType.EXECUTE_BUTTON_CLICKED:
@@ -111,34 +131,18 @@ export class FinancialReportDesignerComponent implements OnChanges {
       case FinancialReportDesignerGridEventType.SELECT_ITEM:
         Assertion.assertValue(event.payload.type, 'event.payload.type');
         Assertion.assertValue(event.payload.item, 'event.payload.item');
-
-        if (event.payload.type === FinancialReportDesignType.FixedRows) {
-          this.selectedRow = event.payload.item as FinancialReportRow;
-          this.rowToEdit =  Object.assign({}, EmptyFinancialReportRow);
-        }
-
-        if (event.payload.type === FinancialReportDesignType.FixedCells) {
-          this.selectedCell = event.payload.item as FinancialReportCell;
-        }
-
+        this.validateItemToSelect(event.payload.type, event.payload.item);
         return;
 
       case FinancialReportDesignerGridEventType.INSERT_ROW:
         Assertion.assertValue(event.payload.row, 'event.payload.row');
-        if (this.selectedRow.uid !== event.payload.row.uid) {
-          this.selectedRow = event.payload.row as FinancialReportRow;
-        }
-        this.rowToEdit =  Object.assign({}, EmptyFinancialReportRow);
-        this.displayFixedRowEditor = true;
+        this.openFixedRowEditor(event.payload.row as FinancialReportRow, EmptyFinancialReportRow);
         return;
 
       case FinancialReportDesignerGridEventType.UPDATE_ROW:
         Assertion.assertValue(event.payload.row, 'event.payload.row');
-        if (this.selectedRow.uid !== event.payload.row.uid) {
-          this.selectedRow = event.payload.row as FinancialReportRow;
-        }
-        this.rowToEdit = event.payload.row as FinancialReportRow;
-        this.displayFixedRowEditor = true;
+        this.openFixedRowEditor(event.payload.row as FinancialReportRow,
+                                event.payload.row as FinancialReportRow);
         return;
 
       case FinancialReportDesignerGridEventType.REMOVE_ROW:
@@ -148,13 +152,27 @@ export class FinancialReportDesignerComponent implements OnChanges {
                        event.payload.rowUID as string);
         return;
 
+      case FinancialReportDesignerGridEventType.INSERT_COLUMN:
+        Assertion.assertValue(event.payload.column, 'event.payload.column');
+        this.openFixedColumnEditor(event.payload.column as FinancialReportColumn,
+                                   EmptyFinancialReportColumn);
+        return;
+
+      case FinancialReportDesignerGridEventType.UPDATE_COLUMN:
+        Assertion.assertValue(event.payload.column, 'event.payload.column');
+        this.openFixedColumnEditor(event.payload.column as FinancialReportColumn,
+                                   event.payload.column as FinancialReportColumn);
+        return;
+
+      case FinancialReportDesignerGridEventType.REMOVE_COLUMN:
+        Assertion.assertValue(event.payload.reportTypeUID, 'event.payload.reportTypeUID');
+        Assertion.assertValue(event.payload.columnUID, 'event.payload.columnUID');
+        this.deleteColumn(event.payload.reportTypeUID as string, event.payload.columnUID as string);
+        return;
+
       case FinancialReportDesignerGridEventType.EDIT_CELL:
         Assertion.assertValue(event.payload.cell, 'event.payload.cell');
-        if (this.selectedCell.row !== event.payload.cell.row &&
-            this.selectedCell.column !== event.payload.cell.column) {
-          this.selectedCell = event.payload.cell as FinancialReportCell;
-        }
-        this.displayFixedCellEditor = true;
+        this.openFixedCellEditor(event.payload.cell as FinancialReportCell);
         return;
 
       default:
@@ -191,6 +209,42 @@ export class FinancialReportDesignerComponent implements OnChanges {
         this.updateRow(event.payload.financialReportTypeUID as string,
                        event.payload.rowUID as string,
                        event.payload.command as FinancialReportEditionCommand);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onFixedColumnEditorEvent(event: EventInfo) {
+    if (this.submitted) {
+      return;
+    }
+
+    switch (event.type as FixedColumnEditorEventType) {
+
+      case FixedColumnEditorEventType.CLOSE_MODAL_CLICKED:
+        this.displayFixedColumnEditor = false;
+        return;
+
+      case FixedColumnEditorEventType.INSERT_COLUMN:
+        Assertion.assertValue(event.payload.reportTypeUID, 'event.payload.reportTypeUID');
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+
+        this.insertColumn(event.payload.reportTypeUID as string,
+                          event.payload.command as FinancialReportEditionCommand);
+        return;
+
+      case FixedColumnEditorEventType.UPDATE_COLUMN:
+        Assertion.assertValue(event.payload.reportTypeUID, 'event.payload.reportTypeUID');
+        Assertion.assertValue(event.payload.columnUID, 'event.payload.columnUID');
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+
+        this.updateColumn(event.payload.reportTypeUID as string,
+                          event.payload.columnUID as string,
+                          event.payload.command as FinancialReportEditionCommand);
         return;
 
       default:
@@ -243,6 +297,49 @@ export class FinancialReportDesignerComponent implements OnChanges {
   }
 
 
+  private validateItemToSelect(type: FinancialReportDesignType, item) {
+    switch (type) {
+      case FinancialReportDesignType.FixedRows:
+        this.selectedRow = item as FinancialReportRow;
+        this.rowToEdit =  Object.assign({}, EmptyFinancialReportRow);
+        return;
+      case FinancialReportDesignType.FixedCells:
+        this.selectedCell = item as FinancialReportCell;
+        return;
+      case FinancialReportDesignType.FixedColumns:
+        this.selectedColumn = item;
+        return;
+    }
+  }
+
+
+  private openFixedRowEditor(rowClicked: FinancialReportRow, rowToEdit: FinancialReportRow) {
+    if (this.selectedRow.uid !== rowClicked.uid) {
+      this.selectedRow = rowClicked;
+    }
+    this.rowToEdit = rowToEdit;
+    this.displayFixedRowEditor = true;
+  }
+
+
+  private openFixedColumnEditor(columnClicked: FinancialReportColumn, columnToEdit: FinancialReportColumn) {
+    if (this.selectedColumn.column !== columnClicked.column) {
+      this.selectedColumn = columnClicked;
+    }
+    this.columnToEdit = columnToEdit;
+    this.displayFixedColumnEditor = true;
+  }
+
+
+  private openFixedCellEditor(cell: FinancialReportCell) {
+    if (this.selectedCell.row !== cell.row && this.selectedCell.column !== cell.column) {
+      this.selectedCell = cell as FinancialReportCell;
+    }
+
+    this.displayFixedCellEditor = true;
+  }
+
+
   private insertRow(financialReportTypeUID: string,
                     command: FinancialReportEditionCommand) {
     this.submitted = true;
@@ -283,6 +380,42 @@ export class FinancialReportDesignerComponent implements OnChanges {
         this.setAndEmitFixedRowDataUpdated(EmptyFinancialReportRow);
       })
       .finally(() => this.submitted = false);
+  }
+
+
+  private insertColumn(reportTypeUID: string, command: FinancialReportEditionCommand) {
+    this.submitted = true;
+
+    setTimeout(() => {
+      this.submitted = false;
+      this.messageBox.showInDevelopment('Agregar columna', {reportTypeUID, command});
+        // this.messageBox.show('Se agregó la columna al reporte.', 'Agregar columna');
+        // this.setAndEmitFixedColumnDataUpdated(x);
+    }, 500);
+  }
+
+
+  private updateColumn(reportTypeUID: string, columnUID: string, command: FinancialReportEditionCommand) {
+    this.submitted = true;
+
+    setTimeout(() => {
+      this.submitted = false;
+      this.messageBox.showInDevelopment('Actualizar columna', {reportTypeUID, columnUID, command});
+      // this.messageBox.show('Se actualizó la columna del reporte.', 'Editar columna');
+      // this.setAndEmitFixedColumnDataUpdated(x);
+    }, 500);
+  }
+
+
+  private deleteColumn(reportTypeUID: string, columnUID: string) {
+    this.submitted = true;
+
+    setTimeout(() => {
+      this.submitted = false;
+      this.messageBox.showInDevelopment('Eliminar columna', {reportTypeUID, columnUID});
+      // this.messageBox.show('Se eliminó la columna del reporte.', 'Eliminar columna');
+      // this.setAndEmitFixedColumnDataUpdated(EmptyFinancialReportColumn);
+    }, 500);
   }
 
 
@@ -337,6 +470,14 @@ export class FinancialReportDesignerComponent implements OnChanges {
   }
 
 
+  private setAndEmitFixedColumnDataUpdated(column: FinancialReportColumn) {
+    this.selectedColumn = column;
+    this.saveSelection = !!column.column && !!column.field;
+    this.closeEditors();
+    sendEvent(this.financialReportDesignerEvent, FinancialReportDesignerEventType.REPORT_UPDATED);
+  }
+
+
   private setAndEmitFixedCellDataUpdated(cell: FinancialReportCell) {
     this.selectedCell = cell;
     this.saveSelection = !isEmpty(cell);
@@ -347,6 +488,7 @@ export class FinancialReportDesignerComponent implements OnChanges {
 
   private closeEditors() {
     this.displayFixedRowEditor = false;
+    this.displayFixedColumnEditor = false;
     this.displayFixedCellEditor = false;
   }
 
@@ -364,6 +506,7 @@ export class FinancialReportDesignerComponent implements OnChanges {
 
   private clearSelectedData() {
     this.selectedRow = Object.assign({}, EmptyFinancialReportRow);
+    this.selectedColumn = Object.assign({}, EmptyFinancialReportColumn);
     this.selectedCell =  Object.assign({}, EmptyFinancialReportCell);
   }
 

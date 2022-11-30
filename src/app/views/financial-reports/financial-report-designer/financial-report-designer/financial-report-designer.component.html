@@ -1,8 +1,6 @@
-
-
 <div fxLayout="column" fxFlexFill>
 
-  <div #controlsContainer fxFlex="none" *ngIf="queryExecuted && financialReportDesign.columns?.length > 0">
+  <div #controlsContainer fxFlex="none" *ngIf="queryExecuted">
 
     <emp-fa-financial-report-designer-controls
       [filter]="filter"
@@ -25,6 +23,7 @@
       [filter]="filter"
       [selectedRow]="selectedRow"
       [selectedCell]="selectedCell"
+      [selectedColumn]="selectedColumn"
       (financialReportDesignerGridEvent)="onFinancialReportDesignerGridEvent($event)">
 
     </emp-fa-financial-report-designer-grid>
@@ -42,6 +41,16 @@
   (fixedRowEditorEvent)="onFixedRowEditorEvent($event)">
 
 </emp-fa-fixed-row-editor>
+
+
+<emp-fa-fixed-column-editor *ngIf="displayFixedColumnEditor"
+  [financialReportConfig]="financialReportDesign.config"
+  [financialReportColumn]="columnToEdit"
+  [column]="selectedColumn.column"
+  [financialReportColumnsList]="financialReportDesign.columns"
+  (fixedColumnEditorEvent)="onFixedColumnEditorEvent($event)">
+
+</emp-fa-fixed-column-editor>
 
 
 <emp-fa-fixed-cell-editor *ngIf="displayFixedCellEditor"

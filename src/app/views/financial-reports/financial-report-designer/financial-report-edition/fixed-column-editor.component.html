@@ -1,0 +1,141 @@
+<emp-ng-modal-window [config]="{width:'900px'}">
+
+  <emp-ng-card
+    [title]="isSaved ? 'Editar columna del reporte' : 'Agregar columna al reporte'"
+    hint='Información de la columna del reporte.'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+        <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+          <div #typeSection fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+
+            <div fxFlex="100">
+              <label>Tipo de columna:</label>
+              <mat-radio-group [formControlName]="controls.type"
+                (change)="onTypeChanged()">
+                <mat-radio-button *ngFor="let type of fixedColumnTypeList" [value]="type.uid"
+                  [fxFlex]="100/3" [style.marginLeft]="0">
+                  {{type.name}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+          </div>
+
+          <div class="section-title"> Información general </div>
+
+          <div #generalFieldsSection fxLayout="row">
+
+            <div [fxFlex]="50">
+              <label>Nombre:</label>
+              <input type="text" class="text-box"
+                [formControlName]="controls.name"
+                [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+            </div>
+
+            <div [fxFlex]="50" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+
+              <mat-checkbox name="isHide"
+                [formControlName]="controls.isHide"
+                (click)="$event.stopPropagation">
+                Ocultar columna
+              </mat-checkbox>
+
+            </div>
+
+          </div>
+
+
+          <ng-container #formulaSection *ngIf="isFormulaType">
+
+            <div fxLayout="row">
+
+              <div [fxFlex]="100">
+                <label>Fórmula:</label>
+                <input type="text" class="text-box"
+                  [formControlName]="controls.formula"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.formula)">
+              </div>
+
+            </div>
+
+          </ng-container>
+
+
+          <ng-container #positingFieldsSection *ngIf="displayPositingSection">
+
+            <div fxLayout="row">
+
+              <div [fxFlex]="100/3">
+                <label>Posición:</label>
+                <emp-ng-select
+                  [formControlName]="controls.positioningRule"
+                  [items]="positioningRuleList"
+                  [showError]="formHandler.showInvalidControl(controls.positioningRule)"
+                  (changes)="onPositioningRuleChanged()">
+                </emp-ng-select>
+              </div>
+
+              <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffset">
+                <emp-ng-select [fxFlex]="100"
+                  [formControlName]="controls.positioningOffsetUID"
+                  bindValue="column"
+                  [items]="financialReportColumnsList"
+                  [config]="{searchableFields: ['column', 'title']}"
+                  [showError]="formHandler.showInvalidControl(controls.positioningOffsetUID)">
+                  <ng-template #labelTemplate let-item="item">
+                    ({{item.column}}) {{item.title}}
+                  </ng-template>
+                  <ng-template #optionTemplate let-item="item">
+                    ({{item.column}}) {{item.title}}
+                  </ng-template>
+                </emp-ng-select>
+              </div>
+
+              <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
+
+                <input type="text" class="text-box text-align-right"
+                  [formControlName]="controls.position"
+                  [class.invalid-control]="formHandler.showInvalidControl(controls.position)">
+
+              </div>
+
+            </div>
+
+          </ng-container>
+
+
+          <ng-container #footerSection>
+
+            <mat-divider class="horizontal"></mat-divider>
+
+            <div fxLayout="row">
+
+              <div fxFlex fxLayoutAlign="end center">
+
+                <button
+                  [class.btn]="!formHandler.isReadyForSubmit"
+                  [class.btn-action]="formHandler.isReadyForSubmit"
+                  (click)="onSubmitDataClicked()">
+                  {{isSaved ? 'Guardar' : 'Agregar'}}
+                </button>
+
+              </div>
+
+            </div>
+
+          </ng-container>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

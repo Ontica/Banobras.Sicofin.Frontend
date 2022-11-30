@@ -25,15 +25,28 @@
 
         <label>Reporte:</label>
 
-        <emp-ng-select name="financialReportTypeUID" required
-          [(ngModel)]="reportsForm.financialReportTypeUID"
+        <emp-ng-select name="financialReportType" required
+          [(ngModel)]="reportsForm.financialReportType"
+          [config]="{bindByValue: false}"
           [items]="financialReportTypesList"
-          [showError]="!reportsForm.financialReportTypeUID">
+          [showError]="!reportsForm.financialReportType">
         </emp-ng-select>
 
       </div>
 
-      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+      <div fxFlex>
+
+        <label>Formato:</label>
+
+        <emp-ng-select name="outputType" required
+          [(ngModel)]="reportsForm.outputType"
+          [items]="reportsForm.financialReportType?.outputTypes ?? [{uid: 'x', name: 'prueba'}]"
+          [showError]="!reportsForm.outputType">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex="none" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
         <button title="Consultar reporte"
           [class.btn-icon]="form.invalid"

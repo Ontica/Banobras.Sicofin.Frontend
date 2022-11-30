@@ -24,8 +24,9 @@ import { FinancialReportFilterComponent } from './financial-report-viewer/financ
 import { FinancialReportSelectorComponent } from './financial-report-designer/financial-report-designer-viewer/financial-report-selector.component';
 import { FinancialReportViewerComponent } from './financial-report-viewer/financial-report-viewer.component';
 import { FixedCellEditorComponent } from './financial-report-designer/financial-report-edition/fixed-cell-editor.component';
+import { FixedColumnEditorComponent } from './financial-report-designer/financial-report-edition/fixed-column-editor.component';
 import { FixedRowEditorComponent } from './financial-report-designer/financial-report-edition/fixed-row-editor.component';
-import { RowMenuComponent } from './financial-report-designer/financial-report-edition/row-menu.component';
+import { ItemMenuComponent } from './financial-report-designer/financial-report-edition/item-menu.component';
 
 
 @NgModule({
@@ -39,8 +40,9 @@ import { RowMenuComponent } from './financial-report-designer/financial-report-e
     FinancialReportSelectorComponent,
     FinancialReportViewerComponent,
     FixedCellEditorComponent,
+    FixedColumnEditorComponent,
     FixedRowEditorComponent,
-    RowMenuComponent,
+    ItemMenuComponent,
   ],
   imports: [
     CommonModule,

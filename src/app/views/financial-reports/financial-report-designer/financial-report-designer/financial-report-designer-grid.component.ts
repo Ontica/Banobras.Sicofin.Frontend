@@ -16,21 +16,23 @@ import { EventInfo, isEmpty } from '@app/core';
 
 import { EmptyFinancialReportDesign, FinancialReportDesign, FinancialReportColumn, FinancialReportRow,
          EmptyFinancialReportRow, DataTableColumnType, FinancialReportCell, EmptyFinancialReportCell,
-         FinancialReportDesignType } from '@app/models';
+         FinancialReportDesignType, EmptyFinancialReportColumn } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { RowMenuEventType } from '../financial-report-edition/row-menu.component';
-
+import { ItemMenuEventType } from '../financial-report-edition/item-menu.component';
 
 export enum FinancialReportDesignerGridEventType {
-  SELECT_ITEM         = 'FinancialReportDesignerGridComponent.Event.SelectItem',
-  INSERT_ROW          = 'FinancialReportDesignerGridComponent.Event.InsertRow',
-  UPDATE_ROW          = 'FinancialReportDesignerGridComponent.Event.UpdateRow',
-  REMOVE_ROW          = 'FinancialReportDesignerGridComponent.Event.RemoveRow',
-  EDIT_CELL           = 'FinancialReportDesignerGridComponent.Event.EditCell',
+  SELECT_ITEM   = 'FinancialReportDesignerGridComponent.Event.SelectItem',
+  INSERT_ROW    = 'FinancialReportDesignerGridComponent.Event.InsertRow',
+  UPDATE_ROW    = 'FinancialReportDesignerGridComponent.Event.UpdateRow',
+  REMOVE_ROW    = 'FinancialReportDesignerGridComponent.Event.RemoveRow',
+  INSERT_COLUMN = 'FinancialReportDesignerGridComponent.Event.InsertColumn',
+  UPDATE_COLUMN = 'FinancialReportDesignerGridComponent.Event.UpdateColumn',
+  REMOVE_COLUMN = 'FinancialReportDesignerGridComponent.Event.RemoveColumn',
+  EDIT_CELL     = 'FinancialReportDesignerGridComponent.Event.EditCell',
 }
 
 
@@ -52,6 +54,8 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
   @Input() filter = '';
 
   @Input() selectedRow: FinancialReportRow = EmptyFinancialReportRow;
+
+  @Input() selectedColumn: FinancialReportColumn = EmptyFinancialReportColumn;
 
   @Input() selectedCell: FinancialReportCell = EmptyFinancialReportCell;
 
@@ -95,36 +99,12 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
 
   onSelectRowClicked(row: FinancialReportRow) {
-    if (!this.isFixedRows || row.row === this.selectedRow.row) {
+    if (row.row === this.selectedRow.row) {
       return;
     }
 
     sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.SELECT_ITEM,
-      {item: row, type: this.financialReportDesign.config.designType});
-  }
-
-
-  onRowMenuEvent(event: EventInfo) {
-   switch (event.type as RowMenuEventType) {
-
-      case RowMenuEventType.INSERT_ITEM_CLICKED:
-        sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.INSERT_ROW,
-          {row: this.selectedRow});
-        return;
-
-      case RowMenuEventType.UPDATE_ITEM_CLICKED:
-        sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.UPDATE_ROW,
-          {row: this.selectedRow})
-        return;
-
-      case RowMenuEventType.REMOVE_ITEM_CLICKED:
-        this.showConfirmMessage();
-        return;
-
-      default:
-        console.log(`Unhandled user interface event ${event.type}`);
-        return;
-    }
+      {item: row, type: FinancialReportDesignType.FixedRows});
   }
 
 
@@ -139,9 +119,66 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
           FinancialReportDesignerGridEventType.EDIT_CELL, {cell});
       } else {
         sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.SELECT_ITEM,
-          {item: cell, type: this.financialReportDesign.config.designType});
+          {item: cell, type: FinancialReportDesignType.FixedCells});
       }
     }
+  }
+
+
+  onColumnClicked(col: string, colIndex: number) {
+    if (colIndex === 0) {
+      return;
+    }
+
+    const column = this.columns.find(c => c.column === col) ?? {column: col};
+
+    sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.SELECT_ITEM,
+      {item: column, type: FinancialReportDesignType.FixedColumns});
+  }
+
+
+  onRowMenuEvent(event: EventInfo) {
+   switch (event.type as ItemMenuEventType) {
+      case ItemMenuEventType.INSERT_ITEM_CLICKED:
+        sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.INSERT_ROW,
+          {row: this.selectedRow});
+        return;
+      case ItemMenuEventType.UPDATE_ITEM_CLICKED:
+        sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.UPDATE_ROW,
+          {row: this.selectedRow})
+        return;
+      case ItemMenuEventType.REMOVE_ITEM_CLICKED:
+        this.showConfirmMessage('row');
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onColumnMenuEvent(event: EventInfo) {
+    switch (event.type as ItemMenuEventType) {
+      case ItemMenuEventType.INSERT_ITEM_CLICKED:
+        sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.INSERT_COLUMN,
+          {column: this.selectedColumn});
+        return;
+      case ItemMenuEventType.UPDATE_ITEM_CLICKED:
+        sendEvent(this.financialReportDesignerGridEvent, FinancialReportDesignerGridEventType.UPDATE_COLUMN,
+          {column: this.selectedColumn})
+        return;
+      case ItemMenuEventType.REMOVE_ITEM_CLICKED:
+        this.showConfirmMessage('column');
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onColumnHeaderClicked(column: FinancialReportColumn) {
+    this.messageBox.showInDevelopment(`Editar encabezado de columna - ${column.title}`, {column});
   }
 
 
@@ -170,7 +207,7 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
 
   private buildFixedRowsGrid() {
-    this.columns = this.financialReportDesign.columns;
+    this.columns = this.financialReportDesign.columns.filter(x => x.show);
 
     if (this.financialReportDesign.rows.length > 0) {
       this.rows = this.financialReportDesign.rows.map(x => ({...x}));
@@ -218,12 +255,45 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
       this.displayedColumnsHeader = [];
       this.displayedColumns = [];
     } else {
+      this.validateColumnsEmpties();
       this.displayedColumnsHeader = [...[' '], ...this.columns.map(column => column.column)];
       this.displayedColumns = [...['number'], ...this.columns.map(column => column.field)];
     }
 
     this.dataSource = new TableVirtualScrollDataSource(this.rows);
     this.dataSource.filterPredicate = this.getFilterPredicate();
+  }
+
+
+  private validateColumnsEmpties() {
+    let hasEmptyColumns = false;
+    const columns = this.columns.map(column => column.column);
+    const columnsChecked = [];
+
+    columns.forEach(col => {
+      if (!!col && !columnsChecked.includes(col)) {
+        columnsChecked.push(col)
+      } else {
+        hasEmptyColumns = true;
+        columnsChecked.push(this.nextLetterInAlphabet(columnsChecked[columnsChecked.length - 1]));
+      }
+    })
+
+    if(hasEmptyColumns) {
+      this.columns.forEach((x,i)=> x.column = columnsChecked[i]);
+    }
+  }
+
+
+  // TODO: 1) validate for more of 27 columns.... 2) assess if move this method to another generic class
+  private nextLetterInAlphabet(letter) {
+    if (letter == "z") {
+      return "a";
+    } else if (letter == "Z") {
+      return "A";
+    } else {
+      return String.fromCharCode(letter.charCodeAt(0) + 1);
+    }
   }
 
 
@@ -245,12 +315,12 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
 
   private getEmptyColumnForFixedCellGrid(column: string): FinancialReportColumn  {
-    const reportColumn: FinancialReportColumn = {
+    const reportColumn: FinancialReportColumn = Object.assign({}, EmptyFinancialReportColumn, {
       column: column,
       title: column,
       field: this.getFieldNameForFixedCells(column),
       type: DataTableColumnType.text,
-    };
+    });
 
     return reportColumn;
   }
@@ -289,55 +359,96 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
     this.scrollToTop();
   }
 
-
-  private showConfirmMessage() {
-    if (isEmpty(this.selectedRow)) {
+  //#region CONFIRM DELETE: (TODO: refactor confirm message methods)
+  private showConfirmMessage(type: 'row' | 'column') {
+    if (!this.isSelectionValid(type)) {
       this.messageBox.showError('No es posible eliminar el elemento');
       return;
     }
 
-    const isConcept = !this.isEmptyConcept();
-    const title =  `Eliminar ${isConcept ? 'el concepto' : 'la etiqueta'} del reporte`;
-    const message = this.getConfirmMessage();
-
-    this.messageBox.confirm(message, title, 'DeleteCancel')
+    this.messageBox.confirm(this.getConfirmMessage(type), this.getTitle(type), 'DeleteCancel')
       .toPromise()
       .then(x => {
         if (x) {
-          const payload = {
-            financialReportTypeUID: this.financialReportDesign.config.reportType.uid,
-            rowUID: this.selectedRow.uid,
-          }
-          sendEvent(this.financialReportDesignerGridEvent,
-            FinancialReportDesignerGridEventType.REMOVE_ROW, payload);
+          this.emitDeleteEventType(type);
         }
       });
   }
 
 
-  private getConfirmMessage(): string {
-    const isConcept = !this.isEmptyConcept();
+  private isSelectionValid(type: 'row' | 'column'): boolean {
+    if (type === 'row') {
+      return !isEmpty(this.selectedRow);
+    }
+    if (type === 'column') {
+      return !!this.selectedColumn.column;
+    }
+    return false;
+  }
+
+
+  private getTitle(type: 'row' | 'column'): string {
+    if (type === 'row') {
+      const isConcept = !this.isEmptyConcept();
+      return `Eliminar ${isConcept ? 'el concepto' : 'la etiqueta'} del reporte`
+    } else {
+      return `Eliminar columna del reporte`
+    }
+  }
+
+
+  private getConfirmMessage(type: 'row' | 'column'): string {
+    let item;
+    let name;
+    let position;
+    let item2;
+
+    if (type === 'row') {
+      const isConcept = !this.isEmptyConcept();
+      item = isConcept ? 'Concepto' : 'Etiqueta';
+      name = isConcept ? this.selectedRow.conceptCode + ': ' + this.selectedRow.concept : this.selectedRow.concept;
+      position = this.selectedRow.row;
+      item2 = isConcept ? 'el concepto' : 'la etiqueta';
+    } else {
+      item = 'Columna';
+      name = this.selectedColumn.title;
+      position = this.selectedColumn.column;
+      item2 = 'la columna';
+    }
 
     return `
-      <table style='margin: 0;'>
-
-        <tr><td class='nowrap'>${isConcept ? 'Concepto' : 'Etiqueta'}: </td><td><strong>
-          ${isConcept ?
-            this.selectedRow.conceptCode + ': ' + this.selectedRow.concept :
-            this.selectedRow.concept}
-        </strong></td></tr>
-
-        <tr><td class='nowrap'>Posición: </td><td><strong>
-          ${this.selectedRow.row}
-        </strong></td></tr>
+      <table class='confirm-data'>
+        <tr><td>${item}: </td><td><strong>${name}</strong></td></tr>
+        <tr><td>Posición: </td><td><strong>${position}</strong></td></tr>
       </table>
+      <br>¿Elimino ${item2} del reporte?`;
+  }
 
-     <br>¿Elimino ${isConcept ? 'el concepto' : 'la etiqueta'} del reporte?`;
+
+  private emitDeleteEventType(type: 'row' | 'column') {
+    if (type === 'row') {
+      const payload = {
+        financialReportTypeUID: this.financialReportDesign.config.reportType.uid,
+        rowUID: this.selectedRow.uid,
+      }
+      sendEvent(this.financialReportDesignerGridEvent,
+        FinancialReportDesignerGridEventType.REMOVE_ROW, payload);
+    }
+
+    if (type === 'column') {
+      const payload = {
+        reportTypeUID: this.financialReportDesign.config.reportType.uid,
+        columnUID: this.selectedColumn.column,
+      }
+      sendEvent(this.financialReportDesignerGridEvent,
+        FinancialReportDesignerGridEventType.REMOVE_COLUMN, payload);
+    }
   }
 
 
   private isEmptyConcept() {
     return isEmpty({uid: this.selectedRow.financialConceptUID});
   }
+  //#endregion
 
 }

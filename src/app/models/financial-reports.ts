@@ -104,6 +104,14 @@ export const EmptyFinancialReportBreakdown: FinancialReportBreakdown = {
 // Designer
 //
 
+
+export interface FinancialReportTypesForDesign extends Identifiable {
+  uid: string;
+  name: string;
+  outputTypes: Identifiable[];
+}
+
+
 export interface FinancialReportDesign {
   config: FinancialReportConfig;
   columns: FinancialReportColumn[];
@@ -113,8 +121,9 @@ export interface FinancialReportDesign {
 
 
 export enum FinancialReportDesignType {
-  FixedRows  = 'FixedRows',
-  FixedCells = 'FixedCells',
+  FixedRows    = 'FixedRows',
+  FixedCells   = 'FixedCells',
+  FixedColumns = 'FixedColumns',
 }
 
 
@@ -145,9 +154,12 @@ export interface FinancialReportRow {
 
 export interface FinancialReportColumn extends DataTableColumn {
   column: string;
-  title: string;
   field: string;
+  title: string;
   type: string;
+  formula: string;
+  show: boolean;
+  isCalculated: boolean;
   digits?: number;
 }
 
@@ -180,9 +192,12 @@ export const EmptyFinancialReportConfig: FinancialReportConfig = {
 
 export const EmptyFinancialReportColumn: FinancialReportColumn = {
   column: '',
+  field: '',
   title: '',
-  field: 'Empty',
   type: DataTableColumnType.text,
+  formula: '',
+  show: true,
+  isCalculated: false,
   digits: 0,
 };
 
@@ -214,14 +229,22 @@ export const EmptyFinancialReportDesign: FinancialReportDesign = {
 
 
 export enum FinancialReportEditionItemType {
-  Concept = 'Concept',
-  Label   = 'Label',
+  Concept   = 'Concept',
+  Label     = 'Label',
+  DataField = 'DataField',
+  Formula   = 'Formula',
 }
 
 
 export const FinancialReportEditionItemTypeList: Identifiable[] = [
   {uid: FinancialReportEditionItemType.Concept, name: 'Concepto'},
   {uid: FinancialReportEditionItemType.Label,   name: 'Etiqueta'},
+];
+
+
+export const FinancialReportColumnEditionItemTypeList: Identifiable[] = [
+  {uid: FinancialReportEditionItemType.DataField, name: 'Dato'},
+  {uid: FinancialReportEditionItemType.Formula,   name: 'Fórmula'},
 ];
 
 
@@ -262,6 +285,10 @@ export enum FinancialReportEditionType {
   InsertConceptRow  = 'InsertConceptRow',
   UpdateLabelRow    = 'UpdateLabelRow',
   UpdateConceptRow  = 'UpdateConceptRow',
+  InsertDataFieldColumn = 'InsertDataFieldColumn',
+  InsertFormulaColumn   = 'InsertFormulaColumn',
+  UpdateDataFieldColumn = 'UpdateDataFieldColumn',
+  UpdateFormulaColumn   = 'UpdateFormulaColumn',
   InsertLabelCell   = 'InsertLabelCell',
   InsertConceptCell = 'InsertConceptCell',
   UpdateLabelCell   = 'UpdateLabelCell',

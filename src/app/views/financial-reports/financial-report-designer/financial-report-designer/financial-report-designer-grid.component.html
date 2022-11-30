@@ -2,44 +2,60 @@
 
   <table mat-table [dataSource]="dataSource" class="emp-designer">
 
-    <ng-container *ngFor="let column of displayedColumnsHeader; let i = index;" [matColumnDef]="column">
-      <th mat-header-cell *matHeaderCellDef class="text-align-center">
-        {{column}}
+    <ng-container *ngFor="let column of displayedColumnsHeader; let ci = index;" [matColumnDef]="column">
+      <th mat-header-cell *matHeaderCellDef class="text-align-center"
+        [class.designer-column-selected]="selectedColumn.column === column"
+        (click)="onColumnClicked(column, ci)">
+
+        <div *ngIf="ci === 0">{{rows.length}}</div>
+
+        <emp-fa-item-menu *ngIf="ci > 0"
+          itemType="column"
+          [canEdit]="isFixedRows"
+          [isSelected]="selectedColumn.column === column"
+          (itemMenuEvent)="onColumnMenuEvent($event)">
+          {{column}}
+        </emp-fa-item-menu>
+
       </th>
     </ng-container>
 
     <ng-container matColumnDef="number">
       <th mat-header-cell *matHeaderCellDef></th>
 
-      <td mat-cell *matCellDef="let row; let i = index;" (click)="onSelectRowClicked(row)">
+      <td mat-cell *matCellDef="let row;" (click)="onSelectRowClicked(row)">
 
-        <emp-fa-row-menu
-          [canEditRows]="isFixedRows"
+        <emp-fa-item-menu
+          itemType="row"
+          [canEdit]="isFixedRows"
           [isSelected]="selectedRow.row === row.row"
-          (rowMenuEvent)="onRowMenuEvent($event)">
+          (itemMenuEvent)="onRowMenuEvent($event)">
           {{row.row}}
-        </emp-fa-row-menu>
+        </emp-fa-item-menu>
 
       </td>
     </ng-container>
 
-    <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column.field">
+    <ng-container *ngFor="let column of columns; let ci = index;" [matColumnDef]="column.field">
 
       <th mat-header-cell *matHeaderCellDef class="nowrap header-bold text-align-center"
+        (click)="onColumnHeaderClicked(column)"
+        [class.designer-column-selected]="selectedColumn.column === column.column"
+        [class.nowrap]="column.type === COLUMN_TYPE.decimal"
         [style.width.px]="80"
-        [style.minWidth.px]="column.field === 'concept' ? 350 : 80"
-        [style.maxWidth.px]="column.type === COLUMN_TYPE.decimal ? 150 : null">
+        [style.minWidth.px]="column.field === 'concept' ? 350 : 80">
         {{column.title}}
       </th>
 
-      <td mat-cell *matCellDef="let row;"
+      <td mat-cell *matCellDef="let row; let ri = index;"
         (click)="onCellSelectClicked(row.row, column.column, row[column.field])"
         [style.minWidth.px]="isFixedCells ? 145 : null"
         [style.maxWidth.px]="isFixedCells ? 145 : null"
         [class]="isFixedCells && row[column.field]?.format ? row[column.field].format : ''"
         [ngClass]="{'text-align-right': column.type === COLUMN_TYPE.decimal,
-                    'nowrap': column.type === COLUMN_TYPE.text_nowrap,
-                    'designer-cell-selected': selectedCell.column === column.column && selectedCell.row === row.row}">
+                    'nowrap': column.type === COLUMN_TYPE.text_nowrap || column.type === COLUMN_TYPE.decimal,
+                    'designer-cell-selected': selectedCell.column === column.column && selectedCell.row === row.row,
+                    'designer-column-selected': selectedColumn.column === column.column}">
 
         <ng-container *ngIf="isFixedRows">
 
@@ -66,8 +82,8 @@
 
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumnsHeader; sticky: true;"></tr>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsHeader; sticky: true;" class="designer-columns-header"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;" class="designer-columns-subheader"
       [hidden]="isFixedCells"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
       [class]="row.format ?? ''"

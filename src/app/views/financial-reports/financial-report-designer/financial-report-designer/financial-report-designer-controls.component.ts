@@ -12,8 +12,10 @@ import { EventInfo } from '@app/core';
 import { sendEvent } from '@app/shared/utils';
 
 export enum FinancialReportDesignerControlsEventType {
-  FILTER_CHANGED        = 'FinancialReportDesignerControlsComponent.Event.FilterChanged',
+  EDIT_HEADER_CLICKED    = 'FinancialReportDesignerControlsComponent.Event.EditHeaderClicked',
+  CLEAR_BUTTON_CLICKED   = 'FinancialReportDesignerControlsComponent.Event.ClearButtonClicked',
   EXECUTE_BUTTON_CLICKED = 'FinancialReportDesignerControlsComponent.Event.ExecuteButtonClicked',
+  FILTER_CHANGED         = 'FinancialReportDesignerControlsComponent.Event.FilterChanged',
 }
 
 @Component({
@@ -33,6 +35,12 @@ export class FinancialReportDesignerControlsComponent {
   @Output() financialReportDesignerControlsEvent = new EventEmitter<EventInfo>();
 
 
+  onEditReportHeaderClicked() {
+    sendEvent(this.financialReportDesignerControlsEvent,
+      FinancialReportDesignerControlsEventType.EDIT_HEADER_CLICKED);
+  }
+
+
   onClearFilter() {
     this.filter = '';
     this.onFilterData();
@@ -48,6 +56,12 @@ export class FinancialReportDesignerControlsComponent {
   onExecuteButtonClicked() {
     sendEvent(this.financialReportDesignerControlsEvent,
       FinancialReportDesignerControlsEventType.EXECUTE_BUTTON_CLICKED);
+  }
+
+
+  onClearButtonClicked() {
+    sendEvent(this.financialReportDesignerControlsEvent,
+      FinancialReportDesignerControlsEventType.CLEAR_BUTTON_CLICKED);
   }
 
 }

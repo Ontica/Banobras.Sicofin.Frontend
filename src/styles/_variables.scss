@@ -156,9 +156,13 @@ $grid-row-height: 32px;
 // Designer
 //
 
-$designer-bar-background: #f0f0f0 !default;
 $designer-border-color: #d2d2d2 !default;
-$designer-row-selected-border-color: #32816e !default;
+$designer-bar-background: #f0f0f0 !default;
+$designer-bar-selected-border-color: #32816e !default;
+$designer-bar-selected-background-color: #b3dbd3 !default;
+$designer-bar-selected-hover-background-color: #97cec3 !default;
+$designer-cell-selected-background-color: #eef7f5 !default;
+$designer-cell-selected-hover-background-color: #dcefeb !default;
 
 $designer-primary-color: #e5f6ff !default;
 $designer-secondary-color: #fff8dd !default;

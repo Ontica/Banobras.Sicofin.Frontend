@@ -88,3 +88,11 @@ table.grid tbody tr:nth-child(odd) {
 table.grid tbody tr:nth-child(even) {
   background-color: $grid-even-background-color;
 }
+
+table.confirm-data {
+  margin: 0;
+}
+
+table.confirm-data > tr > td {
+  white-space: nowrap;
+}
