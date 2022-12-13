@@ -82,22 +82,27 @@
           [class.invalid-control]="formHandler.showInvalidControl(controls.code)">
       </div>
 
-      <div fxFlex fxLayoutAlign="end end">
-        <div fxFlex="none">
-          <label>Fecha inicial:</label>
-          <emp-ng-datepicker
-            [formControlName]="controls.startDate"
-            [showError]="formHandler.showInvalidControl(controls.startDate)">
-          </emp-ng-datepicker>
-        </div>
+      <div fxFlex>
+        <label>Identificador de variable:</label>
+        <input type="text" class="text-box" empNgInputKeys
+          [formControlName]="controls.variableID"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.variableID)">
+      </div>
 
-        <div fxFlex="none">
-          <label>Fecha final:</label>
-          <emp-ng-datepicker
-            [formControlName]="controls.endDate"
-            [showError]="formHandler.showInvalidControl(controls.endDate)">
-          </emp-ng-datepicker>
-        </div>
+      <div fxFlex="none">
+        <label>Fecha inicial:</label>
+        <emp-ng-datepicker
+          [formControlName]="controls.startDate"
+          [showError]="formHandler.showInvalidControl(controls.startDate)">
+        </emp-ng-datepicker>
+      </div>
+
+      <div fxFlex="none">
+        <label>Fecha final:</label>
+        <emp-ng-datepicker
+          [formControlName]="controls.endDate"
+          [showError]="formHandler.showInvalidControl(controls.endDate)">
+        </emp-ng-datepicker>
       </div>
 
     </div>
@@ -105,13 +110,24 @@
     <div fxLayout="row">
 
       <div [fxFlex]="100">
-
         <label>Concepto:</label>
         <input type="text" class="text-box"
           [formControlName]="controls.name"
           [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
-
       </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100">
+        <label>Script de cálculo:</label>
+        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
+          [formControlName]="controls.calculationScript"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.calculationScript)">
+        </textarea>
+      </div>
+
     </div>
 
   </div>

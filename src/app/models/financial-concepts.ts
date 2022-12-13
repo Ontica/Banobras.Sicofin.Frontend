@@ -58,6 +58,8 @@ export interface FinancialConcept {
   level: number;
   startDate: DateString;
   endDate: DateString;
+  calculationScript: string;
+  variableID: string;
   group: Identifiable;
   accountsChart: Identifiable;
   integration: FinancialConceptEntryDescriptor[]
@@ -74,6 +76,8 @@ export interface FinancialConceptEditionCommand {
   position?: number;
   startDate: DateString;
   endDate: DateString;
+  calculationScript: string;
+  variableID: string;
 }
 
 
@@ -218,6 +222,8 @@ export const EmptyFinancialConcept: FinancialConcept = {
   accountsChart: Empty,
   startDate: '',
   endDate: '',
+  calculationScript: '',
+  variableID: '',
   integration: [],
 };
 

@@ -47,6 +47,8 @@ enum FinancialConceptHeaderFormControls {
   positioningOffsetConceptUID = 'positioningOffsetConceptUID',
   startDate = 'startDate',
   endDate = 'endDate',
+  calculationScript = 'calculationScript',
+  variableID = 'variableID',
 }
 
 @Component({
@@ -214,6 +216,8 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
         position: new FormControl(''),
         startDate: new FormControl('', Validators.required),
         endDate: new FormControl('2049-12-31', Validators.required),
+        calculationScript: new FormControl(''),
+        variableID: new FormControl('', Validators.pattern('[A-Z0-9_]*')),
       })
     );
 
@@ -232,6 +236,8 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
       positioningOffsetConceptUID: '',
       startDate: this.financialConcept.startDate || '',
       endDate: this.financialConcept.endDate || '',
+      calculationScript: this.financialConcept.calculationScript || '',
+      variableID: this.financialConcept.variableID || '',
     });
 
     this.validateAccountsChartChanged(this.financialConcept.accountsChart.uid);
@@ -251,6 +257,8 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
       positioningRule: formModel.positioningRule ?? '',
       startDate: formModel.startDate ?? '',
       endDate: formModel.endDate ?? '',
+      calculationScript: formModel.calculationScript ?? '',
+      variableID: formModel.variableID ?? '',
     };
 
     if (this.isSaved) {
