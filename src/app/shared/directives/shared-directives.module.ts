@@ -13,6 +13,7 @@ import { EmpContextMenuDisabledDirective } from './context-menu-disabled.directi
 import { EmpCurrencyDirective } from './currency.directive';
 import { EmpFormKeyDownEnterDirective } from './form-keydown-enter.directive';
 import { EmpHasPermissionDirective } from './has-permission.directive';
+import { EmpInputKeysDirective } from './input-keys.directive';
 import { EmpIntegerDirective } from './integer.directive';
 import { EmpNumerationDirective } from './numeration.directive';
 import { EmpResizableDirective } from './resizable.directive';
@@ -33,6 +34,7 @@ import { EmpNotebookBreakPointsProvider } from './notebook-breakpoint';
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
     EmpHasPermissionDirective,
+    EmpInputKeysDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
     EmpResizableDirective,
@@ -45,6 +47,7 @@ import { EmpNotebookBreakPointsProvider } from './notebook-breakpoint';
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
     EmpHasPermissionDirective,
+    EmpInputKeysDirective,
     EmpIntegerDirective,
     EmpNumerationDirective,
     EmpResizableDirective,
