@@ -14,7 +14,6 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { SubledgerAccountsModule } from '../subledger-accounts/subledger-accounts.module';
 
-import { ImporterDetailsTableComponent } from './vouchers-importer/importer-details-table.component';
 import { VoucherCreatorComponent } from './voucher-creator/voucher-creator.component';
 import { VoucherEditorComponent } from './voucher-editor/voucher-editor.component';
 import { VoucherEntriesEditorComponent } from './voucher-entries-editor/voucher-entries-editor.component';
@@ -27,6 +26,7 @@ import { VoucherListItemComponent } from './vouchers-explorer/voucher-list-item.
 import { VoucherPrintableViewerComponent } from './voucher-printable-viewer/voucher-printable-viewer.component';
 import { VouchersExplorerComponent } from './vouchers-explorer/vouchers-explorer.component';
 import { VouchersImporterComponent } from './vouchers-importer/vouchers-importer.component';
+import { VouchersImporterDetailsTableComponent } from './vouchers-importer/importer-details-table.component';
 import { VoucherSpecialCaseEditorComponent } from './voucher-creator/voucher-special-case-editor.component';
 import { VoucherSubmitterComponent } from './voucher-editor/voucher-submitter.component';
 import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed-view.component';
@@ -43,7 +43,6 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     SubledgerAccountsModule,
   ],
   declarations: [
-    ImporterDetailsTableComponent,
     VoucherCreatorComponent,
     VoucherEditorComponent,
     VoucherEntriesEditorComponent,
@@ -56,6 +55,7 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     VoucherPrintableViewerComponent,
     VouchersExplorerComponent,
     VouchersImporterComponent,
+    VouchersImporterDetailsTableComponent,
     VoucherSpecialCaseEditorComponent,
     VoucherSubmitterComponent,
     VoucherTabbedViewComponent,

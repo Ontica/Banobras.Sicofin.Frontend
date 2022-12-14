@@ -20,8 +20,8 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { sendEvent } from '@app/shared/utils';
 
 
-export enum ImporterDetailsTableEventType {
-  CHECK_CLICKED = 'ImporterDetailsTableComponent.Event.CheckClicked',
+export enum VouchersImporterDetailsTableEventType {
+  CHECK_CLICKED = 'VouchersImporterDetailsTableComponent.Event.CheckClicked',
 }
 
 export enum ImporterDetailsSelectionType {
@@ -31,10 +31,10 @@ export enum ImporterDetailsSelectionType {
 }
 
 @Component({
-  selector: 'emp-fa-importer-details-table',
+  selector: 'emp-fa-vouchers-importer-details-table',
   templateUrl: './importer-details-table.component.html',
 })
-export class ImporterDetailsTableComponent implements OnChanges {
+export class VouchersImporterDetailsTableComponent implements OnChanges {
 
   @Input() importVouchersResult: ImportVouchersResult = EmptyImportVouchersResult;
 
@@ -48,7 +48,7 @@ export class ImporterDetailsTableComponent implements OnChanges {
 
   @Input() showProcessedCount = true;
 
-  @Output() importerDetailsTableEvent = new EventEmitter<EventInfo>();
+  @Output() vouchersImporterDetailsTableEvent = new EventEmitter<EventInfo>();
 
   displayedColumns = [];
 
@@ -85,8 +85,8 @@ export class ImporterDetailsTableComponent implements OnChanges {
   onRowSelectionClicked(row: ImportVouchersTotals) {
     this.selection.toggle(row);
 
-    sendEvent(this.importerDetailsTableEvent,
-      ImporterDetailsTableEventType.CHECK_CLICKED, {selection: this.selection.selected});
+    sendEvent(this.vouchersImporterDetailsTableEvent,
+      VouchersImporterDetailsTableEventType.CHECK_CLICKED, {selection: this.selection.selected});
   }
 
 
@@ -142,7 +142,7 @@ export class ImporterDetailsTableComponent implements OnChanges {
       this.importVouchersResult.voucherTotals.forEach(x => this.selection.select(x));
 
       setTimeout(() => {
-        sendEvent(this.importerDetailsTableEvent, ImporterDetailsTableEventType.CHECK_CLICKED,
+        sendEvent(this.vouchersImporterDetailsTableEvent, VouchersImporterDetailsTableEventType.CHECK_CLICKED,
           {selection: this.selection.selected});
       });
     }

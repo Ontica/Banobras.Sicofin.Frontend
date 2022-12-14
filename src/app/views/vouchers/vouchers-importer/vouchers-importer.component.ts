@@ -30,7 +30,8 @@ import { PermissionsLibrary } from '@app/main-layout';
 
 import { combineLatest, Observable } from 'rxjs';
 
-import { ImporterDetailsSelectionType, ImporterDetailsTableEventType } from './importer-details-table.component';
+import { ImporterDetailsSelectionType,
+         VouchersImporterDetailsTableEventType } from './importer-details-table.component';
 
 export enum VouchersImporterEventType {
   CLOSE_MODAL_CLICKED  = 'VouchersImporterComponent.Event.CloseModalClicked',
@@ -196,8 +197,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  onImporterDetailsTableEvent(event) {
-    if (event.type === ImporterDetailsTableEventType.CHECK_CLICKED) {
+  onVouchersImporterDetailsTableEvent(event: EventInfo) {
+    if (event.type === VouchersImporterDetailsTableEventType.CHECK_CLICKED) {
       Assertion.assertValue(event.payload.selection, 'event.payload.selection');
       this.selectedPartsToImport = event.payload.selection as ImportVouchersTotals[];
     }
