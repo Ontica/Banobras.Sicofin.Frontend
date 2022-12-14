@@ -16,7 +16,7 @@ import { BalancesDataService } from '@app/data-services';
 import { Account, AccountBalance, AccountHistory, AccountRole, AreaRule,
          CurrencyRule, EmptyAccount, LedgerRule, SectorRule } from '@app/models';
 
-import { AccountViewEventType } from '../account-view/account-view.component';
+import { AccountViewEventType } from './account-view.component';
 
 import { sendEvent } from '@app/shared/utils';
 

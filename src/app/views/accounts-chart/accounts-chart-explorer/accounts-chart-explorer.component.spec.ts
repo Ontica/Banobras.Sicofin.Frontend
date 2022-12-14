@@ -7,22 +7,22 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccountsChartComponent } from './accounts-chart.component';
+import { AccountsChartExplorerComponent } from './accounts-chart-explorer.component';
 
 
-describe('AccountsChartComponent', () => {
-  let component: AccountsChartComponent;
-  let fixture: ComponentFixture<AccountsChartComponent>;
+describe('AccountsChartExplorerComponent', () => {
+  let component: AccountsChartExplorerComponent;
+  let fixture: ComponentFixture<AccountsChartExplorerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountsChartComponent ]
+      declarations: [ AccountsChartExplorerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccountsChartComponent);
+    fixture = TestBed.createComponent(AccountsChartExplorerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

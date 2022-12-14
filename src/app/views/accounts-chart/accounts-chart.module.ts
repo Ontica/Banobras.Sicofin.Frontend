@@ -19,13 +19,13 @@ import { ReportsControlsModule } from '../reports-controls/reports-controls.modu
 import { AccountEditionWizardComponent } from './account-edition/account-edition-wizard.component';
 import { AccountHeaderComponent } from './account-edition/account-header.component';
 import { AccountItemsTableComponent } from './account-edition/account-items-table.component';
-import { AccountsChartComponent } from './accounts-chart/accounts-chart.component';
-import { AccountsChartControlsComponent } from './accounts-chart-list/accounts-chart-controls.component';
-import { AccountsChartFilterComponent } from './accounts-chart-filter/accounts-chart-filter.component';
-import { AccountsChartListComponent } from './accounts-chart-list/accounts-chart-list.component';
-import { AccountsChartListEntryComponent } from './accounts-chart-list/accounts-chart-list-entry.component';
+import { AccountsChartControlsComponent } from './accounts-chart-explorer/accounts-chart-controls.component';
+import { AccountsChartExplorerComponent } from './accounts-chart-explorer/accounts-chart-explorer.component';
+import { AccountsChartFilterComponent } from './accounts-chart-explorer/accounts-chart-filter.component';
+import { AccountsChartListComponent } from './accounts-chart-explorer/accounts-chart-list.component';
+import { AccountsChartListEntryComponent } from './accounts-chart-explorer/accounts-chart-list-entry.component';
 import { AccountTabbedViewComponent } from './account-tabbed-view/account-tabbed-view.component';
-import { AccountViewComponent } from './account-view/account-view.component';
+import { AccountViewComponent } from './account-tabbed-view/account-view.component';
 
 
 @NgModule({
@@ -44,8 +44,8 @@ import { AccountViewComponent } from './account-view/account-view.component';
     AccountEditionWizardComponent,
     AccountHeaderComponent,
     AccountItemsTableComponent,
-    AccountsChartComponent,
     AccountsChartControlsComponent,
+    AccountsChartExplorerComponent,
     AccountsChartFilterComponent,
     AccountsChartListComponent,
     AccountsChartListEntryComponent,
@@ -53,7 +53,7 @@ import { AccountViewComponent } from './account-view/account-view.component';
     AccountViewComponent,
   ],
   exports: [
-    AccountsChartComponent,
+    AccountsChartExplorerComponent,
     AccountTabbedViewComponent,
   ]
 })

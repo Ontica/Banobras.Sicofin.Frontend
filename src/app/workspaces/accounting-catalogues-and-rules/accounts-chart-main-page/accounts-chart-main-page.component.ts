@@ -15,7 +15,9 @@ import {
   AccountTabbedViewEventType
 } from '@app/views/accounts-chart/account-tabbed-view/account-tabbed-view.component';
 
-import { AccountsChartEventType } from '@app/views/accounts-chart/accounts-chart/accounts-chart.component';
+import {
+  AccountsChartExplorerEventType
+} from '@app/views/accounts-chart/accounts-chart-explorer/accounts-chart-explorer.component';
 
 
 @Component({
@@ -29,9 +31,9 @@ export class AccountsChartMainPageComponent {
   selectedAccount: Account = EmptyAccount;
 
 
-  onAccountsChartEvent(event: EventInfo) {
-    switch (event.type as AccountsChartEventType) {
-      case AccountsChartEventType.ACCOUNT_SELECTED:
+  onAccountsChartExplorerEvent(event: EventInfo) {
+    switch (event.type as AccountsChartExplorerEventType) {
+      case AccountsChartExplorerEventType.ACCOUNT_SELECTED:
         this.selectedAccount = isEmpty(event.payload.account) ? EmptyAccount : event.payload.account;
         this.displayAccountChartTabbed = !isEmpty(this.selectedAccount);
 

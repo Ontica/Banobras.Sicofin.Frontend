@@ -24,23 +24,23 @@ import {
 
 import { AccountEditionWizardEventType } from '../account-edition/account-edition-wizard.component';
 
-import { AccountsChartFilterEventType } from '../accounts-chart-filter/accounts-chart-filter.component';
+import { AccountsChartFilterEventType } from './accounts-chart-filter.component';
 
-import { AccountsChartListEventType } from '../accounts-chart-list/accounts-chart-list.component';
+import { AccountsChartListEventType } from './accounts-chart-list.component';
 
-export enum AccountsChartEventType {
-  ACCOUNT_SELECTED = 'AccountsChartComponent.Event.AccountSelected',
+export enum AccountsChartExplorerEventType {
+  ACCOUNT_SELECTED = 'AccountsChartExplorerComponent.Event.AccountSelected',
 }
 
 @Component({
-  selector: 'emp-fa-accounts-chart',
-  templateUrl: './accounts-chart.component.html',
+  selector: 'emp-fa-accounts-chart-explorer',
+  templateUrl: './accounts-chart-explorer.component.html',
 })
-export class AccountsChartComponent {
+export class AccountsChartExplorerComponent {
 
   @Input() selectedAccount: Account = EmptyAccount;
 
-  @Output() accountsChartEvent = new EventEmitter<EventInfo>();
+  @Output() accountsChartExplorerEvent = new EventEmitter<EventInfo>();
 
   permissions = PermissionsLibrary;
 
@@ -83,7 +83,8 @@ export class AccountsChartComponent {
 
       case AccountEditionWizardEventType.ACCOUNT_EDITED:
         Assertion.assertValue(event.payload.account, 'event.payload.account');
-        sendEvent(this.accountsChartEvent, AccountsChartEventType.ACCOUNT_SELECTED, event.payload);
+        sendEvent(this.accountsChartExplorerEvent,
+          AccountsChartExplorerEventType.ACCOUNT_SELECTED, event.payload);
         break;
 
       default:
@@ -194,8 +195,8 @@ export class AccountsChartComponent {
 
     this.accountsChartData.getAccount(accountsChartUID, accountUID)
       .toPromise()
-      .then(account => sendEvent(this.accountsChartEvent, AccountsChartEventType.ACCOUNT_SELECTED,
-                        { account }))
+      .then(account => sendEvent(this.accountsChartExplorerEvent,
+                         AccountsChartExplorerEventType.ACCOUNT_SELECTED, { account }))
       .finally(() => this.setSubmitted(false));
   }
 
