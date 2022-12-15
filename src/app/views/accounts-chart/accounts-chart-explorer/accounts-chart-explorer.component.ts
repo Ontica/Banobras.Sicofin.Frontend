@@ -24,6 +24,8 @@ import {
 
 import { AccountEditionWizardEventType } from '../account-edition/account-edition-wizard.component';
 
+import { AccountsImporterEventType } from '../accounts-importer/accounts-importer.component';
+
 import { AccountsChartFilterEventType } from './accounts-chart-filter.component';
 
 import { AccountsChartListEventType } from './accounts-chart-list.component';
@@ -66,8 +68,33 @@ export class AccountsChartExplorerComponent {
 
   displayAccountEditionWizard = false;
 
+  displayAccountsImporter = false;
+
 
   constructor(private accountsChartData: AccountsChartDataService) { }
+
+
+  onImportAccountsClicked() {
+    this.displayAccountsImporter = true;
+  }
+
+
+  onAccountsImporterEvent(event: EventInfo) {
+    switch (event.type as AccountsImporterEventType) {
+
+      case AccountsImporterEventType.CLOSE_MODAL_CLICKED:
+        this.displayAccountsImporter = false;
+        return;
+
+      case AccountsImporterEventType.ACCOUNTS_IMPORTED:
+        // TODO: define what to do after import accounts
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
 
 
   onCreateAccountButtonClicked() {
@@ -75,7 +102,7 @@ export class AccountsChartExplorerComponent {
   }
 
 
-  onAccountEditionWizardEvent(event) {
+  onAccountEditionWizardEvent(event: EventInfo) {
     switch (event.type as AccountEditionWizardEventType) {
       case AccountEditionWizardEventType.CLOSE_MODAL_CLICKED:
         this.displayAccountEditionWizard = false;
@@ -93,7 +120,7 @@ export class AccountsChartExplorerComponent {
   }
 
 
-  onAccountsChartFilterEvent(event) {
+  onAccountsChartFilterEvent(event: EventInfo) {
     switch (event.type as AccountsChartFilterEventType) {
 
       case AccountsChartFilterEventType.CLEAR_ACCOUNTS_CHART_CLICKED:
@@ -127,7 +154,7 @@ export class AccountsChartExplorerComponent {
   }
 
 
-  onAccountsChartListEvent(event) {
+  onAccountsChartListEvent(event: EventInfo) {
     switch (event.type as AccountsChartListEventType) {
       case AccountsChartListEventType.ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.account, 'event.payload.account');
@@ -145,7 +172,7 @@ export class AccountsChartExplorerComponent {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
@@ -207,7 +234,7 @@ export class AccountsChartExplorerComponent {
   }
 
 
-  private setText(accountsChartName) {
+  private setText(accountsChartName: string) {
     this.cardHint = accountsChartName ?? 'Filtro no seleccionado';
   }
 
@@ -224,7 +251,7 @@ export class AccountsChartExplorerComponent {
   }
 
 
-  private setDisplayExportModal(display) {
+  private setDisplayExportModal(display: boolean) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
   }

@@ -1,0 +1,123 @@
+<emp-ng-modal-window [config]="{width: '760px'}">
+
+  <emp-ng-card
+    [title]='title'
+    hint='Se importarán las cuentas a SICOFIN'
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding">
+
+      <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+        autocomplete="off" class="form-section">
+
+        <emp-ng-spinner #spinner [visible]="isLoading">
+
+        </emp-ng-spinner>
+
+        <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
+          fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+          <div class="section-title"> Archivo a importar </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column">
+
+            <div fxFlex="100">
+              <label>Archivo:</label>
+              <emp-ng-file-control [disabled]="executedImported"
+                [fileControl]="file"
+                [showError]="showFileError"
+                [config]="{filesTypes: ['excel'], autoUpload: true, placeholder: 'Elegir o arrastrar el archivo  Excel.'}"
+                (fileControlChange)="onFileControlChange($event)">
+
+              </emp-ng-file-control>
+            </div>
+
+          </div>
+
+          <div class="section-title"> Información sobre las cuentas y parámetros de importación </div>
+
+          <div fxLayout="row" fxLayoutAlign="space-between">
+
+            <div fxFlex="50" fxFlex.lt-md>
+              <label>Tipo de contabilidad:</label>
+              <emp-ng-select
+                [formControlName]="controls.accountsChartUID"
+                [items]="accountsChartMasterDataList"
+                [loading]="isLoadingAccountChart"
+                [showError]="formHandler.showInvalidControl(controls.accountsChartUID)">
+              </emp-ng-select>
+            </div>
+
+            <div fxFlex="none" fxFlex.lt-md="none">
+              <label>Fecha de aplicación:</label>
+              <emp-ng-datepicker
+                [formControlName]="controls.applicationDate"
+                [showError]="formHandler.showInvalidControl(controls.applicationDate)">
+
+              </emp-ng-datepicker>
+            </div>
+
+          </div>
+
+          <ng-container *ngIf="executedDryRun">
+
+            <div class="section-title">
+              Información del archivo a importar
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" [style.maxHeight]="'200px'" [style.minHeight]="'auto'">
+
+              <emp-fa-accounts-importer-details-table fxFlex="100"
+                [importResult]="importResult"
+                [commandExecuted]="executedDryRun">
+
+              </emp-fa-accounts-importer-details-table>
+
+            </div>
+
+          </ng-container>
+
+          <mat-divider class="horizontal"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button (click)="onSubmitDryRunImportAccounts()" [disabled]="executedImported"
+                [class.btn]="executedDryRun || !isFileFormValid"
+                [class.btn-action]="!executedDryRun && isFileFormValid">
+                Analizar archivo
+              </button>
+
+              <button (click)="onSubmitImportAccounts()" [disabled]="executedImported"
+                [class.btn]="!isReadyForSubmit"
+                [class.btn-action]="isReadyForSubmit">
+                Importar cuentas
+              </button>
+
+              <ng-container *ngIf="executedImported">
+
+                <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0">
+
+                </mat-divider>
+
+                <button (click)="onClose()"
+                  class="btn-action">
+                  Cerrar
+                </button>
+
+              </ng-container>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

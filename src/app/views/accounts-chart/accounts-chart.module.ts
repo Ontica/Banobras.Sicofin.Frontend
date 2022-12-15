@@ -24,6 +24,8 @@ import { AccountsChartExplorerComponent } from './accounts-chart-explorer/accoun
 import { AccountsChartFilterComponent } from './accounts-chart-explorer/accounts-chart-filter.component';
 import { AccountsChartListComponent } from './accounts-chart-explorer/accounts-chart-list.component';
 import { AccountsChartListEntryComponent } from './accounts-chart-explorer/accounts-chart-list-entry.component';
+import { AccountsImporterComponent } from './accounts-importer/accounts-importer.component';
+import { AccountsImporterDetailsTableComponent } from './accounts-importer/importer-details-table.component';
 import { AccountTabbedViewComponent } from './account-tabbed-view/account-tabbed-view.component';
 import { AccountViewComponent } from './account-tabbed-view/account-view.component';
 
@@ -49,6 +51,8 @@ import { AccountViewComponent } from './account-tabbed-view/account-view.compone
     AccountsChartFilterComponent,
     AccountsChartListComponent,
     AccountsChartListEntryComponent,
+    AccountsImporterComponent,
+    AccountsImporterDetailsTableComponent,
     AccountTabbedViewComponent,
     AccountViewComponent,
   ],

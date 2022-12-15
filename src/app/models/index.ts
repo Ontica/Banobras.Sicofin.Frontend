@@ -44,6 +44,8 @@ export * from './financial-concepts';
 
 export * from './financial-reports';
 
+export * from './import-accounts';
+
 export * from './import-vouchers';
 
 export * from './imported-data';

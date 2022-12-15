@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
 import { Account, AccountEditionCommand, AccountEditionResult, AccountsChart, AccountsChartMasterData,
-         AccountsQuery, FileReport } from '@app/models';
+         AccountsQuery, FileReport, ImportAccountsCommand, ImportAccountsResult } from '@app/models';
 
 
 @Injectable()
@@ -63,6 +63,9 @@ export class AccountsChartDataService {
     return this.http.get<Account>(path);
   }
 
+  //
+  // Edition
+  //
 
   editAccount(command: AccountEditionCommand): Observable<AccountEditionResult> {
     Assertion.assertValue(command, 'command');
@@ -70,6 +73,36 @@ export class AccountsChartDataService {
     const path = `v2/financial-accounting/accounts-charts/process-command`;
 
     return this.http.post<AccountEditionResult>(path, command);
+  }
+
+
+  dryRunUpdateAccountsChartFromExcel(file: File,
+                                     command: ImportAccountsCommand): Observable<ImportAccountsResult[]> {
+    Assertion.assertValue(file, 'file');
+    Assertion.assertValue(command, 'command');
+
+    const formData: FormData = new FormData();
+    formData.append('media', file);
+    formData.append('command', JSON.stringify(command));
+
+    const path = `v2/financial-accounting/accounts-charts/update-from-excel-file/dry-run`;
+
+    return this.http.post<ImportAccountsResult[]>(path, formData);
+  }
+
+
+  updateAccountsChartFromExcel(file: File,
+                              command: ImportAccountsCommand): Observable<ImportAccountsResult[]> {
+    Assertion.assertValue(file, 'file');
+    Assertion.assertValue(command, 'command');
+
+    const formData: FormData = new FormData();
+    formData.append('media', file);
+    formData.append('command', JSON.stringify(command));
+
+    const path = `v2/financial-accounting/accounts-charts/update-from-excel-file`;
+
+    return this.http.post<ImportAccountsResult[]>(path, formData);
   }
 
 }
