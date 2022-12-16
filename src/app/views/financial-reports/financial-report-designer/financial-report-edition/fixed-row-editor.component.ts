@@ -318,7 +318,7 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
     const formModel = this.formHandler.form.getRawValue();
 
     if (this.isConceptType) {
-      data.conceptUID = formModel.concept ?? '';
+      data.financialConceptUID = formModel.concept ?? '';
     }
 
     if (this.isLabelType) {

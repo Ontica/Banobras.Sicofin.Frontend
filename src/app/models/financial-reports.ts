@@ -298,11 +298,9 @@ export enum FinancialReportEditionType {
 
 export interface FinancialReportEditionFields {
   label?: string;
-  conceptUID?: string;
-  cell?: {
-    column: string;
-    row: number;
-  };
+  financialConceptUID?: string;
+  column?: string;
+  row?: number;
   dataField?: string;
   positioning?: Positioning;
   format?: string;

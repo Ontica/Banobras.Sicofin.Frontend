@@ -285,10 +285,8 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
     const formModel = this.formHandler.form.getRawValue();
 
     let data: FinancialReportEditionFields = {
-      cell: {
-        column: this.financialReportCell.column,
-        row: this.financialReportCell.row,
-      },
+      column: this.financialReportCell.column,
+      row: this.financialReportCell.row,
       format: formModel.format ?? '',
     };
 
@@ -302,7 +300,7 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
     const formModel = this.formHandler.form.getRawValue();
 
     if (this.isConceptType) {
-      data.conceptUID = formModel.concept ?? '';
+      data.financialConceptUID = formModel.concept ?? '';
       data.dataField = formModel.dataField ?? '';
     }
 
