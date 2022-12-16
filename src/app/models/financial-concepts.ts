@@ -43,6 +43,7 @@ export interface FinancialConceptDescriptor {
   uid: string;
   code: string;
   name: string;
+  variableID: string;
   position: number;
   level: number;
   accountsChartName: string;
@@ -109,6 +110,7 @@ export interface FinancialConceptEntryDescriptor {
   subledgerAccount: string;
   sectorCode: string;
   operator: string;
+  group: Identifiable;
 }
 
 
@@ -205,6 +207,7 @@ export const EmptyFinancialConceptDescriptor: FinancialConceptDescriptor = {
   uid: '',
   code: '',
   name: '',
+  variableID: '',
   position: 0,
   level: 0,
   accountsChartName: '',

@@ -35,7 +35,8 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
 
   @Output() financialConceptEntriesTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumnsDefault: string[] = ['itemCode', 'itemName', 'subledgerAccount', 'sectorCode', 'operator'];
+  displayedColumnsDefault: string[] = ['itemCode', 'itemName', 'typeName', 'groupName', 'subledgerAccount',
+                                       'sectorCode', 'operator'];
 
   displayedColumns = [...this.displayedColumnsDefault];
 
@@ -76,6 +77,11 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
   }
 
 
+  getFinancialConceptEntryTypeName(type: FinancialConceptEntryType): string {
+    return getFinancialConceptEntryTypeName(type);
+  }
+
+
   private resetColumns() {
     this.displayedColumns = [...this.displayedColumnsDefault];
 
@@ -89,7 +95,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
     let message =  `
       <table style='margin: 0;'>
       <tr><td class='nowrap'>Tipo: </td>
-      <td><strong>${getFinancialConceptEntryTypeName(financialConceptEntry.type)}</strong></td></tr>
+      <td><strong>${this.getFinancialConceptEntryTypeName(financialConceptEntry.type)}</strong></td></tr>
       <tr><td class='nowrap'>${this.isAccount(financialConceptEntry.type) ? 'Cuenta' : 'Clave'}:</td>
       <td><strong>${!!financialConceptEntry.itemCode ? financialConceptEntry.itemCode : '-'}</strong></td></tr>
       <tr><td class='nowrap'>Descripción: </td>
