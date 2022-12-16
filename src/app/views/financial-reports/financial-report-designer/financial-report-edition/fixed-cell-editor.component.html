@@ -68,7 +68,8 @@
                 <emp-ng-select
                   [formControlName]="controls.dataField"
                   [items]="financialReportConfig.dataFields"
-                  [showError]="formHandler.showInvalidControl(controls.dataField)">
+                  [showError]="formHandler.showInvalidControl(controls.dataField)"
+                  bindLabel="uid">
                 </emp-ng-select>
               </div>
 
