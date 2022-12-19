@@ -11,7 +11,7 @@
 
         <emp-fa-item-menu *ngIf="ci > 0"
           itemType="column"
-          [canEdit]="isFixedRows"
+          [canEdit]="canEditColumns"
           [isSelected]="selectedColumn.column === column"
           (itemMenuEvent)="onColumnMenuEvent($event)">
           {{column}}
@@ -27,7 +27,7 @@
 
         <emp-fa-item-menu
           itemType="row"
-          [canEdit]="isFixedRows"
+          [canEdit]="canEditRows"
           [isSelected]="selectedRow.row === row.row"
           (itemMenuEvent)="onRowMenuEvent($event)">
           {{row.row}}

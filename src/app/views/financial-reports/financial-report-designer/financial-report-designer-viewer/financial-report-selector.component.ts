@@ -36,7 +36,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
   reportsForm = {
     accountChartUID: null,
     financialReportType: null,
-    outputType: null,
+    // outputType: null,
   };
 
   financialReportTypesList: FinancialReportTypesForDesign[] = [];
@@ -73,7 +73,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
   onSearchReportsClicked() {
     const payload = {
       financialReportTypeUID: this.reportsForm.financialReportType.uid,
-      outputTypeUID: this.reportsForm.outputType.uid,
+      // outputTypeUID: this.reportsForm.outputType.uid,
     };
 
     sendEvent(this.financialReportSelectorEvent,

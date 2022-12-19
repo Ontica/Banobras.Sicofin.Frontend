@@ -87,6 +87,21 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
   }
 
 
+  get canEditRows(): boolean {
+    return this.isFixedRows;
+  }
+
+
+  get canEditColumns(): boolean {
+    return false;
+  }
+
+
+  get canEditCells(): boolean {
+    return this.isFixedCells;
+  }
+
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.financialReportDesign) {
       this.configDesignerGrid();
@@ -109,7 +124,7 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
 
   onCellSelectClicked(row: number, column: string, cell: FinancialReportCell) {
-    if (this.isFixedCells) {
+    if (this.canEditCells) {
       if(!cell) {
         cell = Object.assign({}, EmptyFinancialReportCell, {row, column});
       }
@@ -178,7 +193,9 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
 
   onColumnHeaderClicked(column: FinancialReportColumn) {
-    this.messageBox.showInDevelopment(`Editar encabezado de columna - ${column.title}`, {column});
+    if (this.canEditColumns) {
+      this.messageBox.showInDevelopment(`Editar encabezado de columna - ${column.title}`, {column});
+    }
   }
 
 
