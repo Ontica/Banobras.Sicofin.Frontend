@@ -14,9 +14,9 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { MainUIStateSelector, VoucherAction,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptyVoucher, EmptyVoucherFilterData, mapVoucherDescriptorFromVoucher, mapVoucherStageFromViewName,
-         Voucher, VoucherDescriptor, VoucherFilterData, VouchersOperationCommand, VouchersOperationResult,
-         VouchersOperationType } from '@app/models';
+import { EmptyVoucher, EmptyVoucherFilterData, FileReport, mapVoucherDescriptorFromVoucher,
+         mapVoucherStageFromViewName, Voucher, VoucherDescriptor, VoucherFilterData, VouchersOperationCommand,
+         VouchersOperationResult, VouchersOperationType } from '@app/models';
 
 import { View } from '@app/main-layout';
 
@@ -60,6 +60,8 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   displayExportModal = false;
 
   excelFileUrl = '';
+
+  vouchersToPrintFile: FileReport;
 
   isLoading = false;
 
@@ -339,7 +341,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   private displayVouchersToPrint(result: VouchersOperationResult) {
     if (StringLibrary.isValidHttpUrl(result?.file?.url || '')) {
-      window.open(result.file.url, '_blank', `resizable=yes`);
+      this.vouchersToPrintFile = result.file;
       return;
     }
     this.messageBox.showError(result?.message || '');
