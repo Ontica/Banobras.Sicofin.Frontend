@@ -9,6 +9,30 @@ import { DateString, Identifiable, isEmpty } from '@app/core';
 
 import { Account, EmptyAccount, SectorRole } from './accounts-chart';
 
+
+export interface ImportAccountsCommand {
+  accountsChartUID: string;
+  applicationDate: DateString;
+  dryRun: boolean;
+}
+
+
+export interface ImportAccountsResult {
+  operation: string;
+  count: number;
+  errors: number;
+  itemsList: string[];
+  errorsList: string[];
+}
+
+
+export const EmptyImportAccountsCommand: ImportAccountsCommand = {
+  accountsChartUID: '',
+  applicationDate: '',
+  dryRun: true,
+};
+
+
 export enum AccountEditionCommandType {
   CreateAccount     = 'CreateAccount',
   UpdateAccountAll  = 'UpdateAccountAll',

@@ -7,6 +7,7 @@
 
 export * from './accounting-calendars.data.service';
 export * from './accounts-chart.data.service';
+export * from './accounts-edition.data.service';
 export * from './balances-store.data.service';
 export * from './balances.data.service';
 export * from './exchange-rates.data.service';

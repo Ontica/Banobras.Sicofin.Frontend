@@ -15,7 +15,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { AccountsChartDataService } from '@app/data-services';
+import { AccountsEditionDataService } from '@app/data-services';
 
 import { Account, AccountEditionCommand, AccountEditionCommandType, AccountEditionResult, AccountFields,
          AccountItem, AccountRole, AccountsChartMasterData, EmptyAccount, EmptyAccountEditionCommand,
@@ -101,7 +101,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private accountsData: AccountsChartDataService) {
+              private accountsData: AccountsEditionDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 

@@ -13,7 +13,7 @@ import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartDataService } from '@app/data-services';
+import { AccountsEditionDataService } from '@app/data-services';
 
 import { ImportAccountsResult, ImportAccountsCommand, AccountsChartMasterData} from '@app/models';
 
@@ -76,7 +76,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private accountsData: AccountsChartDataService,
+              private accountsData: AccountsEditionDataService,
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
@@ -125,7 +125,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.dryRunUpdateAccountsChartFromExcel();
+    this.executeUpdateAccountsFromExcel(true);
   }
 
 
@@ -134,7 +134,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.showConfirmMessage();
+    this.showConfirmUpdateMessage();
   }
 
 
@@ -165,21 +165,6 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getFormData(): ImportAccountsCommand {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
-
-    const formModel = this.formHandler.form.getRawValue();
-
-    const data: ImportAccountsCommand = {
-      accountsChartUID: formModel.accountsChartUID,
-      applicationDate: formModel.applicationDate,
-    };
-
-    return data;
-  }
-
-
   private resetImportResult() {
     if (this.executedImported) {
       return;
@@ -187,10 +172,15 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
     this.executedDryRun = false;
     this.executedImported = false
-    this.importResult = [];
-    this.hasErrors = false;
-    this.accountsTotal = 0;
-    this.errorsTotal = 0;
+    this.setImportResult([]);
+  }
+
+
+  private setImportResult(result: ImportAccountsResult[]) {
+    this.importResult = result ?? [];
+    this.hasErrors = this.importResult.some(x => x.errors > 0);
+    this.accountsTotal = this.importResult.reduce((sum, x) => sum + x.count, 0);
+    this.errorsTotal = this.importResult.reduce((sum, x) => sum + x.errors, 0);
   }
 
 
@@ -223,41 +213,18 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private dryRunUpdateAccountsChartFromExcel() {
-    this.isLoading = true;
-
-
-    this.accountsData.dryRunUpdateAccountsChartFromExcel(this.file.file, this.getFormData())
-      .toPromise()
-      .then(x => {
-        this.executedDryRun = true;
-        this.setImportResult(x);
-        this.resolveDryRunResponse();
-      })
-      .finally(() => this.isLoading = false);
-  }
-
-
-  private setImportResult(result: ImportAccountsResult[]) {
-    this.importResult = result ?? [];
-    this.hasErrors = this.importResult.some(x => x.errors > 0);
-    this.accountsTotal = this.importResult.reduce((sum, x) => sum + x.count, 0);
-    this.errorsTotal = this.importResult.reduce((sum, x) => sum + x.errors, 0);
-  }
-
-
-  private showConfirmMessage() {
-    this.messageBox.confirm(this.getConfirmMessage(), this.title)
+  private showConfirmUpdateMessage() {
+    this.messageBox.confirm(this.getConfirmUpdateMessage(), this.title)
       .toPromise()
       .then(x => {
         if (x) {
-          this.updateAccountsChartFromExcel();
+          this.executeUpdateAccountsFromExcel(false);
         }
       });
   }
 
 
-  private getConfirmMessage(): string {
+  private getConfirmUpdateMessage(): string {
     const partsToImport = '<ul class="info-list">' +
       this.importResult.map(x => '<li>' + x.operation + '</li>').join('') + '</ul>';
 
@@ -267,48 +234,76 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private updateAccountsChartFromExcel() {
+  private executeUpdateAccountsFromExcel(dryRun: boolean) {
     this.isLoading = true;
 
-    this.accountsData.updateAccountsChartFromExcel(this.file.file, this.getFormData())
+    const command: ImportAccountsCommand = this.getFormData(dryRun);
+
+    this.accountsData.updateAccountsChartFromExcel(this.file.file, command)
       .toPromise()
-      .then(x => {
-        this.executedImported = true;
-        this.setImportResult(x);
-        this.resolveImportResponse();
-        this.setFormDisabled();
-       })
+      .then(x => this.resolveImportResult(x, dryRun))
       .finally(() => this.isLoading = false);
   }
 
 
+  private getFormData(dryRun: boolean): ImportAccountsCommand {
+    Assertion.assert(this.formHandler.form.valid,
+      'Programming error: form must be validated before command execution.');
+
+    const formModel = this.formHandler.form.getRawValue();
+
+    const data: ImportAccountsCommand = {
+      accountsChartUID: formModel.accountsChartUID,
+      applicationDate: formModel.applicationDate,
+      dryRun: dryRun,
+    };
+
+    return data;
+  }
+
+
+  private resolveImportResult(result: ImportAccountsResult[], isDryRun: boolean) {
+    this.setImportResult(result);
+
+    if (isDryRun) {
+      this.resolveDryRunResponse();
+    } else {
+      this.resolveUpdateResponse();
+    }
+  }
+
+
   private resolveDryRunResponse() {
+    this.executedDryRun = true;
+
     if (this.hasErrors) {
-      const message = `No es posible realizar la importación, ya que se detectaron ` +
-        `<strong>${this.errorsTotal} errores</strong> en el archivo.`;
-      this.messageBox.showError(message);
+      this.showImportResultErrorMessage();
     }
   }
 
 
-  private resolveImportResponse() {
-    let message = '';
-
+  private resolveUpdateResponse() {
     if (this.hasErrors) {
-      message = `No fue posible realizar la importación, ya que se detectaron ` +
-        `${this.hasErrors} errores en el archivo.`;
-      this.messageBox.showError(message);
-      return;
+      this.showImportResultErrorMessage();
+    } else {
+      this.executedImported = true;
+      this.formHandler.disableForm();
+      this.showImportResultSuccessMessage();
+      sendEvent(this.accountsImporterEvent, AccountsImporterEventType.ACCOUNTS_IMPORTED);
     }
+  }
 
-    message = `Se han importado ${this.accountsTotal} cuentas.`;
+
+  private showImportResultSuccessMessage() {
+    const message = `Se han importado ${this.accountsTotal} cuentas.`;
     this.messageBox.show(message, this.title);
-    sendEvent(this.accountsImporterEvent, AccountsImporterEventType.ACCOUNTS_IMPORTED);
   }
 
 
-  private setFormDisabled() {
-    this.formHandler.disableForm();
+  private showImportResultErrorMessage() {
+    const message = `No es posible realizar la importación, ya que se detectaron ` +
+      `<strong>${this.errorsTotal} errores</strong> en el archivo.`;
+    this.messageBox.showError(message);
   }
 
 }

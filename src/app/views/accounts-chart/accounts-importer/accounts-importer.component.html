@@ -41,6 +41,7 @@
             <div fxFlex="50" fxFlex.lt-md>
               <label>Tipo de contabilidad:</label>
               <emp-ng-select
+                [config]="{selectFirst: true}"
                 [formControlName]="controls.accountsChartUID"
                 [items]="accountsChartMasterDataList"
                 [loading]="isLoadingAccountChart"
