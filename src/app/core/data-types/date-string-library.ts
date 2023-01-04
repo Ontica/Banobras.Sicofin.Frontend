@@ -86,6 +86,12 @@ export class DateStringLibrary {
   }
 
 
+  static todayAddDays(days: number): DateString {
+    const date = moment().add(days, 'days')
+    return this.mapDateStringFromMoment(date);
+  }
+
+
   static mapDateStringFromMoment(date: moment.Moment): DateString {
     return date.format('YYYY-MM-DD');
   }
