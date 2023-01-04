@@ -87,7 +87,7 @@ export class AccountViewComponent implements OnChanges {
 
   enableEditor(enable: boolean) {
     this.editionMode = enable;
-    this.setFormModel();
+    this.setFormData();
     this.formHandler.disableForm(!this.editionMode);
   }
 
@@ -134,7 +134,7 @@ export class AccountViewComponent implements OnChanges {
   }
 
 
-  private setFormModel() {
+  private setFormData() {
     this.formHandler.form.reset({
       accountsChart: this.account.accountsChart.name,
       startDate: DateStringLibrary.format(this.account.startDate),

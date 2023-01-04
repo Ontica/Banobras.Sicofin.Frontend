@@ -87,7 +87,7 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   ngOnChanges() {
     setTimeout(() => {
-      this.setFormModel();
+      this.setFormData();
       this.setDataTable();
       this.setSelectionData();
     });
@@ -157,7 +157,7 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
-  private setFormModel() {
+  private setFormData() {
     this.formHandler.form.reset({
       items: this.deletingMode ? [] : this.selectedList.map(x => x.uid),
     });

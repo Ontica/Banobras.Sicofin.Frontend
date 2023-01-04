@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { DateStringLibrary, EventInfo, isEmpty } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -55,6 +55,10 @@ export class AccountHeaderComponent implements OnInit {
   controls = AccountHeaderFormControls;
 
   debtorCreditorTypesList: string[] = DebtorCreditorTypesList;
+
+  minDate: DateString = null;
+
+  maxDate: DateString = null;
 
 
   constructor() {
@@ -109,10 +113,10 @@ export class AccountHeaderComponent implements OnInit {
       new FormGroup({
         accountsChartUID: new FormControl('', Validators.required),
         startDate: new FormControl(''),
-        applicationDate: new FormControl(DateStringLibrary.today(), Validators.required),
+        applicationDate: new FormControl('', Validators.required),
         accountNumber: new FormControl('', Validators.required),
         name: new FormControl('', Validators.required),
-        description: new FormControl('', Validators.required),
+        description: new FormControl(''),
         role: new FormControl('', Validators.required),
         accountTypeUID: new FormControl('', Validators.required),
         debtorCreditor: new FormControl('', Validators.required)
@@ -123,12 +127,25 @@ export class AccountHeaderComponent implements OnInit {
 
 
   private enableEditor() {
-    this.setFormModel();
-    this.validateDisabledFields();
+    if (this.isSaved) {
+      this.setFormData();
+      this.setMinAndMaxDates();
+      this.validateDisabledFields();
+    } else {
+      this.setDefaultFields();
+    }
   }
 
 
-  private setFormModel() {
+  private setDefaultFields() {
+    this.formHandler.form.reset({
+      accountsChartUID: this.selectedAccountChart?.uid ?? '',
+      applicationDate: DateStringLibrary.today(),
+    });
+  }
+
+
+  private setFormData() {
     this.formHandler.form.reset({
       accountsChartUID: this.selectedAccountChart?.uid ?? '',
       startDate: DateStringLibrary.format(this.account.startDate),
@@ -143,20 +160,24 @@ export class AccountHeaderComponent implements OnInit {
   }
 
 
-  private validateDisabledFields() {
-    if (this.isSaved) {
-      this.formHandler.disableControl(this.controls.accountsChartUID);
-      this.formHandler.disableControl(this.controls.startDate);
-      this.formHandler.disableControl(this.controls.accountNumber);
+  private setMinAndMaxDates(){
+    this.minDate = DateStringLibrary.todayAddDays(1);
+    this.maxDate = DateStringLibrary.todayAddDays(8);
+  }
 
-      if (this.roleEditionMode) {
-        this.formHandler.disableControl(this.controls.name);
-        this.formHandler.disableControl(this.controls.description);
-        this.formHandler.disableControl(this.controls.accountTypeUID);
-        this.formHandler.disableControl(this.controls.debtorCreditor);
-      } else {
-        this.formHandler.disableControl(this.controls.role);
-      }
+
+  private validateDisabledFields() {
+    this.formHandler.disableControl(this.controls.accountsChartUID);
+    this.formHandler.disableControl(this.controls.startDate);
+    this.formHandler.disableControl(this.controls.accountNumber);
+
+    if (this.roleEditionMode) {
+      this.formHandler.disableControl(this.controls.name);
+      this.formHandler.disableControl(this.controls.description);
+      this.formHandler.disableControl(this.controls.accountTypeUID);
+      this.formHandler.disableControl(this.controls.debtorCreditor);
+    } else {
+      this.formHandler.disableControl(this.controls.role);
     }
   }
 

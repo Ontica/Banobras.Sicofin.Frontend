@@ -150,11 +150,11 @@
             <td mat-cell *matCellDef="let row"> {{ row.ledger.name }} </td>
           </ng-container>
           <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef> Número de cuenta </th>
+            <th mat-header-cell *matHeaderCellDef> Cuenta </th>
             <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.account.number }}</td>
           </ng-container>
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <th mat-header-cell *matHeaderCellDef> Descripción </th>
             <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.account.name }}</td>
           </ng-container>
           <ng-container matColumnDef="currentBalance">
@@ -178,11 +178,11 @@
         <table mat-table [dataSource]="accountHistoryDS">
 
           <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef> Número de cuenta </th>
+            <th mat-header-cell *matHeaderCellDef> Cuenta </th>
             <td mat-cell *matCellDef="let row">{{ row.number }}</td>
           </ng-container>
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <th mat-header-cell *matHeaderCellDef> Descripción </th>
             <td mat-cell *matCellDef="let row">{{ row.name }}</td>
           </ng-container>
           <ng-container matColumnDef="role">

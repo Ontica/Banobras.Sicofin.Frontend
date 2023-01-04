@@ -34,7 +34,8 @@
         <label [style.line-height]="'normal'">{{isSaved ? 'Fecha de aplicación:' : 'Fecha de alta:'}}</label>
         <emp-ng-datepicker
           [formControlName]="controls.applicationDate"
-          [minDate]="isSaved ? account.startDate : null"
+          [minDate]="minDate"
+          [maxDate]="maxDate"
           [showError]="formHandler.showInvalidControl(controls.applicationDate)"
           (valueChange)="onApplicationDateChanges($event)">
 
@@ -48,7 +49,7 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100">
-        <label>Número de cuenta:</label>
+        <label>Cuenta:</label>
         <input type="text" class="text-box"
           [formControlName]="controls.accountNumber"
           [class.invalid-control]="formHandler.showInvalidControl(controls.accountNumber)">
@@ -59,7 +60,7 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100">
-        <label>Nombre:</label>
+        <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize rows="1"
           [formControlName]="controls.name"
           [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
@@ -72,7 +73,7 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100">
-        <label>Descripción:</label>
+        <label>Observaciones:</label>
         <textarea class="text-area" empNgTextareaAutoresize rows="1"
           [formControlName]="controls.description"
           [class.invalid-control]="formHandler.showInvalidControl(controls.description)">

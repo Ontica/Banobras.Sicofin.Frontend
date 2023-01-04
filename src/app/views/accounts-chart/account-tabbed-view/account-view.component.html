@@ -28,7 +28,7 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100">
-        <label>Número de cuenta:</label>
+        <label>Cuenta:</label>
         <input type="text" class="text-box" [formControlName]="controls.number">
       </div>
 
@@ -37,7 +37,7 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100">
-        <label>Nombre:</label>
+        <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
           [formControlName]="controls.name"
           [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
@@ -50,7 +50,7 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100">
-        <label>Descripción:</label>
+        <label>Observaciones:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
           [formControlName]="controls.description"
           [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
