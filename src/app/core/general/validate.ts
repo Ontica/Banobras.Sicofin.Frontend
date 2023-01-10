@@ -112,4 +112,19 @@ export class Validate {
     return periodRequired ? { periodRequired } : null;
   }
 
+
+  static changeRequired(initialValue: any): ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (typeof control.value === 'boolean' && control.value === initialValue) {
+        return { changeRequired: true };
+      }
+
+      if (control.value && control.value === initialValue) {
+        return { changeRequired: true };
+      }
+
+      return null;
+    };
+  }
+
 }
