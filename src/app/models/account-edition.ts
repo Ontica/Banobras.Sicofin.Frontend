@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable, isEmpty } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
 
-import { Account, EmptyAccount, SectorRole } from './accounts-chart';
+import { AccountRole, SectorRole } from './accounts-chart';
 
 
 export interface ImportAccountsCommand {
@@ -33,35 +33,71 @@ export const EmptyImportAccountsCommand: ImportAccountsCommand = {
 };
 
 
-export enum AccountEditionCommandType {
-  CreateAccount     = 'CreateAccount',
-  UpdateAccountAll  = 'UpdateAccountAll',
-  UpdateAccount     = 'UpdateAccount',
-  UpdateAccountRole = 'UpdateAccountRole',
-  RemoveAccount     = 'RemoveAccount',
-  AddCurrencies     = 'AddCurrencies',
-  AddSectors        = 'AddSectors',
-  RemoveCurrencies  = 'RemoveCurrencies',
-  RemoveSectors     = 'RemoveSectors',
-}
-
-
-export const AccountEditionTypeList: Identifiable[] = [
-  {uid: AccountEditionCommandType.UpdateAccount,     name: 'Modificar información general'},
-  {uid: AccountEditionCommandType.UpdateAccountRole, name: 'Modificar el rol de la cuenta'},
-  {uid: AccountEditionCommandType.AddCurrencies,     name: 'Agregar monedas'},
-  {uid: AccountEditionCommandType.RemoveCurrencies,  name: 'Eliminar monedas'},
-  {uid: AccountEditionCommandType.AddSectors,        name: 'Agregar sectores'},
-  {uid: AccountEditionCommandType.RemoveSectors,     name: 'Eliminar sectores'},
-  {uid: AccountEditionCommandType.RemoveAccount,     name: 'Eliminar la cuenta'},
-  {uid: AccountEditionCommandType.UpdateAccountAll,  name: 'Modificar la cuenta ***'},
+export const AccountRoleList: string[] = [
+   AccountRole.Sumaria,
+   AccountRole.Detalle,
 ];
 
 
-export function getAccountEditionTypeName(accountEditionTypeUID: AccountEditionCommandType) {
-  const AccountEditionType = AccountEditionTypeList.find(x => x.uid === accountEditionTypeUID);
-  return isEmpty(AccountEditionType) ? accountEditionTypeUID : AccountEditionType.name;
+
+export function getAccountRole(mainRole: string, usesSector: boolean, usesSubledger: boolean): AccountRole {
+  if (mainRole === AccountRole.Sumaria) {
+    return AccountRole.Sumaria;
+  }
+
+  if (usesSector) {
+    return AccountRole.Sectorizada;
+  }
+
+  if (usesSubledger) {
+    return AccountRole.Control;
+  }
+
+  return AccountRole.Detalle;
 }
+
+
+export enum AccountEditionCommandType {
+  CreateAccount  = 'CreateAccount',
+  UpdateAccount  = 'UpdateAccount',
+  FixAccountName = 'FixAccountName',
+}
+
+
+export function getAccountEditionTypeName(accountEditionTypeUID: AccountEditionCommandType) {
+  switch (accountEditionTypeUID) {
+    case AccountEditionCommandType.CreateAccount:
+      return 'Agregar cuenta'
+    case AccountEditionCommandType.FixAccountName:
+      return 'Corregir descripción'
+    case AccountEditionCommandType.UpdateAccount:
+      return 'Actualizar cuenta'
+    default:
+      return accountEditionTypeUID;
+  }
+}
+
+
+export enum AccountDataToBeUpdated {
+  Name           = 'Name',
+  MainRole       = 'MainRole',
+  AccountType    = 'AccountType',
+  DebtorCreditor = 'DebtorCreditor',
+  Currencies     = 'Currencies',
+  Sectors        = 'Sectors',
+  SubledgerRole  = 'SubledgerRole',
+}
+
+
+export const AccountDataToBeUpdatedList: Identifiable[] = [
+  {uid: AccountDataToBeUpdated.Name,           name: 'Cambiar descripción'},
+  {uid: AccountDataToBeUpdated.MainRole,       name: 'Cambiar rol'},
+  {uid: AccountDataToBeUpdated.SubledgerRole,  name: 'Cambiar auxiliar'},
+  {uid: AccountDataToBeUpdated.AccountType,    name: 'Cambiar tipo de cuenta'},
+  {uid: AccountDataToBeUpdated.DebtorCreditor, name: 'Cambiar naturaleza'},
+  {uid: AccountDataToBeUpdated.Currencies,     name: 'Cambiar monedas'},
+  {uid: AccountDataToBeUpdated.Sectors,        name: 'Cambiar lista de sectores'},
+];
 
 
 export interface AccountFields {
@@ -75,45 +111,59 @@ export interface AccountFields {
 
 
 export interface AccountEditionCommand {
-  commandType: AccountEditionCommandType,
   dryRun: boolean;
-  applicationDate: DateString;
+  commandType: AccountEditionCommandType,
   accountsChartUID: string;
+  applicationDate: DateString;
   accountUID?: string;
+  dataToBeUpdated?: AccountDataToBeUpdated[];
   accountFields?: AccountFields;
-  newRole?: string;
   currencies?: string[];
-  sectors?: SectorField[];
+  sectorRules?: SectorRoleField[];
 }
 
 
-export interface SectorField {
-  uid: string;
+export interface SectorRoleField {
+  code: string;
   role: SectorRole;
 }
 
 
 export const EmptyAccountEditionCommand: AccountEditionCommand = {
-  commandType: AccountEditionCommandType.CreateAccount,
   dryRun: true,
-  applicationDate: null,
+  commandType: AccountEditionCommandType.CreateAccount,
   accountsChartUID: '',
+  applicationDate: null,
 };
 
 
 export interface AccountEditionResult {
-  actions: string[];
-  issues: string[];
-  account: Account;
-  command: AccountEditionCommand;
+  count: number;
+  errors: number;
+  errorsList: string[];
+  itemsList: string[];
+  operation: string;
+
+  // actions: string[];
+  // issues: string[];
+  // command: AccountEditionCommand;
+  // outcome: Account;
+  // warnings: string[];
 }
 
 
 export const EmptyAccountEditionResult: AccountEditionResult = {
-  actions: [],
-  issues: [],
-  account: EmptyAccount,
-  command: EmptyAccountEditionCommand,
+  count: 0,
+  errors: 0,
+  errorsList: [],
+  itemsList: [],
+  operation: '',
+
+  // actions: [],
+  // issues: [],
+  // command: EmptyAccountEditionCommand,
+  // outcome: EmptyAccount,
+  // warnings: [],
 };
 
 

@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { AccountEditionCommand, AccountEditionResult,
-         ImportAccountsCommand, ImportAccountsResult } from '@app/models';
+import { AccountEditionCommand, AccountEditionResult, ImportAccountsCommand,
+         ImportAccountsResult } from '@app/models';
 
 
 @Injectable()
@@ -22,12 +22,25 @@ export class AccountsEditionDataService {
   constructor(private http: HttpService) { }
 
 
-  editAccount(command: AccountEditionCommand): Observable<AccountEditionResult> {
+  createAccount(accountsChartUID: string,
+                command: AccountEditionCommand): Observable<AccountEditionResult> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(command, 'command');
 
-    const path = `v2/financial-accounting/accounts-charts/process-command`;
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts`;
 
     return this.http.post<AccountEditionResult>(path, command);
+  }
+
+
+  updateAccount(accountsChartUID: string,
+                accountUID: string,
+                command: AccountEditionCommand): Observable<AccountEditionResult> {
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
+
+    return this.http.put<AccountEditionResult>(path, command);
   }
 
 
