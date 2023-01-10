@@ -19,6 +19,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
       [class.mat-checkbox-warning]="showWarning"
       [checked]="isChecked()"
       [indeterminate]="isIndeterminate()"
+      [disabled]="disabled"
       (change)="toggleSelection($event)"
       (click)="$event.stopPropagation()">
       {{text}}
@@ -30,6 +31,7 @@ export class CheckboxAllComponent {
   @Input() selection: SelectionModel<any>;
   @Input() values = [];
   @Input() text = '';
+  @Input() disabled = false;
   @Input() showWarning = false;
   @Output() selectionChange = new EventEmitter<SelectionModel<any>>();
 
