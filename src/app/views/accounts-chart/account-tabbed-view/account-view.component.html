@@ -24,7 +24,6 @@
 
     </div>
 
-
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div [fxFlex]="100">
@@ -64,7 +63,7 @@
 
       <div fxFlex>
         <label>Rol de la cuenta:</label>
-        <input type="text" class="text-box" [formControlName]="controls.role">
+        <input type="text" class="text-box" [formControlName]="controls.roleType">
       </div>
 
       <div [fxFlex]="100/3">
@@ -79,27 +78,31 @@
 
     </div>
 
+    <div fxLayout="row" fxLayout.lt-md="column">
+
+      <div fxFlex="none">
+        <mat-checkbox [formControlName]="controls.usesSector"> Maneja Sectores </mat-checkbox>
+      </div>
+
+      <div fxFlex="none">
+        <mat-checkbox [formControlName]="controls.usesSubledger"> Maneja Auxiliares </mat-checkbox>
+      </div>
+
+    </div>
+
     <ng-container *empNgHasPermission="permissions.FEATURE_EDICION_CUENTAS">
 
       <mat-divider></mat-divider>
 
-      <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxLayout="row">
 
-        <div [fxFlex]="100/3">
-          <label>¿Qué se desea hacer con esta cuenta?:</label>
-          <emp-ng-select [(ngModel)]="accountEditionTypeSelected"
-            [ngModelOptions]="{standalone: true}"
-            [items]="accountEditionTypeList">
+        <div fxFlex fxLayoutAlign="end">
+          <button class="btn" (click)="onFixAccountNameButtonClicked()">
+            Corregir descripción
+          </button>
 
-          </emp-ng-select>
-        </div>
-
-        <div fxFlex="none" fxLayoutAlign="start end" [style.paddingBottom.px]="2">
-          <button
-            [class.btn]="accountEditionTypeSelected === null"
-            [class.btn-action]="accountEditionTypeSelected !== null"
-            (click)="onAccountEditionButtonClicked()">
-            Ejecutar el asistente
+          <button class="btn-action" (click)="onUnpdateAccountButtonClicked()">
+            Actualizar cuenta
           </button>
         </div>
 
@@ -113,7 +116,7 @@
 
 
 <emp-fa-account-edition-wizard *ngIf="displayAccountEditionWizard"
-  [accountEditionCommandType]="accountEditionTypeSelected"
+  [commandType]="accountEditionCommandType"
   [account]="account"
   (accountEditionWizardEvent)="onAccountEditionWizardEvent($event)">
 

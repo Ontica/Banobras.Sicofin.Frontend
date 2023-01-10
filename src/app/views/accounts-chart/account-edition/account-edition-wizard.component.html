@@ -2,7 +2,7 @@
 
   <emp-ng-card
     [title]="title"
-    [hint]="showInfoStep && stepper.selectedIndex === 0 ?
+    [hint]="!isSaved && stepper.selectedIndex === 0 ?
             'Información de la cuenta a crear en SICOFIN' : accountNameText"
     (cardClose)="onClose()">
 
@@ -13,6 +13,46 @@
       </emp-ng-spinner>
 
       <mat-stepper #stepper linear labelPosition="bottom">
+
+        <mat-step #configStep *ngIf="showConfigStep"
+          [stepControl]="accountEditionConfig.formHandler.form"
+          [editable]="!accountEdited">
+
+          <ng-template matStepLabel>Configuración</ng-template>
+          <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
+
+          <div class="section-title"> Datos de la cuenta a modificar con el asistente</div>
+
+          <div class="step-container">
+
+            <emp-fa-account-edition-config #accountEditionConfig
+              [account]="account"
+              (accountEditionConfigEvent)="onAccountEditionConfigEvent($event)">
+
+            </emp-fa-account-edition-config>
+
+
+          </div>
+
+          <mat-divider class="divider-stepper-margin"></mat-divider>
+
+          <div fxLayout="row">
+
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button matStepperNext
+                [class.btn]="!isFormAccountEditionConfigValid"
+                [class.btn-action]="isFormAccountEditionConfigValid"
+                [style.marginRight.px]="8"
+                (click)="accountEditionConfig.invalidateForm()">
+                Siguiente
+              </button>
+
+            </div>
+
+          </div>
+
+        </mat-step>
 
         <mat-step #infoStep *ngIf="showInfoStep"
           [stepControl]="accountHeader.formHandler.form" [editable]="!accountEdited">
@@ -25,10 +65,11 @@
           <div class="step-container">
 
             <emp-fa-account-header #accountHeader
+              [commandType]="commandType"
               [account]="account"
               [accountsChartMasterDataList]="accountsChartMasterDataList"
               [selectedAccountChart]="selectedAccountChart"
-              [roleEditionMode]="isRoleEdition"
+              [dataToUpdate]="dataToUpdateSelected"
               (accountHeaderEvent)="onAccountHeaderEvent($event)">
 
             </emp-fa-account-header>
@@ -40,6 +81,11 @@
           <div fxLayout="row">
 
             <div fxFlex fxLayoutAlign="end center">
+
+              <button matStepperPrevious *ngIf="stepper.selectedIndex > 0"
+                class="btn" [style.marginRight.px]="16" >
+                Anterior
+              </button>
 
               <button matStepperNext
                 [class.btn]="!isFormAccountValid"
@@ -70,9 +116,6 @@
               itemType="currencies"
               [dataList]="selectedAccountChart?.currencies ?? []"
               [selectedList]="accountCurrenciesList"
-              [disabledList]="showInfoStep ? [] : accountCurrenciesList"
-              [applicationDateRequired]="isSaved && !showInfoStep"
-              [deletingMode]="isRemoveCommandType"
               (accountItemsTableEvent)="onAccountCurrenciesTableEvent($event)">
 
             </emp-fa-account-items-table>
@@ -105,7 +148,7 @@
         </mat-step>
 
 
-        <mat-step #sectorsStep *ngIf="showSectorsStep && sectorsRequired"
+        <mat-step #sectorsStep *ngIf="showSectorsStep && usesSector"
           [stepControl]="accountSectorsTable.formHandler.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Sectores</ng-template>
@@ -119,9 +162,6 @@
               itemType="sectors"
               [dataList]="selectedAccountChart?.sectors ?? []"
               [selectedList]="accountSectorsList"
-              [disabledList]="showInfoStep ? [] : accountSectorsList"
-              [applicationDateRequired]="isSaved && !showInfoStep"
-              [deletingMode]="isRemoveCommandType"
               (accountItemsTableEvent)="onAccountSectorsTableEvent($event)">
 
             </emp-fa-account-items-table>
@@ -155,7 +195,7 @@
         </mat-step>
 
 
-        <mat-step #roleForSectorsStep *ngIf="showSectorsStep && sectorsRequired && !isRemoveCommandType"
+        <mat-step #roleForSectorsStep *ngIf="showSectorsStep && usesSector"
           [stepControl]="accountRoleForSectorsTable.formHandler.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Rol por sector</ng-template>
@@ -170,8 +210,7 @@
               [selectionRequired]="false"
               [dataList]="selectedSectorsList ?? []"
               [selectedList]="accountSectorsWithSubledgerAccountList"
-              [disabledList]="showInfoStep ? [] : accountSectorsList"
-              [applicationDateRequired]="false"
+              [selectionDisabled]="true"
               (accountItemsTableEvent)="onAccountRoleForSectorsTableEvent($event)">
 
             </emp-fa-account-items-table>
@@ -215,8 +254,7 @@
             <ng-container *ngIf="isReadyForDryRun">
 
               Se analizará la información de la cuenta para realizar la operación
-              <strong *ngIf="isSaved" [class.warning-text]="isRemoveCommandType">
-                {{' ' + accountEditionTypeName}}</strong>: <br><br>
+              <strong class="warning-text"> {{' ' + accountEditionTypeName}}</strong>: <br><br>
 
               <table [style.margin]="0">
                 <tr>
@@ -261,7 +299,7 @@
                 <div class="scrollable-container step-list-container">
 
                   <ul class="info-list">
-                    <li *ngFor="let action of this.accountEditionResult.actions">{{action}}</li>
+                    <li *ngFor="let action of this.accountEditionResult.itemsList">{{action}}</li>
                   </ul>
 
                 </div>
@@ -274,14 +312,13 @@
               <ng-container *ngIf="!isDryRunResultValid">
 
                 No es posible realizar lo operación
-                <strong *ngIf="isSaved" [class.warning-text]="isRemoveCommandType">
-                {{' ' + accountEditionTypeName}}</strong>. <br><br>
+                <strong class="warning-text"> {{' ' + accountEditionTypeName}}</strong>. <br><br>
 
 
                 <div class="scrollable-container step-list-container">
 
                   <ul class="info-list">
-                    <li *ngFor="let issue of accountEditionResult.issues">{{issue}}</li>
+                    <li *ngFor="let error of accountEditionResult.errorsList">{{error}}</li>
                   </ul>
 
                 </div>
@@ -297,7 +334,7 @@
               <div class="scrollable-container step-list-container">
 
                 <ul class="info-list">
-                  <li *ngFor="let action of this.accountEditionResult.actions">{{action}}</li>
+                  <li *ngFor="let action of this.accountEditionResult.itemsList">{{action}}</li>
                 </ul>
 
               </div>
@@ -305,7 +342,7 @@
               <br>
 
               Operación
-              <strong *ngIf="isSaved" [class.warning-text]="isRemoveCommandType">
+              <strong class="warning-text">
                 {{' ' + accountEditionTypeName}}</strong>
               realizada correctamente.
 

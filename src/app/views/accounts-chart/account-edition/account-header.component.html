@@ -18,26 +18,23 @@
 
       </div>
 
+      <div fxFlex="none" fxFlex.lt-md="none" *ngIf="!isSaved">
+
+        <label [style.line-height]="'normal'">Fecha de alta:</label>
+        <emp-ng-datepicker
+          [formControlName]="controls.applicationDate"
+          [showError]="formHandler.showInvalidControl(controls.applicationDate)">
+
+        </emp-ng-datepicker>
+
+      </div>
+
       <div fxFlex="none" fxFlex.lt-md="none" *ngIf="isSaved">
 
         <label [style.line-height]="'normal'">Fecha de alta:</label>
         <emp-ng-datepicker
           [formControlName]="controls.startDate"
           [showError]="formHandler.showInvalidControl(controls.startDate)">
-
-        </emp-ng-datepicker>
-
-      </div>
-
-      <div fxFlex="none" fxFlex.lt-md="none">
-
-        <label [style.line-height]="'normal'">{{isSaved ? 'Fecha de aplicación:' : 'Fecha de alta:'}}</label>
-        <emp-ng-datepicker
-          [formControlName]="controls.applicationDate"
-          [minDate]="minDate"
-          [maxDate]="maxDate"
-          [showError]="formHandler.showInvalidControl(controls.applicationDate)"
-          (valueChange)="onApplicationDateChanges($event)">
 
         </emp-ng-datepicker>
 
@@ -85,14 +82,15 @@
 
     <div fxLayout="row" fxLayout.lt-md="column">
 
-      <div fxFlex>
+      <div [fxFlex]="100/3">
         <label>Rol de la cuenta:</label>
         <emp-ng-select
           [config]="{bindByValue: false}"
           [formControlName]="controls.role"
-          [items]="selectedAccountChart?.accountRoles ?? []"
+          [items]="accountRoleList"
           [showError]="formHandler.showInvalidControl(controls.role)"
-          [bindLabel]="null">
+          [bindLabel]="null"
+          (changes)="onRoleChanges()">
         </emp-ng-select>
       </div>
 
@@ -114,6 +112,28 @@
           [showError]="formHandler.showInvalidControl(controls.debtorCreditor)"
           [bindLabel]="null">
         </emp-ng-select>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+
+      <div [fxFlex]="100/6">
+        <mat-checkbox
+          [formControlName]="controls.usesSector"
+          (click)="$event.stopPropagation">
+          Maneja Sectores
+        </mat-checkbox>
+      </div>
+
+      <div [fxFlex]="100/6">
+        <mat-checkbox
+          [formControlName]="controls.usesSubledger"
+          (click)="$event.stopPropagation">
+          <span [class.warning-text]="formHandler.showInvalidControl(controls.usesSubledger)">
+            Maneja Auxiliares
+          </span>
+        </mat-checkbox>
       </div>
 
     </div>

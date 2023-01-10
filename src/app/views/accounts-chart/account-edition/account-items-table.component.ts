@@ -57,6 +57,8 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   @Input() deletingMode = false;
 
+  @Input() selectionDisabled = false;
+
   @Input() selectionRequired = true;
 
   @Input() applicationDateRequired = false;
@@ -125,6 +127,10 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
 
   showDisabled(uid): boolean {
+    if (this.selectionDisabled) {
+      return true;
+    }
+
     if(this.deletingMode) {
       return false;
     }

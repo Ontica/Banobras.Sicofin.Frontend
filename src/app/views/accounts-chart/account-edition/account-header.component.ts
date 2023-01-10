@@ -5,16 +5,17 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { DateString, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
+import { DateStringLibrary, EventInfo, isEmpty, Validate } from '@app/core';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
-import { Account, AccountFields, AccountsChartMasterData, DebtorCreditorTypesList,
-         EmptyAccount } from '@app/models';
+import { Account, AccountDataToBeUpdated, AccountEditionCommandType, AccountFields, AccountRole,
+         AccountRoleList, AccountsChartMasterData, DebtorCreditorTypesList, EmptyAccount,
+         getAccountRole } from '@app/models';
 
 
 export enum AccountHeaderEventType {
@@ -31,6 +32,8 @@ enum AccountHeaderFormControls {
   role = 'role',
   accountTypeUID = 'accountTypeUID',
   debtorCreditor = 'debtorCreditor',
+  usesSubledger = 'usesSubledger',
+  usesSector = 'usesSector',
 }
 
 
@@ -38,15 +41,17 @@ enum AccountHeaderFormControls {
   selector: 'emp-fa-account-header',
   templateUrl: './account-header.component.html',
 })
-export class AccountHeaderComponent implements OnInit {
+export class AccountHeaderComponent implements OnInit, OnChanges {
+
+  @Input() commandType: AccountEditionCommandType = AccountEditionCommandType.CreateAccount;
 
   @Input() account: Account = EmptyAccount;
+
+  @Input() dataToUpdate: AccountDataToBeUpdated[] = [];
 
   @Input() accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
   @Input() selectedAccountChart: AccountsChartMasterData = null;
-
-  @Input() roleEditionMode = true;
 
   @Output() accountHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -54,11 +59,9 @@ export class AccountHeaderComponent implements OnInit {
 
   controls = AccountHeaderFormControls;
 
+  accountRoleList: string[] = AccountRoleList;
+
   debtorCreditorTypesList: string[] = DebtorCreditorTypesList;
-
-  minDate: DateString = null;
-
-  maxDate: DateString = null;
 
 
   constructor() {
@@ -66,40 +69,60 @@ export class AccountHeaderComponent implements OnInit {
   }
 
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.enableEditor();
-      this.suscribeToFormChangesForEmit();
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.dataToUpdate) {
+      setTimeout(() => this.enableEditor())
+    }
   }
 
 
-  get isSaved() {
+  ngOnInit() {
+    setTimeout(() => this.enableEditor());
+  }
+
+
+  get isSaved(): boolean {
     return !isEmpty(this.account);
   }
 
 
+  get canEditName(): boolean {
+    return this.dataToUpdate.includes(AccountDataToBeUpdated.Name) ||
+      this.commandType === AccountEditionCommandType.FixAccountName;
+  }
+
+
+  get canEditRole(): boolean {
+    return this.dataToUpdate.includes(AccountDataToBeUpdated.MainRole);
+  }
+
+
+  get canEditType(): boolean {
+    return this.dataToUpdate.includes(AccountDataToBeUpdated.AccountType);
+  }
+
+
+  get canEditDebtorCreditor(): boolean {
+    return this.dataToUpdate.includes(AccountDataToBeUpdated.DebtorCreditor);
+  }
+
+  get canEditSubledgerRole(): boolean {
+    return this.dataToUpdate.includes(AccountDataToBeUpdated.SubledgerRole);
+  }
+
+
   onAccountChartChanges() {
-    this.formHandler.getControl(this.controls.role).reset('');
     this.formHandler.getControl(this.controls.accountTypeUID).reset('');
   }
 
 
-  onApplicationDateChanges(applicationDate) {
-    if (this.isSaved && !this.roleEditionMode) {
-      const isSameDate = DateStringLibrary.compareDates(
-        this.formHandler.getControl(this.controls.startDate).value,
-        applicationDate
-        ) === 0;
+  onRoleChanges() {
+    this.formHandler.getControl(this.controls.usesSector)
+      .reset(this.isSaved ? this.account.usesSector : false);
+    this.formHandler.getControl(this.controls.usesSubledger)
+      .reset(this.isSaved ? this.account.usesSubledger : false);
 
-      this.formHandler.disableControl(this.controls.accountNumber, !isSameDate);
-      this.formHandler.disableControl(this.controls.role, !isSameDate);
-
-      if (!isSameDate) {
-        this.formHandler.getControl(this.controls.accountNumber).reset(this.account.number);
-        this.formHandler.getControl(this.controls.role).reset(this.account.role);
-      }
-    }
+    this.validateDisableSectorsAndSubledgers();
   }
 
 
@@ -119,7 +142,9 @@ export class AccountHeaderComponent implements OnInit {
         description: new FormControl(''),
         role: new FormControl('', Validators.required),
         accountTypeUID: new FormControl('', Validators.required),
-        debtorCreditor: new FormControl('', Validators.required)
+        debtorCreditor: new FormControl('', Validators.required),
+        usesSubledger: new FormControl(false),
+        usesSector: new FormControl(false),
       })
     );
 
@@ -129,11 +154,14 @@ export class AccountHeaderComponent implements OnInit {
   private enableEditor() {
     if (this.isSaved) {
       this.setFormData();
-      this.setMinAndMaxDates();
+      this.validateFieldsValidators();
       this.validateDisabledFields();
     } else {
       this.setDefaultFields();
+      this.validateDisableSectorsAndSubledgers();
     }
+
+    this.suscribeToFormChangesForEmit();
   }
 
 
@@ -149,35 +177,89 @@ export class AccountHeaderComponent implements OnInit {
     this.formHandler.form.reset({
       accountsChartUID: this.selectedAccountChart?.uid ?? '',
       startDate: DateStringLibrary.format(this.account.startDate),
-      applicationDate: '',
+      applicationDate: this.commandType === AccountEditionCommandType.FixAccountName ?
+        DateStringLibrary.today() : '',
       accountNumber: this.account.number,
       name: this.account.name,
       description: this.account.description,
-      role: this.account.role,
+      role: this.getInitRoleFromAccount(),
       accountTypeUID: this.account.type.uid,
       debtorCreditor: this.account.debtorCreditor,
+      usesSubledger: this.account.usesSubledger,
+      usesSector: this.account.usesSector,
     });
   }
 
 
-  private setMinAndMaxDates(){
-    this.minDate = DateStringLibrary.todayAddDays(1);
-    this.maxDate = DateStringLibrary.todayAddDays(8);
+  private getInitRoleFromAccount() {
+    return this.account.role === AccountRole.Sumaria ? AccountRole.Sumaria : AccountRole.Detalle;
+  }
+
+
+  private validateDisableSectorsAndSubledgers() {
+    const role = this.formHandler.getControl(this.controls.role).value;
+    const showSectorsAndSubledgersChecks = !!role && role !== AccountRole.Sumaria;
+
+    this.formHandler.disableControl(this.controls.usesSector, !showSectorsAndSubledgersChecks);
+    this.formHandler.disableControl(this.controls.usesSubledger, !showSectorsAndSubledgersChecks);
+  }
+
+
+  private validateFieldsValidators() {
+    this.formHandler.clearControlValidators(this.controls.applicationDate);
+
+    if (this.canEditName) {
+      this.formHandler.setControlValidators(this.controls.name,
+        [Validators.required, Validate.changeRequired(this.account.name)]);
+    }
+
+    // TODO: validate at least one change in one of the 3 fields (role, usesSectors or usesSublegers)
+    if (this.canEditRole) {
+      this.formHandler.setControlValidators(this.controls.role,
+        [Validators.required, Validate.changeRequired(this.getInitRoleFromAccount())]);
+    }
+
+    if (this.canEditType) {
+      this.formHandler.setControlValidators(this.controls.accountTypeUID,
+        [Validators.required, Validate.changeRequired(this.account.type.uid)]);
+    }
+
+    if (this.canEditDebtorCreditor) {
+      this.formHandler.setControlValidators(this.controls.debtorCreditor,
+        [Validators.required, Validate.changeRequired(this.account.debtorCreditor)]);
+    }
+
+    if (this.canEditSubledgerRole) {
+      this.formHandler.setControlValidators(this.controls.usesSubledger,
+        [Validators.required, Validate.changeRequired(this.account.usesSubledger)]);
+    }
   }
 
 
   private validateDisabledFields() {
-    this.formHandler.disableControl(this.controls.accountsChartUID);
-    this.formHandler.disableControl(this.controls.startDate);
-    this.formHandler.disableControl(this.controls.accountNumber);
+    this.formHandler.disableForm();
 
-    if (this.roleEditionMode) {
-      this.formHandler.disableControl(this.controls.name);
-      this.formHandler.disableControl(this.controls.description);
-      this.formHandler.disableControl(this.controls.accountTypeUID);
-      this.formHandler.disableControl(this.controls.debtorCreditor);
-    } else {
-      this.formHandler.disableControl(this.controls.role);
+    if (this.canEditName) {
+      this.formHandler.getControl(this.controls.name).enable();
+      this.formHandler.getControl(this.controls.description).enable();
+    }
+
+    if (this.canEditRole) {
+      this.formHandler.getControl(this.controls.role).enable();
+
+      this.validateDisableSectorsAndSubledgers();
+    }
+
+    if (this.canEditType) {
+      this.formHandler.getControl(this.controls.accountTypeUID).enable();
+    }
+
+    if (this.canEditDebtorCreditor) {
+      this.formHandler.getControl(this.controls.debtorCreditor).enable();
+    }
+
+    if (this.canEditSubledgerRole) {
+      this.formHandler.getControl(this.controls.usesSubledger).enable();
     }
   }
 
@@ -189,9 +271,11 @@ export class AccountHeaderComponent implements OnInit {
 
   private emitChanges() {
     const payload = {
-      account: this.getFormData(),
+      accountFields: this.getFormData(),
       accountChartUID: this.formHandler.getControl(this.controls.accountsChartUID).value,
       applicationDate: this.formHandler.getControl(this.controls.applicationDate).value,
+      usesSector: this.formHandler.getControl(this.controls.usesSector).value,
+      usesSubledger: this.formHandler.getControl(this.controls.usesSubledger).value,
     };
 
     sendEvent(this.accountHeaderEvent, AccountHeaderEventType.FORM_CHANGED, payload);
@@ -205,7 +289,7 @@ export class AccountHeaderComponent implements OnInit {
       accountNumber: formModel.accountNumber ?? '',
       name: formModel.name ?? '',
       description: formModel.description ?? '',
-      role: formModel.role ?? '',
+      role: getAccountRole(formModel.role, formModel.usesSector, formModel.usesSubledger),
       accountTypeUID: formModel.accountTypeUID ?? '',
       debtorCreditor: formModel.debtorCreditor ?? '',
     };

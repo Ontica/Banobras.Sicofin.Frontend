@@ -13,8 +13,8 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { BalancesDataService } from '@app/data-services';
 
-import { Account, AccountBalance, AccountHistory, AccountRole, AreaRule,
-         CurrencyRule, EmptyAccount, LedgerRule, SectorRule } from '@app/models';
+import { Account, AccountBalance, AccountHistory, AreaRule, CurrencyRule, EmptyAccount, LedgerRule,
+         SectorRule } from '@app/models';
 
 import { AccountViewEventType } from './account-view.component';
 
@@ -39,7 +39,6 @@ export class AccountTabbedViewComponent implements OnChanges {
   title = '';
   hint = '';
   selectedTabIndex = 0;
-  showSectors = false;
 
   areaRulesDS: MatTableDataSource<AreaRule>;
   currencyRulesDS: MatTableDataSource<CurrencyRule>;
@@ -53,7 +52,6 @@ export class AccountTabbedViewComponent implements OnChanges {
   ngOnChanges() {
     this.setTitle();
     this.setDataSources();
-    this.setShowSectors();
   }
 
 
@@ -102,12 +100,6 @@ export class AccountTabbedViewComponent implements OnChanges {
     this.sectorRulesDS = new MatTableDataSource(this.account.sectorRules);
     this.ledgerRulesDS = new MatTableDataSource(this.account.ledgerRules);
     this.accountHistoryDS = new MatTableDataSource(this.account.history);
-  }
-
-
-  private setShowSectors() {
-    this.showSectors = this.account.role === AccountRole.Sectorizada ||
-      this.account.sectorRules.length !== 0;
   }
 
 }

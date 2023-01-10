@@ -27,6 +27,7 @@
               [selection]="selection"
               [values]="dataDisplayedUIDList"
               [showWarning]="deletingMode"
+              [disabled]="selectionDisabled"
               (selectionChange)="validateCheckAllChanged($event)">
             </emp-ng-check-box-all>
           </th>

@@ -16,6 +16,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
+import { AccountEditionConfigComponent } from './account-edition/account-edition-config.component';
 import { AccountEditionWizardComponent } from './account-edition/account-edition-wizard.component';
 import { AccountHeaderComponent } from './account-edition/account-header.component';
 import { AccountItemsTableComponent } from './account-edition/account-items-table.component';
@@ -43,6 +44,7 @@ import { AccountViewComponent } from './account-tabbed-view/account-view.compone
     ReportsControlsModule,
   ],
   declarations: [
+    AccountEditionConfigComponent,
     AccountEditionWizardComponent,
     AccountHeaderComponent,
     AccountItemsTableComponent,

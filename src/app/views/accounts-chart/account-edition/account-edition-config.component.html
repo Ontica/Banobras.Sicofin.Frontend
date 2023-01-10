@@ -1,0 +1,44 @@
+<form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
+
+  <div fxLayout="row" fxLayoutAlign="space-between">
+
+    <div fxFlex="none">
+
+      <label >
+        <span [class.warning-text]="formHandler.showInvalidControl(controls.dataToUpdate)">
+          ¿Qué se desea modificar en esta cuenta?:
+        </span>
+      </label>
+
+      <br>
+
+      <div fxLayout="column" fxLayoutGap="0.75rem">
+
+        <mat-checkbox *ngFor="let data of accountDataToUpdateList;"
+          [checked]="selection.isSelected(data)"
+          (click)="$event.stopPropagation()"
+          (change)="onDataToUpdateChanged(data)">
+          {{data.name}}
+        </mat-checkbox>
+
+      </div>
+
+    </div>
+
+    <div fxFlex="none" fxFlex.lt-md="none">
+
+      <label>Fecha de aplicación:</label>
+      <emp-ng-datepicker
+        [formControlName]="controls.applicationDate"
+        [minDate]="minDate"
+        [maxDate]="maxDate"
+        [showError]="formHandler.showInvalidControl(controls.applicationDate)"
+        (valueChange)="onApplicationDateChanged()">
+
+      </emp-ng-datepicker>
+
+    </div>
+
+  </div>
+
+</form>
