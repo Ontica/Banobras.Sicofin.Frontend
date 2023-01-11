@@ -44,7 +44,11 @@ export class FinancialConceptIntegrationEditionComponent {
 
   @ViewChild(ConfirmEditionResultModalComponent) resultModal: ConfirmEditionResultModalComponent;
 
-  submitted = false;
+  isLoading = false;
+
+  editionSubmitted = false;
+
+  deleteSubmitted = false;
 
   displayFinancialConceptEntryEditor = false;
 
@@ -65,7 +69,7 @@ export class FinancialConceptIntegrationEditionComponent {
 
 
   onFinancialConceptEntriesTableEvent(event: EventInfo): void {
-    if (this.submitted) {
+    if (this.editionSubmitted || this.deleteSubmitted) {
       return;
     }
 
@@ -91,7 +95,7 @@ export class FinancialConceptIntegrationEditionComponent {
 
 
   onFinancialConceptEntryEditorEvent(event: EventInfo): void {
-    if (this.submitted) {
+    if (this.editionSubmitted || this.deleteSubmitted) {
       return;
     }
 
@@ -119,49 +123,74 @@ export class FinancialConceptIntegrationEditionComponent {
 
 
   private getFinancialConceptEntry(financialConceptEntryUID: string) {
-    this.submitted = true;
+    this.isLoading = true;
 
     this.financialConceptsData.getFinancialConceptEntry(this.financialConcept.uid, financialConceptEntryUID)
       .toPromise()
       .then(x => this.setSelectedFinancialConceptEntry(x))
-      .finally(() => this.submitted = false);
+      .finally(() => this.isLoading = false);
   }
 
 
   private insertFinancialConceptEntry(command: FinancialConceptEntryEditionCommand) {
-    this.submitted = true;
+    this.editionSubmitted = true;
 
     this.financialConceptsData.insertFinancialConceptEntry(this.financialConcept.uid, command)
       .toPromise()
       .then(x => this.validateEditionResult(x))
-      .finally(() => this.submitted = false);
+      .catch(() => this.editionSubmitted = false);
   }
 
 
   private updateFinancialConceptEntry(command: FinancialConceptEntryEditionCommand) {
-    this.submitted = true;
+    this.editionSubmitted = true;
 
     this.financialConceptsData.updateFinancialConceptEntry(this.financialConcept.uid,
                                                            this.selectedFinancialConceptEntry.uid,
                                                            command)
       .toPromise()
       .then(x => this.validateEditionResult(x))
-      .finally(() => this.submitted = false);
+      .catch(() => this.editionSubmitted = false);
   }
 
 
   private validateEditionResult(editionResult: FinancialConceptEntryEditionResult) {
     if (editionResult?.command?.dryRun) {
-      this.resultModal.validateResult(editionResult)
-        .toPromise()
-        .then(x => {
-          if (x) {
-            this.submitEntryEdition(editionResult.command);
-          }
-        });
+      this.validateDryRunResponse(editionResult);
     } else {
-      this.emitIntegrationUpdated(editionResult.message);
+      this.validateExecuteResponse(editionResult);
     }
+  }
+
+
+  private validateDryRunResponse(editionResult: FinancialConceptEntryEditionResult) {
+    if (editionResult.actions.length > 0 || editionResult.warnings.length > 0 ||
+        editionResult.issues.length > 0) {
+      this.editionSubmitted = false;
+      this.openValidateResultModal(editionResult);
+    } else if (editionResult.command.isValid) {
+      this.submitEntryEdition(editionResult.command);
+    } else {
+      this.messageBox.showError('El comando no es válido.');
+      this.editionSubmitted = false;
+    }
+  }
+
+
+  private validateExecuteResponse(editionResult: FinancialConceptEntryEditionResult) {
+      this.emitIntegrationUpdated(editionResult.message);
+      this.editionSubmitted = false;
+  }
+
+
+  private openValidateResultModal(editionResult: FinancialConceptEntryEditionResult) {
+    this.resultModal.validateResult(editionResult)
+      .toPromise()
+      .then(x => {
+        if (x) {
+          this.submitEntryEdition(editionResult.command);
+        }
+      });
   }
 
 
@@ -178,12 +207,12 @@ export class FinancialConceptIntegrationEditionComponent {
 
   private deleteFinancialConceptEntry(financialConceptUID: string,
                                       financialConceptEntryUID: string) {
-    this.submitted = true;
+    this.deleteSubmitted = true;
 
     this.financialConceptsData.removeFinancialConceptEntry(financialConceptUID, financialConceptEntryUID)
       .toPromise()
       .then(x => this.emitIntegrationUpdated('La regla fue eliminada de la agrupación.'))
-      .finally(() => this.submitted = false);
+      .finally(() => this.deleteSubmitted = false);
   }
 
 

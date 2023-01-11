@@ -158,6 +158,7 @@ export interface FinancialConceptEntryEditionCommand extends EditionCommand {
   type: FinancialConceptEntryEditionType;
   dryRun: boolean;
   payload: FinancialConceptEntryFields;
+  isValid?: boolean;
 }
 
 

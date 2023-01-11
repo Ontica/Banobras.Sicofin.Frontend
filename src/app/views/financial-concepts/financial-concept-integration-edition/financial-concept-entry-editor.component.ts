@@ -74,6 +74,8 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
   @Input() readonly = false;
 
+  @Input() submitted = false;
+
   @Output() financialConceptEntryEditorEvent = new EventEmitter<EventInfo>();
 
   helper: SubscriptionHelper;
@@ -82,7 +84,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   controls = FinancialConceptEntryEditorFormControls;
   editionMode = false;
 
-  isLoading = false;
+  isLoadingDataLists = false;
   isLoadingReferencedFinancialConcepts = false;
   isLoadingExternalVariable = false;
 
@@ -237,7 +239,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private loadDataLists() {
-    this.isLoading = true;
+    this.isLoadingDataLists = true;
 
     combineLatest([
       this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
@@ -249,7 +251,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
       this.referencedGroupList = y.filter(z => z.accountsChart.uid === this.financialConcept.accountsChart.uid);
       this.selectedGroup = y.find(z => z.uid === this.financialConcept.group.uid) ?? null;
 
-      this.isLoading = false;
+      this.isLoadingDataLists = false;
     });
   }
 

@@ -10,7 +10,7 @@
       <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
         autocomplete="off" class="form-section">
 
-        <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+        <emp-ng-spinner #spinner [visible]="isLoadingDataLists || submitted"></emp-ng-spinner>
 
         <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
@@ -40,6 +40,7 @@
                 <emp-ng-select
                   [formControlName]="controls.referencedGroup"
                   [items]="referencedGroupList"
+                  [loading]="isLoadingDataLists"
                   [showError]="formHandler.showInvalidControl(controls.referencedGroup)">
                 </emp-ng-select>
               </div>

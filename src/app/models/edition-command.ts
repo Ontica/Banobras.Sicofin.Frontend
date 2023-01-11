@@ -12,6 +12,7 @@ export interface EditionCommand {
   type: string;
   dryRun: boolean;
   payload: any;
+  isValid?: boolean;
 }
 
 
