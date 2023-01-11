@@ -2,7 +2,7 @@
 
   <emp-ng-card
     [title]='title'
-    hint='Se importarán las cuentas a SICOFIN'
+    hint='Actualiza el catálogo de cuentas utilizando un archivo Excel'
     (cardClose)="onClose()">
 
     <div class="card-body-padding">
@@ -93,7 +93,7 @@
               <button (click)="onSubmitImportAccounts()" [disabled]="executedImported"
                 [class.btn]="!isReadyForSubmit"
                 [class.btn-action]="isReadyForSubmit">
-                Importar cuentas
+                Importar cambios
               </button>
 
               <ng-container *ngIf="executedImported">

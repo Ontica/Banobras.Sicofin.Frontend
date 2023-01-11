@@ -45,7 +45,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
   permissions = PermissionsLibrary;
 
-  title = 'Importador de cuentas';
+  title = 'Importador de cambios al catálogo';
 
   file = null;
 
