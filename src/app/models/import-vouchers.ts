@@ -9,6 +9,7 @@ import { DateString, Identifiable } from '@app/core';
 
 
 export interface ImportVouchersCommand {
+  dryRun: boolean;
   allowUnbalancedVouchers: boolean;
   generateSubledgerAccount: boolean;
   canEditVoucherEntries: boolean;
@@ -50,6 +51,7 @@ export const EmptyImportVouchersResult: ImportVouchersResult = {
 
 
 export const EmptyImportVouchersCommand: ImportVouchersCommand = {
+  dryRun: true,
   allowUnbalancedVouchers: false,
   generateSubledgerAccount: false,
   canEditVoucherEntries: false,

@@ -20,36 +20,6 @@ export class ImportVouchersDataService {
   constructor(private http: HttpService) { }
 
 
-  dryRunImportVouchersFromExcelFile(file: File, importVouchersCommand: ImportVouchersCommand):
-    Observable<ImportVouchersResult> {
-    Assertion.assertValue(file, 'file');
-    Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
-
-    const formData: FormData = new FormData();
-    formData.append('media', file);
-    formData.append('command', JSON.stringify(importVouchersCommand));
-
-    const path = `v2/financial-accounting/vouchers/import-from-excel/dry-run`;
-
-    return this.http.post<ImportVouchersResult>(path, formData);
-  }
-
-
-  dryRunImportVouchersFromTextFile(file: File, importVouchersCommand: ImportVouchersCommand):
-    Observable<ImportVouchersResult> {
-    Assertion.assertValue(file, 'file');
-    Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
-
-    const formData: FormData = new FormData();
-    formData.append('media', file);
-    formData.append('command', JSON.stringify(importVouchersCommand));
-
-    const path = `v2/financial-accounting/vouchers/import-from-text-file/dry-run`;
-
-    return this.http.post<ImportVouchersResult>(path, formData);
-  }
-
-
   getStatusImportVouchersFromDatabase(): Observable<ImportVouchersResult> {
     const path = `v2/financial-accounting/vouchers/import-from-database/status`;
 

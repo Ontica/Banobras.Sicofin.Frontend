@@ -18,7 +18,8 @@ import { ImportVouchersDataService, VouchersDataService } from '@app/data-servic
 import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals,
          ImportVouchersCommand } from '@app/models';
 
-import { AccountChartStateSelector, VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector,
+         VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -173,7 +174,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     this.validateRequiredFormFields();
 
     if (this.isDataBaseImport) {
-      this.dryRunImportVouchers(this.importVouchersData.getStatusImportVouchersFromDatabase());
+      const observable = this.importVouchersData.getStatusImportVouchersFromDatabase()
+      this.importVouchers(observable, true);
     }
   }
 
@@ -207,7 +209,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   onGetStatusImportVouchersFromDatabase() {
     this.resetImportVouchersResult();
-    this.dryRunImportVouchers(this.importVouchersData.getStatusImportVouchersFromDatabase());
+    const observable = this.importVouchersData.getStatusImportVouchersFromDatabase()
+    this.importVouchers(observable, true);
   }
 
 
@@ -216,26 +219,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let observable: any = null;
-
-    switch (this.selectedImportType) {
-      case ImportTypes.excelFile:
-        observable =
-          this.importVouchersData.dryRunImportVouchersFromExcelFile(this.file.file, this.getFormData());
-        break;
-      case ImportTypes.txtFile:
-        observable =
-          this.importVouchersData.dryRunImportVouchersFromTextFile(this.file.file, this.getFormData());
-        break;
-      case ImportTypes.dataBase:
-        observable = this.importVouchersData.getStatusImportVouchersFromDatabase();
-        break;
-      default:
-        console.log(`Unhandled import type ${this.selectedImportType}`);
-        return;
-    }
-
-    this.dryRunImportVouchers(observable);
+    this.validateExecuteImportVouchers(true);
   }
 
 
@@ -249,7 +233,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.executeImportVouchers();
+    this.validateExecuteImportVouchers(false);
   }
 
 
@@ -366,13 +350,14 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getFormData(): ImportVouchersCommand {
+  private getFormData(dryRun: boolean): ImportVouchersCommand {
     Assertion.assert(this.formHandler.form.valid,
       'Programming error: form must be validated before command execution.');
 
     const formModel = this.formHandler.form.getRawValue();
 
     const data: ImportVouchersCommand = {
+      dryRun: dryRun,
       allowUnbalancedVouchers: formModel.allowUnbalancedVouchers,
       generateSubledgerAccount: formModel.generateSubledgerAccount,
       canEditVoucherEntries: formModel.canEditVoucherEntries,
@@ -450,26 +435,12 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private dryRunImportVouchers(importObservable: Observable<ImportVouchersResult>) {
-    this.isLoading = true;
-
-    importObservable
-      .toPromise()
-      .then(x => {
-        this.executedDryRun = true;
-        this.importVouchersResult = x ?? EmptyImportVouchersResult;
-        this.resolveDryRunImportVoucherResponse();
-      })
-      .finally(() => this.isLoading = false);
-  }
-
-
   private showConfirmMessage() {
     this.messageBox.confirm(this.getConfirmMessage(), this.title)
       .toPromise()
       .then(x => {
         if (x) {
-          this.executeImportVouchers();
+          this.validateExecuteImportVouchers(false);
         }
       });
   }
@@ -486,39 +457,52 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private executeImportVouchers() {
+  private validateExecuteImportVouchers(dryRun: boolean) {
     let observable: any = null;
 
     switch (this.selectedImportType) {
       case ImportTypes.excelFile:
-        observable = this.importVouchersData.importVouchersFromExcelFile(this.file.file, this.getFormData());
+        observable = this.importVouchersData.importVouchersFromExcelFile(this.file.file, this.getFormData(dryRun));
         break;
       case ImportTypes.txtFile:
-        observable = this.importVouchersData.importVouchersFromTextFile(this.file.file, this.getFormData());
+        observable = this.importVouchersData.importVouchersFromTextFile(this.file.file, this.getFormData(dryRun));
         break;
       case ImportTypes.dataBase:
-        observable = this.importVouchersData.importVouchersFromDatabase(this.getFormData());
+        if (dryRun) {
+          observable = this.importVouchersData.getStatusImportVouchersFromDatabase();
+        } else {
+          observable = this.importVouchersData.importVouchersFromDatabase(this.getFormData(null));
+        }
         break;
       default:
         console.log(`Unhandled import type ${this.selectedImportType}`);
         return;
     }
 
-    this.importVouchers(observable);
+    this.importVouchers(observable, dryRun);
   }
 
 
-  private importVouchers(importObservable: Observable<ImportVouchersResult>) {
+  private importVouchers(importObservable: Observable<ImportVouchersResult>, dryRun: boolean) {
     this.isLoading = true;
 
     importObservable
       .toPromise()
-      .then(x => this.resolveImportVoucherResponse(x))
+      .then(x => {
+        if (dryRun) {
+          this.resolveDryRunImportVouchersResult(x);
+        } else {
+          this.resolveImportVouchersResult(x)
+        }
+      })
       .finally(() => this.isLoading = false);
   }
 
 
-  private resolveDryRunImportVoucherResponse() {
+  private resolveDryRunImportVouchersResult(response: ImportVouchersResult) {
+    this.executedDryRun = true;
+    this.importVouchersResult = response ?? EmptyImportVouchersResult;
+
     if (!this.isDataBaseImport && this.importVouchersResult.hasErrors) {
       const message = `No es posible realizar la importación, ya que se detectaron ` +
         `${this.importVouchersResult.errors.length} errores en el archivo.`;
@@ -527,7 +511,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private resolveImportVoucherResponse(response: ImportVouchersResult) {
+  private resolveImportVouchersResult(response: ImportVouchersResult) {
     let message = '';
 
     if (this.isDataBaseImport) {
