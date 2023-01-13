@@ -123,6 +123,12 @@ export class Validate {
         return { changeRequired: true };
       }
 
+      if (Array.isArray(control.value) && Array.isArray(initialValue) &&
+          initialValue.length === control.value.length &&
+          initialValue.every(x => control.value.includes(x))) {
+        return { changeRequired: true };
+      }
+
       return null;
     };
   }
