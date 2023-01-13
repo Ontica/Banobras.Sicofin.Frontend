@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -13,9 +13,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import { MatTableDataSource } from '@angular/material/table';
 
-import { EventInfo } from '@app/core';
-
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+import { EventInfo, Validate } from '@app/core';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -26,7 +24,6 @@ export enum AccountItemsTableEventType {
 }
 
 enum AccountItemsTableFormControls {
-  applicationDate = 'applicationDate',
   items = 'items',
 }
 
@@ -45,23 +42,19 @@ enum AccountItemsTableFormControls {
     }
   `],
 })
-export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy {
+export class AccountItemsTableComponent implements OnChanges, OnInit {
 
   @Input() dataList: AccountItem[] = [];
 
   @Input() selectedList: AccountItem[] = [];
 
-  @Input() disabledList: AccountItem[] = [];
-
   @Input() itemType: 'currencies' | 'sectors' | 'roles' = 'currencies';
-
-  @Input() deletingMode = false;
 
   @Input() selectionDisabled = false;
 
   @Input() selectionRequired = true;
 
-  @Input() applicationDateRequired = false;
+  @Input() changeSelectionRequired = false;
 
   @Output() accountItemsTableEvent = new EventEmitter<EventInfo>();
 
@@ -79,10 +72,8 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   dataDisplayedUIDList: string[] = [];
 
-  helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer) {
-    this.helper = uiLayer.createSubscriptionHelper();
+  constructor() {
     this.initForm();
   }
 
@@ -90,6 +81,7 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
   ngOnChanges() {
     setTimeout(() => {
       this.setFormData();
+      this.setDisplayedColumns();
       this.setDataTable();
       this.setSelectionData();
     });
@@ -101,41 +93,13 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
-  ngOnDestroy() {
-    this.helper.destroy();
-  }
-
-
   get hasItems() {
     return !!this.dataSource || this.dataSource?.data.length > 0
   }
 
 
-  get hasDisabledItems() {
-    return this.disabledList.length > 0;
-  }
-
-
   validateCheckAllChanged(selection) {
     this.selection = selection;
-
-    if(!this.deletingMode && this.hasDisabledItems) {
-      this.disabledList.forEach(x => this.selection.deselect(x.uid));
-      this.selectedList.forEach(x => this.selection.select(x.uid));
-    }
-  }
-
-
-  showDisabled(uid): boolean {
-    if (this.selectionDisabled) {
-      return true;
-    }
-
-    if(this.deletingMode) {
-      return false;
-    }
-
-    return this.disabledList.map(x => x.uid).includes(uid);
   }
 
 
@@ -146,56 +110,46 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   private initForm() {
     this.formHandler = new FormHandler(
-      new FormGroup({
-        applicationDate: new FormControl(''),
-        items: new FormControl([], [Validators.required, Validators.minLength(1)]),
-      })
+      new FormGroup({items: new FormControl([], [Validators.required, Validators.minLength(1)])})
     );
   }
 
 
   private suscribeToDataChanges() {
-    this.formHandler.form.valueChanges.subscribe(x => this.emitChanges());
-
     this.selection.changed.subscribe(x =>
       this.formHandler.getControl(this.controls.items).reset(this.selection.selected)
+    );
+    this.formHandler.form.valueChanges.subscribe(x =>
+      this.emitChanges()
     );
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({
-      items: this.deletingMode ? [] : this.selectedList.map(x => x.uid),
-    });
-    this.validateRequiredFormFields();
+    this.formHandler.form.reset({items: this.selectedList.map(x => x.uid)});
+    this.validateItemsFieldValidators();
   }
 
 
-  private validateRequiredFormFields() {
+  private validateItemsFieldValidators() {
     if (this.selectionRequired) {
-      const minLength = this.deletingMode || !this.hasDisabledItems ? 1 : this.selectedList.length + 1;
-      this.formHandler.setControlValidators(this.controls.items, [Validators.required, Validators.minLength(minLength)]);
+        const initialSelection = this.selectedList.map(x => x.uid);
+        const validators = this.changeSelectionRequired ?
+          [Validators.required, Validators.minLength(1), Validate.changeRequired(initialSelection)] :
+          [Validators.required, Validators.minLength(1)];
+
+        this.formHandler.setControlValidators(this.controls.items, validators);
     } else {
       this.formHandler.clearControlValidators(this.controls.items);
-    }
-
-    if(this.applicationDateRequired) {
-      this.formHandler.setControlValidators(this.controls.applicationDate, Validators.required);
-    } else {
-      this.formHandler.clearControlValidators(this.controls.applicationDate);
     }
   }
 
 
   private setDataTable() {
-    this.setDisplayedColumns();
+    const data = this.selectedList.length === 0 ? this.dataList :
+      this.dataList.map(x => this.selectedList.find(y => y.uid === x.uid) ?? x);
 
-    if (this.deletingMode) {
-      this.dataSource = new MatTableDataSource(this.selectedList ?? []);
-    } else {
-      const dataListWithSavedData = this.getDataListWithSavedData();
-      this.dataSource = new MatTableDataSource(dataListWithSavedData ?? []);
-    }
+    this.dataSource = new MatTableDataSource(data ?? []);
 
     this.dataDisplayedUIDList = this.dataSource.data.map(x => x.uid);
   }
@@ -204,23 +158,11 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
   private setSelectionData() {
     this.selection.clear();
 
-    if (!this.deletingMode) {
-      this.dataDisplayedUIDList.forEach(x => {
-        if (this.selectedList.map(y => y.uid).includes(x)) {
-          this.selection.select(x);
-        }
-      });
-    }
-  }
-
-
-  private getDataListWithSavedData(): any[] {
-    return this.dataList.map(x => {
-        if (this.selectedList.map(y => y.uid).includes(x.uid)) {
-          return this.selectedList.find(z => z.uid === x.uid);
-        }
-        return x;
-      });
+    this.selectedList.forEach(x => {
+      if (this.dataDisplayedUIDList.includes(x.uid)) {
+        this.selection.select(x.uid);
+      }
+    });
   }
 
 
@@ -242,13 +184,7 @@ export class AccountItemsTableComponent implements OnChanges, OnInit, OnDestroy 
 
   private emitChanges() {
     const formModel = this.formHandler.form.getRawValue();
-
-    const payload = {
-      isFormValid: this.formHandler.form.valid,
-      applicationDate: formModel.applicationDate ?? '',
-      items: formModel.items ?? [],
-    };
-
+    const payload = {items: formModel.items ?? []};
     sendEvent(this.accountItemsTableEvent, AccountItemsTableEventType.FORM_CHANGED, payload);
   }
 

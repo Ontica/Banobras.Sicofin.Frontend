@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { AccountRole, SectorRole } from './accounts-chart';
+import { Account, AccountRole, EmptyAccount, SectorRole } from './accounts-chart';
 
 
 export interface ImportAccountsCommand {
@@ -33,15 +33,15 @@ export const EmptyImportAccountsCommand: ImportAccountsCommand = {
 };
 
 
-export const AccountRoleList: string[] = [
+export const AccountRoleList: AccountRole[] = [
    AccountRole.Sumaria,
    AccountRole.Detalle,
 ];
 
 
 
-export function getAccountRole(mainRole: string, usesSector: boolean, usesSubledger: boolean): AccountRole {
-  if (mainRole === AccountRole.Sumaria) {
+export function getAccountMainRole(role: AccountRole, usesSector: boolean, usesSubledger: boolean): AccountRole {
+  if (role === AccountRole.Sumaria) {
     return AccountRole.Sumaria;
   }
 
@@ -54,6 +54,32 @@ export function getAccountRole(mainRole: string, usesSector: boolean, usesSubled
   }
 
   return AccountRole.Detalle;
+}
+
+
+export function getAccountRole(role: AccountRole): AccountRole {
+  return role === AccountRole.Sumaria ? AccountRole.Sumaria : AccountRole.Detalle;
+}
+
+
+export function getAccountRoleDescription(role: AccountRole, usesSector: boolean, usesSubledger: boolean): string {
+  if (role === AccountRole.Sumaria) {
+    return AccountRole.Sumaria;
+  }
+
+  let roleName: string = 'De ' + AccountRole.Detalle.toLowerCase();
+
+  if (usesSector) {
+    roleName += ', ' + AccountRole.Sectorizada.toLowerCase();
+  }
+
+  if (usesSubledger) {
+    roleName += ' con auxiliares';
+  } else {
+    roleName += ' sin auxiliares';
+  }
+
+  return roleName;
 }
 
 
@@ -106,7 +132,7 @@ export interface AccountFields {
   description: string;
   accountTypeUID: string;
   debtorCreditor: string;
-  role: string;
+  role: AccountRole;
 }
 
 
@@ -138,32 +164,24 @@ export const EmptyAccountEditionCommand: AccountEditionCommand = {
 
 
 export interface AccountEditionResult {
-  count: number;
-  errors: number;
-  errorsList: string[];
-  itemsList: string[];
-  operation: string;
-
-  // actions: string[];
-  // issues: string[];
-  // command: AccountEditionCommand;
-  // outcome: Account;
-  // warnings: string[];
+  command: AccountEditionCommand;
+  commited: boolean;
+  actions: string[];
+  issues: string[];
+  warnings: string[];
+  message?: string;
+  outcome?: Account;
 }
 
 
 export const EmptyAccountEditionResult: AccountEditionResult = {
-  count: 0,
-  errors: 0,
-  errorsList: [],
-  itemsList: [],
-  operation: '',
-
-  // actions: [],
-  // issues: [],
-  // command: EmptyAccountEditionCommand,
-  // outcome: EmptyAccount,
-  // warnings: [],
+  command: EmptyAccountEditionCommand,
+  commited: false,
+  actions: [],
+  issues: [],
+  warnings: [],
+  message: '',
+  outcome: EmptyAccount,
 };
 
 

@@ -15,7 +15,7 @@ import { PermissionsLibrary } from '@app/main-layout';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
-import { Account, AccountEditionCommandType, AccountRole, EmptyAccount } from '@app/models';
+import { Account, AccountEditionCommandType, EmptyAccount, getAccountRole } from '@app/models';
 
 import { AccountEditionWizardEventType } from '../account-edition/account-edition-wizard.component';
 
@@ -30,7 +30,6 @@ enum AccountViewFormControls {
   number = 'number',
   name = 'name',
   description = 'description',
-  roleType = 'roleType',
   role = 'role',
   type = 'type',
   debtorCreditor = 'debtorCreditor',
@@ -108,7 +107,6 @@ export class AccountViewComponent implements OnChanges {
         name: new FormControl(''),
         description: new FormControl(''),
         role: new FormControl(''),
-        roleType: new FormControl(''),
         type: new FormControl(''),
         debtorCreditor: new FormControl(''),
         usesSubledger: new FormControl(false),
@@ -126,8 +124,7 @@ export class AccountViewComponent implements OnChanges {
       number: this.account.number,
       name: this.account.name,
       description: this.account.description,
-      role: this.account.role,
-      roleType: this.account.role === AccountRole.Sumaria ? AccountRole.Sumaria : AccountRole.Detalle,
+      role: getAccountRole(this.account.role),
       type: this.account.type.name,
       debtorCreditor: this.account.debtorCreditor,
       usesSubledger: this.account.usesSubledger,

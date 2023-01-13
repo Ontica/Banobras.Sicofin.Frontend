@@ -88,9 +88,10 @@
           [config]="{bindByValue: false}"
           [formControlName]="controls.role"
           [items]="accountRoleList"
-          [showError]="formHandler.showInvalidControl(controls.role)"
+          [showError]="formHandler.showInvalidControl(controls.role) ||
+                       formHandler.showInvalidControl(controls.mainRole)"
           [bindLabel]="null"
-          (changes)="onRoleChanges()">
+          (changes)="onRoleChanges($event)">
         </emp-ng-select>
       </div>
 
@@ -121,7 +122,8 @@
       <div [fxFlex]="100/6">
         <mat-checkbox
           [formControlName]="controls.usesSector"
-          (click)="$event.stopPropagation">
+          (click)="$event.stopPropagation"
+          (change)="onChecksChanges()">
           Maneja Sectores
         </mat-checkbox>
       </div>
@@ -129,7 +131,8 @@
       <div [fxFlex]="100/6">
         <mat-checkbox
           [formControlName]="controls.usesSubledger"
-          (click)="$event.stopPropagation">
+          (click)="$event.stopPropagation"
+          (change)="onChecksChanges()">
           <span [class.warning-text]="formHandler.showInvalidControl(controls.usesSubledger)">
             Maneja Auxiliares
           </span>

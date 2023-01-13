@@ -16,7 +16,7 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/cor
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { Account, AccountDataToBeUpdated, AccountDataToBeUpdatedList, AccountRole, EmptyAccount,
-         getAccountRole } from '@app/models';
+         getAccountMainRole } from '@app/models';
 
 
 export enum AccountEditionConfigEventType {
@@ -102,7 +102,7 @@ export class AccountEditionConfigComponent implements OnInit {
 
 
   private setAccountDataToUpdateList() {
-    const role = getAccountRole(this.account.role, this.account.usesSector, this.account.usesSubledger);
+    const role = getAccountMainRole(this.account.role, this.account.usesSector, this.account.usesSubledger);
 
     if (role === AccountRole.Sumaria) {
       this.accountDataToUpdateList = AccountDataToBeUpdatedList.filter(x =>

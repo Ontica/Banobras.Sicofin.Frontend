@@ -14,8 +14,8 @@ import { DateStringLibrary, EventInfo, isEmpty, Validate } from '@app/core';
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { Account, AccountDataToBeUpdated, AccountEditionCommandType, AccountFields, AccountRole,
-         AccountRoleList, AccountsChartMasterData, DebtorCreditorTypesList, EmptyAccount,
-         getAccountRole } from '@app/models';
+         AccountRoleList, AccountsChartMasterData, DebtorCreditorTypesList, EmptyAccount, getAccountRole,
+         getAccountMainRole } from '@app/models';
 
 
 export enum AccountHeaderEventType {
@@ -30,6 +30,7 @@ enum AccountHeaderFormControls {
   name = 'name',
   description = 'description',
   role = 'role',
+  mainRole = 'mainRole',
   accountTypeUID = 'accountTypeUID',
   debtorCreditor = 'debtorCreditor',
   usesSubledger = 'usesSubledger',
@@ -59,7 +60,7 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
   controls = AccountHeaderFormControls;
 
-  accountRoleList: string[] = AccountRoleList;
+  accountRoleList: AccountRole[] = AccountRoleList;
 
   debtorCreditorTypesList: string[] = DebtorCreditorTypesList;
 
@@ -111,18 +112,25 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
   }
 
 
+  get roleName(): string {
+    return this.formHandler.getControl(this.controls.mainRole).value ?? '';
+  }
+
+
   onAccountChartChanges() {
     this.formHandler.getControl(this.controls.accountTypeUID).reset('');
   }
 
 
-  onRoleChanges() {
-    this.formHandler.getControl(this.controls.usesSector)
-      .reset(this.isSaved ? this.account.usesSector : false);
-    this.formHandler.getControl(this.controls.usesSubledger)
-      .reset(this.isSaved ? this.account.usesSubledger : false);
-
+  onRoleChanges(role: AccountRole) {
+    this.setSectorsAndSubledgersAfterRoleChanges(role);
     this.validateDisableSectorsAndSubledgers();
+    this.setMainRole();
+  }
+
+
+  onChecksChanges() {
+    this.setMainRole();
   }
 
 
@@ -141,6 +149,7 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
         name: new FormControl('', Validators.required),
         description: new FormControl(''),
         role: new FormControl('', Validators.required),
+        mainRole: new FormControl('', Validators.required),
         accountTypeUID: new FormControl('', Validators.required),
         debtorCreditor: new FormControl('', Validators.required),
         usesSubledger: new FormControl(false),
@@ -174,6 +183,8 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
 
   private setFormData() {
+    const isRoleSumaria = this.account.role === AccountRole.Sumaria;
+
     this.formHandler.form.reset({
       accountsChartUID: this.selectedAccountChart?.uid ?? '',
       startDate: DateStringLibrary.format(this.account.startDate),
@@ -182,41 +193,37 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
       accountNumber: this.account.number,
       name: this.account.name,
       description: this.account.description,
-      role: this.getInitRoleFromAccount(),
+      role: getAccountRole(this.account.role),
+      mainRole: getAccountMainRole(this.account.role, this.account.usesSector, this.account.usesSubledger),
       accountTypeUID: this.account.type.uid,
       debtorCreditor: this.account.debtorCreditor,
-      usesSubledger: this.account.usesSubledger,
-      usesSector: this.account.usesSector,
+      usesSubledger: isRoleSumaria ? false : this.account.usesSubledger,
+      usesSector: isRoleSumaria ? false : this.account.usesSector,
     });
-  }
-
-
-  private getInitRoleFromAccount() {
-    return this.account.role === AccountRole.Sumaria ? AccountRole.Sumaria : AccountRole.Detalle;
-  }
-
-
-  private validateDisableSectorsAndSubledgers() {
-    const role = this.formHandler.getControl(this.controls.role).value;
-    const showSectorsAndSubledgersChecks = !!role && role !== AccountRole.Sumaria;
-
-    this.formHandler.disableControl(this.controls.usesSector, !showSectorsAndSubledgersChecks);
-    this.formHandler.disableControl(this.controls.usesSubledger, !showSectorsAndSubledgersChecks);
   }
 
 
   private validateFieldsValidators() {
     this.formHandler.clearControlValidators(this.controls.applicationDate);
+    this.formHandler.clearControlValidators(this.controls.name);
+    this.formHandler.clearControlValidators(this.controls.mainRole);
+    this.formHandler.clearControlValidators(this.controls.role);
+    this.formHandler.clearControlValidators(this.controls.usesSector);
+    this.formHandler.clearControlValidators(this.controls.usesSubledger);
+    this.formHandler.clearControlValidators(this.controls.accountTypeUID);
+    this.formHandler.clearControlValidators(this.controls.debtorCreditor);
 
     if (this.canEditName) {
       this.formHandler.setControlValidators(this.controls.name,
         [Validators.required, Validate.changeRequired(this.account.name)]);
     }
 
-    // TODO: validate at least one change in one of the 3 fields (role, usesSectors or usesSublegers)
     if (this.canEditRole) {
-      this.formHandler.setControlValidators(this.controls.role,
-        [Validators.required, Validate.changeRequired(this.getInitRoleFromAccount())]);
+      const initMainRole =
+        getAccountMainRole(this.account.role, this.account.usesSector, this.account.usesSubledger);
+      this.formHandler.setControlValidators(this.controls.role, [Validators.required]);
+      this.formHandler.setControlValidators(this.controls.mainRole,
+        [Validators.required, Validate.changeRequired(initMainRole)]);
     }
 
     if (this.canEditType) {
@@ -246,6 +253,7 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
     if (this.canEditRole) {
       this.formHandler.getControl(this.controls.role).enable();
+      this.formHandler.getControl(this.controls.mainRole).enable();
 
       this.validateDisableSectorsAndSubledgers();
     }
@@ -264,8 +272,43 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
   }
 
 
+  private setSectorsAndSubledgersAfterRoleChanges(role: AccountRole) {
+    const useAccountData = this.isSaved && role !== AccountRole.Sumaria &&
+      this.account.role !== AccountRole.Sumaria;
+
+    this.formHandler.getControl(this.controls.usesSector)
+      .reset(useAccountData ? this.account.usesSector : false);
+
+    this.formHandler.getControl(this.controls.usesSubledger)
+      .reset(useAccountData ? this.account.usesSubledger : false);
+  }
+
+
+  private validateDisableSectorsAndSubledgers() {
+    const role = this.formHandler.getControl(this.controls.role).value;
+    const showSectorsAndSubledgersChecks = !!role && role !== AccountRole.Sumaria;
+
+    this.formHandler.disableControl(this.controls.usesSector, !showSectorsAndSubledgersChecks);
+    this.formHandler.disableControl(this.controls.usesSubledger, !showSectorsAndSubledgersChecks);
+  }
+
+
   private suscribeToFormChangesForEmit() {
     this.formHandler.form.valueChanges.subscribe(x => this.emitChanges());
+  }
+
+
+  private setMainRole() {
+    const role = this.formHandler.getControl(this.controls.role).value;
+    let mainRole = '';
+
+    if (!!role) {
+      const usesSector = this.formHandler.getControl(this.controls.usesSector).value;
+      const usesSubledger = this.formHandler.getControl(this.controls.usesSubledger).value;
+
+      mainRole = getAccountMainRole(role, usesSector, usesSubledger);
+    }
+    this.formHandler.getControl(this.controls.mainRole).setValue(mainRole);
   }
 
 
@@ -289,7 +332,7 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
       accountNumber: formModel.accountNumber ?? '',
       name: formModel.name ?? '',
       description: formModel.description ?? '',
-      role: getAccountRole(formModel.role, formModel.usesSector, formModel.usesSubledger),
+      role: getAccountMainRole(formModel.role, formModel.usesSector, formModel.usesSubledger),
       accountTypeUID: formModel.accountTypeUID ?? '',
       debtorCreditor: formModel.debtorCreditor ?? '',
     };

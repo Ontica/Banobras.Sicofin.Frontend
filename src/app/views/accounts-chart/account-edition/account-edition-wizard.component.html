@@ -116,6 +116,7 @@
               itemType="currencies"
               [dataList]="selectedAccountChart?.currencies ?? []"
               [selectedList]="accountCurrenciesList"
+              [changeSelectionRequired]="isSaved"
               (accountItemsTableEvent)="onAccountCurrenciesTableEvent($event)">
 
             </emp-fa-account-items-table>
@@ -148,7 +149,7 @@
         </mat-step>
 
 
-        <mat-step #sectorsStep *ngIf="showSectorsStep && usesSector"
+        <mat-step #sectorsStep *ngIf="showSectorsStep"
           [stepControl]="accountSectorsTable.formHandler.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Sectores</ng-template>
@@ -162,6 +163,7 @@
               itemType="sectors"
               [dataList]="selectedAccountChart?.sectors ?? []"
               [selectedList]="accountSectorsList"
+              [changeSelectionRequired]="isSaved"
               (accountItemsTableEvent)="onAccountSectorsTableEvent($event)">
 
             </emp-fa-account-items-table>
@@ -195,7 +197,7 @@
         </mat-step>
 
 
-        <mat-step #roleForSectorsStep *ngIf="showSectorsStep && usesSector"
+        <mat-step #roleForSectorsStep *ngIf="showRoleForSectorsStep"
           [stepControl]="accountRoleForSectorsTable.formHandler.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Rol por sector</ng-template>
@@ -260,22 +262,19 @@
                 <tr>
                   <td class='nowrap'> Catálogo de cuentas: </td>
                   <td>
-                    <strong *ngIf="!showInfoStep">{{account.accountsChart.name}}</strong>
-                    <strong *ngIf="showInfoStep">{{selectedAccountChart?.name}}</strong>
+                    <strong>{{selectedAccountChart?.name}}</strong>
                   </td>
                 </tr>
                 <tr>
                   <td class='nowrap'> Cuenta: </td>
                   <td>
-                    <strong *ngIf="!showInfoStep"> {{account.number + ': ' + account.name}}</strong>
-                    <strong *ngIf="showInfoStep"> {{accountEditionCommand.accountFields?.accountNumber + ': ' + accountEditionCommand.accountFields?.name}}</strong>
+                    <strong> {{accountEditionCommand.accountFields?.accountNumber + ': ' + accountEditionCommand.accountFields?.name}}</strong>
                   </td>
                 </tr>
                 <tr>
                   <td class='nowrap'> Rol: </td>
                   <td>
-                    <strong *ngIf="!showInfoStep"> {{account.role}}</strong>
-                    <strong *ngIf="showInfoStep"> {{accountEditionCommand.accountFields?.role}}</strong>
+                    <strong> {{accountRoleDescriptionFromCommand}}</strong>
                   </td>
                 </tr>
                 <tr>
@@ -299,7 +298,7 @@
                 <div class="scrollable-container step-list-container">
 
                   <ul class="info-list">
-                    <li *ngFor="let action of this.accountEditionResult.itemsList">{{action}}</li>
+                    <li *ngFor="let action of accountEditionResult.actions">{{action}}</li>
                   </ul>
 
                 </div>
@@ -318,7 +317,7 @@
                 <div class="scrollable-container step-list-container">
 
                   <ul class="info-list">
-                    <li *ngFor="let error of accountEditionResult.errorsList">{{error}}</li>
+                    <li *ngFor="let error of accountEditionResult.issues">{{error}}</li>
                   </ul>
 
                 </div>
@@ -334,17 +333,23 @@
               <div class="scrollable-container step-list-container">
 
                 <ul class="info-list">
-                  <li *ngFor="let action of this.accountEditionResult.itemsList">{{action}}</li>
+                  <li *ngFor="let action of accountEditionResult.actions">{{action}}</li>
                 </ul>
 
               </div>
 
+              <br>
               <br>
 
               Operación
               <strong class="warning-text">
                 {{' ' + accountEditionTypeName}}</strong>
               realizada correctamente.
+
+              <br>
+              <br>
+
+              {{accountEditionResult.message}}
 
             </ng-container>
 
