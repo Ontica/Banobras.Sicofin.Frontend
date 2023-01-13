@@ -34,8 +34,8 @@ export class HttpHandler {
   }
 
 
-  delete<T>(path: string, options?: HttpClientOptions, service?: Service): Observable<T> {
-    return this.invokeHttpCall<T>(HttpMethod.DELETE, path, undefined, options, service);
+  delete<T>(path: string, body?: any, options?: HttpClientOptions, service?: Service): Observable<T> {
+    return this.invokeHttpCall<T>(HttpMethod.DELETE, path, body, options, service);
   }
 
 
@@ -147,7 +147,6 @@ export class HttpHandler {
 
     } else {
       return 'data';
-
     }
   }
 

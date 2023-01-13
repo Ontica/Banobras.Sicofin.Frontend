@@ -65,13 +65,13 @@ export class HttpService {
   }
 
 
-  delete<T>(path: string, options?: HttpClientOptions): Observable<T> {
+  delete<T>(path: string, body?: any, options?: HttpClientOptions): Observable<T> {
     Assertion.assertValue(path, 'path');
 
     return this.directory.getService(path, HttpMethod.DELETE)
       .pipe(
         switchMap(service =>
-          this.httpHandler.delete<T>(path, options, service))
+          this.httpHandler.delete<T>(path, body, options, service))
       );
   }
 
