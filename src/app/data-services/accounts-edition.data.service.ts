@@ -36,11 +36,26 @@ export class AccountsEditionDataService {
   updateAccount(accountsChartUID: string,
                 accountUID: string,
                 command: AccountEditionCommand): Observable<AccountEditionResult> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(accountUID, 'accountUID');
     Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
 
     return this.http.put<AccountEditionResult>(path, command);
+  }
+
+
+  deleteAccount(accountsChartUID: string,
+                accountUID: string,
+                command: AccountEditionCommand): Observable<AccountEditionResult> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(accountUID, 'accountUID');
+    Assertion.assertValue(command, 'command');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
+
+    return this.http.delete<AccountEditionResult>(path, command);
   }
 
 
