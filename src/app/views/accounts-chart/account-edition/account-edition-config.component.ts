@@ -86,7 +86,6 @@ export class AccountEditionConfigComponent implements OnInit {
         dataToUpdate: new FormControl([], [Validators.required, Validators.minLength(1)]),
       })
     );
-
   }
 
 

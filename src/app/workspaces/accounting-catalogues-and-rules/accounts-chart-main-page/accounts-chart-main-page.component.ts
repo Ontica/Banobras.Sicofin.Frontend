@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
@@ -16,6 +16,7 @@ import {
 } from '@app/views/accounts-chart/account-tabbed-view/account-tabbed-view.component';
 
 import {
+  AccountsChartExplorerComponent,
   AccountsChartExplorerEventType
 } from '@app/views/accounts-chart/accounts-chart-explorer/accounts-chart-explorer.component';
 
@@ -26,6 +27,8 @@ import {
 })
 export class AccountsChartMainPageComponent {
 
+  @ViewChild('accountChartExplorer') accountChartExplorer: AccountsChartExplorerComponent;
+
   displayAccountChartTabbed = false;
 
   selectedAccount: Account = EmptyAccount;
@@ -34,9 +37,8 @@ export class AccountsChartMainPageComponent {
   onAccountsChartExplorerEvent(event: EventInfo) {
     switch (event.type as AccountsChartExplorerEventType) {
       case AccountsChartExplorerEventType.ACCOUNT_SELECTED:
-        this.selectedAccount = isEmpty(event.payload.account) ? EmptyAccount : event.payload.account;
-        this.displayAccountChartTabbed = !isEmpty(this.selectedAccount);
-
+        Assertion.assertValue(event.payload.account, 'event.payload.account');
+        this.setSelectedAccount(event.payload.account as Account);
         break;
 
       default:
@@ -54,7 +56,8 @@ export class AccountsChartMainPageComponent {
 
       case AccountTabbedViewEventType.ACCOUNT_UPDATED:
         Assertion.assertValue(event.payload.account, 'event.payload.account');
-        this.setSelectedAccount(event.payload.account);
+        this.setSelectedAccount(event.payload.account as Account);
+        this.refreshAccountChartExplorer()
         break;
 
       default:
@@ -67,6 +70,11 @@ export class AccountsChartMainPageComponent {
   private setSelectedAccount(account: Account) {
     this.selectedAccount = isEmpty(account) ? EmptyAccount : account;
     this.displayAccountChartTabbed = !isEmpty(this.selectedAccount);
+  }
+
+
+  private refreshAccountChartExplorer() {
+    this.accountChartExplorer.refreshSearchAccounts();
   }
 
 }

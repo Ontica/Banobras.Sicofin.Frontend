@@ -88,7 +88,7 @@ export class AccountViewComponent implements OnChanges {
 
       case AccountEditionWizardEventType.ACCOUNT_EDITED:
         sendEvent(this.accountViewEvent, AccountViewEventType.ACCOUNT_UPDATED, event.payload);
-        break;
+        return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);

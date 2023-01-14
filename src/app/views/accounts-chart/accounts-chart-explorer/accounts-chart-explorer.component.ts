@@ -128,9 +128,7 @@ export class AccountsChartExplorerComponent {
         Assertion.assertValue(event.payload.accountsQuery, 'event.payload.accountsQuery');
 
         this.selectedAccountChartUID = event.payload.accountsChart.uid;
-
         this.accountsQuery = event.payload.accountsQuery as AccountsQuery;
-
         this.setAccountData(EmptyAccountsChart);
 
         return;
@@ -140,9 +138,7 @@ export class AccountsChartExplorerComponent {
         Assertion.assertValue(event.payload.accountsQuery, 'event.payload.accountsQuery');
 
         this.selectedAccountChartUID = event.payload.accountsChart.uid;
-
         this.accountsQuery = event.payload.accountsQuery as AccountsQuery;
-
         this.searchAccounts(this.selectedAccountChartUID, this.accountsQuery);
 
         return;
@@ -194,6 +190,15 @@ export class AccountsChartExplorerComponent {
   }
 
 
+  refreshSearchAccounts() {
+    if (!this.selectedAccountChartUID) {
+      return;
+    }
+
+    this.searchAccounts(this.selectedAccountChartUID, this.accountsQuery);
+  }
+
+
   private searchAccounts(accountsChartUID: string, accountsQuery: AccountsQuery) {
     this.setLoadingAccounts(true);
 
@@ -211,9 +216,7 @@ export class AccountsChartExplorerComponent {
     this.accountsChartData.exportAccountsToExcel(this.selectedAccountChartUID,
                                                  this.accountsQuery)
       .toPromise()
-      .then(x => {
-        this.excelFileUrl = x.url;
-      });
+      .then(x => this.excelFileUrl = x.url);
   }
 
 

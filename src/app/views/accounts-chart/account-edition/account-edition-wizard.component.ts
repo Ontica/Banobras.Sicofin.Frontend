@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } 
 
 import { Observable } from 'rxjs';
 
-import { Assertion, DateString, EventInfo, isEmpty } from '@app/core';
+import { Assertion, DateString, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -33,11 +33,13 @@ import { AccountItemsTableComponent,
 
 import { AccountEditionConfigComponent,
          AccountEditionConfigEventType } from './account-edition-config.component';
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 
 export enum AccountEditionWizardEventType {
   CLOSE_MODAL_CLICKED = 'AccountEditionWizardComponent.Event.CloseModalClicked',
-  ACCOUNT_EDITED = 'AccountEditionWizardComponent.Event.AccountEdited',
+  ACCOUNT_EDITED      = 'AccountEditionWizardComponent.Event.AccountEdited',
+  ACCOUNT_DELETED     = 'AccountEditionWizardComponent.Event.AccountDeleted',
 }
 
 @Component({
@@ -116,7 +118,8 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
 
   constructor(private uiLayer: PresentationLayer,
-              private accountsData: AccountsEditionDataService) {
+              private accountsData: AccountsEditionDataService,
+              private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -444,6 +447,11 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   }
 
 
+  onDeleteAccountClicked() {
+    this.showConfirmDeleteMessage();
+  }
+
+
   private setTitle() {
     this.accountEditionTypeName = getAccountEditionTypeName(this.commandType);
     this.title = `Asistente para ${this.accountEditionTypeName.toLowerCase()}`
@@ -478,19 +486,11 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
   private setInitAccountFields() {
     if (this.isSaved) {
-      const accountFields: AccountFields = {
-        accountNumber: this.account.number ?? '',
-        name: this.account.name ?? '',
-        description: this.account.description ?? '',
-        role: getAccountMainRole(this.account.role, this.account.usesSector, this.account.usesSubledger),
-        accountTypeUID: this.account.type.uid ?? '',
-        debtorCreditor: this.account.debtorCreditor ?? '',
-      };
-
-      this.setAccountFields(accountFields);
+      this.setAccountFields(this.getAccountFieldsFromAccount(this.account));
       this.setInitSectorsFlags();
     }
   }
+
 
   private setInitSectorsFlags() {
     const isRoleSumaria = this.account.role === AccountRole.Sumaria;
@@ -513,16 +513,6 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   }
 
 
-  private getAccountItemFromCurrencyRule(rule: CurrencyRule): AccountItem {
-    return {
-        uid: rule.currency.uid,
-        fullName: rule.currency.fullName,
-        startDate: rule.startDate,
-        endDate: rule.endDate,
-    };
-  }
-
-
   private setInitAccountSectors() {
     this.accountSectorsList = this.usesSector ?
       this.account.sectorRules.map(x => this.getAccountItemFromSectorRule(x)): [];
@@ -534,6 +524,34 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   }
 
 
+  private setInitSectorsWithSubledgers() {
+    const sectorWithSubledger = this.account.sectorRules.filter(x => x.sectorRole === SectorRole.Control);
+    this.setAccountSectorsWithSubledgerAccountList(sectorWithSubledger)
+  }
+
+
+  private getAccountFieldsFromAccount(account: Account): AccountFields {
+    return {
+      accountNumber: account.number ?? '',
+      name: account.name ?? '',
+      description: account.description ?? '',
+      role: getAccountMainRole(account.role, account.usesSector, account.usesSubledger),
+      accountTypeUID: account.type.uid ?? '',
+      debtorCreditor: account.debtorCreditor ?? '',
+    };
+  }
+
+
+  private getAccountItemFromCurrencyRule(rule: CurrencyRule): AccountItem {
+    return {
+        uid: rule.currency.uid,
+        fullName: rule.currency.fullName,
+        startDate: rule.startDate,
+        endDate: rule.endDate,
+    };
+  }
+
+
   private getAccountItemFromSectorRule(rule: SectorRule): AccountItem {
     return {
       uid: rule.sector.uid,
@@ -542,12 +560,6 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       startDate: rule.startDate,
       endDate: rule.endDate,
     };
-  }
-
-
-  private setInitSectorsWithSubledgers() {
-    const sectorWithSubledger = this.account.sectorRules.filter(x => x.sectorRole === SectorRole.Control);
-    this.setAccountSectorsWithSubledgerAccountList(sectorWithSubledger)
   }
 
 
@@ -594,6 +606,44 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
       sendEvent(this.accountEditionWizardEvent, AccountEditionWizardEventType.ACCOUNT_EDITED, {account});
     }
+  }
+
+
+  private showConfirmDeleteMessage() {
+    const accountName = `${this.account.number}: ${this.account.name} (${this.accountRoleDescriptionForTitle})`;
+    const accountsChartName = this.account.accountsChart.name;
+    const command = this.getAccountEditionCommandForDelete();
+
+    let message = `Esta operación eliminara la cuenta
+                   <strong> ${accountName}</strong>
+                   del catálogo de cuentas <strong> ${accountsChartName}</strong>,
+                   con fecha de ${DateStringLibrary.format(command.applicationDate)}.
+                   <br><br>¿Elimino la cuenta?`;
+
+    this.messageBox.confirm(message, 'Eliminar cuenta', 'DeleteCancel')
+      .toPromise()
+      .then(x => {
+        if (x) {
+          this.deleteAccount(command);
+        }
+      });
+  }
+
+
+  private deleteAccount(command: AccountEditionCommand) {
+    this.submitted = true;
+
+    this.accountsData.deleteAccount(command.accountsChartUID, command.accountUID, command)
+      .toPromise()
+      .then(x => this.resolveAccountDeleteResponse())
+      .finally(() => this.submitted = false);
+  }
+
+
+  private resolveAccountDeleteResponse() {
+    this.messageBox.show('La cuenta fue eliminada correctamente.', 'Eliminar Cuenta');
+    sendEvent(this.accountEditionWizardEvent, AccountEditionWizardEventType.ACCOUNT_EDITED,
+      {account: EmptyAccount});
   }
 
 
@@ -717,6 +767,23 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       accountFields: this.accountEditionCommand.accountFields,
       currencies: this.accountEditionCommand.currencies,
       sectorRules: this.accountEditionCommand.sectorRules,
+    };
+
+    return command;
+  }
+
+
+  private getAccountEditionCommandForDelete(): AccountEditionCommand {
+    const command: AccountEditionCommand = {
+      dryRun: false,
+      commandType: AccountEditionCommandType.DeleteAccount,
+      accountsChartUID: this.account.accountsChart.uid,
+      accountUID: this.account.uid,
+      applicationDate: DateStringLibrary.today(),
+      dataToBeUpdated: [],
+      accountFields: this.getAccountFieldsFromAccount(this.account),
+      currencies: this.account.currencyRules.map(x => x.currency.uid),
+      sectorRules: this.account.sectorRules.map(x => this.getSectorRoleField(x.sector.code, x.sectorRole)),
     };
 
     return command;

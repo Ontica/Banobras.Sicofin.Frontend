@@ -86,6 +86,7 @@ export function getAccountRoleDescription(role: AccountRole, usesSector: boolean
 export enum AccountEditionCommandType {
   CreateAccount  = 'CreateAccount',
   UpdateAccount  = 'UpdateAccount',
+  DeleteAccount  = 'DeleteAccount',
   FixAccountName = 'FixAccountName',
 }
 
