@@ -135,11 +135,19 @@ export class DataTableComponent implements OnChanges {
 
 
   private initDataSource() {
-    this.columns = this.dataTable.columns;
+    this.columns = this.getValidatedColumns();
     this.displayedColumns = this.columns.map(column => column.field);
 
     this.dataSource = new TableVirtualScrollDataSource(this.dataTable.entries);
     this.dataSource.filterPredicate = this.getFilterPredicate();
+  }
+
+
+  private getValidatedColumns(): DataTableColumn[] {
+    const columns = this.dataTable.columns.filter((value, index, self) =>
+      index === self.findIndex((t) => (!!value.field && t.field === value.field)));
+
+    return columns;
   }
 
 
