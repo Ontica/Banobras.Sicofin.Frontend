@@ -19,6 +19,7 @@ import {
 import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
 import { FinancialConceptsModule } from '@app/views/financial-concepts/financial-concepts.module';
 import { FinancialReportsModule } from '@app/views/financial-reports/financial-reports.module';
+import { ReportingModule } from '@app/views/reporting/reporting.module';
 import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger-accounts.module';
 
@@ -54,6 +55,7 @@ import {
     AccountsChartModule,
     FinancialConceptsModule,
     FinancialReportsModule,
+    ReportingModule,
     ReportsControlsModule,
     SubledgerAccountsModule,
   ],

@@ -29,6 +29,8 @@ export class AccountsChartMainPageComponent {
 
   @ViewChild('accountChartExplorer') accountChartExplorer: AccountsChartExplorerComponent;
 
+  displayLockedUpBalancesModal = false;
+
   displayAccountChartTabbed = false;
 
   selectedAccount: Account = EmptyAccount;
@@ -39,6 +41,10 @@ export class AccountsChartMainPageComponent {
       case AccountsChartExplorerEventType.ACCOUNT_SELECTED:
         Assertion.assertValue(event.payload.account, 'event.payload.account');
         this.setSelectedAccount(event.payload.account as Account);
+        break;
+
+      case AccountsChartExplorerEventType.LOCKED_UP_BALANCES_BUTTON_CLICKED:
+        this.displayLockedUpBalancesModal = true;
         break;
 
       default:

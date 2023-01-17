@@ -50,6 +50,8 @@ export * from './imported-data';
 
 export * from './ledgers';
 
+export * from './locked-up-balances';
+
 export * from './operational-reports';
 
 export * from './reconciliation';

@@ -52,3 +52,9 @@
   (closeEvent)="onCloseExternalProcessSubmitterEvent()">
 
 </emp-fa-external-process-submitter>
+
+
+<emp-fa-locked-up-balances-modal *ngIf="displayLockedUpBalancesModal"
+  (lockedUpBalancesModalEvent)="displayLockedUpBalancesModal = false">
+
+</emp-fa-locked-up-balances-modal>

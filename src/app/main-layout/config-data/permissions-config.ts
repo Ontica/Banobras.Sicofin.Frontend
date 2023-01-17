@@ -35,6 +35,7 @@ export enum PermissionsLibrary {
   FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
   FEATURE_IMPORTACION_SISTEMAS_TRANSVERSALES = 'feature-importacion-sistemas-transversales',
   FEATURE_IMPORTACION_CONCILIACIONES = 'feature-importacion-conciliaciones',
+  FEATURE_SALDOS_ENCERRADOS = 'feature-saldos-encerrados',
   FEATURE_EP_RENTABILIDAD = 'feature-ep-rentabilidad',
   FEATURE_EP_CONCILIACION_SIC = 'feature-ep-conciliacion-sic',
   FEATURE_EP_EXPORTACION_SALDOS_MENSUALES = 'feature-ep-exportacion-saldos-mensuales',

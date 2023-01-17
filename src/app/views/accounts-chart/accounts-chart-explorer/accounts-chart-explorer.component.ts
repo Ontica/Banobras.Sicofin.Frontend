@@ -31,7 +31,8 @@ import { AccountsChartFilterEventType } from './accounts-chart-filter.component'
 import { AccountsChartListEventType } from './accounts-chart-list.component';
 
 export enum AccountsChartExplorerEventType {
-  ACCOUNT_SELECTED = 'AccountsChartExplorerComponent.Event.AccountSelected',
+  ACCOUNT_SELECTED                  = 'AccountsChartExplorerComponent.Event.AccountSelected',
+  LOCKED_UP_BALANCES_BUTTON_CLICKED = 'AccountsChartExplorerComponent.Event.LockedUpBalancesButtonClicked',
 }
 
 @Component({
@@ -187,6 +188,12 @@ export class AccountsChartExplorerComponent {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  onLockedUpBalancesButtonClicked() {
+    sendEvent(this.accountsChartExplorerEvent,
+      AccountsChartExplorerEventType.LOCKED_UP_BALANCES_BUTTON_CLICKED);
   }
 
 

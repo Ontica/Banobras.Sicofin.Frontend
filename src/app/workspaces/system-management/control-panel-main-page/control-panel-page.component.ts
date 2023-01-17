@@ -20,6 +20,8 @@ export class ControlPanelMainPageComponent {
 
   displayAccountingCalendarsEditor = false;
 
+  displayLockedUpBalancesModal = false;
+
   displayExternalProcessesEditor = false;
 
   controlPanelOptionList = ControlPanelOptionList;
@@ -40,11 +42,14 @@ export class ControlPanelMainPageComponent {
         this.openExternalProcessesEditor(option.externalProcessType);
         return;
 
+      case 'LockedUpBalances':
+        this.displayLockedUpBalancesModal = true;
+        return;
+
       default:
         console.log(`Unhandled user interface event ${option.type}`);
         return;
     }
-
   }
 
 

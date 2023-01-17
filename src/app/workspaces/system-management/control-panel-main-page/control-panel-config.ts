@@ -14,7 +14,8 @@ type ControlPanelOptionType = 'AccountingCalendars' |
                               'ExternalProcessRentabilidad' |
                               'ExternalProcessConciliacionSIC' |
                               'ExternalProcessExportacionSaldosMensuales' |
-                              'ExternalProcessExportacionSaldosDiarios';
+                              'ExternalProcessExportacionSaldosDiarios' |
+                              'LockedUpBalances';
 
 
 
@@ -67,5 +68,12 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     type: 'ExternalProcessExportacionSaldosDiarios',
     permission: PermissionsLibrary.FEATURE_EP_EXPORTACION_SALDOS_DIARIOS,
     externalProcessType: ExternalProcessTypes.ExportacionSaldosDiarios,
+  },
+  {
+    title: 'Busqueda de saldos encerrados',
+    description: 'Proceso de busqueda de saldos encerrados.' ,
+    actionTitle: 'Buscar',
+    type: 'LockedUpBalances',
+    permission: PermissionsLibrary.FEATURE_SALDOS_ENCERRADOS,
   },
 ];

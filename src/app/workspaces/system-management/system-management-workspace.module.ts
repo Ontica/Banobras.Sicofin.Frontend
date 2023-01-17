@@ -18,6 +18,7 @@ import { SystemManagementWorkspaceRoutingModule } from './system-management-work
 import { BalancesGenerationModule } from '@app/views/balances-generation/balances-generation.module';
 import { ExchangeRatesModule } from '@app/views/exchange-rates/exchange-rates.module';
 import { ProcessesModule } from '@app/views/processes/processes.module';
+import { ReportingModule } from '@app/views/reporting/reporting.module';
 import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 
 import {
@@ -45,6 +46,7 @@ import {
     BalancesGenerationModule,
     ExchangeRatesModule,
     ProcessesModule,
+    ReportingModule,
     ReportsControlsModule,
   ],
 

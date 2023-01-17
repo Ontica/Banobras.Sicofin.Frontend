@@ -21,6 +21,7 @@ import { FinancialReportsEditionDataService } from './financial-reports-edition.
 import { ImportVouchersDataService } from './import-vouchers.data.service';
 import { OperationalReportsDataService } from './operational-reports.data.service';
 import { ReconciliationDataService } from './reconciliation.data.service';
+import { ReportingDataService } from './reporting.data.service';
 import { SubledgerDataService } from './subledgers.data.service';
 import { TransactionSlipsDataService } from './transaction-slips.data.service';
 import { VouchersDataService } from './vouchers.data.service';
@@ -47,6 +48,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     ImportVouchersDataService,
     OperationalReportsDataService,
     ReconciliationDataService,
+    ReportingDataService,
     SubledgerDataService,
     TransactionSlipsDataService,
     VouchersDataService,

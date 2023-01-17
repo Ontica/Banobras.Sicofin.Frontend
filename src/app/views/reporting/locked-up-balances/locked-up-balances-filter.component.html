@@ -1,0 +1,58 @@
+<form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div fxFlex="50">
+
+        <label>Catálogo de cuentas:</label>
+
+        <emp-ng-select name="accountsChartUID" required
+          [(ngModel)]="query.accountsChartUID"
+          [items]="accountsChartMasterDataList"
+          [loading]="isLoading"
+          [showError]="!query.accountsChartUID">
+
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex>
+
+      </div>
+
+      <div fxFlex="none">
+
+          <label>Período:</label>
+
+          <emp-ng-date-range-picker name="period"
+            [(startDate)]="query.fromDate"
+            [(endDate)]="query.toDate"
+            [showError]="!query.fromDate ||
+                         !query.toDate">
+
+          </emp-ng-date-range-picker>
+
+      </div>
+
+
+      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button title="Buscar"
+          [class.btn-icon]="form.invalid || !periodValid"
+          [class.btn-icon-action]="form.valid && periodValid"
+          [disabled]="form.invalid || !periodValid"
+          (click)="onBuildOperationalReportClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>

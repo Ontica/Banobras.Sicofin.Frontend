@@ -13,17 +13,33 @@
 
     </div>
 
-    <div class="card-header-options" *empNgHasPermission="permissions.FEATURE_EDICION_CUENTAS">
+    <div class="card-header-options">
 
-      <button class="btn"
-        (click)="onImportAccountsClicked()">
-        Importar cambios
-      </button>
+      <ng-container *empNgHasPermission="permissions.FEATURE_SALDOS_ENCERRADOS">
 
-      <button class="btn-action" fxFlexOffset="1.5rem"
-        (click)="onCreateAccountButtonClicked()">
-        Agregar cuenta
-      </button>
+        <button class="btn"
+          (click)="onLockedUpBalancesButtonClicked()">
+          Saldos encerrados
+        </button>
+
+        <mat-divider vertical="true" class="vertical-inline"></mat-divider>
+
+      </ng-container>
+
+
+      <ng-container *empNgHasPermission="permissions.FEATURE_EDICION_CUENTAS">
+
+        <button class="btn"
+          (click)="onImportAccountsClicked()">
+          Importar cambios
+        </button>
+
+        <button class="btn-action" fxFlexOffset="1.5rem"
+          (click)="onCreateAccountButtonClicked()">
+          Agregar cuenta
+        </button>
+
+      </ng-container>
 
     </div>
 

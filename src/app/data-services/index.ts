@@ -19,6 +19,7 @@ export * from './financial-reports.data.service';
 export * from './import-vouchers.data.service';
 export * from './operational-reports.data.service';
 export * from './reconciliation.data.service';
+export * from './reporting.data.service';
 export * from './subledgers.data.service';
 export * from './transaction-slips.data.service';
 export * from './vouchers.data.service';
