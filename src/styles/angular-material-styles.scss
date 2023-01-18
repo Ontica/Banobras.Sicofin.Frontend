@@ -302,11 +302,18 @@ table.mat-table {
     }
 
     a.item-link {
-      color: $primary-color-dark;
+      color: $link-color;
     }
 
     a.item-link:hover {
       text-decoration: underline;
+    }
+
+    a.link-highlight {
+      font-size: $font-size-grid * 1.1;
+      color: $primary-color;
+      text-decoration: underline;
+      white-space: nowrap;
     }
   }
 
@@ -498,6 +505,11 @@ table.mat-table.emp-designer {
 
   &.vertical {
     margin: 12px 8px 0 0;
+    height: $control-height;
+  }
+
+  &.vertical-inline {
+    margin: 0 0.75rem;
     height: $control-height;
   }
 }

@@ -636,6 +636,8 @@ pre {
   display: none;
 }
 
+// list
+
 ul.info-list {
   padding: 0 1.5em;
 
@@ -647,20 +649,20 @@ ul.info-list {
 // card-info
 
 .card-info-container {
-  padding: 16px;
+  padding: 1rem;
 }
 
 .card-info {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
-  background-color: #fafafa;
-  padding: 16px;
+  background-color: $background-color-highlight;
+  padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 3px;
 }
 
 .card-info-title {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 0.5rem;
   color: $primary-color;
   font-size: 12pt;
   font-weight: 600;
