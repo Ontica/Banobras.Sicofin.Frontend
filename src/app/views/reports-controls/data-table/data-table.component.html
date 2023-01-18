@@ -46,6 +46,18 @@
                   {{row[column.field]}}
                 </a>
               </ng-container>
+              <ng-container *ngSwitchCase="dataTableColumnType.text_button">
+                <a *ngIf="!column.functionToShowButton ||
+                         (!!column.functionToShowButton && !!column.functionToShowButton(row))"
+                  class="link-highlight"
+                  (click)="onItemLinkClicked(row)">
+                  {{column.buttonText ?? row[column.field]}}
+                </a>
+                <span *ngIf="!!column.functionToShowButton && !column.functionToShowButton(row)"
+                  class="nowrap">
+                  {{row[column.field]}}
+                </span>
+              </ng-container>
               <ng-container *ngSwitchDefault>
                 {{row[column.field]}}
               </ng-container>

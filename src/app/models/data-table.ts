@@ -24,6 +24,8 @@ export interface DataTableColumn {
   digits?: number;
   isColumnStrikethrough?: boolean;
   fieldConditionStrikethrough?: string;
+  functionToShowButton?: (entry: DataTableEntry) => any;
+  buttonText?: string;
 }
 
 
@@ -46,6 +48,7 @@ export enum DataTableColumnType {
   text_nowrap = 'text-nowrap',
   decimal = 'decimal',
   date = 'date',
+  text_button = 'text-button',
 }
 
 
