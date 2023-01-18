@@ -12,15 +12,31 @@ import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './da
 
 export interface LockedUpBalancesQuery extends DataTableQuery {
   accountsChartUID: string;
-  fromDate?: DateString;
+  fromDate: DateString;
   toDate: DateString;
+}
+
+
+export interface LockedUpBalancesEntry extends DataTableEntry {
+  ledgerNumber: string;
+  accountName: string;
+  roleChangeDate: DateString;
+  actionRole: string;
+  canGenerateVoucher: boolean;
 }
 
 
 export interface LockedUpBalancesData extends DataTable {
   query: LockedUpBalancesQuery;
   columns: DataTableColumn[];
-  entries: DataTableEntry[];
+  entries: LockedUpBalancesEntry[];
+}
+
+
+export interface GenerateVoucherCommand {
+  accountsChartUID: string;
+  ledgerNumber: string;
+  roleChangeDate: DateString;
 }
 
 
