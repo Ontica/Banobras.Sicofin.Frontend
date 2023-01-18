@@ -11,12 +11,16 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { ReportingDataService } from '@app/data-services';
 
-import { EmptyLockedUpBalancesData, EmptyLockedUpBalancesQuery, LockedUpBalancesData,
-         LockedUpBalancesQuery } from '@app/models';
+import { EmptyLockedUpBalancesData, EmptyLockedUpBalancesQuery,
+         LockedUpBalancesData, LockedUpBalancesQuery } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
+
+import {
+  ExportReportModalEventType
+} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { LockedUpBalancesFilterEventType } from './locked-up-balances-filter.component';
 
@@ -42,6 +46,10 @@ export class LockedUpBalancesModalComponent {
 
   data: LockedUpBalancesData = Object.assign({}, EmptyLockedUpBalancesData);
 
+  displayExportModal = false;
+
+  fileUrl = '';
+
 
   constructor(private reportingData: ReportingDataService) { }
 
@@ -59,7 +67,6 @@ export class LockedUpBalancesModalComponent {
     switch (event.type as LockedUpBalancesFilterEventType) {
       case LockedUpBalancesFilterEventType.SEARCH_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-
         this.query = event.payload.query as LockedUpBalancesQuery;
         this.setLockedUpBalancesData(EmptyLockedUpBalancesData, false);
         this.getLockedUpBalances();
@@ -80,6 +87,32 @@ export class LockedUpBalancesModalComponent {
         this.setText(event.payload.displayedEntriesMessage as string);
         return;
 
+      case DataTableEventType.EXPORT_DATA:
+        this.setDisplayExportModal(true);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onExportReportModalEvent(event: EventInfo) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayExportModal(false);
+        return;
+
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        if (this.submitted) {
+          return;
+        }
+
+        this.exportLockedUpBalances();
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -96,6 +129,10 @@ export class LockedUpBalancesModalComponent {
   }
 
 
+  private exportLockedUpBalances() {
+    setTimeout(() => this.fileUrl = 'DummyUrl', 500);
+  }
+
 
   private setLockedUpBalancesData(data: LockedUpBalancesData, queryExecuted = true) {
     this.data = data;
@@ -111,6 +148,12 @@ export class LockedUpBalancesModalComponent {
     }
 
     this.hint = displayedEntriesMessage ?? `${this.data.entries.length} registros encontrados`;
+  }
+
+
+  private setDisplayExportModal(display: boolean) {
+    this.displayExportModal = display;
+    this.fileUrl = '';
   }
 
 }
