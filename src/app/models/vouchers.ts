@@ -284,9 +284,9 @@ export interface VoucherFields {
   voucherTypeUID: string;
   accountsChartUID: string;
   ledgerUID: string;
-  concept: string;
-  functionalAreaId: number;
-  accountingDate: string;
+  accountingDate: DateString;
+  concept?: string;
+  functionalAreaId?: number;
   calculationDate?: DateString;
   onVoucherNumber?: string;
 }

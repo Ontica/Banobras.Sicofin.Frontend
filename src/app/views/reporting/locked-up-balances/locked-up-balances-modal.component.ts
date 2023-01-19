@@ -9,10 +9,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { ReportingDataService } from '@app/data-services';
+import { ReportingDataService, VouchersDataService } from '@app/data-services';
 
-import { DataTableColumnType, EmptyLockedUpBalancesData, EmptyLockedUpBalancesQuery, GenerateVoucherCommand,
-         LockedUpBalancesData, LockedUpBalancesEntry, LockedUpBalancesQuery } from '@app/models';
+import { DataTableColumnType, EmptyLockedUpBalancesData, EmptyLockedUpBalancesQuery, LockedUpBalancesData,
+         LockedUpBalancesEntry, LockedUpBalancesQuery, VoucherFields } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -56,6 +56,7 @@ export class LockedUpBalancesModalComponent {
 
 
   constructor(private reportingData: ReportingDataService,
+              private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) { }
 
 
@@ -144,12 +145,13 @@ export class LockedUpBalancesModalComponent {
   }
 
 
-  private generateVoucher(command: GenerateVoucherCommand) {
+  private generateVoucher(voucherFields: VoucherFields) {
     this.submitted = true;
-    setTimeout(() => {
-      this.messageBox.showInDevelopment('Generar póliza', {command});
-      this.submitted = false;
-    }, 500);
+
+    this.vouchersData.createVoucherSpecialCase(voucherFields)
+      .toPromise()
+      .then(x => this.messageBox.show('Generar póliza', 'Se generó la póliza correctamente.'))
+      .finally(() => this.submitted = false);
   }
 
 
@@ -174,7 +176,7 @@ export class LockedUpBalancesModalComponent {
 
 
   private validateGenerateVoucher(entry: LockedUpBalancesEntry) {
-    if (entry.canGenerateVoucher && !!entry.ledgerNumber) {
+    if (entry.canGenerateVoucher && !!entry.ledgerUID && !!entry.roleChangeDate) {
       const message = `Esta operación generará la póliza para cancelar los saldos de la contabilidad
                       <strong> ${entry.accountName}</strong>.
                       <br><br>¿Genero la póliza?`;
@@ -183,8 +185,8 @@ export class LockedUpBalancesModalComponent {
         .toPromise()
         .then(x => {
           if (x) {
-            const command = this.getGenerateVoucherCommand(entry);
-            this.generateVoucher(command);
+            const fields = this.getVoucherFields(entry);
+            this.generateVoucher(fields);
           }
         });
     }
@@ -207,11 +209,12 @@ export class LockedUpBalancesModalComponent {
   }
 
 
-  private getGenerateVoucherCommand(entry: LockedUpBalancesEntry): GenerateVoucherCommand {
-    const command: GenerateVoucherCommand = {
+  private getVoucherFields(entry: LockedUpBalancesEntry): VoucherFields {
+    const command: VoucherFields = {
+      voucherTypeUID: 'CancelacionSaldosEncerrados',
       accountsChartUID: this.query.accountsChartUID,
-      ledgerNumber: entry.ledgerNumber,
-      roleChangeDate: entry.roleChangeDate,
+      ledgerUID: entry.ledgerUID,
+      accountingDate: entry.roleChangeDate,
     };
 
     return command;

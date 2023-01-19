@@ -18,11 +18,10 @@ export interface LockedUpBalancesQuery extends DataTableQuery {
 
 
 export interface LockedUpBalancesEntry extends DataTableEntry {
-  ledgerNumber: string;
-  accountName: string;
+  ledgerUID: string;
   roleChangeDate: DateString;
-  actionRole: string;
   canGenerateVoucher: boolean;
+  accountName: string;
 }
 
 
@@ -30,13 +29,6 @@ export interface LockedUpBalancesData extends DataTable {
   query: LockedUpBalancesQuery;
   columns: DataTableColumn[];
   entries: LockedUpBalancesEntry[];
-}
-
-
-export interface GenerateVoucherCommand {
-  accountsChartUID: string;
-  ledgerNumber: string;
-  roleChangeDate: DateString;
 }
 
 
