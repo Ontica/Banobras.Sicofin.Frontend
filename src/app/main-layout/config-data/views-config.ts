@@ -101,7 +101,7 @@ export const AccountingCataloguesAndRulesViews: View[] = [
   },
   {
     name: 'AccountingCataloguesAndRulesViews.ExternalVariables',
-    title: 'Valores por defecto',
+    title: 'Valores externos',
     url: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.fullpath,
     permission: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.permission,
   },
