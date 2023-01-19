@@ -150,7 +150,8 @@ export class FinancialConceptsMainPageComponent implements OnInit {
     this.setFinancialConceptsListData([]);
     this.isLoading = true;
 
-    this.financialConceptsData.getFinancialConceptsInGroup(this.financialConceptQuery.groupUID)
+    this.financialConceptsData.getFinancialConceptsInGroup(this.financialConceptQuery.groupUID,
+                                                           this.financialConceptQuery.date)
       .toPromise()
       .then(x => this.setFinancialConceptsListData(x))
       .finally(() => this.isLoading = false);

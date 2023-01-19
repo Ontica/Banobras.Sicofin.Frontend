@@ -34,8 +34,8 @@ export interface FinancialConceptsGroup {
 
 export interface FinancialConceptQuery {
   accountsChartUID: string;
-  groupUID?: string;
-  date?: DateString;
+  groupUID: string;
+  date: DateString;
 }
 
 

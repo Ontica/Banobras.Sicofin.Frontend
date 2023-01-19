@@ -37,8 +37,9 @@
 
         <label>Fecha:</label>
 
-        <emp-ng-datepicker name="date" disabled
-          [(ngModel)]="financialConceptsForm.date">
+        <emp-ng-datepicker name="date" required
+          [(ngModel)]="financialConceptsForm.date"
+          [showError]="!financialConceptsForm.date">
 
         </emp-ng-datepicker>
 

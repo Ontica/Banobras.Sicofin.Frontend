@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, HttpService, Identifiable } from '@app/core';
+import { Assertion, DateString, HttpService, Identifiable } from '@app/core';
 
 import { ExternalVariable, FileReport, FinancialConcept, FinancialConceptDescriptor,
          FinancialConceptEditionCommand, FinancialConceptEntry, FinancialConceptEntryEditionCommand,
@@ -43,10 +43,14 @@ export class FinancialConceptsDataService {
   }
 
 
-  getFinancialConceptsInGroup(financialConceptGroupUID: string): Observable<FinancialConceptDescriptor[]> {
-    Assertion.assertValue(financialConceptGroupUID, 'financialConceptGroupUID');
+  getFinancialConceptsInGroup(groupUID: string, date?: DateString): Observable<FinancialConceptDescriptor[]> {
+    Assertion.assertValue(groupUID, 'groupUID');
 
-    const path = `v2/financial-accounting/financial-concepts/in-group/${financialConceptGroupUID}`;
+    let path = `v2/financial-accounting/financial-concepts/in-group/${groupUID}`;
+
+    if (!!date) {
+      path += `/?date=${date}`;
+    }
 
     return this.http.get<FinancialConceptDescriptor[]>(path);
   }
