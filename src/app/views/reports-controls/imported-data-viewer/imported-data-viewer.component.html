@@ -17,10 +17,11 @@
 
       <button class="btn" *ngIf="showEditData"
         (click)="onEditDataClicked()">
-        Edición de {{dataType}}
+        {{!!editDataButtonText ? editDataButtonText : 'Edición de ' + dataType}}
       </button>
 
-      <button class="btn" *ngIf="showImportData"
+      <button class="btn-action" *ngIf="showImportData"
+        fxFlexOffset="1.5rem"
         (click)="displayImportModal = true">
         Importar {{dataType}}
       </button>

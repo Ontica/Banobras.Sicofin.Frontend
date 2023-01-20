@@ -52,6 +52,8 @@ export class ImportedDataViewerComponent implements OnChanges {
 
   @Input() showEditData = false;
 
+  @Input() editDataButtonText = '';
+
   @Input() periodRequired = false;
 
   @Input() typeFieldConfig: FieldConfig = Object.assign({}, DefaultFieldConfig);
