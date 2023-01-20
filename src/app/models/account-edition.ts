@@ -120,8 +120,8 @@ export const AccountDataToBeUpdatedList: Identifiable[] = [
   {uid: AccountDataToBeUpdated.Name,           name: 'Cambiar descripción'},
   {uid: AccountDataToBeUpdated.MainRole,       name: 'Cambiar rol'},
   {uid: AccountDataToBeUpdated.SubledgerRole,  name: 'Cambiar auxiliar'},
-  {uid: AccountDataToBeUpdated.AccountType,    name: 'Cambiar tipo de cuenta'},
-  {uid: AccountDataToBeUpdated.DebtorCreditor, name: 'Cambiar naturaleza'},
+  // {uid: AccountDataToBeUpdated.AccountType,    name: 'Cambiar tipo de cuenta'},
+  // {uid: AccountDataToBeUpdated.DebtorCreditor, name: 'Cambiar naturaleza'},
   {uid: AccountDataToBeUpdated.Currencies,     name: 'Cambiar monedas'},
   {uid: AccountDataToBeUpdated.Sectors,        name: 'Cambiar lista de sectores'},
 ];
