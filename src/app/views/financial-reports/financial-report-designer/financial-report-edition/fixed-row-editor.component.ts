@@ -21,11 +21,11 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { FinancialConceptDescriptor, Positioning, PositioningRule, PositioningRuleList,
-         FinancialReportEditionItemTypeList, FinancialReportRow, EmptyFinancialReportRow,
-         FinancialReportEditionItemType, FormatTypeList, FormatType, FinancialReportConfig,
-         EmptyFinancialReportConfig, FinancialReportEditionCommand, FinancialReportEditionFields,
-         FinancialReportEditionType } from '@app/models';
+import { DefaultEndDate, EmptyFinancialReportConfig, EmptyFinancialReportRow, FinancialConceptDescriptor,
+         FinancialReportConfig, FinancialReportEditionCommand, FinancialReportEditionFields,
+         FinancialReportEditionItemType, FinancialReportEditionItemTypeList, FinancialReportEditionType,
+         FinancialReportRow, FormatType, FormatTypeList, Positioning, PositioningRule,
+         PositioningRuleList } from '@app/models';
 
 
 export enum FixedRowEditorEventType {
@@ -44,6 +44,8 @@ enum FixedRowEditorFormControls {
   positioningOffsetUID = 'positioningOffsetUID',
   position = 'position',
   format = 'format',
+  startDate = 'startDate',
+  endDate = 'endDate',
 }
 
 @Component({
@@ -193,6 +195,8 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
         positioningOffsetUID: new FormControl(''),
         position: new FormControl('', Validators.required),
         format: new FormControl(FormatType.Default, Validators.required),
+        startDate: new FormControl('', Validators.required),
+        endDate: new FormControl(DefaultEndDate, Validators.required),
       })
     );
 
@@ -233,6 +237,8 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
       positioningRule: PositioningRule.ByPositionValue,
       position: this.financialReportRow.row || '',
       format: this.financialReportRow.format || FormatType.Default,
+      startDate: this.financialReportRow.startDate || '',
+      endDate: this.financialReportRow.endDate || '',
     });
 
     this.setFieldsDataByType();
@@ -305,6 +311,8 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
     let data: FinancialReportEditionFields = {
       format: formModel.format ?? '',
+      startDate: formModel.startDate ?? '',
+      endDate: formModel.endDate ?? '',
     };
 
     this.validateFieldsByType(data);

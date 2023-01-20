@@ -112,7 +112,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
+              <div fxFlex="120px" fxLayoutAlign="start end" *ngIf="displayPosition">
 
                 <input type="text" class="text-box text-align-right" empNgInteger
                   [formControlName]="controls.position"
@@ -138,6 +138,22 @@
                   </ng-template>
 
                 </emp-ng-select>
+              </div>
+
+              <div fxFlex="120px">
+                <label>Fecha inicial:</label>
+                <emp-ng-datepicker
+                  [formControlName]="controls.startDate"
+                  [showError]="formHandler.showInvalidControl(controls.startDate)">
+                </emp-ng-datepicker>
+              </div>
+
+              <div fxFlex="120px">
+                <label>Fecha final:</label>
+                <emp-ng-datepicker
+                  [formControlName]="controls.endDate"
+                  [showError]="formHandler.showInvalidControl(controls.endDate)">
+                </emp-ng-datepicker>
               </div>
 
             </div>

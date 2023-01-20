@@ -20,8 +20,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyFinancialConcept, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEditionCommand, FinancialConceptsGroup, PositioningRule,
+import { AccountsChartMasterData, DefaultEndDate, EmptyFinancialConcept, FinancialConcept,
+         FinancialConceptDescriptor, FinancialConceptEditionCommand, FinancialConceptsGroup, PositioningRule,
          PositioningRuleList } from '@app/models';
 
 import { AccountChartStateSelector,
@@ -215,7 +215,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
         positioningOffsetConceptUID: new FormControl(''),
         position: new FormControl(''),
         startDate: new FormControl('', Validators.required),
-        endDate: new FormControl('2049-12-31', Validators.required),
+        endDate: new FormControl(DefaultEndDate, Validators.required),
         calculationScript: new FormControl(''),
         variableID: new FormControl('', Validators.pattern('[A-Z0-9_]*')),
       })

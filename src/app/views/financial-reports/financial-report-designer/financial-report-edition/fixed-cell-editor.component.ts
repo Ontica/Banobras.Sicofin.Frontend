@@ -23,10 +23,10 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { FinancialConceptDescriptor, FinancialReportEditionItemTypeList, FinancialReportEditionItemType,
-         FormatTypeList, FormatType, FinancialReportConfig, EmptyFinancialReportConfig, FinancialReportCell,
-         EmptyFinancialReportCell, FinancialReportEditionCommand, FinancialReportEditionType,
-         FinancialReportEditionFields } from '@app/models';
+import { DefaultEndDate, EmptyFinancialReportCell, EmptyFinancialReportConfig, FinancialConceptDescriptor,
+         FinancialReportCell, FinancialReportConfig, FinancialReportEditionCommand,
+         FinancialReportEditionFields, FinancialReportEditionItemType, FinancialReportEditionItemTypeList,
+         FinancialReportEditionType, FormatType, FormatTypeList } from '@app/models';
 
 
 export enum FixedCellEditorEventType {
@@ -44,6 +44,8 @@ enum FixedCellEditorFormControls {
   dataField = 'dataField',
   label = 'label',
   format = 'format',
+  startDate = 'startDate',
+  endDate = 'endDate',
 }
 
 @Component({
@@ -171,6 +173,8 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
         dataField: new FormControl('', Validators.required),
         label: new FormControl(''),
         format: new FormControl(FormatType.Default, Validators.required),
+        startDate: new FormControl('', Validators.required),
+        endDate: new FormControl(DefaultEndDate, Validators.required),
       })
     );
 
@@ -219,6 +223,8 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
       type: this.isEmptyConcept(this.financialReportCell.financialConceptUID) ?
         FinancialReportEditionItemType.Label : FinancialReportEditionItemType.Concept,
       format: this.financialReportCell.format || FormatType.Default,
+      startDate: this.financialReportCell.startDate || '',
+      endDate: this.financialReportCell.endDate || '',
     });
 
     this.setFieldsDataByType();
@@ -288,6 +294,8 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
       column: this.financialReportCell.column,
       row: this.financialReportCell.row,
       format: formModel.format ?? '',
+      startDate: formModel.startDate ?? '',
+      endDate: formModel.endDate ?? '',
     };
 
     this.validateFieldsByType(data);

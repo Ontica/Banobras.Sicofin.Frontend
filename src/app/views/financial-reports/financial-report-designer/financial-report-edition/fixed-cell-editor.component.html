@@ -116,6 +116,22 @@
                 </emp-ng-select>
               </div>
 
+              <div fxFlex="120px">
+                <label>Fecha inicial:</label>
+                <emp-ng-datepicker
+                  [formControlName]="controls.startDate"
+                  [showError]="formHandler.showInvalidControl(controls.startDate)">
+                </emp-ng-datepicker>
+              </div>
+
+              <div fxFlex="120px">
+                <label>Fecha final:</label>
+                <emp-ng-datepicker
+                  [formControlName]="controls.endDate"
+                  [showError]="formHandler.showInvalidControl(controls.endDate)">
+                </emp-ng-datepicker>
+              </div>
+
             </div>
 
           </ng-container>

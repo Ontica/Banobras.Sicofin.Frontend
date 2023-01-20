@@ -28,7 +28,7 @@
 
           <div class="section-title"> Información general </div>
 
-          <div #generalFieldsSection fxLayout="row">
+          <div #generalFieldsSection fxLayout="row" fxLayout.lt-sm="column">
 
             <div [fxFlex]="50">
               <label>Nombre:</label>
@@ -37,7 +37,23 @@
                 [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
             </div>
 
-            <div [fxFlex]="50" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+            <div fxFlex="none">
+              <label>Fecha inicial:</label>
+              <emp-ng-datepicker
+                [formControlName]="controls.startDate"
+                [showError]="formHandler.showInvalidControl(controls.startDate)">
+              </emp-ng-datepicker>
+            </div>
+
+            <div fxFlex="none">
+              <label>Fecha final:</label>
+              <emp-ng-datepicker
+                [formControlName]="controls.endDate"
+                [showError]="formHandler.showInvalidControl(controls.endDate)">
+              </emp-ng-datepicker>
+            </div>
+
+            <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
 
               <mat-checkbox name="isHide"
                 [formControlName]="controls.isHide"

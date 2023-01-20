@@ -13,7 +13,7 @@ import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
-import { EmptyFinancialReportColumn, EmptyFinancialReportConfig, FinancialReportColumn,
+import { DefaultEndDate, EmptyFinancialReportColumn, EmptyFinancialReportConfig, FinancialReportColumn,
          FinancialReportColumnEditionItemTypeList, FinancialReportConfig, FinancialReportEditionCommand,
          FinancialReportEditionItemType, FinancialReportEditionType, Positioning, PositioningRule,
          PositioningRuleList } from '@app/models';
@@ -32,6 +32,8 @@ enum FixedColumnEditorFormControls {
   positioningRule = 'positioningRule',
   positioningOffsetUID = 'positioningOffsetUID',
   position = 'position',
+  startDate = 'startDate',
+  endDate = 'endDate',
 }
 
 @Component({
@@ -165,6 +167,8 @@ export class FixedColumnEditorComponent implements OnChanges {
         positioningRule: new FormControl(PositioningRule.ByPositionValue, Validators.required),
         positioningOffsetUID: new FormControl(''),
         position: new FormControl('', Validators.required),
+        startDate: new FormControl('', Validators.required),
+        endDate: new FormControl(DefaultEndDate, Validators.required),
       })
     );
   }
@@ -183,6 +187,8 @@ export class FixedColumnEditorComponent implements OnChanges {
       isHide: !this.financialReportColumn.show,
       positioningRule: PositioningRule.ByPositionValue,
       position: this.financialReportColumn.column || '',
+      startDate: this.financialReportColumn.startDate || '',
+      endDate: this.financialReportColumn.endDate || '',
     });
 
     this.onTypeChanged();
@@ -237,6 +243,8 @@ export class FixedColumnEditorComponent implements OnChanges {
     let data: any = {
       name: formModel.name ?? '',
       isHide: formModel.isHide ?? '',
+      startDate: formModel.startDate ?? '',
+      endDate: formModel.endDate ?? '',
     };
 
     this.validateFieldsByType(data);

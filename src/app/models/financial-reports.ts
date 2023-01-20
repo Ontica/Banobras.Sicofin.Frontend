@@ -154,6 +154,8 @@ export interface FinancialReportRow {
   conceptCode?: string;
   concept?: string;
   format?: string;
+  startDate?: DateString,
+  endDate?: DateString,
   row: number;
   financialConceptGroupUID?: string;
   financialConceptUID?: string;
@@ -169,6 +171,8 @@ export interface FinancialReportColumn extends DataTableColumn {
   show: boolean;
   isCalculated: boolean;
   digits?: number;
+  startDate?: DateString,
+  endDate?: DateString,
 }
 
 
@@ -181,6 +185,8 @@ export interface FinancialReportCell {
   dataField: string;
   label: string;
   format: string;
+  startDate?: DateString,
+  endDate?: DateString,
 }
 
 
@@ -320,4 +326,6 @@ export interface FinancialReportEditionFields {
   dataField?: string;
   positioning?: Positioning;
   format?: string;
+  startDate?: DateString;
+  endDate?: DateString;
 }
