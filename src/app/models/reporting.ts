@@ -5,7 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Identifiable } from '@app/core';
+import { DateString, Identifiable } from '@app/core';
+
+
+export const DefaultEndDate: DateString = '2049-12-31';
+
 
 export enum ReportGroup {
   ReportesFiscales = 'ReportesFiscales',
