@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService } from '@app/core';
 
 import { ExternalValuesData, ExternalValuesImportDatasetCommand, ExternalValuesDatasetsQuery,
-         ExternalValuesQuery, ExternalVariableSet, FileReport, ImportDatasets } from '@app/models';
+         ExternalValuesQuery, ExternalVariableSet, FileReport, ImportDatasets, ExternalVariable } from '@app/models';
 
 
 @Injectable()
@@ -25,6 +25,13 @@ export class ExternalVariablesDataService {
     const path = `v2/financial-accounting/financial-concepts/external-variables-sets`;
 
     return this.http.get<ExternalVariableSet[]>(path);
+  }
+
+
+  getExternalVariables(setUID: string): Observable<ExternalVariable[]> {
+    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}`;
+
+    return this.http.get<ExternalVariable[]>(path);
   }
 
 

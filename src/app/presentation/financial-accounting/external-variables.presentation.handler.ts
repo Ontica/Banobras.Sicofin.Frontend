@@ -11,23 +11,23 @@ import { Observable } from 'rxjs';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
-import { FinancialConceptsDataService } from '@app/data-services';
+import { ExternalVariablesDataService } from '@app/data-services';
 
 
 export enum SelectorType {
-  FINANCIAL_CONCEPTS_GROUPS_LIST = 'FA.FinancialConcepts.Selector.FinancialConceptsGroups.List',
+  EXTERNAL_VARIABLES_SETS_LIST   = 'FA.ExternalVariables.Selector.ExternalVariablesSets.List',
 }
 
 
 const initialState: StateValues = [
-  { key: SelectorType.FINANCIAL_CONCEPTS_GROUPS_LIST, value: [] },
+  { key: SelectorType.EXTERNAL_VARIABLES_SETS_LIST, value: [] },
 ];
 
 
 @Injectable()
-export class FinancialConceptsPresentationHandler extends AbstractPresentationHandler {
+export class ExternalVariablesPresentationHandler extends AbstractPresentationHandler {
 
-  constructor(private data: FinancialConceptsDataService) {
+  constructor(private data: ExternalVariablesDataService) {
     super({
       initialState,
       selectors: SelectorType,
@@ -41,8 +41,8 @@ export class FinancialConceptsPresentationHandler extends AbstractPresentationHa
 
     switch (selectorType) {
 
-      case SelectorType.FINANCIAL_CONCEPTS_GROUPS_LIST:
-        provider = () => this.data.getFinancialConceptsGroups();
+      case SelectorType.EXTERNAL_VARIABLES_SETS_LIST:
+        provider = () => this.data.getExternalVariablesSets();
 
         return super.selectFirst<U>(selectorType, provider);
 

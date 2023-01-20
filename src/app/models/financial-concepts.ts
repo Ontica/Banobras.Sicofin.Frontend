@@ -9,15 +9,7 @@ import { DateString, Empty, FlexibleIdentifiable, Identifiable, isEmpty } from '
 
 import { EditionCommand, EditionResult, Positioning, PositioningRule } from './edition-command';
 
-
-export interface ExternalVariable {
-  uid: string;
-  code: string;
-  name: string;
-  notes: string;
-  position: number;
-  setUID: string;
-}
+import { EmptyExternalVariable, ExternalVariable } from './external-variables';
 
 
 export interface FinancialConceptsGroup {
@@ -185,16 +177,6 @@ export interface FinancialConceptEntryEditionResult extends EditionResult {
   issues: string[];
   warnings: string[];
 }
-
-
-export const EmptyExternalVariable: ExternalVariable = {
-  uid: '',
-  code: '',
-  name: '',
-  notes: '',
-  position: 1,
-  setUID: '',
-};
 
 
 export const EmptyFinancialConceptQuery: FinancialConceptQuery = {

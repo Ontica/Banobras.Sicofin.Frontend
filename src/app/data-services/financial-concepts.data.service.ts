@@ -9,9 +9,9 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, DateString, HttpService, Identifiable } from '@app/core';
+import { Assertion, DateString, HttpService } from '@app/core';
 
-import { ExternalVariable, FileReport, FinancialConcept, FinancialConceptDescriptor,
+import { FileReport, FinancialConcept, FinancialConceptDescriptor,
          FinancialConceptEditionCommand, FinancialConceptEntry, FinancialConceptEntryEditionCommand,
          FinancialConceptEntryEditionResult, FinancialConceptsGroup } from '@app/models';
 
@@ -20,20 +20,6 @@ import { ExternalVariable, FileReport, FinancialConcept, FinancialConceptDescrip
 export class FinancialConceptsDataService {
 
   constructor(private http: HttpService) { }
-
-
-  getExternalVariablesSets(): Observable<Identifiable[]> {
-    const path = `v2/financial-accounting/financial-concepts/external-variables-sets`;
-
-    return this.http.get<Identifiable[]>(path);
-  }
-
-
-  getExternalVariables(setUID: string): Observable<ExternalVariable[]> {
-    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}`;
-
-    return this.http.get<ExternalVariable[]>(path);
-  }
 
 
   getFinancialConceptsGroups(): Observable<FinancialConceptsGroup[]> {

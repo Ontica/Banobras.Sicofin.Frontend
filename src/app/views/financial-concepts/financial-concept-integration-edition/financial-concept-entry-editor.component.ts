@@ -21,7 +21,7 @@ import { FormHandler, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartDataService, FinancialConceptsDataService,
+import { AccountsChartDataService, ExternalVariablesDataService, FinancialConceptsDataService,
          SubledgerDataService } from '@app/data-services';
 
 import { AccountDescriptor, AccountsChartMasterData, AccountsQuery, EmptyFinancialConcept,
@@ -118,8 +118,9 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   private unsubscribeExternalVariableSetUID: Subject<void> = new Subject();
 
 
-  constructor(uiLayer: PresentationLayer,
+  constructor(private uiLayer: PresentationLayer,
               private financialConceptsData: FinancialConceptsDataService,
+              private externalVariablesData: ExternalVariablesDataService,
               private accountsChartData: AccountsChartDataService,
               private subledgerData: SubledgerDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
@@ -316,7 +317,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
           this.resetExternalVariableData()
           this.isLoadingExternalVariable = true;
         }),
-        switchMap(setUID => this.financialConceptsData.getExternalVariables(setUID)
+        switchMap(setUID => this.externalVariablesData.getExternalVariables(setUID)
           .pipe(
             catchError(() => of([])),
             tap(() => this.isLoadingExternalVariable = false)

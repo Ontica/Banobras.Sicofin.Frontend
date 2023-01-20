@@ -5,9 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { ExternalVariablesStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { DatasetModes, DatasetModesList, EmptyExternalValuesData, ExecuteDatasetsQuery, ExternalValuesData,
          ExternalValuesDatasetsQuery, ExternalValuesImportDatasetCommand, ExternalValuesQuery,
@@ -30,7 +34,9 @@ import {
   selector: 'emp-fa-external-variables-main-page',
   templateUrl: './external-variables-main-page.component.html',
 })
-export class ExternalVariablesMainPageComponent implements OnInit {
+export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
+
+  helper: SubscriptionHelper;
 
   externalVariableSetList: ExternalVariableSet[] = [];
 
@@ -54,12 +60,20 @@ export class ExternalVariablesMainPageComponent implements OnInit {
 
   isLoading = false;
 
-  constructor(private externalVariablesData: ExternalVariablesDataService,
-              private messageBox: MessageBoxService) { }
+  constructor(private uiLayer: PresentationLayer,
+              private externalVariablesData: ExternalVariablesDataService,
+              private messageBox: MessageBoxService) {
+    this.helper = uiLayer.createSubscriptionHelper();
+  }
 
 
   ngOnInit() {
-    this.getExternalVariablesSets();
+    this.loadExternalVariablesSets();
+  }
+
+
+  ngOnDestroy() {
+    this.helper.destroy();
   }
 
 
@@ -127,12 +141,14 @@ export class ExternalVariablesMainPageComponent implements OnInit {
   }
 
 
-  private getExternalVariablesSets() {
+  private loadExternalVariablesSets() {
     this.setSubmitted(true);
-    this.externalVariablesData.getExternalVariablesSets()
-      .toPromise()
-      .then(x => this.externalVariableSetList = x)
-      .finally(() => this.setSubmitted(false));
+
+    this.helper.select<ExternalVariableSet[]>(ExternalVariablesStateSelector.EXTERNAL_VARIABLES_SETS_LIST)
+      .subscribe(x => {
+        this.externalVariableSetList = x;
+        this.setSubmitted(false);
+      });
   }
 
 

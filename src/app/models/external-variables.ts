@@ -18,22 +18,36 @@ export interface ExternalVariableSet extends Identifiable {
 }
 
 
+export interface ExternalVariablesDatasetsQuery {
+  externalVariablesSetUID: string;
+  date: DateString;
+}
+
+
+export interface ExternalVariable {
+  uid: string;
+  code: string;
+  name: string;
+  notes: string;
+  position: number;
+  setUID: string;
+  startDate: DateString;
+  endDate: DateString;
+}
+
+
+export interface ExternalVariableFields {
+  code: string;
+  name: string;
+  startDate: DateString;
+  endDate: DateString;
+}
+
+
 export enum DatasetModes {
   onlyLoadedValues = 'onlyLoadedValues',
   allValues        = 'allValues',
 }
-
-
-export const DatasetModesList: Identifiable[] = [
-  {
-    uid: DatasetModes.onlyLoadedValues,
-    name: 'Solo valores importados',
-  },
-  {
-    uid: DatasetModes.allValues,
-    name: 'Lista completa',
-  },
-];
 
 
 export interface ExternalValuesQuery {
@@ -58,18 +72,48 @@ export interface ExternalValuesData extends DataTable {
 }
 
 
-export const EmptyExternalValuesData: ExternalValuesData = {
-  query: {externalVariablesSetUID: '', datasetMode: '', date: ''},
-  columns: [],
-  entries: [],
-};
-
-
 export interface ExternalValuesImportDatasetCommand {
   externalVariablesSetUID?: string;
   datasetKind?: string;
   date: DateString;
 }
+
+
+export const EmptyExternalVariablesDatasetsQuery: ExternalVariablesDatasetsQuery = {
+  externalVariablesSetUID: '',
+  date: '',
+}
+
+
+export const EmptyExternalVariable: ExternalVariable = {
+  uid: '',
+  code: '',
+  name: '',
+  notes: '',
+  position: 1,
+  setUID: '',
+  startDate: '',
+  endDate: '',
+};
+
+
+export const DatasetModesList: Identifiable[] = [
+  {
+    uid: DatasetModes.onlyLoadedValues,
+    name: 'Solo valores importados',
+  },
+  {
+    uid: DatasetModes.allValues,
+    name: 'Lista completa',
+  },
+];
+
+
+export const EmptyExternalValuesData: ExternalValuesData = {
+  query: {externalVariablesSetUID: '', datasetMode: '', date: ''},
+  columns: [],
+  entries: [],
+};
 
 
 export function mapToExternalValuesQuery(query: ExecuteDatasetsQuery): ExternalValuesQuery {

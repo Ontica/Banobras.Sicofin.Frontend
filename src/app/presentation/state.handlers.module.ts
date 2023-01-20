@@ -15,6 +15,8 @@ import { AccountChartPresentationHandler } from './financial-accounting/account-
 
 import { ExchangeRatesPresentationHandler } from './financial-accounting/exchange-rates.presentation.handler';
 
+import { ExternalVariablesPresentationHandler } from './financial-accounting/external-variables.presentation.handler';
+
 import { FinancialConceptsPresentationHandler } from './financial-accounting/financial-concepts.presentation.handler';
 
 import { ReportingPresentationHandler } from './financial-accounting/reporting.presentation.handler';
@@ -27,6 +29,7 @@ import { VoucherPresentationHandler } from './financial-accounting/voucher.prese
     MainLayoutPresentationHandler,
     AccountChartPresentationHandler,
     ExchangeRatesPresentationHandler,
+    ExternalVariablesPresentationHandler,
     FinancialConceptsPresentationHandler,
     ReportingPresentationHandler,
     VoucherPresentationHandler,
@@ -34,6 +37,7 @@ import { VoucherPresentationHandler } from './financial-accounting/voucher.prese
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccountChartPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: ExchangeRatesPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: ExternalVariablesPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: FinancialConceptsPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: ReportingPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: VoucherPresentationHandler, multi: true },
