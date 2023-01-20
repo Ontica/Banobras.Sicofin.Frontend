@@ -103,7 +103,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
   displaySubledgerAccountCreator = false;
 
-  constructor(uiLayer: PresentationLayer,
+  constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();

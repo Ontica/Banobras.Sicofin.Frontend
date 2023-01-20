@@ -79,7 +79,7 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
   private unsubscribeGroupUID: Subject<void> = new Subject();
 
 
-  constructor(uiLayer: PresentationLayer,
+  constructor(private uiLayer: PresentationLayer,
               private financialConceptsData: FinancialConceptsDataService,
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();

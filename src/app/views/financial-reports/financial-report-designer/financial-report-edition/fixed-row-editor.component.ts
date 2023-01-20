@@ -83,7 +83,7 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
   private unsubscribeGroupUID: Subject<void> = new Subject();
 
 
-  constructor(uiLayer: PresentationLayer,
+  constructor(private uiLayer: PresentationLayer,
               private financialConceptsData: FinancialConceptsDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
     this.initForm();
