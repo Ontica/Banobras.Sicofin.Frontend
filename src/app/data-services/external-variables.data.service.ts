@@ -29,7 +29,7 @@ export class ExternalVariablesDataService {
 
 
   getExternalVariables(setUID: string): Observable<ExternalVariable[]> {
-    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}`;
+    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}/variables`;
 
     return this.http.get<ExternalVariable[]>(path);
   }
