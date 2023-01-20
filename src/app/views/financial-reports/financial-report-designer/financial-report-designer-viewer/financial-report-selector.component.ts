@@ -7,13 +7,14 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, FinancialReportTypesForDesign } from '@app/models';
+import { AccountsChartMasterData, FinancialReportDesignQuery,
+         FinancialReportTypesForDesign } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -36,6 +37,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
   reportsForm = {
     accountChartUID: null,
     financialReportType: null,
+    date: '',
     // outputType: null,
   };
 
@@ -72,8 +74,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
 
   onSearchReportsClicked() {
     const payload = {
-      financialReportTypeUID: this.reportsForm.financialReportType.uid,
-      // outputTypeUID: this.reportsForm.outputType.uid,
+      query: this.getFinancialReportDesignQuery(),
     };
 
     sendEvent(this.financialReportSelectorEvent,
@@ -99,6 +100,18 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
       .toPromise()
       .then(x => this.financialReportTypesList = x )
       .finally(() => this.isLoading = false);
+  }
+
+
+  private getFinancialReportDesignQuery(): FinancialReportDesignQuery {
+    const query: FinancialReportDesignQuery = {
+      accountChartUID: this.reportsForm.accountChartUID,
+      financialReportTypeUID: this.reportsForm.financialReportType.uid,
+      date: this.reportsForm.date,
+      // outputType: this.reportsForm.outputType.uid,
+    };
+
+    return query;
   }
 
 }

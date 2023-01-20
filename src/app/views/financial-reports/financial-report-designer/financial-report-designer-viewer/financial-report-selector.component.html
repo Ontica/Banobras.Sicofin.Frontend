@@ -34,6 +34,18 @@
 
       </div>
 
+      <div fxFlex="none">
+
+        <label>Fecha:</label>
+
+        <emp-ng-datepicker name="date" required
+          [(ngModel)]="reportsForm.date"
+          [showError]="!reportsForm.date">
+
+        </emp-ng-datepicker>
+
+      </div>
+
       <!-- <div fxFlex>
 
         <label>Formato:</label>

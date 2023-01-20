@@ -11,9 +11,12 @@ import { Assertion, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialReportsDataService } from '@app/data-services';
 
-import { EmptyFinancialReportDesign, FinancialReportDesign } from '@app/models';
+import { EmptyFinancialReportDesign, EmptyFinancialReportDesignQuery, FinancialReportDesign,
+         FinancialReportDesignQuery } from '@app/models';
 
-import { FinancialReportDesignerEventType } from '../financial-report-designer/financial-report-designer.component';
+import {
+  FinancialReportDesignerEventType
+} from '../financial-report-designer/financial-report-designer.component';
 
 import { FinancialReportSelectorEventType } from './financial-report-selector.component';
 
@@ -36,9 +39,9 @@ export class FinancialReportDesignerViewerComponent {
 
   queryExecuted = false;
 
-  financialReportTypeUID = '';
+  query: FinancialReportDesignQuery = EmptyFinancialReportDesignQuery;
 
-  financialReportDesign: FinancialReportDesign = Object.assign({}, EmptyFinancialReportDesign);
+  data: FinancialReportDesign = Object.assign({}, EmptyFinancialReportDesign);
 
 
   constructor(private financialReportsData: FinancialReportsDataService) { }
@@ -52,9 +55,9 @@ export class FinancialReportDesignerViewerComponent {
     switch (event.type as FinancialReportSelectorEventType) {
 
       case FinancialReportSelectorEventType.SEARCH_REPORT_CLICKED:
-        Assertion.assertValue(event.payload.financialReportTypeUID, 'event.payload.financialReportTypeUID');
-        this.financialReportTypeUID = event.payload.financialReportTypeUID;
-        this.getFinancialReportDesign();
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
+        this.query = event.payload.query as FinancialReportDesignQuery;
+        this.getFinancialReportDesignData();
         return;
 
       default:
@@ -68,7 +71,7 @@ export class FinancialReportDesignerViewerComponent {
     switch (event.type as FinancialReportDesignerEventType) {
 
       case FinancialReportDesignerEventType.REPORT_UPDATED:
-        this.getFinancialReportDesign();
+        this.getFinancialReportDesignData();
         return;
 
       default:
@@ -78,14 +81,14 @@ export class FinancialReportDesignerViewerComponent {
   }
 
 
-  private getFinancialReportDesign() {
+  private getFinancialReportDesignData() {
     this.setSubmitted(true);
-    this.setFinancialReportDesign(EmptyFinancialReportDesign, false);
+    this.setFinancialReportDesignData(EmptyFinancialReportDesign, false);
 
-    this.financialReportsData.getFinancialReportDesign(this.financialReportTypeUID)
+    this.financialReportsData.getFinancialReportDesign(this.query.financialReportTypeUID, this.query.date)
       .toPromise()
-      .then(x => this.setFinancialReportDesign(x, true))
-      .catch(e => this.setFinancialReportDesign(EmptyFinancialReportDesign, true))
+      .then(x => this.setFinancialReportDesignData(x, true))
+      .catch(e => this.setFinancialReportDesignData(EmptyFinancialReportDesign, true))
       .finally(() => {
         this.setText();
         this.setSubmitted(false);
@@ -94,14 +97,14 @@ export class FinancialReportDesignerViewerComponent {
 
 
   private setText() {
-    if (isEmpty(this.financialReportDesign.config.reportType)) {
+    if (isEmpty(this.data.config.reportType)) {
       this.cardHint = 'Favor de seleccionar el reporte';
       return;
     }
 
-    this.cardHint = `${this.financialReportDesign.config.accountsChart.name} | ` +
-      `${this.financialReportDesign.config.reportType.name} - ` +
-      `${this.financialReportDesign.rows.length} registros encontrados`;
+    this.cardHint = `${this.data.config.accountsChart.name} | ` +
+      `${this.data.config.reportType.name} - ` +
+      `${this.data.rows.length} registros encontrados`;
   }
 
 
@@ -111,8 +114,8 @@ export class FinancialReportDesignerViewerComponent {
   }
 
 
-  private setFinancialReportDesign(financialReportDesign: FinancialReportDesign, queryExecuted: boolean) {
-    this.financialReportDesign = financialReportDesign;
+  private setFinancialReportDesignData(data: FinancialReportDesign, queryExecuted: boolean) {
+    this.data = data;
     this.queryExecuted = queryExecuted;
   }
 

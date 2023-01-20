@@ -112,6 +112,14 @@ export interface FinancialReportTypesForDesign extends Identifiable {
 }
 
 
+export interface FinancialReportDesignQuery extends DataTableQuery {
+  accountChartUID: string;
+  financialReportTypeUID: string;
+  date: DateString;
+  outputType?: string;
+}
+
+
 export interface FinancialReportDesign {
   config: FinancialReportConfig;
   columns: FinancialReportColumn[];
@@ -173,6 +181,14 @@ export interface FinancialReportCell {
   dataField: string;
   label: string;
   format: string;
+}
+
+
+export const EmptyFinancialReportDesignQuery: FinancialReportDesignQuery = {
+  accountChartUID: '',
+  financialReportTypeUID: '',
+  date: '',
+  outputType: '',
 }
 
 
