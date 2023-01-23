@@ -17,6 +17,7 @@ import {
   AccountingCataloguesAndRulesWorkspaceRoutingModule
 } from './accounting-catalogues-and-rules-workspace-routing.module';
 import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
+import { ExternalVariablesModule } from '@app/views/external-variables/external-variables.module';
 import { FinancialConceptsModule } from '@app/views/financial-concepts/financial-concepts.module';
 import { FinancialReportsModule } from '@app/views/financial-reports/financial-reports.module';
 import { ReportingModule } from '@app/views/reporting/reporting.module';
@@ -53,6 +54,7 @@ import {
 
     AccountingCataloguesAndRulesWorkspaceRoutingModule,
     AccountsChartModule,
+    ExternalVariablesModule,
     FinancialConceptsModule,
     FinancialReportsModule,
     ReportingModule,

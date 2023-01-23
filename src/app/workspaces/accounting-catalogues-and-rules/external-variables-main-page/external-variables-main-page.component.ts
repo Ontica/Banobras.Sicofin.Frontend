@@ -56,6 +56,8 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
 
   DatasetModes = DatasetModes;
 
+  displayExternalVariablesEdition = false;
+
   submitted = false;
 
   isLoading = false;
@@ -132,6 +134,10 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
         Assertion.assertValue(event.payload.inputDataset.uid, 'event.payload.inputDataset.uid');
 
         this.showConfirmDeleteDataSet(event.payload.inputDataset as InputDataset);
+        return;
+
+      case ImportedDataViewerEventType.EDIT_DATA_CLICKED:
+        this.displayExternalVariablesEdition = true;
         return;
 
       default:

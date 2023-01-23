@@ -184,6 +184,12 @@ button.btn-icon-action {
   }
 }
 
+button.btn-icon-active {
+  .mat-icon {
+    color: $action-color;
+  }
+}
+
 button.btn-base:hover {
   background-color: $button-selected-color;
   color: $text-color-dark;
@@ -206,6 +212,12 @@ button.btn-icon:hover {
 button.btn-icon-action:hover {
   background-color: $action-selected-color;
   transition: 0.3s ease-out;
+}
+
+button.btn-icon-active:hover {
+  .mat-icon {
+    color: $action-selected-color;
+  }
 }
 
 button.btn-margin-right {

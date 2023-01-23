@@ -16,6 +16,8 @@
       [exportationTypeDefault]="false"
       [fileUrl]="fileUrl"
       [isLoading]="isLoading"
+      [showEditData]="true"
+      editDataButtonText="Editar variables"
       searchButtonText="Ver"
       (importedDataViewerEvent)="onImportedDataViewerEvent($event)">
 
@@ -24,3 +26,9 @@
   </div>
 
 </div>
+
+
+<emp-fa-external-variables-edition *ngIf="displayExternalVariablesEdition"
+  (closeEvent)="displayExternalVariablesEdition = false">
+
+</emp-fa-external-variables-edition>

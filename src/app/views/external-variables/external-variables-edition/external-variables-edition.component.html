@@ -1,0 +1,42 @@
+<emp-ng-modal-window [config]="{width:'1085px'}">
+
+  <emp-ng-card
+    title="Editor de variables"
+    [hint]="cardHint"
+    (cardClose)="onClose()">
+
+    <div class="card-body-padding" [empNgSpinnerHost]="spinner">
+
+      <emp-ng-spinner #spinner [visible]="isLoading || submitted">
+
+      </emp-ng-spinner>
+
+        <div fxLayout="column" fxLayoutGap="0.5rem">
+
+          <emp-fa-external-variable-set-selector
+            (externalVariableSetSelectorEvent)="onExternalVariableSetSelectorEvent($event)">
+
+          </emp-fa-external-variable-set-selector>
+
+          <emp-fa-external-variable-editor #externalVariableCreator
+            [externalVariablesSetUID]="externalVariableSet.uid"
+            [canEdit]="queryExecuted"
+            (externalVariableEditorEvent)="onExternalVariableEditorEvent($event)">
+
+          </emp-fa-external-variable-editor>
+
+          <emp-fa-external-variables-list
+            [externalVariablesList]="externalVariablesList"
+            [queryExecuted]="queryExecuted"
+            [externalVariableSet]="externalVariableSet"
+            (externalVariablesListEvent)="onExternalVariablesListEvent($event)">
+
+          </emp-fa-external-variables-list>
+
+        </div>
+
+    </div>
+
+  </emp-ng-card>
+
+</emp-ng-modal-window>

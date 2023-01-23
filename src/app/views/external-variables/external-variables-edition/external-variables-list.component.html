@@ -1,0 +1,79 @@
+
+<mat-divider class="horizontal-slim">
+
+</mat-divider>
+
+
+<div *ngIf="!queryExecuted" class="instruction-text">
+  Seleccionar los filtros.
+</div>
+
+
+<div *ngIf="queryExecuted && externalVariablesList.length === 0" class="instruction-text">
+  No se han agregado variables al conjunto.
+</div>
+
+
+<div *ngIf="externalVariablesList.length > 0" [style.paddingRight.px]="8">
+
+  <cdk-virtual-scroll-viewport itemSize="48" [style.height.px]="472">
+
+    <div *ngFor="let variable of externalVariablesList"
+      fxLayout="row" fxLayoutAlign="space-between center"
+      class="simple-list-item margin" [style.minHeight.px]="40">
+
+      <ng-container
+        *ngTemplateOutlet="externalVariablesSelected.uid === variable.uid ?
+                           itemToEdit :
+                           itemReadOnly; context: { variable: variable }">
+
+      </ng-container>
+
+    </div>
+
+  </cdk-virtual-scroll-viewport>
+
+</div>
+
+
+<ng-template #itemToEdit let-variable="variable">
+
+  <emp-fa-external-variable-editor
+    [externalVariablesSetUID]="externalVariableSet.uid"
+    [externalVariable]="variable"
+    [canEdit]="true"
+    [style.width.%]="100"
+    (externalVariableEditorEvent)="onExternalVariableEditorEvent($event)">
+
+  </emp-fa-external-variable-editor>
+
+</ng-template>
+
+
+<ng-template #itemReadOnly let-variable="variable">
+
+  <div fxFlex="150px" class="detail">
+    <strong>{{variable.code}}</strong>
+  </div>
+
+  <div fxFlex>
+    <strong>{{variable.name}}</strong>
+  </div>
+
+  <div fxFlex="180px" class="detail text-align-center">
+    {{variable.startDate | dateTimeFormat}} - {{variable.endDate | dateTimeFormat}}
+  </div>
+
+  <div fxFlex="24px"></div>
+
+  <button fxFlex="24px" mat-icon-button
+    [style.marginRight.px]="8"
+    (click)="onEditExternalVariableClicked(variable)">
+    <mat-icon title="Editar variable"> edit </mat-icon>
+  </button>
+
+  <button fxFlex="24px" mat-icon-button (click)="onRemoveExternalVariableClicked(variable)">
+    <mat-icon title="Eliminar variable"> delete </mat-icon>
+  </button>
+
+</ng-template>

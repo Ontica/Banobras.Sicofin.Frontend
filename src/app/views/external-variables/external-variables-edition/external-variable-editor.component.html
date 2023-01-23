@@ -1,0 +1,66 @@
+<form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section"
+  [style.paddingBottom.px]="isSaved ? 0 : 4">
+
+  <div fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="isSaved ? 0 : 8">
+
+    <div fxFlex="160px">
+
+      <input type="text" class="text-box" name="period"
+        placeholder="Clave"
+        [formControlName]="controls.code"
+        [class.invalid-control]="formHandler.showInvalidControl(controls.code)">
+
+    </div>
+
+    <div fxFlex>
+
+      <input type="text" class="text-box" name="period"
+        placeholder="Nombre de la variable"
+        [formControlName]="controls.name"
+        [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+
+    </div>
+
+    <div fxFlex="none">
+
+      <emp-ng-date-range-picker name="period"
+        [formControlName]="controls.period"
+        [showError]="formHandler.showInvalidControl(controls.period)">
+
+      </emp-ng-date-range-picker>
+
+    </div>
+
+
+    <button fxFlex="none" *ngIf="!isSaved"
+      [class.btn-icon-action]="canEdit && isFormValid"
+      [class.btn-icon]="!canEdit || !isFormValid"
+      (click)="onAddExternalVariableClicked()">
+
+      <mat-icon title="Agregar"> add </mat-icon>
+
+    </button>
+
+
+    <button *ngIf="isSaved"
+      fxFlex="none" mat-icon-button
+      (click)="onCancelEditionClicked()">
+
+      <mat-icon title="Cancelar"> close </mat-icon>
+
+    </button>
+
+
+    <button *ngIf="isSaved"
+      fxFlex="none" mat-icon-button
+      [class.btn-icon-active]="isFormValid"
+      [style.marginRight]="0"
+      (click)="onUpdateExternalVariableClicked()">
+
+      <mat-icon title="Guardar"> done </mat-icon>
+
+    </button>
+
+  </div>
+
+</form>

@@ -190,6 +190,10 @@ $border-shadow-width: 5px;
   background: $control-disabled-background;
 }
 
+.simple-list-item:not(:last-child).margin {
+  margin-bottom: 0.5rem;
+}
+
 .simple-list-item .detail {
   font-family: $font-family-secondary;
 }

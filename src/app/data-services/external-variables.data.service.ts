@@ -12,7 +12,8 @@ import { Observable } from 'rxjs';
 import { Assertion, HttpService } from '@app/core';
 
 import { ExternalValuesData, ExternalValuesImportDatasetCommand, ExternalValuesDatasetsQuery,
-         ExternalValuesQuery, ExternalVariableSet, FileReport, ImportDatasets, ExternalVariable } from '@app/models';
+         ExternalValuesQuery, ExternalVariableSet, FileReport, ImportDatasets, ExternalVariable,
+         ExternalVariableFields } from '@app/models';
 
 
 @Injectable()
@@ -32,6 +33,41 @@ export class ExternalVariablesDataService {
     const path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}/variables`;
 
     return this.http.get<ExternalVariable[]>(path);
+  }
+
+
+  addExternalVariable(setUID: string, fields: ExternalVariableFields): Observable<ExternalVariable> {
+    Assertion.assertValue(setUID, 'setUID');
+    Assertion.assertValue(fields, 'fields');
+
+    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}/variables`;
+
+    return this.http.post<ExternalVariable>(path, fields);
+  }
+
+
+  updateExternalVariable(setUID: string,
+                         variableUID: string,
+                         fields: ExternalVariableFields): Observable<ExternalVariable> {
+    Assertion.assertValue(setUID, 'setUID');
+    Assertion.assertValue(variableUID, 'variableUID');
+    Assertion.assertValue(fields, 'fields');
+
+    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/` +
+      `${setUID}/variables/${variableUID}`;
+
+    return this.http.put<ExternalVariable>(path, fields);
+  }
+
+
+  removeExternalVariable(setUID: string, variableUID: string): Observable<void> {
+    Assertion.assertValue(setUID, 'setUID');
+    Assertion.assertValue(variableUID, 'variableUID');
+
+    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/` +
+      `${setUID}/variables/${variableUID}`;
+
+    return this.http.delete<void>(path);
   }
 
 

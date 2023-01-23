@@ -1,0 +1,39 @@
+<form #form="ngForm" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+  autocomplete="off" class="form-section" [style.paddingBottom.px]="8">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="row">
+
+    <div fxFlex="50">
+
+      <label>Tipo:</label>
+
+      <emp-ng-select name="externalVariablesSetUID" required
+        [(ngModel)]="formData.externalVariablesSetUID"
+        [items]="externalVariableSetList"
+        [showError]="!formData.externalVariablesSetUID"
+        [loading]="isLoading"
+        (changes)="onSelectorChanges()">
+      </emp-ng-select>
+
+    </div>
+
+    <div fxFlex></div>
+
+    <div fxFlex="none">
+      <label>Fecha:</label>
+      <emp-ng-datepicker name="date" required
+        [(ngModel)]="formData.date"
+        [showError]="!formData.date"
+        (valueChange)="onSelectorChanges()">
+      </emp-ng-datepicker>
+    </div>
+
+  </div>
+
+</form>
+
+<mat-divider class="horizontal-slim">
+
+</mat-divider>
