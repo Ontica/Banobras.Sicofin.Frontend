@@ -150,7 +150,7 @@ export class LockedUpBalancesModalComponent {
 
     this.vouchersData.createVoucherSpecialCase(voucherFields)
       .toPromise()
-      .then(x => this.messageBox.show('Generar póliza', 'Se generó la póliza correctamente.'))
+      .then(x => this.messageBox.show('Se generó la póliza correctamente.', 'Generar póliza'))
       .finally(() => this.submitted = false);
   }
 

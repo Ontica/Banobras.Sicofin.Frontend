@@ -32,14 +32,14 @@ export interface ControlPanelOption {
 export const ControlPanelOptionList: ControlPanelOption[] = [
   {
     title: 'Períodos',
-    description: 'Edición de fechas de los calendarios.' ,
+    description: 'Herramienta para abrir y cerrar períodos contables.' ,
     actionTitle: 'Períodos',
     type: 'AccountingCalendars',
     permission: PermissionsLibrary.FEATURE_EDICION_CALENDARIOS_CONTABLES,
   },
   {
     title: 'Rentabilidad',
-    description: 'Ejecución de proceso de rentabilidad.' ,
+    description: 'Ejecución del proceso de rentabilidad.' ,
     actionTitle: 'Rentabilidad',
     type: 'ExternalProcessRentabilidad',
     permission: PermissionsLibrary.FEATURE_EP_RENTABILIDAD,
@@ -47,7 +47,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
   },
   {
     title: 'Conciliación de cartera',
-    description: 'Ejecución de proceso de conciliación de cartera.' ,
+    description: 'Ejecución del proceso de conciliación de cartera.' ,
     actionTitle: 'Conciliación',
     type: 'ExternalProcessConciliacionSIC',
     permission: PermissionsLibrary.FEATURE_EP_CONCILIACION_SIC,
@@ -70,8 +70,8 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     externalProcessType: ExternalProcessTypes.ExportacionSaldosDiarios,
   },
   {
-    title: 'Busqueda de saldos encerrados',
-    description: 'Proceso de busqueda de saldos encerrados.' ,
+    title: 'Búsqueda de saldos encerrados',
+    description: 'Herramienta de consulta y cancelación de saldos encerrados.' ,
     actionTitle: 'Buscar',
     type: 'LockedUpBalances',
     permission: PermissionsLibrary.FEATURE_SALDOS_ENCERRADOS,
