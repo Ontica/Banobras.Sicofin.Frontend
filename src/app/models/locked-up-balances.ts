@@ -21,7 +21,7 @@ export interface LockedUpBalancesEntry extends DataTableEntry {
   ledgerUID: string;
   roleChangeDate: DateString;
   canGenerateVoucher: boolean;
-  accountName: string;
+  itemName: string;
 }
 
 

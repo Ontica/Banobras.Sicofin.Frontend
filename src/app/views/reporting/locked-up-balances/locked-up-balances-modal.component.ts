@@ -178,7 +178,7 @@ export class LockedUpBalancesModalComponent {
   private validateGenerateVoucher(entry: LockedUpBalancesEntry) {
     if (entry.canGenerateVoucher && !!entry.ledgerUID && !!entry.roleChangeDate) {
       const message = `Esta operación generará la póliza para cancelar los saldos de la contabilidad
-                      <strong> ${entry.accountName}</strong>.
+                      <strong> ${entry.itemName}</strong>.
                       <br><br>¿Genero la póliza?`;
 
       this.messageBox.confirm(message, 'Generar póliza')
