@@ -22,7 +22,7 @@ export class EmpHasPermissionDirective implements OnInit {
     this.updateView();
   }
 
-  private permission: PermissionsLibrary = null;
+  private permission: PermissionsLibrary | PermissionsLibrary[] = null;
 
   private isHidden = true;
 

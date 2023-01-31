@@ -98,9 +98,13 @@ export class SessionService {
   }
 
 
-  hasPermission(permission: string): boolean {
-    return this.principal.permissions &&
-      this.principal.permissions.filter(x =>  x === permission).length > 0;
+  hasPermission(permission: string | string[]): boolean {
+    if (Array.isArray(permission)) {
+      return this.principal.permissions &&
+        this.principal.permissions.some(x => permission.some(y => y === x));
+    } else {
+      return this.principal.permissions && this.principal.permissions.some(x => x === permission);
+    }
   }
 
 
