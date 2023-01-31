@@ -11,7 +11,7 @@ import { EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { FinancialReportsDataService } from '@app/data-services';
+import { FinancialReportsEditionDataService } from '@app/data-services';
 
 import { AccountsChartMasterData, FinancialReportDesignQuery,
          FinancialReportTypesForDesign } from '@app/models';
@@ -48,7 +48,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private financialReportsData: FinancialReportsDataService) {
+              private financialReportsEditionData: FinancialReportsEditionDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -96,7 +96,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
   private getFinancialReportTypesForDesign(accountChartUID) {
     this.isLoading = true;
 
-    this.financialReportsData.getFinancialReportTypesForDesign(accountChartUID)
+    this.financialReportsEditionData.getFinancialReportTypesForDesign(accountChartUID)
       .toPromise()
       .then(x => this.financialReportTypesList = x )
       .finally(() => this.isLoading = false);

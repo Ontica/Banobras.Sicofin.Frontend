@@ -1,0 +1,76 @@
+<div class="explorer">
+
+  <div class="primary"
+    [class.priority]="!hasReportBreakdown"
+    [fxHide.notebook]="displayReportBreakdown">
+
+    <emp-fa-report-viewer
+      [reportGroup]="reportGroup"
+      [reportQuery]="reportQuery"
+      [selectedReportType]="selectedReportType"
+      [reportData]="reportData"
+      [queryExecuted]="queryExecuted"
+      [selectedEntry]="selectedReportBreakdown"
+      [fileUrl]="fileUrl"
+      [isLoading]="isLoading || isLoadingBreakdown"
+      (reportViewerEvent)="onReportViewerEvent($event)">
+
+      <ng-container *ngTemplateOutlet="reportFilter">
+
+      </ng-container>
+
+    </emp-fa-report-viewer>
+
+  </div>
+
+  <div class="secondary" *ngIf="displayReportBreakdown"
+    [class.priority]="hasReportBreakdown">
+
+    <ng-container *ngTemplateOutlet="reportBreakdown">
+
+    </ng-container>
+
+  </div>
+
+</div>
+
+
+<ng-template #reportFilter>
+
+  <ng-container [ngSwitch]="reportGroup">
+
+    <emp-fa-financial-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesRegulatorios"
+      (financialReportFilterEvent)="onReportFilterEvent($event)">
+
+    </emp-fa-financial-report-filter>
+
+    <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesOperativos"
+      [reportGroup]="reportGroup"
+      (operationalReportFilterEvent)="onReportFilterEvent($event)">
+
+    </emp-fa-operational-report-filter>
+
+    <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesFiscales"
+      [reportGroup]="reportGroup"
+      (operationalReportFilterEvent)="onReportFilterEvent($event)">
+
+    </emp-fa-operational-report-filter>
+
+  </ng-container>
+
+</ng-template>
+
+
+<ng-template #reportBreakdown>
+
+    <ng-container [ngSwitch]="reportGroup">
+
+      <emp-fa-financial-report-breakdown-tabbed-view *ngSwitchCase="ReportGroups.ReportesRegulatorios"
+        [financialReportBreakdown]="selectedReportBreakdown"
+        (financialReportBreakdownTabbedViewEvent)="onReportBreakdownEvent($event)">
+
+      </emp-fa-financial-report-breakdown-tabbed-view>
+
+    </ng-container>
+
+</ng-template>

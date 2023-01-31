@@ -7,6 +7,8 @@
 
 import { DateString, Identifiable } from '@app/core';
 
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
+
 
 export const DefaultEndDate: DateString = '2049-12-31';
 
@@ -56,8 +58,49 @@ export interface ExportationType extends Identifiable {
 }
 
 
+export interface ReportTypeFlags {
+
+}
+
+
+export interface ReportQuery extends DataTableQuery {
+  reportType?: string;
+  accountsChartUID: string;
+}
+
+
+export interface ReportData extends DataTable {
+  query: ReportQuery;
+  columns: DataTableColumn[];
+  entries: ReportEntry[];
+}
+
+
+export interface ReportEntry extends DataTableEntry {
+
+}
+
+
 export const DefaultExportationType: ExportationType = {
   uid: FileType.Excel,
   name: FileType.Excel,
   fileType: FileType.Excel,
 };
+
+
+export const EmptyReportTypeFlags: ReportTypeFlags = {
+
+}
+
+
+export const EmptyReportQuery: ReportQuery = {
+  reportType: '',
+  accountsChartUID: '',
+}
+
+
+export const EmptyReportData: ReportData = {
+  query: EmptyReportQuery,
+  columns: [],
+  entries: [],
+}

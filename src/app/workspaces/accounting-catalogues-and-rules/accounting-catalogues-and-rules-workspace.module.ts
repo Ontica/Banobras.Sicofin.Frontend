@@ -19,7 +19,9 @@ import {
 import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
 import { ExternalVariablesModule } from '@app/views/external-variables/external-variables.module';
 import { FinancialConceptsModule } from '@app/views/financial-concepts/financial-concepts.module';
-import { FinancialReportsModule } from '@app/views/financial-reports/financial-reports.module';
+import {
+  FinancialReportsDesignerModule
+} from '@app/views/financial-reports-designer/financial-reports-designer.module';
 import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger-accounts.module';
 
@@ -55,7 +57,7 @@ import {
     AccountsChartModule,
     ExternalVariablesModule,
     FinancialConceptsModule,
-    FinancialReportsModule,
+    FinancialReportsDesignerModule,
     ReportsControlsModule,
     SubledgerAccountsModule,
   ],

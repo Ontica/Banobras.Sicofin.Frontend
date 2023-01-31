@@ -16,10 +16,8 @@ import { ExchangeRatesDataService } from './exchange-rates.data.service';
 import { ExternalProcessDataService } from './external-process.data.service';
 import { ExternalVariablesDataService } from './external-variables.data.service';
 import { FinancialConceptsDataService } from './financial-concepts.data.service';
-import { FinancialReportsDataService } from './financial-reports.data.service';
 import { FinancialReportsEditionDataService } from './financial-reports-edition.data.service';
 import { ImportVouchersDataService } from './import-vouchers.data.service';
-import { OperationalReportsDataService } from './operational-reports.data.service';
 import { ReconciliationDataService } from './reconciliation.data.service';
 import { ReportingDataService } from './reporting.data.service';
 import { SubledgerDataService } from './subledgers.data.service';
@@ -43,10 +41,8 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     ExternalVariablesDataService,
     FileDownloadService,
     FinancialConceptsDataService,
-    FinancialReportsDataService,
     FinancialReportsEditionDataService,
     ImportVouchersDataService,
-    OperationalReportsDataService,
     ReconciliationDataService,
     ReportingDataService,
     SubledgerDataService,

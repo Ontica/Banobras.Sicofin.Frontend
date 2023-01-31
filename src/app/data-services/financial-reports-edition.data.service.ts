@@ -9,15 +9,34 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, DateString, HttpService } from '@app/core';
 
-import { FinancialReportCell, FinancialReportEditionCommand, FinancialReportRow } from '@app/models';
+import { FinancialReportCell, FinancialReportDesign, FinancialReportEditionCommand, FinancialReportRow,
+         FinancialReportTypesForDesign } from '@app/models';
 
 
 @Injectable()
 export class FinancialReportsEditionDataService {
 
   constructor(private http: HttpService) { }
+
+
+  getFinancialReportTypesForDesign(accountsChartUID: string): Observable<FinancialReportTypesForDesign[]> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+
+    const path = `v2/financial-accounting/financial-reports/design/types/${accountsChartUID}`;
+
+    return this.http.get<FinancialReportTypesForDesign[]>(path);
+  }
+
+
+  getFinancialReportDesign(reportTypeUID: string, date: DateString): Observable<FinancialReportDesign> {
+    Assertion.assertValue(reportTypeUID, 'reportTypeUID');
+
+    const path = `v2/financial-accounting/financial-reports/design/${reportTypeUID}/?date=${date}`;
+
+    return this.http.get<FinancialReportDesign>(path);
+  }
 
 
   insertRow(financialReportTypeUID: string,

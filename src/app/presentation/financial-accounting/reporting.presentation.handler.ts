@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
-import { OperationalReportsDataService } from '@app/data-services';
+import { ReportingDataService } from '@app/data-services';
 
 import { EmptyBalanceExplorerData } from '@app/models';
 
@@ -38,7 +38,7 @@ const initialState: StateValues = [
 @Injectable()
 export class ReportingPresentationHandler extends AbstractPresentationHandler {
 
-  constructor(private data: OperationalReportsDataService) {
+  constructor(private data: ReportingDataService) {
     super({
       initialState,
       selectors: SelectorType,

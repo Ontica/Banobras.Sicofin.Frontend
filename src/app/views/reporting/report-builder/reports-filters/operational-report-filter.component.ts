@@ -24,7 +24,7 @@ import { combineLatest } from 'rxjs';
 
 
 export enum OperationalReportFilterEventType {
-  BUILD_OPERATIONAL_REPORT_CLICKED = 'OperationalReportFilterComponent.Event.BuildOperationalReportClicked',
+  BUILD_REPORT_CLICKED = 'OperationalReportFilterComponent.Event.BuildReportClicked',
 }
 
 @Component({
@@ -39,7 +39,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  operationalReportQuery: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
+  query: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
 
   selectedAccountChart = null;
 
@@ -77,7 +77,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   get periodValid() {
     if (this.showField.datePeriod) {
-      return !!this.operationalReportQuery.fromDate && !!this.operationalReportQuery.toDate;
+      return !!this.query.fromDate && !!this.query.toDate;
     }
 
     return true;
@@ -94,23 +94,23 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   onReportTypeChanges(reportType: ReportType<OperationalReportTypeFlags>) {
     this.selectedReportType = reportType ?? null;
 
-    this.operationalReportQuery.reportType = reportType?.uid ?? null;
-    this.operationalReportQuery.toDate = null;
-    this.operationalReportQuery.fromDate = null;
-    this.operationalReportQuery.ledgers = [];
-    this.operationalReportQuery.accountNumber = null;
-    this.operationalReportQuery.withSubledgerAccount = false;
+    this.query.reportType = reportType?.uid ?? null;
+    this.query.toDate = null;
+    this.query.fromDate = null;
+    this.query.ledgers = [];
+    this.query.accountNumber = null;
+    this.query.withSubledgerAccount = false;
   }
 
 
   onBuildOperationalReportClicked() {
     const payload = {
-      operationalReportQuery: this.getOperationalReportQuery(),
+      query: this.getOperationalReportQuery(),
       reportType: this.selectedReportType,
     };
 
     sendEvent(this.operationalReportFilterEvent,
-      OperationalReportFilterEventType.BUILD_OPERATIONAL_REPORT_CLICKED, payload);
+      OperationalReportFilterEventType.BUILD_REPORT_CLICKED, payload);
   }
 
 
@@ -136,13 +136,13 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   private setDefaultAccountsChartUID() {
     this.selectedAccountChart = this.accountsChartMasterDataList.length > 0 ?
       this.accountsChartMasterDataList[0] : null;
-    this.operationalReportQuery.accountsChartUID = this.selectedAccountChart?.uid;
+    this.query.accountsChartUID = this.selectedAccountChart?.uid;
   }
 
 
   private setFilteredReportTypeList() {
     this.filteredReportTypeList = this.reportTypeList.filter(x =>
-      x.accountsCharts.includes(this.operationalReportQuery.accountsChartUID) &&
+      x.accountsCharts.includes(this.query.accountsChartUID) &&
       x.group === this.reportGroup
     );
   }
@@ -150,9 +150,9 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   private getOperationalReportQuery(): OperationalReportQuery {
     const data: OperationalReportQuery = {
-      reportType: this.operationalReportQuery.reportType,
-      accountsChartUID: this.operationalReportQuery.accountsChartUID,
-      toDate: this.operationalReportQuery.toDate,
+      reportType: this.query.reportType,
+      accountsChartUID: this.query.accountsChartUID,
+      toDate: this.query.toDate,
     };
 
     this.validateQueryFields(data);
@@ -163,27 +163,27 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   private validateQueryFields(data: OperationalReportQuery) {
     if (this.showField.ledgers) {
-      data.ledgers = this.operationalReportQuery.ledgers ?? [];
+      data.ledgers = this.query.ledgers ?? [];
     }
 
     if (this.showField.datePeriod) {
-      data.fromDate = this.operationalReportQuery.fromDate ?? '';
+      data.fromDate = this.query.fromDate ?? '';
     }
 
     if (this.showField.sendType) {
-      data.sendType = this.operationalReportQuery.sendType ?? null;
+      data.sendType = this.query.sendType ?? null;
     }
 
     if (this.showField.account) {
-      data.accountNumber = this.operationalReportQuery.accountNumber ?? null;
+      data.accountNumber = this.query.accountNumber ?? null;
     }
 
     if (this.showField.withSubledgerAccount) {
-      data.withSubledgerAccount = this.operationalReportQuery.withSubledgerAccount;
+      data.withSubledgerAccount = this.query.withSubledgerAccount;
     }
 
     if (this.showField.outputType) {
-      data.outputType = this.operationalReportQuery.outputType;
+      data.outputType = this.query.outputType;
     }
   }
 

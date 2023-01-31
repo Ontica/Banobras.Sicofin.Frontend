@@ -59,6 +59,8 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
   @Input() selectedCell: FinancialReportCell = EmptyFinancialReportCell;
 
+  @Input() canEdit = false;
+
   @Output() financialReportDesignerGridEvent = new EventEmitter<EventInfo>();
 
   rows: any[];
@@ -88,17 +90,17 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
 
   get canEditRows(): boolean {
-    return this.isFixedRows;
+    return this.canEdit && this.isFixedRows;
   }
 
 
   get canEditColumns(): boolean {
-    return false;
+    return this.canEdit && false;
   }
 
 
   get canEditCells(): boolean {
-    return this.isFixedCells;
+    return this.canEdit && this.isFixedCells;
   }
 
 

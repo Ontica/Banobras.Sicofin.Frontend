@@ -9,10 +9,10 @@
         <label>Catálogo de cuentas:</label>
 
         <emp-ng-select name="accountsChartUID" required
-          [(ngModel)]="operationalReportQuery.accountsChartUID"
+          [(ngModel)]="query.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [showError]="!operationalReportQuery.accountsChartUID"
+          [showError]="!query.accountsChartUID"
           (changes)="onAccountsChartChanges($event)">
         </emp-ng-select>
 
@@ -23,9 +23,9 @@
         <label>Reporte:</label>
 
         <emp-ng-select name="reportType" required
-          [(ngModel)]="operationalReportQuery.reportType"
+          [(ngModel)]="query.reportType"
           [items]="filteredReportTypeList"
-          [showError]="!operationalReportQuery.reportType"
+          [showError]="!query.reportType"
           (changes)="onReportTypeChanges($event)">
         </emp-ng-select>
 
@@ -38,8 +38,8 @@
           <label>Fecha:</label>
 
           <emp-ng-datepicker name="toDate" required
-            [(ngModel)]="operationalReportQuery.toDate"
-            [showError]="!operationalReportQuery.toDate">
+            [(ngModel)]="query.toDate"
+            [showError]="!query.toDate">
 
           </emp-ng-datepicker>
 
@@ -50,10 +50,10 @@
           <label>Período:</label>
 
           <emp-ng-date-range-picker name="period"
-            [(startDate)]="operationalReportQuery.fromDate"
-            [(endDate)]="operationalReportQuery.toDate"
-            [showError]="!operationalReportQuery.fromDate ||
-                         !operationalReportQuery.toDate">
+            [(startDate)]="query.fromDate"
+            [(endDate)]="query.toDate"
+            [showError]="!query.fromDate ||
+                         !query.toDate">
 
           </emp-ng-date-range-picker>
 
@@ -86,7 +86,7 @@
 
           <emp-ng-select name="ledger"
             [config]="{clearable: true, multiple: true}"
-            [(ngModel)]="operationalReportQuery.ledgers"
+            [(ngModel)]="query.ledgers"
             [items]="selectedAccountChart?.ledgers ?? []"
             bindLabel="fullName"
             [placeholder]="selectedAccountChart ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'">
@@ -99,9 +99,9 @@
           <label>Cuenta:</label>
 
           <input type="text" class="text-box" name="fromAccount" required
-            [(ngModel)]="operationalReportQuery.accountNumber"
-            [class.invalid-control]="!operationalReportQuery.accountNumber"
-            (keyup.escape)="operationalReportQuery.accountNumber = ''">
+            [(ngModel)]="query.accountNumber"
+            [class.invalid-control]="!query.accountNumber"
+            (keyup.escape)="query.accountNumber = ''">
 
         </div>
 
@@ -109,7 +109,7 @@
           fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
 
           <mat-checkbox name="withSubledgerAccount"
-            [(ngModel)]="operationalReportQuery.withSubledgerAccount"
+            [(ngModel)]="query.withSubledgerAccount"
             (click)="$event.stopPropagation">
             Con Auxiliares
           </mat-checkbox>
@@ -127,9 +127,9 @@
 
         <emp-ng-select name="sendType" required
           [config]="{selectFirst: true}"
-          [(ngModel)]="operationalReportQuery.sendType"
+          [(ngModel)]="query.sendType"
           [items]="sendTypesList"
-          [showError]="!operationalReportQuery.sendType">
+          [showError]="!query.sendType">
         </emp-ng-select>
 
       </div>
@@ -140,9 +140,9 @@
 
         <emp-ng-select name="outputType" required
           [config]="{selectFirst: true}"
-          [(ngModel)]="operationalReportQuery.outputType"
+          [(ngModel)]="query.outputType"
           [items]="selectedReportType.outputType ?? []"
-          [showError]="!operationalReportQuery.outputType">
+          [showError]="!query.outputType">
         </emp-ng-select>
 
       </div>

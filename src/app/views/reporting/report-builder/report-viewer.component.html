@@ -3,7 +3,7 @@
   <div class="card-header card-header-flat">
 
     <div class="card-title">
-      Generación de reportes regulatorios
+      Generación de reportes {{reportGroupName}}
 
       <div class="card-hint" empNgProgressText
         loadingText="Cargando"
@@ -19,20 +19,19 @@
 
     <div fxLayout="column" fxFlexFill>
 
-      <emp-ng-spinner #spinner [visible]="isLoading || isLoadingBreakdown">
+      <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-fa-financial-report-filter fxFlex="none"
-        (financialReportFilterEvent)="onFinancialReportFilterEvent($event)">
+      <ng-content>
 
-      </emp-fa-financial-report-filter>
+      </ng-content>
 
       <emp-fa-data-table fxFlex
-        [dataTable]="financialReport"
-        [selectedEntry]="selectedFinancialReportBreakdown.financialReportEntry"
+        [dataTable]="reportData"
         [executed]="queryExecuted"
-        (dataTableEvent)="onFinancialReportTableEvent($event)">
+        [selectedEntry]="selectedEntry?.financialReportEntry"
+        (dataTableEvent)="onDataTableEvent($event)">
 
       </emp-fa-data-table>
 
@@ -42,9 +41,8 @@
 
 </div>
 
-
 <emp-fa-export-report-modal *ngIf="displayExportModal"
-  [title]="'Exportar ' + reportType.name"
+  [title]="'Exportar ' + selectedReportType?.name"
   [fileUrl]="fileUrl"
   [exportationTypes]="exportationTypesList"
   (exportReportModalEvent)="onExportReportModalEvent($event)">

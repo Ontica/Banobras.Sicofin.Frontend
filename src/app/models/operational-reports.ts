@@ -7,12 +7,12 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './data-table';
+import { DataTableColumn } from './data-table';
 
-import { FileType } from './reporting';
+import { FileType, ReportData, ReportEntry, ReportQuery, ReportTypeFlags } from './reporting';
 
 
-export interface OperationalReportTypeFlags {
+export interface OperationalReportTypeFlags extends ReportTypeFlags {
   singleDate: boolean;
   datePeriod: boolean;
   ledgers: boolean;
@@ -20,6 +20,38 @@ export interface OperationalReportTypeFlags {
   withSubledgerAccount: boolean;
   sendType: boolean;
   outputType: boolean;
+}
+
+
+export enum SendTypes {
+  N = 'N',
+  C = 'C',
+}
+
+
+export interface OperationalReportQuery extends ReportQuery {
+  reportType: string;
+  accountsChartUID: string;
+  ledgers?: string[];
+  fromDate?: DateString;
+  toDate: DateString;
+  accountNumber?: string;
+  withSubledgerAccount?: boolean;
+  exportTo?: FileType;
+  sendType?: SendTypes;
+  outputType?: string;
+}
+
+
+export interface OperationalReport extends ReportData {
+  query: OperationalReportQuery;
+  columns: DataTableColumn[];
+  entries: OperationalReportEntry[];
+}
+
+
+export interface OperationalReportEntry extends ReportEntry {
+
 }
 
 
@@ -34,42 +66,10 @@ export const EmptyOperationalReportTypeFlags: OperationalReportTypeFlags = {
 }
 
 
-export enum SendTypes {
-  N = 'N',
-  C = 'C',
-}
-
-
 export const SendTypesList: Identifiable[] = [
   {uid: SendTypes.N, name: 'Normal'},
   {uid: SendTypes.C, name: 'Complementario'},
 ];
-
-
-export interface OperationalReportQuery extends DataTableQuery {
-  reportType: string;
-  accountsChartUID: string;
-  ledgers?: string[];
-  fromDate?: DateString;
-  toDate: DateString;
-  accountNumber?: string;
-  withSubledgerAccount?: boolean;
-  exportTo?: FileType;
-  sendType?: SendTypes;
-  outputType?: string;
-}
-
-
-export interface OperationalReport extends DataTable {
-  query: OperationalReportQuery;
-  columns: DataTableColumn[];
-  entries: OperationalReportEntry[];
-}
-
-
-export interface OperationalReportEntry extends DataTableEntry {
-
-}
 
 
 export const EmptyOperationalReportQuery: OperationalReportQuery = {

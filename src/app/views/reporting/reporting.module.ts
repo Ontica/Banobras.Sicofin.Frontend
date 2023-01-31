@@ -17,13 +17,14 @@ import { ReportsControlsModule } from '../reports-controls/reports-controls.modu
 
 import { LockedUpBalancesFilterComponent } from './locked-up-balances/locked-up-balances-filter.component';
 import { LockedUpBalancesModalComponent } from './locked-up-balances/locked-up-balances-modal.component';
+import { FinancialReportBreakdownTabbedViewComponent } from './report-builder/reports-breakdown/financial-report-breakdown-tabbed-view.component';
+import { FinancialReportFilterComponent } from './report-builder/reports-filters/financial-report-filter.component';
+import { OperationalReportFilterComponent } from './report-builder/reports-filters/operational-report-filter.component';
+import { ReportBuilderComponent } from './report-builder/report-builder.component';
+import { ReportViewerComponent } from './report-builder/report-viewer.component';
 
 
 @NgModule({
-  declarations: [
-    LockedUpBalancesFilterComponent,
-    LockedUpBalancesModalComponent,
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -35,8 +36,19 @@ import { LockedUpBalancesModalComponent } from './locked-up-balances/locked-up-b
 
     ReportsControlsModule,
   ],
+  declarations: [
+    LockedUpBalancesFilterComponent,
+    LockedUpBalancesModalComponent,
+
+    FinancialReportBreakdownTabbedViewComponent,
+    FinancialReportFilterComponent,
+    OperationalReportFilterComponent,
+    ReportBuilderComponent,
+    ReportViewerComponent,
+  ],
   exports: [
     LockedUpBalancesModalComponent,
+    ReportBuilderComponent,
   ]
 })
 export class ReportingModule { }

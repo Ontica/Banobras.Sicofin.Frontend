@@ -42,6 +42,8 @@ export * from './external-variables';
 
 export * from './financial-concepts';
 
+export * from './financial-reports-edition';
+
 export * from './financial-reports';
 
 export * from './import-vouchers';

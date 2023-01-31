@@ -7,10 +7,10 @@
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges,
+import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges,
          ViewChild } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty } from '@app/core';
+import { Assertion, EventInfo, isEmpty, SessionService } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -31,6 +31,7 @@ import { FinancialReportDesignerControlsEventType } from './financial-report-des
 import { FinancialReportDesignerGridEventType } from './financial-report-designer-grid.component';
 
 import { FixedColumnEditorEventType } from '../financial-report-edition/fixed-column-editor.component';
+import { PermissionsLibrary } from '@app/main-layout';
 
 
 export enum FinancialReportDesignerEventType {
@@ -42,7 +43,7 @@ export enum FinancialReportDesignerEventType {
   selector: 'emp-fa-financial-report-designer',
   templateUrl: './financial-report-designer.component.html',
 })
-export class FinancialReportDesignerComponent implements OnChanges {
+export class FinancialReportDesignerComponent implements OnChanges, OnInit {
 
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
@@ -53,6 +54,8 @@ export class FinancialReportDesignerComponent implements OnChanges {
   @Input() isLoading = false;
 
   @Output() financialReportDesignerEvent = new EventEmitter<EventInfo>();
+
+  hasPermissionToEdit = false;
 
   submitted = false;
 
@@ -81,6 +84,7 @@ export class FinancialReportDesignerComponent implements OnChanges {
 
 
   constructor(private financialReportsEditionData: FinancialReportsEditionDataService,
+              private session: SessionService,
               private messageBox: MessageBoxService) {}
 
 
@@ -96,6 +100,11 @@ export class FinancialReportDesignerComponent implements OnChanges {
     if (changes.financialReportDesign) {
       this.validateClearSelectedData();
     }
+  }
+
+
+  ngOnInit() {
+    this.setPermissionToEdit();
   }
 
 
@@ -294,6 +303,11 @@ export class FinancialReportDesignerComponent implements OnChanges {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private setPermissionToEdit() {
+    this.hasPermissionToEdit = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_REPORTES);
   }
 
 

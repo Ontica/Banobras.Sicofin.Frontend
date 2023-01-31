@@ -7,21 +7,21 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OperationalReportsMainPageComponent } from './operational-reports-main-page.component';
+import { ReportViewerComponent } from './report-viewer.component';
 
-describe('OperationalReportsMainPageComponent', () => {
-  let component: OperationalReportsMainPageComponent;
-  let fixture: ComponentFixture<OperationalReportsMainPageComponent>;
+describe('ReportViewerComponent', () => {
+  let component: ReportViewerComponent;
+  let fixture: ComponentFixture<ReportViewerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OperationalReportsMainPageComponent ]
+      declarations: [ ReportViewerComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OperationalReportsMainPageComponent);
+    fixture = TestBed.createComponent(ReportViewerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

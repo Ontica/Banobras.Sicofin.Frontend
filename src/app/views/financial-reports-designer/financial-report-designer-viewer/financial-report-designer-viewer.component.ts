@@ -9,7 +9,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
-import { FinancialReportsDataService } from '@app/data-services';
+import { FinancialReportsEditionDataService } from '@app/data-services';
 
 import { EmptyFinancialReportDesign, EmptyFinancialReportDesignQuery, FinancialReportDesign,
          FinancialReportDesignQuery } from '@app/models';
@@ -44,7 +44,7 @@ export class FinancialReportDesignerViewerComponent {
   data: FinancialReportDesign = Object.assign({}, EmptyFinancialReportDesign);
 
 
-  constructor(private financialReportsData: FinancialReportsDataService) { }
+  constructor(private financialReportsEditionData: FinancialReportsEditionDataService) { }
 
 
   onFinancialReportSelectorEvent(event: EventInfo) {
@@ -85,7 +85,8 @@ export class FinancialReportDesignerViewerComponent {
     this.setSubmitted(true);
     this.setFinancialReportDesignData(EmptyFinancialReportDesign, false);
 
-    this.financialReportsData.getFinancialReportDesign(this.query.financialReportTypeUID, this.query.date)
+    this.financialReportsEditionData.getFinancialReportDesign(this.query.financialReportTypeUID,
+                                                              this.query.date)
       .toPromise()
       .then(x => this.setFinancialReportDesignData(x, true))
       .catch(e => this.setFinancialReportDesignData(EmptyFinancialReportDesign, true))

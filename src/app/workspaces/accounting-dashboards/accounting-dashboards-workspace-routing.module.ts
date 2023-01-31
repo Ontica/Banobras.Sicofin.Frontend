@@ -11,13 +11,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES_LIBRARY } from '@app/main-layout';
 
-import { BalanceReconciliationMainPageComponent } from './balance-reconciliation-main-page/balance-reconciliation-main-page.component';
-
-import { FinancialReportsMainPageComponent } from './financial-reports-main-page/financial-reports-main-page.component';
-
-import { OperationalReportsMainPageComponent } from './operational-reports-main-page/operational-reports-main-page.component';
+import {
+  BalanceReconciliationMainPageComponent
+} from './balance-reconciliation-main-page/balance-reconciliation-main-page.component';
 
 import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-balance-main-page.component';
+
+import { ReportBuilderComponent } from '@app/views/reporting/report-builder/report-builder.component';
 
 
 const routes: Routes = [
@@ -29,22 +29,22 @@ const routes: Routes = [
   {
     data: { permission: ROUTES_LIBRARY.tableros_reportes_regulatorios.permission },
     path: ROUTES_LIBRARY.tableros_reportes_regulatorios.path,
-    component: FinancialReportsMainPageComponent,
+    component: ReportBuilderComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.tableros_reportes_operativos.permission },
+    path: ROUTES_LIBRARY.tableros_reportes_operativos.path,
+    component: ReportBuilderComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission },
+    path: ROUTES_LIBRARY.tableros_reportes_fiscales.path,
+    component: ReportBuilderComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.tableros_conciliaciones.permission },
     path: ROUTES_LIBRARY.tableros_conciliaciones.path,
     component: BalanceReconciliationMainPageComponent,
-  },
-  {
-    data: { permission: ROUTES_LIBRARY.tableros_reportes_operativos.permission },
-    path: ROUTES_LIBRARY.tableros_reportes_operativos.path,
-    component: OperationalReportsMainPageComponent,
-  },
-  {
-    data: { permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission },
-    path: ROUTES_LIBRARY.tableros_reportes_fiscales.path,
-    component: OperationalReportsMainPageComponent,
   },
   {
     path: '',

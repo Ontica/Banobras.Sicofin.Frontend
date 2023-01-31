@@ -14,14 +14,13 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedModule } from '@app/shared/shared.module';
 
 import { AccountingDashboardsWorkspaceRoutingModule } from './accounting-dashboards-workspace-routing.module';
-import { FinancialReportsModule } from '@app/views/financial-reports/financial-reports.module';
-import { OperationalReportsModule } from '@app/views/operational-reports/operational-reports.module';
+import { ReportingModule } from '@app/views/reporting/reporting.module';
+import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
 import { TrialBalanceModule } from '@app/views/trial-balance/trial-balance.module';
 
-import { BalanceReconciliationMainPageComponent } from './balance-reconciliation-main-page/balance-reconciliation-main-page.component';
-import { FinancialReportsMainPageComponent } from './financial-reports-main-page/financial-reports-main-page.component';
-import { OperationalReportsMainPageComponent } from './operational-reports-main-page/operational-reports-main-page.component';
-import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+import {
+  BalanceReconciliationMainPageComponent
+} from './balance-reconciliation-main-page/balance-reconciliation-main-page.component';
 import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-balance-main-page.component';
 
 
@@ -36,16 +35,13 @@ import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-b
     SharedModule,
 
     AccountingDashboardsWorkspaceRoutingModule,
-    FinancialReportsModule,
-    OperationalReportsModule,
+    ReportingModule,
     ReportsControlsModule,
     TrialBalanceModule,
   ],
 
   declarations: [
     BalanceReconciliationMainPageComponent,
-    FinancialReportsMainPageComponent,
-    OperationalReportsMainPageComponent,
     TrialBalanceMainPageComponent,
   ],
 

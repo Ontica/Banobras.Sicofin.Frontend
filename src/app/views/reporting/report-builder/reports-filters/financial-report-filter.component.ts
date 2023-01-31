@@ -11,7 +11,7 @@ import { EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { FinancialReportsDataService } from '@app/data-services';
+import { ReportingDataService } from '@app/data-services';
 
 import { AccountsChartMasterData, EmptyFinancialReportQuery, FinancialReportQuery, FinancialReportTypeFlags,
          ReportType } from '@app/models';
@@ -22,7 +22,7 @@ import { sendEvent } from '@app/shared/utils';
 
 
 export enum FinancialReportFilterEventType {
-  BUILD_FINANCIAL_REPORT_CLICKED   = 'FinancialReportFilterComponent.Event.BuildFinancialReportClicked',
+  BUILD_REPORT_CLICKED = 'FinancialReportFilterComponent.Event.BuildReportClicked',
 }
 
 @Component({
@@ -46,7 +46,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private financialReportsData: FinancialReportsDataService) {
+              private reportingData: ReportingDataService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -97,8 +97,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
       reportType: this.selectedReportType,
     };
 
-    sendEvent(this.financialReportFilterEvent,
-      FinancialReportFilterEventType.BUILD_FINANCIAL_REPORT_CLICKED, payload);
+    sendEvent(this.financialReportFilterEvent, FinancialReportFilterEventType.BUILD_REPORT_CLICKED, payload);
   }
 
 
@@ -122,7 +121,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   private getFinancialReportTypes(accountChartUID) {
     this.isLoading = true;
 
-    this.financialReportsData.getFinancialReportTypes(accountChartUID)
+    this.reportingData.getFinancialReportTypes(accountChartUID)
       .toPromise()
       .then(x => this.reportTypeList = x)
       .finally(() => this.isLoading = false);
