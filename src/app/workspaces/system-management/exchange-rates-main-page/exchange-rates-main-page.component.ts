@@ -9,7 +9,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { combineLatest } from 'rxjs';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo, Identifiable, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -45,7 +45,7 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
 
   exchangeRateData: ExchangeRateData = Object.assign({}, EmptyExchangeRateData);
 
-  permissionToEdit = PermissionsLibrary.FEATURE_EDICION_TIPOS_CAMBIO;
+  hasPermissionToEdit = false;
 
   excelFileUrl = '';
 
@@ -60,13 +60,15 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
   helper: SubscriptionHelper;
 
   constructor(private uiLayer: PresentationLayer,
-              private exchangeRatesData: ExchangeRatesDataService) {
+              private exchangeRatesData: ExchangeRatesDataService,
+              private session: SessionService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
 
   ngOnInit(): void {
     this.loadDataLists();
+    this.setHasPermissionToEdit();
   }
 
 
@@ -123,6 +125,11 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private setHasPermissionToEdit() {
+    this.hasPermissionToEdit = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_TIPOS_CAMBIO);
   }
 
 

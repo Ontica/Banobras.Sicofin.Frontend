@@ -7,7 +7,7 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, EventInfo, Identifiable, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -48,7 +48,9 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
 
   externalValuesData: ExternalValuesData = Object.assign({}, EmptyExternalValuesData);
 
-  permissionToImport = PermissionsLibrary.FEATURE_IMPORTACION_VALORES_EXTERNOS;
+  hasPermissionToEditVariables = false;
+
+  hasPermissionToImportValues = false;
 
   fileUrl = '';
 
@@ -64,6 +66,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
 
   constructor(private uiLayer: PresentationLayer,
               private externalVariablesData: ExternalVariablesDataService,
+              private session: SessionService,
               private messageBox: MessageBoxService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
@@ -71,6 +74,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadExternalVariablesSets();
+    this.setHasPermissions();
   }
 
 
@@ -144,6 +148,13 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private setHasPermissions() {
+    this.hasPermissionToEditVariables = true;
+    this.hasPermissionToImportValues =
+      this.session.hasPermission(PermissionsLibrary.FEATURE_IMPORTACION_VALORES_EXTERNOS);
   }
 
 

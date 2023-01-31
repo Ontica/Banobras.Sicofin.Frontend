@@ -4,7 +4,8 @@
 
     <emp-fa-imported-data-viewer
       dataType="valores externos"
-      [permissionForOptions]="permissionToImport"
+      [showEditData]="hasPermissionToEditVariables"
+      [showImportData]="hasPermissionToImportValues"
       [typeFieldConfig]="{show: true, required: true, list: externalVariableSetList}"
       [additionalFieldConfig]="{show: true, label: 'Incluir', required: false, multiple: false,
                                 list: datasetModesList, defaultValue: DatasetModes.onlyLoadedValues}"
@@ -16,7 +17,6 @@
       [exportationTypeDefault]="false"
       [fileUrl]="fileUrl"
       [isLoading]="isLoading"
-      [showEditData]="true"
       editDataButtonText="Editar variables"
       searchButtonText="Ver"
       (importedDataViewerEvent)="onImportedDataViewerEvent($event)">

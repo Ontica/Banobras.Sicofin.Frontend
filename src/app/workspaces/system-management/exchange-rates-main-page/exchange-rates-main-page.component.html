@@ -4,10 +4,9 @@
 
     <emp-fa-imported-data-viewer
       dataType="tipos de cambio"
-      [permissionForOptions]="permissionToEdit"
-      [showIconButtonToSubmit]="true"
       [showImportData]="false"
-      [showEditData]="true"
+      [showEditData]="hasPermissionToEdit"
+      [showIconButtonToSubmit]="true"
       [periodRequired]="true"
       [typeFieldConfig]="{show: true, required: false, multiple: true, list: exchangeRateTypeList}"
       [additionalFieldConfig]="{show: true, label: 'Monedas', required: false, multiple: true, list: currenciesList}"

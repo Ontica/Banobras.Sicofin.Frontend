@@ -7,7 +7,7 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, SessionService } from '@app/core';
 
 import { ReconciliationType, InputDatasetsQuery, ReconciliationDatasets, ImportInputDatasetCommand,
          InputDataset, mapToReconciliationImportInputDatasetCommand, mapToReconciliationInputDatasetsCommand,
@@ -42,7 +42,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
   reconciliationDataTable: ReconciliationData = Object.assign({}, EmptyReconciliationData);
 
-  permissionToImport = PermissionsLibrary.FEATURE_IMPORTACION_CONCILIACIONES;
+  hasPermissionToImport = false;
 
   fileUrl = '';
 
@@ -51,11 +51,13 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   isLoading = false;
 
   constructor(private reconciliationData: ReconciliationDataService,
+              private session: SessionService,
               private messageBox: MessageBoxService) { }
 
 
   ngOnInit() {
     this.getReconciliationTypes();
+    this.setHasPermissionToImport();
   }
 
 
@@ -118,6 +120,12 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private setHasPermissionToImport() {
+    this.hasPermissionToImport =
+      this.session.hasPermission(PermissionsLibrary.FEATURE_IMPORTACION_CONCILIACIONES);
   }
 
 
