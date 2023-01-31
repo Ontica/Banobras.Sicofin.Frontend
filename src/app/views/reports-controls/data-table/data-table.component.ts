@@ -49,6 +49,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() clickableEntry = false;
 
+  @Input() canClickRow = true;
+
   @Input() formatFieldName = 'format';
 
   @Input() countOnlyEntries = false;
@@ -99,7 +101,10 @@ export class DataTableComponent implements OnChanges {
 
 
   isClickableEntry(entry: DataTableEntry) {
-    return !!entry.clickableEntry || (this.clickableEntry && ClickeableItemTypeList.includes(entry.itemType));
+    return this.canClickRow && (
+      !!entry.clickableEntry ||
+      (this.clickableEntry && ClickeableItemTypeList.includes(entry.itemType))
+    );
   }
 
 
