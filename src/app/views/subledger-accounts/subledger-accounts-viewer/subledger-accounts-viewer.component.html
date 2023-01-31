@@ -15,7 +15,8 @@
 
     <div class="card-header-options">
 
-      <button class="btn-action" fxFlexOffset="1.5rem"
+      <button *empNgHasPermission="permissions.FEATURE_EDICION_AUXILIARES"
+        class="btn-action" fxFlexOffset="1.5rem"
         (click)="onCreateSubledgerAccountClicked()">
         Agregar auxiliar
       </button>

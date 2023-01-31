@@ -14,12 +14,14 @@
 
     <div class="card-header-options">
 
-      <button class="btn"
+      <button *empNgHasPermission="permissionsToImportVouchers"
+        class="btn"
         (click)="onClickImportVouchers()">
         Importar pólizas
       </button>
 
-      <button class="btn-action" fxFlexOffset="1.5rem"
+      <button *empNgHasPermission="permissionToCreateVoucher"
+        class="btn-action" fxFlexOffset="1.5rem"
         (click)="onClickCreateVoucher()">
         Nueva póliza
       </button>

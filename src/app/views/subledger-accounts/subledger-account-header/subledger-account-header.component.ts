@@ -14,6 +14,8 @@ import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { PermissionsLibrary } from '@app/main-layout';
+
 import { AccountsChartMasterData, EmptySubledgerAccount, Ledger, SubledgerAccount,
          SubledgerAccountFields} from '@app/models';
 
@@ -64,6 +66,8 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
   helper: SubscriptionHelper;
   eventType = SubledgerAccountHeaderEventType;
+
+  permissions = PermissionsLibrary;
 
 
   constructor(private uiLayer: PresentationLayer,

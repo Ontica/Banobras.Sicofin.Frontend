@@ -152,7 +152,8 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
 
 
   private setHasPermissions() {
-    this.hasPermissionToEditVariables = true;
+    this.hasPermissionToEditVariables =
+      this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_VARIABLES_EXTERNAS);
     this.hasPermissionToImportValues =
       this.session.hasPermission(PermissionsLibrary.FEATURE_IMPORTACION_VALORES_EXTERNOS);
   }

@@ -9,6 +9,8 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
+import { PermissionsLibrary } from '@app/main-layout';
+
 import { EmptySubledgerAccountDataTable, SubledgerAccountDataTable } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
@@ -32,12 +34,18 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
   @Input() subledgerAccountData: SubledgerAccountDataTable =
     Object.assign({}, EmptySubledgerAccountDataTable);
+
   @Input() queryExecuted = false;
+
   @Input() isLoading = false;
+
   @Output() subledgerAccountsViewerEvent = new EventEmitter<EventInfo>();
 
   accountChartName = '';
+
   cardHint = 'Seleccionar los filtros';
+
+  permissions = PermissionsLibrary;
 
 
   ngOnChanges(changes: SimpleChanges): void {

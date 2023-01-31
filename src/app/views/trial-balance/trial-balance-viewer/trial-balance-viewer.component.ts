@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 
 import { Observable } from 'rxjs';
 
-import { Assertion, Empty, EventInfo, Identifiable } from '@app/core';
+import { Assertion, Empty, EventInfo, Identifiable, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -32,6 +32,7 @@ import {
 import { BalanceQuickFilterEventType } from './balance-quick-filter.component';
 
 import { TrialBalanceFilterEventType } from './trial-balance-filter.component';
+import { PermissionsLibrary } from '@app/main-layout';
 
 
 export enum TrialBalanceViewerEventType {
@@ -63,6 +64,8 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   queryExecuted = false;
 
+  hasPermissionToAccountStatement = false;
+
   query: BalanceExplorerQuery | TrialBalanceQuery = getEmptyTrialBalanceQuery();
 
   data: BalanceExplorerResult | TrialBalance = EmptyTrialBalance;
@@ -75,12 +78,15 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   constructor(private uiLayer: PresentationLayer,
+              private session: SessionService,
               private balancesDataService: BalancesDataService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
 
 
   ngOnInit() {
+    this.setPermissionToAccountStatement();
+
     if (this.isQuickQuery) {
       this.subscriptionHelper.select<BalanceExplorerData>(ReportingStateSelector.BALANCE_EXPLORER_DATA)
         .subscribe(x => this.setInitData(x));
@@ -255,6 +261,12 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
       this.uiLayer.dispatch(ReportingAction.SET_BALANCE_EXPLORER_DATA, {balanceData});
     }
+  }
+
+
+  private setPermissionToAccountStatement() {
+    this.hasPermissionToAccountStatement =
+      this.session.hasPermission(PermissionsLibrary.FEATURE_ESTADO_DE_CUENTA);
   }
 
 

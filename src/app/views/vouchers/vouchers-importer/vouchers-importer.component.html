@@ -21,11 +21,24 @@
             <label>Tipo de importación:</label>
             <mat-radio-group [(ngModel)]="selectedImportType" [ngModelOptions]="{standalone: true}"
               (change)="onImportTypeChange()">
-              <mat-radio-button [value]="importTypes.excelFile">Archivo Excel</mat-radio-button>
-              <mat-radio-button [value]="importTypes.txtFile">Archivo de texto plano</mat-radio-button>
-              <mat-radio-button [value]="importTypes.dataBase" *empNgHasPermission="permissions.FEATURE_IMPORTACION_SISTEMAS_TRANSVERSALES">
+
+              <ng-container *empNgHasPermission="permissions.FEATURE_POLIZAS_IMPORTACION_DESDE_ARCHIVOS">
+
+                <mat-radio-button [value]="importTypes.excelFile">
+                  Archivo Excel
+                </mat-radio-button>
+
+                <mat-radio-button [value]="importTypes.txtFile">
+                  Archivo de texto plano
+                </mat-radio-button>
+
+              </ng-container>
+
+              <mat-radio-button [value]="importTypes.dataBase"
+                *empNgHasPermission="permissions.FEATURE_POLIZAS_IMPORTACION_SISTEMAS_TRANSVERSALES">
                 De sistemas transversales
               </mat-radio-button>
+
             </mat-radio-group>
           </div>
 
