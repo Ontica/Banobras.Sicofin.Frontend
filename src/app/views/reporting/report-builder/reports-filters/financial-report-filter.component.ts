@@ -7,13 +7,14 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { EventInfo, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { ReportingDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyFinancialReportQuery, FinancialReportQuery, FinancialReportTypeFlags,
+import { AccountsChartMasterData, EmptyFinancialReportQuery, EmptyFinancialReportType,
+         EmptyFinancialReportTypeFlags, FinancialReportQuery, FinancialReportTypeFlags,
          ReportType } from '@app/models';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
@@ -35,7 +36,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   query: FinancialReportQuery = Object.assign({}, EmptyFinancialReportQuery);
 
-  selectedReportType: ReportType<FinancialReportTypeFlags> = null;
+  selectedReportType: ReportType<FinancialReportTypeFlags> = EmptyFinancialReportType;
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
@@ -51,7 +52,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadAccountsCharts();
   }
 
@@ -61,8 +62,13 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get periodValid() {
-    if (this.selectedReportType?.show.datePeriod) {
+  get showField(): FinancialReportTypeFlags  {
+    return isEmpty(this.selectedReportType) ? EmptyFinancialReportTypeFlags : this.selectedReportType.show;
+  }
+
+
+  get periodValid(): boolean {
+    if (this.showField.datePeriod) {
       return !!this.query.fromDate && !!this.query.toDate;
     }
 
@@ -81,13 +87,8 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
 
   onReportTypeChanges(reportType: ReportType<FinancialReportTypeFlags>) {
-    this.selectedReportType = reportType ?? null;
-
-    this.query.financialReportType = reportType?.uid ?? null;
-    this.query.fromDate = '';
-    this.query.toDate = '';
-    this.query.getAccountsIntegration = false;
-    this.query.exportTo = null;
+    this.selectedReportType = isEmpty(reportType) ? EmptyFinancialReportType : reportType;
+    this.query.financialReportType = this.selectedReportType.uid ?? '';
   }
 
 
@@ -118,7 +119,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getFinancialReportTypes(accountChartUID) {
+  private getFinancialReportTypes(accountChartUID: string) {
     this.isLoading = true;
 
     this.reportingData.getFinancialReportTypes(accountChartUID)
@@ -134,16 +135,16 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
       accountsChartUID: this.query.accountsChartUID,
     };
 
-    if (this.selectedReportType?.show.datePeriod) {
+    if (this.showField.singleDate) {
+      data.toDate = this.query.toDate ?? null;
+    }
+
+    if (this.showField.datePeriod) {
       data.fromDate = this.query.fromDate ?? null;
       data.toDate = this.query.toDate ?? null;
     }
 
-    if (this.selectedReportType?.show.singleDate) {
-      data.toDate = this.query.toDate ?? null;
-    }
-
-    if (this.selectedReportType?.show.getAccountsIntegration) {
+    if (this.showField.getAccountsIntegration) {
       data.getAccountsIntegration = this.query?.getAccountsIntegration ?? false;
     }
 

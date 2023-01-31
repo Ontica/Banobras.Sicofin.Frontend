@@ -18,7 +18,7 @@ import { View } from '@app/main-layout';
 import { ReportingDataService } from '@app/data-services';
 
 import { FileType, FinancialReportBreakdown, FinancialReportQuery, ReportGroup, ReportQuery, ReportType,
-         ReportData, EmptyReportData } from '@app/models';
+         ReportData, EmptyReportData, ReportTypeFlags, EmptyReportType } from '@app/models';
 
 import { ReportViewerEventType } from './report-viewer.component';
 
@@ -46,7 +46,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   reportQuery: ReportQuery = Object.assign({});
 
-  selectedReportType: ReportType<any> = null;
+  selectedReportType: ReportType<ReportTypeFlags> = EmptyReportType;
 
   reportData: ReportData = Object.assign({}, EmptyReportData);
 
@@ -95,7 +95,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
         this.reportQuery = event.payload.query as ReportQuery;
-        this.setReportType(event.payload.reportType as ReportType<any>);
+        this.setReportType(event.payload.reportType as ReportType<ReportTypeFlags>);
         this.setReportData(EmptyReportData, false);
         this.getReportData();
         return;
@@ -216,7 +216,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
   }
 
 
-  private setReportType(reportType: ReportType<any>) {
+  private setReportType(reportType: ReportType<ReportTypeFlags>) {
     this.selectedReportType = reportType;
   }
 

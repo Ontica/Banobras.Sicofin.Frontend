@@ -9,7 +9,7 @@ import { DateString, Identifiable } from '@app/core';
 
 import { DataTableColumn } from './data-table';
 
-import { FileType, ReportData, ReportEntry, ReportQuery, ReportTypeFlags } from './reporting';
+import { FileType, ReportData, ReportEntry, ReportQuery, ReportType, ReportTypeFlags } from './reporting';
 
 
 export interface OperationalReportTypeFlags extends ReportTypeFlags {
@@ -34,7 +34,7 @@ export interface OperationalReportQuery extends ReportQuery {
   accountsChartUID: string;
   ledgers?: string[];
   fromDate?: DateString;
-  toDate: DateString;
+  toDate?: DateString;
   accountNumber?: string;
   withSubledgerAccount?: boolean;
   exportTo?: FileType;
@@ -63,6 +63,14 @@ export const EmptyOperationalReportTypeFlags: OperationalReportTypeFlags = {
   withSubledgerAccount: false,
   sendType: false,
   outputType: false,
+}
+
+
+export const EmptyOperationalReportType: ReportType<OperationalReportTypeFlags> = {
+  uid: '',
+  name: '',
+  show: EmptyOperationalReportTypeFlags,
+  exportTo: [],
 }
 
 

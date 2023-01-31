@@ -93,6 +93,14 @@ export const EmptyReportTypeFlags: ReportTypeFlags = {
 }
 
 
+export const EmptyReportType: ReportType<ReportTypeFlags> = {
+  uid: '',
+  name: '',
+  show: EmptyReportTypeFlags,
+  exportTo: [],
+}
+
+
 export const EmptyReportQuery: ReportQuery = {
   reportType: '',
   accountsChartUID: '',

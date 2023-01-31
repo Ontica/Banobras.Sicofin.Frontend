@@ -11,8 +11,8 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { ReportGroup, ReportType, ExportationType, ReportQuery, ReportData, EmptyReportData,
-         EmptyReportQuery } from '@app/models';
+import { ReportGroup, ReportType, ExportationType, ReportQuery, ReportData, EmptyReportData, EmptyReportQuery,
+         ReportTypeFlags, EmptyReportType} from '@app/models';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
@@ -36,7 +36,7 @@ export class ReportViewerComponent implements OnChanges {
 
   @Input() reportQuery: ReportQuery = Object.assign({}, EmptyReportQuery);
 
-  @Input() selectedReportType: ReportType<any> = null;
+  @Input() selectedReportType: ReportType<ReportTypeFlags> = EmptyReportType;
 
   @Input() reportData: ReportData = Object.assign({}, EmptyReportData);
 

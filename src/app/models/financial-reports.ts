@@ -9,7 +9,7 @@ import { DateString } from '@app/core';
 
 import { DataTableColumn, DataTableItemType } from './data-table';
 
-import { ReportData, ReportEntry, ReportQuery } from './reporting';
+import { ReportData, ReportEntry, ReportQuery, ReportType } from './reporting';
 
 
 export interface FinancialReportTypeFlags {
@@ -54,6 +54,21 @@ export interface FinancialReportEntry extends ReportEntry {
 export interface FinancialReportBreakdown {
   financialReportEntry: FinancialReportEntry;
   financialReportBreakdown: FinancialReport;
+}
+
+
+export const EmptyFinancialReportTypeFlags: FinancialReportTypeFlags = {
+  getAccountsIntegration: false,
+  datePeriod: false,
+  singleDate: false,
+}
+
+
+export const EmptyFinancialReportType: ReportType<FinancialReportTypeFlags> = {
+  uid: '',
+  name: '',
+  show: EmptyFinancialReportTypeFlags,
+  exportTo: [],
 }
 
 

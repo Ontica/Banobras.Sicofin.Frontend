@@ -31,6 +31,7 @@
         [dataTable]="reportData"
         [executed]="queryExecuted"
         [selectedEntry]="selectedEntry?.financialReportEntry"
+        [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
         (dataTableEvent)="onDataTableEvent($event)">
 
       </emp-fa-data-table>

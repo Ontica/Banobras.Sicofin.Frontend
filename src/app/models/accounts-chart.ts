@@ -24,6 +24,22 @@ export interface AccountsChartMasterData {
 }
 
 
+export const EmtyAccountsChartMasterData: AccountsChartMasterData = {
+  uid: '',
+  name: '',
+  accountsPattern: '',
+  accountNumberSeparator: '',
+  maxAccountLevel: null,
+  startDate: '',
+  endDate: '',
+  accountRoles: [],
+  accountTypes: [],
+  currencies: [],
+  sectors: [],
+  ledgers: [],
+};
+
+
 export enum AccountRole {
 
   // Summary account (cuenta sumaria)

@@ -7,13 +7,13 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { EventInfo, Identifiable } from '@app/core';
+import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyOperationalReportQuery, EmptyOperationalReportTypeFlags,
-         OperationalReportQuery, OperationalReportTypeFlags, ReportGroup, ReportType,
-         SendTypesList } from '@app/models';
+import { AccountsChartMasterData, EmptyOperationalReportQuery, EmptyOperationalReportType,
+         EmptyOperationalReportTypeFlags, EmtyAccountsChartMasterData, OperationalReportQuery,
+         OperationalReportTypeFlags, ReportGroup, ReportType, SendTypesList } from '@app/models';
 
 import { AccountChartStateSelector,
          ReportingStateSelector } from '@app/presentation/exported.presentation.types';
@@ -39,11 +39,11 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
+  selectedAccountChart: AccountsChartMasterData = EmtyAccountsChartMasterData;
+
   query: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
 
-  selectedAccountChart = null;
-
-  selectedReportType: ReportType<OperationalReportTypeFlags> = null;
+  selectedReportType: ReportType<OperationalReportTypeFlags> = EmptyOperationalReportType;
 
   reportTypeList: ReportType<OperationalReportTypeFlags>[] = [];
 
@@ -60,7 +60,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadDataLists();
   }
 
@@ -71,11 +71,11 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   get showField(): OperationalReportTypeFlags  {
-    return this.selectedReportType?.show ?? EmptyOperationalReportTypeFlags;
+    return isEmpty(this.selectedReportType) ? EmptyOperationalReportTypeFlags : this.selectedReportType.show;
   }
 
 
-  get periodValid() {
+  get periodValid(): boolean {
     if (this.showField.datePeriod) {
       return !!this.query.fromDate && !!this.query.toDate;
     }
@@ -88,18 +88,13 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     this.selectedAccountChart = accountChart;
     this.setFilteredReportTypeList();
     this.onReportTypeChanges(null);
+    this.resetLedgers();
   }
 
 
   onReportTypeChanges(reportType: ReportType<OperationalReportTypeFlags>) {
-    this.selectedReportType = reportType ?? null;
-
-    this.query.reportType = reportType?.uid ?? null;
-    this.query.toDate = null;
-    this.query.fromDate = null;
-    this.query.ledgers = [];
-    this.query.accountNumber = null;
-    this.query.withSubledgerAccount = false;
+    this.selectedReportType = isEmpty(reportType) ? EmptyOperationalReportType: reportType;
+    this.query.reportType = this.selectedReportType.uid ?? '';
   }
 
 
@@ -135,8 +130,8 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   private setDefaultAccountsChartUID() {
     this.selectedAccountChart = this.accountsChartMasterDataList.length > 0 ?
-      this.accountsChartMasterDataList[0] : null;
-    this.query.accountsChartUID = this.selectedAccountChart?.uid;
+      this.accountsChartMasterDataList[0] : EmtyAccountsChartMasterData;
+    this.query.accountsChartUID = this.selectedAccountChart.uid;
   }
 
 
@@ -148,11 +143,15 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  private resetLedgers() {
+    this.query.ledgers = [];
+  }
+
+
   private getOperationalReportQuery(): OperationalReportQuery {
     const data: OperationalReportQuery = {
       reportType: this.query.reportType,
       accountsChartUID: this.query.accountsChartUID,
-      toDate: this.query.toDate,
     };
 
     this.validateQueryFields(data);
@@ -166,8 +165,13 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
       data.ledgers = this.query.ledgers ?? [];
     }
 
+    if (this.showField.singleDate) {
+      data.toDate = this.query.toDate ?? null;
+    }
+
     if (this.showField.datePeriod) {
-      data.fromDate = this.query.fromDate ?? '';
+      data.toDate = this.query.toDate ?? null;
+      data.fromDate = this.query.fromDate ?? null;
     }
 
     if (this.showField.sendType) {
@@ -175,7 +179,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     }
 
     if (this.showField.account) {
-      data.accountNumber = this.query.accountNumber ?? null;
+      data.accountNumber = this.query.accountNumber ?? '';
     }
 
     if (this.showField.withSubledgerAccount) {
