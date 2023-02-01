@@ -31,6 +31,12 @@ export enum PermissionsLibrary {
   FEATURE_POLIZAS_IMPORTACION_DESDE_ARCHIVOS = 'feature-polizas-importacion-desde-archivos',
   FEATURE_POLIZAS_IMPORTACION_SISTEMAS_TRANSVERSALES = 'feature-polizas-importacion-sistemas-transversales',
 
+  FEATURE_POLIZAS_ENVIAR_AL_DIARIO = 'feature-polizas-enviar-al-diario',
+  FEATURE_POLIZAS_ENVIAR_AL_SUPERVISOR = 'feature-polizas-enviar-al-supervisor',
+  FEATURE_POLIZAS_REASIGNAR = 'feature-polizas-reasignar',
+  FEATURE_POLIZAS_ELIMINAR = 'feature-polizas-eliminar',
+  FEATURE_POLIZAS_IMPRIMIR = 'feature-polizas-imprimir',
+
   //
   // SALDOS Y REPORTES
   //
@@ -96,6 +102,7 @@ export enum PermissionsLibrary {
   FEATURE_EXPORTACION_SALDOS_MENSUALES = 'feature-exportacion-saldos-mensuales',
   FEATURE_EXPORTACION_SALDOS_DIARIOS = 'feature-exportacion-saldos-diarios',
   FEATURE_SALDOS_ENCERRADOS = 'feature-saldos-encerrados',
+  FEATURE_SALDOS_ENCERRADOS_GENERAR_POLIZA = 'feature-saldos-encerrados-generar-poliza',
 
   // GENERACIÓN DE SALDOS
   ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',

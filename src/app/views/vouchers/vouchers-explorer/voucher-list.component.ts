@@ -17,11 +17,11 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
          tap } from 'rxjs/operators';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, EventInfo, Identifiable, isEmpty, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { View } from '@app/main-layout';
+import { PermissionsLibrary, View } from '@app/main-layout';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -31,8 +31,8 @@ import { VouchersDataService } from '@app/data-services';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { EmptyVoucher, mapVoucherStageFromViewName, Voucher, VoucherDescriptor, VouchersOperation,
-         VouchersOperationCommand, VouchersOperationList, VouchersOperationType,
+import { EmptyVoucher, getVoucherOperation, mapVoucherStageFromViewName, Voucher, VoucherDescriptor,
+         VouchersOperation, VouchersOperationCommand, VouchersOperationType,
          VoucherStage } from '@app/models';
 
 import { expandCollapse } from '@app/shared/animations/animations';
@@ -80,6 +80,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService,
+              private session: SessionService,
               private messageBox: MessageBoxService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
@@ -168,13 +169,42 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
   private setOperationListByCurrentView() {
     this.subscriptionHelper.select<View>(MainUIStateSelector.CURRENT_VIEW)
-      .subscribe(x => {
-        this.operationsList = [...[], ...VouchersOperationList];
-        const voucherStage = mapVoucherStageFromViewName(x.name);
-        if (voucherStage !== VoucherStage.ControlDesk) {
-          this.operationsList = this.operationsList.filter(y => y.uid !== VouchersOperationType.reasign);
-        }
-      });
+      .subscribe(x => this.setVouchersOperationList(x.name));
+  }
+
+
+  private setVouchersOperationList(viewName: string) {
+    let list: VouchersOperation[] = [];
+
+    const voucherStage = mapVoucherStageFromViewName(viewName);
+
+    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_ENVIAR_AL_DIARIO)) {
+      list.push(getVoucherOperation(VouchersOperationType.close));
+    }
+
+    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_ENVIAR_AL_SUPERVISOR)) {
+      list.push(getVoucherOperation(VouchersOperationType.sendToSupervisor));
+    }
+
+    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_REASIGNAR) &&
+        voucherStage === VoucherStage.ControlDesk) {
+      list.push(getVoucherOperation(VouchersOperationType.reasign));
+    }
+
+    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_ELIMINAR)) {
+      list.push(getVoucherOperation(VouchersOperationType.delete));
+    }
+
+    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_IMPRIMIR)) {
+      list.push(getVoucherOperation(VouchersOperationType.print));
+    }
+
+    this.operationsList = list;
+  }
+
+
+  private hasPermission(permission: string): boolean {
+    return this.session.hasPermission(permission);
   }
 
 

@@ -52,27 +52,29 @@ export enum EditorType {
 
 export const DateSearchFieldList: Identifiable[] = [
   {uid: 'AccountingDate', name: 'Fecha de afectación'},
-  {uid: 'RecordingDate', name: 'Fecha de elaboración'}
+  {uid: 'RecordingDate',  name: 'Fecha de elaboración'}
 ];
 
 
 export const EditorTypeList: Identifiable[] = [
   {uid: EditorType.ElaboratedBy, name: 'Elaborada por'},
   {uid: EditorType.AuthorizedBy, name: 'Autorizada por'},
-  {uid: EditorType.PostedBy, name: 'Enviada a diario por'},
+  {uid: EditorType.PostedBy,     name: 'Enviada a diario por'},
 ];
 
 
 export enum VouchersOperationType {
   close = 'close',
   sendToSupervisor = 'send-to-supervisor',
+  reasign = 'reasign',
   delete = 'delete',
   print = 'print',
-  reasign = 'reasign',
 }
 
 
 export interface VouchersOperation extends Identifiable {
+  uid: string;
+  name: string;
   assignToRequired?: boolean;
 }
 
@@ -84,6 +86,11 @@ export const VouchersOperationList: VouchersOperation[] = [
   {uid: VouchersOperationType.delete,           name: 'Eliminar'},
   {uid: VouchersOperationType.print,            name: 'Imprimir'},
 ];
+
+
+export function getVoucherOperation(operationType: VouchersOperationType): VouchersOperation {
+  return VouchersOperationList.find(x => x.uid === operationType);
+}
 
 
 export interface VouchersOperationCommand {
