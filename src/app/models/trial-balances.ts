@@ -25,42 +25,6 @@ export enum TrialBalanceTypes {
 }
 
 
-export const TrialBalanceTypeList: Identifiable[] = [
-  {
-    uid: TrialBalanceTypes.AnaliticoDeCuentas,
-    name: 'Analítico de cuentas',
-  },
-  {
-    uid: TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
-    name: 'Balanza con contabilidades en cascada',
-  },
-  {
-    uid: TrialBalanceTypes.BalanzaValorizadaComparativa,
-    name: 'Balanza de comparación entre períodos',
-  },
-  {
-    uid: TrialBalanceTypes.Balanza,
-    name: 'Balanza tradicional',
-  },
-  {
-    uid: TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-    name: 'Balanza en columnas por moneda origen',
-  },
-  {
-    uid: TrialBalanceTypes.BalanzaDolarizada,
-    name: 'Balanza dolarizada',
-  },
-  {
-    uid: TrialBalanceTypes.SaldosPorAuxiliar,
-    name: 'Saldos por auxiliar',
-  },
-  {
-    uid: TrialBalanceTypes.SaldosPorCuenta,
-    name: 'Saldos por cuenta',
-  },
-];
-
-
 export enum BalancesType {
   AllAccounts = 'AllAccounts',
   WithCurrentBalance = 'WithCurrentBalance',

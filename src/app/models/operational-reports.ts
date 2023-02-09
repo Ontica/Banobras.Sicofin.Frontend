@@ -69,6 +69,7 @@ export const EmptyOperationalReportTypeFlags: OperationalReportTypeFlags = {
 export const EmptyOperationalReportType: ReportType<OperationalReportTypeFlags> = {
   uid: '',
   name: '',
+  group: '',
   show: EmptyOperationalReportTypeFlags,
   exportTo: [],
 }

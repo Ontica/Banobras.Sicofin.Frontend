@@ -14,19 +14,21 @@ export const DefaultEndDate: DateString = '2049-12-31';
 
 
 export enum ReportGroup {
+  SaldosYBalanzas = 'SaldosYBalanzas',
+  ExploradorSaldos = 'ExploradorSaldos',
   ReportesFiscales = 'ReportesFiscales',
   ReportesRegulatorios = 'ReportesRegulatorios',
   ReportesOperativos = 'ReportesOperativos',
 }
 
 
-export interface ReportType<T> {
+export interface ReportType<T> extends Identifiable {
   uid: string;
   name: string;
-  group?: string;
+  group: string;
   accountsCharts?: string[];
-  show: T;
-  exportTo: FileType[] | ExportationType[];
+  show?: T;
+  exportTo?: FileType[] | ExportationType[];
   outputType?: Identifiable[];
   payloadType?: ReportPayloadType;
 }
@@ -96,8 +98,7 @@ export const EmptyReportTypeFlags: ReportTypeFlags = {
 export const EmptyReportType: ReportType<ReportTypeFlags> = {
   uid: '',
   name: '',
-  show: EmptyReportTypeFlags,
-  exportTo: [],
+  group: '',
 }
 
 

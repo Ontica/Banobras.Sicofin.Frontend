@@ -12,7 +12,7 @@
           <emp-ng-select name="accountsChartUID" required
             [(ngModel)]="formData.accountsChartUID"
             [items]="accountsChartMasterDataList"
-            [loading]="isLoading"
+            [loading]="isLoadingAccountsCharts"
             [showError]="!formData.accountsChartUID"
             (changes)="onAccountChartChanges()">
           </emp-ng-select>
@@ -25,7 +25,8 @@
 
           <emp-ng-select name="trialBalanceType" required
             [(ngModel)]="formData.trialBalanceType"
-            [items]="balanceTypeList"
+            [items]="reportTypeList"
+            [loading]="isLoadingReportTypes"
             [showError]="!formData.trialBalanceType"
             (changes)="onBalanceTypeChange()">
           </emp-ng-select>

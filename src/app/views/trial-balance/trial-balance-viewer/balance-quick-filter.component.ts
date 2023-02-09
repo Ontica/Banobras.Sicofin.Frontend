@@ -7,14 +7,14 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, BalanceExplorerQuery, BalanceExplorerTypes, BalanceExplorerTypeList, FileReportVersion,
-         emptyBalanceExplorerQuery } from '@app/models';
+import { AccountsChartMasterData, BalanceExplorerQuery, BalanceExplorerTypes, FileReportVersion,
+         emptyBalanceExplorerQuery, ReportType, ReportTypeFlags, ReportGroup } from '@app/models';
 
-import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector, ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -48,9 +48,11 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  balanceTypeList: Identifiable[] = BalanceExplorerTypeList ?? [];
+  reportTypeList: ReportType<ReportTypeFlags>[] = [];
 
-  isLoading = false;
+  isLoadingAccountsCharts = false;
+
+  isLoadingReportTypes = false;
 
   helper: SubscriptionHelper;
 
@@ -67,6 +69,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   ngOnInit() {
     this.loadAccountsCharts();
+    this.loadReportTypes();
   }
 
 
@@ -75,10 +78,11 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  get trialBalanceTypeSelected(): Identifiable {
+  get trialBalanceTypeSelected(): ReportType<ReportTypeFlags> {
     return !this.formData.trialBalanceType ? null :
-      this.balanceTypeList.find(x => x.uid === this.formData.trialBalanceType);
+      this.reportTypeList.find(x => x.uid === this.formData.trialBalanceType);
   }
+
 
   get accountChartSelected(): AccountsChartMasterData {
     return !this.formData.accountsChartUID ? null :
@@ -121,8 +125,8 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   onBuildBalanceClicked() {
     const payload = {
-      trialBalanceType: this.trialBalanceTypeSelected,
-      balancesQuery: this.getBalancesQuery(),
+      reportType: this.trialBalanceTypeSelected,
+      query: this.getBalancesQuery(),
     };
 
     sendEvent(this.balanceQuickFilterEvent, BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED, payload);
@@ -135,14 +139,25 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
 
   private loadAccountsCharts() {
-    this.isLoading = true;
+    this.isLoadingAccountsCharts = true;
 
     this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
       .subscribe(x => {
         this.accountsChartMasterDataList = x ?? [];
         this.setDefaultFields();
-        this.isLoading = false;
+        this.isLoadingAccountsCharts = false;
       });
+  }
+
+
+  private loadReportTypes() {
+    this.isLoadingReportTypes = true;
+
+    this.helper.select<ReportType<ReportTypeFlags>[]>(ReportingStateSelector.REPORT_TYPES_LIST)
+    .subscribe(x => {
+      this.reportTypeList = x.filter(y => y.group === ReportGroup.ExploradorSaldos);
+      this.isLoadingReportTypes = false;
+    });
   }
 
 
@@ -166,8 +181,8 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
     if (!this.formData.accountsChartUID) {
       this.formData.accountsChartUID = this.accountsChartMasterDataList[0] ?
         this.accountsChartMasterDataList[0].uid : null;
-      this.formData.trialBalanceType = this.balanceTypeList[0] ?
-        this.balanceTypeList[0].uid as BalanceExplorerTypes : null;
+      this.formData.trialBalanceType = this.reportTypeList[0] ?
+        this.reportTypeList[0].uid as BalanceExplorerTypes : null;
 
       this.formData.toDate = DateStringLibrary.today();
       this.validateValueOfInitPeriodFromDate(this.formData.toDate);

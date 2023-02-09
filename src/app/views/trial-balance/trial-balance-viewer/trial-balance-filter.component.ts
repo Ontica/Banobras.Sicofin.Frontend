@@ -15,10 +15,11 @@ import { ExchangeRatesDataService } from '@app/data-services';
 
 import { AccountsChartMasterData, getEmptyTrialBalanceQuery, getLevelsListFromPattern,
          mapToValidBalancePeriod, resetExchangeRateValues, TrialBalanceQuery,  BalancePeriod,
-         TrialBalanceTypes, TrialBalanceTypeList, BalancesTypeForBalanceList,
-         BalancesTypeForTrialBalanceList } from '@app/models';
+         TrialBalanceTypes, BalancesTypeForBalanceList, BalancesTypeForTrialBalanceList, ReportType,
+         ReportTypeFlags, EmtyAccountsChartMasterData, ReportGroup } from '@app/models';
 
-import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector,
+         ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
@@ -46,17 +47,19 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   accountChartSelected: AccountsChartMasterData = null;
 
+  query: TrialBalanceQuery = getEmptyTrialBalanceQuery();
+
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
-  trialBalanceQuery: TrialBalanceQuery = getEmptyTrialBalanceQuery();
-
-  trialBalanceTypeList: Identifiable[] = TrialBalanceTypeList;
+  reportTypeList: ReportType<ReportTypeFlags>[] = [];
 
   levelsList: Identifiable[] = [];
 
   balancesTypeList: Identifiable[] = [];
 
-  isLoading = false;
+  isLoadingAccountsCharts = false;
+
+  isLoadingReportTypes = false;
 
   helper: SubscriptionHelper;
 
@@ -68,6 +71,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadAccountsCharts();
+    this.loadReportTypes();
     this.setBalancesTypeList();
   }
 
@@ -77,15 +81,15 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get trialBalanceTypeSelected(): Identifiable {
-    return !this.trialBalanceQuery.trialBalanceType ? null :
-      this.trialBalanceTypeList.find(x => x.uid === this.trialBalanceQuery.trialBalanceType);
+  get trialBalanceTypeSelected(): ReportType<ReportTypeFlags> {
+    return !this.query.trialBalanceType ? null :
+      this.reportTypeList.find(x => x.uid === this.query.trialBalanceType);
   }
 
 
   get isBalanceSelected() {
     return [TrialBalanceTypes.SaldosPorCuenta,
-            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.query.trialBalanceType);
   }
 
 
@@ -94,19 +98,19 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
   get exchangeRatesRequired(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.BalanzaDolarizada].includes(this.query.trialBalanceType);
   }
 
 
   get useDefaultValuationDisabled(): boolean {
-    return [TrialBalanceTypes.BalanzaDolarizada].includes(this.trialBalanceQuery.trialBalanceType);
+    return [TrialBalanceTypes.BalanzaDolarizada].includes(this.query.trialBalanceType);
   }
 
 
@@ -115,13 +119,13 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.SaldosPorAuxiliar,
-            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
   get showCascadeBalancesRequired(): boolean {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
-            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.query.trialBalanceType);
   }
 
 
@@ -131,25 +135,25 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.SaldosPorAuxiliar,
-            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
   get withSubledgerAccountRequired(): boolean {
     return [TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.SaldosPorAuxiliar].includes(this.query.trialBalanceType);
   }
 
 
   get periodsRequired(): boolean {
     return [TrialBalanceTypes.BalanzaValorizadaComparativa]
-            .includes(this.trialBalanceQuery.trialBalanceType);
+            .includes(this.query.trialBalanceType);
   }
 
 
   get displayInitialPeriod() {
     return !this.isBalanceSelected &&
-           ![TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
+           ![TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
@@ -165,7 +169,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
-            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
@@ -173,65 +177,65 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     return ![TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
              TrialBalanceTypes.BalanzaDolarizada,
              TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
+             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
   get displayWithAverageBalance(): boolean {
     return ![TrialBalanceTypes.BalanzaDolarizada,
              TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
-             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.trialBalanceQuery.trialBalanceType);
+             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
   get displayWithSectorization(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
-            TrialBalanceTypes.Balanza].includes(this.trialBalanceQuery.trialBalanceType);
+            TrialBalanceTypes.Balanza].includes(this.query.trialBalanceType);
   }
 
 
   get trialBalanceFormFieldsValid(): boolean {
-    return !!this.trialBalanceQuery.trialBalanceType && !!this.trialBalanceQuery.accountsChartUID &&
+    return !!this.query.trialBalanceType && !!this.query.accountsChartUID &&
            this.initalPeriodDatesValid && this.finalPeriodDatesValid &&
-           !!this.trialBalanceQuery.balancesType;
+           !!this.query.balancesType;
   }
 
 
   get initalPeriodDatesValid(): boolean {
     if (this.displayInitialPeriod) {
-      return !!this.trialBalanceQuery.initialPeriod.fromDate &&
-             !!this.trialBalanceQuery.initialPeriod.toDate;
+      return !!this.query.initialPeriod.fromDate &&
+             !!this.query.initialPeriod.toDate;
     }
 
-    return !!this.trialBalanceQuery.initialPeriod.toDate;
+    return !!this.query.initialPeriod.toDate;
   }
 
 
   get finalPeriodDatesValid(): boolean {
     return !this.periodsRequired ? true :
-           !!this.trialBalanceQuery.finalPeriod.fromDate &&
-           !!this.trialBalanceQuery.finalPeriod.toDate;
+           !!this.query.finalPeriod.fromDate &&
+           !!this.query.finalPeriod.toDate;
   }
 
 
   get initialPeriodExchangeRateValid(): boolean  {
-    return this.trialBalanceQuery.useDefaultValuation ? true :
-      !!this.trialBalanceQuery.initialPeriod.exchangeRateDate &&
-      !!this.trialBalanceQuery.initialPeriod.exchangeRateTypeUID &&
-      !!this.trialBalanceQuery.initialPeriod.valuateToCurrrencyUID;
+    return this.query.useDefaultValuation ? true :
+      !!this.query.initialPeriod.exchangeRateDate &&
+      !!this.query.initialPeriod.exchangeRateTypeUID &&
+      !!this.query.initialPeriod.valuateToCurrrencyUID;
   }
 
 
   get finalPeriodExchangeRateValid(): boolean {
-    return this.trialBalanceQuery.useDefaultValuation ? true :
-      !!this.trialBalanceQuery.finalPeriod.exchangeRateTypeUID &&
-      !!this.trialBalanceQuery.finalPeriod.exchangeRateDate &&
-      !!this.trialBalanceQuery.finalPeriod.valuateToCurrrencyUID;
+    return this.query.useDefaultValuation ? true :
+      !!this.query.finalPeriod.exchangeRateTypeUID &&
+      !!this.query.finalPeriod.exchangeRateDate &&
+      !!this.query.finalPeriod.valuateToCurrrencyUID;
   }
 
 
   get exchangeRateFormFieldsValid(): boolean {
-    if (!this.trialBalanceQuery.useValuation) {
+    if (!this.query.useValuation) {
       return true;
     }
 
@@ -241,13 +245,13 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onTrialBalanceTypeChange() {
-    this.trialBalanceQuery.showCascadeBalances = this.showCascadeBalancesRequired;
-    this.trialBalanceQuery.withSubledgerAccount = this.withSubledgerAccountRequired;
+    this.query.showCascadeBalances = this.showCascadeBalancesRequired;
+    this.query.withSubledgerAccount = this.withSubledgerAccountRequired;
 
-    this.trialBalanceQuery.useValuation = this.exchangeRatesRequired;
-    this.trialBalanceQuery.useDefaultValuation = this.exchangeRatesRequired;
+    this.query.useValuation = this.exchangeRatesRequired;
+    this.query.useDefaultValuation = this.exchangeRatesRequired;
 
-    this.validateValueOfInitPeriodFromDate(this.trialBalanceQuery.initialPeriod.toDate);
+    this.validateValueOfInitPeriodFromDate(this.query.initialPeriod.toDate);
     this.setBalancesTypeList();
   }
 
@@ -271,9 +275,9 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onUseValuationChange() {
-    this.trialBalanceQuery.useDefaultValuation = true;
-    resetExchangeRateValues(this.trialBalanceQuery.initialPeriod);
-    resetExchangeRateValues(this.trialBalanceQuery.finalPeriod);
+    this.query.useDefaultValuation = true;
+    resetExchangeRateValues(this.query.initialPeriod);
+    resetExchangeRateValues(this.query.finalPeriod);
   }
 
 
@@ -300,7 +304,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   getExchangeRatesForDate(period: BalancePeriod) {
     period.exchangeRatesList = [];
 
-    if (!this.trialBalanceQuery.initialPeriod.exchangeRateDate) {
+    if (!this.query.initialPeriod.exchangeRateDate) {
       return;
     }
 
@@ -310,9 +314,9 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   onClearFilters() {
-    this.trialBalanceQuery = Object.assign({}, getEmptyTrialBalanceQuery(), {
-      trialBalanceType: this.trialBalanceQuery.trialBalanceType,
-      accountsChartUID: this.trialBalanceQuery.accountsChartUID,
+    this.query = Object.assign({}, getEmptyTrialBalanceQuery(), {
+      trialBalanceType: this.query.trialBalanceType,
+      accountsChartUID: this.query.accountsChartUID,
       balancesType: this.balancesTypeList[0] ? this.balancesTypeList[0].uid : '',
       useValuation: this.exchangeRatesRequired,
       showCascadeBalances: this.showCascadeBalancesRequired,
@@ -328,14 +332,14 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     Assertion.assert(this.trialBalanceFormFieldsValid,
       'Programming error: trialBalance form must be validated before query execution.');
 
-    if (this.trialBalanceQuery.useValuation) {
+    if (this.query.useValuation) {
       Assertion.assert(this.exchangeRateFormFieldsValid,
         'Programming error: exchangeRate form must be validated before query execution.');
     }
 
     const payload = {
-      trialBalanceType: this.trialBalanceTypeSelected,
-      trialBalanceQuery: this.getTrialBalanceQueryData(),
+      query: this.getTrialBalanceQueryData(),
+      reportType: this.trialBalanceTypeSelected,
     };
 
     sendEvent(this.trialBalanceFilterEvent, TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED, payload);
@@ -343,14 +347,26 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   private loadAccountsCharts() {
-    this.isLoading = true;
+    this.isLoadingAccountsCharts = true;
 
     this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
       .subscribe(x => {
         this.accountsChartMasterDataList = x;
+        this.setDefaultAccountsChartUID();
         this.setLevelsList();
-        this.isLoading = false;
+        this.isLoadingAccountsCharts = false;
       });
+  }
+
+
+  private loadReportTypes() {
+    this.isLoadingReportTypes = true;
+
+    this.helper.select<ReportType<ReportTypeFlags>[]>(ReportingStateSelector.REPORT_TYPES_LIST)
+    .subscribe(x => {
+      this.reportTypeList = x.filter(x => x.group === ReportGroup.SaldosYBalanzas);
+      this.isLoadingReportTypes = false;
+    });
   }
 
 
@@ -358,7 +374,14 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.balancesTypeList = this.isBalanceSelected ?  BalancesTypeForBalanceList :
       BalancesTypeForTrialBalanceList;
 
-    this.trialBalanceQuery.balancesType = this.balancesTypeList[0] ? this.balancesTypeList[0].uid : '';
+    this.query.balancesType = this.balancesTypeList.length > 0 ? this.balancesTypeList[0].uid : '';
+  }
+
+
+  private setDefaultAccountsChartUID() {
+    this.accountChartSelected = this.accountsChartMasterDataList.length > 0 ?
+      this.accountsChartMasterDataList[0] : EmtyAccountsChartMasterData;
+    this.query.accountsChartUID = this.accountChartSelected.uid;
   }
 
 
@@ -375,13 +398,13 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   private validateFieldToClear() {
-    this.trialBalanceQuery.ledgers = this.accountChartSelected.ledgers
-      .filter(x => this.trialBalanceQuery.ledgers.includes(x.uid))
+    this.query.ledgers = this.accountChartSelected.ledgers
+      .filter(x => this.query.ledgers.includes(x.uid))
       .map(x => x.uid);
 
-    this.trialBalanceQuery.level =
-      this.levelsList.filter(x => this.trialBalanceQuery.level + '' === x.uid).length > 0 ?
-      this.trialBalanceQuery.level : null;
+    this.query.level =
+      this.levelsList.filter(x => this.query.level + '' === x.uid).length > 0 ?
+      this.query.level : null;
   }
 
 
@@ -390,31 +413,28 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.trialBalanceQuery.initialPeriod.fromDate =
+    this.query.initialPeriod.fromDate =
       DateStringLibrary.getFirstDayOfMonthFromDateString(toDate);
   }
 
 
   private getTrialBalanceQueryData(): TrialBalanceQuery {
     const data: TrialBalanceQuery = {
-      trialBalanceType: this.trialBalanceQuery.trialBalanceType,
-      accountsChartUID: this.trialBalanceQuery.accountsChartUID,
-      ledgers: this.trialBalanceQuery.ledgers,
+      trialBalanceType: this.query.trialBalanceType,
+      accountsChartUID: this.query.accountsChartUID,
+      ledgers: this.query.ledgers,
       initialPeriod: {
-        fromDate: this.trialBalanceQuery.initialPeriod.fromDate,
-        toDate: this.trialBalanceQuery.initialPeriod.toDate,
+        fromDate: this.query.initialPeriod.fromDate,
+        toDate: this.query.initialPeriod.toDate,
       },
-      fromAccount: this.trialBalanceQuery.fromAccount,
-      showCascadeBalances: this.trialBalanceQuery.showCascadeBalances,
-      balancesType: this.trialBalanceQuery.balancesType,
-      useValuation: this.trialBalanceQuery.useValuation,
-      useDefaultValuation: this.trialBalanceQuery.useValuation ?
-        this.trialBalanceQuery.useDefaultValuation : false,
-      withAverageBalance: this.displayWithAverageBalance ?
-        this.trialBalanceQuery.withAverageBalance : false,
-      withSectorization: this.displayWithSectorization ?
-        this.trialBalanceQuery.withSectorization : false,
-      withSubledgerAccount: this.trialBalanceQuery.withSubledgerAccount,
+      fromAccount: this.query.fromAccount,
+      showCascadeBalances: this.query.showCascadeBalances,
+      balancesType: this.query.balancesType,
+      useValuation: this.query.useValuation,
+      useDefaultValuation: this.query.useValuation ? this.query.useDefaultValuation : false,
+      withAverageBalance: this.displayWithAverageBalance ? this.query.withAverageBalance : false,
+      withSectorization: this.displayWithSectorization ? this.query.withSectorization : false,
+      withSubledgerAccount: this.query.withSubledgerAccount,
     };
 
     this.validateQueryFields(data);
@@ -425,38 +445,38 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   private validateQueryFields(data: TrialBalanceQuery) {
     if (this.displayToAccount) {
-      data.toAccount = this.trialBalanceQuery.toAccount;
+      data.toAccount = this.query.toAccount;
     }
 
     if (this.displaySubledgerAccount) {
-      data.subledgerAccount = this.trialBalanceQuery.subledgerAccount;
+      data.subledgerAccount = this.query.subledgerAccount;
     }
 
     if (this.displayLevel) {
-      data.level = this.trialBalanceQuery.level;
+      data.level = this.query.level;
     }
   }
 
 
   private validateExchangeRatesFields(data: TrialBalanceQuery) {
-    if (this.trialBalanceQuery.useValuation) {
-      data.consolidateBalancesToTargetCurrency = this.trialBalanceQuery.useDefaultValuation ? false :
-        this.trialBalanceQuery.consolidateBalancesToTargetCurrency;
+    if (this.query.useValuation) {
+      data.consolidateBalancesToTargetCurrency = this.query.useDefaultValuation ? false :
+        this.query.consolidateBalancesToTargetCurrency;
 
-      if (!this.trialBalanceQuery.useDefaultValuation) {
+      if (!this.query.useDefaultValuation) {
         const initialPeriod: BalancePeriod = {
           fromDate: data.initialPeriod.fromDate,
           toDate: data.initialPeriod.toDate,
-          exchangeRateDate: this.trialBalanceQuery.initialPeriod.exchangeRateDate,
-          exchangeRateTypeUID: this.trialBalanceQuery.initialPeriod.exchangeRateTypeUID,
-          valuateToCurrrencyUID: this.trialBalanceQuery.initialPeriod.valuateToCurrrencyUID,
+          exchangeRateDate: this.query.initialPeriod.exchangeRateDate,
+          exchangeRateTypeUID: this.query.initialPeriod.exchangeRateTypeUID,
+          valuateToCurrrencyUID: this.query.initialPeriod.valuateToCurrrencyUID,
         };
         data.initialPeriod = initialPeriod;
       }
 
       if (this.periodsRequired) {
-        data.finalPeriod = mapToValidBalancePeriod(this.trialBalanceQuery.finalPeriod,
-                                                   this.trialBalanceQuery.useDefaultValuation);
+        data.finalPeriod = mapToValidBalancePeriod(this.query.finalPeriod,
+                                                   this.query.useDefaultValuation);
       }
     }
   }

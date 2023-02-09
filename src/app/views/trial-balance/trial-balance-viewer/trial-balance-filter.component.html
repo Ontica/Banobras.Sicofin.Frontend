@@ -12,9 +12,10 @@
 
           <emp-ng-select name="trialBalanceType" required
             [config]="{selectFirst: true}"
-            [(ngModel)]="trialBalanceQuery.trialBalanceType"
-            [items]="trialBalanceTypeList"
-            [showError]="!trialBalanceQuery.trialBalanceType"
+            [(ngModel)]="query.trialBalanceType"
+            [items]="reportTypeList"
+            [showError]="!query.trialBalanceType"
+            [loading]="isLoadingReportTypes"
             (changes)="onTrialBalanceTypeChange()">
           </emp-ng-select>
 
@@ -29,10 +30,10 @@
               <label>Período inicial:</label>
 
               <emp-ng-date-range-picker name="initialPeriod"
-                [(startDate)]="trialBalanceQuery.initialPeriod.fromDate"
-                [(endDate)]="trialBalanceQuery.initialPeriod.toDate"
-                [showError]="!trialBalanceQuery.initialPeriod.fromDate ||
-                             !trialBalanceQuery.initialPeriod.toDate">
+                [(startDate)]="query.initialPeriod.fromDate"
+                [(endDate)]="query.initialPeriod.toDate"
+                [showError]="!query.initialPeriod.fromDate ||
+                             !query.initialPeriod.toDate">
 
               </emp-ng-date-range-picker>
 
@@ -43,8 +44,8 @@
               <label>Fecha:</label>
 
               <emp-ng-datepicker name="date"
-                [(ngModel)]="trialBalanceQuery.initialPeriod.toDate"
-                [showError]="!trialBalanceQuery.initialPeriod.toDate"
+                [(ngModel)]="query.initialPeriod.toDate"
+                [showError]="!query.initialPeriod.toDate"
                 (valueChange)="onDatepickerInitialPeriodToDateChange($event)">
 
               </emp-ng-datepicker>
@@ -60,10 +61,10 @@
               <label>Período final:</label>
 
               <emp-ng-date-range-picker name="finalPeriod" #finalPeriodRangePicker
-                [(startDate)]="trialBalanceQuery.finalPeriod.fromDate"
-                [(endDate)]="trialBalanceQuery.finalPeriod.toDate"
-                [showError]="!trialBalanceQuery.finalPeriod.fromDate ||
-                             !trialBalanceQuery.finalPeriod.toDate">
+                [(startDate)]="query.finalPeriod.fromDate"
+                [(endDate)]="query.finalPeriod.toDate"
+                [showError]="!query.finalPeriod.fromDate ||
+                             !query.finalPeriod.toDate">
 
               </emp-ng-date-range-picker>
 
@@ -119,11 +120,10 @@
           <label>Catálogo de cuentas:</label>
 
           <emp-ng-select name="accountsChartUID" required
-            [config]="{selectFirst: true}"
-            [(ngModel)]="trialBalanceQuery.accountsChartUID"
+            [(ngModel)]="query.accountsChartUID"
             [items]="accountsChartMasterDataList"
-            [loading]="isLoading"
-            [showError]="!trialBalanceQuery.accountsChartUID"
+            [loading]="isLoadingAccountsCharts"
+            [showError]="!query.accountsChartUID"
             (changes)="onAccountChartChanges($event)">
           </emp-ng-select>
 
@@ -135,7 +135,7 @@
 
           <emp-ng-select name="ledger"
             [config]="{clearable: true, multiple: true}"
-            [(ngModel)]="trialBalanceQuery.ledgers"
+            [(ngModel)]="query.ledgers"
             [items]="accountChartSelected?.ledgers"
             bindLabel="fullName"
             [placeholder]="accountChartSelected ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'">
@@ -150,7 +150,7 @@
         <div fxFlex="25">
 
           <mat-checkbox name="withSubledgerAccount" [disabled]="withSubledgerAccountDisabled"
-            [(ngModel)]="trialBalanceQuery.withSubledgerAccount"
+            [(ngModel)]="query.withSubledgerAccount"
             [title]="withSubledgerAccountDisabled && !withSubledgerAccountRequired ? 'No aplica' : ''"
             (click)="$event.stopPropagation">
             Con Auxiliares
@@ -161,7 +161,7 @@
         <div fxFlex="25">
 
           <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesDisabled"
-            [(ngModel)]="trialBalanceQuery.showCascadeBalances"
+            [(ngModel)]="query.showCascadeBalances"
             [title]="showCascadeBalancesDisabled && !showCascadeBalancesRequired ? 'No aplica' : ''"
             (click)="$event.stopPropagation">
             Imprimir en cascada
@@ -172,7 +172,7 @@
         <div fxFlex="25">
 
           <mat-checkbox name="useValuation" [disabled]="exchangeRatesDisabled"
-            [(ngModel)]="trialBalanceQuery.useValuation"
+            [(ngModel)]="query.useValuation"
             [title]="exchangeRatesDisabled && !exchangeRatesRequired ? 'No aplica' : ''"
             (click)="$event.stopPropagation"
             (change)="onUseValuationChange()">
@@ -183,9 +183,9 @@
 
         <div fxFlex="25">
 
-          <mat-checkbox name="useDefaultValuation" *ngIf="trialBalanceQuery.useValuation"
+          <mat-checkbox name="useDefaultValuation" *ngIf="query.useValuation"
             [disabled]="useDefaultValuationDisabled"
-            [(ngModel)]="trialBalanceQuery.useDefaultValuation"
+            [(ngModel)]="query.useDefaultValuation"
             (click)="$event.stopPropagation"
             (change)="onUseDefaultValuationChange($event.checked)">
             Valorización default
@@ -211,8 +211,8 @@
             <label>{{displayToAccount ? 'De la cuenta:' : 'Con la cuenta:'}}</label>
 
             <input type="text" class="text-box" name="fromAccount"
-              [(ngModel)]="trialBalanceQuery.fromAccount"
-              (keyup.escape)="trialBalanceQuery.fromAccount = ''">
+              [(ngModel)]="query.fromAccount"
+              (keyup.escape)="query.fromAccount = ''">
 
           </div>
 
@@ -223,8 +223,8 @@
               <label>Con el auxiliar:</label>
 
               <input type="text" class="text-box" name="subledgerAccount"
-                [(ngModel)]="trialBalanceQuery.subledgerAccount"
-                (keyup.escape)="trialBalanceQuery.subledgerAccount = ''">
+                [(ngModel)]="query.subledgerAccount"
+                (keyup.escape)="query.subledgerAccount = ''">
 
             </ng-container>
 
@@ -233,8 +233,8 @@
               <label>A la cuenta:</label>
 
               <input type="text" class="text-box" name="toAccount"
-                [(ngModel)]="trialBalanceQuery.toAccount"
-                (keyup.escape)="trialBalanceQuery.toAccount = ''">
+                [(ngModel)]="query.toAccount"
+                (keyup.escape)="query.toAccount = ''">
 
             </ng-container>
 
@@ -246,9 +246,9 @@
             <label>Incluir:</label>
 
             <emp-ng-select name="balancesType" required
-              [(ngModel)]="trialBalanceQuery.balancesType"
+              [(ngModel)]="query.balancesType"
               [items]="balancesTypeList"
-              [showError]="!trialBalanceQuery.balancesType">
+              [showError]="!query.balancesType">
             </emp-ng-select>
 
           </div>
@@ -264,7 +264,7 @@
 
             <emp-ng-select name="level"
               [config]="{clearable: true}"
-              [(ngModel)]="trialBalanceQuery.level"
+              [(ngModel)]="query.level"
               [items]="levelsList"
               placeholder="Todos">
             </emp-ng-select>
@@ -275,7 +275,7 @@
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
             <mat-checkbox name="withAverageBalance"
-              [(ngModel)]="trialBalanceQuery.withAverageBalance"
+              [(ngModel)]="query.withAverageBalance"
               (click)="$event.stopPropagation">
               Con saldo promedio
             </mat-checkbox>
@@ -286,7 +286,7 @@
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
             <mat-checkbox name="withSectorization"
-              [(ngModel)]="trialBalanceQuery.withSectorization"
+              [(ngModel)]="query.withSectorization"
               (click)="$event.stopPropagation">
               Con sectorización
             </mat-checkbox>
@@ -299,7 +299,7 @@
 
 
       <div #exchangeRateFieldsContainer [@expandCollapse]
-        *ngIf="trialBalanceQuery.useValuation && !trialBalanceQuery.useDefaultValuation">
+        *ngIf="query.useValuation && !query.useDefaultValuation">
 
         <mat-divider class="horizontal"></mat-divider>
 
@@ -310,13 +310,13 @@
             <div class="section-title" *ngIf="periodsRequired"> Período inicial </div>
 
             <emp-fa-exchange-rate-selector #initialPeriodExchangeRates
-              [exchangeRatesList]="trialBalanceQuery.initialPeriod.exchangeRatesList"
-              [exchangeRateDate]="trialBalanceQuery.initialPeriod.exchangeRateDate"
-              [(exchangeRateTypeUID)]="trialBalanceQuery.initialPeriod.exchangeRateTypeUID"
-              [(valuateToCurrrencyUID)]="trialBalanceQuery.initialPeriod.valuateToCurrrencyUID"
-              [(consolidateBalancesToTargetCurrency)]="trialBalanceQuery.consolidateBalancesToTargetCurrency"
-              (exchangeRateDateChange)="onExchangeRateDateChanged(trialBalanceQuery.initialPeriod, $event)"
-              (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event, trialBalanceQuery.initialPeriod)">
+              [exchangeRatesList]="query.initialPeriod.exchangeRatesList"
+              [exchangeRateDate]="query.initialPeriod.exchangeRateDate"
+              [(exchangeRateTypeUID)]="query.initialPeriod.exchangeRateTypeUID"
+              [(valuateToCurrrencyUID)]="query.initialPeriod.valuateToCurrrencyUID"
+              [(consolidateBalancesToTargetCurrency)]="query.consolidateBalancesToTargetCurrency"
+              (exchangeRateDateChange)="onExchangeRateDateChanged(query.initialPeriod, $event)"
+              (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event, query.initialPeriod)">
 
             </emp-fa-exchange-rate-selector>
 
@@ -327,13 +327,13 @@
             <div class="section-title"> Período final </div>
 
             <emp-fa-exchange-rate-selector #finalPeriodExchangeRates
-              [exchangeRatesList]="trialBalanceQuery.finalPeriod.exchangeRatesList"
-              [exchangeRateDate]="trialBalanceQuery.finalPeriod.exchangeRateDate"
-              [(exchangeRateTypeUID)]="trialBalanceQuery.finalPeriod.exchangeRateTypeUID"
-              [(valuateToCurrrencyUID)]="trialBalanceQuery.finalPeriod.valuateToCurrrencyUID"
+              [exchangeRatesList]="query.finalPeriod.exchangeRatesList"
+              [exchangeRateDate]="query.finalPeriod.exchangeRateDate"
+              [(exchangeRateTypeUID)]="query.finalPeriod.exchangeRateTypeUID"
+              [(valuateToCurrrencyUID)]="query.finalPeriod.valuateToCurrrencyUID"
               [showConsolidateBalancesToTargetCurrency]="false"
-              (exchangeRateDateChange)="onExchangeRateDateChanged(trialBalanceQuery.finalPeriod, $event)"
-              (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event, trialBalanceQuery.finalPeriod)">
+              (exchangeRateDateChange)="onExchangeRateDateChanged(query.finalPeriod, $event)"
+              (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event, query.finalPeriod)">
 
             </emp-fa-exchange-rate-selector>
 

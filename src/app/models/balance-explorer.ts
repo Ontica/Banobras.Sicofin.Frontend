@@ -11,6 +11,8 @@ import { AccountDescriptor } from './accounts-chart';
 
 import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './data-table';
 
+import { ReportType, ReportTypeFlags } from './reporting';
+
 
 export interface AccountBalance {
   ledger: Identifiable;
@@ -31,18 +33,6 @@ export enum FileReportVersion {
   V1 = 'V1',
   V2 = 'V2',
 }
-
-
-export const BalanceExplorerTypeList: Identifiable[] = [
-  {
-    uid: BalanceExplorerTypes.SaldosPorCuentaConsultaRapida,
-    name: 'Saldos por cuenta',
-  },
-  {
-    uid: BalanceExplorerTypes.SaldosPorAuxiliarConsultaRapida,
-    name: 'Saldos por auxiliar',
-  },
-];
 
 
 export interface BalanceExplorerResult extends DataTable {
@@ -98,7 +88,7 @@ export function emptyBalanceExplorerQuery(): BalanceExplorerQuery {
 
 export interface BalanceExplorerData {
   balance: BalanceExplorerResult;
-  balanceType: Identifiable;
+  balanceType: ReportType<ReportTypeFlags>;
   queryExecuted: boolean;
 }
 

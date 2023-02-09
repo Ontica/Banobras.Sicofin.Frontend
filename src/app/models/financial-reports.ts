@@ -67,6 +67,7 @@ export const EmptyFinancialReportTypeFlags: FinancialReportTypeFlags = {
 export const EmptyFinancialReportType: ReportType<FinancialReportTypeFlags> = {
   uid: '',
   name: '',
+  group: '',
   show: EmptyFinancialReportTypeFlags,
   exportTo: [],
 }
