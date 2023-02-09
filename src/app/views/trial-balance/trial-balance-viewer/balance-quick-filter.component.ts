@@ -14,7 +14,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { AccountsChartMasterData, BalanceExplorerQuery, BalanceExplorerTypes, FileReportVersion,
          emptyBalanceExplorerQuery, ReportType, ReportTypeFlags, ReportGroup } from '@app/models';
 
-import { AccountChartStateSelector, ReportingStateSelector } from '@app/presentation/exported.presentation.types';
+import { AccountChartStateSelector,
+         ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -63,7 +64,6 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   ngOnChanges() {
     this.initFormData();
-    this.setDefaultFields();
   }
 
 
@@ -75,6 +75,11 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
   ngOnDestroy() {
     this.helper.destroy();
+  }
+
+
+  get isQueryExecuted(): boolean {
+    return !!this.balancesQuery.accountsChartUID && !!this.balancesQuery.trialBalanceType;
   }
 
 
@@ -144,7 +149,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
     this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
       .subscribe(x => {
         this.accountsChartMasterDataList = x ?? [];
-        this.setDefaultFields();
+        this.setDefaultAccountsChart();
         this.isLoadingAccountsCharts = false;
       });
   }
@@ -156,6 +161,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
     this.helper.select<ReportType<ReportTypeFlags>[]>(ReportingStateSelector.REPORT_TYPES_LIST)
     .subscribe(x => {
       this.reportTypeList = x.filter(y => y.group === ReportGroup.ExploradorSaldos);
+      this.setDefaultReportType();
       this.isLoadingReportTypes = false;
     });
   }
@@ -174,16 +180,31 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
       withSubledgerAccount: this.balancesQuery.withSubledgerAccount,
       withAllAccounts: this.balancesQuery.withAllAccounts,
     };
+
+    this.setDefaultAccountsChart();
+    this.setDefaultReportType();
+    this.setDefaultDates();
   }
 
 
-  private setDefaultFields() {
-    if (!this.formData.accountsChartUID) {
+  private setDefaultAccountsChart() {
+    if (!this.isQueryExecuted) {
       this.formData.accountsChartUID = this.accountsChartMasterDataList[0] ?
         this.accountsChartMasterDataList[0].uid : null;
+    }
+  }
+
+
+  private setDefaultReportType() {
+    if (!this.isQueryExecuted) {
       this.formData.trialBalanceType = this.reportTypeList[0] ?
         this.reportTypeList[0].uid as BalanceExplorerTypes : null;
+    }
+  }
 
+
+  private setDefaultDates() {
+    if (!this.isQueryExecuted) {
       this.formData.toDate = DateStringLibrary.today();
       this.validateValueOfInitPeriodFromDate(this.formData.toDate);
     }
