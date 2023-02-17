@@ -15,4 +15,12 @@ export class Cryptography {
     return CryptoJS.SHA256(value).toString();
   }
 
+  static encryptAES(key: string, value: string): string {
+    return CryptoJS.AES.encrypt(value, key).toString();
+  }
+
+  static decryptAES(key: string, value: string): string {
+    return CryptoJS.AES.decrypt(value, key).toString(CryptoJS.enc.Utf8);
+  }
+
 }

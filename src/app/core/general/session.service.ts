@@ -7,11 +7,15 @@
 
 import { Injectable } from '@angular/core';
 
-import { Assertion } from '../general/assertion';
+import { ROUTES_LIST } from '@app/main-layout';
 
 import { ApplicationSettingsService } from './application-settings.service';
 
 import { ApplicationSettings } from './application-settings';
+
+import { LocalStorageService, StorageKeys } from './local-storage.service';
+
+import { Assertion } from '../general/assertion';
 
 import { Principal } from '../security/principal';
 
@@ -19,9 +23,7 @@ import { KeyValue } from '../data-types/key-value';
 
 import { Identity, SessionToken } from '../security/security-types';
 
-import { LocalStorageService } from './local-storage.service';
-
-import { ROUTES_LIST } from '@app/main-layout';
+import { CORRUPT_LOCAL_STORAGE_MESSAGE } from '../errors/error-messages';
 
 
 @Injectable()
@@ -43,12 +45,12 @@ export class SessionService {
 
 
   getSessionToken(): SessionToken {
-    return this.localStorage.get<SessionToken>('sessionToken');
+    return this.localStorage.get<SessionToken>(StorageKeys.sessionToken);
   }
 
 
   setSessionToken(sessionToken: SessionToken) {
-    this.localStorage.set<SessionToken>('sessionToken', sessionToken);
+    this.localStorage.set<SessionToken>(StorageKeys.sessionToken, sessionToken);
   }
 
 
@@ -133,16 +135,20 @@ export class SessionService {
 
   private setPrincipalFromLocalStorage() {
     const sessionToken = this.getSessionToken();
-    Assertion.assertValue(sessionToken.accessToken, 'sessionToken.accessToken');
 
-    if (!!sessionToken && !!sessionToken.accessToken) {
-      const identity =  this.localStorage.get<Identity>('identity') ?? null;
-      const permissions = this.localStorage.get<string[]>('permissions') ?? null;
-      const defaultRoute = this.localStorage.get<string>('defaultRoute') ?? null;
+    if (!!sessionToken) {
+      Assertion.assertValue(sessionToken.accessToken, 'sessionToken.accessToken');
 
-      Assertion.assert(typeof identity.name === 'string', 'corrupted identity, must be a string.');
-      Assertion.assert(permissions instanceof Array, 'corrupted permissions, must be an array of strings.');
-      Assertion.assert(typeof defaultRoute === 'string', 'corrupted defaultRoute, must be a string.');
+      const identity =  this.localStorage.get<Identity>(StorageKeys.identity) ?? null;
+      const permissions = this.localStorage.get<string[]>(StorageKeys.permissions) ?? null;
+      const defaultRoute = this.localStorage.get<string>(StorageKeys.defaultRoute) ?? null;
+
+      Assertion.assert(identity && typeof identity.name === 'string',
+        `${CORRUPT_LOCAL_STORAGE_MESSAGE}: ${StorageKeys.identity}`);
+      Assertion.assert(permissions instanceof Array,
+        `${CORRUPT_LOCAL_STORAGE_MESSAGE}: ${StorageKeys.permissions}`);
+      Assertion.assert(typeof defaultRoute === 'string',
+        `${CORRUPT_LOCAL_STORAGE_MESSAGE}: ${StorageKeys.defaultRoute}`);
 
       this.principal = new Principal(sessionToken, identity, permissions, defaultRoute);
     }
@@ -150,10 +156,10 @@ export class SessionService {
 
 
   private setPrincipalToLocalStorage() {
-    this.localStorage.set<SessionToken>('sessionToken', this.principal.sessionToken);
-    this.localStorage.set<Identity>('identity', this.principal.identity);
-    this.localStorage.set<string[]>('permissions', this.principal.permissions);
-    this.localStorage.set<string>('defaultRoute', this.principal.defaultRoute);
+    this.localStorage.set<SessionToken>(StorageKeys.sessionToken, this.principal.sessionToken);
+    this.localStorage.set<Identity>(StorageKeys.identity, this.principal.identity);
+    this.localStorage.set<string[]>(StorageKeys.permissions, this.principal.permissions);
+    this.localStorage.set<string>(StorageKeys.defaultRoute, this.principal.defaultRoute);
   }
 
 }
