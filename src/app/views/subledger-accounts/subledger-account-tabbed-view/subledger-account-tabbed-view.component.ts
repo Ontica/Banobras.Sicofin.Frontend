@@ -72,7 +72,7 @@ export class SubledgerAccountTabbedViewComponent implements OnChanges {
     this.hint = this.subledgerAccount.ledger.name;
 
     if (this.subledgerAccount.suspended) {
-      this.hint += '<span class="tag-error tag-small"">Suspendido</span>';
+      this.hint += '<span class="tag tag-error tag-small"">Suspendido</span>';
     }
   }
 

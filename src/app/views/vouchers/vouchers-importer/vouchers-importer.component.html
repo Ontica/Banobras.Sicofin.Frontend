@@ -197,14 +197,14 @@
 
             <ng-container *ngIf="importVouchersResult.isRunning">
               <span>Información de pólizas en proceso de importación</span>
-              <span *ngIf="executedDryRun" class="tag-info tag-small" [style.marginBottom.px]="1">
+              <span *ngIf="executedDryRun" class="tag tag-info tag-small" [style.marginBottom.px]="1">
                 En ejecución
               </span>
             </ng-container>
 
             <ng-container *ngIf="!importVouchersResult.isRunning">
               <span>Información a importar</span>
-              <span *ngIf="executedDryRun" class="tag-error tag-small" [style.marginBottom.px]="1">
+              <span *ngIf="executedDryRun" class="tag tag-error tag-small" [style.marginBottom.px]="1">
                 Detenido
               </span>
             </ng-container>
