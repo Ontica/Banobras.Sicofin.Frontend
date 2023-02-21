@@ -6,12 +6,21 @@
     </mat-icon>
   </a>
 
-  <button *ngIf="!menuConfig.modeOnlyIcon" mat-button [matMenuTriggerFor]="menu">
-    <mat-icon *ngIf="menuConfig.icon">
-      {{menuConfig.icon}}
-    </mat-icon>
-    {{menuConfig.textButton}}
-  </button>
+  <ng-container *ngIf="!menuConfig.modeOnlyIcon">
+
+    <button *ngIf="!!menuConfig.icon" mat-button [matMenuTriggerFor]="menu">
+      <mat-icon *ngIf="menuConfig.icon">
+        {{menuConfig.icon}}
+      </mat-icon>
+      {{menuConfig.textButton}}
+    </button>
+
+    <button *ngIf="!menuConfig.icon" class="btn" [matMenuTriggerFor]="menu">
+      {{menuConfig.textButton}}
+    </button>
+
+  </ng-container>
+
 
   <mat-menu #menu="matMenu" [yPosition]="menuConfig.yPosition" [xPosition]="menuConfig.xPosition">
 
