@@ -54,12 +54,12 @@ const routes: Routes = [
     path: ROUTES_LIBRARY.unauthorized.path,
     canActivate: [SecurityGuard],
     component: MainLayoutComponent,
-    loadChildren: () => import('./views/unauthorized/unauthorized.module')
+    loadChildren: () => import('./views/_unauthorized/unauthorized.module')
                               .then(m => m.UnauthorizedModule)
   },
   {
     path: ROUTES_LIBRARY.security.path,
-    loadChildren: () => import('./views/security/security-ui.module')
+    loadChildren: () => import('./views/_security/security-ui.module')
                               .then(m => m.SecurityUIModule)
   },
   { path: '', redirectTo: DEFAULT_URL, pathMatch: 'full' },

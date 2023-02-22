@@ -15,7 +15,7 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedDirectivesModule } from '@app/shared/directives/shared-directives.module';
 import { SharedFormControlsModule } from '@app/shared/form-controls/shared-form-controls.module';
 import { SharedIndicatorsModule } from '@app/shared/indicators/shared-indicators.module';
-import { ToolsModule } from '@app/views/tools/tools.module';
+import { ToolsModule } from '@app/views/_tools/tools.module';
 
 import { FooterComponent } from './footer/footer.component';
 import { MainLayoutComponent } from './main-layout.component';

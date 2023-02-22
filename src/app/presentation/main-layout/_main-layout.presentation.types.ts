@@ -12,6 +12,8 @@ export { ActionType as MainUIStateAction } from './main-layout.presentation.hand
 export type MainLayoutActions = MainUIStateAction;
 
 
+/* Selectors */
+
 import { SelectorType as MainUIStateSelector } from './main-layout.presentation.handler';
 export { SelectorType as MainUIStateSelector } from './main-layout.presentation.handler';
 
