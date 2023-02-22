@@ -5,6 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+export * from './_access-control.data.service';
 export * from './accounting-calendars.data.service';
 export * from './accounts-chart.data.service';
 export * from './accounts-edition.data.service';
