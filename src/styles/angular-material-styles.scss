@@ -315,6 +315,11 @@ table.mat-table {
       text-decoration: underline;
       white-space: nowrap;
     }
+
+    .text-highlight {
+      font-size: $font-size-grid * 1.1;
+      color: $primary-color;
+    }
   }
 
   tr {
@@ -801,6 +806,22 @@ table.mat-table.emp-designer {
 .mat-radio-button .mat-radio-inner-circle {
   color: $checkbox-background-color !important;
   background-color: $checkbox-background-color !important;
+}
+
+.radio-group-vertical {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  align-items: flex-start;
+}
+
+.radio-button-vertical {
+  margin: 8px 8px 8px 0;
+}
+
+.radio-button-vertical ~ .radio-button-vertical {
+  margin-left: 0;
 }
 
 //
