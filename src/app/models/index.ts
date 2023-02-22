@@ -18,6 +18,8 @@
 // needed for external services interaction.
 //
 
+export * from './_access-control';
+
 export * from './accounting-calendar';
 
 export * from './account-statement';

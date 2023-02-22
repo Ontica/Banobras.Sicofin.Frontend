@@ -1,0 +1,71 @@
+<form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
+
+  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <div [fxFlex]="100/3">
+
+        <label>Tipo de consulta:</label>
+
+        <emp-ng-select name="queryType" #queryType="ngModel" required
+          [config]="{selectFirst: true, bindByValue: false}"
+          [(ngModel)]="formData.queryType"
+          [items]="queryTypesList"
+          [showError]="queryType.invalid">
+        </emp-ng-select>
+
+      </div>
+
+      <div [fxFlex]="100/3">
+
+        <label>Aplicación:</label>
+
+        <emp-ng-select name="context" #context="ngModel" required
+          [config]="{selectFirst: true, bindByValue: false}"
+          [(ngModel)]="formData.context"
+          [items]="contextsList"
+          [loading]="isLoading"
+          [showError]="context.invalid">
+        </emp-ng-select>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="start end">
+
+        <div class="input-search-container">
+
+          <input type="text" class="text-box" name="keywords" #keywords="ngModel"
+            placeholder="Buscar..."
+            [(ngModel)]="formData.keywords"
+            [class.invalid-control]="keywords.invalid"
+            (keyup.escape)="onClearKeyword()">
+
+        </div>
+
+      </div>
+
+      <div fxFlex="36px" fxFlex.lt-md="none"
+        [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+
+        <button title="Buscar"
+          [class.btn-icon]="form.invalid"
+          [class.btn-icon-action]="form.valid"
+          [disabled]="form.invalid"
+          (click)="onSearchClicked()">
+
+          <mat-icon>search</mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
+
+<mat-divider>
+
+</mat-divider>

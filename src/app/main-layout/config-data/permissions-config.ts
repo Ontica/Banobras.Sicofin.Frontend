@@ -111,8 +111,8 @@ export enum PermissionsLibrary {
   ROUTE_TIPOS_CAMBIO = 'route-tipos-cambio',
   FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
 
-  // USUARIOS Y PERMISOS
-  ROUTE_USUARIOS_Y_PERMISOS = 'route-usuarios-y-permisos',
+  // CONTROL DE ACCESOS
+  ROUTE_CONTROL_DE_ACCESOS = 'route-control-de-accesos',
 }
 
 
@@ -282,6 +282,12 @@ export const ROUTES_LIBRARY = {
     parent: 'administracion',
     path: 'tipos-de-cambio',
     fullpath: '/administracion/tipos-de-cambio',
+  },
+  administracion_control_de_accesos: {
+    permission: PermissionsLibrary.ROUTE_CONTROL_DE_ACCESOS,
+    parent: 'administracion',
+    path: 'control-de-accesos',
+    fullpath: '/administracion/control-de-accesos',
   },
 
   // #endregion

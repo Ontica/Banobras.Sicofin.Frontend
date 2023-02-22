@@ -1,0 +1,117 @@
+<form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+  autocomplete="off" class="form-section">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+    <div fxLayout="row">
+
+        <div [fxFlex]="200/3">
+          <label>Nombre:</label>
+          <input type="text" class="text-box"
+            [formControlName]="controls.fullName"
+            [class.invalid-control]="formHandler.showInvalidControl(controls.fullName)">
+        </div>
+
+        <div [fxFlex]="100/3">
+          <label>Usuario:</label>
+          <input type="text" class="text-box"
+            [formControlName]="controls.nickName"
+            [class.invalid-control]="formHandler.showInvalidControl(controls.nickName)">
+        </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="200/3">
+        <label>Correo:</label>
+        <input type="text" class="text-box"
+          [formControlName]="controls.eMail"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.eMail)">
+      </div>
+
+      <div [fxFlex]="100/3">
+        <label>Identificador:</label>
+        <input type="text" class="text-box"
+          [formControlName]="controls.userID"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.userID)">
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <mat-divider class="horizontal" *ngIf="!isSaved || (isSaved && canEdit)"></mat-divider>
+
+
+  <div #rowFooter fxLayout="row">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button (click)="onSubmitForm()"
+          [class.btn]="!formHandler.isValid"
+          [class.btn-action]="formHandler.isValid">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved && canEdit">
+
+      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+
+        <button *ngIf="!isSuspended"
+          type="button" class="btn-warning"
+          (click)="onSuspendButtonClicked()">
+          Suspender
+        </button>
+
+        <button *ngIf="isSuspended"
+          type="button" class="btn-action"
+          (click)="onActiveButtonClicked()">
+          Activar
+        </button>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <ng-container *ngIf="editionMode">
+
+          <button (click)="onSubmitForm()"
+            [class.btn]="!formHandler.isValid"
+            [class.btn-action]="formHandler.isValid">
+            Guardar
+          </button>
+
+          <button (click)="enableEditor(false)"
+            class="btn-base uppercase">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
+            Editar
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

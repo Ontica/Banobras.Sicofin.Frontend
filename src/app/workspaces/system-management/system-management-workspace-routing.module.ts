@@ -12,6 +12,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { ROUTES_LIBRARY } from '@app/main-layout';
 
 import {
+  AccessControlMainPageComponent
+} from './access-control-main-page/access-control-main-page.component';
+
+import {
   BalanceGenerationMainPageComponent
 } from './balance-generation-main-page/balance-generation-main-page.component';
 
@@ -37,6 +41,11 @@ const routes: Routes = [
     data: { permission: ROUTES_LIBRARY.administracion_tipos_de_cambio.permission },
     path: ROUTES_LIBRARY.administracion_tipos_de_cambio.path,
     component: ExchangeRatesMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES_LIBRARY.administracion_control_de_accesos.permission },
+    path: ROUTES_LIBRARY.administracion_control_de_accesos.path,
+    component: AccessControlMainPageComponent,
   },
   {
     path: '',

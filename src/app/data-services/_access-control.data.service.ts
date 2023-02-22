@@ -9,7 +9,9 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { HttpService, Identifiable } from '@app/core';
+import { Assertion, HttpService, Identifiable } from '@app/core';
+
+import { Subject } from '@app/models';
 
 
 @Injectable()
@@ -20,6 +22,48 @@ export class AccessControlDataService {
 
   getContexts(): Observable<Identifiable[]> {
     const path = `v4/onepoint/security/management/contexts`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  searchSubjects(contextUID: string, keywords: string): Observable<Subject[]> {
+    Assertion.assertValue(contextUID, 'contextUID');
+
+    let path = `v4/onepoint/security/management/subjects/?contextuid=${contextUID}`;
+
+    if (!!keywords) {
+      path += `&keywords=${keywords}`;
+    }
+
+    return this.http.get<Subject[]>(path);
+  }
+
+
+  getSubjectContexts(subjectUID: string): Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getSubjectRolesByContext(subjectUID: string, contextUID: string): Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts/${contextUID}/roles`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getSubjectFeaturesByContext(subjectUID: string, contextUID: string): Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts/${contextUID}/features`;
 
     return this.http.get<Identifiable[]>(path);
   }

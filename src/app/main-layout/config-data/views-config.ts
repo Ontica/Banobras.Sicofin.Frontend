@@ -139,6 +139,12 @@ export const AccountingSystemManagementViews: View[] = [
     url: ROUTES_LIBRARY.administracion_tipos_de_cambio.fullpath,
     permission: ROUTES_LIBRARY.administracion_tipos_de_cambio.permission,
   },
+  {
+    name: 'AccountingSystemManagementViews.AccessControl',
+    title: 'Control de accesos',
+    url: ROUTES_LIBRARY.administracion_control_de_accesos.fullpath,
+    permission: ROUTES_LIBRARY.administracion_control_de_accesos.permission,
+  },
 ];
 
 
