@@ -141,7 +141,7 @@ export class ExternalVariablesEditionComponent {
   private getExternalVariables(query: ExternalVariablesDatasetsQuery) {
     this.isLoading = true;
 
-    this.externalVariablesData.getExternalVariables(query.externalVariablesSetUID)
+    this.externalVariablesData.getExternalVariables(query.externalVariablesSetUID, query.date)
       .toPromise()
       .then(x => this.setExternalVariablesList(x, true))
       .catch(e => this.setExternalVariablesList([], false))

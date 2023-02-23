@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, DateString, HttpService } from '@app/core';
 
 import { ExternalValuesData, ExternalValuesImportDatasetCommand, ExternalValuesDatasetsQuery,
          ExternalValuesQuery, ExternalVariableSet, FileReport, ImportDatasets, ExternalVariable,
@@ -29,8 +29,14 @@ export class ExternalVariablesDataService {
   }
 
 
-  getExternalVariables(setUID: string): Observable<ExternalVariable[]> {
-    const path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}/variables`;
+  getExternalVariables(setUID: string, date?: DateString): Observable<ExternalVariable[]> {
+    Assertion.assertValue(setUID, 'setUID');
+
+    let path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}/variables`;
+
+    if (!!date) {
+      path += `/?date=${date}`;
+    }
 
     return this.http.get<ExternalVariable[]>(path);
   }
