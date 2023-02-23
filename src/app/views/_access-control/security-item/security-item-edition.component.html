@@ -8,12 +8,12 @@
 
     <div fxFlex fxLayoutAlign="start center">
 
-      <emp-ng-select *ngIf="filterRequired"
-        name="selectedFilter" [fxFlex]="50"
-        [(ngModel)]="selectedFilter" [ngModelOptions]="{standalone: true}"
-        [items]="itemsForFilterList"
+      <emp-ng-select *ngIf="selectorRequired"
+        name="selectedSelector" [fxFlex]="50"
+        [(ngModel)]="selectedSelectorUID" [ngModelOptions]="{standalone: true}"
+        [items]="itemsForSelectorList"
         placeholder="Seleccione la aplicación"
-        (changes)="onSelectedFilterChanges($event)">
+        (changes)="onSelectedSelectorChanges($event)">
       </emp-ng-select>
 
     </div>
@@ -21,9 +21,9 @@
     <div *ngIf="canEdit" fxFlex="none" fxLayoutAlign="end center">
 
       <button
-        [disabled]="!isFilterValid"
-        [class.btn]="!isFilterValid"
-        [class.btn-action]="isFilterValid"
+        [disabled]="!isSelectorValid"
+        [class.btn]="!isSelectorValid"
+        [class.btn-action]="isSelectorValid"
         [style.marginLeft.px]="8"
         (click)="onAssignItemButtonClicked()">
         Agregar {{itemTypeName}}
@@ -77,12 +77,12 @@
 
     <div class="card-body-padding" [empNgSpinnerHost]="spinnerAssign">
 
-      <emp-ng-spinner #spinnerAssign [visible]="displayItemAssign && submitted">
-
-      </emp-ng-spinner>
-
       <form #addItemform="ngForm" empNgFormKeyDownEnter
         autocomplete="off" class="form-section">
+
+        <emp-ng-spinner #spinnerAssign [visible]="displayItemAssign && submitted">
+
+        </emp-ng-spinner>
 
         <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
@@ -90,33 +90,37 @@
             No se encontraron elementos a agregar.
           </div>
 
-          <mat-radio-group *ngIf="itemsToAssignValidsList.length > 0"
-            [(ngModel)]="itemToAssign" required
-            name="itemToAssign" class="radio-group-vertical">
+          <div *ngIf="itemsToAssignValidsList.length > 0" class="items-container">
 
-            <mat-radio-button *ngFor="let item of itemsToAssignValidsList"
-              [value]="item"
-              class="radio-button-vertical">
-              {{item.name}}
-            </mat-radio-button>
+            <mat-radio-group
+              [(ngModel)]="itemToAssign" required
+              name="itemToAssign" class="radio-group-vertical">
 
-          </mat-radio-group>
+              <mat-radio-button *ngFor="let item of itemsToAssignValidsList"
+                [value]="item"
+                class="radio-button-vertical">
+                {{item.name}}
+              </mat-radio-button>
 
-        </div>
+            </mat-radio-group>
 
-        <mat-divider class="horizontal"></mat-divider>
+          </div>
 
-        <div #rowFooter fxLayout="row">
+          <mat-divider></mat-divider>
 
-          <div fxFlex fxLayoutAlign="end center">
+          <div #rowFooter fxLayout="row">
 
-            <button
-              [disabled]="!isItemToAssignValid"
-              [class.btn]="!isItemToAssignValid"
-              [class.btn-action]="isItemToAssignValid"
-              (click)="onAssignItem()">
-              Agregar
-            </button>
+            <div fxFlex fxLayoutAlign="end center">
+
+              <button
+                [disabled]="!isItemToAssignValid"
+                [class.btn]="!isItemToAssignValid"
+                [class.btn-action]="isItemToAssignValid"
+                (click)="onAssignItem()">
+                Agregar
+              </button>
+
+            </div>
 
           </div>
 

@@ -22,8 +22,8 @@
 
           <emp-ng-security-item-edition
             [itemsList]="subjectContextsList"
-            [itemsToAssignList]="contextsList"
             [canEdit]="canEdit"
+            [itemsToAssignList]="contextsList"
             [submitted]="submitted"
             itemTypeName="Aplicación"
             (securityItemEditionEvent)="onSubjectContextsEditionEvent($event)">
@@ -40,10 +40,12 @@
 
       <emp-ng-security-item-edition
         [itemsList]="subjectRolesList"
-        [itemsForFilterList]="subjectContextsList"
-        [filterRequired]="true"
         [canEdit]="canEdit"
+        [itemsForSelectorList]="subjectContextsList"
+        [selectorRequired]="true"
         [queryExcecuted]="isSubjectRolesExcecuted"
+        [itemsToAssignList]="rolesList"
+        [submitted]="submitted"
         itemTypeName="Rol"
         (securityItemEditionEvent)="onSubjectRolesEditionEvent($event)">
 
@@ -55,10 +57,12 @@
 
       <emp-ng-security-item-edition
         [itemsList]="subjectFeaturesList"
-        [itemsForFilterList]="subjectContextsList"
-        [filterRequired]="true"
         [canEdit]="canEdit"
+        [itemsForSelectorList]="subjectContextsList"
+        [selectorRequired]="true"
         [queryExcecuted]="isSubjectFeaturesExcecuted"
+        [itemsToAssignList]="featuresList"
+        [submitted]="submitted"
         itemTypeName="Permiso"
         (securityItemEditionEvent)="onSubjectFeaturesEditionEvent($event)">
 

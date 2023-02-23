@@ -27,6 +27,20 @@ export class AccessControlDataService {
   }
 
 
+  getRolesByContext(contextUID: string): Observable<Identifiable[]> {
+    const path = `v4/onepoint/security/management/contexts/${contextUID}/roles`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
+  getFeaturesByContext(contextUID: string): Observable<Identifiable[]> {
+    const path = `v4/onepoint/security/management/contexts/${contextUID}/features`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   searchSubjects(contextUID: string, keywords: string): Observable<Subject[]> {
     Assertion.assertValue(contextUID, 'contextUID');
 
@@ -84,6 +98,54 @@ export class AccessControlDataService {
     Assertion.assertValue(contextUID, 'contextUID');
 
     const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts/${contextUID}`;
+
+    return this.http.delete<Identifiable[]>(path);
+  }
+
+
+  assignRoleToSubject(subjectUID: string, contextUID: string, roleUID: string):Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+    Assertion.assertValue(roleUID, 'roleUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}` +
+      `/contexts/${contextUID}/roles/${roleUID}`;
+
+    return this.http.post<Identifiable[]>(path);
+  }
+
+
+  removeRoleToSubject(subjectUID: string, contextUID: string, roleUID: string):Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+    Assertion.assertValue(roleUID, 'roleUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}` +
+      `/contexts/${contextUID}/roles/${roleUID}`;
+
+    return this.http.delete<Identifiable[]>(path);
+  }
+
+
+  assignFeatureToSubject(subjectUID: string, contextUID: string, featureUID: string):Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+    Assertion.assertValue(featureUID, 'featureUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}` +
+      `/contexts/${contextUID}/features/${featureUID}`;
+
+    return this.http.post<Identifiable[]>(path);
+  }
+
+
+  removeFeatureToSubject(subjectUID: string, contextUID: string, featureUID: string):Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+    Assertion.assertValue(featureUID, 'featureUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}` +
+      `/contexts/${contextUID}/features/${featureUID}`
 
     return this.http.delete<Identifiable[]>(path);
   }

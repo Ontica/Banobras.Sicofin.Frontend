@@ -16,26 +16,39 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 import { sendEvent } from '@app/shared/utils';
 
 export enum SecurityItemEditionEventType {
-  FILTER_CHANGED = 'SecurityItemEditionComponent.Event.FilterChanged',
-  ASSIGN_ITEM    = 'SecurityItemEditionComponent.Event.AssignItem',
-  REMOVE_ITEM    = 'SecurityItemEditionComponent.Event.RemoveItem',
+  SELECTOR_CHANGED = 'SecurityItemEditionComponent.Event.SelectorChanged',
+  ASSIGN_ITEM      = 'SecurityItemEditionComponent.Event.AssignItem',
+  REMOVE_ITEM      = 'SecurityItemEditionComponent.Event.RemoveItem',
 }
 
 @Component({
   selector: 'emp-ng-security-item-edition',
+  styles: [`
+    .items-container {
+      max-height: 100%;
+      overflow-y: auto;
+    }
+
+    @media (min-height: 800px) {
+      .items-container {
+        max-height: 640px;
+        overflow-y: auto;
+      }
+    }
+  `],
   templateUrl: './security-item-edition.component.html',
 })
 export class SecurityItemEditionComponent implements OnChanges {
 
   @Input() itemsList: Identifiable[] = [];
 
-  @Input() itemsForFilterList: Identifiable[] = [];
+  @Input() itemsForSelectorList: Identifiable[] = [];
 
   @Input() itemsToAssignList: Identifiable[] = [];
 
   @Input() canEdit = false;
 
-  @Input() filterRequired = false;
+  @Input() selectorRequired = false;
 
   @Input() itemTypeName: string = '';
 
@@ -51,7 +64,7 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   dataSource: MatTableDataSource<Identifiable>;
 
-  selectedFilter = null;
+  selectedSelectorUID = null;
 
   displayItemAssign = false;
 
@@ -71,14 +84,14 @@ export class SecurityItemEditionComponent implements OnChanges {
       this.resetItemAssign();
     }
 
-    if (changes.itemsForFilterList) {
-      this.validateResetFilter();
+    if (changes.itemsForSelectorList) {
+      this.validateResetSelector();
     }
   }
 
 
-  get isFilterValid(): boolean {
-    return this.filterRequired ? !!this.selectedFilter : true;
+  get isSelectorValid(): boolean {
+    return this.selectorRequired ? !!this.selectedSelectorUID : true;
   }
 
 
@@ -87,12 +100,12 @@ export class SecurityItemEditionComponent implements OnChanges {
   }
 
 
-  onSelectedFilterChanges(item: Identifiable) {
+  onSelectedSelectorChanges(selector: Identifiable) {
     const payload = {
-      itemUID: item.uid,
+      selectorUID: selector.uid ?? '',
     };
 
-    sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.FILTER_CHANGED, payload);
+    sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.SELECTOR_CHANGED, payload);
   }
 
 
@@ -109,8 +122,12 @@ export class SecurityItemEditionComponent implements OnChanges {
 
 
   onAssignItem() {
-    sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.ASSIGN_ITEM,
-      {itemUID: this.itemToAssign.uid});
+    const payload = {
+      selectorUID: this.selectedSelectorUID ?? '',
+      itemUID: this.itemToAssign.uid,
+    };
+
+    sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.ASSIGN_ITEM, payload);
   }
 
 
@@ -134,10 +151,11 @@ export class SecurityItemEditionComponent implements OnChanges {
   }
 
 
-  private validateResetFilter() {
-    if (!this.itemsForFilterList.map(x => x.uid).includes(this.selectedFilter)) {
-      this.selectedFilter = null;
-      setTimeout(() => this.onSelectedFilterChanges(Empty));
+  private validateResetSelector() {
+    if (!!this.selectedSelectorUID &&
+        !this.itemsForSelectorList.map(x => x.uid).includes(this.selectedSelectorUID)) {
+      this.selectedSelectorUID = null;
+      setTimeout(() => this.onSelectedSelectorChanges(Empty));
     }
   }
 
@@ -165,8 +183,12 @@ export class SecurityItemEditionComponent implements OnChanges {
       .toPromise()
       .then(x => {
         if (x) {
-          sendEvent(this.securityItemEditionEvent,
-            SecurityItemEditionEventType.REMOVE_ITEM, {itemUID: item.uid});
+          const payload = {
+            selectorUID: this.selectedSelectorUID ?? '',
+            itemUID: item.uid,
+          };
+
+          sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.REMOVE_ITEM, payload);
         }
       });
   }

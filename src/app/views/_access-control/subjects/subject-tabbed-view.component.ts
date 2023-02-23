@@ -17,8 +17,6 @@ import { AccessControlDataService } from '@app/data-services';
 
 import { EmptySubject, SecurityItemType, Subject } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 import { SecurityItemEditionEventType } from '../security-item/security-item-edition.component';
 
 export enum SubjectTabbedViewEventType {
@@ -38,6 +36,10 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   @Output() subjectTabbedViewEvent = new EventEmitter<EventInfo>();
 
   contextsList: Identifiable[] = [];
+
+  rolesList: Identifiable[] = [];
+
+  featuresList: Identifiable[] = [];
 
   subjectContextsList: Identifiable[] = [];
 
@@ -61,7 +63,6 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
 
   constructor(private accessControlData: AccessControlDataService,
-              private messageBox: MessageBoxService,
               private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
@@ -85,15 +86,19 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
   onSubjectContextsEditionEvent(event: EventInfo) {
     switch (event.type as SecurityItemEditionEventType) {
-      case SecurityItemEditionEventType.ASSIGN_ITEM:
+      case SecurityItemEditionEventType.ASSIGN_ITEM: {
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.assignContextToSubject(this.subject.uid, event.payload.itemUID);
+        const contextUID = event.payload.itemUID;
+        this.assignContextToSubject(this.subject.uid, contextUID);
         return;
+      }
 
-      case SecurityItemEditionEventType.REMOVE_ITEM:
+      case SecurityItemEditionEventType.REMOVE_ITEM:{
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.removeContextToSubject(this.subject.uid, event.payload.itemUID);
+        const contextUID = event.payload.itemUID;
+        this.removeContextToSubject(this.subject.uid, contextUID);
         return;
+      }
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -104,19 +109,31 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
   onSubjectRolesEditionEvent(event: EventInfo) {
     switch (event.type as SecurityItemEditionEventType) {
-      case SecurityItemEditionEventType.FILTER_CHANGED:
-        this.validateExecuteGetSubjectRolesByContext(event.payload.itemUID ?? '');
+      case SecurityItemEditionEventType.SELECTOR_CHANGED:
+        this.validateLoadSubjectRolesByContext(event.payload.selectorUID ?? '');
         return;
 
-      case SecurityItemEditionEventType.ASSIGN_ITEM:
+      case SecurityItemEditionEventType.ASSIGN_ITEM: {
+        Assertion.assertValue(event.payload.selectorUID, 'event.payload.selectorUID');
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.messageBox.showInDevelopment('Agregar rol a usuario', event.payload);
-        return;
 
-      case SecurityItemEditionEventType.REMOVE_ITEM:
-        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.messageBox.showInDevelopment('Remover rol a usuario', event.payload);
+        const contextUID = event.payload.selectorUID;
+        const roleUID = event.payload.itemUID;
+
+        this.assignRoleToSubject(this.subject.uid, contextUID, roleUID);
         return;
+      }
+
+      case SecurityItemEditionEventType.REMOVE_ITEM: {
+        Assertion.assertValue(event.payload.selectorUID, 'event.payload.selectorUID');
+        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
+
+        const contextUID = event.payload.selectorUID;
+        const roleUID = event.payload.itemUID;
+
+        this.removeRoleToSubject(this.subject.uid, contextUID, roleUID);
+        return;
+      }
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -127,19 +144,31 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
   onSubjectFeaturesEditionEvent(event: EventInfo) {
     switch (event.type as SecurityItemEditionEventType) {
-      case SecurityItemEditionEventType.FILTER_CHANGED:
-        this.validateExecuteGetSubjectFeaturesByContext(event.payload.itemUID ?? '');
+      case SecurityItemEditionEventType.SELECTOR_CHANGED:
+        this.validateLoadSubjectFeaturesByContext(event.payload.selectorUID ?? '');
         return;
 
-      case SecurityItemEditionEventType.ASSIGN_ITEM:
+      case SecurityItemEditionEventType.ASSIGN_ITEM: {
+        Assertion.assertValue(event.payload.selectorUID, 'event.payload.selectorUID');
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.messageBox.showInDevelopment('Agregar permiso a usuario', event.payload);
-        return;
 
-      case SecurityItemEditionEventType.REMOVE_ITEM:
-        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.messageBox.showInDevelopment('Remover permiso a usuario', event.payload);
+        const contextUID = event.payload.selectorUID;
+        const featureUID = event.payload.itemUID;
+
+        this.assignFeatureToSubject(this.subject.uid, contextUID, featureUID);
         return;
+      }
+
+      case SecurityItemEditionEventType.REMOVE_ITEM: {
+        Assertion.assertValue(event.payload.selectorUID, 'event.payload.selectorUID');
+        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
+
+        const contextUID = event.payload.selectorUID;
+        const featureUID = event.payload.itemUID;
+
+        this.removeFeatureToSubject(this.subject.uid, contextUID, featureUID);
+        return;
+      }
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -166,6 +195,20 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
         this.contextsList = x;
         this.isLoadingContexts = false;
       });
+  }
+
+
+  private getRolesByContext(contextUID: string) {
+    this.accessControlData.getRolesByContext(contextUID)
+      .toPromise()
+      .then(x => this.rolesList = x);
+  }
+
+
+  private getFeaturesByContext(contextUID: string) {
+    this.accessControlData.getFeaturesByContext(contextUID)
+      .toPromise()
+      .then(x => this.featuresList = x);
   }
 
 
@@ -225,9 +268,50 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
+  private assignRoleToSubject(subjectUID: string, contextUID: string, roleUID: string) {
+    this.submitted = true;
 
-  private validateExecuteGetSubjectRolesByContext(contextUID: string) {
+    this.accessControlData.assignRoleToSubject(subjectUID, contextUID, roleUID)
+      .toPromise()
+      .then(x => this.subjectRolesList = x)
+      .finally(() => this.submitted = false);
+  }
+
+
+  private removeRoleToSubject(subjectUID: string, contextUID: string, roleUID: string) {
+    this.submitted = true;
+
+    this.accessControlData.removeRoleToSubject(subjectUID, contextUID, roleUID)
+      .toPromise()
+      .then(x => this.subjectRolesList = x)
+      .finally(() => this.submitted = false);
+  }
+
+
+  private assignFeatureToSubject(subjectUID: string, contextUID: string, featureUID: string) {
+    this.submitted = true;
+
+    this.accessControlData.assignFeatureToSubject(subjectUID, contextUID, featureUID)
+      .toPromise()
+      .then(x => this.subjectFeaturesList = x)
+      .finally(() => this.submitted = false);
+  }
+
+
+  private removeFeatureToSubject(subjectUID: string, contextUID: string, featureUID: string) {
+    this.submitted = true;
+
+    this.accessControlData.removeFeatureToSubject(subjectUID, contextUID, featureUID)
+      .toPromise()
+      .then(x => this.subjectFeaturesList = x)
+      .finally(() => this.submitted = false);
+  }
+
+
+
+  private validateLoadSubjectRolesByContext(contextUID: string) {
     this.subjectRolesList = [];
+    this.rolesList = []
 
     if (!contextUID) {
       this.isSubjectRolesExcecuted = false;
@@ -235,11 +319,13 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
     }
 
     this.getSubjectRolesByContext(contextUID);
+    this.getRolesByContext(contextUID);
   }
 
 
-  private validateExecuteGetSubjectFeaturesByContext(contextUID: string) {
+  private validateLoadSubjectFeaturesByContext(contextUID: string) {
     this.subjectFeaturesList = [];
+    this.featuresList = [];
 
     if (!contextUID) {
       this.isSubjectFeaturesExcecuted = false;
@@ -247,6 +333,7 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
     }
 
     this.getSubjectFeaturesByContext(contextUID);
+    this.getFeaturesByContext(contextUID);
   }
 
 }
