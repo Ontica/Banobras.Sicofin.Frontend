@@ -33,6 +33,8 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
   @Input() subject: Subject = EmptySubject;
 
+  @Input() canEdit = true;
+
   @Output() subjectTabbedViewEvent = new EventEmitter<EventInfo>();
 
   contextsList: Identifiable[] = [];
@@ -42,8 +44,6 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   subjectRolesList: Identifiable[] = [];
 
   subjectFeaturesList: Identifiable[] = [];
-
-  canEdit = true;
 
   submitted = false;
 

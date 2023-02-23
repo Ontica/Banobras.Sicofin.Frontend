@@ -5,9 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { EventInfo, SessionService } from '@app/core';
+
+import { PermissionsLibrary } from '@app/main-layout';
 
 import { AccessControlQueryType, AccessControlSelectionData, EmptyAccessControlSelectionData, Feature,
          Role, Subject } from '@app/models';
@@ -24,13 +26,25 @@ export enum AccessControlTabbedViewEventType {
   selector: 'emp-fa-access-control-tabbed-view',
   templateUrl: './access-control-tabbed-view.component.html',
 })
-export class AccessControlTabbedViewComponent {
+export class AccessControlTabbedViewComponent implements OnInit {
 
   @Input() accessControlItem: AccessControlSelectionData = EmptyAccessControlSelectionData;
 
   @Output() accessControlTabbedViewEvent = new EventEmitter<EventInfo>();
 
+  canEdit = true;
+
   AccessControlType = AccessControlQueryType;
+
+
+  constructor(private session: SessionService){
+
+  }
+
+
+  ngOnInit() {
+    this.setPermission();
+  }
 
 
   get typeName(): string {
@@ -87,6 +101,11 @@ export class AccessControlTabbedViewComponent {
 
   onClose() {
     sendEvent(this.accessControlTabbedViewEvent, AccessControlTabbedViewEventType.CLOSE_BUTTON_CLICKED);
+  }
+
+
+  private setPermission() {
+    this.canEdit = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_CONTROL_DE_ACCESOS);
   }
 
 }

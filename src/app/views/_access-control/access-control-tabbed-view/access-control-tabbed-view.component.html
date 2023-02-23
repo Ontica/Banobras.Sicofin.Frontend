@@ -6,7 +6,8 @@
   <ng-container [ngSwitch]="accessControlItem.type">
 
     <emp-ng-subject-tabbed-view *ngSwitchCase="AccessControlType.Subjects"
-      [subject]="subject">
+      [subject]="subject"
+      [canEdit]="canEdit">
 
     </emp-ng-subject-tabbed-view>
 
