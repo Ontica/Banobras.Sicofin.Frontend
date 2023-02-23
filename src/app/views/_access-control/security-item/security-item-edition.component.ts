@@ -17,7 +17,7 @@ import { sendEvent } from '@app/shared/utils';
 
 export enum SecurityItemEditionEventType {
   FILTER_CHANGED = 'SecurityItemEditionComponent.Event.FilterChanged',
-  ADD_ITEM       = 'SecurityItemEditionComponent.Event.AddItem',
+  ASSIGN_ITEM    = 'SecurityItemEditionComponent.Event.AssignItem',
   REMOVE_ITEM    = 'SecurityItemEditionComponent.Event.RemoveItem',
 }
 
@@ -31,7 +31,7 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   @Input() itemsForFilterList: Identifiable[] = [];
 
-  @Input() itemsForAddList: Identifiable[] = [];
+  @Input() itemsToAssignList: Identifiable[] = [];
 
   @Input() canEdit = false;
 
@@ -39,7 +39,9 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   @Input() itemTypeName: string = '';
 
-  @Input() notFoundText = 'No se han definido elementos.';
+  @Input() queryExcecuted = true;
+
+  @Input() submitted = false;
 
   @Output() securityItemEditionEvent = new EventEmitter<EventInfo>();
 
@@ -51,9 +53,12 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   selectedFilter = null;
 
-  displayItemAdd = false;
+  displayItemAssign = false;
 
-  itemToAdd = Empty;
+  itemToAssign = Empty;
+
+  itemsToAssignValidsList: Identifiable[] = [];
+
 
   constructor(private messageBox: MessageBoxService) {
 
@@ -62,12 +67,12 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.itemsList) {
-      this.dataSource = new MatTableDataSource(this.itemsList);
-      this.resetColumns();
+      this.setDataTable();
+      this.resetItemAssign();
     }
 
     if (changes.itemsForFilterList) {
-      this.selectedFilter = null;
+      this.validateResetFilter();
     }
   }
 
@@ -77,8 +82,8 @@ export class SecurityItemEditionComponent implements OnChanges {
   }
 
 
-  get isItemToAddValid(): boolean {
-    return !isEmpty(this.itemToAdd);
+  get isItemToAssignValid(): boolean {
+    return !isEmpty(this.itemToAssign);
   }
 
 
@@ -91,26 +96,32 @@ export class SecurityItemEditionComponent implements OnChanges {
   }
 
 
-  onAddItemButtonClicked() {
-    this.displayItemAdd = true;
-    this.itemToAdd = Empty;
+  onAssignItemButtonClicked() {
+    this.displayItemAssign = true;
+    this.itemToAssign = Empty;
+    this.setItemsToAssignValids();
   }
 
 
-  onCloseItemAdd() {
-    this.displayItemAdd = false;
-    this.itemToAdd = Empty;
+  onCloseItemAssign() {
+    this.resetItemAssign();
   }
 
 
-  onAddItem() {
-    sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.ADD_ITEM,
-      {itemUID: this.itemToAdd.uid});
+  onAssignItem() {
+    sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.ASSIGN_ITEM,
+      {itemUID: this.itemToAssign.uid});
   }
 
 
   onRemoveItemClicked(item: Identifiable) {
     this.showConfirmMessage(item);
+  }
+
+
+  private setDataTable() {
+    this.dataSource = new MatTableDataSource(this.itemsList);
+    this.resetColumns();
   }
 
 
@@ -120,6 +131,27 @@ export class SecurityItemEditionComponent implements OnChanges {
     if (this.canEdit) {
       this.displayedColumns.push('actionDelete');
     }
+  }
+
+
+  private validateResetFilter() {
+    if (!this.itemsForFilterList.map(x => x.uid).includes(this.selectedFilter)) {
+      this.selectedFilter = null;
+      setTimeout(() => this.onSelectedFilterChanges(Empty));
+    }
+  }
+
+
+  private resetItemAssign() {
+    this.displayItemAssign = false;
+    this.itemToAssign = Empty;
+    this.itemsToAssignValidsList = [];
+  }
+
+
+  private setItemsToAssignValids() {
+    this.itemsToAssignValidsList =
+      this.itemsToAssignList.filter(x => !this.itemsList.map(y => y.uid).includes(x.uid));
   }
 
 

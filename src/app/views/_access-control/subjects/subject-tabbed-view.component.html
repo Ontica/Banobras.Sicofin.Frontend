@@ -22,8 +22,9 @@
 
           <emp-ng-security-item-edition
             [itemsList]="subjectContextsList"
-            [itemsForAddList]="contextsList"
+            [itemsToAssignList]="contextsList"
             [canEdit]="canEdit"
+            [submitted]="submitted"
             itemTypeName="Aplicación"
             (securityItemEditionEvent)="onSubjectContextsEditionEvent($event)">
 
@@ -42,7 +43,7 @@
         [itemsForFilterList]="subjectContextsList"
         [filterRequired]="true"
         [canEdit]="canEdit"
-        [notFoundText]="isSubjectRolesExcecuted ? 'No se han definido roles.' : 'No se ha invocado la consulta.'"
+        [queryExcecuted]="isSubjectRolesExcecuted"
         itemTypeName="Rol"
         (securityItemEditionEvent)="onSubjectRolesEditionEvent($event)">
 
@@ -57,7 +58,7 @@
         [itemsForFilterList]="subjectContextsList"
         [filterRequired]="true"
         [canEdit]="canEdit"
-        [notFoundText]="isSubjectFeaturesExcecuted ? 'No se han definido permisos.' : 'No se ha invocado la consulta.'"
+        [queryExcecuted]="isSubjectFeaturesExcecuted"
         itemTypeName="Permiso"
         (securityItemEditionEvent)="onSubjectFeaturesEditionEvent($event)">
 

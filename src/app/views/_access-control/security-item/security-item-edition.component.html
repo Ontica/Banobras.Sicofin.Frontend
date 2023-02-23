@@ -1,4 +1,8 @@
-<div fxLayout="column" fxFlexFill [style.paddingRight.px]="8">
+<div fxLayout="column" fxFlexFill [style.paddingRight.px]="8" [empNgSpinnerHost]="spinnerRemove">
+
+  <emp-ng-spinner #spinnerRemove [visible]="!displayItemAssign && submitted">
+
+  </emp-ng-spinner>
 
   <div fxLayout="row">
 
@@ -21,7 +25,7 @@
         [class.btn]="!isFilterValid"
         [class.btn-action]="isFilterValid"
         [style.marginLeft.px]="8"
-        (click)="onAddItemButtonClicked()">
+        (click)="onAssignItemButtonClicked()">
         Agregar {{itemTypeName}}
       </button>
 
@@ -50,7 +54,7 @@
 
     <ng-container matColumnDef="notFoundMessage">
       <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
-        {{notFoundText}}
+        {{queryExcecuted ? 'No se han agregado elementos.' : 'No se ha invocado la consulta.'}}
       </td>
     </ng-container>
 
@@ -64,29 +68,33 @@
 </div>
 
 
-<emp-ng-modal-window *ngIf="displayItemAdd" [config]="{width:'750px'}">
+<emp-ng-modal-window *ngIf="displayItemAssign" [config]="{width:'750px'}">
 
   <emp-ng-card
     [title]="'Agregar ' + (itemTypeName | lowercase)"
     hint="Seleccione el elemento a agregar."
-    (cardClose)="onCloseItemAdd()">
+    (cardClose)="onCloseItemAssign()">
 
-    <div class="card-body-padding">
+    <div class="card-body-padding" [empNgSpinnerHost]="spinnerAssign">
+
+      <emp-ng-spinner #spinnerAssign [visible]="displayItemAssign && submitted">
+
+      </emp-ng-spinner>
 
       <form #addItemform="ngForm" empNgFormKeyDownEnter
         autocomplete="off" class="form-section">
 
         <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
-          <div *ngIf="itemsForAddList.length === 0" class="instruction-text">
+          <div *ngIf="itemsToAssignValidsList.length === 0" class="instruction-text">
             No se encontraron elementos a agregar.
           </div>
 
-          <mat-radio-group *ngIf="itemsForAddList.length > 0"
-            [(ngModel)]="itemToAdd" required
-            name="itemToAdd" class="radio-group-vertical">
+          <mat-radio-group *ngIf="itemsToAssignValidsList.length > 0"
+            [(ngModel)]="itemToAssign" required
+            name="itemToAssign" class="radio-group-vertical">
 
-            <mat-radio-button *ngFor="let item of itemsForAddList"
+            <mat-radio-button *ngFor="let item of itemsToAssignValidsList"
               [value]="item"
               class="radio-button-vertical">
               {{item.name}}
@@ -103,11 +111,11 @@
           <div fxFlex fxLayoutAlign="end center">
 
             <button
-              [disabled]="!isItemToAddValid"
-              [class.btn]="!isItemToAddValid"
-              [class.btn-action]="isItemToAddValid"
-              (click)="onAddItem()">
-              Guardar
+              [disabled]="!isItemToAssignValid"
+              [class.btn]="!isItemToAssignValid"
+              [class.btn-action]="isItemToAssignValid"
+              (click)="onAssignItem()">
+              Agregar
             </button>
 
           </div>

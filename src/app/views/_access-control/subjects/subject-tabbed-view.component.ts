@@ -43,6 +43,10 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
   subjectFeaturesList: Identifiable[] = [];
 
+  canEdit = true;
+
+  submitted = false;
+
   isLoading = false;
 
   isLoadingContexts = false;
@@ -79,21 +83,16 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
-  get canEdit(): boolean {
-    return false;
-  }
-
-
   onSubjectContextsEditionEvent(event: EventInfo) {
     switch (event.type as SecurityItemEditionEventType) {
-      case SecurityItemEditionEventType.ADD_ITEM:
+      case SecurityItemEditionEventType.ASSIGN_ITEM:
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.messageBox.showInDevelopment('Agregar aplicación a usuario', event.payload);
+        this.assignContextToSubject(this.subject.uid, event.payload.itemUID);
         return;
 
       case SecurityItemEditionEventType.REMOVE_ITEM:
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.messageBox.showInDevelopment('Remover aplicación a usuario', event.payload);
+        this.removeContextToSubject(this.subject.uid, event.payload.itemUID);
         return;
 
       default:
@@ -106,11 +105,10 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   onSubjectRolesEditionEvent(event: EventInfo) {
     switch (event.type as SecurityItemEditionEventType) {
       case SecurityItemEditionEventType.FILTER_CHANGED:
-        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.getSubjectRolesByContext(event.payload.itemUID);
+        this.validateExecuteGetSubjectRolesByContext(event.payload.itemUID ?? '');
         return;
 
-      case SecurityItemEditionEventType.ADD_ITEM:
+      case SecurityItemEditionEventType.ASSIGN_ITEM:
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
         this.messageBox.showInDevelopment('Agregar rol a usuario', event.payload);
         return;
@@ -130,11 +128,10 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   onSubjectFeaturesEditionEvent(event: EventInfo) {
     switch (event.type as SecurityItemEditionEventType) {
       case SecurityItemEditionEventType.FILTER_CHANGED:
-        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
-        this.getSubjectFeaturesByContext(event.payload.itemUID);
+        this.validateExecuteGetSubjectFeaturesByContext(event.payload.itemUID ?? '');
         return;
 
-      case SecurityItemEditionEventType.ADD_ITEM:
+      case SecurityItemEditionEventType.ASSIGN_ITEM:
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
         this.messageBox.showInDevelopment('Agregar permiso a usuario', event.payload);
         return;
@@ -183,7 +180,6 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
 
   private getSubjectRolesByContext(contextUID: string) {
-    this.subjectRolesList = [];
     this.isLoading = true;
 
     this.accessControlData.getSubjectRolesByContext(this.subject.uid, contextUID)
@@ -197,7 +193,6 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
 
   private getSubjectFeaturesByContext(contextUID: string) {
-    this.subjectFeaturesList = [];
     this.isLoading = true;
 
     this.accessControlData.getSubjectFeaturesByContext(this.subject.uid, contextUID)
@@ -208,4 +203,50 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
         this.isSubjectFeaturesExcecuted = true;
       });
   }
+
+
+  private assignContextToSubject(subjectUID: string, contextUID: string) {
+    this.submitted = true;
+
+    this.accessControlData.assignContextToSubject(subjectUID, contextUID)
+      .toPromise()
+      .then(x => this.subjectContextsList = x)
+      .finally(() => this.submitted = false);
+  }
+
+
+  private removeContextToSubject(subjectUID: string, contextUID: string) {
+    this.submitted = true;
+
+    this.accessControlData.removeContextToSubject(subjectUID, contextUID)
+      .toPromise()
+      .then(x => this.subjectContextsList = x)
+      .finally(() => this.submitted = false);
+  }
+
+
+
+  private validateExecuteGetSubjectRolesByContext(contextUID: string) {
+    this.subjectRolesList = [];
+
+    if (!contextUID) {
+      this.isSubjectRolesExcecuted = false;
+      return;
+    }
+
+    this.getSubjectRolesByContext(contextUID);
+  }
+
+
+  private validateExecuteGetSubjectFeaturesByContext(contextUID: string) {
+    this.subjectFeaturesList = [];
+
+    if (!contextUID) {
+      this.isSubjectFeaturesExcecuted = false;
+      return;
+    }
+
+    this.getSubjectFeaturesByContext(contextUID);
+  }
+
 }

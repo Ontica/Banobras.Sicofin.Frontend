@@ -68,4 +68,24 @@ export class AccessControlDataService {
     return this.http.get<Identifiable[]>(path);
   }
 
+
+  assignContextToSubject(subjectUID: string, contextUID: string):Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts/${contextUID}`;
+
+    return this.http.post<Identifiable[]>(path);
+  }
+
+
+  removeContextToSubject(subjectUID: string, contextUID: string):Observable<Identifiable[]> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(contextUID, 'contextUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts/${contextUID}`;
+
+    return this.http.delete<Identifiable[]>(path);
+  }
+
 }
