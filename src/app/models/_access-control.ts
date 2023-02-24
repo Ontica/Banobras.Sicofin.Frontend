@@ -22,6 +22,9 @@ export const AccessControlQueryTypeList: Identifiable[] = [
 ];
 
 
+export const DefaultAccessControlQueryType = AccessControlQueryTypeList[0];
+
+
 export interface AccessControlSelectionData {
   type: AccessControlQueryType,
   item: Subject | Role | Feature,

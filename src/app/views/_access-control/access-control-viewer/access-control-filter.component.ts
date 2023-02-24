@@ -13,7 +13,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccessControlStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { AccessControlQueryTypeList } from '@app/models';
+import { AccessControlQueryType, AccessControlQueryTypeList,
+         DefaultAccessControlQueryType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -36,12 +37,14 @@ export class AccessControlFilterComponent implements OnInit, OnDestroy {
   contextsList: Identifiable[] = [];
 
   formData = {
-    queryType: null,
-    context: null,
+    queryType: DefaultAccessControlQueryType,
+    contextUID: null,
     keywords: null,
   };
 
   helper: SubscriptionHelper;
+
+  isContextRequired = false;
 
 
   constructor(private uiLayer: PresentationLayer) {
@@ -51,11 +54,17 @@ export class AccessControlFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadContexts();
+    this.setIsContextRequired();
   }
 
 
   ngOnDestroy() {
     this.helper.destroy();
+  }
+
+
+  onQueryTypeChanges() {
+    this.setIsContextRequired()
   }
 
 
@@ -85,10 +94,16 @@ export class AccessControlFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  private setIsContextRequired() {
+    this.isContextRequired = [AccessControlQueryType.Roles, AccessControlQueryType.Features]
+      .includes(this.formData.queryType.uid as AccessControlQueryType);
+  }
+
+
   private getFormData(): any {
     const data: any = {
       queryType: this.formData.queryType.uid || '',
-      contextUID: this.formData.context.uid || '',
+      contextUID: this.formData.contextUID || '',
       keywords: this.formData.keywords || '',
     };
 

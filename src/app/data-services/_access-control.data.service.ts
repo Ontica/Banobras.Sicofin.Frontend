@@ -42,13 +42,14 @@ export class AccessControlDataService {
 
 
   searchSubjects(contextUID: string, keywords: string): Observable<Subject[]> {
-    Assertion.assertValue(contextUID, 'contextUID');
+    let path = `v4/onepoint/security/management/subjects?`;
 
-    let path = `v4/onepoint/security/management/subjects/?contextuid=${contextUID}`;
+    const queryParams = [
+      !contextUID ? null : `contextuid=${contextUID}`,
+      !keywords ? null : `keywords=${keywords}`,
+    ];
 
-    if (!!keywords) {
-      path += `&keywords=${keywords}`;
-    }
+    path += queryParams.filter(p => p).join('&');
 
     return this.http.get<Subject[]>(path);
   }

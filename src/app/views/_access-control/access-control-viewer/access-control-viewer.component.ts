@@ -86,7 +86,6 @@ export class AccessControlViewerComponent implements OnInit {
 
       case AccessControlFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
-        Assertion.assertValue(event.payload.query.contextUID, 'event.payload.query.contextUID');
         Assertion.assertValue(event.payload.queryTypeName, 'event.payload.queryTypeName');
 
         this.setQuery(event.payload.query, event.payload.queryTypeName);
