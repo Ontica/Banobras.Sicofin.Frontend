@@ -13,7 +13,7 @@ import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
-import { DefaultEndDate, EmptyFinancialReportColumn, EmptyFinancialReportConfig, FinancialReportColumn,
+import { EmptyFinancialReportColumn, EmptyFinancialReportConfig, FinancialReportColumn,
          FinancialReportColumnEditionItemTypeList, FinancialReportConfig, FinancialReportEditionCommand,
          FinancialReportEditionItemType, FinancialReportEditionType, Positioning, PositioningRule,
          PositioningRuleList } from '@app/models';
@@ -167,10 +167,18 @@ export class FixedColumnEditorComponent implements OnChanges {
         positioningRule: new FormControl(PositioningRule.ByPositionValue, Validators.required),
         positioningOffsetUID: new FormControl(''),
         position: new FormControl('', Validators.required),
-        startDate: new FormControl('', Validators.required),
-        endDate: new FormControl(DefaultEndDate, Validators.required),
+        startDate: new FormControl(''), // ('', Validators.required)
+        endDate: new FormControl(''), // (DefaultEndDate, Validators.required)
       })
     );
+
+    this.setDisableFields();
+  }
+
+
+  private setDisableFields() {
+    this.formHandler.disableControl(this.controls.startDate);
+    this.formHandler.disableControl(this.controls.endDate);
   }
 
 

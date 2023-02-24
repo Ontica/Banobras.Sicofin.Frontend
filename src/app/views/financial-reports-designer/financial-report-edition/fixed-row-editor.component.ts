@@ -21,7 +21,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { DefaultEndDate, EmptyFinancialReportConfig, EmptyFinancialReportRow, FinancialConceptDescriptor,
+import { EmptyFinancialReportConfig, EmptyFinancialReportRow, FinancialConceptDescriptor,
          FinancialReportConfig, FinancialReportEditionCommand, FinancialReportEditionFields,
          FinancialReportEditionItemType, FinancialReportEditionItemTypeList, FinancialReportEditionType,
          FinancialReportRow, FormatType, FormatTypeList, Positioning, PositioningRule,
@@ -195,12 +195,19 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
         positioningOffsetUID: new FormControl(''),
         position: new FormControl('', Validators.required),
         format: new FormControl(FormatType.Default, Validators.required),
-        startDate: new FormControl('', Validators.required),
-        endDate: new FormControl(DefaultEndDate, Validators.required),
+        startDate: new FormControl(''), // ('', Validators.required)
+        endDate: new FormControl(''), // (DefaultEndDate, Validators.required)
       })
     );
 
+    this.setDisableFields();
     this.onSuscribeGroupChanges();
+  }
+
+
+  private setDisableFields() {
+    this.formHandler.disableControl(this.controls.startDate);
+    this.formHandler.disableControl(this.controls.endDate);
   }
 
 

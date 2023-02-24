@@ -23,7 +23,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
-import { DefaultEndDate, EmptyFinancialReportCell, EmptyFinancialReportConfig, FinancialConceptDescriptor,
+import { EmptyFinancialReportCell, EmptyFinancialReportConfig, FinancialConceptDescriptor,
          FinancialReportCell, FinancialReportConfig, FinancialReportEditionCommand,
          FinancialReportEditionFields, FinancialReportEditionItemType, FinancialReportEditionItemTypeList,
          FinancialReportEditionType, FormatType, FormatTypeList } from '@app/models';
@@ -173,12 +173,19 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
         dataField: new FormControl('', Validators.required),
         label: new FormControl(''),
         format: new FormControl(FormatType.Default, Validators.required),
-        startDate: new FormControl('', Validators.required),
-        endDate: new FormControl(DefaultEndDate, Validators.required),
+        startDate: new FormControl(''), // ('', Validators.required)
+        endDate: new FormControl(''), // (DefaultEndDate, Validators.required)
       })
     );
 
+    this.setDisableFields();
     this.onSuscribeGroupChanges();
+  }
+
+
+  private setDisableFields() {
+    this.formHandler.disableControl(this.controls.startDate);
+    this.formHandler.disableControl(this.controls.endDate);
   }
 
 
