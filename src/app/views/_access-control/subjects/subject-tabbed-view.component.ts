@@ -15,7 +15,7 @@ import { AccessControlStateSelector } from '@app/presentation/exported.presentat
 
 import { AccessControlDataService } from '@app/data-services';
 
-import { EmptySubject, SecurityItemType, Subject } from '@app/models';
+import { EmptySubject, Feature, SecurityItemType, Subject } from '@app/models';
 
 import { SecurityItemEditionEventType } from '../security-item/security-item-edition.component';
 
@@ -39,7 +39,7 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
   rolesList: Identifiable[] = [];
 
-  featuresList: Identifiable[] = [];
+  featuresList: Feature[] = [];
 
   subjectContextsList: Identifiable[] = [];
 

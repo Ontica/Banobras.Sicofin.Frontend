@@ -9,11 +9,15 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { MatTableDataSource } from '@angular/material/table';
 
-import { Empty, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, Empty, EventInfo, Identifiable } from '@app/core';
+
+import { SecurityItem } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { SecurityItemAssignEventType } from './security-item-assign.component';
 
 export enum SecurityItemEditionEventType {
   SELECTOR_CHANGED = 'SecurityItemEditionComponent.Event.SelectorChanged',
@@ -23,28 +27,15 @@ export enum SecurityItemEditionEventType {
 
 @Component({
   selector: 'emp-ng-security-item-edition',
-  styles: [`
-    .items-container {
-      max-height: 100%;
-      overflow-y: auto;
-    }
-
-    @media (min-height: 800px) {
-      .items-container {
-        max-height: 640px;
-        overflow-y: auto;
-      }
-    }
-  `],
   templateUrl: './security-item-edition.component.html',
 })
 export class SecurityItemEditionComponent implements OnChanges {
 
-  @Input() itemsList: Identifiable[] = [];
+  @Input() itemsAssignedList: Identifiable[] = [];
 
   @Input() itemsForSelectorList: Identifiable[] = [];
 
-  @Input() itemsToAssignList: Identifiable[] = [];
+  @Input() itemsToAssignList: SecurityItem[] = [];
 
   @Input() canEdit = false;
 
@@ -68,10 +59,6 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   displayItemAssign = false;
 
-  itemToAssign = Empty;
-
-  itemsToAssignValidsList: Identifiable[] = [];
-
 
   constructor(private messageBox: MessageBoxService) {
 
@@ -79,24 +66,23 @@ export class SecurityItemEditionComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.itemsList) {
+    if (changes.itemsAssignedList) {
       this.setDataTable();
-      this.resetItemAssign();
+      this.closeItemToAssign();
     }
 
-    if (changes.itemsForSelectorList) {
-      this.validateResetSelector();
+    if (changes.itemsToAssignList) {
+      this.resetSelectedSelectorIfNotInList();
+    }
+
+    if (changes.queryExcecuted) {
+      this.resetSelectorIfNotQueryExecuted();
     }
   }
 
 
   get isSelectorValid(): boolean {
     return this.selectorRequired ? !!this.selectedSelectorUID : true;
-  }
-
-
-  get isItemToAssignValid(): boolean {
-    return !isEmpty(this.itemToAssign);
   }
 
 
@@ -111,23 +97,24 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   onAssignItemButtonClicked() {
     this.displayItemAssign = true;
-    this.itemToAssign = Empty;
-    this.setItemsToAssignValids();
   }
 
 
-  onCloseItemAssign() {
-    this.resetItemAssign();
-  }
+  onSecurityItemAssignEvent(event: EventInfo) {
+    switch (event.type as SecurityItemAssignEventType) {
+      case SecurityItemAssignEventType.ASSIGN_ITEM:
+        Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
+        this.emitEventType(SecurityItemEditionEventType.ASSIGN_ITEM, event.payload.itemUID);
+        return;
 
+      case SecurityItemAssignEventType.CLOSE_MODAL_CLICKED:
+        this.closeItemToAssign();
+        return;
 
-  onAssignItem() {
-    const payload = {
-      selectorUID: this.selectedSelectorUID ?? '',
-      itemUID: this.itemToAssign.uid,
-    };
-
-    sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.ASSIGN_ITEM, payload);
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
   }
 
 
@@ -137,7 +124,7 @@ export class SecurityItemEditionComponent implements OnChanges {
 
 
   private setDataTable() {
-    this.dataSource = new MatTableDataSource(this.itemsList);
+    this.dataSource = new MatTableDataSource(this.itemsAssignedList);
     this.resetColumns();
   }
 
@@ -151,7 +138,14 @@ export class SecurityItemEditionComponent implements OnChanges {
   }
 
 
-  private validateResetSelector() {
+  private resetSelectorIfNotQueryExecuted() {
+    if (!this.queryExcecuted) {
+      this.selectedSelectorUID = null;
+    }
+  }
+
+
+  private resetSelectedSelectorIfNotInList() {
     if (!!this.selectedSelectorUID &&
         !this.itemsForSelectorList.map(x => x.uid).includes(this.selectedSelectorUID)) {
       this.selectedSelectorUID = null;
@@ -160,16 +154,8 @@ export class SecurityItemEditionComponent implements OnChanges {
   }
 
 
-  private resetItemAssign() {
+  private closeItemToAssign() {
     this.displayItemAssign = false;
-    this.itemToAssign = Empty;
-    this.itemsToAssignValidsList = [];
-  }
-
-
-  private setItemsToAssignValids() {
-    this.itemsToAssignValidsList =
-      this.itemsToAssignList.filter(x => !this.itemsList.map(y => y.uid).includes(x.uid));
   }
 
 
@@ -183,14 +169,19 @@ export class SecurityItemEditionComponent implements OnChanges {
       .toPromise()
       .then(x => {
         if (x) {
-          const payload = {
-            selectorUID: this.selectedSelectorUID ?? '',
-            itemUID: item.uid,
-          };
-
-          sendEvent(this.securityItemEditionEvent, SecurityItemEditionEventType.REMOVE_ITEM, payload);
+          this.emitEventType(SecurityItemEditionEventType.REMOVE_ITEM, item.uid);
         }
       });
+  }
+
+
+  private emitEventType(eventType: SecurityItemEditionEventType, itemUID: string) {
+    const payload = {
+      selectorUID: this.selectedSelectorUID ?? '',
+      itemUID: itemUID,
+    };
+
+    sendEvent(this.securityItemEditionEvent, eventType, payload);
   }
 
 }

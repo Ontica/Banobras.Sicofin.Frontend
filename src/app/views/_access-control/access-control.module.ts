@@ -18,6 +18,7 @@ import { AccessControlFilterComponent } from './access-control-viewer/access-con
 import { AccessControlTabbedViewComponent } from './access-control-tabbed-view/access-control-tabbed-view.component';
 import { AccessControlViewerComponent } from './access-control-viewer/access-control-viewer.component';
 
+import { SecurityItemAssignComponent } from './security-item/security-item-assign.component';
 import { SecurityItemEditionComponent } from './security-item/security-item-edition.component';
 
 import { SubjectEditorComponent } from './subjects/subject-editor.component';
@@ -42,6 +43,7 @@ import { SubjectTabbedViewComponent } from './subjects/subject-tabbed-view.compo
     AccessControlViewerComponent,
     AccessControlTabbedViewComponent,
 
+    SecurityItemAssignComponent,
     SecurityItemEditionComponent,
 
     SubjectEditorComponent,

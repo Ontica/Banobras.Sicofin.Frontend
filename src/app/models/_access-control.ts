@@ -41,6 +41,14 @@ export enum SecurityItemType {
 }
 
 
+export interface SecurityItem extends Identifiable {
+  uid: string;
+  name: string;
+  description?: string;
+  group?: string;
+}
+
+
 export interface Subject {
   uid: string;
   userID: string;
@@ -55,15 +63,13 @@ export interface Subject {
 }
 
 
-export interface Role extends Identifiable {
-  uid: string;
-  name: string;
+export interface Role extends SecurityItem {
+
 }
 
 
-export interface Feature extends Identifiable {
-  uid: string;
-  name: string;
+export interface Feature extends SecurityItem {
+
 }
 
 

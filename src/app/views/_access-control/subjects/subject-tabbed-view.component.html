@@ -21,7 +21,7 @@
           <div class="section-title"> Aplicaciones </div>
 
           <emp-ng-security-item-edition
-            [itemsList]="subjectContextsList"
+            [itemsAssignedList]="subjectContextsList"
             [canEdit]="canEdit"
             [itemsToAssignList]="contextsList"
             [submitted]="submitted"
@@ -39,7 +39,7 @@
     <mat-tab label="Roles">
 
       <emp-ng-security-item-edition
-        [itemsList]="subjectRolesList"
+        [itemsAssignedList]="subjectRolesList"
         [canEdit]="canEdit"
         [itemsForSelectorList]="subjectContextsList"
         [selectorRequired]="true"
@@ -56,7 +56,7 @@
     <mat-tab label="Permisos">
 
       <emp-ng-security-item-edition
-        [itemsList]="subjectFeaturesList"
+        [itemsAssignedList]="subjectFeaturesList"
         [canEdit]="canEdit"
         [itemsForSelectorList]="subjectContextsList"
         [selectorRequired]="true"

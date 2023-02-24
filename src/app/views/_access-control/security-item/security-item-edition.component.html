@@ -1,8 +1,6 @@
-<div fxLayout="column" fxFlexFill [style.paddingRight.px]="8" [empNgSpinnerHost]="spinnerRemove">
+<div fxLayout="column" fxFlexFill [style.paddingRight.px]="8" [empNgSpinnerHost]="spinner">
 
-  <emp-ng-spinner #spinnerRemove [visible]="!displayItemAssign && submitted">
-
-  </emp-ng-spinner>
+  <emp-ng-spinner #spinner [visible]="!displayItemAssign && submitted"></emp-ng-spinner>
 
   <div fxLayout="row">
 
@@ -68,68 +66,11 @@
 </div>
 
 
-<emp-ng-modal-window *ngIf="displayItemAssign" [config]="{width:'750px'}">
+<emp-ng-security-item-assign *ngIf="displayItemAssign"
+  [itemsAssignedList]="itemsAssignedList"
+  [itemsToAssignList]="itemsToAssignList"
+  [itemTypeName]="itemTypeName"
+  [submitted]="submitted"
+  (securityItemAssignEvent)="onSecurityItemAssignEvent($event)">
 
-  <emp-ng-card
-    [title]="'Agregar ' + (itemTypeName | lowercase)"
-    hint="Seleccione el elemento a agregar."
-    (cardClose)="onCloseItemAssign()">
-
-    <div class="card-body-padding" [empNgSpinnerHost]="spinnerAssign">
-
-      <form #addItemform="ngForm" empNgFormKeyDownEnter
-        autocomplete="off" class="form-section">
-
-        <emp-ng-spinner #spinnerAssign [visible]="displayItemAssign && submitted">
-
-        </emp-ng-spinner>
-
-        <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
-
-          <div *ngIf="itemsToAssignValidsList.length === 0" class="instruction-text">
-            No se encontraron elementos a agregar.
-          </div>
-
-          <div *ngIf="itemsToAssignValidsList.length > 0" class="items-container">
-
-            <mat-radio-group
-              [(ngModel)]="itemToAssign" required
-              name="itemToAssign" class="radio-group-vertical">
-
-              <mat-radio-button *ngFor="let item of itemsToAssignValidsList"
-                [value]="item"
-                class="radio-button-vertical">
-                {{item.name}}
-              </mat-radio-button>
-
-            </mat-radio-group>
-
-          </div>
-
-          <mat-divider></mat-divider>
-
-          <div #rowFooter fxLayout="row">
-
-            <div fxFlex fxLayoutAlign="end center">
-
-              <button
-                [disabled]="!isItemToAssignValid"
-                [class.btn]="!isItemToAssignValid"
-                [class.btn-action]="isItemToAssignValid"
-                (click)="onAssignItem()">
-                Agregar
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </form>
-
-    </div>
-
-  </emp-ng-card>
-
-</emp-ng-modal-window>
+</emp-ng-security-item-assign>
