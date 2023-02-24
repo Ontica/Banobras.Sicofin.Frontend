@@ -7,12 +7,12 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, DateString, DateStringLibrary, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { ReportGroup, ReportType, ExportationType, ReportQuery, ReportData, EmptyReportData, EmptyReportQuery,
-         ReportTypeFlags, EmptyReportType} from '@app/models';
+         ReportTypeFlags, EmptyReportType, FileType } from '@app/models';
 
 import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
 
@@ -64,7 +64,7 @@ export class ReportViewerComponent implements OnChanges {
       this.setReportGroupName();
     }
 
-    if (changes.selectedReportType) {
+    if (changes.selectedReportType || changes.reportQuery) {
       this.setExportationType();
     }
 
@@ -168,11 +168,37 @@ export class ReportViewerComponent implements OnChanges {
     const exportTo = this.selectedReportType?.exportTo ?? [];
 
     if (this.reportGroup === ReportGroup.ReportesRegulatorios) {
-      this.exportationTypesList = exportTo as ExportationType[] ?? [];
+      this.exportationTypesList = this.getExportationTypesFiltered(exportTo as ExportationType[] ?? []);
     } else {
       this.exportationTypesList = !exportTo ? [] :
-        exportTo.map(x => Object.create({uid: x, name: x, fileType: x}));
+        exportTo.map(x => this.buildExportationTypeFromFileType(x));
     }
+  }
+
+
+  private getExportationTypesFiltered(data: ExportationType[]): ExportationType[] {
+    const isFilterByDates = !!this.reportQuery.toDate && data.some(x => !!x.startDate && !!x.endDate);
+
+    if (isFilterByDates) {
+      return data.filter(x => this.isDateInRange(this.reportQuery.toDate, x.startDate, x.endDate));
+    }
+
+    return data;
+  }
+
+
+  private isDateInRange(date: DateString, startDate: DateString, endDate: DateString): boolean {
+    return DateStringLibrary.compareDates(date, startDate) >= 0 &&
+           DateStringLibrary.compareDates(date, endDate) <= 0;
+  }
+
+
+  private buildExportationTypeFromFileType(fileType: FileType): ExportationType {
+    return {
+      uid: fileType,
+      name: fileType,
+      fileType: fileType,
+    };
   }
 
 }

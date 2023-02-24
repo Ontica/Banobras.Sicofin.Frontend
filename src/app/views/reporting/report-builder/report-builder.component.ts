@@ -203,7 +203,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
     this.isLoadingBreakdown = true;
 
     this.reportingData.getFinancialReportBreakdown(reportEntry.uid,
-                                                          this.reportQuery as FinancialReportQuery)
+                                                   this.reportQuery as FinancialReportQuery)
       .toPromise()
       .then(x => {
         const reportBreakdown: FinancialReportBreakdown = {

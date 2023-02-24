@@ -55,8 +55,12 @@ export enum FileType {
 
 
 export interface ExportationType extends Identifiable {
+  uid: string;
+  name: string;
   fileType: FileType;
   dataset?: string;
+  startDate?: DateString;
+  endDate?: DateString;
 }
 
 
@@ -68,6 +72,9 @@ export interface ReportTypeFlags {
 export interface ReportQuery extends DataTableQuery {
   reportType?: string;
   accountsChartUID: string;
+  fromDate?: DateString;
+  toDate?: DateString;
+  exportTo?: string;
 }
 
 
