@@ -10,6 +10,7 @@
         name="selectedSelector" [fxFlex]="50"
         [(ngModel)]="selectedSelectorUID" [ngModelOptions]="{standalone: true}"
         [items]="itemsForSelectorList"
+        [showError]="!selectedSelectorUID"
         placeholder="Seleccione la aplicación"
         (changes)="onSelectedSelectorChanges($event)">
       </emp-ng-select>

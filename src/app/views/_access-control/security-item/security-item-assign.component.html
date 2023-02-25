@@ -23,9 +23,10 @@
                 <label>Grupo de permiso:</label>
                 <emp-ng-select
                   name="securityItemGroup"
+                  [config]="{bindByValue: false}"
                   [(ngModel)]="selectedGroup" [ngModelOptions]="{standalone: true}"
                   [items]="groupsList"
-                  [config]="{bindByValue: false}"
+                  [showError]="!selectedGroup"
                   [bindLabel]="null"
                   (changes)="onSelectedGroupChanges()">
                 </emp-ng-select>
