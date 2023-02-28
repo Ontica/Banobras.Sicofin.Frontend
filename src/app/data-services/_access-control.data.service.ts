@@ -11,13 +11,20 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { Subject } from '@app/models';
+import { Subject, SubjectFields, SubjectsQuery } from '@app/models';
 
 
 @Injectable()
 export class AccessControlDataService {
 
   constructor(private http: HttpService) { }
+
+
+  getWorkareas(): Observable<Identifiable[]> {
+    const path = `v4/onepoint/security/management/subjects/workareas`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
 
 
   getContexts(): Observable<Identifiable[]> {
@@ -41,17 +48,10 @@ export class AccessControlDataService {
   }
 
 
-  searchSubjects(contextUID: string, keywords: string): Observable<Subject[]> {
-    let path = `v4/onepoint/security/management/subjects?`;
+  searchSubjects(query: SubjectsQuery): Observable<Subject[]> {
+    let path = `v4/onepoint/security/management/subjects/search`;
 
-    const queryParams = [
-      !contextUID ? null : `contextuid=${contextUID}`,
-      !keywords ? null : `keywords=${keywords}`,
-    ];
-
-    path += queryParams.filter(p => p).join('&');
-
-    return this.http.get<Subject[]>(path);
+    return this.http.post<Subject[]>(path, query);
   }
 
 
@@ -81,6 +81,15 @@ export class AccessControlDataService {
     const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts/${contextUID}/features`;
 
     return this.http.get<Identifiable[]>(path);
+  }
+
+
+  createSubject(subjectFields: SubjectFields): Observable<Subject> {
+    Assertion.assertValue(subjectFields, 'subjectFields');
+
+    const path = `v4/onepoint/security/management/subjects`;
+
+    return this.http.post<Subject>(path, subjectFields);
   }
 
 

@@ -21,6 +21,7 @@ import { AccessControlViewerComponent } from './access-control-viewer/access-con
 import { SecurityItemAssignComponent } from './security-item/security-item-assign.component';
 import { SecurityItemEditionComponent } from './security-item/security-item-edition.component';
 
+import { SubjectCreatorComponent } from './subjects/subject-creator.component';
 import { SubjectEditorComponent } from './subjects/subject-editor.component';
 import { SubjectHeaderComponent } from './subjects/subject-header.component';
 import { SubjectsTableComponent } from './subjects/subjects-table.component';
@@ -46,6 +47,7 @@ import { SubjectTabbedViewComponent } from './subjects/subject-tabbed-view.compo
     SecurityItemAssignComponent,
     SecurityItemEditionComponent,
 
+    SubjectCreatorComponent,
     SubjectEditorComponent,
     SubjectHeaderComponent,
     SubjectsTableComponent,

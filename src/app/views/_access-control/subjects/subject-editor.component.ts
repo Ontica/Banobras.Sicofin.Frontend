@@ -7,9 +7,11 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { EventInfo } from '@app/core';
 
-import { EmptySubject, Subject, SubjectFields } from '@app/models';
+import { EmptySubject, Subject } from '@app/models';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -27,12 +29,19 @@ export class SubjectEditorComponent {
 
   @Input() subject: Subject = EmptySubject;
 
+  @Input() canEdit = false;
+
+  @Input() canGeneratePassword = false;
+
+  @Input() isSuspended = false;
+
   @Output() subjectEditorEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
 
-  get canEdit(): boolean {
-    return false;
+
+  constructor(private messageBox: MessageBoxService) {
+
   }
 
 
@@ -42,20 +51,15 @@ export class SubjectEditorComponent {
     }
 
     switch (event.type as SubjectHeaderEventType) {
-
-      case SubjectHeaderEventType.UPDATE_SUBJECT:
-        Assertion.assertValue(event.payload.subject, 'event.payload.subject');
-        this.updateSubject(event.payload.subject as SubjectFields);
+      case SubjectHeaderEventType.GENERATE_PASSWORD:
+        this.generatePasswordToSubject();
         return;
-
       case SubjectHeaderEventType.SUSPEND_SUBJECT:
         this.suspendSubject();
         return;
-
       case SubjectHeaderEventType.ACTIVE_SUBJECT:
         this.activateSubject();
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -63,12 +67,13 @@ export class SubjectEditorComponent {
   }
 
 
-  private updateSubject(subjectFields: SubjectFields) {
+  private generatePasswordToSubject() {
     this.submitted = true;
 
     setTimeout(() => {
+      this.messageBox.showInDevelopment('Generar contraseña', this.subject);
       sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED,
-        {subject: subjectFields});
+        {subject: this.subject});
       this.submitted = false
     }, 200);
   }
@@ -78,6 +83,7 @@ export class SubjectEditorComponent {
     this.submitted = true;
 
     setTimeout(() => {
+      this.messageBox.showInDevelopment('Dar de alta', this.subject);
       sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED,
         {subject: this.subject});
       this.submitted = false
@@ -89,6 +95,7 @@ export class SubjectEditorComponent {
     this.submitted = true;
 
     setTimeout(() => {
+      this.messageBox.showInDevelopment('Dar de baja', this.subject);
       sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED,
         {subject: this.subject});
       this.submitted = false

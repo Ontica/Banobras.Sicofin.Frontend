@@ -60,7 +60,7 @@ export class AccessControlTabbedViewComponent implements OnInit {
   get titleText(): string {
     switch (this.accessControlItem.type) {
       case AccessControlQueryType.Subjects:
-        return `(${this.subject.nickName}) ${this.subject.fullName}`;
+        return `(${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo}`;
 
       case AccessControlQueryType.Roles: return this.role.name;
       case AccessControlQueryType.Features: return this.feature.name;
@@ -73,8 +73,9 @@ export class AccessControlTabbedViewComponent implements OnInit {
     switch (this.accessControlItem.type) {
       case AccessControlQueryType.Subjects:
         return `<span class="tag tag-small" style="margin-left: 0">${this.subject.status}</span>` +
-          `<strong>${this.subject.workplace} &nbsp; &nbsp; | &nbsp; &nbsp;</strong>` +
-          `${this.subject.businessID}`;
+          `<strong>${this.subject.workarea}</strong> &nbsp; &nbsp; | &nbsp; &nbsp;` +
+          `${this.subject.jobPosition}`;
+
 
       case AccessControlQueryType.Roles:
       case AccessControlQueryType.Features:

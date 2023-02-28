@@ -25,9 +25,33 @@ export const AccessControlQueryTypeList: Identifiable[] = [
 export const DefaultAccessControlQueryType = AccessControlQueryTypeList[0];
 
 
+export interface AccessControlQuery {
+  queryType: string;
+  contextUID: string;
+  workareaUID: string;
+  keywords: string;
+}
+
+
+export interface SubjectsQuery  {
+  contextUID: string;
+  workareaUID: string;
+  keywords: string;
+}
+
+
+export function buildSubjectsQueryFromAccessControlQuery(query: AccessControlQuery): SubjectsQuery {
+  return {
+    contextUID: query.contextUID ?? '',
+    workareaUID: query.workareaUID ?? '',
+    keywords: query.keywords ?? '',
+  };
+}
+
+
 export interface AccessControlSelectionData {
-  type: AccessControlQueryType,
-  item: Subject | Role | Feature,
+  type: AccessControlQueryType;
+  item: Subject | Role | Feature;
 }
 
 
@@ -54,14 +78,15 @@ export interface SecurityItem extends Identifiable {
 
 export interface Subject {
   uid: string;
-  userID: string;
   fullName: string;
-  nickName: string;
+  userID: string;
   eMail: string;
-  workplace: string;
-  businessID: string;
+  employeeNo: string;
+  jobPosition: string;
+  workarea: string;
+  workareaUID: string;
+  credentialsLastUpdate: DateString;
   lastAccess: DateString;
-  isSystem: boolean;
   status: string;
 }
 
@@ -78,22 +103,24 @@ export interface Feature extends SecurityItem {
 
 export interface SubjectFields {
   fullName: string;
-  nickName: string;
-  eMail: string;
   userID: string;
-  roles?: string[];
+  eMail: string;
+  employeeNo: string;
+  jobPosition: string;
+  workareaUID: string;
 }
 
 
 export const EmptySubject: Subject = {
   uid: '',
-  userID: '',
   fullName: '',
-  nickName: '',
+  userID: '',
   eMail: '',
-  workplace: '',
-  businessID: '',
+  employeeNo: '',
+  jobPosition: '',
+  workarea: '',
+  workareaUID: '',
+  credentialsLastUpdate: '',
   lastAccess: '',
-  isSystem: false,
   status: '',
 }

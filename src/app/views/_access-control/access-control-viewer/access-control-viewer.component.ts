@@ -11,17 +11,22 @@ import { Assertion, Empty, EventInfo } from '@app/core';
 
 import { AccessControlDataService } from '@app/data-services';
 
-import { AccessControlQueryType, Feature, Role, Subject, AccessControlSelectionData } from '@app/models';
+import { PermissionsLibrary } from '@app/main-layout';
+
+import { ArrayLibrary, sendEvent } from '@app/shared/utils';
+
+import { AccessControlQueryType, Feature, Role, Subject, AccessControlSelectionData,
+         DefaultAccessControlQueryType, AccessControlQuery, SubjectsQuery, buildSubjectsQueryFromAccessControlQuery } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
 
 import { AccessControlControlsEventType } from './access-control-controls.component';
 
 import { AccessControlFilterEventType } from './access-control-filter.component';
 
 import { SubjectsTableEventType } from '../subjects/subjects-table.component';
+
+import { SubjectCreatorEventType } from '../subjects/subject-creator.component';
 
 
 export enum AccessControlViewerEventType {
@@ -40,7 +45,7 @@ export class AccessControlViewerComponent implements OnInit {
 
   cardHint = 'Seleccionar los filtros';
 
-  query = null;
+  query: AccessControlQuery = null;
 
   queryTypeName = '';
 
@@ -54,7 +59,11 @@ export class AccessControlViewerComponent implements OnInit {
 
   featuresList: Feature[] = [];
 
+  displaSubjectCreator = false;
+
   QueryTypes = AccessControlQueryType;
+
+  Permissions = PermissionsLibrary;
 
 
   constructor(private accessControlData: AccessControlDataService,
@@ -81,9 +90,29 @@ export class AccessControlViewerComponent implements OnInit {
   }
 
 
+  onCreateSubjectClicked() {
+    this.displaSubjectCreator = true;
+  }
+
+
+  onSubjectCreatorEvent(event: EventInfo) {
+    switch (event.type as SubjectCreatorEventType) {
+      case SubjectCreatorEventType.CLOSE_MODAL_CLICKED:
+        this.displaSubjectCreator = false;
+        return;
+      case SubjectCreatorEventType.SUBJECT_CREATED:
+        Assertion.assertValue(event.payload.subject, 'event.payload.subject');
+        this.validateSubjectCreated(event.payload.subject as Subject);
+        return;
+      default:
+        console.log(`Unhandled type interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   onAccessControlFilterEvent(event: EventInfo) {
     switch (event.type as AccessControlFilterEventType) {
-
       case AccessControlFilterEventType.SEARCH_CLICKED:
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         Assertion.assertValue(event.payload.queryTypeName, 'event.payload.queryTypeName');
@@ -103,7 +132,6 @@ export class AccessControlViewerComponent implements OnInit {
 
   onAccessControlControlsEvent(event: EventInfo) {
     switch (event.type as AccessControlControlsEventType) {
-
       case AccessControlControlsEventType.EXPORT_BUTTON_CLICKED:
         this.messageBox.showInDevelopment('Exportar Datos', this.query);
         return;
@@ -117,7 +145,6 @@ export class AccessControlViewerComponent implements OnInit {
 
   onSubjectsTableEvent(event: EventInfo) {
     switch (event.type as SubjectsTableEventType) {
-
       case SubjectsTableEventType.SUBJECT_CLICKED:
         Assertion.assertValue(event.payload.item, 'event.payload.item');
         this.emitSelectedItem(event.payload.item as Subject);
@@ -137,9 +164,9 @@ export class AccessControlViewerComponent implements OnInit {
   }
 
 
-  private emitSelectedItem(item: Subject | Role | Feature) {
+  private emitSelectedItem(item: Subject | Role | Feature, type?: AccessControlQueryType) {
     const payload: AccessControlSelectionData = {
-      type: this.query?.queryType,
+      type: type ?? this.query?.queryType as AccessControlQueryType,
       item,
     }
     sendEvent(this.accessControlViewerEvent, AccessControlViewerEventType.ITEM_SELECTED, payload);
@@ -149,7 +176,7 @@ export class AccessControlViewerComponent implements OnInit {
   private validateQueryType() {
     switch (this.query.queryType) {
       case AccessControlQueryType.Subjects:
-        this.searchSubjects(this.query?.contextUID ?? '', this.query?.keywords ?? '');
+        this.searchSubjects(buildSubjectsQueryFromAccessControlQuery(this.query));
         return;
 
       case AccessControlQueryType.Roles:
@@ -174,10 +201,10 @@ export class AccessControlViewerComponent implements OnInit {
   }
 
 
-  private searchSubjects(contextUID: string, keywords: string) {
+  private searchSubjects(query: SubjectsQuery) {
     this.isLoading = true;
 
-    this.accessControlData.searchSubjects(contextUID, keywords)
+    this.accessControlData.searchSubjects(query)
       .toPromise()
       .then(x => {
         this.subjectsList = x;
@@ -229,6 +256,27 @@ export class AccessControlViewerComponent implements OnInit {
     }
 
     this.cardHint = `Consulta de ${this.queryTypeName}`;
+  }
+
+
+  private validateSubjectCreated(subject: Subject) {
+    if (!this.queryExecuted) {
+      this.setQuery({queryType: DefaultAccessControlQueryType.uid}, DefaultAccessControlQueryType.name);
+      this.insertSubjectToList(subject);
+    }
+
+    if (this.queryExecuted && this.query.queryType === AccessControlQueryType.Subjects) {
+      this.insertSubjectToList(subject);
+    }
+
+    this.emitSelectedItem(subject as Subject, AccessControlQueryType.Subjects);
+  }
+
+
+  private insertSubjectToList(subject: Subject) {
+    const newList = ArrayLibrary.insertItemTop(this.subjectsList, subject, 'uid');
+    this.subjectsList = newList;
+    this.setControlData(this.subjectsList.length);
   }
 
 }

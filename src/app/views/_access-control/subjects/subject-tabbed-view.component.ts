@@ -17,7 +17,12 @@ import { AccessControlDataService } from '@app/data-services';
 
 import { EmptySubject, Feature, SecurityItemType, Subject } from '@app/models';
 
+import { sendEvent } from '@app/shared/utils';
+
 import { SecurityItemEditionEventType } from '../security-item/security-item-edition.component';
+
+import { SubjectEditorEventType } from './subject-editor.component';
+
 
 export enum SubjectTabbedViewEventType {
   SUBJECT_UPDATED = 'SubjectTabbedViewComponent.Event.SubjectUpdated',
@@ -84,6 +89,31 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
+  get hasContexts(): boolean {
+    return this.subjectContextsList.length > 0;
+  }
+
+
+  get isSuspended(): boolean {
+    return this.subject.status === 'Deleted';
+  }
+
+
+  onSubjectEditorEvent(event: EventInfo) {
+    switch (event.type as SubjectEditorEventType) {
+
+      case SubjectEditorEventType.SUBJECT_UPDATED:
+        sendEvent(this.subjectTabbedViewEvent, SubjectTabbedViewEventType.SUBJECT_UPDATED,
+          event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   onSubjectContextsEditionEvent(event: EventInfo) {
     switch (event.type as SecurityItemEditionEventType) {
       case SecurityItemEditionEventType.ASSIGN_ITEM: {
@@ -93,7 +123,7 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
         return;
       }
 
-      case SecurityItemEditionEventType.REMOVE_ITEM:{
+      case SecurityItemEditionEventType.REMOVE_ITEM: {
         Assertion.assertValue(event.payload.itemUID, 'event.payload.itemUID');
         const contextUID = event.payload.itemUID;
         this.removeContextToSubject(this.subject.uid, contextUID);
@@ -186,16 +216,7 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
     this.isSubjectFeaturesExcecuted = false;
   }
 
-
-  private loadContexts() {
-    this.isLoadingContexts = true;
-
-    this.helper.select<Identifiable[]>(AccessControlStateSelector.CONTEXTS_LIST)
-      .subscribe(x => {
-        this.contextsList = x;
-        this.isLoadingContexts = false;
-      });
-  }
+  //#region Load Context Data
 
 
   private getRolesByContext(contextUID: string) {
@@ -211,6 +232,20 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
       .then(x => this.featuresList = x);
   }
 
+  //#endregion
+
+  //#region Subject Contexts
+
+  private loadContexts() {
+    this.isLoadingContexts = true;
+
+    this.helper.select<Identifiable[]>(AccessControlStateSelector.CONTEXTS_LIST)
+      .subscribe(x => {
+        this.contextsList = x;
+        this.isLoadingContexts = false;
+      });
+  }
+
 
   private getSubjectContexts() {
     this.isLoading = true;
@@ -219,32 +254,6 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
       .toPromise()
       .then(x => this.subjectContextsList = x)
       .finally(() => this.isLoading = false);
-  }
-
-
-  private getSubjectRolesByContext(contextUID: string) {
-    this.isLoading = true;
-
-    this.accessControlData.getSubjectRolesByContext(this.subject.uid, contextUID)
-      .toPromise()
-      .then(x => this.subjectRolesList = x)
-      .finally(() => {
-        this.isLoading = false;
-        this.isSubjectRolesExcecuted = true;
-      });
-  }
-
-
-  private getSubjectFeaturesByContext(contextUID: string) {
-    this.isLoading = true;
-
-    this.accessControlData.getSubjectFeaturesByContext(this.subject.uid, contextUID)
-      .toPromise()
-      .then(x => this.subjectFeaturesList = x)
-      .finally(() => {
-        this.isLoading = false;
-        this.isSubjectFeaturesExcecuted = true;
-      });
   }
 
 
@@ -267,6 +276,36 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
       .finally(() => this.submitted = false);
   }
 
+  //#endregion
+
+  //#region Subject Roles
+
+  private validateLoadSubjectRolesByContext(contextUID: string) {
+    this.subjectRolesList = [];
+    this.rolesList = []
+
+    if (!contextUID) {
+      this.isSubjectRolesExcecuted = false;
+      return;
+    }
+
+    this.getSubjectRolesByContext(contextUID);
+    this.getRolesByContext(contextUID);
+  }
+
+
+  private getSubjectRolesByContext(contextUID: string) {
+    this.isLoading = true;
+
+    this.accessControlData.getSubjectRolesByContext(this.subject.uid, contextUID)
+      .toPromise()
+      .then(x => this.subjectRolesList = x)
+      .finally(() => {
+        this.isLoading = false;
+        this.isSubjectRolesExcecuted = true;
+      });
+  }
+
 
   private assignRoleToSubject(subjectUID: string, contextUID: string, roleUID: string) {
     this.submitted = true;
@@ -285,6 +324,36 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
       .toPromise()
       .then(x => this.subjectRolesList = x)
       .finally(() => this.submitted = false);
+  }
+
+  //#endregion
+
+  //#region Subject Features
+
+  private validateLoadSubjectFeaturesByContext(contextUID: string) {
+    this.subjectFeaturesList = [];
+    this.featuresList = [];
+
+    if (!contextUID) {
+      this.isSubjectFeaturesExcecuted = false;
+      return;
+    }
+
+    this.getSubjectFeaturesByContext(contextUID);
+    this.getFeaturesByContext(contextUID);
+  }
+
+
+  private getSubjectFeaturesByContext(contextUID: string) {
+    this.isLoading = true;
+
+    this.accessControlData.getSubjectFeaturesByContext(this.subject.uid, contextUID)
+      .toPromise()
+      .then(x => this.subjectFeaturesList = x)
+      .finally(() => {
+        this.isLoading = false;
+        this.isSubjectFeaturesExcecuted = true;
+      });
   }
 
 
@@ -307,33 +376,6 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
       .finally(() => this.submitted = false);
   }
 
-
-
-  private validateLoadSubjectRolesByContext(contextUID: string) {
-    this.subjectRolesList = [];
-    this.rolesList = []
-
-    if (!contextUID) {
-      this.isSubjectRolesExcecuted = false;
-      return;
-    }
-
-    this.getSubjectRolesByContext(contextUID);
-    this.getRolesByContext(contextUID);
-  }
-
-
-  private validateLoadSubjectFeaturesByContext(contextUID: string) {
-    this.subjectFeaturesList = [];
-    this.featuresList = [];
-
-    if (!contextUID) {
-      this.isSubjectFeaturesExcecuted = false;
-      return;
-    }
-
-    this.getSubjectFeaturesByContext(contextUID);
-    this.getFeaturesByContext(contextUID);
-  }
+  //#endregion
 
 }

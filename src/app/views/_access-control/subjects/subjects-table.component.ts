@@ -35,7 +35,7 @@ export class SubjectsTableComponent implements OnChanges {
 
   @Output() subjectsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['subject', 'workplace', 'email'];
+  displayedColumns: string[] = ['subject', 'workarea', 'email'];
 
   dataSource: TableVirtualScrollDataSource<Subject>;
 

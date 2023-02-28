@@ -15,10 +15,10 @@
         </div>
 
         <div [fxFlex]="100/3">
-          <label>Usuario:</label>
+          <label>Identificador:</label>
           <input type="text" class="text-box"
-            [formControlName]="controls.nickName"
-            [class.invalid-control]="formHandler.showInvalidControl(controls.nickName)">
+            [formControlName]="controls.userID"
+            [class.invalid-control]="formHandler.showInvalidControl(controls.userID)">
         </div>
 
     </div>
@@ -33,10 +33,31 @@
       </div>
 
       <div [fxFlex]="100/3">
-        <label>Identificador:</label>
+        <label>Número de empleado:</label>
         <input type="text" class="text-box"
-          [formControlName]="controls.userID"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.userID)">
+          [formControlName]="controls.employeeNo"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.employeeNo)">
+      </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="200/3">
+        <label>Área de trabajo:</label>
+        <emp-ng-select
+          [formControlName]="controls.workareaUID"
+          [items]="workareasList"
+          [loading]="isLoading"
+          [showError]="formHandler.showInvalidControl(controls.workareaUID)">
+        </emp-ng-select>
+      </div>
+
+      <div [fxFlex]="100/3">
+        <label>Puesto de trabajo:</label>
+        <input type="text" class="text-box"
+          [formControlName]="controls.jobPosition"
+          [class.invalid-control]="formHandler.showInvalidControl(controls.jobPosition)">
       </div>
 
     </div>
@@ -53,9 +74,10 @@
 
       <div fxFlex fxLayoutAlign="end center">
 
-        <button (click)="onSubmitForm()"
+        <button
           [class.btn]="!formHandler.isValid"
-          [class.btn-action]="formHandler.isValid">
+          [class.btn-action]="formHandler.isValid"
+          (click)="onCreateButtonClicked()">
           Agregar
         </button>
 
@@ -70,13 +92,13 @@
         <button *ngIf="!isSuspended"
           type="button" class="btn-warning"
           (click)="onSuspendButtonClicked()">
-          Suspender
+          Dar de baja
         </button>
 
         <button *ngIf="isSuspended"
           type="button" class="btn-action"
           (click)="onActiveButtonClicked()">
-          Activar
+          Dar de alta
         </button>
 
       </div>
@@ -85,14 +107,15 @@
 
         <ng-container *ngIf="editionMode">
 
-          <button (click)="onSubmitForm()"
-            [class.btn]="!formHandler.isValid"
-            [class.btn-action]="formHandler.isValid">
-            Guardar
+          <button *ngIf="canGeneratePassword"
+            class="btn-action"
+            (click)="onGeneratePasswordButtonClicked()">
+            Generar contraseña
           </button>
 
-          <button (click)="enableEditor(false)"
-            class="btn-base uppercase">
+          <button
+            class="btn-base uppercase"
+            (click)="enableEditor(false)">
             Descartar Cambios
           </button>
 
@@ -101,7 +124,7 @@
         <ng-container *ngIf="!editionMode">
 
           <button
-            class="btn-action"
+            class="btn"
             (click)="enableEditor(true)">
             Editar
           </button>

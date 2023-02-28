@@ -13,6 +13,16 @@
 
     </div>
 
+    <div class="card-header-options">
+
+      <button *empNgHasPermission="Permissions.FEATURE_EDICION_CONTROL_DE_ACCESOS"
+        class="btn-action" fxFlexOffset="1.5rem"
+        (click)="onCreateSubjectClicked()">
+        Agregar usuario
+      </button>
+
+    </div>
+
   </div>
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
@@ -69,3 +79,8 @@
   </div>
 
 </div>
+
+<emp-ng-subject-creator *ngIf="displaSubjectCreator"
+  (subjectCreatorEvent)="onSubjectCreatorEvent($event)">
+
+</emp-ng-subject-creator>

@@ -7,13 +7,15 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
+import { combineLatest } from 'rxjs';
+
 import { EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccessControlStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { AccessControlQueryType, AccessControlQueryTypeList,
+import { AccessControlQuery, AccessControlQueryType, AccessControlQueryTypeList,
          DefaultAccessControlQueryType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
@@ -36,15 +38,20 @@ export class AccessControlFilterComponent implements OnInit, OnDestroy {
 
   contextsList: Identifiable[] = [];
 
+  workareasList: Identifiable[] = [];
+
   formData = {
     queryType: DefaultAccessControlQueryType,
     contextUID: null,
+    workareaUID: null,
     keywords: null,
   };
 
   helper: SubscriptionHelper;
 
   isContextRequired = false;
+
+  displayWorkarea = true;
 
 
   constructor(private uiLayer: PresentationLayer) {
@@ -53,8 +60,8 @@ export class AccessControlFilterComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.loadContexts();
-    this.setIsContextRequired();
+    this.loadDataLists();
+    this.validateSelectedQueryType();
   }
 
 
@@ -63,8 +70,19 @@ export class AccessControlFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get isFormValid() {
+    return !!this.formData.queryType && this.isValidContextField;
+  }
+
+
+  get isValidContextField(): boolean {
+    return AccessControlQueryType.Subjects === this.formData.queryType.uid ? true :
+      !!this.formData.contextUID;
+  }
+
+
   onQueryTypeChanges() {
-    this.setIsContextRequired()
+    this.validateSelectedQueryType()
   }
 
 
@@ -83,27 +101,34 @@ export class AccessControlFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private loadContexts() {
+  private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<Identifiable[]>(AccessControlStateSelector.CONTEXTS_LIST)
-      .subscribe(x => {
-        this.contextsList = x;
-        this.isLoading = false;
-      });
+    combineLatest([
+      this.helper.select<Identifiable[]>(AccessControlStateSelector.CONTEXTS_LIST),
+      this.helper.select<Identifiable[]>(AccessControlStateSelector.WORKAREAS_LIST),
+    ])
+    .subscribe(([x, y]) => {
+      this.contextsList = x;
+      this.workareasList = y;
+      this.isLoading = false;
+    });
   }
 
 
-  private setIsContextRequired() {
+  private validateSelectedQueryType() {
     this.isContextRequired = [AccessControlQueryType.Roles, AccessControlQueryType.Features]
       .includes(this.formData.queryType.uid as AccessControlQueryType);
+
+    this.displayWorkarea = AccessControlQueryType.Subjects === this.formData.queryType.uid;
   }
 
 
-  private getFormData(): any {
-    const data: any = {
+  private getFormData(): AccessControlQuery {
+    const data: AccessControlQuery = {
       queryType: this.formData.queryType.uid || '',
       contextUID: this.formData.contextUID || '',
+      workareaUID: this.formData.workareaUID || '',
       keywords: this.formData.keywords || '',
     };
 
