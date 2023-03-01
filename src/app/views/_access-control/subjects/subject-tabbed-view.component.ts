@@ -26,6 +26,7 @@ import { SubjectEditorEventType } from './subject-editor.component';
 
 export enum SubjectTabbedViewEventType {
   SUBJECT_UPDATED = 'SubjectTabbedViewComponent.Event.SubjectUpdated',
+  SUBJECT_DELETED = 'SubjectTabbedViewComponent.Event.SubjectDeleted',
 }
 
 @Component({
@@ -94,7 +95,7 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
   }
 
 
-  get isSuspended(): boolean {
+  get isDeleted(): boolean {
     return this.subject.status === 'Deleted';
   }
 
@@ -104,6 +105,11 @@ export class SubjectTabbedViewComponent implements OnChanges, OnInit, OnDestroy 
 
       case SubjectEditorEventType.SUBJECT_UPDATED:
         sendEvent(this.subjectTabbedViewEvent, SubjectTabbedViewEventType.SUBJECT_UPDATED,
+          event.payload);
+        return;
+
+      case SubjectEditorEventType.SUBJECT_DELETED:
+        sendEvent(this.subjectTabbedViewEvent, SubjectTabbedViewEventType.SUBJECT_DELETED,
           event.payload);
         return;
 

@@ -65,7 +65,7 @@
   </div>
 
 
-  <mat-divider class="horizontal" *ngIf="!isSaved || (isSaved && canEdit)"></mat-divider>
+  <mat-divider class="horizontal" *ngIf="!isSaved || (isSaved && canEdit && !isDeleted)"></mat-divider>
 
 
   <div #rowFooter fxLayout="row">
@@ -77,7 +77,7 @@
         <button
           [class.btn]="!formHandler.isValid"
           [class.btn-action]="formHandler.isValid"
-          (click)="onCreateButtonClicked()">
+          (click)="onSubmitButtonClicked()">
           Agregar
         </button>
 
@@ -85,48 +85,45 @@
 
     </ng-container>
 
-    <ng-container *ngIf="isSaved && canEdit">
+    <ng-container *ngIf="isSaved && canEdit && !isDeleted">
 
-      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+      <div fxFlex fxLayoutAlign="start center">
 
-        <button *ngIf="!isSuspended"
-          type="button" class="btn-warning"
-          (click)="onSuspendButtonClicked()">
-          Dar de baja
+        <button *ngIf="!editionMode && canGeneratePassword"
+          class="btn-action"
+          (click)="onGeneratePasswordButtonClicked()">
+          Generar contraseña
         </button>
 
-        <button *ngIf="isSuspended"
-          type="button" class="btn-action"
-          (click)="onActiveButtonClicked()">
-          Dar de alta
+        <button *ngIf="editionMode"
+          type="button" class="btn-warning"
+          (click)="onDeleteButtonClicked()">
+          Dar de baja
         </button>
 
       </div>
 
       <div fxFlex fxLayoutAlign="end center">
 
+        <button *ngIf="!editionMode"
+          class="btn-action"
+          (click)="enableEditor(true)">
+          Editar
+        </button>
+
         <ng-container *ngIf="editionMode">
 
-          <button *ngIf="canGeneratePassword"
-            class="btn-action"
-            (click)="onGeneratePasswordButtonClicked()">
-            Generar contraseña
+          <button
+            [class.btn]="!formHandler.isValid"
+            [class.btn-action]="formHandler.isValid"
+            (click)="onSubmitButtonClicked()">
+            Guardar
           </button>
 
           <button
             class="btn-base uppercase"
             (click)="enableEditor(false)">
             Descartar Cambios
-          </button>
-
-        </ng-container>
-
-        <ng-container *ngIf="!editionMode">
-
-          <button
-            class="btn"
-            (click)="enableEditor(true)">
-            Editar
           </button>
 
         </ng-container>

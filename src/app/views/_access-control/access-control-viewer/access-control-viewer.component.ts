@@ -16,7 +16,8 @@ import { PermissionsLibrary } from '@app/main-layout';
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
 import { AccessControlQueryType, Feature, Role, Subject, AccessControlSelectionData,
-         DefaultAccessControlQueryType, AccessControlQuery, SubjectsQuery, buildSubjectsQueryFromAccessControlQuery } from '@app/models';
+         DefaultAccessControlQueryType, AccessControlQuery, SubjectsQuery,
+         buildSubjectsQueryFromAccessControlQuery } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -154,6 +155,12 @@ export class AccessControlViewerComponent implements OnInit {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  reloadData() {
+    this.resetData();
+    this.validateQueryType();
   }
 
 

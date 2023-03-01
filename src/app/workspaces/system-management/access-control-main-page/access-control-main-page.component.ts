@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty } from '@app/core';
 
@@ -16,6 +16,7 @@ import {
 } from '@app/views/_access-control/access-control-tabbed-view/access-control-tabbed-view.component';
 
 import {
+  AccessControlViewerComponent,
   AccessControlViewerEventType
 } from '@app/views/_access-control/access-control-viewer/access-control-viewer.component';
 
@@ -24,6 +25,8 @@ import {
   templateUrl: './access-control-main-page.component.html',
 })
 export class AccessControlMainPageComponent {
+
+  @ViewChild('accessControlViewer') accessControlViewer: AccessControlViewerComponent;
 
   displayTabbedView = false;
 
@@ -51,10 +54,31 @@ export class AccessControlMainPageComponent {
         this.setSelectedData(EmptyAccessControlSelectionData);
         return;
 
+      case AccessControlTabbedViewEventType.DELETED:
+        this.resetDataUpdated(EmptyAccessControlSelectionData);
+        return;
+
+      case AccessControlTabbedViewEventType.UPDATED:
+        Assertion.assertValue(event.payload.subject, 'event.payload.subject');
+
+        const data: AccessControlSelectionData = {
+          type: this.selectedData.type,
+          item: event.payload.subject,
+        };
+
+        this.resetDataUpdated(data);
+        return;
+
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
+  }
+
+
+  private resetDataUpdated(data: AccessControlSelectionData) {
+    this.setSelectedData(data);
+    this.accessControlViewer.reloadData();
   }
 
 

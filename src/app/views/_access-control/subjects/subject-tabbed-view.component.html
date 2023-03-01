@@ -14,8 +14,8 @@
         <emp-ng-subject-editor fxFlex="none"
           [subject]="subject"
           [canEdit]="canEdit"
-          [canGeneratePassword]="!isSuspended && hasContexts"
-          [isSuspended]="isSuspended"
+          [canGeneratePassword]="!isDeleted && hasContexts"
+          [isDeleted]="isDeleted"
           (subjectEditorEvent)="onSubjectEditorEvent($event)">
 
         </emp-ng-subject-editor>
@@ -26,7 +26,7 @@
 
           <emp-ng-security-item-edition
             [itemsAssignedList]="subjectContextsList"
-            [canEdit]="!isSuspended && canEdit"
+            [canEdit]="!isDeleted && canEdit"
             [itemsToAssignList]="contextsList"
             [submitted]="submitted"
             itemTypeName="Aplicación"
@@ -44,7 +44,7 @@
 
       <emp-ng-security-item-edition
         [itemsAssignedList]="subjectRolesList"
-        [canEdit]="!isSuspended && canEdit"
+        [canEdit]="!isDeleted && canEdit"
         [itemsForSelectorList]="subjectContextsList"
         [selectorRequired]="true"
         [queryExcecuted]="isSubjectRolesExcecuted"
@@ -61,7 +61,7 @@
 
       <emp-ng-security-item-edition
         [itemsAssignedList]="subjectFeaturesList"
-        [canEdit]="!isSuspended && canEdit"
+        [canEdit]="!isDeleted && canEdit"
         [itemsForSelectorList]="subjectContextsList"
         [selectorRequired]="true"
         [queryExcecuted]="isSubjectFeaturesExcecuted"

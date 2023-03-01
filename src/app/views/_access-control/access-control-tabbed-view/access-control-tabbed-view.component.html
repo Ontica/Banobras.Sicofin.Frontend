@@ -7,7 +7,8 @@
 
     <emp-ng-subject-tabbed-view *ngSwitchCase="AccessControlType.Subjects"
       [subject]="subject"
-      [canEdit]="canEdit">
+      [canEdit]="canEdit"
+      (subjectTabbedViewEvent)="onSubjectTabbedViewEvent($event)">
 
     </emp-ng-subject-tabbed-view>
 

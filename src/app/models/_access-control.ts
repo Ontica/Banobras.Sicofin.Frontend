@@ -124,3 +124,15 @@ export const EmptySubject: Subject = {
   lastAccess: '',
   status: '',
 }
+
+
+export const EmptyRole: Role = {
+  uid: '',
+  name: '',
+}
+
+
+export const EmptyFeature: Feature = {
+  uid: '',
+  name: '',
+}

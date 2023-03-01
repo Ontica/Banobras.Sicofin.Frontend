@@ -5,16 +5,18 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { EventInfo, SessionService } from '@app/core';
 
 import { PermissionsLibrary } from '@app/main-layout';
 
-import { AccessControlQueryType, AccessControlSelectionData, EmptyAccessControlSelectionData, Feature,
-         Role, Subject } from '@app/models';
+import { AccessControlQueryType, AccessControlSelectionData, EmptyAccessControlSelectionData, EmptyFeature,
+         EmptyRole, EmptySubject, Feature, Role, Subject } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { SubjectTabbedViewEventType } from '../subjects/subject-tabbed-view.component';
 
 export enum AccessControlTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'AccessControlTabbedViewComponent.Event.CloseButtonClicked',
@@ -26,7 +28,7 @@ export enum AccessControlTabbedViewEventType {
   selector: 'emp-fa-access-control-tabbed-view',
   templateUrl: './access-control-tabbed-view.component.html',
 })
-export class AccessControlTabbedViewComponent implements OnInit {
+export class AccessControlTabbedViewComponent implements OnInit, OnChanges {
 
   @Input() accessControlItem: AccessControlSelectionData = EmptyAccessControlSelectionData;
 
@@ -36,9 +38,22 @@ export class AccessControlTabbedViewComponent implements OnInit {
 
   AccessControlType = AccessControlQueryType;
 
+  subject: Subject = EmptySubject;
+
+  role: Role = EmptyRole;
+
+  feature: Feature = EmptyFeature;
 
   constructor(private session: SessionService){
 
+  }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.accessControlItem) {
+      this.resetSelectedItems();
+      this.setSelectedItem();
+    }
   }
 
 
@@ -76,27 +91,12 @@ export class AccessControlTabbedViewComponent implements OnInit {
           `<strong>${this.subject.workarea}</strong> &nbsp; &nbsp; | &nbsp; &nbsp;` +
           `${this.subject.jobPosition}`;
 
-
       case AccessControlQueryType.Roles:
       case AccessControlQueryType.Features:
         return `Información del ${this.typeName} seleccionado.`;
+
       default: return '';
     }
-  }
-
-
-  get subject(): Subject {
-    return this.accessControlItem.item as Subject;
-  }
-
-
-  get role(): Role {
-    return this.accessControlItem.item as Role;
-  }
-
-
-  get feature(): Feature {
-    return this.accessControlItem.item as Feature;
   }
 
 
@@ -105,8 +105,52 @@ export class AccessControlTabbedViewComponent implements OnInit {
   }
 
 
+  onSubjectTabbedViewEvent(event: EventInfo) {
+    switch (event.type as SubjectTabbedViewEventType) {
+
+      case SubjectTabbedViewEventType.SUBJECT_UPDATED:
+        sendEvent(this.accessControlTabbedViewEvent, AccessControlTabbedViewEventType.UPDATED,
+          event.payload);
+        return;
+
+      case SubjectTabbedViewEventType.SUBJECT_DELETED:
+        sendEvent(this.accessControlTabbedViewEvent, AccessControlTabbedViewEventType.DELETED,
+          event.payload);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   private setPermission() {
     this.canEdit = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_CONTROL_DE_ACCESOS);
+  }
+
+
+  private setSelectedItem() {
+    switch (this.accessControlItem.type) {
+      case AccessControlQueryType.Subjects:
+        this.subject = this.accessControlItem.item as Subject;
+        return;
+      case AccessControlQueryType.Roles:
+        this.role = this.accessControlItem.item as Role;
+        return;
+      case AccessControlQueryType.Features:
+        this.feature = this.accessControlItem.item as Feature;
+        return;
+      default:
+        return;
+    }
+  }
+
+
+  private resetSelectedItems() {
+    this.subject = EmptySubject;
+    this.role = EmptyRole;
+    this.feature = EmptyFeature;
   }
 
 }

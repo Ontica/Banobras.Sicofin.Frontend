@@ -5,8 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
-         SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -24,8 +23,8 @@ import { FormHandler, sendEvent } from '@app/shared/utils';
 
 export enum SubjectHeaderEventType {
   CREATE_SUBJECT    = 'SubjectHeaderComponent.Event.CreateSubject',
-  SUSPEND_SUBJECT   = 'SubjectHeaderComponent.Event.SuspendSubject',
-  ACTIVE_SUBJECT    = 'SubjectHeaderComponent.Event.ActiveSubject',
+  UPDATE_SUBJECT    = 'SubjectHeaderComponent.Event.UpdateSubject',
+  DELETE_SUBJECT    = 'SubjectHeaderComponent.Event.DeleteSubject',
   GENERATE_PASSWORD = 'SubjectHeaderComponent.Event.GeneratePassword',
 }
 
@@ -50,7 +49,7 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() canGeneratePassword = false;
 
-  @Input() isSuspended = false;
+  @Input() isDeleted = false;
 
   @Output() subjectHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -75,10 +74,8 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.subject && this.isSaved) {
-      this.enableEditor(false);
-    }
+  ngOnChanges() {
+    this.enableEditor(!this.isSaved);
   }
 
 
@@ -104,17 +101,20 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
       this.setFormData();
     }
 
-    this.formHandler.disableForm(this.isSaved);
+    this.formHandler.disableForm(!this.editionMode || this.isDeleted);
   }
 
 
-  onCreateButtonClicked() {
+  onSubmitButtonClicked() {
     if (!this.formHandler.validateReadyForSubmit()) {
       this.formHandler.invalidateForm();
       return;
     }
 
-    sendEvent(this.subjectHeaderEvent, SubjectHeaderEventType.CREATE_SUBJECT, {subject: this.getFormData()});
+    const eventType = this.isSaved ? SubjectHeaderEventType.UPDATE_SUBJECT :
+      SubjectHeaderEventType.CREATE_SUBJECT;
+
+    sendEvent(this.subjectHeaderEvent, eventType, {subject: this.getFormData()});
   }
 
 
@@ -123,13 +123,8 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  onSuspendButtonClicked() {
-    this.showConfirmMessage(SubjectHeaderEventType.SUSPEND_SUBJECT);
-  }
-
-
-  onActiveButtonClicked() {
-    this.showConfirmMessage(SubjectHeaderEventType.ACTIVE_SUBJECT);
+  onDeleteButtonClicked() {
+    this.showConfirmMessage(SubjectHeaderEventType.DELETE_SUBJECT);
   }
 
 
@@ -195,7 +190,7 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   private showConfirmMessage(eventType: SubjectHeaderEventType) {
     const confirmType: 'AcceptCancel' | 'DeleteCancel' =
-      eventType === SubjectHeaderEventType.SUSPEND_SUBJECT ? 'DeleteCancel' : 'AcceptCancel';
+      eventType === SubjectHeaderEventType.DELETE_SUBJECT ? 'DeleteCancel' : 'AcceptCancel';
     const title = this.getConfirmTitle(eventType);
     const message = this.getConfirmMessage(eventType);
 
@@ -212,8 +207,7 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
   private getConfirmTitle(eventType: SubjectHeaderEventType): string {
     switch (eventType) {
       case SubjectHeaderEventType.GENERATE_PASSWORD: return 'Generar contraseña';
-      case SubjectHeaderEventType.SUSPEND_SUBJECT: return 'Dar de baja al usuario';
-      case SubjectHeaderEventType.ACTIVE_SUBJECT: return 'Dar de alta al usuario';
+      case SubjectHeaderEventType.DELETE_SUBJECT: return 'Dar de baja al usuario';
       default: return '';
     }
   }
@@ -226,15 +220,10 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
                 <strong> ${this.subject.eMail}</strong>.
                 <br><br>¿Genero la contraseña?`;
 
-      case SubjectHeaderEventType.SUSPEND_SUBJECT:
+      case SubjectHeaderEventType.DELETE_SUBJECT:
         return `Esta operación <strong>dará de baja / eliminará</strong> al usuario
                 <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo}</strong>.
                 <br><br>¿Doy de baja al usuario?`;
-
-      case SubjectHeaderEventType.ACTIVE_SUBJECT:
-        return `Esta operación <strong>reactivará</strong> al usuario
-                <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo}</strong>.
-                <br><br>¿Reactivo al usuario?`;
 
       default: return '';
     }

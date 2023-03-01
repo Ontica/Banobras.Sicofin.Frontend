@@ -2,7 +2,7 @@
 
   <div class="primary priority" [fxHide.notebook]="displayTabbedView">
 
-    <emp-ng-access-control-viewer
+    <emp-ng-access-control-viewer #accessControlViewer
       [selectedItem]="selectedData.item"
       (accessControlViewerEvent)="onAccessControlViewerEvent($event)">
 

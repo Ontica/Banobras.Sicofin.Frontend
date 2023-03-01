@@ -7,9 +7,11 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
-import { EmptySubject, Subject } from '@app/models';
+import { AccessControlDataService } from '@app/data-services';
+
+import { EmptySubject, Subject, SubjectFields } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -19,6 +21,7 @@ import { SubjectHeaderEventType } from './subject-header.component';
 
 export enum SubjectEditorEventType {
   SUBJECT_UPDATED = 'SubjectEditorComponent.Event.SubjectUpdated',
+  SUBJECT_DELETED = 'SubjectEditorComponent.Event.SubjectDeleted',
 }
 
 @Component({
@@ -33,14 +36,15 @@ export class SubjectEditorComponent {
 
   @Input() canGeneratePassword = false;
 
-  @Input() isSuspended = false;
+  @Input() isDeleted = false;
 
   @Output() subjectEditorEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
 
 
-  constructor(private messageBox: MessageBoxService) {
+  constructor(private accessControlData: AccessControlDataService,
+              private messageBox: MessageBoxService) {
 
   }
 
@@ -51,14 +55,15 @@ export class SubjectEditorComponent {
     }
 
     switch (event.type as SubjectHeaderEventType) {
+      case SubjectHeaderEventType.UPDATE_SUBJECT:
+        Assertion.assertValue(event.payload.subject, 'event.payload.subject');
+        this.updateSubject(this.subject.uid,  event.payload.subject as SubjectFields);
+        return;
       case SubjectHeaderEventType.GENERATE_PASSWORD:
         this.generatePasswordToSubject();
         return;
-      case SubjectHeaderEventType.SUSPEND_SUBJECT:
-        this.suspendSubject();
-        return;
-      case SubjectHeaderEventType.ACTIVE_SUBJECT:
-        this.activateSubject();
+      case SubjectHeaderEventType.DELETE_SUBJECT:
+        this.deleteSubject();
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -67,39 +72,36 @@ export class SubjectEditorComponent {
   }
 
 
+  private updateSubject(subjectUID: string, subjectFields: SubjectFields) {
+    this.submitted = true;
+
+    this.accessControlData.updateSubject(subjectUID, subjectFields)
+      .toPromise()
+      .then(x => sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED, {subject: x}))
+      .finally(() => this.submitted = false);
+  }
+
+
   private generatePasswordToSubject() {
     this.submitted = true;
 
-    setTimeout(() => {
-      this.messageBox.showInDevelopment('Generar contraseña', this.subject);
-      sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED,
-        {subject: this.subject});
-      this.submitted = false
-    }, 200);
+    this.accessControlData.resetCredentialsToSubject(this.subject.uid)
+      .toPromise()
+      .then(x =>
+        this.messageBox.show('La operación se realizó correctamente.', 'Generar contraseña')
+      )
+      .finally(() => this.submitted = false);
   }
 
 
-  private activateSubject() {
+  private deleteSubject() {
     this.submitted = true;
 
-    setTimeout(() => {
-      this.messageBox.showInDevelopment('Dar de alta', this.subject);
-      sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED,
-        {subject: this.subject});
-      this.submitted = false
-    }, 200);
-  }
-
-
-  private suspendSubject() {
-    this.submitted = true;
-
-    setTimeout(() => {
-      this.messageBox.showInDevelopment('Dar de baja', this.subject);
-      sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED,
-        {subject: this.subject});
-      this.submitted = false
-    }, 200);
+    this.accessControlData.deleteSubject(this.subject.uid)
+      .toPromise()
+      .then(x => sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_DELETED,
+        {subjectUID: this.subject.uid}))
+      .finally(() => this.submitted = false);
   }
 
 }

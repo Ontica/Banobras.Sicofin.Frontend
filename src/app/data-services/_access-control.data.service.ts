@@ -93,6 +93,34 @@ export class AccessControlDataService {
   }
 
 
+  updateSubject(subjectUID: string, subjectFields: SubjectFields): Observable<Subject> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+    Assertion.assertValue(subjectFields, 'subjectFields');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}`;
+
+    return this.http.put<Subject>(path, subjectFields);
+  }
+
+
+  deleteSubject(subjectUID: string): Observable<void> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}`;
+
+    return this.http.delete<void>(path);
+  }
+
+
+  resetCredentialsToSubject(subjectUID: string): Observable<any> {
+    Assertion.assertValue(subjectUID, 'subjectUID');
+
+    const path = `v4/onepoint/security/management/subjects/${subjectUID}/reset-credentials`;
+
+    return this.http.post<any>(path);
+  }
+
+
   assignContextToSubject(subjectUID: string, contextUID: string):Observable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
@@ -113,7 +141,9 @@ export class AccessControlDataService {
   }
 
 
-  assignRoleToSubject(subjectUID: string, contextUID: string, roleUID: string):Observable<Identifiable[]> {
+  assignRoleToSubject(subjectUID: string,
+                      contextUID: string,
+                      roleUID: string):Observable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(roleUID, 'roleUID');
@@ -125,7 +155,9 @@ export class AccessControlDataService {
   }
 
 
-  removeRoleToSubject(subjectUID: string, contextUID: string, roleUID: string):Observable<Identifiable[]> {
+  removeRoleToSubject(subjectUID: string,
+                      contextUID: string,
+                      roleUID: string):Observable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(roleUID, 'roleUID');
@@ -137,7 +169,9 @@ export class AccessControlDataService {
   }
 
 
-  assignFeatureToSubject(subjectUID: string, contextUID: string, featureUID: string):Observable<Identifiable[]> {
+  assignFeatureToSubject(subjectUID: string,
+                         contextUID: string,
+                         featureUID: string):Observable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(featureUID, 'featureUID');
@@ -149,7 +183,9 @@ export class AccessControlDataService {
   }
 
 
-  removeFeatureToSubject(subjectUID: string, contextUID: string, featureUID: string):Observable<Identifiable[]> {
+  removeFeatureToSubject(subjectUID: string,
+                         contextUID: string,
+                         featureUID: string):Observable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(featureUID, 'featureUID');
