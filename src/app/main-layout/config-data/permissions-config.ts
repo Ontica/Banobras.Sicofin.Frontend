@@ -93,6 +93,13 @@ export enum PermissionsLibrary {
 
   MODULE_ADMINISTRACION_DE_SISTEMA = 'module-administracion-de-sistema',
 
+  // TIPOS DE CAMBIO
+  ROUTE_TIPOS_CAMBIO = 'route-tipos-cambio',
+  FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
+
+  // GENERACIÓN DE SALDOS
+  ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',
+
   // PANEL DE CONTROL
   ROUTE_PANEL_CONTROL = 'route-panel-control',
 
@@ -103,13 +110,6 @@ export enum PermissionsLibrary {
   FEATURE_EXPORTACION_SALDOS_DIARIOS = 'feature-exportacion-saldos-diarios',
   FEATURE_SALDOS_ENCERRADOS = 'feature-saldos-encerrados',
   FEATURE_SALDOS_ENCERRADOS_GENERAR_POLIZA = 'feature-saldos-encerrados-generar-poliza',
-
-  // GENERACIÓN DE SALDOS
-  ROUTE_GENERACION_DE_SALDOS = 'route-generacion-de-saldos',
-
-  // TIPOS DE CAMBIO
-  ROUTE_TIPOS_CAMBIO = 'route-tipos-cambio',
-  FEATURE_EDICION_TIPOS_CAMBIO = 'feature-edicion-tipos-cambio',
 
   // CONTROL DE ACCESOS
   ROUTE_CONTROL_DE_ACCESOS = 'route-control-de-accesos',
@@ -266,11 +266,11 @@ export const ROUTES_LIBRARY = {
 
   // #region system-management-routing module
 
-  administracion_panel_de_control: {
-    permission: PermissionsLibrary.ROUTE_PANEL_CONTROL,
+  administracion_tipos_de_cambio: {
+    permission: PermissionsLibrary.ROUTE_TIPOS_CAMBIO,
     parent: 'administracion',
-    path: 'panel-de-control',
-    fullpath: '/administracion/panel-de-control',
+    path: 'tipos-de-cambio',
+    fullpath: '/administracion/tipos-de-cambio',
   },
   administracion_generacion_de_saldos: {
     permission: PermissionsLibrary.ROUTE_GENERACION_DE_SALDOS,
@@ -278,11 +278,11 @@ export const ROUTES_LIBRARY = {
     path: 'generacion-de-saldos',
     fullpath: '/administracion/generacion-de-saldos',
   },
-  administracion_tipos_de_cambio: {
-    permission: PermissionsLibrary.ROUTE_TIPOS_CAMBIO,
+  administracion_panel_de_control: {
+    permission: PermissionsLibrary.ROUTE_PANEL_CONTROL,
     parent: 'administracion',
-    path: 'tipos-de-cambio',
-    fullpath: '/administracion/tipos-de-cambio',
+    path: 'panel-de-control',
+    fullpath: '/administracion/panel-de-control',
   },
   administracion_control_de_accesos: {
     permission: PermissionsLibrary.ROUTE_CONTROL_DE_ACCESOS,

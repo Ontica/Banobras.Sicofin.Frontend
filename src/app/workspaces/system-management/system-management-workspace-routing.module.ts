@@ -28,9 +28,9 @@ import {
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.administracion_panel_de_control.permission },
-    path: ROUTES_LIBRARY.administracion_panel_de_control.path,
-    component: ControlPanelMainPageComponent,
+    data: { permission: ROUTES_LIBRARY.administracion_tipos_de_cambio.permission },
+    path: ROUTES_LIBRARY.administracion_tipos_de_cambio.path,
+    component: ExchangeRatesMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission },
@@ -38,9 +38,9 @@ const routes: Routes = [
     component: BalanceGenerationMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.administracion_tipos_de_cambio.permission },
-    path: ROUTES_LIBRARY.administracion_tipos_de_cambio.path,
-    component: ExchangeRatesMainPageComponent,
+    data: { permission: ROUTES_LIBRARY.administracion_panel_de_control.permission },
+    path: ROUTES_LIBRARY.administracion_panel_de_control.path,
+    component: ControlPanelMainPageComponent,
   },
   {
     data: { permission: ROUTES_LIBRARY.administracion_control_de_accesos.permission },
@@ -49,7 +49,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: ROUTES_LIBRARY.administracion_panel_de_control.path,
+    redirectTo: ROUTES_LIBRARY.administracion_tipos_de_cambio.path,
     pathMatch: 'full',
   },
 ];
