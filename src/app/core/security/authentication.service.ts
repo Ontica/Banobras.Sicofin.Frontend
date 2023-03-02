@@ -77,7 +77,6 @@ export class AuthenticationService {
                                     principalData.identity,
                                     principalData.permissions,
                                     defaultRoute);
-
     this.session.setPrincipal(principal);
   }
 

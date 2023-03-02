@@ -9,6 +9,12 @@
 export enum PermissionsLibrary {
 
   //
+  // DEFAULT
+  //
+
+  NOT_REQUIRED = 'permission-not-required',
+
+  //
   // EXPLORADOR DE SALDOS (HERRAMIENTA)
   //
 
@@ -313,6 +319,9 @@ export const DEFAULT_URL = ( DEFAULT_ROUTE.parent ? DEFAULT_ROUTE.parent + '/' :
 
 
 export const UNAUTHORIZED_ROUTE = ROUTES_LIBRARY.unauthorized.path;
+
+
+export const PERMISSION_NOT_REQUIRED = PermissionsLibrary.NOT_REQUIRED;
 
 
 export const ROUTES_LIST = Object.keys(ROUTES_LIBRARY)
