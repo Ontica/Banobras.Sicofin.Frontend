@@ -109,6 +109,7 @@ export enum PermissionsLibrary {
   // PANEL DE CONTROL
   ROUTE_PANEL_CONTROL = 'route-panel-control',
 
+  FEATURE_CHANGE_PASSWORD = 'feature-change-password',
   FEATURE_EDICION_PERIODOS = 'feature-edicion-periodos',
   FEATURE_RENTABILIDAD = 'feature-rentabilidad',
   FEATURE_CONCILIACION_SIC = 'feature-conciliacion-sic',

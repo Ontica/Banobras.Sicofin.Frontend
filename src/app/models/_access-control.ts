@@ -91,6 +91,13 @@ export interface Subject {
 }
 
 
+export interface UpdateCredentialsFields {
+  userID: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+
 export interface Role extends SecurityItem {
 
 }

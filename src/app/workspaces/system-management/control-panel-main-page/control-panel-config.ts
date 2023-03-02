@@ -10,7 +10,8 @@ import { ExternalProcessTypes } from '@app/models';
 import { PermissionsLibrary } from '@app/main-layout';
 
 
-type ControlPanelOptionType = 'AccountingCalendars' |
+type ControlPanelOptionType = 'ChangePassword' |
+                              'AccountingCalendars' |
                               'ExternalProcessRentabilidad' |
                               'ExternalProcessConciliacionSIC' |
                               'ExternalProcessExportacionSaldosMensuales' |
@@ -30,6 +31,13 @@ export interface ControlPanelOption {
 
 
 export const ControlPanelOptionList: ControlPanelOption[] = [
+  {
+    title: 'Cambiar contraseña',
+    description: 'Herramienta para actualizar la contraseña de usuario.' ,
+    actionTitle: 'Cambiar',
+    type: 'ChangePassword',
+    permission: PermissionsLibrary.FEATURE_CHANGE_PASSWORD,
+  },
   {
     title: 'Períodos',
     description: 'Herramienta para abrir y cerrar períodos contables.' ,

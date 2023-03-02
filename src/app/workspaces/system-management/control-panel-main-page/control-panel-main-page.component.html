@@ -40,6 +40,11 @@
 
 </div>
 
+<emp-ng-change-password-modal *ngIf="displayChangePasswordModal"
+  (closeEvent)="displayChangePasswordModal = false">
+
+</emp-ng-change-password-modal>
+
 
 <emp-fa-accounting-calendars-editor *ngIf="displayAccountingCalendarsEditor"
   (closeEvent)="displayAccountingCalendarsEditor = false">

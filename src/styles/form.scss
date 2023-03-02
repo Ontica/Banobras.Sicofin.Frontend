@@ -39,11 +39,24 @@ form.submitted select.ng-invalid {
   border-left: 5px solid $warning-color;
 }
 
-form.submitted .inline-error {
+form .inline-error {
   color: $warning-color;
   font-size: 10pt;
   font-weight: 400;
   padding: 8pt;
+  margin: 0 10px 12px 0;
+  border: 1px solid $warning-color;
+  border-radius: 1px;
+}
+
+form .inline-info {
+  color: $primary-color;
+  font-size: 10pt;
+  font-weight: 400;
+  padding: 8pt;
+  margin: 0 10px 12px 0;
+  border: 1px solid $primary-color;
+  border-radius: 1px;
 }
 
 .border-bottom {

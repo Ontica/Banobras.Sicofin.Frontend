@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService, Identifiable } from '@app/core';
 
-import { Subject, SubjectFields, SubjectsQuery } from '@app/models';
+import { Subject, SubjectFields, SubjectsQuery, UpdateCredentialsFields } from '@app/models';
 
 
 @Injectable()
@@ -118,6 +118,15 @@ export class AccessControlDataService {
     const path = `v4/onepoint/security/management/subjects/${subjectUID}/reset-credentials`;
 
     return this.http.post<any>(path);
+  }
+
+
+  updateCredentialsToSubject(credentialsFields: UpdateCredentialsFields): Observable<any> {
+    Assertion.assertValue(credentialsFields, 'credentialsFields');
+
+    const path = `v4/onepoint/security/management/update-my-credentials`;
+
+    return this.http.post<any>(path, credentialsFields);
   }
 
 

@@ -18,6 +18,8 @@ import { ControlPanelOption, ControlPanelOptionList } from './control-panel-conf
 })
 export class ControlPanelMainPageComponent {
 
+  displayChangePasswordModal = false;
+
   displayAccountingCalendarsEditor = false;
 
   displayLockedUpBalancesModal = false;
@@ -31,6 +33,10 @@ export class ControlPanelMainPageComponent {
 
   onClickControlPanelOption(option: ControlPanelOption) {
     switch (option.type) {
+      case 'ChangePassword':
+        this.displayChangePasswordModal = true;
+        return;
+
       case 'AccountingCalendars':
         this.displayAccountingCalendarsEditor = true;
         return;

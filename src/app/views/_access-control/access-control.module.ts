@@ -26,6 +26,7 @@ import { SubjectEditorComponent } from './subjects/subject-editor.component';
 import { SubjectHeaderComponent } from './subjects/subject-header.component';
 import { SubjectsTableComponent } from './subjects/subjects-table.component';
 import { SubjectTabbedViewComponent } from './subjects/subject-tabbed-view.component';
+import { ChangePasswordModalComponent } from './credentials/change-password-modal.component';
 
 
 @NgModule({
@@ -44,6 +45,8 @@ import { SubjectTabbedViewComponent } from './subjects/subject-tabbed-view.compo
     AccessControlViewerComponent,
     AccessControlTabbedViewComponent,
 
+    ChangePasswordModalComponent,
+
     SecurityItemAssignComponent,
     SecurityItemEditionComponent,
 
@@ -56,6 +59,7 @@ import { SubjectTabbedViewComponent } from './subjects/subject-tabbed-view.compo
   exports: [
     AccessControlTabbedViewComponent,
     AccessControlViewerComponent,
+    ChangePasswordModalComponent,
   ]
 })
 export class AccessControlModule { }
