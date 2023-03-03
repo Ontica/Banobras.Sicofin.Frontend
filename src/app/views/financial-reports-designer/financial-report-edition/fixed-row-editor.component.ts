@@ -13,7 +13,7 @@ import { of, Subject } from 'rxjs';
 
 import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -61,6 +61,8 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
   @Input() row = 1;
 
   @Input() financialReportRowList: FinancialReportRow[] = [];
+
+  @Input() queryDate: DateString = null;
 
   @Output() fixedRowEditorEvent = new EventEmitter<EventInfo>();
 
@@ -221,7 +223,8 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
           this.resetConceptData()
           this.isLoading = true;
         }),
-        switchMap(groupUID => this.financialConceptsData.getFinancialConceptsInGroup(groupUID)
+        switchMap(groupUID =>
+          this.financialConceptsData.getFinancialConceptsInGroup(groupUID, this.queryDate)
           .pipe(
             catchError(() => of([])),
             tap(() => this.isLoading = false)

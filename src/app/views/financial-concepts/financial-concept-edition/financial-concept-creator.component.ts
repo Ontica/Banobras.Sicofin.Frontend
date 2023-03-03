@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, DateString, EventInfo } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
@@ -31,7 +31,9 @@ export class FinancialConceptCreatorComponent {
 
   @Input() accountsChartUID = '';
 
-  @Input() financialConceptsGroupUID = '';
+  @Input() groupUID = '';
+
+  @Input() queryDate: DateString = null;
 
   @Output() financialConceptCreatorEvent = new EventEmitter<EventInfo>();
 

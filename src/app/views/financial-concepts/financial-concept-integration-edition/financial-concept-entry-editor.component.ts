@@ -15,7 +15,7 @@ import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil,
          tap } from 'rxjs/operators';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { FormHandler, sendEvent } from '@app/shared/utils';
 
@@ -69,6 +69,8 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   @Input() financialConceptEntry: FinancialConceptEntry = EmptyFinancialConceptEntry;
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
+
+  @Input() queryDate: DateString = null;
 
   @Input() isSaved = false;
 
@@ -297,7 +299,8 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
           this.resetReferencedFinancialConceptData()
           this.isLoadingReferencedFinancialConcepts = true;
         }),
-        switchMap(groupUID => this.financialConceptsData.getFinancialConceptsInGroup(groupUID)
+        switchMap(groupUID =>
+          this.financialConceptsData.getFinancialConceptsInGroup(groupUID, this.queryDate)
           .pipe(
             catchError(() => of([])),
             tap(() => this.isLoadingReferencedFinancialConcepts = false)

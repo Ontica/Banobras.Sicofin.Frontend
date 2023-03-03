@@ -32,6 +32,7 @@
 
       <emp-fa-financial-report-designer fxFlex
         [financialReportDesign]="data"
+        [queryDate]="query.date"
         [isLoading]="isLoading"
         [queryExecuted]="queryExecuted"
         (financialReportDesignerEvent)="onFinancialReportDesignerEvent($event)">

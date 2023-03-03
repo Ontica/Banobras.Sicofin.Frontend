@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { DateString, EventInfo } from '@app/core';
 
 import { EmptyFinancialConcept, FinancialConcept } from '@app/models';
 
@@ -35,6 +35,8 @@ export enum FinancialConceptTabbedViewEventType {
 export class FinancialConceptTabbedViewComponent implements OnChanges {
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
+
+  @Input() queryDate: DateString = null;
 
   @Input() canEdit = false;
 

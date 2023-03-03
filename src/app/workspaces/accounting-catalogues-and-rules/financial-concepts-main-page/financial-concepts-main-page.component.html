@@ -1,4 +1,6 @@
-<emp-ng-spinner #spinner [visible]="isLoadingFinancialConcept"></emp-ng-spinner>
+<emp-ng-spinner #spinner [visible]="isLoadingFinancialConcept">
+
+</emp-ng-spinner>
 
 <div class="explorer">
 
@@ -19,6 +21,7 @@
 
     <emp-fa-financial-concept-tabbed-view
       [financialConcept]="selectedFinancialConcept"
+      [queryDate]="financialConceptQuery.date"
       [canEdit]="canEditConcepts"
       (financialConceptTabbedViewEvent)="onFinancialConceptTabbedViewEvent($event)">
 
@@ -30,7 +33,8 @@
 
 <emp-fa-financial-concept-creator *ngIf="displayFinancialConceptCreator"
   [accountsChartUID]="financialConceptQuery.accountsChartUID"
-  [financialConceptsGroupUID]="financialConceptQuery.groupUID"
+  [groupUID]="financialConceptQuery.groupUID"
+  [queryDate]="financialConceptQuery.date"
   (financialConceptCreatorEvent)="onFinancialConceptCreatorEvent($event)">
 
 </emp-fa-financial-concept-creator>

@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty } from '@app/core';
+import { Assertion, DateString, EventInfo, isEmpty } from '@app/core';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
@@ -37,6 +37,8 @@ export enum FinancialConceptIntegrationEditionEventType {
 export class FinancialConceptIntegrationEditionComponent {
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
+
+  @Input() queryDate: DateString = null;
 
   @Input() canEdit = false;
 

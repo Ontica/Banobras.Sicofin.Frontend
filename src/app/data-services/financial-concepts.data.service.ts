@@ -29,7 +29,7 @@ export class FinancialConceptsDataService {
   }
 
 
-  getFinancialConceptsInGroup(groupUID: string, date?: DateString): Observable<FinancialConceptDescriptor[]> {
+  getFinancialConceptsInGroup(groupUID: string, date: DateString): Observable<FinancialConceptDescriptor[]> {
     Assertion.assertValue(groupUID, 'groupUID');
 
     let path = `v2/financial-accounting/financial-concepts/in-group/${groupUID}`;

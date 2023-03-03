@@ -28,6 +28,7 @@
 <emp-fa-financial-concept-entry-editor *ngIf="displayFinancialConceptEntryEditor"
   [financialConcept]="financialConcept"
   [financialConceptEntry]="selectedFinancialConceptEntry"
+  [queryDate]="queryDate"
   [isSaved]="isSelectedEntrySaved"
   [submitted]="editionSubmitted"
   (financialConceptEntryEditorEvent)="onFinancialConceptEntryEditorEvent($event)">

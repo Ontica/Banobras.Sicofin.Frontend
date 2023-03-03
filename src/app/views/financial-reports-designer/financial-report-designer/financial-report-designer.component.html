@@ -39,6 +39,7 @@
   [financialReportRow]="rowToEdit"
   [row]="selectedRow.row"
   [financialReportRowList]="financialReportDesign.rows"
+  [queryDate]="queryDate"
   (fixedRowEditorEvent)="onFixedRowEditorEvent($event)">
 
 </emp-fa-fixed-row-editor>
@@ -57,6 +58,7 @@
 <emp-fa-fixed-cell-editor *ngIf="displayFixedCellEditor"
   [financialReportConfig]="financialReportDesign.config"
   [financialReportCell]="selectedCell"
+  [queryDate]="queryDate"
   (fixedCellEditorEvent)="onFixedCellEditorEvent($event)">
 
 </emp-fa-fixed-cell-editor>

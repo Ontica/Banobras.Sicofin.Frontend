@@ -14,7 +14,7 @@ import { combineLatest, of, Subject } from 'rxjs';
 
 import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
-import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -60,6 +60,8 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
   @Input() accountsChartUID = '';
 
   @Input() groupUID = '';
+
+  @Input() queryDate: DateString = null;
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
 
@@ -315,7 +317,8 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
           this.resetFinancialConceptsData()
           this.isLoadingFinancialConcepts = true;
         }),
-        switchMap(groupUID => this.financialConceptsData.getFinancialConceptsInGroup(groupUID)
+        switchMap(groupUID =>
+          this.financialConceptsData.getFinancialConceptsInGroup(groupUID, this.queryDate)
           .pipe(
             catchError(() => of([])),
             tap(() => this.isLoadingFinancialConcepts = false)

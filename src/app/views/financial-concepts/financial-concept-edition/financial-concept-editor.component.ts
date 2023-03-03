@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, DateString, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -32,9 +32,12 @@ export class FinancialConceptEditorComponent {
 
   @Input() financialConcept: FinancialConcept = EmptyFinancialConcept;
 
-  @Output() financialConceptEditorEvent = new EventEmitter<EventInfo>();
+  @Input() queryDate: DateString = null;
 
   @Input() canEdit = false;
+
+  @Output() financialConceptEditorEvent = new EventEmitter<EventInfo>();
+
 
   submitted = false;
 

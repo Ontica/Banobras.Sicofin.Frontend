@@ -10,7 +10,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges,
          ViewChild } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty, SessionService } from '@app/core';
+import { Assertion, DateString, EventInfo, isEmpty, SessionService } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -48,6 +48,8 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
   @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
   @Input() financialReportDesign: FinancialReportDesign =  Object.assign({}, EmptyFinancialReportDesign);
+
+  @Input() queryDate: DateString = null;
 
   @Input() queryExecuted = false;
 

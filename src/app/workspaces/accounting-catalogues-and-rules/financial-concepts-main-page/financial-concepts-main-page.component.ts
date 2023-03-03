@@ -67,6 +67,7 @@ export class FinancialConceptsMainPageComponent implements OnInit {
     switch (event.type as FinancialConceptsViewerEventType) {
       case FinancialConceptsViewerEventType.SEARCH_FINANCIAL_CONCEPTS_CLICKED:
         Assertion.assertValue(event.payload.financialConceptQuery, 'event.payload.financialConceptQuery');
+        this.setSelectedFinancialConcept(EmptyFinancialConcept);
         this.financialConceptQuery = event.payload.financialConceptQuery as FinancialConceptQuery;
         this.getFinancialConceptsInGroup();
         return;
