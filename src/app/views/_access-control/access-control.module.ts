@@ -18,15 +18,19 @@ import { AccessControlFilterComponent } from './access-control-viewer/access-con
 import { AccessControlTabbedViewComponent } from './access-control-tabbed-view/access-control-tabbed-view.component';
 import { AccessControlViewerComponent } from './access-control-viewer/access-control-viewer.component';
 
+import { ChangePasswordModalComponent } from './credentials/change-password-modal.component';
+
 import { SecurityItemAssignComponent } from './security-item/security-item-assign.component';
 import { SecurityItemEditionComponent } from './security-item/security-item-edition.component';
 
+import { SubjectContextsComponent } from './subjects/subject-contexts.component';
 import { SubjectCreatorComponent } from './subjects/subject-creator.component';
 import { SubjectEditorComponent } from './subjects/subject-editor.component';
+import { SubjectFeaturesComponent } from './subjects/subject-features.component';
 import { SubjectHeaderComponent } from './subjects/subject-header.component';
+import { SubjectRolesComponent } from './subjects/subject-roles.component';
 import { SubjectsTableComponent } from './subjects/subjects-table.component';
 import { SubjectTabbedViewComponent } from './subjects/subject-tabbed-view.component';
-import { ChangePasswordModalComponent } from './credentials/change-password-modal.component';
 
 
 @NgModule({
@@ -50,9 +54,12 @@ import { ChangePasswordModalComponent } from './credentials/change-password-moda
     SecurityItemAssignComponent,
     SecurityItemEditionComponent,
 
+    SubjectContextsComponent,
     SubjectCreatorComponent,
     SubjectEditorComponent,
+    SubjectFeaturesComponent,
     SubjectHeaderComponent,
+    SubjectRolesComponent,
     SubjectsTableComponent,
     SubjectTabbedViewComponent,
   ],

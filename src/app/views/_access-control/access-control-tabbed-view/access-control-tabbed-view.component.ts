@@ -44,7 +44,7 @@ export class AccessControlTabbedViewComponent implements OnInit, OnChanges {
 
   feature: Feature = EmptyFeature;
 
-  constructor(private session: SessionService){
+  constructor(private session: SessionService) {
 
   }
 
@@ -75,7 +75,8 @@ export class AccessControlTabbedViewComponent implements OnInit, OnChanges {
   get titleText(): string {
     switch (this.accessControlItem.type) {
       case AccessControlQueryType.Subjects:
-        return `(${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo}`;
+        return `(${this.subject.userID}) ${this.subject.fullName}` +
+                (!!this.subject.employeeNo ? ` - ${this.subject.employeeNo}` : '');
 
       case AccessControlQueryType.Roles: return this.role.name;
       case AccessControlQueryType.Features: return this.feature.name;
@@ -88,8 +89,8 @@ export class AccessControlTabbedViewComponent implements OnInit, OnChanges {
     switch (this.accessControlItem.type) {
       case AccessControlQueryType.Subjects:
         return `<span class="tag tag-small" style="margin-left: 0">${this.subject.status}</span>` +
-          `<strong>${this.subject.workarea}</strong> &nbsp; &nbsp; | &nbsp; &nbsp;` +
-          `${this.subject.jobPosition}`;
+               `<strong>${this.subject.workarea}</strong> &nbsp; &nbsp; | &nbsp; &nbsp;` +
+               `${this.subject.jobPosition}`;
 
       case AccessControlQueryType.Roles:
       case AccessControlQueryType.Features:

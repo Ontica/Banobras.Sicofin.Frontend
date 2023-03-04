@@ -71,7 +71,7 @@ export class SecurityItemEditionComponent implements OnChanges {
       this.closeItemToAssign();
     }
 
-    if (changes.itemsToAssignList) {
+    if (changes.itemsToAssignList || changes.itemsForSelectorList) {
       this.resetSelectedSelectorIfNotInList();
     }
 

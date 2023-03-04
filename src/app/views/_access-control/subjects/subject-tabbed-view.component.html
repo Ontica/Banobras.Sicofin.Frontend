@@ -1,7 +1,7 @@
 
 <div [style.height.%]="100" [empNgSpinnerHost]="spinner">
 
-  <emp-ng-spinner #spinner [visible]="isLoadingContexts || isLoading">
+  <emp-ng-spinner #spinner [visible]="isLoading">
 
   </emp-ng-spinner>
 
@@ -24,15 +24,13 @@
 
           <div class="section-title"> Aplicaciones </div>
 
-          <emp-ng-security-item-edition
-            [itemsAssignedList]="subjectContextsList"
+          <emp-ng-subject-contexts
+            [subjectUID]="subject.uid"
+            [subjectContextsList]="subjectContextsList"
             [canEdit]="!isDeleted && canEdit"
-            [itemsToAssignList]="contextsList"
-            [submitted]="submitted"
-            itemTypeName="Aplicación"
-            (securityItemEditionEvent)="onSubjectContextsEditionEvent($event)">
+            (subjectContextsEvent)="onSubjectContextsEvent($event)">
 
-          </emp-ng-security-item-edition>
+          </emp-ng-subject-contexts>
 
         </div>
 
@@ -42,35 +40,23 @@
 
     <mat-tab label="Roles">
 
-      <emp-ng-security-item-edition
-        [itemsAssignedList]="subjectRolesList"
-        [canEdit]="!isDeleted && canEdit"
-        [itemsForSelectorList]="subjectContextsList"
-        [selectorRequired]="true"
-        [queryExcecuted]="isSubjectRolesExcecuted"
-        [itemsToAssignList]="rolesList"
-        [submitted]="submitted"
-        itemTypeName="Rol"
-        (securityItemEditionEvent)="onSubjectRolesEditionEvent($event)">
+      <emp-ng-subject-roles
+        [subjectUID]="subject.uid"
+        [subjectContextsList]="subjectContextsList"
+        [canEdit]="!isDeleted && canEdit">
 
-      </emp-ng-security-item-edition>
+      </emp-ng-subject-roles>
 
     </mat-tab>
 
     <mat-tab label="Permisos">
 
-      <emp-ng-security-item-edition
-        [itemsAssignedList]="subjectFeaturesList"
-        [canEdit]="!isDeleted && canEdit"
-        [itemsForSelectorList]="subjectContextsList"
-        [selectorRequired]="true"
-        [queryExcecuted]="isSubjectFeaturesExcecuted"
-        [itemsToAssignList]="featuresList"
-        [submitted]="submitted"
-        itemTypeName="Permiso"
-        (securityItemEditionEvent)="onSubjectFeaturesEditionEvent($event)">
+      <emp-ng-subject-features
+        [subjectUID]="subject.uid"
+        [subjectContextsList]="subjectContextsList"
+        [canEdit]="!isDeleted && canEdit">
 
-      </emp-ng-security-item-edition>
+      </emp-ng-subject-features>
 
     </mat-tab>
 
