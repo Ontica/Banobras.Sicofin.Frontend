@@ -25,7 +25,7 @@ export enum AccessControlTabbedViewEventType {
 }
 
 @Component({
-  selector: 'emp-fa-access-control-tabbed-view',
+  selector: 'emp-ng-access-control-tabbed-view',
   templateUrl: './access-control-tabbed-view.component.html',
 })
 export class AccessControlTabbedViewComponent implements OnInit, OnChanges {
