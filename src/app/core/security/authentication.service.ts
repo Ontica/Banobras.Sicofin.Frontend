@@ -67,7 +67,7 @@ export class AuthenticationService {
 
 
   private setSession(sessionToken: SessionToken, principalData: PrincipalData){
-    if (!APP_CONFIG.layout.enablePermissions) {
+    if (!APP_CONFIG.security.enablePermissions) {
       principalData.permissions = getAllPermissions();
     }
 

@@ -15,8 +15,11 @@ export const APP_CONFIG: AppConfig = {
     organization: 'Banco Nacional de Obras y Servicios Públicos S.N.C.',
     description: '',
   },
-  layout: {
+  security: {
     enablePermissions: true,
+    encriptLocalStorageData: true,
+  },
+  layout: {
     displayNavbarHeader: false,
     displayMenuUser: false,
     displayChangeLanguage: false,

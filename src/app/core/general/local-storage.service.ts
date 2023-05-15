@@ -9,6 +9,8 @@ import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
 
+import { APP_CONFIG } from '@app/main-layout';
+
 import { CORRUPT_LOCAL_STORAGE_MESSAGE } from '../errors/error-messages';
 
 import { Cryptography } from '../security/cryptography';
@@ -20,19 +22,33 @@ export enum StorageKeys {
   defaultRoute = 'key-04',
 }
 
+const ENCRYPTION_KEY = environment.security_id;
+
+const ENCRIPT_DATA = APP_CONFIG.security.encriptLocalStorageData;
+
 @Injectable()
 export class LocalStorageService {
 
-  private ENCRYPTION_KEY = environment.security_id;
-
   set<T>(key: StorageKeys, value: T) {
-    localStorage.setItem(key, Cryptography.encryptAES(this.ENCRYPTION_KEY, JSON.stringify(value)));
+    const valueString = JSON.stringify(value);
+
+    const valueToStore = ENCRIPT_DATA ? Cryptography.encryptAES(ENCRYPTION_KEY, valueString) : valueString;
+
+    localStorage.setItem(key, valueToStore);
   }
 
   get<T>(key: StorageKeys): T {
     try {
-      const value = localStorage.getItem(key);
-      return value ? JSON.parse(Cryptography.decryptAES(this.ENCRYPTION_KEY, value)) as T : null;
+      const valueStored = localStorage.getItem(key);
+
+      if (!valueStored) {
+        return null;
+      }
+
+      const value = ENCRIPT_DATA ? Cryptography.decryptAES(ENCRYPTION_KEY, valueStored) : valueStored;
+
+      return JSON.parse(value) as T;
+
     } catch (error) {
       throw new Error(`${CORRUPT_LOCAL_STORAGE_MESSAGE} (DECRYPT): ${key}`);
     }
