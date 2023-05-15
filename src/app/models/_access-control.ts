@@ -17,8 +17,8 @@ export enum AccessControlQueryType {
 
 export const AccessControlQueryTypeList: Identifiable[] = [
   {uid: AccessControlQueryType.Subjects, name: 'Usuarios'},
-  {uid: AccessControlQueryType.Roles,    name: 'Roles'},
-  {uid: AccessControlQueryType.Features, name: 'Permisos'},
+  // {uid: AccessControlQueryType.Roles,    name: 'Roles'},
+  // {uid: AccessControlQueryType.Features, name: 'Permisos'},
 ];
 
 
