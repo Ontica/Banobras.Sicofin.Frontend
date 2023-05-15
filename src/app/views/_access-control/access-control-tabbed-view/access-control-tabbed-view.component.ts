@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { EventInfo, SessionService } from '@app/core';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { PERMISSIONS } from '@app/main-layout';
 
 import { AccessControlQueryType, AccessControlSelectionData, EmptyAccessControlSelectionData, EmptyFeature,
          EmptyRole, EmptySubject, Feature, Role, Subject } from '@app/models';
@@ -127,7 +127,7 @@ export class AccessControlTabbedViewComponent implements OnInit, OnChanges {
 
 
   private setPermission() {
-    this.canEdit = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_CONTROL_DE_ACCESOS);
+    this.canEdit = this.session.hasPermission(PERMISSIONS.FEATURE_EDICION_CONTROL_DE_ACCESOS);
   }
 
 

@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/main-layout';
+import { ROUTES } from '@app/main-layout';
 
 import {
   TransactionSlipsMainPageComponent
@@ -20,33 +20,33 @@ import { VouchersMainPageComponent } from './vouchers-main-page/vouchers-main-pa
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.permission },
-    path: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.path,
+    data: { permission: ROUTES.operacion_contable_mis_polizas_pendientes.permission },
+    path: ROUTES.operacion_contable_mis_polizas_pendientes.path,
     component: VouchersMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_mesa_de_control.permission },
-    path: ROUTES_LIBRARY.operacion_contable_mesa_de_control.path,
+    data: { permission: ROUTES.operacion_contable_mesa_de_control.permission },
+    path: ROUTES.operacion_contable_mesa_de_control.path,
     component: VouchersMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_polizas_en_libros.permission },
-    path: ROUTES_LIBRARY.operacion_contable_polizas_en_libros.path,
+    data: { permission: ROUTES.operacion_contable_polizas_en_libros.permission },
+    path: ROUTES.operacion_contable_polizas_en_libros.path,
     component: VouchersMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_todas_las_polizas.permission },
-    path: ROUTES_LIBRARY.operacion_contable_todas_las_polizas.path,
+    data: { permission: ROUTES.operacion_contable_todas_las_polizas.permission },
+    path: ROUTES.operacion_contable_todas_las_polizas.path,
     component: VouchersMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable_volantes.permission },
-    path: ROUTES_LIBRARY.operacion_contable_volantes.path,
+    data: { permission: ROUTES.operacion_contable_volantes.permission },
+    path: ROUTES.operacion_contable_volantes.path,
     component: TransactionSlipsMainPageComponent,
   },
   {
     path: '',
-    redirectTo: ROUTES_LIBRARY.operacion_contable_mis_polizas_pendientes.path,
+    redirectTo: ROUTES.operacion_contable_mis_polizas_pendientes.path,
     pathMatch: 'full',
   },
 ];

@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { PERMISSIONS } from '@app/main-layout';
 
 import { EmptySubledgerAccountDataTable, SubledgerAccountDataTable } from '@app/models';
 
@@ -45,7 +45,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
   cardHint = 'Seleccionar los filtros';
 
-  permissions = PermissionsLibrary;
+  permissions = PERMISSIONS;
 
 
   ngOnChanges(changes: SimpleChanges): void {

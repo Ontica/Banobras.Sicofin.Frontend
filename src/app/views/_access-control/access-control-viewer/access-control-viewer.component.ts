@@ -11,7 +11,7 @@ import { Assertion, Empty, EventInfo } from '@app/core';
 
 import { AccessControlDataService } from '@app/data-services';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { PERMISSIONS } from '@app/main-layout';
 
 import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
@@ -64,7 +64,7 @@ export class AccessControlViewerComponent implements OnInit {
 
   QueryTypes = AccessControlQueryType;
 
-  Permissions = PermissionsLibrary;
+  Permissions = PERMISSIONS;
 
 
   constructor(private accessControlData: AccessControlDataService,

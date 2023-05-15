@@ -21,7 +21,7 @@ import { Assertion, EventInfo, Identifiable, isEmpty, SessionService } from '@ap
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { PermissionsLibrary, View } from '@app/main-layout';
+import { PERMISSIONS, View } from '@app/main-layout';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -178,24 +178,24 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
     const voucherStage = mapVoucherStageFromViewName(viewName);
 
-    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_ENVIAR_AL_DIARIO)) {
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_ENVIAR_AL_DIARIO)) {
       list.push(getVoucherOperation(VouchersOperationType.close));
     }
 
-    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_ENVIAR_AL_SUPERVISOR)) {
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_ENVIAR_AL_SUPERVISOR)) {
       list.push(getVoucherOperation(VouchersOperationType.sendToSupervisor));
     }
 
-    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_REASIGNAR) &&
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_REASIGNAR) &&
         voucherStage === VoucherStage.ControlDesk) {
       list.push(getVoucherOperation(VouchersOperationType.reasign));
     }
 
-    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_ELIMINAR)) {
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_ELIMINAR)) {
       list.push(getVoucherOperation(VouchersOperationType.delete));
     }
 
-    if (this.hasPermission(PermissionsLibrary.FEATURE_POLIZAS_IMPRIMIR)) {
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_IMPRIMIR)) {
       list.push(getVoucherOperation(VouchersOperationType.print));
     }
 

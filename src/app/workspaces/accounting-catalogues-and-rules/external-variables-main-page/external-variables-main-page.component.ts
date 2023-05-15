@@ -11,6 +11,8 @@ import { Assertion, EventInfo, Identifiable, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { PERMISSIONS } from '@app/main-layout';
+
 import { ExternalVariablesStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { DatasetModes, DatasetModesList, EmptyExternalValuesData, ExecuteDatasetsQuery, ExternalValuesData,
@@ -20,8 +22,6 @@ import { DatasetModes, DatasetModesList, EmptyExternalValuesData, ExecuteDataset
          mapToExternalValuesQuery } from '@app/models';
 
 import { ExternalVariablesDataService } from '@app/data-services';
-
-import { PermissionsLibrary } from '@app/main-layout';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -153,9 +153,9 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
 
   private setHasPermissions() {
     this.hasPermissionToEditVariables =
-      this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_VARIABLES_EXTERNAS);
+      this.session.hasPermission(PERMISSIONS.FEATURE_EDICION_VARIABLES_EXTERNAS);
     this.hasPermissionToImportValues =
-      this.session.hasPermission(PermissionsLibrary.FEATURE_IMPORTACION_VALORES_EXTERNOS);
+      this.session.hasPermission(PERMISSIONS.FEATURE_IMPORTACION_VALORES_EXTERNOS);
   }
 
 

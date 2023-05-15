@@ -12,6 +12,8 @@ import { Component, EventEmitter, HostListener, Input, OnChanges, OnInit, Output
 
 import { Assertion, DateString, EventInfo, isEmpty, SessionService } from '@app/core';
 
+import { PERMISSIONS } from '@app/main-layout';
+
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FinancialReportsEditionDataService } from '@app/data-services';
@@ -31,7 +33,6 @@ import { FinancialReportDesignerControlsEventType } from './financial-report-des
 import { FinancialReportDesignerGridEventType } from './financial-report-designer-grid.component';
 
 import { FixedColumnEditorEventType } from '../financial-report-edition/fixed-column-editor.component';
-import { PermissionsLibrary } from '@app/main-layout';
 
 
 export enum FinancialReportDesignerEventType {
@@ -309,7 +310,7 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
 
 
   private setPermissionToEdit() {
-    this.hasPermissionToEdit = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_REPORTES);
+    this.hasPermissionToEdit = this.session.hasPermission(PERMISSIONS.FEATURE_EDICION_REPORTES);
   }
 
 

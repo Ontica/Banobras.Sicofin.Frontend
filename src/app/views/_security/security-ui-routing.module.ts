@@ -9,19 +9,19 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/main-layout';
+import { ROUTES } from '@app/main-layout';
 
 import { UserLoginComponent } from './user-login/user-login.component';
 
 
 const routes: Routes = [
   {
-    path: ROUTES_LIBRARY.security_login.path,
+    path: ROUTES.security_login.path,
     component: UserLoginComponent,
   },
   {
     path: '',
-    redirectTo: ROUTES_LIBRARY.security_login.path,
+    redirectTo: ROUTES.security_login.path,
     pathMatch: 'full',
   },
 ];

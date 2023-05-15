@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/main-layout';
+import { ROUTES } from '@app/main-layout';
 
 import {
   BalanceReconciliationMainPageComponent
@@ -22,33 +22,33 @@ import { ReportBuilderComponent } from '@app/views/reporting/report-builder/repo
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.tableros_saldos_y_balanzas.permission },
-    path: ROUTES_LIBRARY.tableros_saldos_y_balanzas.path,
+    data: { permission: ROUTES.tableros_saldos_y_balanzas.permission },
+    path: ROUTES.tableros_saldos_y_balanzas.path,
     component: TrialBalanceMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.tableros_reportes_regulatorios.permission },
-    path: ROUTES_LIBRARY.tableros_reportes_regulatorios.path,
+    data: { permission: ROUTES.tableros_reportes_regulatorios.permission },
+    path: ROUTES.tableros_reportes_regulatorios.path,
     component: ReportBuilderComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.tableros_reportes_operativos.permission },
-    path: ROUTES_LIBRARY.tableros_reportes_operativos.path,
+    data: { permission: ROUTES.tableros_reportes_operativos.permission },
+    path: ROUTES.tableros_reportes_operativos.path,
     component: ReportBuilderComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.tableros_reportes_fiscales.permission },
-    path: ROUTES_LIBRARY.tableros_reportes_fiscales.path,
+    data: { permission: ROUTES.tableros_reportes_fiscales.permission },
+    path: ROUTES.tableros_reportes_fiscales.path,
     component: ReportBuilderComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.tableros_conciliaciones.permission },
-    path: ROUTES_LIBRARY.tableros_conciliaciones.path,
+    data: { permission: ROUTES.tableros_conciliaciones.permission },
+    path: ROUTES.tableros_conciliaciones.path,
     component: BalanceReconciliationMainPageComponent,
   },
   {
     path: '',
-    redirectTo: ROUTES_LIBRARY.tableros_saldos_y_balanzas.path,
+    redirectTo: ROUTES.tableros_saldos_y_balanzas.path,
     pathMatch: 'full',
   },
 ];

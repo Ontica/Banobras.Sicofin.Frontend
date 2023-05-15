@@ -9,9 +9,13 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { combineLatest, Observable } from 'rxjs';
+
 import { Assertion, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { PERMISSIONS } from '@app/main-layout';
 
 import { ImportVouchersDataService, VouchersDataService } from '@app/data-services';
 
@@ -27,12 +31,9 @@ import { FileType } from '@app/shared/form-controls/file-control/file-control-da
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
-import { PermissionsLibrary } from '@app/main-layout';
-
-import { combineLatest, Observable } from 'rxjs';
-
 import { ImporterDetailsSelectionType,
          VouchersImporterDetailsTableEventType } from './importer-details-table.component';
+
 
 export enum VouchersImporterEventType {
   CLOSE_MODAL_CLICKED  = 'VouchersImporterComponent.Event.CloseModalClicked',
@@ -62,7 +63,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   @Output() vouchersImporterEvent = new EventEmitter<EventInfo>();
 
-  permissions = PermissionsLibrary;
+  permissions = PERMISSIONS;
 
   title = 'Importador de pólizas';
   file = null;

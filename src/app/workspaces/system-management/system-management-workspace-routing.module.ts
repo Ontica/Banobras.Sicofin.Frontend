@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/main-layout';
+import { ROUTES } from '@app/main-layout';
 
 import {
   AccessControlMainPageComponent
@@ -28,28 +28,28 @@ import {
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.administracion_tipos_de_cambio.permission },
-    path: ROUTES_LIBRARY.administracion_tipos_de_cambio.path,
+    data: { permission: ROUTES.administracion_tipos_de_cambio.permission },
+    path: ROUTES.administracion_tipos_de_cambio.path,
     component: ExchangeRatesMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.administracion_generacion_de_saldos.permission },
-    path: ROUTES_LIBRARY.administracion_generacion_de_saldos.path,
+    data: { permission: ROUTES.administracion_generacion_de_saldos.permission },
+    path: ROUTES.administracion_generacion_de_saldos.path,
     component: BalanceGenerationMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.administracion_panel_de_control.permission },
-    path: ROUTES_LIBRARY.administracion_panel_de_control.path,
+    data: { permission: ROUTES.administracion_panel_de_control.permission },
+    path: ROUTES.administracion_panel_de_control.path,
     component: ControlPanelMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.administracion_control_de_accesos.permission },
-    path: ROUTES_LIBRARY.administracion_control_de_accesos.path,
+    data: { permission: ROUTES.administracion_control_de_accesos.permission },
+    path: ROUTES.administracion_control_de_accesos.path,
     component: AccessControlMainPageComponent,
   },
   {
     path: '',
-    redirectTo: ROUTES_LIBRARY.administracion_tipos_de_cambio.path,
+    redirectTo: ROUTES.administracion_tipos_de_cambio.path,
     pathMatch: 'full',
   },
 ];

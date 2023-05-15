@@ -13,9 +13,9 @@ import { Assertion, EventInfo, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { BalancesDataService } from '@app/data-services';
+import { PERMISSIONS } from '@app/main-layout';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { BalancesDataService } from '@app/data-services';
 
 import { BalanceExplorerData, BalanceExplorerEntry, BalanceExplorerQuery, BalanceExplorerResult,
          emptyBalanceExplorerQuery, EmptyReportType, EmptyTrialBalance, FileReport,
@@ -268,7 +268,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   private setPermissionToAccountStatement() {
     this.hasPermissionToAccountStatement =
-      this.session.hasPermission(PermissionsLibrary.FEATURE_ESTADO_DE_CUENTA);
+      this.session.hasPermission(PERMISSIONS.FEATURE_ESTADO_DE_CUENTA);
   }
 
 

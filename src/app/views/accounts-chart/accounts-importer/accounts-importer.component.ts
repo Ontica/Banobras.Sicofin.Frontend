@@ -23,7 +23,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { PERMISSIONS } from '@app/main-layout';
 
 export enum AccountsImporterEventType {
   CLOSE_MODAL_CLICKED  = 'AccountsImporterComponent.Event.CloseModalClicked',
@@ -43,7 +43,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
   @Output() accountsImporterEvent = new EventEmitter<EventInfo>();
 
-  permissions = PermissionsLibrary;
+  permissions = PERMISSIONS;
 
   title = 'Importador de cambios al catálogo';
 

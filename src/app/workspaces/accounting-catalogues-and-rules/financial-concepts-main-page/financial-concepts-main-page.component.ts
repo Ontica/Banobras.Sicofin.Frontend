@@ -9,9 +9,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo, isEmpty, SessionService } from '@app/core';
 
-import { FinancialConceptsDataService } from '@app/data-services';
+import { PERMISSIONS } from '@app/main-layout';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { FinancialConceptsDataService } from '@app/data-services';
 
 import { EmptyFinancialConcept, EmptyFinancialConceptQuery, FinancialConcept, FinancialConceptQuery,
          FinancialConceptDescriptor } from '@app/models';
@@ -194,7 +194,7 @@ export class FinancialConceptsMainPageComponent implements OnInit {
 
 
   private setPermission() {
-    this.canEditConcepts = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_CONCEPTOS);
+    this.canEditConcepts = this.session.hasPermission(PERMISSIONS.FEATURE_EDICION_CONCEPTOS);
   }
 
 }

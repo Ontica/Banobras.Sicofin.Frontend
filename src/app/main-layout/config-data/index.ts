@@ -9,10 +9,10 @@ export * from './app-config';
 
 export * from './permissions-config';
 
-export * from './layout-config';
+export * from './routes-config';
 
 export * from './tools-config';
 
-export * from './value-selectors';
+export * from './layout-config';
 
 export * from './views-config';

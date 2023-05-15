@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { ExternalProcessTypes } from '@app/models';
+import { PERMISSIONS } from '@app/main-layout';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { ExternalProcessTypes } from '@app/models';
 
 
 type ControlPanelOptionType = 'ChangePassword' |
@@ -25,7 +25,7 @@ export interface ControlPanelOption {
   description: string;
   actionTitle: string;
   type: ControlPanelOptionType;
-  permission: PermissionsLibrary;
+  permission: PERMISSIONS;
   externalProcessType?: ExternalProcessTypes;
 }
 
@@ -36,21 +36,21 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Herramienta para actualizar la contraseña de usuario.' ,
     actionTitle: 'Cambiar',
     type: 'ChangePassword',
-    permission: PermissionsLibrary.FEATURE_CHANGE_PASSWORD,
+    permission: PERMISSIONS.FEATURE_CHANGE_PASSWORD,
   },
   {
     title: 'Períodos',
     description: 'Herramienta para abrir y cerrar períodos contables.' ,
     actionTitle: 'Períodos',
     type: 'AccountingCalendars',
-    permission: PermissionsLibrary.FEATURE_EDICION_PERIODOS,
+    permission: PERMISSIONS.FEATURE_EDICION_PERIODOS,
   },
   {
     title: 'Rentabilidad',
     description: 'Ejecución del proceso de rentabilidad.' ,
     actionTitle: 'Rentabilidad',
     type: 'ExternalProcessRentabilidad',
-    permission: PermissionsLibrary.FEATURE_RENTABILIDAD,
+    permission: PERMISSIONS.FEATURE_RENTABILIDAD,
     externalProcessType: ExternalProcessTypes.Rentabilidad,
   },
   {
@@ -58,7 +58,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Ejecución del proceso de conciliación de cartera.' ,
     actionTitle: 'Conciliación',
     type: 'ExternalProcessConciliacionSIC',
-    permission: PermissionsLibrary.FEATURE_CONCILIACION_SIC,
+    permission: PERMISSIONS.FEATURE_CONCILIACION_SIC,
     externalProcessType: ExternalProcessTypes.ConciliacionSIC,
   },
   {
@@ -66,7 +66,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Proceso de exportación de saldos mensuales.' ,
     actionTitle: 'Exportar',
     type: 'ExternalProcessExportacionSaldosMensuales',
-    permission: PermissionsLibrary.FEATURE_EXPORTACION_SALDOS_MENSUALES,
+    permission: PERMISSIONS.FEATURE_EXPORTACION_SALDOS_MENSUALES,
     externalProcessType: ExternalProcessTypes.ExportacionSaldosMensuales,
   },
   {
@@ -74,7 +74,7 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Proceso de exportación de saldos diarios.' ,
     actionTitle: 'Exportar',
     type: 'ExternalProcessExportacionSaldosDiarios',
-    permission: PermissionsLibrary.FEATURE_EXPORTACION_SALDOS_DIARIOS,
+    permission: PERMISSIONS.FEATURE_EXPORTACION_SALDOS_DIARIOS,
     externalProcessType: ExternalProcessTypes.ExportacionSaldosDiarios,
   },
   {
@@ -82,6 +82,6 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     description: 'Herramienta de consulta y cancelación de saldos encerrados.' ,
     actionTitle: 'Buscar',
     type: 'LockedUpBalances',
-    permission: PermissionsLibrary.FEATURE_SALDOS_ENCERRADOS,
+    permission: PERMISSIONS.FEATURE_SALDOS_ENCERRADOS,
   },
 ];

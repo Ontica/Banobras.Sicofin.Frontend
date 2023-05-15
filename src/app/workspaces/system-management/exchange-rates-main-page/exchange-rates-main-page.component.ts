@@ -13,11 +13,11 @@ import { Assertion, EventInfo, Identifiable, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { PERMISSIONS } from '@app/main-layout';
+
 import { ExchangeRatesStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { ExchangeRatesDataService } from '@app/data-services';
-
-import { PermissionsLibrary } from '@app/main-layout';
 
 import { EmptyExchangeRateData, ExchangeRatesQuery, ExchangeRateData, ExecuteDatasetsQuery,
          mapToExchangeRatesQuery } from '@app/models';
@@ -129,7 +129,7 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
 
 
   private setHasPermissionToEdit() {
-    this.hasPermissionToEdit = this.session.hasPermission(PermissionsLibrary.FEATURE_EDICION_TIPOS_CAMBIO);
+    this.hasPermissionToEdit = this.session.hasPermission(PERMISSIONS.FEATURE_EDICION_TIPOS_CAMBIO);
   }
 
 

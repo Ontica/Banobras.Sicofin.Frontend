@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { ROUTES_LIBRARY } from '@app/main-layout';
+import { ROUTES } from '@app/main-layout';
 
 import {
   AccountsChartMainPageComponent
@@ -34,33 +34,33 @@ import {
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.path,
+    data: { permission: ROUTES.reglas_y_catalogos_catalogos_de_cuentas.permission },
+    path: ROUTES.reglas_y_catalogos_catalogos_de_cuentas.path,
     component: AccountsChartMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_auxiliares.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_auxiliares.path,
+    data: { permission: ROUTES.reglas_y_catalogos_auxiliares.permission },
+    path: ROUTES.reglas_y_catalogos_auxiliares.path,
     component: SubledgerAccountsMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_valores_externos.path,
+    data: { permission: ROUTES.reglas_y_catalogos_valores_externos.permission },
+    path: ROUTES.reglas_y_catalogos_valores_externos.path,
     component: ExternalVariablesMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_agrupaciones.path,
+    data: { permission: ROUTES.reglas_y_catalogos_agrupaciones.permission },
+    path: ROUTES.reglas_y_catalogos_agrupaciones.path,
     component: FinancialConceptsMainPageComponent,
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos_configuracion_de_reportes.path,
+    data: { permission: ROUTES.reglas_y_catalogos_configuracion_de_reportes.permission },
+    path: ROUTES.reglas_y_catalogos_configuracion_de_reportes.path,
     component: ReportDesignerMainPageComponent,
   },
   {
     path: '',
-    redirectTo: ROUTES_LIBRARY.reglas_y_catalogos_catalogos_de_cuentas.path,
+    redirectTo: ROUTES.reglas_y_catalogos_catalogos_de_cuentas.path,
     pathMatch: 'full',
   },
 ];

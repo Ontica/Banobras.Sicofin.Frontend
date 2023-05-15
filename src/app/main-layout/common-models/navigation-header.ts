@@ -5,6 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+import { PERMISSIONS } from '../config-data';
+
 import { Layout, View, ViewAction } from './common';
 
 import { MenuItem, createMenuItemForView } from './menu-item';
@@ -39,7 +41,7 @@ export function buildNavigationHeader(layout: Layout,
   for (const view of layout.views) {
     const menuItem = createMenuItemForView(view);
 
-    if (permissions.includes(view.permission)) {
+    if (view.permission === PERMISSIONS.NOT_REQUIRED || permissions.includes(view.permission)) {
       navHeader.mainMenu.push(menuItem);
     }
   }

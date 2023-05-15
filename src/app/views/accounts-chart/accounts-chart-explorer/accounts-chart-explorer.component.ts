@@ -11,7 +11,7 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { PERMISSIONS } from '@app/main-layout';
 
 import { Account, AccountsChart, AccountsQuery, EmptyAccount, EmptyAccountsChart,
          EmptyAccountsQuery } from '@app/models';
@@ -44,7 +44,7 @@ export class AccountsChartExplorerComponent {
 
   @Output() accountsChartExplorerEvent = new EventEmitter<EventInfo>();
 
-  permissions = PermissionsLibrary;
+  permissions = PERMISSIONS;
 
   cardHint = 'Editor y visualizador de los catálogos de cuentas';
 

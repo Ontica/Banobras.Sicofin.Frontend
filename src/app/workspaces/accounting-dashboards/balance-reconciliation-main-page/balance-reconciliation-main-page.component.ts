@@ -9,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Assertion, EventInfo, SessionService } from '@app/core';
 
+import { PERMISSIONS } from '@app/main-layout';
+
 import { ReconciliationType, InputDatasetsQuery, ReconciliationDatasets, ImportInputDatasetCommand,
          InputDataset, mapToReconciliationImportInputDatasetCommand, mapToReconciliationInputDatasetsCommand,
          ReconciliationImportInputDatasetCommand, ReconciliationData, EmptyReconciliationData,
@@ -16,8 +18,6 @@ import { ReconciliationType, InputDatasetsQuery, ReconciliationDatasets, ImportI
          ReconciliationCommand } from '@app/models';
 
 import { ReconciliationDataService } from '@app/data-services';
-
-import { PermissionsLibrary } from '@app/main-layout';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -125,7 +125,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
   private setHasPermissionToImport() {
     this.hasPermissionToImport =
-      this.session.hasPermission(PermissionsLibrary.FEATURE_IMPORTACION_CONCILIACIONES);
+      this.session.hasPermission(PERMISSIONS.FEATURE_IMPORTACION_CONCILIACIONES);
   }
 
 

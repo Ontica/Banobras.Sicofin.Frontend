@@ -11,12 +11,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SecurityGuard } from './core';
 
-import { DEFAULT_URL, MainLayoutComponent, NoContentComponent, ROUTES_LIBRARY } from '@app/main-layout';
+import { DEFAULT_URL, MainLayoutComponent, NoContentComponent, ROUTES } from '@app/main-layout';
 
 const routes: Routes = [
   {
-    data: { permission: ROUTES_LIBRARY.operacion_contable.permission },
-    path: ROUTES_LIBRARY.operacion_contable.path,
+    data: { permission: ROUTES.operacion_contable.permission },
+    path: ROUTES.operacion_contable.path,
     component: MainLayoutComponent,
     canActivate: [SecurityGuard],
     canActivateChild: [SecurityGuard],
@@ -24,8 +24,8 @@ const routes: Routes = [
                               .then((m) => m.AccountingOperationsWorkspaceModule)
   },
   {
-    data: { permission: ROUTES_LIBRARY.tableros.permission },
-    path: ROUTES_LIBRARY.tableros.path,
+    data: { permission: ROUTES.tableros.permission },
+    path: ROUTES.tableros.path,
     component: MainLayoutComponent,
     canActivate: [SecurityGuard],
     canActivateChild: [SecurityGuard],
@@ -33,8 +33,8 @@ const routes: Routes = [
                               .then((m) => m.AccountingDashboardsWorkspaceModule)
   },
   {
-    data: { permission: ROUTES_LIBRARY.reglas_y_catalogos.permission },
-    path: ROUTES_LIBRARY.reglas_y_catalogos.path,
+    data: { permission: ROUTES.reglas_y_catalogos.permission },
+    path: ROUTES.reglas_y_catalogos.path,
     component: MainLayoutComponent,
     canActivate: [SecurityGuard],
     canActivateChild: [SecurityGuard],
@@ -42,8 +42,8 @@ const routes: Routes = [
                                .then((m) => m.AccountingCataloguesAndRulesWorkplaceModule)
   },
   {
-    data: { permission: ROUTES_LIBRARY.administracion.permission },
-    path: ROUTES_LIBRARY.administracion.path,
+    data: { permission: ROUTES.administracion.permission },
+    path: ROUTES.administracion.path,
     component: MainLayoutComponent,
     canActivate: [SecurityGuard],
     canActivateChild: [SecurityGuard],
@@ -51,14 +51,14 @@ const routes: Routes = [
                              .then((m) => m.SystemManagementWorkspaceModule)
   },
   {
-    path: ROUTES_LIBRARY.unauthorized.path,
+    path: ROUTES.unauthorized.path,
     canActivate: [SecurityGuard],
     component: MainLayoutComponent,
     loadChildren: () => import('./views/_unauthorized/unauthorized.module')
                               .then(m => m.UnauthorizedModule)
   },
   {
-    path: ROUTES_LIBRARY.security.path,
+    path: ROUTES.security.path,
     loadChildren: () => import('./views/_security/security-ui.module')
                               .then(m => m.SecurityUIModule)
   },

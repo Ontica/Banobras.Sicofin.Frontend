@@ -9,7 +9,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnIni
 
 import { Assertion, EventInfo } from '@app/core';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { PERMISSIONS } from '@app/main-layout';
 
 import { EmptyVoucher, EmptyVoucherFilterData, Voucher, VoucherDescriptor,
          VoucherFilterData } from '@app/models';
@@ -56,11 +56,11 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
   searching = false;
 
   permissionsToImportVouchers = [
-    PermissionsLibrary.FEATURE_POLIZAS_IMPORTACION_DESDE_ARCHIVOS,
-    PermissionsLibrary.FEATURE_POLIZAS_IMPORTACION_SISTEMAS_TRANSVERSALES,
+    PERMISSIONS.FEATURE_POLIZAS_IMPORTACION_DESDE_ARCHIVOS,
+    PERMISSIONS.FEATURE_POLIZAS_IMPORTACION_SISTEMAS_TRANSVERSALES,
   ];
 
-  permissionToCreateVoucher = PermissionsLibrary.FEATURE_POLIZAS_EDICION_MANUAL;
+  permissionToCreateVoucher = PERMISSIONS.FEATURE_POLIZAS_EDICION_MANUAL;
 
   ngOnInit(): void {
     this.setInitTexts();

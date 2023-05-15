@@ -9,7 +9,7 @@ import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angula
 
 import { SessionService } from '@app/core';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { PERMISSIONS } from '@app/main-layout';
 
 
 @Directive({
@@ -22,7 +22,7 @@ export class EmpHasPermissionDirective implements OnInit {
     this.updateView();
   }
 
-  private permission: PermissionsLibrary | PermissionsLibrary[] = null;
+  private permission: PERMISSIONS | PERMISSIONS[] = null;
 
   private isHidden = true;
 

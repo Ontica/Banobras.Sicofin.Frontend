@@ -9,9 +9,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Assertion, EventInfo, SessionService } from '@app/core';
 
-import { ReportingDataService, VouchersDataService } from '@app/data-services';
+import { PERMISSIONS } from '@app/main-layout';
 
-import { PermissionsLibrary } from '@app/main-layout';
+import { ReportingDataService, VouchersDataService } from '@app/data-services';
 
 import { DataTableColumnType, EmptyLockedUpBalancesData, EmptyLockedUpBalancesQuery, LockedUpBalancesData,
          LockedUpBalancesEntry, LockedUpBalancesQuery, VoucherFields } from '@app/models';
@@ -180,7 +180,7 @@ export class LockedUpBalancesModalComponent {
 
 
   private hasPermissionToGenerateVouchers(): boolean {
-    return this.session.hasPermission(PermissionsLibrary.FEATURE_SALDOS_ENCERRADOS_GENERAR_POLIZA);
+    return this.session.hasPermission(PERMISSIONS.FEATURE_SALDOS_ENCERRADOS_GENERAR_POLIZA);
   }
 
 
