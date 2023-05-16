@@ -5,14 +5,14 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 
 export class FormHandler {
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
-  constructor(formGroup: FormGroup) {
+  constructor(formGroup: UntypedFormGroup) {
     this.form = formGroup;
   }
 

@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { DateStringLibrary, EventInfo, isEmpty, Validate } from '@app/core';
 
@@ -141,19 +141,19 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
   private initForm() {
     this.formHandler = new FormHandler(
-      new FormGroup({
-        accountsChartUID: new FormControl('', Validators.required),
-        startDate: new FormControl(''),
-        applicationDate: new FormControl('', Validators.required),
-        accountNumber: new FormControl('', Validators.required),
-        name: new FormControl('', Validators.required),
-        description: new FormControl(''),
-        role: new FormControl('', Validators.required),
-        mainRole: new FormControl('', Validators.required),
-        accountTypeUID: new FormControl('', Validators.required),
-        debtorCreditor: new FormControl('', Validators.required),
-        usesSubledger: new FormControl(false),
-        usesSector: new FormControl(false),
+      new UntypedFormGroup({
+        accountsChartUID: new UntypedFormControl('', Validators.required),
+        startDate: new UntypedFormControl(''),
+        applicationDate: new UntypedFormControl('', Validators.required),
+        accountNumber: new UntypedFormControl('', Validators.required),
+        name: new UntypedFormControl('', Validators.required),
+        description: new UntypedFormControl(''),
+        role: new UntypedFormControl('', Validators.required),
+        mainRole: new UntypedFormControl('', Validators.required),
+        accountTypeUID: new UntypedFormControl('', Validators.required),
+        debtorCreditor: new UntypedFormControl('', Validators.required),
+        usesSubledger: new UntypedFormControl(false),
+        usesSector: new UntypedFormControl(false),
       })
     );
 

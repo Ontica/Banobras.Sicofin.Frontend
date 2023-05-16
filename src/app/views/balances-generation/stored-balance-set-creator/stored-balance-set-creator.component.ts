@@ -9,7 +9,7 @@ import { EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angu
 
 import { Component } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -107,9 +107,9 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        accountsChart: new FormControl('', Validators.required),
-        balancesDate: new FormControl('', Validators.required),
+      new UntypedFormGroup({
+        accountsChart: new UntypedFormControl('', Validators.required),
+        balancesDate: new UntypedFormControl('', Validators.required),
       })
     );
   }

@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
@@ -155,9 +155,9 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        accountsChartUID: new FormControl('', Validators.required),
-        applicationDate: new FormControl('', Validators.required),
+      new UntypedFormGroup({
+        accountsChartUID: new UntypedFormControl('', Validators.required),
+        applicationDate: new UntypedFormControl('', Validators.required),
       })
     );
 

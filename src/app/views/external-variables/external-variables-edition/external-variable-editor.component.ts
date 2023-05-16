@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, isEmpty, Validate } from '@app/core';
 
@@ -135,10 +135,10 @@ export class ExternalVariableEditorComponent implements OnChanges {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        code: new FormControl(null, Validators.required),
-        name: new FormControl('', Validators.required),
-        period: new FormControl(null, [Validators.required, Validate.periodRequired]),
+      new UntypedFormGroup({
+        code: new UntypedFormControl(null, Validators.required),
+        name: new UntypedFormControl('', Validators.required),
+        period: new UntypedFormControl(null, [Validators.required, Validate.periodRequired]),
       })
     );
 

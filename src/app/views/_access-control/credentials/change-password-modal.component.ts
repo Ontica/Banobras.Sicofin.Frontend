@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, Validate } from '@app/core';
 
@@ -151,11 +151,11 @@ export class ChangePasswordModalComponent implements OnInit {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        userID: new FormControl('', Validators.required),
-        currentPassword: new FormControl('', [Validators.required]),
-        newPassword: new FormControl('', [Validators.required]),
-        confirmNewPassword: new FormControl('', [Validators.required]),
+      new UntypedFormGroup({
+        userID: new UntypedFormControl('', Validators.required),
+        currentPassword: new UntypedFormControl('', [Validators.required]),
+        newPassword: new UntypedFormControl('', [Validators.required]),
+        confirmNewPassword: new UntypedFormControl('', [Validators.required]),
       },
       {
          validators: [Validate.matchOther(this.controls.newPassword, this.controls.confirmNewPassword)]

@@ -8,7 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
@@ -265,22 +265,22 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        entryType: new FormControl(FinancialConceptEntryType.FinancialConceptReference, Validators.required),
-        referencedGroup: new FormControl('', Validators.required),
-        referencedFinancialConcept: new FormControl('', Validators.required),
-        externalVariableSet: new FormControl(''),
-        externalVariable: new FormControl(''),
-        account: new FormControl(''),
-        subledgerAccount: new FormControl(''),
-        sector: new FormControl(''),
-        currency: new FormControl(''),
-        positioningRule: new FormControl(PositioningRule.AtEnd, Validators.required),
-        positioningOffsetEntryUID: new FormControl(''),
-        position: new FormControl(''),
-        operator: new FormControl('', Validators.required),
-        calculationRule: new FormControl('', Validators.required),
-        dataColumn: new FormControl('', Validators.required),
+      new UntypedFormGroup({
+        entryType: new UntypedFormControl(FinancialConceptEntryType.FinancialConceptReference, Validators.required),
+        referencedGroup: new UntypedFormControl('', Validators.required),
+        referencedFinancialConcept: new UntypedFormControl('', Validators.required),
+        externalVariableSet: new UntypedFormControl(''),
+        externalVariable: new UntypedFormControl(''),
+        account: new UntypedFormControl(''),
+        subledgerAccount: new UntypedFormControl(''),
+        sector: new UntypedFormControl(''),
+        currency: new UntypedFormControl(''),
+        positioningRule: new UntypedFormControl(PositioningRule.AtEnd, Validators.required),
+        positioningOffsetEntryUID: new UntypedFormControl(''),
+        position: new UntypedFormControl(''),
+        operator: new UntypedFormControl('', Validators.required),
+        calculationRule: new UntypedFormControl('', Validators.required),
+        dataColumn: new UntypedFormControl('', Validators.required),
       })
     );
 

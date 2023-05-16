@@ -8,7 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
@@ -183,13 +183,13 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        accountsChart: new FormControl('', Validators.required),
-        ledger: new FormControl('', Validators.required),
-        subledgerType: new FormControl('', Validators.required),
-        number: new FormControl('', Validators.required),
-        name: new FormControl('', Validators.required),
-        description: new FormControl(''),
+      new UntypedFormGroup({
+        accountsChart: new UntypedFormControl('', Validators.required),
+        ledger: new UntypedFormControl('', Validators.required),
+        subledgerType: new UntypedFormControl('', Validators.required),
+        number: new UntypedFormControl('', Validators.required),
+        name: new UntypedFormControl('', Validators.required),
+        description: new UntypedFormControl(''),
       })
     );
   }

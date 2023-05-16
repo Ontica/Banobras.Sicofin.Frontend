@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { of, Subject } from 'rxjs';
 
@@ -188,17 +188,17 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        type: new FormControl(FinancialReportEditionItemType.Concept, Validators.required),
-        group: new FormControl('', Validators.required),
-        concept: new FormControl('', Validators.required),
-        label: new FormControl(''),
-        positioningRule: new FormControl(PositioningRule.ByPositionValue, Validators.required),
-        positioningOffsetUID: new FormControl(''),
-        position: new FormControl('', Validators.required),
-        format: new FormControl(FormatType.Default, Validators.required),
-        startDate: new FormControl(''), // ('', Validators.required)
-        endDate: new FormControl(''), // (DefaultEndDate, Validators.required)
+      new UntypedFormGroup({
+        type: new UntypedFormControl(FinancialReportEditionItemType.Concept, Validators.required),
+        group: new UntypedFormControl('', Validators.required),
+        concept: new UntypedFormControl('', Validators.required),
+        label: new UntypedFormControl(''),
+        positioningRule: new UntypedFormControl(PositioningRule.ByPositionValue, Validators.required),
+        positioningOffsetUID: new UntypedFormControl(''),
+        position: new UntypedFormControl('', Validators.required),
+        format: new UntypedFormControl(FormatType.Default, Validators.required),
+        startDate: new UntypedFormControl(''), // ('', Validators.required)
+        endDate: new UntypedFormControl(''), // (DefaultEndDate, Validators.required)
       })
     );
 

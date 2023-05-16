@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { SelectionModel } from '@angular/cdk/collections';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
@@ -81,9 +81,9 @@ export class AccountEditionConfigComponent implements OnInit {
 
   private initForm() {
     this.formHandler = new FormHandler(
-      new FormGroup({
-        applicationDate: new FormControl('', Validators.required),
-        dataToUpdate: new FormControl([], [Validators.required, Validators.minLength(1)]),
+      new UntypedFormGroup({
+        applicationDate: new UntypedFormControl('', Validators.required),
+        dataToUpdate: new UntypedFormControl([], [Validators.required, Validators.minLength(1)]),
       })
     );
   }

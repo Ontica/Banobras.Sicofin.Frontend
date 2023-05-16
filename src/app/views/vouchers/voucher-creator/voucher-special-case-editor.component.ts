@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { EventInfo } from '@app/core';
 
@@ -60,9 +60,9 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        calculationDate: new FormControl('', Validators.required),
-        onVoucherNumber: new FormControl('', Validators.required),
+      new UntypedFormGroup({
+        calculationDate: new UntypedFormControl('', Validators.required),
+        onVoucherNumber: new UntypedFormControl('', Validators.required),
       })
     );
 

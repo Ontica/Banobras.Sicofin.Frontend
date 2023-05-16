@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, Identifiable, Validate } from '@app/core';
 
@@ -159,13 +159,13 @@ export class ExternalProcessSubmitterComponent implements OnInit {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        year: new FormControl(),
-        month: new FormControl(),
-        methodology: new FormControl(),
-        period: new FormControl(),
-        storeInto: new FormControl(this.isExportacionSaldosDiariosType ? StoreBalancesInto.Diario : null),
-        date: new FormControl(),
+      new UntypedFormGroup({
+        year: new UntypedFormControl(),
+        month: new UntypedFormControl(),
+        methodology: new UntypedFormControl(),
+        period: new UntypedFormControl(),
+        storeInto: new UntypedFormControl(this.isExportacionSaldosDiariosType ? StoreBalancesInto.Diario : null),
+        date: new UntypedFormControl(),
       })
     );
 

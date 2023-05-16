@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
@@ -159,16 +159,16 @@ export class FixedColumnEditorComponent implements OnChanges {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        type: new FormControl(FinancialReportEditionItemType.DataField, Validators.required),
-        name: new FormControl('', Validators.required),
-        formula: new FormControl(''),
-        isHide: new FormControl(false),
-        positioningRule: new FormControl(PositioningRule.ByPositionValue, Validators.required),
-        positioningOffsetUID: new FormControl(''),
-        position: new FormControl('', Validators.required),
-        startDate: new FormControl(''), // ('', Validators.required)
-        endDate: new FormControl(''), // (DefaultEndDate, Validators.required)
+      new UntypedFormGroup({
+        type: new UntypedFormControl(FinancialReportEditionItemType.DataField, Validators.required),
+        name: new UntypedFormControl('', Validators.required),
+        formula: new UntypedFormControl(''),
+        isHide: new UntypedFormControl(false),
+        positioningRule: new UntypedFormControl(PositioningRule.ByPositionValue, Validators.required),
+        positioningOffsetUID: new UntypedFormControl(''),
+        position: new UntypedFormControl('', Validators.required),
+        startDate: new UntypedFormControl(''), // ('', Validators.required)
+        endDate: new UntypedFormControl(''), // (DefaultEndDate, Validators.required)
       })
     );
 

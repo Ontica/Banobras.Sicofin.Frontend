@@ -7,7 +7,7 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
@@ -32,9 +32,9 @@ export class UserLoginComponent implements OnInit {
 
   submitted = false;
 
-  form = new FormGroup({
-    userID: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required)
+  form = new UntypedFormGroup({
+    userID: new UntypedFormControl('', Validators.required),
+    password: new UntypedFormControl('', Validators.required)
   });
 
   exceptionMsg: string;

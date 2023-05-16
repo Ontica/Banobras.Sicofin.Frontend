@@ -10,13 +10,13 @@ If you are interested in the former version of this software based on ASP and Vi
 
 ## Quick start
 
-This project is being built with Angular 13 and TypeScript 4.
+This project is being built with Angular 14 and TypeScript 4.7.
 
-It uses [Angular CLI](https://github.com/angular/angular-cli), so both the CLI and generated project, have dependencies that require Node 12 or higher, together with NPM 6 or higher.
+It uses [Angular CLI](https://github.com/angular/angular-cli), so both the CLI and generated project, have dependencies that require Node 14.15.0 or higher, together with NPM 6 or higher.
 
-**Make sure you have Node version >= 12 and NPM >= 6**
+**Make sure you have Node version >= 14.15.0 and NPM >= 6**
 
-**Then install [Angular CLI](https://github.com/angular/angular-cli)** (globally if possible), ensuring that you have installed **version 13** or higher.
+**Then install [Angular CLI](https://github.com/angular/angular-cli)** (globally if possible), ensuring that you have installed **version 14** or higher.
 
 ```bash
 # install Angular CLI globally
@@ -43,7 +43,7 @@ npm install
 ng serve --open
 ```
 
-By default, you have to navigate to [http://localhost:4200](http://localhost:2021) to see the application running.
+By default, you have to navigate to [http://localhost:2021](http://localhost:2021) to see the application running.
 
 ## Backend access
 
@@ -71,5 +71,5 @@ de derechos de autor.
 
 ## Copyright
 
-Copyright © 2021-2022. La Vía Óntica SC, Ontica LLC y autores.
+Copyright © 2021-2023. La Vía Óntica SC, Ontica LLC y autores.
 Todos los derechos reservados.

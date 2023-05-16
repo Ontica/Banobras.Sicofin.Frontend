@@ -8,7 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
@@ -363,21 +363,21 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        voucherEntryType: new FormControl('', Validators.required),
-        ledgerAccount: new FormControl(null, Validators.required),
-        sector: new FormControl('', Validators.required),
-        subledgerAccount: new FormControl('', Validators.required),
-        currency: new FormControl('', Validators.required),
-        amount: new FormControl('', [Validators.required, Validate.isPositive]),
-        exchangeRate: new FormControl('', [Validators.required, Validate.isPositive]),
-        baseCurrencyAmount: new FormControl('', [Validators.required, Validate.isPositive]),
-        responsibilityArea: new FormControl(''),
-        budgetConcept: new FormControl('', Validators.maxLength(6)),
-        eventType: new FormControl(''),
-        verificationNumber: new FormControl('', Validators.maxLength(6)),
-        concept: new FormControl('', Validators.maxLength(255)),
-        date: new FormControl(''),
+      new UntypedFormGroup({
+        voucherEntryType: new UntypedFormControl('', Validators.required),
+        ledgerAccount: new UntypedFormControl(null, Validators.required),
+        sector: new UntypedFormControl('', Validators.required),
+        subledgerAccount: new UntypedFormControl('', Validators.required),
+        currency: new UntypedFormControl('', Validators.required),
+        amount: new UntypedFormControl('', [Validators.required, Validate.isPositive]),
+        exchangeRate: new UntypedFormControl('', [Validators.required, Validate.isPositive]),
+        baseCurrencyAmount: new UntypedFormControl('', [Validators.required, Validate.isPositive]),
+        responsibilityArea: new UntypedFormControl(''),
+        budgetConcept: new UntypedFormControl('', Validators.maxLength(6)),
+        eventType: new UntypedFormControl(''),
+        verificationNumber: new UntypedFormControl('', Validators.maxLength(6)),
+        concept: new UntypedFormControl('', Validators.maxLength(255)),
+        date: new UntypedFormControl(''),
       })
     );
   }

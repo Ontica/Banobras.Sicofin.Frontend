@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion } from '@app/core';
 
@@ -103,9 +103,9 @@ export class AccountingCalendarsEditorComponent implements OnInit {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        periodName: new FormControl('', Validators.required),
-        period: new FormControl(null, Validators.required),
+      new UntypedFormGroup({
+        periodName: new UntypedFormControl('', Validators.required),
+        period: new UntypedFormControl(null, Validators.required),
       })
     );
 

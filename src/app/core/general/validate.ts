@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { FormatLibrary } from '@app/shared/utils';
 
@@ -135,7 +135,7 @@ export class Validate {
 
 
   static matchOther(controlName: string, matchingControlName: string): ValidatorFn {
-    return (formGroup: FormGroup) => {
+    return (formGroup: UntypedFormGroup) => {
       const control = formGroup.get(controlName);
       const matchingControl = formGroup.get(matchingControlName);
 

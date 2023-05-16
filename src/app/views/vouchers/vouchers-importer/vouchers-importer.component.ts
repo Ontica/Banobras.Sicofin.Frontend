@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, Observable } from 'rxjs';
 
@@ -278,13 +278,13 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        allowUnbalancedVouchers: new FormControl(false),
-        generateSubledgerAccount: new FormControl(false),
-        canEditVoucherEntries: new FormControl(true),
-        accountsChartUID: new FormControl('', Validators.required),
-        accountingDate: new FormControl('', Validators.required),
-        voucherTypeUID: new FormControl('', Validators.required),
+      new UntypedFormGroup({
+        allowUnbalancedVouchers: new UntypedFormControl(false),
+        generateSubledgerAccount: new UntypedFormControl(false),
+        canEditVoucherEntries: new UntypedFormControl(true),
+        accountsChartUID: new UntypedFormControl('', Validators.required),
+        accountingDate: new UntypedFormControl('', Validators.required),
+        voucherTypeUID: new UntypedFormControl('', Validators.required),
       })
     );
 

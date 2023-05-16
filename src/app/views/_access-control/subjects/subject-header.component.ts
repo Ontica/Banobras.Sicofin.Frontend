@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
@@ -145,13 +145,13 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        fullName: new FormControl('', Validators.required),
-        userID: new FormControl('', Validators.required),
-        eMail: new FormControl('', Validators.required),
-        employeeNo: new FormControl(''),
-        jobPosition: new FormControl('', Validators.required),
-        workareaUID: new FormControl('', Validators.required),
+      new UntypedFormGroup({
+        fullName: new UntypedFormControl('', Validators.required),
+        userID: new UntypedFormControl('', Validators.required),
+        eMail: new UntypedFormControl('', Validators.required),
+        employeeNo: new UntypedFormControl(''),
+        jobPosition: new UntypedFormControl('', Validators.required),
+        workareaUID: new UntypedFormControl('', Validators.required),
       })
     );
   }

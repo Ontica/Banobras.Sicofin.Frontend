@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { DateStringLibrary, EventInfo } from '@app/core';
 
@@ -99,18 +99,18 @@ export class AccountViewComponent implements OnChanges {
 
   private initForm() {
     this.formHandler = new FormHandler(
-      new FormGroup({
-        accountsChart: new FormControl(''),
-        startDate: new FormControl(''),
-        endDate: new FormControl(''),
-        number: new FormControl(''),
-        name: new FormControl(''),
-        description: new FormControl(''),
-        role: new FormControl(''),
-        type: new FormControl(''),
-        debtorCreditor: new FormControl(''),
-        usesSubledger: new FormControl(false),
-        usesSector: new FormControl(false),
+      new UntypedFormGroup({
+        accountsChart: new UntypedFormControl(''),
+        startDate: new UntypedFormControl(''),
+        endDate: new UntypedFormControl(''),
+        number: new UntypedFormControl(''),
+        name: new UntypedFormControl(''),
+        description: new UntypedFormControl(''),
+        role: new UntypedFormControl(''),
+        type: new UntypedFormControl(''),
+        debtorCreditor: new UntypedFormControl(''),
+        usesSubledger: new UntypedFormControl(false),
+        usesSector: new UntypedFormControl(false),
       })
     );
   }

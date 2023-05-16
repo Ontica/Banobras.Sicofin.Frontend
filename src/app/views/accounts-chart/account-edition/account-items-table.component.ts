@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -110,7 +110,7 @@ export class AccountItemsTableComponent implements OnChanges, OnInit {
 
   private initForm() {
     this.formHandler = new FormHandler(
-      new FormGroup({items: new FormControl([], [Validators.required, Validators.minLength(1)])})
+      new UntypedFormGroup({items: new UntypedFormControl([], [Validators.required, Validators.minLength(1)])})
     );
   }
 

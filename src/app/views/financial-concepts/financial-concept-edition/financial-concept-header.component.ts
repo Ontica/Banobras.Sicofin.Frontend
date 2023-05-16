@@ -8,7 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, of, Subject } from 'rxjs';
 
@@ -208,18 +208,18 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
     }
 
     this.formHandler = new FormHandler(
-      new FormGroup({
-        accountsChartUID: new FormControl('', Validators.required),
-        groupUID: new FormControl('', Validators.required),
-        code: new FormControl('', Validators.required),
-        name: new FormControl('', Validators.required),
-        positioningRule: new FormControl(PositioningRule.AtEnd, Validators.required),
-        positioningOffsetConceptUID: new FormControl(''),
-        position: new FormControl(''),
-        startDate: new FormControl('', Validators.required),
-        endDate: new FormControl(DefaultEndDate, Validators.required),
-        calculationScript: new FormControl(''),
-        variableID: new FormControl('', Validators.pattern('[A-Z0-9_]*')),
+      new UntypedFormGroup({
+        accountsChartUID: new UntypedFormControl('', Validators.required),
+        groupUID: new UntypedFormControl('', Validators.required),
+        code: new UntypedFormControl('', Validators.required),
+        name: new UntypedFormControl('', Validators.required),
+        positioningRule: new UntypedFormControl(PositioningRule.AtEnd, Validators.required),
+        positioningOffsetConceptUID: new UntypedFormControl(''),
+        position: new UntypedFormControl(''),
+        startDate: new UntypedFormControl('', Validators.required),
+        endDate: new UntypedFormControl(DefaultEndDate, Validators.required),
+        calculationScript: new UntypedFormControl(''),
+        variableID: new UntypedFormControl('', Validators.pattern('[A-Z0-9_]*')),
       })
     );
 
