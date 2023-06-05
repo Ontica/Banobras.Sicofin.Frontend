@@ -134,7 +134,7 @@ export class FixedColumnEditorComponent implements OnChanges {
 
 
   onSubmitDataClicked() {
-    if (!this.formHandler.isReadyForSubmit) {
+    if (!this.formHandler.isValid) {
       this.formHandler.invalidateForm();
       return;
     }

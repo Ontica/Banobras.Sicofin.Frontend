@@ -20,16 +20,8 @@ export class FormHandler {
     return this.form.valid && this.form.dirty;
   }
 
-  get isReadyForSubmit() {
-    return this.isValid;
-  }
-
   getControl(name: string) {
     return this.form.get(name);
-  }
-
-  setFormModel(values: any) {
-    this.form.reset(values);
   }
 
   showInvalidControl(name: string) {
@@ -39,10 +31,10 @@ export class FormHandler {
   }
 
   validateReadyForSubmit() {
-    if (!this.isReadyForSubmit) {
+    if (!this.isValid) {
       this.invalidateForm();
     }
-    return this.isReadyForSubmit;
+    return this.isValid;
   }
 
   invalidateForm() {

@@ -139,7 +139,7 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   onSubmitDataClicked() {
-    if (!this.formHandler.isReadyForSubmit) {
+    if (!this.formHandler.isValid) {
       this.formHandler.invalidateForm();
       return;
     }

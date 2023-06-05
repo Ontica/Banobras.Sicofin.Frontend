@@ -225,7 +225,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   onSubmitDataClicked() {
-    if (!this.formHandler.isReadyForSubmit) {
+    if (!this.formHandler.isValid) {
       this.formHandler.invalidateForm();
       return;
     }

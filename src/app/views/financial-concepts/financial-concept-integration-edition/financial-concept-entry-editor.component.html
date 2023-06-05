@@ -289,8 +289,8 @@
               <div fxFlex fxLayoutAlign="end center">
 
                 <button
-                  [class.btn]="!formHandler.isReadyForSubmit"
-                  [class.btn-action]="formHandler.isReadyForSubmit"
+                  [class.btn]="!formHandler.isValid"
+                  [class.btn-action]="formHandler.isValid"
                   (click)="onSubmitDataClicked()">
                   {{editionMode ? 'Guardar' : 'Agregar'}}
                 </button>
