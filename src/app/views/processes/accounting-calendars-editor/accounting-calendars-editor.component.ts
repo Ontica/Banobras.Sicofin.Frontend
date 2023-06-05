@@ -7,22 +7,23 @@
 
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion } from '@app/core';
 
 import { AccountingCalendarsDataService } from '@app/data-services';
 
-import { AccountingCalendar, AccountingCalendarPeriod, AccountingCalendarPeriodFields } from '@app/models';
+import { AccountingCalendar, AccountingCalendarPeriod, AccountingCalendarPeriodFields,
+         DateRange } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { FormHandler } from '@app/shared/utils';
+import { FormHelper } from '@app/shared/utils';
 
-enum AccountingCalendarsEditorFormControls {
-  periodName = 'periodName',
-  period = 'period',
-}
+interface AccountingCalendarsFormModel extends FormGroup<{
+  periodName: FormControl<string>;
+  period: FormControl<DateRange>;
+}> { }
 
 @Component({
   selector: 'emp-fa-accounting-calendars-editor',
@@ -32,6 +33,10 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
   @Output() closeEvent = new EventEmitter<void>();
 
+  form: AccountingCalendarsFormModel;
+
+  formHelper = FormHelper;
+
   isLoading = false;
 
   accountingCalendarsList: any[] = [];
@@ -40,9 +45,6 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
   accountingCalendarSelected: AccountingCalendar = null;
 
-  formHandler: FormHandler;
-
-  controls = AccountingCalendarsEditorFormControls;
 
   constructor(private accountingCalendarsData: AccountingCalendarsDataService,
               private messageBox: MessageBoxService){
@@ -50,15 +52,15 @@ export class AccountingCalendarsEditorComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.getAccountingCalendars();
   }
 
 
-  get isFormValid() {
-    return this.formHandler.isValid &&
-           !!this.formHandler.getControl(this.controls.period).value.fromDate &&
-           !!this.formHandler.getControl(this.controls.period).value.toDate;
+  get isFormValid(): boolean {
+    return this.formHelper.isFormReady(this.form) &&
+           !!this.form.value.period.fromDate &&
+           !!this.form.value.period.toDate;
   }
 
 
@@ -68,8 +70,8 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
 
   onAccountingCalendarChanges() {
-    this.formHandler.resetForm();
-    this.formHandler.disableForm(!this.accountingCalendarUID);
+    this.form.reset();
+    this.formHelper.setDisableForm(this.form, !this.accountingCalendarUID);
 
     if (!!this.accountingCalendarUID) {
       this.getAccountingCalendar(this.accountingCalendarUID);
@@ -98,26 +100,21 @@ export class AccountingCalendarsEditorComponent implements OnInit {
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        periodName: new UntypedFormControl('', Validators.required),
-        period: new UntypedFormControl(null, Validators.required),
-      })
-    );
+    this.form = fb.group({
+      periodName: ['', Validators.required],
+      period: [null as DateRange, Validators.required],
+    });
 
-    this.formHandler.disableForm(true);
+    this.formHelper.setDisableForm(this.form, true);
   }
 
 
   private getFormData(): AccountingCalendarPeriodFields {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: AccountingCalendarPeriodFields = {
       period: formModel.periodName ?? '',
@@ -158,7 +155,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
       .toPromise()
       .then(x => {
         this.accountingCalendarSelected = x;
-        this.formHandler.resetForm();
+        this.form.reset();
       })
       .finally(() => this.isLoading = false);
   }

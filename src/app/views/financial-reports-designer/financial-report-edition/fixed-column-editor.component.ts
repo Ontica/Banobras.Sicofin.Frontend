@@ -7,16 +7,16 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, DateString, EventInfo, Identifiable } from '@app/core';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { EmptyFinancialReportColumn, EmptyFinancialReportConfig, FinancialReportColumn,
          FinancialReportColumnEditionItemTypeList, FinancialReportConfig, FinancialReportEditionCommand,
-         FinancialReportEditionItemType, FinancialReportEditionType, Positioning, PositioningRule,
-         PositioningRuleList } from '@app/models';
+         FinancialReportEditionFields, FinancialReportEditionItemType, FinancialReportEditionType,
+         Positioning, PositioningRule, PositioningRuleList } from '@app/models';
 
 export enum FixedColumnEditorEventType {
   CLOSE_MODAL_CLICKED = 'FixedColumnEditorComponent.Event.CloseModalClicked',
@@ -24,17 +24,17 @@ export enum FixedColumnEditorEventType {
   UPDATE_COLUMN       = 'FixedColumnEditorComponent.Event.UpdateColumn',
 }
 
-enum FixedColumnEditorFormControls {
-  type = 'type',
-  name = 'name',
-  formula = 'formula',
-  isHide = 'isHide',
-  positioningRule = 'positioningRule',
-  positioningOffsetUID = 'positioningOffsetUID',
-  position = 'position',
-  startDate = 'startDate',
-  endDate = 'endDate',
-}
+interface FixedColumnFormModel extends FormGroup<{
+  type: FormControl<FinancialReportEditionItemType>;
+  name: FormControl<string>;
+  formula: FormControl<string>;
+  isHide: FormControl<boolean>;
+  positioningRule: FormControl<PositioningRule>;
+  positioningOffsetUID: FormControl<string>;
+  position: FormControl<string>;
+  startDate: FormControl<DateString>;
+  endDate: FormControl<DateString>;
+}> { }
 
 @Component({
   selector: 'emp-fa-fixed-column-editor',
@@ -52,9 +52,9 @@ export class FixedColumnEditorComponent implements OnChanges {
 
   @Output() fixedColumnEditorEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  form: FixedColumnFormModel;
 
-  controls = FixedColumnEditorFormControls;
+  formHelper = FormHelper;
 
   isLoading = false;
 
@@ -89,31 +89,28 @@ export class FixedColumnEditorComponent implements OnChanges {
 
 
   get isDataFieldType(): boolean {
-    return FinancialReportEditionItemType.DataField ===
-      this.formHandler.getControl(this.controls.type).value;
+    return FinancialReportEditionItemType.DataField === this.form.controls.type.value;
   }
 
 
   get isFormulaType(): boolean {
-    return FinancialReportEditionItemType.Formula ===
-      this.formHandler.getControl(this.controls.type).value;
+    return FinancialReportEditionItemType.Formula === this.form.controls.type.value;
   }
 
 
   get displayPositingSection(): boolean {
-    return !this.formHandler.getControl(this.controls.isHide).value;
+    return !this.form.controls.isHide.value;
   }
 
 
   get displayPositioningOffset(): boolean {
     return this.displayPositingSection && [PositioningRule.AfterOffset, PositioningRule.BeforeOffset]
-      .includes(this.formHandler.getControl(this.controls.positioningRule).value);
+      .includes(this.form.controls.positioningRule.value);
   }
 
 
   get displayPosition(): boolean {
-    return PositioningRule.ByPositionValue ===
-      this.formHandler.getControl(this.controls.positioningRule).value;
+    return PositioningRule.ByPositionValue === this.form.controls.positioningRule.value;
   }
 
 
@@ -123,62 +120,55 @@ export class FixedColumnEditorComponent implements OnChanges {
 
 
   onTypeChanged() {
-    this.setControlConfig(this.controls.formula, this.isFormulaType);
+    this.setControlConfig(this.form.controls.formula, this.isFormulaType);
   }
 
 
   onPositioningRuleChanged() {
-    this.setControlConfig(this.controls.positioningOffsetUID, this.displayPositioningOffset);
-    this.setControlConfig(this.controls.position, this.displayPosition);
+    this.setControlConfig(this.form.controls.positioningOffsetUID, this.displayPositioningOffset);
+    this.setControlConfig(this.form.controls.position, this.displayPosition);
   }
 
 
   onSubmitDataClicked() {
-    if (!this.formHandler.isValid) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const eventType = this.isSaved ?
+        FixedColumnEditorEventType.UPDATE_COLUMN :
+        FixedColumnEditorEventType.INSERT_COLUMN;
+
+      const payload = {
+        reportTypeUID: this.financialReportConfig.reportType.uid,
+        columnUID: this.isSaved ? this.financialReportColumn.column : null,// TODO: check how to identify column
+        command: this.getFinancialReportEditionCommand(),
+      };
+
+      sendEvent(this.fixedColumnEditorEvent, eventType, payload);
     }
-
-    const eventType = this.isSaved ?
-      FixedColumnEditorEventType.UPDATE_COLUMN :
-      FixedColumnEditorEventType.INSERT_COLUMN;
-
-    const payload = {
-      reportTypeUID: this.financialReportConfig.reportType.uid,
-      columnUID: this.isSaved ? this.financialReportColumn.column : null,// TODO: check how to identify column
-      command: this.getFinancialReportEditionCommand(),
-    };
-
-    sendEvent(this.fixedColumnEditorEvent, eventType, payload);
   }
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        type: new UntypedFormControl(FinancialReportEditionItemType.DataField, Validators.required),
-        name: new UntypedFormControl('', Validators.required),
-        formula: new UntypedFormControl(''),
-        isHide: new UntypedFormControl(false),
-        positioningRule: new UntypedFormControl(PositioningRule.ByPositionValue, Validators.required),
-        positioningOffsetUID: new UntypedFormControl(''),
-        position: new UntypedFormControl('', Validators.required),
-        startDate: new UntypedFormControl(''), // ('', Validators.required)
-        endDate: new UntypedFormControl(''), // (DefaultEndDate, Validators.required)
-      })
-    );
+    this.form = fb.group({
+      type: [FinancialReportEditionItemType.DataField, Validators.required],
+      name: ['', Validators.required],
+      formula: [''],
+      isHide: [false],
+      positioningRule: [PositioningRule.ByPositionValue, Validators.required],
+      positioningOffsetUID: [''],
+      position: ['', Validators.required],
+      startDate: [null as DateString], // ['', Validators.required],
+      endDate: [null as DateString], // [DefaultEndDate, Validators.required],
+    });
 
     this.setDisableFields();
   }
 
 
   private setDisableFields() {
-    this.formHandler.disableControl(this.controls.startDate);
-    this.formHandler.disableControl(this.controls.endDate);
+    this.formHelper.setDisableControl(this.form.controls.startDate);
+    this.formHelper.setDisableControl(this.form.controls.endDate);
   }
 
 
@@ -187,7 +177,7 @@ export class FixedColumnEditorComponent implements OnChanges {
       return;
     }
 
-    this.formHandler.form.reset({
+    this.form.reset({
       type: !!this.financialReportColumn.formula ? // TODO: check this for a new field type?
         FinancialReportEditionItemType.Formula : FinancialReportEditionItemType.DataField,
       name: this.financialReportColumn.title || '',
@@ -200,17 +190,17 @@ export class FixedColumnEditorComponent implements OnChanges {
     });
 
     this.onTypeChanged();
-    this.formHandler.disableControl(this.controls.type);
+    this.formHelper.setDisableControl(this.form.controls.type);
   }
 
 
   private setPosition() {
-    this.formHandler.getControl(this.controls.positioningRule).reset(PositioningRule.ByPositionValue);
-    this.formHandler.getControl(this.controls.position).reset(this.column);
+    this.form.controls.positioningRule.reset(PositioningRule.ByPositionValue);
+    this.form.controls.position.reset(this.column);
   }
 
 
-  // TODO: define command interface
+  // TODO: redefine command interface
   private getFinancialReportEditionCommand(): FinancialReportEditionCommand {
     const command: FinancialReportEditionCommand = {
       type: this.getFinancialReportEditionType(),
@@ -241,16 +231,15 @@ export class FixedColumnEditorComponent implements OnChanges {
     return null;
   }
 
-  // TODO: define data interface
-  private getFormData(): any {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+  // TODO: Rfx data interface
+  private getFormData(): FinancialReportEditionFields {
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
-    let data: any = {
-      name: formModel.name ?? '',
-      isHide: formModel.isHide ?? '',
+    let data: FinancialReportEditionFields = {
+      columnName: formModel.name ?? '',
+      isHideColumn: formModel.isHide,
       startDate: formModel.startDate ?? '',
       endDate: formModel.endDate ?? '',
     };
@@ -262,8 +251,8 @@ export class FixedColumnEditorComponent implements OnChanges {
   }
 
 
-  private validateFieldsByType(data: any) {
-    const formModel = this.formHandler.form.getRawValue();
+  private validateFieldsByType(data: FinancialReportEditionFields) {
+    const formModel = this.form.getRawValue();
 
     if (this.isFormulaType) {
       data.formula = formModel.formula ?? '';
@@ -271,15 +260,15 @@ export class FixedColumnEditorComponent implements OnChanges {
   }
 
 
-  private validatePositionsFields(data: any) {
-    const formModel = this.formHandler.form.getRawValue();
+  private validatePositionsFields(data: FinancialReportEditionFields) {
+    const formModel = this.form.getRawValue();
 
     if (!this.displayPositingSection) {
       return;
     }
 
     const positioning: Positioning = {
-      rule: formModel.positioningRule ?? '',
+      rule: formModel.positioningRule ?? null,
     }
 
     if (this.displayPositioningOffset) {
@@ -287,7 +276,7 @@ export class FixedColumnEditorComponent implements OnChanges {
     }
 
     if (this.displayPosition) {
-      positioning.position = formModel.position;
+      positioning.position = formModel.position as any; // TODO: check field to send column position
     }
 
     data.positioning = positioning;
@@ -304,15 +293,15 @@ export class FixedColumnEditorComponent implements OnChanges {
         [PositioningRule.AtStart, PositioningRule.ByPositionValue].includes(x.uid as PositioningRule));
     }
 
-    this.formHandler.getControl(this.controls.positioningRule).reset(PositioningRule.ByPositionValue);
+    this.form.controls.positioningRule.reset(PositioningRule.ByPositionValue);
   }
 
 
-  private setControlConfig(control: FixedColumnEditorFormControls, required: boolean) {
+  private setControlConfig(control: FormControl<any>, required: boolean) {
       if (required) {
-      this.formHandler.setControlValidators(control, Validators.required);
+      this.formHelper.setControlValidators(control, Validators.required);
     } else {
-      this.formHandler.clearControlValidators(control);
+      this.formHelper.clearControlValidators(control);
     }
   }
 

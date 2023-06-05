@@ -15,7 +15,7 @@
       <mat-stepper #stepper linear labelPosition="bottom">
 
         <mat-step #configStep *ngIf="showConfigStep"
-          [stepControl]="accountEditionConfig.formHandler.form"
+          [stepControl]="accountEditionConfig.form"
           [editable]="!accountEdited">
 
           <ng-template matStepLabel>Configuración</ng-template>
@@ -64,7 +64,7 @@
         </mat-step>
 
         <mat-step #infoStep *ngIf="showInfoStep"
-          [stepControl]="accountHeader.formHandler.form" [editable]="!accountEdited">
+          [stepControl]="accountHeader.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Información</ng-template>
           <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
@@ -112,7 +112,7 @@
 
 
         <mat-step #currenciesStep *ngIf="showCurrenciesStep"
-          [stepControl]="accountCurrenciesTable.formHandler.form" [editable]="!accountEdited">
+          [stepControl]="accountCurrenciesTable.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Monedas</ng-template>
           <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
@@ -159,7 +159,7 @@
 
 
         <mat-step #sectorsStep *ngIf="showSectorsStep"
-          [stepControl]="accountSectorsTable.formHandler.form" [editable]="!accountEdited">
+          [stepControl]="accountSectorsTable.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Sectores</ng-template>
           <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>
@@ -207,7 +207,7 @@
 
 
         <mat-step #roleForSectorsStep *ngIf="showRoleForSectorsStep"
-          [stepControl]="accountRoleForSectorsTable.formHandler.form" [editable]="!accountEdited">
+          [stepControl]="accountRoleForSectorsTable.form" [editable]="!accountEdited">
 
           <ng-template matStepLabel>Rol por sector</ng-template>
           <ng-template matStepperIcon="edit"> <mat-icon>done</mat-icon> </ng-template>

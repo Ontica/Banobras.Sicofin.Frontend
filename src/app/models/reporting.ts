@@ -90,6 +90,12 @@ export interface ReportEntry extends DataTableEntry {
 }
 
 
+export interface DateRange {
+  fromDate: DateString;
+  toDate: DateString;
+}
+
+
 export const DefaultExportationType: ExportationType = {
   uid: FileType.Excel,
   name: FileType.Excel,

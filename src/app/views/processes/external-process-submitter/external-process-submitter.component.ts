@@ -7,28 +7,28 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, Identifiable, Validate } from '@app/core';
+import { Assertion, DateString, Identifiable, Validate } from '@app/core';
 
-import { FormHandler } from '@app/shared/utils';
+import { FormHelper } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { ExternalProcessDataService } from '@app/data-services';
 
-import { ConcilacionSICExternalProcessCommand, ExportBalancesCommand, ExternalProcessTypeList,
+import { ConcilacionSICExternalProcessCommand, DateRange, ExportBalancesCommand, ExternalProcessTypeList,
          ExternalProcessTypes, RentabilidadExternalProcessCommand, StoreBalancesInto,
          StoreBalancesIntoForMonthlyExportList } from '@app/models';
 
-enum ExternalProcessSubmitterFormControls {
-  year = 'year',
-  month = 'month',
-  methodology = 'methodology',
-  period = 'period',
-  storeInto = 'storeInto',
-  date = 'date',
-}
+interface ExternalProcessFormModel extends FormGroup<{
+  year: FormControl<number>;
+  month: FormControl<number>;
+  methodology: FormControl<number>;
+  period: FormControl<DateRange>;
+  storeInto: FormControl<StoreBalancesInto>;
+  date: FormControl<DateString>;
+}> { }
 
 @Component({
   selector: 'emp-fa-external-process-submitter',
@@ -42,9 +42,9 @@ export class ExternalProcessSubmitterComponent implements OnInit {
 
   title = 'Procesos externos';
 
-  formHandler: FormHandler;
+  form: ExternalProcessFormModel;
 
-  controls = ExternalProcessSubmitterFormControls;
+  formHelper = FormHelper;
 
   submitted = false;
 
@@ -59,27 +59,27 @@ export class ExternalProcessSubmitterComponent implements OnInit {
   }
 
 
-  get isRentabilidadType() {
+  get isRentabilidadType(): boolean {
     return this.externalProcessType === ExternalProcessTypes.Rentabilidad;
   }
 
 
-  get isConciliacionSICType() {
+  get isConciliacionSICType(): boolean {
     return this.externalProcessType === ExternalProcessTypes.ConciliacionSIC;
   }
 
 
-  get isExportacionSaldosMensualesType() {
+  get isExportacionSaldosMensualesType(): boolean {
     return this.externalProcessType === ExternalProcessTypes.ExportacionSaldosMensuales;
   }
 
 
-  get isExportacionSaldosDiariosType() {
+  get isExportacionSaldosDiariosType(): boolean {
     return this.externalProcessType === ExternalProcessTypes.ExportacionSaldosDiarios;
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.title = ExternalProcessTypeList.find(x => x.uid === this.externalProcessType).name;
     this.initForm();
   }
@@ -95,12 +95,9 @@ export class ExternalProcessSubmitterComponent implements OnInit {
       return;
     }
 
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      this.validateExecuteExternalProcess();
     }
-
-    this.validateExecuteExternalProcess();
   }
 
 
@@ -131,7 +128,7 @@ export class ExternalProcessSubmitterComponent implements OnInit {
     this.externalProcessData.executeExternalProcess(this.externalProcessType, command)
       .toPromise()
       .then(x => {
-        this.formHandler.resetForm();
+        this.form.reset();
         this.messageBox.show(x, this.title);
       })
       .finally(() => this.submitted = false);
@@ -146,7 +143,7 @@ export class ExternalProcessSubmitterComponent implements OnInit {
     this.externalProcessData.exportBalances(command)
       .toPromise()
       .then(x => {
-        this.formHandler.resetForm();
+        this.form.reset();
         this.messageBox.show(x, this.title);
       })
       .finally(() => this.submitted = false);
@@ -154,20 +151,16 @@ export class ExternalProcessSubmitterComponent implements OnInit {
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        year: new UntypedFormControl(),
-        month: new UntypedFormControl(),
-        methodology: new UntypedFormControl(),
-        period: new UntypedFormControl(),
-        storeInto: new UntypedFormControl(this.isExportacionSaldosDiariosType ? StoreBalancesInto.Diario : null),
-        date: new UntypedFormControl(),
-      })
-    );
+    this.form = fb.group({
+      year: [],
+      month: [],
+      methodology: [],
+      period: [],
+      storeInto: [this.isExportacionSaldosDiariosType ? StoreBalancesInto.Diario : null],
+      date: [],
+    });
 
     this.initValidators();
   }
@@ -175,39 +168,38 @@ export class ExternalProcessSubmitterComponent implements OnInit {
 
   private initValidators() {
     if (this.isRentabilidadType) {
-      this.formHandler.setControlValidators(this.controls.year,
+      this.formHelper.setControlValidators(this.form.controls.year,
         [Validators.required, Validators.minLength(4), Validators.maxLength(4)]);
 
-      this.formHandler.setControlValidators(this.controls.month,
+      this.formHelper.setControlValidators(this.form.controls.month,
         [Validators.required, Validators.min(1), Validators.max(12)]);
 
-      this.formHandler.setControlValidators(this.controls.methodology, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.methodology, Validators.required);
       return;
     }
 
     if (this.isConciliacionSICType) {
-      this.formHandler.setControlValidators(this.controls.period,
+      this.formHelper.setControlValidators(this.form.controls.period,
         [Validators.required, Validate.periodRequired]);
       return;
     }
 
     if (this.isExportacionSaldosMensualesType || this.isExportacionSaldosDiariosType) {
-      this.formHandler.setControlValidators(this.controls.storeInto, Validators.required);
-      this.formHandler.setControlValidators(this.controls.date, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.storeInto, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.date, Validators.required);
     }
   }
 
 
   private getRentabilidadExternalProcessCommand(): RentabilidadExternalProcessCommand {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: RentabilidadExternalProcessCommand = {
-      anio: formModel.year ?? '',
-      mes: formModel.month ?? '',
-      metodologia: formModel.methodology ?? '',
+      anio: formModel.year ?? null,
+      mes: formModel.month ?? null,
+      metodologia: formModel.methodology ?? null,
     };
 
     return data;
@@ -215,10 +207,9 @@ export class ExternalProcessSubmitterComponent implements OnInit {
 
 
   private getConcilacionSICExternalProcessCommand(): ConcilacionSICExternalProcessCommand {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: ConcilacionSICExternalProcessCommand = {
       fechaInicio: formModel.period.fromDate ?? '',
@@ -230,10 +221,9 @@ export class ExternalProcessSubmitterComponent implements OnInit {
 
 
   private getExportBalancesCommand(): ExportBalancesCommand {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: ExportBalancesCommand = {
       storeInto: formModel.storeInto ?? null,

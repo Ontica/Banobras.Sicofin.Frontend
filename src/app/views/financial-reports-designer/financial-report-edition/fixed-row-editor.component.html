@@ -7,7 +7,7 @@
 
     <div class="card-body-padding">
 
-      <form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+      <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
         <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
@@ -15,7 +15,7 @@
 
             <div fxFlex="100">
               <label>Tipo de renglon:</label>
-              <mat-radio-group [formControlName]="controls.type"
+              <mat-radio-group formControlName="type"
                 (change)="onTypeChanged()">
                 <mat-radio-button *ngFor="let type of fixedRowTypeList" [value]="type.uid"
                   [fxFlex]="100/3" [style.marginLeft]="0">
@@ -35,20 +35,20 @@
               <div [fxFlex]="100/3">
                 <label>Agrupación:</label>
                 <emp-ng-select
-                  [formControlName]="controls.group"
+                  formControlName="group"
                   [items]="financialReportConfig.financialConceptGroups"
-                  [showError]="formHandler.showInvalidControl(controls.group)">
+                  [showError]="formHelper.isControlInvalid(form.controls.group)">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="200/3">
                 <label>Concepto:</label>
                 <emp-ng-select
-                  [formControlName]="controls.concept"
+                  formControlName="concept"
                   [items]="conceptList"
                   [loading]="isLoading"
                   [config]="{virtualScroll: true, searchableFields: ['code', 'name']}"
-                  [showError]="formHandler.showInvalidControl(controls.concept)"
+                  [showError]="formHelper.isControlInvalid(form.controls.concept)"
                   bindLabel="code">
                   <ng-template #labelTemplate let-item="item">
                     ({{item.code}}) {{item.name}}
@@ -72,8 +72,8 @@
               <div [fxFlex]="100">
                 <label>Etiqueta:</label>
                 <input type="text" class="text-box"
-                  [formControlName]="controls.label"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.label)">
+                  formControlName="label"
+                  [class.invalid-control]="formHelper.isControlInvalid(form.controls.label)">
               </div>
 
             </div>
@@ -89,20 +89,20 @@
               <div [fxFlex]="100/3">
                 <label>Posición:</label>
                 <emp-ng-select
-                  [formControlName]="controls.positioningRule"
+                  formControlName="positioningRule"
                   [items]="positioningRuleList"
-                  [showError]="formHandler.showInvalidControl(controls.positioningRule)"
+                  [showError]="formHelper.isControlInvalid(form.controls.positioningRule)"
                   (changes)="onPositioningRuleChanged()">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffset">
                 <emp-ng-select [fxFlex]="100"
-                  [formControlName]="controls.positioningOffsetUID"
+                  formControlName="positioningOffsetUID"
                   [items]="financialReportRowList"
                   [config]="{searchableFields: ['conceptCode', 'concept']}"
-                  [showError]="formHandler.showInvalidControl(controls.positioningOffsetUID)"
-                  [placeholder]="!!formHandler.getControl(controls.group).value ? 'Seleccionar' : 'Seleccionar la agrupación'">
+                  [showError]="formHelper.isControlInvalid(form.controls.positioningOffsetUID)"
+                  [placeholder]="!!form.controls.group.value ? 'Seleccionar' : 'Seleccionar la agrupación'">
                   <ng-template #labelTemplate let-item="item">
                     ({{item.conceptCode}}) {{item.concept}}
                   </ng-template>
@@ -115,8 +115,8 @@
               <div fxFlex="120px" fxLayoutAlign="start end" *ngIf="displayPosition">
 
                 <input type="text" class="text-box text-align-right" empNgInteger
-                  [formControlName]="controls.position"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.position)">
+                  formControlName="position"
+                  [class.invalid-control]="formHelper.isControlInvalid(form.controls.position)">
 
               </div>
 
@@ -127,11 +127,11 @@
               <div [fxFlex]="100/3">
                 <label>Formato:</label>
                 <emp-ng-select
-                  [formControlName]="controls.format"
+                  formControlName="format"
                   [items]="formatList"
                   [config]="{bindByValue: false}"
                   [bindLabel]="null"
-                  [showError]="formHandler.showInvalidControl(controls.format)">
+                  [showError]="formHelper.isControlInvalid(form.controls.format)">
 
                   <ng-template #optionTemplate let-item="item">
                     <div [class]="item" [style.width.%]="100">{{item}}</div>
@@ -143,16 +143,16 @@
               <div fxFlex="120px">
                 <label>Fecha inicial:</label>
                 <emp-ng-datepicker
-                  [formControlName]="controls.startDate"
-                  [showError]="formHandler.showInvalidControl(controls.startDate)">
+                  formControlName="startDate"
+                  [showError]="formHelper.isControlInvalid(form.controls.startDate)">
                 </emp-ng-datepicker>
               </div>
 
               <div fxFlex="120px">
                 <label>Fecha final:</label>
                 <emp-ng-datepicker
-                  [formControlName]="controls.endDate"
-                  [showError]="formHandler.showInvalidControl(controls.endDate)">
+                  formControlName="endDate"
+                  [showError]="formHelper.isControlInvalid(form.controls.endDate)">
                 </emp-ng-datepicker>
               </div>
 
@@ -170,8 +170,8 @@
               <div fxFlex fxLayoutAlign="end center">
 
                 <button
-                  [class.btn]="!formHandler.isValid"
-                  [class.btn-action]="formHandler.isValid"
+                  [class.btn]="!formHelper.isFormReady(form)"
+                  [class.btn-action]="formHelper.isFormReady(form)"
                   (click)="onSubmitDataClicked()">
                   {{isSaved ? 'Guardar' : 'Agregar'}}
                 </button>

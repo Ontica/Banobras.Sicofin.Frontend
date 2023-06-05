@@ -1,4 +1,4 @@
-<form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+<form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
   autocomplete="off" class="form-section">
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
@@ -10,9 +10,9 @@
         <div [fxFlex]="100/3">
           <label>Catálogo de cuentas:</label>
           <emp-ng-select
-            [formControlName]="controls.accountsChart"
+            formControlName="accountsChart"
             [items]="accountsChartMasterDataList"
-            [showError]="formHandler.showInvalidControl(controls.accountsChart)"
+            [showError]="formHelper.isControlInvalid(form.controls.accountsChart)"
             (changes)="onAccountsChartChanges($event)">
           </emp-ng-select>
         </div>
@@ -20,9 +20,9 @@
         <div [fxFlex]="100/3">
           <label>Contabilidad:</label>
           <emp-ng-select
-            [formControlName]="controls.ledger"
+            formControlName="ledger"
             [items]="ledgerList"
-            [showError]="formHandler.showInvalidControl(controls.ledger)"
+            [showError]="formHelper.isControlInvalid(form.controls.ledger)"
             bindLabel="fullName"
             (changes)="onLedgerChanges($event)">
           </emp-ng-select>
@@ -31,9 +31,9 @@
         <div [fxFlex]="100/3">
           <label>Libro auxiliar:</label>
           <emp-ng-select
-            [formControlName]="controls.subledgerType"
+            formControlName="subledgerType"
             [items]="subledgerAccountsTypeList"
-            [showError]="formHandler.showInvalidControl(controls.subledgerType)">
+            [showError]="formHelper.isControlInvalid(form.controls.subledgerType)">
           </emp-ng-select>
         </div>
 
@@ -44,15 +44,15 @@
       <div [fxFlex]="100/3">
         <label>Número:</label>
         <input type="text" class="text-box" empNgInteger
-          [formControlName]="controls.number"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.number)">
+          formControlName="number"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.number)">
       </div>
 
       <div fxFlex>
         <label>Nombre:</label>
         <input type="text" class="text-box"
-          [formControlName]="controls.name"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+          formControlName="name"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
       </div>
 
     </div>
@@ -62,8 +62,8 @@
       <div [fxFlex]="100">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
-          [formControlName]="controls.description"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
+          formControlName="description"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.description)">
         </textarea>
       </div>
 
@@ -80,8 +80,8 @@
       <div fxFlex fxLayoutAlign="end center">
 
         <button (click)="onSubmitForm()"
-          [class.btn]="!formHandler.isValid"
-          [class.btn-action]="formHandler.isValid">
+          [class.btn]="!formHelper.isFormReady(form)"
+          [class.btn-action]="formHelper.isFormReady(form)">
           Agregar
         </button>
 
@@ -112,8 +112,8 @@
         <ng-container *ngIf="editionMode">
 
           <button (click)="onSubmitForm()"
-            [class.btn]="!formHandler.isValid"
-            [class.btn-action]="formHandler.isValid">
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)">
             Guardar
           </button>
 

@@ -1,4 +1,4 @@
-<form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
   <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
 
@@ -6,18 +6,18 @@
 
       <div [fxFlex]="100/3">
         <label>Catálogo de cuentas:</label>
-        <input type="text" class="text-box" [formControlName]="controls.accountsChart">
+        <input type="text" class="text-box" formControlName="accountsChart">
       </div>
 
       <div fxFlex fxLayoutAlign="end">
         <div fxFlex="100px">
           <label>Fecha de alta:</label>
-          <input type="text" class="text-box" [formControlName]="controls.startDate">
+          <input type="text" class="text-box" formControlName="startDate">
         </div>
 
         <div fxFlex="100px">
           <label>Fecha de baja:</label>
-          <input type="text" class="text-box" [formControlName]="controls.endDate">
+          <input type="text" class="text-box" formControlName="endDate">
         </div>
 
       </div>
@@ -28,7 +28,7 @@
 
       <div [fxFlex]="100">
         <label>Cuenta:</label>
-        <input type="text" class="text-box" [formControlName]="controls.number">
+        <input type="text" class="text-box" formControlName="number">
       </div>
 
     </div>
@@ -38,8 +38,8 @@
       <div [fxFlex]="100">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
-          [formControlName]="controls.name"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+          formControlName="name"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
 
         </textarea>
       </div>
@@ -51,8 +51,8 @@
       <div [fxFlex]="100">
         <label>Observaciones:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
-          [formControlName]="controls.description"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
+          formControlName="description"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.description)">
 
         </textarea>
       </div>
@@ -63,17 +63,17 @@
 
       <div fxFlex>
         <label>Rol de la cuenta:</label>
-        <input type="text" class="text-box" [formControlName]="controls.role">
+        <input type="text" class="text-box" formControlName="role">
       </div>
 
       <div [fxFlex]="100/3">
         <label>Tipo de cuenta:</label>
-        <input type="text" class="text-box" [formControlName]="controls.type">
+        <input type="text" class="text-box" formControlName="type">
       </div>
 
       <div [fxFlex]="100/3">
         <label>Naturaleza:</label>
-        <input type="text" class="text-box" [formControlName]="controls.debtorCreditor">
+        <input type="text" class="text-box" formControlName="debtorCreditor">
       </div>
 
     </div>
@@ -81,11 +81,11 @@
     <div fxLayout="row" fxLayout.lt-md="column">
 
       <div fxFlex="none">
-        <mat-checkbox [formControlName]="controls.usesSector"> Maneja Sectores </mat-checkbox>
+        <mat-checkbox formControlName="usesSector"> Maneja Sectores </mat-checkbox>
       </div>
 
       <div fxFlex="none">
-        <mat-checkbox [formControlName]="controls.usesSubledger"> Maneja Auxiliares </mat-checkbox>
+        <mat-checkbox formControlName="usesSubledger"> Maneja Auxiliares </mat-checkbox>
       </div>
 
     </div>

@@ -7,7 +7,7 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
@@ -32,23 +32,27 @@ export class UserLoginComponent implements OnInit {
 
   submitted = false;
 
-  form = new UntypedFormGroup({
-    userID: new UntypedFormControl('', Validators.required),
-    password: new UntypedFormControl('', Validators.required)
+  form = new FormGroup({
+    userID: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required)
   });
 
   exceptionMsg: string;
 
+
   constructor(private authenticationService: AuthenticationService,
               private router: Router) { }
+
 
   ngOnInit() {
     this.logout();
   }
 
+
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
   }
+
 
   login() {
     if (this.form.invalid || this.submitted) {
@@ -58,6 +62,7 @@ export class UserLoginComponent implements OnInit {
 
     this.authenticate();
   }
+
 
   private authenticate() {
     this.submitted = true;

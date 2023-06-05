@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
@@ -19,7 +19,7 @@ import { EmptySubject, Subject, SubjectFields} from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum SubjectHeaderEventType {
   CREATE_SUBJECT    = 'SubjectHeaderComponent.Event.CreateSubject',
@@ -28,14 +28,14 @@ export enum SubjectHeaderEventType {
   GENERATE_PASSWORD = 'SubjectHeaderComponent.Event.GeneratePassword',
 }
 
-enum SubjectHeaderFormControls {
-  fullName = 'fullName',
-  userID = 'userID',
-  eMail = 'eMail',
-  employeeNo = 'employeeNo',
-  jobPosition = 'jobPosition',
-  workareaUID = 'workareaUID',
-}
+interface SubjectFormModel extends FormGroup<{
+  fullName: FormControl<string>;
+  userID: FormControl<string>;
+  eMail: FormControl<string>;
+  employeeNo: FormControl<string>;
+  jobPosition: FormControl<string>;
+  workareaUID: FormControl<string>;
+}> { }
 
 @Component({
   selector: 'emp-ng-subject-header',
@@ -53,9 +53,9 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   @Output() subjectHeaderEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  form: SubjectFormModel;
 
-  controls = SubjectHeaderFormControls;
+  formHelper = FormHelper;
 
   editionMode = false;
 
@@ -101,20 +101,19 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
       this.setFormData();
     }
 
-    this.formHandler.disableForm(!this.editionMode || this.isDeleted);
+    const disable = !this.editionMode || this.isDeleted;
+
+    this.formHelper.setDisableForm(this.form, disable);
   }
 
 
   onSubmitButtonClicked() {
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const eventType = this.isSaved ? SubjectHeaderEventType.UPDATE_SUBJECT :
+        SubjectHeaderEventType.CREATE_SUBJECT;
+
+      sendEvent(this.subjectHeaderEvent, eventType, { subject: this.getFormData() });
     }
-
-    const eventType = this.isSaved ? SubjectHeaderEventType.UPDATE_SUBJECT :
-      SubjectHeaderEventType.CREATE_SUBJECT;
-
-    sendEvent(this.subjectHeaderEvent, eventType, {subject: this.getFormData()});
   }
 
 
@@ -134,31 +133,43 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
     this.helper.select<Identifiable[]>(AccessControlStateSelector.WORKAREAS_LIST)
       .subscribe(x => {
         this.workareasList = x;
+        this.validateSubjectWorkareaInList();
         this.isLoading = false;
       });
   }
 
 
-  private initForm() {
-    if (this.formHandler) {
+  private validateSubjectWorkareaInList() {
+    if (!this.subject.workareaUID) {
+
       return;
     }
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        fullName: new UntypedFormControl('', Validators.required),
-        userID: new UntypedFormControl('', Validators.required),
-        eMail: new UntypedFormControl('', Validators.required),
-        employeeNo: new UntypedFormControl(''),
-        jobPosition: new UntypedFormControl('', Validators.required),
-        workareaUID: new UntypedFormControl('', Validators.required),
-      })
-    );
+    const subjectWorkarea: Identifiable = {
+      uid: this.subject.workareaUID,
+      name: this.subject.workarea,
+    };
+
+    this.workareasList = ArrayLibrary.insertIfNotExist(this.workareasList ?? [], subjectWorkarea, 'uid');
+  }
+
+
+  private initForm() {
+    const fb = new FormBuilder();
+
+    this.form = fb.group({
+      fullName: ['', Validators.required],
+      userID: ['', Validators.required],
+      eMail: ['', Validators.required],
+      employeeNo: [''],
+      jobPosition: ['', Validators.required],
+      workareaUID: ['', Validators.required],
+    });
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({
+    this.form.reset({
       fullName: this.subject.fullName,
       userID: this.subject.userID,
       eMail: this.subject.eMail,
@@ -170,10 +181,10 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
 
   private getFormData(): SubjectFields {
-    Assertion.assert(this.formHandler.form.valid,
+    Assertion.assert(this.form.valid,
       'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: SubjectFields = {
       fullName: formModel.fullName ?? '',

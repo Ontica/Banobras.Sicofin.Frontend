@@ -5,31 +5,29 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Assertion, DateString, EventInfo } from '@app/core';
 
-import { Assertion, EventInfo } from '@app/core';
-
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { AccountsChartMasterData } from '@app/models';
+import { AccountsChartMasterData, BalanceStorageCommand } from '@app/models';
 
 export enum StoredBalanceSetCreatorEventType {
   CLOSE_MODAL_CLICKED = 'StoredBalanceSetCreatorComponent.Event.CloseModalClicked',
   CREATE_STORED_BALANCE_SET = 'StoredBalanceSetCreatorComponent.Event.CreateStoredBalanceSetClicked',
 }
 
-enum StoredBalanceSetCreatorFormControls {
-  accountsChart = 'accountsChart',
-  balancesDate = 'balancesDate',
-}
+interface StoredBalanceSetFormModel extends FormGroup<{
+  accountsChart: FormControl<string>;
+  balancesDate: FormControl<DateString>;
+}> { }
 
 @Component({
   selector: 'emp-fa-stored-balance-set-creator',
@@ -41,13 +39,16 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
 
   @Output() storedBalanceSetCreatorEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
-  controls = StoredBalanceSetCreatorFormControls;
+  form: StoredBalanceSetFormModel;
+
+  formHelper = FormHelper;
+
   isLoading = false;
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
   helper: SubscriptionHelper;
+
 
   constructor(private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
@@ -56,13 +57,11 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
 
 
   ngOnChanges() {
-    this.formHandler.form.reset({
-      accountsChart: this.accountsChartDefault?.uid || '',
-    });
+    this.setFormData();
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadDataLists();
   }
 
@@ -78,15 +77,12 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
 
 
   onCreateStoredBalanceSetClicked() {
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
-      return;
-    }
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const payload = {command: this.getFormData()}
 
-    sendEvent(this.storedBalanceSetCreatorEvent, StoredBalanceSetCreatorEventType.CREATE_STORED_BALANCE_SET, {
-      accountsChartUID: this.formHandler.getControl(this.controls.accountsChart).value ?? '',
-      storedBalanceSet: this.getFormData()
-    });
+      sendEvent(this.storedBalanceSetCreatorEvent,
+        StoredBalanceSetCreatorEventType.CREATE_STORED_BALANCE_SET, payload);
+    }
   }
 
 
@@ -102,26 +98,27 @@ export class StoredBalanceSetCreatorComponent implements OnInit, OnChanges, OnDe
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        accountsChart: new UntypedFormControl('', Validators.required),
-        balancesDate: new UntypedFormControl('', Validators.required),
-      })
-    );
+    this.form = fb.group({
+      accountsChart: ['', Validators.required],
+      balancesDate: ['' as DateString, Validators.required],
+    });
   }
 
 
-  private getFormData(): any {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+  private setFormData() {
+    this.form.reset({ accountsChart: this.accountsChartDefault?.uid || '' });
+  }
 
-    const formModel = this.formHandler.form.getRawValue();
 
-    const data = {
+  private getFormData(): BalanceStorageCommand {
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
+
+    const formModel = this.form.getRawValue();
+
+    const data: BalanceStorageCommand = {
+      accountsChartUID: formModel.accountsChart ?? '',
       balancesDate: formModel.balancesDate ?? '',
     };
 

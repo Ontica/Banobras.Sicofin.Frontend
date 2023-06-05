@@ -7,7 +7,7 @@
 
     <div class="card-body-padding">
 
-      <form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+      <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
         <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
@@ -15,7 +15,7 @@
 
             <div fxFlex="100">
               <label>Tipo de celda:</label>
-              <mat-radio-group [formControlName]="controls.type"
+              <mat-radio-group formControlName="type"
                 (change)="onTypeChanged()">
                 <mat-radio-button *ngFor="let type of fixedCellTypeList" [value]="type.uid"
                   [fxFlex]="100/3" [style.marginLeft]="0">
@@ -35,20 +35,20 @@
               <div [fxFlex]="100/3">
                 <label>Agrupación:</label>
                 <emp-ng-select
-                  [formControlName]="controls.group"
+                  formControlName="group"
                   [items]="financialReportConfig.financialConceptGroups"
-                  [showError]="formHandler.showInvalidControl(controls.group)">
+                  [showError]="formHelper.isControlInvalid(form.controls.group)">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="200/3">
                 <label>Concepto:</label>
                 <emp-ng-select
-                  [formControlName]="controls.concept"
+                  formControlName="concept"
                   [items]="conceptList"
                   [loading]="isLoading"
                   [config]="{virtualScroll: true, searchableFields: ['code', 'name']}"
-                  [showError]="formHandler.showInvalidControl(controls.concept)"
+                  [showError]="formHelper.isControlInvalid(form.controls.concept)"
                   bindLabel="code">
                   <ng-template #labelTemplate let-item="item">
                     ({{item.code}}) {{item.name}}
@@ -66,9 +66,9 @@
               <div [fxFlex]="100/3">
                 <label>Campo:</label>
                 <emp-ng-select
-                  [formControlName]="controls.dataField"
+                  formControlName="dataField"
                   [items]="financialReportConfig.dataFields"
-                  [showError]="formHandler.showInvalidControl(controls.dataField)"
+                  [showError]="formHelper.isControlInvalid(form.controls.dataField)"
                   bindLabel="uid">
                 </emp-ng-select>
               </div>
@@ -86,8 +86,8 @@
               <div [fxFlex]="100">
                 <label>Etiqueta:</label>
                 <input type="text" class="text-box"
-                  [formControlName]="controls.label"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.label)">
+                  formControlName="label"
+                  [class.invalid-control]="formHelper.isControlInvalid(form.controls.label)">
               </div>
 
             </div>
@@ -103,11 +103,11 @@
               <div [fxFlex]="100/3">
                 <label>Formato:</label>
                 <emp-ng-select
-                  [formControlName]="controls.format"
+                  formControlName="format"
                   [items]="formatList"
                   [config]="{bindByValue: false}"
                   [bindLabel]="null"
-                  [showError]="formHandler.showInvalidControl(controls.format)">
+                  [showError]="formHelper.isControlInvalid(form.controls.format)">
 
                   <ng-template #optionTemplate let-item="item">
                     <div [class]="item" [style.width.%]="100">{{item}}</div>
@@ -119,16 +119,16 @@
               <div fxFlex="120px">
                 <label>Fecha inicial:</label>
                 <emp-ng-datepicker
-                  [formControlName]="controls.startDate"
-                  [showError]="formHandler.showInvalidControl(controls.startDate)">
+                  formControlName="startDate"
+                  [showError]="formHelper.isControlInvalid(form.controls.startDate)">
                 </emp-ng-datepicker>
               </div>
 
               <div fxFlex="120px">
                 <label>Fecha final:</label>
                 <emp-ng-datepicker
-                  [formControlName]="controls.endDate"
-                  [showError]="formHandler.showInvalidControl(controls.endDate)">
+                  formControlName="endDate"
+                  [showError]="formHelper.isControlInvalid(form.controls.endDate)">
                 </emp-ng-datepicker>
               </div>
 
@@ -155,8 +155,8 @@
               <div fxFlex fxLayoutAlign="end center">
 
                 <button
-                  [class.btn]="!formHandler.isValid"
-                  [class.btn-action]="formHandler.isValid"
+                  [class.btn]="!formHelper.isFormReady(form)"
+                  [class.btn-action]="formHelper.isFormReady(form)"
                   (click)="onSubmitDataClicked()">
                   {{isSaved ? 'Guardar' : 'Agregar'}}
                 </button>

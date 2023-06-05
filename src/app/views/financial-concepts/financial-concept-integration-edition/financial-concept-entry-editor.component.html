@@ -7,7 +7,7 @@
 
     <div class="card-body-padding">
 
-      <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+      <form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
         autocomplete="off" class="form-section">
 
         <emp-ng-spinner #spinner [visible]="isLoadingDataLists || submitted"></emp-ng-spinner>
@@ -18,7 +18,7 @@
 
             <div fxFlex="100">
               <label>Tipo de agrupación:</label>
-              <mat-radio-group [formControlName]="controls.entryType"
+              <mat-radio-group formControlName="entryType"
                 (change)="onEntryTypeChanged()">
                 <mat-radio-button *ngFor="let type of financialConceptEntryTypeList" [value]="type.uid"
                   [fxFlex]="100/3" [style.marginLeft]="0">
@@ -38,21 +38,21 @@
               <div [fxFlex]="100/3">
                 <label>Agrupación:</label>
                 <emp-ng-select
-                  [formControlName]="controls.referencedGroup"
+                  formControlName="referencedGroup"
                   [items]="referencedGroupList"
                   [loading]="isLoadingDataLists"
-                  [showError]="formHandler.showInvalidControl(controls.referencedGroup)">
+                  [showError]="formHelper.isControlInvalid(form.controls.referencedGroup)">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="200/3">
                 <label>Concepto:</label>
                 <emp-ng-select
-                  [formControlName]="controls.referencedFinancialConcept"
+                  formControlName="referencedFinancialConcept"
                   [items]="referencedFinancialConceptList"
                   [loading]="isLoadingReferencedFinancialConcepts"
                   [config]="{virtualScroll: true, bindByValue: false, searchableFields: ['code', 'name']}"
-                  [showError]="formHandler.showInvalidControl(controls.referencedFinancialConcept)"
+                  [showError]="formHelper.isControlInvalid(form.controls.referencedFinancialConcept)"
                   bindLabel="code">
                   <ng-template #labelTemplate let-item="item">
                     ({{item.code}}) {{item.name}}
@@ -76,20 +76,20 @@
               <div [fxFlex]="100/3">
                 <label>Conjunto:</label>
                 <emp-ng-select
-                  [formControlName]="controls.externalVariableSet"
+                  formControlName="externalVariableSet"
                   [items]="selectedGroup.externalVariablesSets"
-                  [showError]="formHandler.showInvalidControl(controls.externalVariableSet)">
+                  [showError]="formHelper.isControlInvalid(form.controls.externalVariableSet)">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="200/3">
                 <label>Valor externo:</label>
                 <emp-ng-select
-                  [formControlName]="controls.externalVariable"
+                  formControlName="externalVariable"
                   [items]="externalVariableList"
                   [loading]="isLoadingExternalVariable"
                   [config]="{virtualScroll: true, searchableFields: ['code', 'name']}"
-                  [showError]="formHandler.showInvalidControl(controls.externalVariable)"
+                  [showError]="formHelper.isControlInvalid(form.controls.externalVariable)"
                   bindLabel="code"
                   bindValue="code">
                   <ng-template #labelTemplate let-item="item">
@@ -119,11 +119,11 @@
                                 minTermLength: accountMinTermLength,
                                 virtualScroll: true,
                                 typeToSearchText: 'Ingresar ' + accountMinTermLength +' o más caracteres'}"
-                    [formControlName]="controls.account"
+                    formControlName="account"
                     [items]="accountList$ | async"
                     [typeahead]="accountInput$"
                     [loading]="accountLoading"
-                    [showError]="formHandler.showInvalidControl(controls.account)"
+                    [showError]="formHelper.isControlInvalid(form.controls.account)"
                     bindValue="id"
                     placeholder="Buscar cuenta"
                     (clear)="onClearAccount()">
@@ -143,7 +143,7 @@
                   <label>Sector:</label>
                   <emp-ng-select
                     [config]="{clearable: true}"
-                    [formControlName]="controls.sector"
+                    formControlName="sector"
                     [items]="selectedAccountChart?.sectors"
                     bindValue="code"
                     bindLabel="code"
@@ -163,7 +163,7 @@
                                 minTermLength: subledgerAccountMinTermLength,
                                 typeToSearchText: 'Ingresar ' + subledgerAccountMinTermLength +' o más caracteres',
                                 virtualScroll: true }"
-                    [formControlName]="controls.subledgerAccount"
+                    formControlName="subledgerAccount"
                     [items]="subledgerAccountList$ | async"
                     [typeahead]="subledgerAccountInput$"
                     [loading]="subledgerAccountLoading"
@@ -190,7 +190,7 @@
                   <label>Moneda:</label>
                   <emp-ng-select
                     [config]="{clearable: true}"
-                    [formControlName]="controls.currency"
+                    formControlName="currency"
                     [items]="selectedAccountChart?.currencies"
                     bindLabel="fullName"
                     bindValue="code"
@@ -211,31 +211,31 @@
               <div [fxFlex]="100/3">
                 <label>Operador:</label>
                 <emp-ng-select
-                  [formControlName]="controls.operator"
+                  formControlName="operator"
                   [items]="operatorList"
-                  [showError]="formHandler.showInvalidControl(controls.operator)">
+                  [showError]="formHelper.isControlInvalid(form.controls.operator)">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="100/3">
                 <label>Regla de cálculo:</label>
                 <emp-ng-select
-                  [formControlName]="controls.calculationRule"
+                  formControlName="calculationRule"
                   [items]="selectedGroup?.calculationRules ?? []"
                   [config]="{bindByValue: false}"
                   [bindLabel]="null"
-                  [showError]="formHandler.showInvalidControl(controls.calculationRule)">
+                  [showError]="formHelper.isControlInvalid(form.controls.calculationRule)">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="100/3">
                 <label>Columna:</label>
                 <emp-ng-select
-                  [formControlName]="controls.dataColumn"
+                  formControlName="dataColumn"
                   [items]="selectedGroup?.dataColumns ?? []"
                   [config]="{bindByValue: false}"
                   [bindLabel]="null"
-                  [showError]="formHandler.showInvalidControl(controls.dataColumn)">
+                  [showError]="formHelper.isControlInvalid(form.controls.dataColumn)">
                 </emp-ng-select>
               </div>
 
@@ -248,20 +248,20 @@
             <div [fxFlex]="100/3">
               <label>Posición:</label>
               <emp-ng-select
-                [formControlName]="controls.positioningRule"
+                formControlName="positioningRule"
                 [items]="positioningRuleList"
-                [showError]="formHandler.showInvalidControl(controls.positioningRule)"
+                [showError]="formHelper.isControlInvalid(form.controls.positioningRule)"
                 (changes)="onPositioningRuleChanged()">
               </emp-ng-select>
             </div>
 
             <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffsetConcept">
               <emp-ng-select [fxFlex]="100"
-                [formControlName]="controls.positioningOffsetEntryUID"
+                formControlName="positioningOffsetEntryUID"
                 [items]="financialConcept.integration"
                 [config]="{searchableFields: ['itemCode', 'itemName']}"
-                [showError]="formHandler.showInvalidControl(controls.positioningOffsetEntryUID)"
-                [placeholder]="!!formHandler.getControl(controls.referencedGroup).value ? 'Seleccionar' : 'Seleccionar la agrupación'">
+                [showError]="formHelper.isControlInvalid(form.controls.positioningOffsetEntryUID)"
+                [placeholder]="!!form.controls.referencedGroup.value ? 'Seleccionar' : 'Seleccionar la agrupación'">
                 <ng-template #labelTemplate let-item="item">
                   ({{item.itemCode}}) {{item.itemName}}
                 </ng-template>
@@ -274,7 +274,7 @@
             <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
 
               <input type="text" class="text-box text-align-right" empNgInteger
-                [formControlName]="controls.position">
+                formControlName="position">
 
             </div>
 
@@ -289,8 +289,8 @@
               <div fxFlex fxLayoutAlign="end center">
 
                 <button
-                  [class.btn]="!formHandler.isValid"
-                  [class.btn-action]="formHandler.isValid"
+                  [class.btn]="!formHelper.isFormReady(form)"
+                  [class.btn-action]="formHelper.isFormReady(form)"
                   (click)="onSubmitDataClicked()">
                   {{editionMode ? 'Guardar' : 'Agregar'}}
                 </button>

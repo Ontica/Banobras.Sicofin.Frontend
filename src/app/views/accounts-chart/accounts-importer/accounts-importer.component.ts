@@ -7,9 +7,9 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, EventInfo, Identifiable } from '@app/core';
+import { Assertion, DateString, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -21,7 +21,7 @@ import { AccountChartStateSelector } from '@app/presentation/exported.presentati
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
+import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { PERMISSIONS } from '@app/main-layout';
 
@@ -30,10 +30,10 @@ export enum AccountsImporterEventType {
   ACCOUNTS_IMPORTED = 'AccountsImporterComponent.Event.AccountsImported',
 }
 
-enum AccountsImporterFormControls {
-  accountsChartUID = 'accountsChartUID',
-  applicationDate = 'applicationDate',
-}
+interface AccountsImporterFormModel extends FormGroup<{
+  accountsChartUID: FormControl<string>;
+  applicationDate: FormControl<DateString>;
+}> { }
 
 @Component({
   selector: 'emp-fa-accounts-importer',
@@ -49,9 +49,9 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
   file = null;
 
-  formHandler: FormHandler;
+  form: AccountsImporterFormModel;
 
-  controls = AccountsImporterFormControls;
+  formHelper = FormHelper;
 
   isFormInvalidated = false;
 
@@ -75,6 +75,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
   helper: SubscriptionHelper;
 
+
   constructor(private uiLayer: PresentationLayer,
               private accountsData: AccountsEditionDataService,
               private messageBox: MessageBoxService) {
@@ -83,7 +84,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadAccountsCharts();
   }
 
@@ -98,12 +99,12 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  get isFileFormValid() {
-    return this.formHandler.form.valid && this.file;
+  get isFileFormValid(): boolean {
+    return this.form.valid && this.file;
   }
 
 
-  get isReadyForSubmit() {
+  get isReadyForSubmit(): boolean {
     return this.executedDryRun && !this.executedImported &&
            this.isFileFormValid && !this.hasErrors && this.accountsTotal > 0;
   }
@@ -150,18 +151,14 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        accountsChartUID: new UntypedFormControl('', Validators.required),
-        applicationDate: new UntypedFormControl('', Validators.required),
-      })
-    );
+    this.form = fb.group({
+      accountsChartUID: ['', Validators.required],
+      applicationDate: ['' as DateString, Validators.required],
+    });
 
-    this.formHandler.form.valueChanges.subscribe(v => this.resetImportResult());
+    this.form.valueChanges.subscribe(v => this.resetImportResult());
   }
 
 
@@ -196,7 +193,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
   private setAndReturnIsFormInvalidated(): boolean {
     this.isFormInvalidated = this.isFileFormValid ? false :
-      !this.formHandler.validateReadyForSubmit() || !this.file;
+      !this.formHelper.isFormReadyAndInvalidate(this.form) || !this.file;
 
     return this.isFormInvalidated;
   }
@@ -247,10 +244,9 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
 
   private getFormData(dryRun: boolean): ImportAccountsCommand {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: ImportAccountsCommand = {
       accountsChartUID: formModel.accountsChartUID,
@@ -287,7 +283,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
       this.showImportResultErrorMessage();
     } else {
       this.executedImported = true;
-      this.formHandler.disableForm();
+      this.formHelper.setDisableForm(this.form);
       this.showImportResultSuccessMessage();
       sendEvent(this.accountsImporterEvent, AccountsImporterEventType.ACCOUNTS_IMPORTED);
     }

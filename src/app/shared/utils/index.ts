@@ -9,6 +9,6 @@ export * from './array-library';
 
 export * from './event-emission';
 
-export * from './form-handler';
+export * from './form-helper';
 
 export * from './format-library';

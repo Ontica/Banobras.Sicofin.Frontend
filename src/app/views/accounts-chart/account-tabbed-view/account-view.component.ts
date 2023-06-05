@@ -7,15 +7,16 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { DateStringLibrary, EventInfo } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo } from '@app/core';
 
 import { PERMISSIONS } from '@app/main-layout';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
-import { Account, AccountEditionCommandType, EmptyAccount, getAccountRole } from '@app/models';
+import { Account, AccountEditionCommandType, AccountRole, DebtorCreditorType, EmptyAccount,
+         getAccountRole } from '@app/models';
 
 import { AccountEditionWizardEventType } from '../account-edition/account-edition-wizard.component';
 
@@ -23,19 +24,19 @@ export enum AccountViewEventType {
   ACCOUNT_UPDATED = 'AccountViewComponent.Event.AccountUpdated',
 }
 
-enum AccountViewFormControls {
-  accountsChart = 'accountsChart',
-  startDate = 'startDate',
-  endDate = 'endDate',
-  number = 'number',
-  name = 'name',
-  description = 'description',
-  role = 'role',
-  type = 'type',
-  debtorCreditor = 'debtorCreditor',
-  usesSubledger = 'usesSubledger',
-  usesSector = 'usesSector',
-}
+interface AccountViewFormModel extends FormGroup<{
+  accountsChart: FormControl<string>;
+  startDate: FormControl<DateString>;
+  endDate: FormControl<DateString>;
+  number: FormControl<string>;
+  name: FormControl<string>;
+  description: FormControl<string>;
+  role: FormControl<AccountRole>;
+  type: FormControl<string>;
+  debtorCreditor: FormControl<DebtorCreditorType>;
+  usesSubledger: FormControl<boolean>;
+  usesSector: FormControl<boolean>;
+}> { }
 
 @Component({
   selector: 'emp-fa-account-view',
@@ -49,9 +50,9 @@ export class AccountViewComponent implements OnChanges {
 
   permissions = PERMISSIONS;
 
-  formHandler: FormHandler;
+  form: AccountViewFormModel;
 
-  controls = AccountViewFormControls;
+  formHelper = FormHelper;
 
   displayAccountEditionWizard = false;
 
@@ -61,6 +62,7 @@ export class AccountViewComponent implements OnChanges {
   constructor() {
     this.initForm();
   }
+
 
   ngOnChanges() {
     this.setFormData();
@@ -81,7 +83,6 @@ export class AccountViewComponent implements OnChanges {
 
   onAccountEditionWizardEvent(event: EventInfo) {
     switch (event.type as AccountEditionWizardEventType) {
-
       case AccountEditionWizardEventType.CLOSE_MODAL_CLICKED:
         this.displayAccountEditionWizard = false;
         return;
@@ -98,26 +99,26 @@ export class AccountViewComponent implements OnChanges {
 
 
   private initForm() {
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        accountsChart: new UntypedFormControl(''),
-        startDate: new UntypedFormControl(''),
-        endDate: new UntypedFormControl(''),
-        number: new UntypedFormControl(''),
-        name: new UntypedFormControl(''),
-        description: new UntypedFormControl(''),
-        role: new UntypedFormControl(''),
-        type: new UntypedFormControl(''),
-        debtorCreditor: new UntypedFormControl(''),
-        usesSubledger: new UntypedFormControl(false),
-        usesSector: new UntypedFormControl(false),
-      })
-    );
+    const fb = new FormBuilder();
+
+    this.form = fb.group({
+      accountsChart: [''],
+      startDate: [null],
+      endDate: [null],
+      number: [''],
+      name: [''],
+      description: [''],
+      role: [null],
+      type: [''],
+      debtorCreditor: [null],
+      usesSubledger: [false],
+      usesSector: [false],
+    });
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({
+    this.form.reset({
       accountsChart: this.account.accountsChart.name,
       startDate: DateStringLibrary.format(this.account.startDate),
       endDate: DateStringLibrary.format(this.account.endDate),
@@ -131,7 +132,7 @@ export class AccountViewComponent implements OnChanges {
       usesSector: this.account.usesSector,
     });
 
-    this.formHandler.disableForm(true);
+    this.formHelper.setDisableForm(this.form, true);
   }
 
 }

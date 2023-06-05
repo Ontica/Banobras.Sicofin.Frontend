@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -15,7 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo, Validate } from '@app/core';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { AccountItem } from '@app/models';
 
@@ -23,9 +23,7 @@ export enum AccountItemsTableEventType {
   FORM_CHANGED = 'AccountItemsTableComponent.Event.FormChanged',
 }
 
-enum AccountItemsTableFormControls {
-  items = 'items',
-}
+interface AccountItemsFormModel extends FormGroup<{ items: FormControl<string[]> }> { }
 
 @Component({
   selector: 'emp-fa-account-items-table',
@@ -58,9 +56,9 @@ export class AccountItemsTableComponent implements OnChanges, OnInit {
 
   @Output() accountItemsTableEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  form: AccountItemsFormModel;
 
-  controls = AccountItemsTableFormControls;
+  formHelper = FormHelper;
 
   displayedColumnsDefault: string[] = ['selection', 'fullName'];
 
@@ -93,8 +91,13 @@ export class AccountItemsTableComponent implements OnChanges, OnInit {
   }
 
 
-  get hasItems() {
+  get hasItems(): boolean {
     return !!this.dataSource || this.dataSource?.data.length > 0
+  }
+
+
+  get isFormValid(): boolean {
+    return !!this.form.valid;
   }
 
 
@@ -104,43 +107,41 @@ export class AccountItemsTableComponent implements OnChanges, OnInit {
 
 
   invalidateForm() {
-    this.formHandler.invalidateForm();
+    this.formHelper.markFormControlsAsTouched(this.form);
   }
 
 
   private initForm() {
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({items: new UntypedFormControl([], [Validators.required, Validators.minLength(1)])})
-    );
+    const fb = new FormBuilder();
+
+    this.form = fb.group({
+      items: [[] as string[], [Validators.required, Validators.minLength(1)]],
+    });
   }
 
 
   private suscribeToDataChanges() {
-    this.selection.changed.subscribe(x =>
-      this.formHandler.getControl(this.controls.items).reset(this.selection.selected)
-    );
-    this.formHandler.form.valueChanges.subscribe(x =>
-      this.emitChanges()
-    );
+    this.selection.changed.subscribe(x => this.form.controls.items.reset(this.selection.selected));
+    this.form.valueChanges.subscribe(x => this.emitChanges());
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({items: this.selectedList.map(x => x.uid)});
+    this.form.reset({items: this.selectedList.map(x => x.uid)});
     this.validateItemsFieldValidators();
   }
 
 
   private validateItemsFieldValidators() {
     if (this.selectionRequired) {
-        const initialSelection = this.selectedList.map(x => x.uid);
-        const validators = this.changeSelectionRequired ?
-          [Validators.required, Validators.minLength(1), Validate.changeRequired(initialSelection)] :
-          [Validators.required, Validators.minLength(1)];
+      const initialSelection = this.selectedList.map(x => x.uid);
+      const validators = this.changeSelectionRequired ?
+        [Validators.required, Validators.minLength(1), Validate.changeRequired(initialSelection)] :
+        [Validators.required, Validators.minLength(1)];
 
-        this.formHandler.setControlValidators(this.controls.items, validators);
+      this.formHelper.setControlValidators(this.form.controls.items, validators);
     } else {
-      this.formHandler.clearControlValidators(this.controls.items);
+      this.formHelper.clearControlValidators(this.form.controls.items);
     }
   }
 
@@ -183,7 +184,7 @@ export class AccountItemsTableComponent implements OnChanges, OnInit {
 
 
   private emitChanges() {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
     const payload = {items: formModel.items ?? []};
     sendEvent(this.accountItemsTableEvent, AccountItemsTableEventType.FORM_CHANGED, payload);
   }

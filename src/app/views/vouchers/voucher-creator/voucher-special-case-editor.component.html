@@ -1,4 +1,4 @@
-<form [formGroup]="formHandler.form" autocomplete="off" class="form-section" empNgFormKeyDownEnter>
+<form [formGroup]="form" autocomplete="off" class="form-section" empNgFormKeyDownEnter>
 
   <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
 
@@ -13,8 +13,8 @@
         <div [fxFlex]="100/3" *ngIf="voucherSpecialCaseType?.askForCalculationDateField">
           <label>{{voucherSpecialCaseType?.calculationDateFieldName}}:</label>
           <emp-ng-datepicker
-            [formControlName]="controls.calculationDate"
-            [showError]="formHandler.showInvalidControl(controls.calculationDate)">
+            formControlName="calculationDate"
+            [showError]="formHelper.isControlInvalid(form.controls.calculationDate)">
 
           </emp-ng-datepicker>
         </div>
@@ -22,8 +22,8 @@
         <div [fxFlex]="100/3" *ngIf="voucherSpecialCaseType?.askForVoucherNumberField">
           <label>Número de póliza:</label>
           <input type="text" class="text-box" empNgNumeration
-            [formControlName]="controls.onVoucherNumber"
-            [class.invalid-control]="formHandler.showInvalidControl(controls.onVoucherNumber)">
+            formControlName="onVoucherNumber"
+            [class.invalid-control]="formHelper.isControlInvalid(form.controls.onVoucherNumber)">
         </div>
 
       </div>

@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { of, Subject } from 'rxjs';
 
@@ -15,7 +15,7 @@ import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } f
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -28,7 +28,6 @@ import { EmptyFinancialReportCell, EmptyFinancialReportConfig, FinancialConceptD
          FinancialReportEditionFields, FinancialReportEditionItemType, FinancialReportEditionItemTypeList,
          FinancialReportEditionType, FormatType, FormatTypeList } from '@app/models';
 
-
 export enum FixedCellEditorEventType {
   CLOSE_MODAL_CLICKED = 'FixedCellEditorComponent.Event.CloseModalClicked',
   INSERT_CELL         = 'FixedCellEditorComponent.Event.InsertCell',
@@ -36,17 +35,16 @@ export enum FixedCellEditorEventType {
   REMOVE_CELL         = 'FixedCellEditorComponent.Event.RemoveCell',
 }
 
-
-enum FixedCellEditorFormControls {
-  type = 'type',
-  group = 'group',
-  concept = 'concept',
-  dataField = 'dataField',
-  label = 'label',
-  format = 'format',
-  startDate = 'startDate',
-  endDate = 'endDate',
-}
+interface FixedCellFormModel extends FormGroup<{
+  type: FormControl<FinancialReportEditionItemType>;
+  group: FormControl<string>;
+  concept: FormControl<string>;
+  dataField: FormControl<string>;
+  label: FormControl<string>;
+  format: FormControl<FormatType>;
+  startDate: FormControl<DateString>;
+  endDate: FormControl<DateString>;
+}> { }
 
 @Component({
   selector: 'emp-fa-fixed-cell-editor',
@@ -66,9 +64,9 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
   helper: SubscriptionHelper;
 
-  formHandler: FormHandler;
+  form: FixedCellFormModel;
 
-  controls = FixedCellEditorFormControls;
+  formHelper = FormHelper;
 
   isLoading = false;
 
@@ -114,14 +112,12 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   get isConceptType(): boolean {
-    return FinancialReportEditionItemType.Concept ===
-      this.formHandler.getControl(this.controls.type).value;
+    return FinancialReportEditionItemType.Concept === this.form.controls.type.value;
   }
 
 
   get isLabelType(): boolean {
-    return FinancialReportEditionItemType.Label ===
-      this.formHandler.getControl(this.controls.type).value;
+    return FinancialReportEditionItemType.Label === this.form.controls.type.value;
   }
 
 
@@ -131,29 +127,26 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   onTypeChanged() {
-    this.setControlConfig(this.controls.group, this.isConceptType);
-    this.setControlConfig(this.controls.concept, this.isConceptType);
-    this.setControlConfig(this.controls.dataField, this.isConceptType);
-    this.setControlConfig(this.controls.label, this.isLabelType);
+    this.setControlConfig(this.form.controls.group, this.isConceptType);
+    this.setControlConfig(this.form.controls.concept, this.isConceptType);
+    this.setControlConfig(this.form.controls.dataField, this.isConceptType);
+    this.setControlConfig(this.form.controls.label, this.isLabelType);
   }
 
 
   onSubmitDataClicked() {
-    if (!this.formHandler.isValid) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const eventType = this.isSaved ? FixedCellEditorEventType.UPDATE_CELL :
+        FixedCellEditorEventType.INSERT_CELL;
+
+      let payload = {
+        financialReportTypeUID: this.financialReportConfig.reportType.uid,
+        cellUID: this.isSaved ? this.financialReportCell.uid : null,
+        command: this.getFinancialReportEditionCommand(),
+      };
+
+      sendEvent(this.fixedCellEditorEvent, eventType, payload);
     }
-
-    const eventType = this.isSaved ? FixedCellEditorEventType.UPDATE_CELL :
-      FixedCellEditorEventType.INSERT_CELL;
-
-    let payload = {
-      financialReportTypeUID: this.financialReportConfig.reportType.uid,
-      cellUID: this.isSaved ? this.financialReportCell.uid : null,
-      command: this.getFinancialReportEditionCommand(),
-    };
-
-    sendEvent(this.fixedCellEditorEvent, eventType, payload);
   }
 
 
@@ -163,22 +156,18 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        type: new UntypedFormControl(FinancialReportEditionItemType.Concept, Validators.required),
-        group: new UntypedFormControl('', Validators.required),
-        concept: new UntypedFormControl('', Validators.required),
-        dataField: new UntypedFormControl('', Validators.required),
-        label: new UntypedFormControl(''),
-        format: new UntypedFormControl(FormatType.Default, Validators.required),
-        startDate: new UntypedFormControl(''), // ('', Validators.required)
-        endDate: new UntypedFormControl(''), // (DefaultEndDate, Validators.required)
-      })
-    );
+    this.form = fb.group({
+      type: [FinancialReportEditionItemType.Concept, Validators.required],
+      group: ['', Validators.required],
+      concept: ['', Validators.required],
+      dataField: ['', Validators.required],
+      label: [''],
+      format: [FormatType.Default, Validators.required],
+      startDate: ['' as DateString], // ('', Validators.required)
+      endDate: ['' as DateString], // (DefaultEndDate, Validators.required)
+    });
 
     this.setDisableFields();
     this.onSuscribeGroupChanges();
@@ -186,8 +175,8 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   private setDisableFields() {
-    this.formHandler.disableControl(this.controls.startDate);
-    this.formHandler.disableControl(this.controls.endDate);
+    this.formHelper.setDisableControl(this.form.controls.startDate);
+    this.formHelper.setDisableControl(this.form.controls.endDate);
   }
 
 
@@ -202,7 +191,7 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   private onSuscribeGroupChanges() {
-    this.formHandler.getControl(this.controls.group).valueChanges
+    this.form.controls.group.valueChanges
       .pipe(
         takeUntil(this.unsubscribeGroupUID),
         filter(groupUID => !!groupUID),
@@ -223,23 +212,23 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   private resetConceptData() {
-    this.formHandler.getControl(this.controls.concept).reset();
+    this.form.controls.concept.reset();
     this.conceptList = [];
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({
+    this.form.reset({
       type: this.isEmptyConcept(this.financialReportCell.financialConceptUID) ?
         FinancialReportEditionItemType.Label : FinancialReportEditionItemType.Concept,
-      format: this.financialReportCell.format || FormatType.Default,
+      format: this.financialReportCell.format as FormatType || FormatType.Default,
       startDate: this.financialReportCell.startDate || '',
       endDate: this.financialReportCell.endDate || '',
     });
 
     this.setFieldsDataByType();
     this.onTypeChanged();
-    this.formHandler.disableControl(this.controls.type);
+    this.formHelper.setDisableControl(this.form.controls.type);
   }
 
 
@@ -250,15 +239,11 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
   private setFieldsDataByType() {
     if (this.isConceptType) {
-      this.formHandler.getControl(this.controls.group)
-        .reset(this.financialReportCell.financialConceptGroupUID);
-      this.formHandler.getControl(this.controls.concept)
-        .reset(this.financialReportCell.financialConceptUID);
-      this.formHandler.getControl(this.controls.dataField)
-        .reset(this.financialReportCell.dataField);
+      this.form.controls.group.reset(this.financialReportCell.financialConceptGroupUID);
+      this.form.controls.concept.reset(this.financialReportCell.financialConceptUID);
+      this.form.controls.dataField.reset(this.financialReportCell.dataField);
     } else {
-      this.formHandler.getControl(this.controls.label)
-        .reset(this.financialReportCell.label);
+      this.form.controls.label.reset(this.financialReportCell.label);
     }
   }
 
@@ -295,10 +280,9 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   private getFormData(): FinancialReportEditionFields {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     let data: FinancialReportEditionFields = {
       column: this.financialReportCell.column,
@@ -315,7 +299,7 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
 
 
   private validateFieldsByType(data: FinancialReportEditionFields) {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     if (this.isConceptType) {
       data.financialConceptUID = formModel.concept ?? '';
@@ -328,11 +312,11 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
   }
 
 
-  private setControlConfig(control: FixedCellEditorFormControls, required: boolean) {
+  private setControlConfig(control: FormControl<any>, required: boolean) {
       if (required) {
-      this.formHandler.setControlValidators(control, Validators.required);
+      this.formHelper.setControlValidators(control, Validators.required);
     } else {
-      this.formHandler.clearControlValidators(control);
+      this.formHelper.clearControlValidators(control);
     }
   }
 

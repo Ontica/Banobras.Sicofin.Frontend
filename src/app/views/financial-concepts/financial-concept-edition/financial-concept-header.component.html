@@ -1,4 +1,4 @@
-<form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+<form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
   autocomplete="off" class="form-section">
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
@@ -12,9 +12,9 @@
         <div [fxFlex]="100/3">
           <label>Catálogo de cuentas:</label>
           <emp-ng-select
-            [formControlName]="controls.accountsChartUID"
+            formControlName="accountsChartUID"
             [items]="accountsChartMasterDataList"
-            [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
+            [showError]="formHelper.isControlInvalid(form.controls.accountsChartUID)"
             (changes)="onAccountsChartChanged($event)">
           </emp-ng-select>
         </div>
@@ -22,11 +22,11 @@
         <div [fxFlex]="200/3">
           <label>Agrupación:</label>
           <emp-ng-select
-            [formControlName]="controls.groupUID"
+            formControlName="groupUID"
             [items]="filteredGroupsList"
-            [showError]="formHandler.showInvalidControl(controls.groupUID)"
+            [showError]="formHelper.isControlInvalid(form.controls.groupUID)"
             [loading]="isLoadingGroups"
-            [placeholder]="!!formHandler.getControl(controls.accountsChartUID).value ? 'Seleccionar' : 'Seleccionar el catálogo de cuentas'">
+            [placeholder]="!!form.controls.accountsChartUID.value ? 'Seleccionar' : 'Seleccionar el catálogo de cuentas'">
           </emp-ng-select>
         </div>
 
@@ -37,21 +37,21 @@
       <div [fxFlex]="100/3">
         <label>Posición:</label>
         <emp-ng-select
-          [formControlName]="controls.positioningRule"
+          formControlName="positioningRule"
           [items]="positioningRuleList"
-          [showError]="formHandler.showInvalidControl(controls.positioningRule)"
+          [showError]="formHelper.isControlInvalid(form.controls.positioningRule)"
           (changes)="onPositioningRuleChanged()">
         </emp-ng-select>
       </div>
 
       <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffsetConcept">
         <emp-ng-select [fxFlex]="100"
-          [formControlName]="controls.positioningOffsetConceptUID"
+          formControlName="positioningOffsetConceptUID"
           [items]="financialConceptsList"
           [loading]="isLoadingFinancialConcepts"
           [config]="{virtualScroll: true, searchableFields: ['code', 'name']}"
-          [showError]="formHandler.showInvalidControl(controls.positioningOffsetConceptUID)"
-          [placeholder]="!!formHandler.getControl(controls.groupUID).value ? 'Seleccionar' : 'Seleccionar la agrupación'"
+          [showError]="formHelper.isControlInvalid(form.controls.positioningOffsetConceptUID)"
+          [placeholder]="!!form.controls.groupUID.value ? 'Seleccionar' : 'Seleccionar la agrupación'"
           bindLabel="code">
           <ng-template #labelTemplate let-item="item">
             ({{item.code}}) {{item.name}}
@@ -65,7 +65,7 @@
       <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
 
         <input type="text" class="text-box text-align-right" empNgInteger
-          [formControlName]="controls.position">
+          formControlName="position">
 
       </div>
 
@@ -78,30 +78,30 @@
       <div [fxFlex]="100/3">
         <label>Clave:</label>
         <input type="text" class="text-box"
-          [formControlName]="controls.code"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.code)">
+          formControlName="code"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.code)">
       </div>
 
       <div fxFlex>
         <label>Identificador de variable:</label>
         <input type="text" class="text-box" empNgInputKeys
-          [formControlName]="controls.variableID"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.variableID)">
+          formControlName="variableID"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.variableID)">
       </div>
 
       <div fxFlex="none">
         <label>Fecha inicial:</label>
         <emp-ng-datepicker
-          [formControlName]="controls.startDate"
-          [showError]="formHandler.showInvalidControl(controls.startDate)">
+          formControlName="startDate"
+          [showError]="formHelper.isControlInvalid(form.controls.startDate)">
         </emp-ng-datepicker>
       </div>
 
       <div fxFlex="none">
         <label>Fecha final:</label>
         <emp-ng-datepicker
-          [formControlName]="controls.endDate"
-          [showError]="formHandler.showInvalidControl(controls.endDate)">
+          formControlName="endDate"
+          [showError]="formHelper.isControlInvalid(form.controls.endDate)">
         </emp-ng-datepicker>
       </div>
 
@@ -112,8 +112,8 @@
       <div [fxFlex]="100">
         <label>Concepto:</label>
         <input type="text" class="text-box"
-          [formControlName]="controls.name"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+          formControlName="name"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
       </div>
 
     </div>
@@ -123,8 +123,8 @@
       <div [fxFlex]="100">
         <label>Script de cálculo:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
-          [formControlName]="controls.calculationScript"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.calculationScript)">
+          formControlName="calculationScript"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.calculationScript)">
         </textarea>
       </div>
 
@@ -143,8 +143,8 @@
         <div fxFlex fxLayoutAlign="end center">
 
           <button (click)="onSubmitForm()"
-            [class.btn]="!formHandler.isValid"
-            [class.btn-action]="formHandler.isValid">
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)">
             Agregar
           </button>
 
@@ -168,8 +168,8 @@
           <ng-container *ngIf="editionMode">
 
             <button (click)="onSubmitForm()"
-              [class.btn]="!formHandler.isValid"
-              [class.btn-action]="formHandler.isValid">
+              [class.btn]="!formHelper.isFormReady(form)"
+              [class.btn-action]="formHelper.isFormReady(form)">
               Guardar
             </button>
 

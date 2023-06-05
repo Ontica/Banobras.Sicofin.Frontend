@@ -21,16 +21,18 @@
           <form autocomplete="off" [formGroup]="form">
 
             <label for="userID">Usuario:</label>
-            <input type="text" class="text-box" id="userID" autocomplete="username" autofocus
-              formControlName="userID"
-              [class.invalid-control]="form.get('userID').invalid && form.get('userID').touched">
+            <div class="login-field-container">
+              <input type="text" class="text-box" id="userID" autocomplete="username" autofocus
+                formControlName="userID"
+                [class.invalid-control]="form.controls.userID.invalid && form.controls.userID.touched">
+            </div>
 
             <label for="password">Contraseña:</label>
-            <div class="password-field-container">
+            <div class="login-field-container">
               <input [type]="showPassword ? 'text' : 'password'" class="text-box"
                 id="password" autocomplete="current-password"
                 formControlName="password"
-                [class.invalid-control]="form.get('password').invalid && form.get('password').touched">
+                [class.invalid-control]="form.controls.password.invalid && form.controls.password.touched">
               <mat-icon class="input-icon" *ngIf="showPasswordModeSelected === 'icon'"
                 (click)="toggleShowPassword()">
                 {{showPassword ? 'visibility_off' : 'visibility'}}
@@ -54,7 +56,7 @@
 
               <button type="sumbit" class="btn-warning"
                 [class.spinner]="submitted"
-                [style.marginRight.px]="10"
+                [style.marginRight.px]="8"
                 (click)="login()">
                 Ingresar
               </button>

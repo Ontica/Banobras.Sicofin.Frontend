@@ -1,4 +1,4 @@
-<form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
   <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
 
@@ -7,10 +7,10 @@
       <div [fxFlex]="100/3">
         <label>Tipo de póliza:</label>
         <emp-ng-select
-          [formControlName]="controls.voucherTypeUID"
+          formControlName="voucherTypeUID"
           [items]="isSpecialCase ? voucherSpecialCaseTypesList : voucherTypesList"
           [loading]="isLoading"
-          [showError]="formHandler.showInvalidControl(controls.voucherTypeUID)"
+          [showError]="formHelper.isControlInvalid(form.controls.voucherTypeUID)"
           (changes)="onVoucherTypeChanges($event)">
         </emp-ng-select>
       </div>
@@ -18,10 +18,10 @@
       <div [fxFlex]="100/3">
         <label>Tipo de contabilidad:</label>
         <emp-ng-select
-          [formControlName]="controls.accountsChartUID"
+          formControlName="accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
+          [showError]="formHelper.isControlInvalid(form.controls.accountsChartUID)"
           (changes)="onAccountChartChanges($event)">
         </emp-ng-select>
       </div>
@@ -30,11 +30,11 @@
         <label>Contabilidad:</label>
         <emp-ng-select
           [config]="{clearable: allowAllLedgersSelection}"
-          [formControlName]="controls.ledgerUID"
+          formControlName="ledgerUID"
           [items]="accountChartSelected?.ledgers"
           bindLabel="fullName"
           [placeholder]="ledgerPlaceholder"
-          [showError]="formHandler.showInvalidControl(controls.ledgerUID)">
+          [showError]="formHelper.isControlInvalid(form.controls.ledgerUID)">
         </emp-ng-select>
       </div>
 
@@ -46,8 +46,8 @@
       <div [fxFlex]="100">
         <label>Concepto de la póliza:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
-          [formControlName]="controls.concept"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.concept)">
+          formControlName="concept"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.concept)">
 
         </textarea>
       </div>
@@ -60,9 +60,9 @@
       <div [fxFlex]="100/3">
         <label>Origen de la transacción:</label>
         <emp-ng-select
-          [formControlName]="controls.functionalAreaId"
+          formControlName="functionalAreaId"
           [items]="functionalAreasList"
-          [showError]="formHandler.showInvalidControl(controls.functionalAreaId)">
+          [showError]="formHelper.isControlInvalid(form.controls.functionalAreaId)">
         </emp-ng-select>
       </div>
 
@@ -71,8 +71,8 @@
         <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">
           <label>Fecha valor:</label>
           <emp-ng-datepicker
-            [formControlName]="controls.accountingDate"
-            [showError]="formHandler.showInvalidControl(controls.accountingDate)">
+            formControlName="accountingDate"
+            [showError]="formHelper.isControlInvalid(form.controls.accountingDate)">
 
           </emp-ng-datepicker>
         </div>
@@ -80,10 +80,10 @@
         <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
           <label>Fecha de afectación:</label>
           <emp-ng-select
-            [formControlName]="controls.accountingDate"
+            formControlName="accountingDate"
             [items]="accountingDatesList"
             [loading]="isLoadingAccountingDates"
-            [showError]="formHandler.showInvalidControl(controls.accountingDate)">
+            [showError]="formHelper.isControlInvalid(form.controls.accountingDate)">
 
           </emp-ng-select>
         </div>

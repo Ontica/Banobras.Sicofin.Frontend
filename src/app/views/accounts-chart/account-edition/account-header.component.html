@@ -1,4 +1,4 @@
-<form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
   <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
 
@@ -7,9 +7,9 @@
       <div [fxFlex]="100/3">
         <label>Catálogo de cuentas:</label>
         <emp-ng-select
-          [formControlName]="controls.accountsChartUID"
+          formControlName="accountsChartUID"
           [items]="accountsChartMasterDataList"
-          [showError]="formHandler.showInvalidControl(controls.accountsChartUID)"
+          [showError]="formHelper.isControlInvalid(form.controls.accountsChartUID)"
           (changes)="onAccountChartChanges()">
         </emp-ng-select>
       </div>
@@ -22,8 +22,8 @@
 
         <label [style.line-height]="'normal'">Fecha de alta:</label>
         <emp-ng-datepicker
-          [formControlName]="controls.applicationDate"
-          [showError]="formHandler.showInvalidControl(controls.applicationDate)">
+          formControlName="applicationDate"
+          [showError]="formHelper.isControlInvalid(form.controls.applicationDate)">
 
         </emp-ng-datepicker>
 
@@ -33,8 +33,8 @@
 
         <label [style.line-height]="'normal'">Fecha de alta:</label>
         <emp-ng-datepicker
-          [formControlName]="controls.startDate"
-          [showError]="formHandler.showInvalidControl(controls.startDate)">
+          formControlName="startDate"
+          [showError]="formHelper.isControlInvalid(form.controls.startDate)">
 
         </emp-ng-datepicker>
 
@@ -48,8 +48,8 @@
       <div [fxFlex]="100">
         <label>Cuenta:</label>
         <input type="text" class="text-box"
-          [formControlName]="controls.accountNumber"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.accountNumber)">
+          formControlName="accountNumber"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.accountNumber)">
       </div>
 
     </div>
@@ -59,8 +59,8 @@
       <div [fxFlex]="100">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize rows="1"
-          [formControlName]="controls.name"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+          formControlName="name"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
 
         </textarea>
       </div>
@@ -72,8 +72,8 @@
       <div [fxFlex]="100">
         <label>Observaciones:</label>
         <textarea class="text-area" empNgTextareaAutoresize rows="1"
-          [formControlName]="controls.description"
-          [class.invalid-control]="formHandler.showInvalidControl(controls.description)">
+          formControlName="description"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.description)">
 
         </textarea>
       </div>
@@ -86,10 +86,10 @@
         <label>Rol de la cuenta:</label>
         <emp-ng-select
           [config]="{bindByValue: false}"
-          [formControlName]="controls.role"
+          formControlName="role"
           [items]="accountRoleList"
-          [showError]="formHandler.showInvalidControl(controls.role) ||
-                       formHandler.showInvalidControl(controls.mainRole)"
+          [showError]="formHelper.isControlInvalid(form.controls.role) ||
+                       formHelper.isControlInvalid(form.controls.mainRole)"
           [bindLabel]="null"
           (changes)="onRoleChanges($event)">
         </emp-ng-select>
@@ -98,9 +98,9 @@
       <div [fxFlex]="100/3">
         <label>Tipo de cuenta:</label>
         <emp-ng-select
-          [formControlName]="controls.accountTypeUID"
+          formControlName="accountTypeUID"
           [items]="selectedAccountChart?.accountTypes ?? []"
-          [showError]="formHandler.showInvalidControl(controls.accountTypeUID)">
+          [showError]="formHelper.isControlInvalid(form.controls.accountTypeUID)">
         </emp-ng-select>
       </div>
 
@@ -108,9 +108,9 @@
         <label>Naturaleza:</label>
         <emp-ng-select
           [config]="{bindByValue: false}"
-          [formControlName]="controls.debtorCreditor"
+          formControlName="debtorCreditor"
           [items]="debtorCreditorTypesList"
-          [showError]="formHandler.showInvalidControl(controls.debtorCreditor)"
+          [showError]="formHelper.isControlInvalid(form.controls.debtorCreditor)"
           [bindLabel]="null">
         </emp-ng-select>
       </div>
@@ -121,7 +121,7 @@
 
       <div [fxFlex]="100/6">
         <mat-checkbox
-          [formControlName]="controls.usesSector"
+          formControlName="usesSector"
           (click)="$event.stopPropagation"
           (change)="onChecksChanges()">
           Maneja Sectores
@@ -130,10 +130,10 @@
 
       <div [fxFlex]="100/6">
         <mat-checkbox
-          [formControlName]="controls.usesSubledger"
+          formControlName="usesSubledger"
           (click)="$event.stopPropagation"
           (change)="onChecksChanges()">
-          <span [class.warning-text]="formHandler.showInvalidControl(controls.usesSubledger)">
+          <span [class.warning-text]="formHelper.isControlInvalid(form.controls.usesSubledger)">
             Maneja Auxiliares
           </span>
         </mat-checkbox>

@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, Observable } from 'rxjs';
 
@@ -29,25 +29,24 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { FileType } from '@app/shared/form-controls/file-control/file-control-data';
 
-import { FormatLibrary, FormHandler, sendEvent } from '@app/shared/utils';
+import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { ImporterDetailsSelectionType,
          VouchersImporterDetailsTableEventType } from './importer-details-table.component';
-
 
 export enum VouchersImporterEventType {
   CLOSE_MODAL_CLICKED  = 'VouchersImporterComponent.Event.CloseModalClicked',
   VOUCHERS_IMPORTED = 'VouchersImporterComponent.Event.VouchersImported',
 }
 
-enum VouchersImporterFormControls {
-  allowUnbalancedVouchers = 'allowUnbalancedVouchers',
-  generateSubledgerAccount = 'generateSubledgerAccount',
-  canEditVoucherEntries = 'canEditVoucherEntries',
-  accountsChartUID = 'accountsChartUID',
-  accountingDate = 'accountingDate',
-  voucherTypeUID = 'voucherTypeUID',
-}
+interface VouchersImporterFormModel extends FormGroup<{
+  allowUnbalancedVouchers: FormControl<boolean>;
+  generateSubledgerAccount: FormControl<boolean>;
+  canEditVoucherEntries: FormControl<boolean>;
+  accountsChartUID: FormControl<string>;
+  accountingDate: FormControl<string>;
+  voucherTypeUID: FormControl<string>;
+}> { }
 
 enum ImportTypes {
   excelFile = 'excelFile',
@@ -68,8 +67,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   title = 'Importador de pólizas';
   file = null;
 
-  formHandler: FormHandler;
-  controls = VouchersImporterFormControls;
+  form: VouchersImporterFormModel;
+  formHelper = FormHelper;
   isFormInvalidated = false;
 
   isLoading = false;
@@ -102,7 +101,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadDataLists();
   }
 
@@ -112,15 +111,17 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  get isExcelImport() {
+  get isExcelImport(): boolean {
     return this.selectedImportType === ImportTypes.excelFile;
   }
 
-  get isTxtImport() {
+
+  get isTxtImport(): boolean {
     return this.selectedImportType === ImportTypes.txtFile;
   }
 
-  get isDataBaseImport() {
+
+  get isDataBaseImport(): boolean {
     return this.selectedImportType === ImportTypes.dataBase;
   }
 
@@ -129,12 +130,13 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     return this.isFormInvalidated && !this.file;
   }
 
-  get isFileFormValid() {
-    return this.isDataBaseImport ? true : this.formHandler.form.valid && this.file;
+
+  get isFileFormValid(): boolean {
+    return this.isDataBaseImport ? true : this.form.valid && this.file;
   }
 
 
-  get isReadyForSubmit() {
+  get isReadyForSubmit(): boolean {
     if (this.isDataBaseImport) {
       return this.executedDryRun && !this.importVouchersResult.isRunning &&
         this.selectedPartsToImport.length === 1;
@@ -149,7 +151,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  get descriptionColumnText() {
+  get descriptionColumnText(): string {
     if (this.isExcelImport) {
       return 'Hoja';
     }
@@ -189,14 +191,14 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   onAccountChartChanges(accountChart: Identifiable) {
     if (this.isExcelImport) {
-      this.formHandler.getControl(this.controls.accountingDate).reset();
+      this.form.controls.accountingDate.reset();
       this.getOpenedAccountingDates(accountChart.uid);
     }
   }
 
 
   onHasValueDateChange() {
-    this.formHandler.getControl(this.controls.accountingDate).reset();
+    this.form.controls.accountingDate.reset();
   }
 
 
@@ -209,9 +211,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
 
   onGetStatusImportVouchersFromDatabase() {
-    this.resetImportVouchersResult();
-    const observable = this.importVouchersData.getStatusImportVouchersFromDatabase()
-    this.importVouchers(observable, true);
+    this.getStatusImportVouchersFromDatabase();
   }
 
 
@@ -230,7 +230,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     }
 
     if (this.isDataBaseImport) {
-      this.showConfirmMessage();
+      this.showConfirmMessageToImport();
       return;
     }
 
@@ -273,27 +273,23 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        allowUnbalancedVouchers: new UntypedFormControl(false),
-        generateSubledgerAccount: new UntypedFormControl(false),
-        canEditVoucherEntries: new UntypedFormControl(true),
-        accountsChartUID: new UntypedFormControl('', Validators.required),
-        accountingDate: new UntypedFormControl('', Validators.required),
-        voucherTypeUID: new UntypedFormControl('', Validators.required),
-      })
-    );
+    this.form = fb.group({
+      allowUnbalancedVouchers: [false],
+      generateSubledgerAccount: [false],
+      canEditVoucherEntries: [true],
+      accountsChartUID: ['', Validators.required],
+      accountingDate: ['', Validators.required],
+      voucherTypeUID: ['', Validators.required],
+    });
 
-    this.formHandler.form.valueChanges.subscribe(v => this.resetImportVouchersResult());
+    this.form.valueChanges.subscribe(v => this.resetImportVouchersResult());
   }
 
 
   private resetForm() {
-    this.formHandler.form.reset({
+    this.form.reset({
       allowUnbalancedVouchers: false,
       generateSubledgerAccount: false,
       canEditVoucherEntries: true,
@@ -332,30 +328,30 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   private validateRequiredFormFields() {
     if (this.isDataBaseImport) {
-      this.formHandler.clearControlValidators(this.controls.voucherTypeUID);
-      this.formHandler.clearControlValidators(this.controls.accountsChartUID);
-      this.formHandler.clearControlValidators(this.controls.accountingDate);
+      this.formHelper.clearControlValidators(this.form.controls.voucherTypeUID);
+      this.formHelper.clearControlValidators(this.form.controls.accountsChartUID);
+      this.formHelper.clearControlValidators(this.form.controls.accountingDate);
     }
 
     if (this.isTxtImport) {
-      this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
-      this.formHandler.setControlValidators(this.controls.accountsChartUID, Validators.required);
-      this.formHandler.clearControlValidators(this.controls.accountingDate);
+      this.formHelper.setControlValidators(this.form.controls.voucherTypeUID, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.accountsChartUID, Validators.required);
+      this.formHelper.clearControlValidators(this.form.controls.accountingDate);
     }
 
     if (this.isExcelImport) {
-      this.formHandler.setControlValidators(this.controls.voucherTypeUID, Validators.required);
-      this.formHandler.setControlValidators(this.controls.accountsChartUID, Validators.required);
-      this.formHandler.setControlValidators(this.controls.accountingDate, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.voucherTypeUID, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.accountsChartUID, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.accountingDate, Validators.required);
     }
   }
 
 
   private getFormData(dryRun: boolean): ImportVouchersCommand {
-    Assertion.assert(this.formHandler.form.valid,
+    Assertion.assert(this.form.valid,
       'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: ImportVouchersCommand = {
       dryRun: dryRun,
@@ -372,7 +368,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
 
   private validateFieldsByImportType(data: ImportVouchersCommand) {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     if (this.isExcelImport) {
       data.accountsChartUID = formModel.accountsChartUID;
@@ -410,7 +406,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   private setAndReturnIsFormInvalidated(): boolean {
     this.isFormInvalidated = this.isFileFormValid ? false :
-      !this.formHandler.validateReadyForSubmit() || !this.file;
+      !this.formHelper.isFormReadyAndInvalidate(this.form) || !this.file;
     return this.isFormInvalidated;
   }
 
@@ -436,8 +432,8 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private showConfirmMessage() {
-    this.messageBox.confirm(this.getConfirmMessage(), this.title)
+  private showConfirmMessageToImport() {
+    this.messageBox.confirm(this.getConfirmMessageToImport(), this.title)
       .toPromise()
       .then(x => {
         if (x) {
@@ -447,7 +443,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getConfirmMessage(): string {
+  private getConfirmMessageToImport(): string {
     const vouchersTotal = this.selectedPartsToImport.reduce((s, c) => s + c.vouchersCount, 0);
     const partsToImport = '<ul class="info-list">' +
       this.selectedPartsToImport.map(x => '<li>' + x.description + '</li>').join('') + '</ul>';
@@ -534,6 +530,13 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     message = `Se han importado ${response.vouchersCount} pólizas.`;
     this.messageBox.show(message, this.title);
     sendEvent(this.vouchersImporterEvent, VouchersImporterEventType.VOUCHERS_IMPORTED);
+  }
+
+
+  private getStatusImportVouchersFromDatabase() {
+    this.resetImportVouchersResult();
+    const observable = this.importVouchersData.getStatusImportVouchersFromDatabase();
+    this.importVouchers(observable, true);
   }
 
 }

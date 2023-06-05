@@ -11,11 +11,13 @@ import { Observable } from 'rxjs';
 
 import { Assertion, DateString, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
 
-import { sendEvent } from '@app/shared/utils';
-
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { AccountsEditionDataService } from '@app/data-services';
 
@@ -33,8 +35,6 @@ import { AccountItemsTableComponent,
 
 import { AccountEditionConfigComponent,
          AccountEditionConfigEventType } from './account-edition-config.component';
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
 
 export enum AccountEditionWizardEventType {
   CLOSE_MODAL_CLICKED = 'AccountEditionWizardComponent.Event.CloseModalClicked',
@@ -110,11 +110,11 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
 
   accountSectorsWithSubledgerAccountList: AccountItem[] = [];
 
-  helper: SubscriptionHelper;
-
   usesSector = false;
 
   usesSubledger = false;
+
+  helper: SubscriptionHelper;
 
 
   constructor(private uiLayer: PresentationLayer,
@@ -256,7 +256,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    return !!this.accountEditionConfig?.formHandler?.isValid;
+    return !!this.accountEditionConfig?.isFormValid;
   }
 
 
@@ -265,7 +265,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    return !!this.accountHeader?.formHandler?.isValid;
+    return !!this.accountHeader?.isFormValid;
   }
 
 
@@ -274,7 +274,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    return !!this.accountCurrenciesTable?.formHandler?.form.valid;
+    return !!this.accountCurrenciesTable?.isFormValid;
   }
 
 
@@ -283,7 +283,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    return !!this.accountSectorsTable?.formHandler?.form.valid;
+    return !!this.accountSectorsTable?.isFormValid;
   }
 
 
@@ -292,7 +292,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    return !!this.accountRoleForSectorsTable?.formHandler?.form.valid;
+    return !!this.accountRoleForSectorsTable?.isFormValid;
   }
 
 

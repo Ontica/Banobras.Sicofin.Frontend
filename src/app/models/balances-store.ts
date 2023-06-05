@@ -5,7 +5,12 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Empty, Identifiable } from '@app/core';
+import { DateString, Empty, Identifiable } from '@app/core';
+
+export interface BalanceStorageCommand {
+  accountsChartUID: string;
+  balancesDate: DateString;
+}
 
 
 export interface StoredBalanceSet extends Identifiable {

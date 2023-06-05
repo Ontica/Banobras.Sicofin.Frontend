@@ -8,28 +8,28 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil,
          tap } from 'rxjs/operators';
 
-import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { Assertion, DateString, EventInfo, FlexibleIdentifiable, Identifiable, isEmpty } from '@app/core';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountsChartDataService, ExternalVariablesDataService, FinancialConceptsDataService,
          SubledgerDataService } from '@app/data-services';
 
-import { AccountDescriptor, AccountsChartMasterData, AccountsQuery, EmptyFinancialConcept,
-         EmptyFinancialConceptEntry, ExternalVariable, FinancialConcept, FinancialConceptDescriptor,
-         FinancialConceptEntryEditionCommand, FinancialConceptEntryFields, FinancialConceptEntryType,
-         FinancialConceptEntryTypeList, FinancialConceptsGroup, OperatorTypeList, Positioning,
-         PositioningRule, PositioningRuleList, SubledgerAccountQuery, SubledgerAccountDescriptor,
-         FinancialConceptEntryEditionType, FinancialConceptEntry } from '@app/models';
+import { AccountsChartMasterData, AccountsQuery, EmptyFinancialConcept, EmptyFinancialConceptEntry,
+         ExternalVariable, FinancialConcept, FinancialConceptDescriptor, FinancialConceptEntryEditionCommand,
+         FinancialConceptEntryFields, FinancialConceptEntryType, FinancialConceptEntryTypeList,
+         FinancialConceptsGroup, OperatorTypeList, Positioning, PositioningRule, PositioningRuleList,
+         SubledgerAccountQuery, FinancialConceptEntryEditionType, FinancialConceptEntry, OperatorType,
+         mapToFinancialConceptDescriptor } from '@app/models';
 
 import { AccountChartStateSelector,
          FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
@@ -41,24 +41,23 @@ export enum FinancialConceptEntryEditorEventType {
   UPDATE_ENTRY        = 'FinancialConceptEntryEditorComponent.Event.UpdateEntry',
 }
 
-
-enum FinancialConceptEntryEditorFormControls {
-  entryType = 'entryType',
-  referencedGroup = 'referencedGroup',
-  referencedFinancialConcept = 'referencedFinancialConcept',
-  externalVariableSet = 'externalVariableSet',
-  externalVariable = 'externalVariable',
-  account = 'account',
-  subledgerAccount = 'subledgerAccount',
-  sector = 'sector',
-  currency = 'currency',
-  positioningRule = 'positioningRule',
-  positioningOffsetEntryUID = 'positioningOffsetEntryUID',
-  position = 'position',
-  operator = 'operator',
-  calculationRule = 'calculationRule',
-  dataColumn = 'dataColumn',
-}
+interface FinancialConceptEntryFormModel extends FormGroup<{
+  entryType: FormControl<FinancialConceptEntryType>;
+  referencedGroup: FormControl<string>;
+  referencedFinancialConcept: FormControl<FinancialConceptDescriptor>;
+  externalVariableSet: FormControl<string>;
+  externalVariable: FormControl<string>;
+  account: FormControl<FlexibleIdentifiable>;
+  subledgerAccount: FormControl<FlexibleIdentifiable>;
+  sector: FormControl<string>;
+  currency: FormControl<string>;
+  positioningRule: FormControl<PositioningRule>;
+  positioningOffsetEntryUID: FormControl<string>;
+  position: FormControl<number>;
+  operator: FormControl<OperatorType>;
+  calculationRule: FormControl<string>;
+  dataColumn: FormControl<string>;
+}> { }
 
 @Component({
   selector: 'emp-fa-financial-concept-entry-editor',
@@ -82,8 +81,8 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
   helper: SubscriptionHelper;
 
-  formHandler: FormHandler;
-  controls = FinancialConceptEntryEditorFormControls;
+  form: FinancialConceptEntryFormModel;
+  formHelper = FormHelper;
   editionMode = false;
 
   isLoadingDataLists = false;
@@ -106,12 +105,12 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   externalVariableSetList: Identifiable[] = [];
   externalVariableList: ExternalVariable[] = [];
 
-  accountList$: Observable<AccountDescriptor[]>;
+  accountList$: Observable<FlexibleIdentifiable[]>;
   accountInput$ = new Subject<string>();
   accountMinTermLength = 1;
   accountLoading = false;
 
-  subledgerAccountList$: Observable<SubledgerAccountDescriptor[]>;
+  subledgerAccountList$: Observable<FlexibleIdentifiable[]>;
   subledgerAccountInput$ = new Subject<string>();
   subledgerAccountMinTermLength = 4;
   subledgerAccountLoading = false;
@@ -130,7 +129,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadDataLists();
     this.subscribeAccountList();
     this.subscribeSubledgerAccountList();
@@ -164,31 +163,28 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   get isFinancialConceptReferenceType(): boolean {
-    return FinancialConceptEntryType.FinancialConceptReference ===
-      this.formHandler.getControl(this.controls.entryType).value;
+    return FinancialConceptEntryType.FinancialConceptReference === this.form.controls.entryType.value;
   }
 
 
   get isExternalVariableType(): boolean {
-    return FinancialConceptEntryType.ExternalVariable ===
-      this.formHandler.getControl(this.controls.entryType).value;
+    return FinancialConceptEntryType.ExternalVariable === this.form.controls.entryType.value;
   }
 
 
   get isAccountType(): boolean {
-    return FinancialConceptEntryType.Account === this.formHandler.getControl(this.controls.entryType).value;
+    return FinancialConceptEntryType.Account === this.form.controls.entryType.value;
   }
 
 
   get displayPositioningOffsetConcept(): boolean {
     return [PositioningRule.AfterOffset, PositioningRule.BeforeOffset]
-             .includes(this.formHandler.getControl(this.controls.positioningRule).value);
+             .includes(this.form.controls.positioningRule.value);
   }
 
 
   get displayPosition(): boolean {
-    return PositioningRule.ByPositionValue ===
-      this.formHandler.getControl(this.controls.positioningRule).value;
+    return PositioningRule.ByPositionValue === this.form.controls.positioningRule.value;
   }
 
 
@@ -198,19 +194,19 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   onEntryTypeChanged() {
-    this.setControlConfig(this.controls.referencedGroup, this.isFinancialConceptReferenceType);
-    this.setControlConfig(this.controls.referencedFinancialConcept, this.isFinancialConceptReferenceType);
+    this.setControlConfig(this.form.controls.referencedGroup, this.isFinancialConceptReferenceType);
+    this.setControlConfig(this.form.controls.referencedFinancialConcept, this.isFinancialConceptReferenceType);
 
-    this.setControlConfig(this.controls.externalVariableSet, this.isExternalVariableType);
-    this.setControlConfig(this.controls.externalVariable, this.isExternalVariableType);
+    this.setControlConfig(this.form.controls.externalVariableSet, this.isExternalVariableType);
+    this.setControlConfig(this.form.controls.externalVariable, this.isExternalVariableType);
 
-    this.setControlConfig(this.controls.account, this.isAccountType);
+    this.setControlConfig(this.form.controls.account, this.isAccountType);
   }
 
 
   onPositioningRuleChanged() {
-    this.setControlConfig(this.controls.positioningOffsetEntryUID, this.displayPositioningOffsetConcept);
-    this.setControlConfig(this.controls.position, this.displayPosition);
+    this.setControlConfig(this.form.controls.positioningOffsetEntryUID, this.displayPositioningOffsetConcept);
+    this.setControlConfig(this.form.controls.position, this.displayPosition);
   }
 
 
@@ -225,19 +221,16 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   onSubmitDataClicked() {
-    if (!this.formHandler.isValid) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const eventType = this.isSaved ? FinancialConceptEntryEditorEventType.UPDATE_ENTRY :
+        FinancialConceptEntryEditorEventType.INSERT_ENTRY;
+
+      const payload = {
+        command: this.getFinancialConceptEntryEditionCommand(),
+      };
+
+      sendEvent(this.financialConceptEntryEditorEvent, eventType, payload);
     }
-
-    const eventType = this.isSaved ? FinancialConceptEntryEditorEventType.UPDATE_ENTRY :
-      FinancialConceptEntryEditorEventType.INSERT_ENTRY;
-
-    const payload = {
-      command: this.getFinancialConceptEntryEditionCommand(),
-    };
-
-    sendEvent(this.financialConceptEntryEditorEvent, eventType, payload);
   }
 
 
@@ -250,7 +243,6 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
     ])
     .subscribe(([x, y]) => {
       this.selectedAccountChart = x.find(z => z.uid === this.financialConcept.accountsChart.uid) ?? null;
-
       this.referencedGroupList = y.filter(z => z.accountsChart.uid === this.financialConcept.accountsChart.uid);
       this.selectedGroup = y.find(z => z.uid === this.financialConcept.group.uid) ?? null;
 
@@ -260,29 +252,25 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        entryType: new UntypedFormControl(FinancialConceptEntryType.FinancialConceptReference, Validators.required),
-        referencedGroup: new UntypedFormControl('', Validators.required),
-        referencedFinancialConcept: new UntypedFormControl('', Validators.required),
-        externalVariableSet: new UntypedFormControl(''),
-        externalVariable: new UntypedFormControl(''),
-        account: new UntypedFormControl(''),
-        subledgerAccount: new UntypedFormControl(''),
-        sector: new UntypedFormControl(''),
-        currency: new UntypedFormControl(''),
-        positioningRule: new UntypedFormControl(PositioningRule.AtEnd, Validators.required),
-        positioningOffsetEntryUID: new UntypedFormControl(''),
-        position: new UntypedFormControl(''),
-        operator: new UntypedFormControl('', Validators.required),
-        calculationRule: new UntypedFormControl('', Validators.required),
-        dataColumn: new UntypedFormControl('', Validators.required),
-      })
-    );
+    this.form = fb.group({
+      entryType: [FinancialConceptEntryType.FinancialConceptReference, Validators.required],
+      referencedGroup: ['', Validators.required],
+      referencedFinancialConcept: [null as FinancialConceptDescriptor, Validators.required],
+      externalVariableSet: [''],
+      externalVariable: [''],
+      account: [null as FlexibleIdentifiable],
+      subledgerAccount: [null as FlexibleIdentifiable],
+      sector: [''],
+      currency: [''],
+      positioningRule: [PositioningRule.AtEnd, Validators.required],
+      positioningOffsetEntryUID: [''],
+      position: [null as number],
+      operator: [null as OperatorType, Validators.required],
+      calculationRule: ['', Validators.required],
+      dataColumn: ['', Validators.required],
+    });
 
     this.onSuscribeReferencedGroupChanges();
     this.onSuscribeExternalVariableSetChanges();
@@ -290,7 +278,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private onSuscribeReferencedGroupChanges() {
-    this.formHandler.getControl(this.controls.referencedGroup).valueChanges
+    this.form.controls.referencedGroup.valueChanges
       .pipe(
         takeUntil(this.unsubscribeReferencedGroupUID),
         filter(groupUID => !!groupUID),
@@ -311,7 +299,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private onSuscribeExternalVariableSetChanges() {
-    this.formHandler.getControl(this.controls.externalVariableSet).valueChanges
+    this.form.controls.externalVariableSet.valueChanges
       .pipe(
         takeUntil(this.unsubscribeExternalVariableSetUID),
         filter(setUID => !!setUID),
@@ -331,13 +319,13 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private resetReferencedFinancialConceptData() {
-    this.formHandler.getControl(this.controls.referencedFinancialConcept).reset();
+    this.form.controls.referencedFinancialConcept.reset();
     this.referencedFinancialConceptList = [];
   }
 
 
   private resetExternalVariableData() {
-    this.formHandler.getControl(this.controls.externalVariable).reset();
+    this.form.controls.externalVariable.reset();
     this.externalVariableList = [];
   }
 
@@ -350,14 +338,14 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private setFormData() {
-    this.formHandler.form.reset({
-      entryType: this.financialConceptEntry.type || '',
-      operator: this.financialConceptEntry.operator || '',
+    this.form.reset({
+      entryType: this.financialConceptEntry.type || null,
+      operator: this.financialConceptEntry.operator as OperatorType || null,
       calculationRule: this.financialConceptEntry.calculationRule || '',
       dataColumn: this.financialConceptEntry.dataColumn || '',
-      positioningRule: this.financialConceptEntry.positioning.rule || '',
+      positioningRule: this.financialConceptEntry.positioning.rule || null,
       positioningOffsetEntryUID: this.financialConceptEntry.positioning.offsetUID || '',
-      position: this.financialConceptEntry.positioning.position || '',
+      position: this.financialConceptEntry.positioning.position || null,
     });
 
     this.setAccountDataFromLists();
@@ -365,7 +353,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
     this.setFinancialConceptReferenceData();
 
     this.onEntryTypeChanged();
-    this.formHandler.disableControl(this.controls.entryType);
+    this.formHelper.setDisableControl(this.form.controls.entryType);
   }
 
 
@@ -375,30 +363,28 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
       const subledgerAccount = !!this.financialConceptEntry?.subledgerAccount?.id ?
         this.financialConceptEntry.subledgerAccount : null;
 
-      this.formHandler.getControl(this.controls.account).reset(account);
-      this.formHandler.getControl(this.controls.subledgerAccount).reset(subledgerAccount);
-      this.formHandler.getControl(this.controls.sector).reset(this.financialConceptEntry.sectorCode);
-      this.formHandler.getControl(this.controls.currency).reset(this.financialConceptEntry.currencyCode);
+      this.form.controls.account.reset(account);
+      this.form.controls.subledgerAccount.reset(subledgerAccount);
+      this.form.controls.sector.reset(this.financialConceptEntry.sectorCode);
+      this.form.controls.currency.reset(this.financialConceptEntry.currencyCode);
     }
   }
 
 
   private setExternalVariableData() {
     if (this.isExternalVariableType) {
-      this.formHandler.getControl(this.controls.externalVariableSet)
-        .reset(this.financialConceptEntry.externalVariable.setUID ?? '');
-      this.formHandler.getControl(this.controls.externalVariable)
-        .reset(this.financialConceptEntry.externalVariable.code ?? '');
+      this.form.controls.externalVariableSet.reset(this.financialConceptEntry.externalVariable.setUID ?? '');
+      this.form.controls.externalVariable.reset(this.financialConceptEntry.externalVariable.code ?? '');
     }
   }
 
 
   private setFinancialConceptReferenceData() {
     if (this.isFinancialConceptReferenceType) {
-      this.formHandler.getControl(this.controls.referencedGroup)
-        .reset(this.financialConceptEntry.referencedFinancialConcept.group.uid);
-      this.formHandler.getControl(this.controls.referencedFinancialConcept)
-        .reset(this.financialConceptEntry.referencedFinancialConcept);
+      this.form.controls.referencedGroup.reset(this.financialConceptEntry.referencedFinancialConcept.group.uid);
+      this.form.controls.referencedFinancialConcept.reset(
+        mapToFinancialConceptDescriptor(this.financialConceptEntry.referencedFinancialConcept)
+      );
     }
   }
 
@@ -435,13 +421,12 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private getFormData(): FinancialConceptEntryFields {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     let data: FinancialConceptEntryFields = {
-      operator: formModel.operator ?? '',
+      operator: formModel.operator ?? null,
       calculationRule: formModel.calculationRule ?? '',
       dataColumn: formModel.dataColumn ?? '',
     };
@@ -454,7 +439,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private validateFieldsByEntryType(data: FinancialConceptEntryFields) {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     if (this.isFinancialConceptReferenceType) {
       data.referencedFinancialConceptUID = formModel.referencedFinancialConcept?.uid ?? '';
@@ -474,10 +459,10 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
 
   private validatePositionsFields(data: FinancialConceptEntryFields) {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const positioning: Positioning = {
-      rule: formModel.positioningRule ?? '',
+      rule: formModel.positioningRule ?? null,
     }
 
     if (this.displayPositioningOffsetConcept) {
@@ -503,7 +488,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
 
     if (!this.isSaved) {
       const positioningRule = hasRules ? PositioningRule.AtEnd : PositioningRule.AtStart;
-      this.formHandler.getControl(this.controls.positioningRule).reset(positioningRule);
+      this.form.controls.positioningRule.reset(positioningRule);
     }
   }
 
@@ -548,7 +533,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  private getDefaultAccountList(): any[] {
+  private getDefaultAccountList(): FlexibleIdentifiable[] {
     if (!this.isSaved || !this.financialConceptEntry?.account?.uid) {
       return [];
     }
@@ -556,7 +541,7 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  private getDefaultSubledgerAccountList(): any[] {
+  private getDefaultSubledgerAccountList(): FlexibleIdentifiable[] {
     if (!this.isSaved || !this.financialConceptEntry?.subledgerAccount?.id) {
       return [];
     }
@@ -581,11 +566,11 @@ export class FinancialConceptEntryEditorComponent implements OnChanges, OnInit, 
   }
 
 
-  private setControlConfig(control: FinancialConceptEntryEditorFormControls, required: boolean) {
-      if (required) {
-      this.formHandler.setControlValidators(control, Validators.required);
+  private setControlConfig(control: FormControl<any>, required: boolean) {
+    if (required) {
+      this.formHelper.setControlValidators(control, Validators.required);
     } else {
-      this.formHandler.clearControlValidators(control);
+      this.formHelper.clearControlValidators(control);
     }
   }
 

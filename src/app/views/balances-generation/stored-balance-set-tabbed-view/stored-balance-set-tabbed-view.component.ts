@@ -97,7 +97,6 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
     const payload = {
       accountsChartUID: this.storedBalanceSet.accountsChart.uid,
       balanceSetUID: this.storedBalanceSet.uid,
-      storedBalanceSet: {balancesDate: this.storedBalanceSet.balancesDate},
     };
 
     sendEvent(this.storedBalanceSetTabbedViewEvent,

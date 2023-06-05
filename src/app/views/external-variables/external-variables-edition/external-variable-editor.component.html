@@ -1,4 +1,4 @@
-<form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section"
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section"
   [style.paddingBottom.px]="isSaved ? 0 : 4">
 
   <div fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="isSaved ? 0 : 8">
@@ -7,8 +7,8 @@
 
       <input type="text" class="text-box" name="period"
         placeholder="Clave"
-        [formControlName]="controls.code"
-        [class.invalid-control]="formHandler.showInvalidControl(controls.code)">
+        formControlName="code"
+        [class.invalid-control]="formHelper.isControlInvalid(form.controls.code)">
 
     </div>
 
@@ -16,16 +16,16 @@
 
       <input type="text" class="text-box" name="period"
         placeholder="Nombre de la variable"
-        [formControlName]="controls.name"
-        [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+        formControlName="name"
+        [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
 
     </div>
 
     <div fxFlex="none">
 
       <emp-ng-date-range-picker name="period"
-        [formControlName]="controls.period"
-        [showError]="formHandler.showInvalidControl(controls.period)">
+        formControlName="period"
+        [showError]="formHelper.isControlInvalid(form.controls.period)">
 
       </emp-ng-date-range-picker>
 

@@ -8,11 +8,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest } from 'rxjs';
 
-import { DateStringLibrary, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -22,7 +22,7 @@ import { AccountsChartMasterData, EmptyVoucher, Voucher, VoucherFields,
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { VouchersDataService } from '@app/data-services';
 
@@ -31,14 +31,14 @@ export enum VoucherHeaderEventType {
   FIELDS_CHANGED = 'VoucherHeaderComponent.Event.FieldsChanged',
 }
 
-enum VoucherHeaderFormControls {
-  voucherTypeUID = 'voucherTypeUID',
-  accountsChartUID = 'accountsChartUID',
-  ledgerUID = 'ledgerUID',
-  concept = 'concept',
-  functionalAreaId = 'functionalAreaId',
-  accountingDate = 'accountingDate',
-}
+interface VoucherFormModel extends FormGroup<{
+  voucherTypeUID: FormControl<string>;
+  accountsChartUID: FormControl<string>;
+  ledgerUID: FormControl<string>;
+  concept: FormControl<string>;
+  functionalAreaId: FormControl<string>;
+  accountingDate: FormControl<DateString>;
+}> { }
 
 @Component({
   selector: 'emp-fa-voucher-header',
@@ -56,21 +56,30 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() voucherHeaderEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
-  controls = VoucherHeaderFormControls;
+  form: VoucherFormModel;
+
+  formHelper = FormHelper;
+
   isLoading = false;
+
   isLoadingAccountingDates = false;
 
   hasValueDate = false;
+
   accountChartSelected: AccountsChartMasterData = null;
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
+
   voucherTypesList: Identifiable[] = [];
+
   voucherSpecialCaseTypesList: VoucherSpecialCaseType[] = [];
+
   functionalAreasList: Identifiable[] = [];
+
   accountingDatesList: Identifiable[] = [];
 
   helper: SubscriptionHelper;
+
 
   constructor(private uiLayer: PresentationLayer,
               private vouchersData: VouchersDataService) {
@@ -80,7 +89,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadDataLists();
   }
 
@@ -105,12 +114,12 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  get isSavedVoucher() {
+  get isSavedVoucher(): boolean {
     return this.voucher && this.voucher.id > 0;
   }
 
 
-  get hasEntries() {
+  get hasEntries(): boolean {
     return this.voucher.entries.length > 0;
   }
 
@@ -124,7 +133,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  enableEditor(enable) {
+  enableEditor(enable: boolean) {
     this.editionMode = enable;
 
     if (!this.editionMode) {
@@ -137,7 +146,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   invalidateForm() {
-    this.formHandler.invalidateForm();
+    this.formHelper.markFormControlsAsTouched(this.form);
   }
 
 
@@ -148,15 +157,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
-    this.formHandler.getControl(this.controls.accountingDate).reset();
-    this.formHandler.getControl(this.controls.ledgerUID).reset();
+    this.form.controls.accountingDate.reset();
+    this.form.controls.ledgerUID.reset();
     this.accountChartSelected = accountChart;
     this.getOpenedAccountingDates(accountChart.uid);
   }
 
 
   onHasValueDateChange() {
-    this.formHandler.getControl(this.controls.accountingDate).reset();
+    this.form.controls.accountingDate.reset();
   }
 
 
@@ -206,37 +215,33 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        voucherTypeUID: new UntypedFormControl('', Validators.required),
-        accountsChartUID: new UntypedFormControl('', Validators.required),
-        ledgerUID: new UntypedFormControl('', Validators.required),
-        concept: new UntypedFormControl('', Validators.required),
-        functionalAreaId: new UntypedFormControl('', Validators.required),
-        accountingDate: new UntypedFormControl('', Validators.required),
-      })
-    );
+    this.form = fb.group({
+      voucherTypeUID: ['', Validators.required],
+      accountsChartUID: ['', Validators.required],
+      ledgerUID: ['', Validators.required],
+      concept: ['', Validators.required],
+      functionalAreaId: ['', Validators.required],
+      accountingDate: ['' as DateString, Validators.required],
+    });
 
-    this.formHandler.form.valueChanges.subscribe(v => this.emitChanges());
+    this.form.valueChanges.subscribe(v => this.emitChanges());
   }
 
 
   private validateRequiredFormFields() {
     if (this.allowAllLedgersSelection) {
-      this.formHandler.clearControlValidators(this.controls.ledgerUID);
+      this.formHelper.clearControlValidators(this.form.controls.ledgerUID);
     } else {
-      this.formHandler.setControlValidators(this.controls.ledgerUID, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.ledgerUID, Validators.required);
     }
   }
 
 
   private emitChanges() {
     const payload = {
-      isFormValid: this.formHandler.form.valid,
+      isFormValid: this.form.valid,
       voucher: this.getFormData(),
     };
 
@@ -246,11 +251,11 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   private setFormData() {
     if (!this.isSavedVoucher) {
-      this.formHandler.form.reset();
+      this.form.reset();
       return;
     }
 
-    this.formHandler.form.reset({
+    this.form.reset({
       voucherTypeUID: this.voucher.voucherType.uid || '',
       accountsChartUID: this.voucher.accountsChart.uid || '',
       ledgerUID: this.voucher.ledger.uid || '',
@@ -273,15 +278,15 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  private disableForm(disable) {
-    this.formHandler.disableForm(disable);
+  private disableForm(disable: boolean) {
+    this.formHelper.setDisableForm(this.form, disable);
   }
 
 
   private validateDisabledFieldsByHasEntries() {
     if (this.editionMode) {
-      this.formHandler.disableControl(this.controls.accountsChartUID, this.hasEntries);
-      this.formHandler.disableControl(this.controls.ledgerUID, this.hasEntries);
+      this.formHelper.setDisableControl(this.form.controls.accountsChartUID, this.hasEntries);
+      this.formHelper.setDisableControl(this.form.controls.ledgerUID, this.hasEntries);
     }
   }
 
@@ -301,14 +306,14 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private getFormData(): VoucherFields {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: VoucherFields = {
       voucherTypeUID: formModel.voucherTypeUID ?? '',
       accountsChartUID: formModel.accountsChartUID ?? '',
       ledgerUID: formModel.ledgerUID ?? '',
       concept: formModel.concept ?? '',
-      functionalAreaId: formModel.functionalAreaId ?? '',
+      functionalAreaId: +formModel.functionalAreaId ?? null,
       accountingDate: formModel.accountingDate ?? null,
     };
 

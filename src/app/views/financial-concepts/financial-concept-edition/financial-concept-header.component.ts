@@ -8,7 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, of, Subject } from 'rxjs';
 
@@ -29,7 +29,7 @@ import { AccountChartStateSelector,
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum FinancialConceptHeaderEventType {
   CREATE_FINANCIAL_CONCEPT = 'FinancialConceptHeaderComponent.Event.CreateFinancialConcept',
@@ -37,19 +37,19 @@ export enum FinancialConceptHeaderEventType {
   REMOVE_FINANCIAL_CONCEPT = 'FinancialConceptHeaderComponent.Event.RemoveFinancialConcept',
 }
 
-enum FinancialConceptHeaderFormControls {
-  accountsChartUID = 'accountsChartUID',
-  groupUID = 'groupUID',
-  code = 'code',
-  name = 'name',
-  position = 'position',
-  positioningRule = 'positioningRule',
-  positioningOffsetConceptUID = 'positioningOffsetConceptUID',
-  startDate = 'startDate',
-  endDate = 'endDate',
-  calculationScript = 'calculationScript',
-  variableID = 'variableID',
-}
+interface FinancialConceptFormModel extends FormGroup<{
+  accountsChartUID: FormControl<string>;
+  groupUID: FormControl<string>;
+  code: FormControl<string>;
+  name: FormControl<string>;
+  position: FormControl<number>;
+  positioningRule: FormControl<PositioningRule>;
+  positioningOffsetConceptUID: FormControl<string>;
+  startDate: FormControl<DateString>;
+  endDate: FormControl<DateString>;
+  calculationScript: FormControl<string>;
+  variableID: FormControl<string>;
+}> { }
 
 @Component({
   selector: 'emp-fa-financial-concept-header',
@@ -69,9 +69,9 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
   @Output() financialConceptHeaderEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  form: FinancialConceptFormModel;
 
-  controls = FinancialConceptHeaderFormControls;
+  formHelper = FormHelper;
 
   editionMode = false;
 
@@ -105,7 +105,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.accountsChartUID) {
       this.setAccountsChartDefault();
     }
@@ -139,16 +139,15 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
   get displayPositioningOffsetConcept(): boolean {
     return [PositioningRule.AfterOffset, PositioningRule.BeforeOffset]
-             .includes(this.formHandler.getControl(this.controls.positioningRule).value);
+      .includes(this.form.controls.positioningRule.value);
   }
 
   get displayPosition(): boolean {
-    return PositioningRule.ByPositionValue ===
-      this.formHandler.getControl(this.controls.positioningRule).value;
+    return PositioningRule.ByPositionValue === this.form.controls.positioningRule.value;
   }
 
 
-  enableEditor(enable) {
+  enableEditor(enable: boolean) {
     this.editionMode = enable;
 
     if (!this.editionMode) {
@@ -160,7 +159,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   onAccountsChartChanged(accountChart: AccountsChartMasterData) {
-    this.formHandler.getControl(this.controls.groupUID).reset();
+    this.form.controls.groupUID.reset();
     this.validateAccountsChartChanged(accountChart?.uid);
     this.resetFinancialConceptsData();
   }
@@ -168,32 +167,26 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
   onPositioningRuleChanged() {
     if (this.displayPositioningOffsetConcept) {
-      this.formHandler.setControlValidators(this.controls.positioningOffsetConceptUID, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.positioningOffsetConceptUID, Validators.required);
     } else {
-      this.formHandler.clearControlValidators(this.controls.positioningOffsetConceptUID);
+      this.formHelper.clearControlValidators(this.form.controls.positioningOffsetConceptUID);
     }
 
     if (this.displayPosition) {
-      this.formHandler.setControlValidators(this.controls.position, [Validators.required]);
+      this.formHelper.setControlValidators(this.form.controls.position, [Validators.required]);
     } else {
-      this.formHandler.clearControlValidators(this.controls.position);
+      this.formHelper.clearControlValidators(this.form.controls.position);
     }
   }
 
 
   onSubmitForm() {
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const eventType = this.isSaved ? FinancialConceptHeaderEventType.UPDATE_FINANCIAL_CONCEPT :
+        FinancialConceptHeaderEventType.CREATE_FINANCIAL_CONCEPT;
+
+      sendEvent(this.financialConceptHeaderEvent, eventType, {financialConcept: this.getFormData()});
     }
-
-    let eventType = FinancialConceptHeaderEventType.CREATE_FINANCIAL_CONCEPT;
-
-    if (this.isSaved) {
-      eventType = FinancialConceptHeaderEventType.UPDATE_FINANCIAL_CONCEPT;
-    }
-
-    sendEvent(this.financialConceptHeaderEvent, eventType, {financialConcept: this.getFormData()});
   }
 
 
@@ -203,41 +196,37 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        accountsChartUID: new UntypedFormControl('', Validators.required),
-        groupUID: new UntypedFormControl('', Validators.required),
-        code: new UntypedFormControl('', Validators.required),
-        name: new UntypedFormControl('', Validators.required),
-        positioningRule: new UntypedFormControl(PositioningRule.AtEnd, Validators.required),
-        positioningOffsetConceptUID: new UntypedFormControl(''),
-        position: new UntypedFormControl(''),
-        startDate: new UntypedFormControl('', Validators.required),
-        endDate: new UntypedFormControl(DefaultEndDate, Validators.required),
-        calculationScript: new UntypedFormControl(''),
-        variableID: new UntypedFormControl('', Validators.pattern('[A-Z0-9_]*')),
-      })
-    );
+    this.form = fb.group({
+      accountsChartUID: ['', Validators.required],
+      groupUID: ['', Validators.required],
+      code: ['', Validators.required],
+      name: ['', Validators.required],
+      positioningRule: [PositioningRule.AtEnd, Validators.required],
+      positioningOffsetConceptUID: [''],
+      position: [null as number],
+      startDate: [null as DateString, Validators.required],
+      endDate: [DefaultEndDate, Validators.required],
+      calculationScript: [''],
+      variableID: ['', Validators.pattern('[A-Z0-9_]*')],
+    });
 
     this.onSuscribeGroupChanges();
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({
+    this.form.reset({
       accountsChartUID: this.financialConcept.accountsChart.uid || '',
       groupUID: this.financialConcept.group.uid || '',
       code: this.financialConcept.code || '',
       name: this.financialConcept.name || '',
       positioningRule: PositioningRule.ByPositionValue,
-      position: this.financialConcept.position || '',
+      position: this.financialConcept.position || null,
       positioningOffsetConceptUID: '',
-      startDate: this.financialConcept.startDate || '',
-      endDate: this.financialConcept.endDate || '',
+      startDate: this.financialConcept.startDate || null,
+      endDate: this.financialConcept.endDate || null,
       calculationScript: this.financialConcept.calculationScript || '',
       variableID: this.financialConcept.variableID || '',
     });
@@ -247,16 +236,15 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private getFormData(): FinancialConceptEditionCommand {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: FinancialConceptEditionCommand = {
       groupUID: formModel.groupUID ?? '',
       code: formModel.code ?? '',
       name: formModel.name ?? '',
-      positioningRule: formModel.positioningRule ?? '',
+      positioningRule: formModel.positioningRule ?? null,
       startDate: formModel.startDate ?? '',
       endDate: formModel.endDate ?? '',
       calculationScript: formModel.calculationScript ?? '',
@@ -280,11 +268,11 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private validateFieldsDisabled() {
-    this.formHandler.disableForm(!this.editionMode);
+    this.formHelper.setDisableForm(this.form, !this.editionMode);
 
     if(this.isSaved) {
-      this.formHandler.disableControl(this.controls.accountsChartUID);
-      this.formHandler.disableControl(this.controls.groupUID);
+      this.formHelper.setDisableControl(this.form.controls.accountsChartUID);
+      this.formHelper.setDisableControl(this.form.controls.groupUID);
     }
   }
 
@@ -308,7 +296,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private onSuscribeGroupChanges() {
-    this.formHandler.getControl(this.controls.groupUID).valueChanges
+    this.form.controls.groupUID.valueChanges
       .pipe(
         takeUntil(this.unsubscribeGroupUID),
         filter(groupUID => !!groupUID),
@@ -329,7 +317,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private resetFinancialConceptsData() {
-    this.formHandler.getControl(this.controls.positioningOffsetConceptUID).reset();
+    this.form.controls.positioningOffsetConceptUID.reset();
     this.financialConceptsList = [];
   }
 
@@ -345,7 +333,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
     }
 
 
-    this.formHandler.getControl(this.controls.accountsChartUID).reset(accountsChartUID);
+    this.form.controls.accountsChartUID.reset(accountsChartUID);
 
     if (!!accountsChartUID) {
       this.filterFinancialConceptsGroups(accountsChartUID);
@@ -354,7 +342,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private setGroupUIDDefault() {
-    this.formHandler.getControl(this.controls.groupUID).reset(this.groupUID);
+    this.form.controls.groupUID.reset(this.groupUID);
   }
 
 

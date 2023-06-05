@@ -5,13 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion, Validate } from '@app/core';
-
-import { FormHandler } from '@app/shared/utils';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -19,95 +17,70 @@ import { AccessControlDataService } from '@app/data-services';
 
 import { UpdateCredentialsFields} from '@app/models';
 
+import { FormHelper } from '@app/shared/utils';
 
-enum ChangePasswordModalFormControls {
-  userID = 'userID',
-  currentPassword = 'currentPassword',
-  newPassword = 'newPassword',
-  confirmNewPassword = 'confirmNewPassword',
-}
 
-interface PaswordRules {
+interface ChangePasswordFormModel extends FormGroup<{
+  userID: FormControl<string>;
+  currentPassword: FormControl<string>;
+  newPassword: FormControl<string>;
+  confirmNewPassword: FormControl<string>;
+}> { }
+
+interface IPaswordRules {
   minlengthRequired: boolean;
   upperRequired: boolean;
   lowerRequired: boolean;
   numberRequired: boolean;
   specialCharactersRequired: boolean;
-  minlength?: number;
+  minlength: number;
 }
+
+const DefaultPaswordRules: IPaswordRules = {
+  minlengthRequired: true,
+  upperRequired: true,
+  lowerRequired: true,
+  numberRequired: true,
+  specialCharactersRequired: true,
+  minlength: 8,
+};
 
 @Component({
   selector: 'emp-ng-change-password-modal',
   templateUrl: './change-password-modal.component.html',
 })
-export class ChangePasswordModalComponent implements OnInit {
+export class ChangePasswordModalComponent  {
 
   @Output() closeEvent = new EventEmitter<void>();
 
-  formHandler: FormHandler;
+  form: ChangePasswordFormModel;
 
-  controls = ChangePasswordModalFormControls;
+  formHelper = FormHelper;
+
+  passwordRules: IPaswordRules = DefaultPaswordRules;
 
   showPassword = false;
 
   submitted = false;
 
-  passwordRules: PaswordRules = {
-    minlengthRequired: true,
-    upperRequired: true,
-    lowerRequired: true,
-    numberRequired: true,
-    specialCharactersRequired: true,
-    minlength: 8,
-  };
-
 
   constructor(private accessControlData: AccessControlDataService,
               private messageBox: MessageBoxService) {
-  }
-
-
-  ngOnInit(): void {
     this.initForm();
   }
 
 
-  get textInfo(): string {
-    let rules: string[] = [];
+  get newPasswordErrorsText(): string {
+    const errors = this.getNewPasswordErrorsList();
 
-    if (this.passwordRules.minlengthRequired &&
-        (this.formHandler.getControl(this.controls.newPassword).errors?.required ||
-         this.formHandler.getControl(this.controls.newPassword).errors?.minlength)) {
-       rules.push(`al menos ${this.passwordRules.minlength ?? 5} caracteres`);
-    }
-
-    if (this.passwordRules.upperRequired &&
-        this.formHandler.getControl(this.controls.newPassword).errors?.hasUpper) {
-       rules.push('mayúsculas');
-    }
-
-    if (this.passwordRules.lowerRequired &&
-        this.formHandler.getControl(this.controls.newPassword).errors?.hasLower) {
-       rules.push('minúsculas');
-    }
-
-    if (this.passwordRules.numberRequired &&
-        this.formHandler.getControl(this.controls.newPassword).errors?.hasNumber) {
-       rules.push('números');
-    }
-
-    if (this.passwordRules.specialCharactersRequired &&
-        this.formHandler.getControl(this.controls.newPassword).errors?.hasSpecialCharacters) {
-       rules.push('caracteres especiales');
-    }
-
-    if (rules.length > 0) {
-      let textInfo = 'La nueva contraseña debe contener ';
-      textInfo += [rules.slice(0, -1).join(', '), rules.slice(-1)[0]].join(rules.length < 2 ? '' : ' y ');
-      return textInfo + '.';
-    } else {
+    if (errors.length === 0) {
       return '';
     }
+
+    const errorsText =
+      [errors.slice(0, -1).join(', '), errors.slice(-1)[0]].join(errors.length < 2 ? '' : ' y ');
+
+    return `La nueva contraseña debe contener ${errorsText}.`;
   }
 
 
@@ -121,19 +94,16 @@ export class ChangePasswordModalComponent implements OnInit {
       return;
     }
 
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      this.updateCredentialsToSubject();
     }
-
-    this.updateCredentialsToSubject();
   }
 
 
   private updateCredentialsToSubject() {
     this.submitted = true;
 
-    const command = this.getUpdateCredentialsFields();
+    const command = this.getFormData();
 
     this.accessControlData.updateCredentialsToSubject(command)
       .toPromise()
@@ -146,21 +116,19 @@ export class ChangePasswordModalComponent implements OnInit {
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        userID: new UntypedFormControl('', Validators.required),
-        currentPassword: new UntypedFormControl('', [Validators.required]),
-        newPassword: new UntypedFormControl('', [Validators.required]),
-        confirmNewPassword: new UntypedFormControl('', [Validators.required]),
+    this.form = fb.group(
+      {
+        userID: ['', Validators.required],
+        currentPassword: ['', Validators.required],
+        newPassword: ['', Validators.required],
+        confirmNewPassword: ['', Validators.required],
       },
       {
-         validators: [Validate.matchOther(this.controls.newPassword, this.controls.confirmNewPassword)]
-      }
-    ));
+        validators: [Validate.matchOther('newPassword', 'confirmNewPassword')],
+      },
+    );
 
     this.setNewPasswordValidators();
   }
@@ -189,15 +157,44 @@ export class ChangePasswordModalComponent implements OnInit {
       validators.push(Validate.hasSpecialCharacters);
     }
 
-    this.formHandler.setControlValidators(this.controls.newPassword, validators);
+    this.formHelper.setControlValidators(this.form.controls.newPassword, validators);
   }
 
 
-  private getUpdateCredentialsFields(): UpdateCredentialsFields {
-    Assertion.assert(this.formHandler.form.valid,
+  private getNewPasswordErrorsList(): string[] {
+    let rules: string[] = [];
+
+    if (this.passwordRules.minlengthRequired &&
+      (this.form.controls.newPassword.errors.required || this.form.controls.newPassword.errors.minlength)) {
+      rules.push(`al menos ${this.passwordRules.minlength ?? 5} caracteres`);
+    }
+
+    if (this.passwordRules.upperRequired && this.form.controls.newPassword.errors.hasUpper) {
+      rules.push('mayúsculas');
+    }
+
+    if (this.passwordRules.lowerRequired && this.form.controls.newPassword.errors.hasLower) {
+      rules.push('minúsculas');
+    }
+
+    if (this.passwordRules.numberRequired && this.form.controls.newPassword.errors.hasNumber) {
+      rules.push('números');
+    }
+
+    if (this.passwordRules.specialCharactersRequired &&
+      this.form.controls.newPassword.errors.hasSpecialCharacters) {
+      rules.push('caracteres especiales');
+    }
+
+    return rules;
+  }
+
+
+  private getFormData(): UpdateCredentialsFields {
+    Assertion.assert(this.form.valid,
       'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: UpdateCredentialsFields = {
       userID: formModel.userID ?? '',

@@ -122,6 +122,20 @@ export interface FinancialConceptEntry {
 }
 
 
+export function mapToFinancialConceptDescriptor(concept: FinancialConcept): FinancialConceptDescriptor {
+  return {
+    uid: concept.uid,
+    code: concept.code,
+    name: concept.name,
+    variableID: concept.variableID,
+    position: concept.position,
+    level: concept.level,
+    accountsChartName: concept.accountsChart.name,
+    groupName: concept.group.name,
+  };
+}
+
+
 export enum OperatorType {
   Add = 'Add',
   Substract = 'Substract',

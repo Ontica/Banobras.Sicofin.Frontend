@@ -8,7 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
@@ -23,7 +23,7 @@ import { AccountChartStateSelector } from '@app/presentation/exported.presentati
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum SubledgerAccountHeaderEventType {
   CREATE_SUBLEDGER_ACCOUNT = 'SubledgerAccountHeaderComponent.Event.CreateSubledgerAccount',
@@ -32,14 +32,14 @@ export enum SubledgerAccountHeaderEventType {
   ACTIVE_SUBLEDGER_ACCOUNT = 'SubledgerAccountHeaderComponent.Event.ActiveSubledgerAccount',
 }
 
-enum SubledgerAccountHeaderFormControls {
-  accountsChart = 'accountsChart',
-  ledger = 'ledger',
-  subledgerType = 'subledgerType',
-  number = 'number',
-  name = 'name',
-  description = 'description',
-}
+interface SubledgerAccounFormModel extends FormGroup<{
+  accountsChart: FormControl<string>;
+  ledger: FormControl<string>;
+  subledgerType: FormControl<string>;
+  number: FormControl<string>;
+  name: FormControl<string>;
+  description: FormControl<string>;
+}> { }
 
 @Component({
   selector: 'emp-fa-subledger-account-header',
@@ -55,16 +55,22 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
   @Output() subledgerAccountHeaderEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
-  controls = SubledgerAccountHeaderFormControls;
+  form: SubledgerAccounFormModel;
+
+  formHelper = FormHelper;
+
   editionMode = false;
+
   isLoading = false;
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
+
   ledgerList: Ledger[] = [];
+
   subledgerAccountsTypeList: Identifiable[] = [];
 
   helper: SubscriptionHelper;
+
   eventType = SubledgerAccountHeaderEventType;
 
   permissions = PERMISSIONS;
@@ -78,7 +84,7 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.accountsChartUID) {
       this.setAccountsChartDefault();
     }
@@ -93,7 +99,7 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadAccountsCharts();
   }
 
@@ -108,43 +114,40 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
   }
 
 
-  enableEditor(enable) {
+  enableEditor(enable: boolean) {
     this.editionMode = enable;
 
     if (!this.editionMode) {
       this.setFormData();
     }
 
-    this.formHandler.disableForm(!this.editionMode);
+    this.formHelper.setDisableForm(this.form, !this.editionMode);
   }
 
 
   onAccountsChartChanges(accountsChart: AccountsChartMasterData) {
-    this.formHandler.getControl(this.controls.ledger).reset();
+    this.form.controls.ledger.reset();
     this.ledgerList = accountsChart.ledgers;
     this.onLedgerChanges(null);
   }
 
 
   onLedgerChanges(ledger: Ledger) {
-    this.formHandler.getControl(this.controls.subledgerType).reset();
+    this.form.controls.subledgerType.reset();
     this.subledgerAccountsTypeList = ledger?.subledgerAccountsTypes ?? [];
   }
 
 
   onSubmitForm() {
-    if (!this.formHandler.validateReadyForSubmit()) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      let eventType = SubledgerAccountHeaderEventType.CREATE_SUBLEDGER_ACCOUNT;
+
+      if (this.isSaved) {
+        eventType = SubledgerAccountHeaderEventType.UPDATE_SUBLEDGER_ACCOUNT;
+      }
+
+      sendEvent(this.subledgerAccountHeaderEvent, eventType, { subledgerAccount: this.getFormData() });
     }
-
-    let eventType = SubledgerAccountHeaderEventType.CREATE_SUBLEDGER_ACCOUNT;
-
-    if (this.isSaved) {
-      eventType = SubledgerAccountHeaderEventType.UPDATE_SUBLEDGER_ACCOUNT;
-    }
-
-    sendEvent(this.subledgerAccountHeaderEvent, eventType, {subledgerAccount: this.getFormData()});
   }
 
 
@@ -178,25 +181,21 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        accountsChart: new UntypedFormControl('', Validators.required),
-        ledger: new UntypedFormControl('', Validators.required),
-        subledgerType: new UntypedFormControl('', Validators.required),
-        number: new UntypedFormControl('', Validators.required),
-        name: new UntypedFormControl('', Validators.required),
-        description: new UntypedFormControl(''),
-      })
-    );
+    this.form = fb.group({
+      accountsChart: ['', Validators.required],
+      ledger: ['', Validators.required],
+      subledgerType: ['', Validators.required],
+      number: ['', Validators.required],
+      name: ['', Validators.required],
+      description: [''],
+    });
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({
+    this.form.reset({
       accountsChart: this.subledgerAccount.accountsChartUID,
       ledger: this.subledgerAccount.ledger.uid,
       subledgerType: this.subledgerAccount.type.uid,
@@ -216,16 +215,16 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
     accountsChartUID = !!this.accountsChartUID ? this.accountsChartUID : accountsChartUID;
 
-    this.formHandler.getControl(this.controls.accountsChart).reset(accountsChartUID);
-    this.formHandler.disableControl(this.controls.accountsChart, !!this.accountsChartUID);
+    this.form.controls.accountsChart.reset(accountsChartUID);
+    this.formHelper.setDisableControl(this.form.controls.accountsChart, !!this.accountsChartUID);
 
     this.setLedgerList(accountsChartUID);
   }
 
 
   private setLedgerDefault() {
-    this.formHandler.getControl(this.controls.ledger).reset(this.ledgerUID ?? null);
-    this.formHandler.disableControl(this.controls.ledger, !!this.ledgerUID);
+    this.form.controls.ledger.reset(this.ledgerUID ?? null);
+    this.formHelper.setDisableControl(this.form.controls.ledger, !!this.ledgerUID);
     this.setSubledgerAccountsTypeList(this.ledgerUID);
   }
 
@@ -246,10 +245,9 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
 
 
   private getFormData(): SubledgerAccountFields {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: SubledgerAccountFields = {
       ledgerUID: formModel.ledger ?? '',

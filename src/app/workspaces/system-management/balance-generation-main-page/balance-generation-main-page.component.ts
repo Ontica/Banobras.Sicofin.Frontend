@@ -11,7 +11,7 @@ import { Assertion, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
 
 import { BalancesStoreDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, EmptyStoredBalanceSet, StoredBalanceSet } from '@app/models';
+import { AccountsChartMasterData, BalanceStorageCommand, EmptyStoredBalanceSet, StoredBalanceSet } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -93,9 +93,12 @@ export class BalanceGenerationMainPageComponent {
         return;
 
       case StoredBalanceSetCreatorEventType.CREATE_STORED_BALANCE_SET:
-        Assertion.assertValue(event.payload.accountsChartUID, 'event.payload.accountsChartUID');
-        Assertion.assertValue(event.payload.storedBalanceSet, 'event.payload.storedBalanceSet');
-        this.createStoredBalancesSet(event.payload.accountsChartUID, event.payload.storedBalanceSet);
+        Assertion.assertValue(event.payload.command, 'event.payload.command');
+        Assertion.assertValue(event.payload.command.accountsChartUID, 'event.payload.command.accountsChartUID');
+        Assertion.assertValue(event.payload.command.balancesDate, 'event.payload.command.balancesDate');
+
+        this.createStoredBalancesSet(event.payload.command.accountsChartUID,
+                                     event.payload.command as BalanceStorageCommand);
         return;
 
       default:
@@ -119,10 +122,7 @@ export class BalanceGenerationMainPageComponent {
       case StoredBalanceSetTabbedViewEventType.CALCULATE_STORED_BALANCE_SET:
         Assertion.assertValue(event.payload.accountsChartUID, 'event.payload.accountsChartUID');
         Assertion.assertValue(event.payload.balanceSetUID, 'event.payload.balanceSetUID');
-        Assertion.assertValue(event.payload.storedBalanceSet, 'event.payload.storedBalanceSet');
-        this.calculateStoredBalancesSet(event.payload.accountsChartUID,
-                                        event.payload.balanceSetUID,
-                                        event.payload.storedBalanceSet);
+        this.calculateStoredBalancesSet(event.payload.accountsChartUID, event.payload.balanceSetUID);
         return;
 
       case StoredBalanceSetTabbedViewEventType.EXPORT_STORED_BALANCE_SET:
@@ -184,7 +184,7 @@ export class BalanceGenerationMainPageComponent {
   }
 
 
-  private createStoredBalancesSet(accountsChartUID: string, balanceSet: any) {
+  private createStoredBalancesSet(accountsChartUID: string, balanceSet: BalanceStorageCommand) {
     this.setSubmitted(true);
 
     this.balancesStoreData.createStoredBalancesSet(accountsChartUID, balanceSet)
@@ -201,10 +201,10 @@ export class BalanceGenerationMainPageComponent {
   }
 
 
-  private calculateStoredBalancesSet(accountsChartUID: string, balanceSetUID: string, balanceSet: any) {
+  private calculateStoredBalancesSet(accountsChartUID: string, balanceSetUID: string) {
     this.setSubmitted(true);
 
-    this.balancesStoreData.calculateStoredBalancesSet(accountsChartUID, balanceSetUID, balanceSet)
+    this.balancesStoreData.calculateStoredBalancesSet(accountsChartUID, balanceSetUID)
       .toPromise()
       .then(x => {
         this.setSelectedStoredBalanceSet(x);

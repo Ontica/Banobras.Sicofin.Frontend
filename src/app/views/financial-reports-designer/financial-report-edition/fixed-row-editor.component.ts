@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { of, Subject } from 'rxjs';
 
@@ -15,7 +15,7 @@ import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } f
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -34,19 +34,18 @@ export enum FixedRowEditorEventType {
   UPDATE_ROW          = 'FixedRowEditorComponent.Event.UpdateRow',
 }
 
-
-enum FixedRowEditorFormControls {
-  type = 'type',
-  group = 'group',
-  concept = 'concept',
-  label = 'label',
-  positioningRule = 'positioningRule',
-  positioningOffsetUID = 'positioningOffsetUID',
-  position = 'position',
-  format = 'format',
-  startDate = 'startDate',
-  endDate = 'endDate',
-}
+interface FixedRowFormModel extends FormGroup<{
+  type: FormControl<FinancialReportEditionItemType>;
+  group: FormControl<string>;
+  concept: FormControl<string>;
+  label: FormControl<string>;
+  positioningRule: FormControl<PositioningRule>;
+  positioningOffsetUID: FormControl<string>;
+  position: FormControl<number>;
+  format: FormControl<FormatType>;
+  startDate: FormControl<DateString>;
+  endDate: FormControl<DateString>;
+}> { }
 
 @Component({
   selector: 'emp-fa-fixed-row-editor',
@@ -68,9 +67,9 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
   helper: SubscriptionHelper;
 
-  formHandler: FormHandler;
+  form: FixedRowFormModel;
 
-  controls = FixedRowEditorFormControls;
+  formHelper = FormHelper;
 
   isLoading = false;
 
@@ -123,26 +122,23 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
 
   get isConceptType(): boolean {
-    return FinancialReportEditionItemType.Concept ===
-      this.formHandler.getControl(this.controls.type).value;
+    return FinancialReportEditionItemType.Concept === this.form.controls.type.value;
   }
 
 
   get isLabelType(): boolean {
-    return FinancialReportEditionItemType.Label ===
-      this.formHandler.getControl(this.controls.type).value;
+    return FinancialReportEditionItemType.Label === this.form.controls.type.value;
   }
 
 
   get displayPositioningOffset(): boolean {
     return [PositioningRule.AfterOffset, PositioningRule.BeforeOffset]
-      .includes(this.formHandler.getControl(this.controls.positioningRule).value);
+      .includes(this.form.controls.positioningRule.value);
   }
 
 
   get displayPosition(): boolean {
-    return PositioningRule.ByPositionValue ===
-      this.formHandler.getControl(this.controls.positioningRule).value;
+    return PositioningRule.ByPositionValue === this.form.controls.positioningRule.value;
   }
 
 
@@ -152,55 +148,48 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
 
   onTypeChanged() {
-    this.setControlConfig(this.controls.group, this.isConceptType);
-    this.setControlConfig(this.controls.concept, this.isConceptType);
-    this.setControlConfig(this.controls.label, this.isLabelType);
+    this.setControlConfig(this.form.controls.group, this.isConceptType);
+    this.setControlConfig(this.form.controls.concept, this.isConceptType);
+    this.setControlConfig(this.form.controls.label, this.isLabelType);
   }
 
 
   onPositioningRuleChanged() {
-    this.setControlConfig(this.controls.positioningOffsetUID, this.displayPositioningOffset);
-    this.setControlConfig(this.controls.position, this.displayPosition);
+    this.setControlConfig(this.form.controls.positioningOffsetUID, this.displayPositioningOffset);
+    this.setControlConfig(this.form.controls.position, this.displayPosition);
   }
 
 
   onSubmitDataClicked() {
-    if (!this.formHandler.isValid) {
-      this.formHandler.invalidateForm();
-      return;
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const eventType = this.isSaved ? FixedRowEditorEventType.UPDATE_ROW : FixedRowEditorEventType.INSERT_ROW;
+
+      const payload = {
+        financialReportTypeUID: this.financialReportConfig.reportType.uid,
+        rowUID: this.isSaved ? this.financialReportRow.uid : null,
+        command: this.getFinancialReportEditionCommand(),
+      };
+
+      sendEvent(this.fixedRowEditorEvent, eventType, payload);
     }
-
-    const eventType = this.isSaved ? FixedRowEditorEventType.UPDATE_ROW : FixedRowEditorEventType.INSERT_ROW;
-
-    const payload = {
-      financialReportTypeUID: this.financialReportConfig.reportType.uid,
-      rowUID: this.isSaved ? this.financialReportRow.uid : null,
-      command: this.getFinancialReportEditionCommand(),
-    };
-
-    sendEvent(this.fixedRowEditorEvent, eventType, payload);
   }
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        type: new UntypedFormControl(FinancialReportEditionItemType.Concept, Validators.required),
-        group: new UntypedFormControl('', Validators.required),
-        concept: new UntypedFormControl('', Validators.required),
-        label: new UntypedFormControl(''),
-        positioningRule: new UntypedFormControl(PositioningRule.ByPositionValue, Validators.required),
-        positioningOffsetUID: new UntypedFormControl(''),
-        position: new UntypedFormControl('', Validators.required),
-        format: new UntypedFormControl(FormatType.Default, Validators.required),
-        startDate: new UntypedFormControl(''), // ('', Validators.required)
-        endDate: new UntypedFormControl(''), // (DefaultEndDate, Validators.required)
-      })
-    );
+    this.form = fb.group({
+      type: [FinancialReportEditionItemType.Concept, Validators.required],
+      group: ['', Validators.required],
+      concept: ['', Validators.required],
+      label: [''],
+      positioningRule: [PositioningRule.ByPositionValue, Validators.required],
+      positioningOffsetUID: [''],
+      position: [null as number, Validators.required],
+      format: [FormatType.Default, Validators.required],
+      startDate: ['' as DateString], // ['', Validators.required],
+      endDate: ['' as DateString], // [DefaultEndDate, Validators.required],
+    });
 
     this.setDisableFields();
     this.onSuscribeGroupChanges();
@@ -208,13 +197,13 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
 
   private setDisableFields() {
-    this.formHandler.disableControl(this.controls.startDate);
-    this.formHandler.disableControl(this.controls.endDate);
+    this.formHelper.setDisableControl(this.form.controls.startDate);
+    this.formHelper.setDisableControl(this.form.controls.endDate);
   }
 
 
   private onSuscribeGroupChanges() {
-    this.formHandler.getControl(this.controls.group).valueChanges
+    this.form.controls.group.valueChanges
       .pipe(
         takeUntil(this.unsubscribeGroupUID),
         filter(groupUID => !!groupUID),
@@ -235,18 +224,18 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
 
   private resetConceptData() {
-    this.formHandler.getControl(this.controls.concept).reset();
+    this.form.controls.concept.reset();
     this.conceptList = [];
   }
 
 
   private setFormData() {
-    this.formHandler.form.reset({
+    this.form.reset({
       type: this.isEmptyConcept(this.financialReportRow.financialConceptUID) ?
         FinancialReportEditionItemType.Label : FinancialReportEditionItemType.Concept,
       positioningRule: PositioningRule.ByPositionValue,
-      position: this.financialReportRow.row || '',
-      format: this.financialReportRow.format || FormatType.Default,
+      position: this.financialReportRow.row || null,
+      format: this.financialReportRow.format as FormatType || FormatType.Default,
       startDate: this.financialReportRow.startDate || '',
       endDate: this.financialReportRow.endDate || '',
     });
@@ -254,7 +243,7 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
     this.setFieldsDataByType();
 
     this.onTypeChanged();
-    this.formHandler.disableControl(this.controls.type);
+    this.formHelper.setDisableControl(this.form.controls.type);
   }
 
 
@@ -265,20 +254,17 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
   private setFieldsDataByType() {
     if (this.isConceptType) {
-      this.formHandler.getControl(this.controls.group)
-        .reset(this.financialReportRow.financialConceptGroupUID);
-      this.formHandler.getControl(this.controls.concept)
-        .reset(this.financialReportRow.financialConceptUID);
+      this.form.controls.group.reset(this.financialReportRow.financialConceptGroupUID);
+      this.form.controls.concept.reset(this.financialReportRow.financialConceptUID);
     } else {
-      this.formHandler.getControl(this.controls.label)
-        .reset(this.financialReportRow.concept);
+      this.form.controls.label.reset(this.financialReportRow.concept);
     }
   }
 
 
   private setPosition() {
-    this.formHandler.getControl(this.controls.positioningRule).reset(PositioningRule.ByPositionValue);
-    this.formHandler.getControl(this.controls.position).reset(this.row);
+    this.form.controls.positioningRule.reset(PositioningRule.ByPositionValue);
+    this.form.controls.position.reset(this.row);
   }
 
 
@@ -314,10 +300,9 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
 
   private getFormData(): FinancialReportEditionFields {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     let data: FinancialReportEditionFields = {
       format: formModel.format ?? '',
@@ -333,7 +318,7 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
 
   private validateFieldsByType(data: FinancialReportEditionFields) {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     if (this.isConceptType) {
       data.financialConceptUID = formModel.concept ?? '';
@@ -346,10 +331,10 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
 
 
   private validatePositionsFields(data: FinancialReportEditionFields) {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const positioning: Positioning = {
-      rule: formModel.positioningRule ?? '',
+      rule: formModel.positioningRule ?? null,
     }
 
     if (this.displayPositioningOffset) {
@@ -374,15 +359,15 @@ export class FixedRowEditorComponent implements OnChanges, OnDestroy {
         [PositioningRule.AtStart, PositioningRule.ByPositionValue].includes(x.uid as PositioningRule));
     }
 
-    this.formHandler.getControl(this.controls.positioningRule).reset(PositioningRule.ByPositionValue);
+    this.form.controls.positioningRule.reset(PositioningRule.ByPositionValue);
   }
 
 
-  private setControlConfig(control: FixedRowEditorFormControls, required: boolean) {
+  private setControlConfig(control: FormControl<any>, required: boolean) {
       if (required) {
-      this.formHandler.setControlValidators(control, Validators.required);
+      this.formHelper.setControlValidators(control, Validators.required);
     } else {
-      this.formHandler.clearControlValidators(control);
+        this.formHelper.clearControlValidators(control);
     }
   }
 

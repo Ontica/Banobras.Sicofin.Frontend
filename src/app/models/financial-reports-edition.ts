@@ -231,6 +231,9 @@ export interface FinancialReportEditionFields {
   column?: string;
   row?: number;
   dataField?: string;
+  columnName?: string;
+  isHideColumn?: boolean;
+  formula?: string;
   positioning?: Positioning;
   format?: string;
   startDate?: DateString;

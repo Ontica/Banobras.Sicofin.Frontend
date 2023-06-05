@@ -55,6 +55,7 @@ export class VoucherCreatorComponent {
 
   submitted = false;
 
+
   constructor(private vouchersData: VouchersDataService) {}
 
 
@@ -73,7 +74,7 @@ export class VoucherCreatorComponent {
   }
 
 
-  get readyForSubmit() {
+  get readyForSubmit(): boolean {
     if (this.isSpecialCase && !this.voucherSpecialCaseFieldsValid) {
       return false;
     }
@@ -118,7 +119,7 @@ export class VoucherCreatorComponent {
   }
 
 
-  onVoucherHeaderEvent(event: EventInfo): void {
+  onVoucherHeaderEvent(event: EventInfo) {
     switch (event.type as VoucherHeaderEventType) {
 
       case VoucherHeaderEventType.FIELDS_CHANGED:
@@ -144,7 +145,7 @@ export class VoucherCreatorComponent {
   }
 
 
-  onVoucherSpecialCaseEditorEvent(event: EventInfo): void {
+  onVoucherSpecialCaseEditorEvent(event: EventInfo) {
     switch (event.type as VoucherSpecialCaseEditorEventType) {
 
       case VoucherSpecialCaseEditorEventType.FIELDS_CHANGED:
@@ -165,6 +166,7 @@ export class VoucherCreatorComponent {
 
   private invalidateForms() {
     this.voucherHeader.invalidateForm();
+
     if (this.isSpecialCase) {
       this.voucherSpecialCaseEditor.invalidateForm();
     }

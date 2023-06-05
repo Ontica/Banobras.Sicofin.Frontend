@@ -7,7 +7,7 @@
 
     <div class="card-body-padding">
 
-      <form [formGroup]="formHandler.form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+      <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
         <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
 
@@ -15,7 +15,7 @@
 
             <div fxFlex="100">
               <label>Tipo de columna:</label>
-              <mat-radio-group [formControlName]="controls.type"
+              <mat-radio-group formControlName="type"
                 (change)="onTypeChanged()">
                 <mat-radio-button *ngFor="let type of fixedColumnTypeList" [value]="type.uid"
                   [fxFlex]="100/3" [style.marginLeft]="0">
@@ -33,30 +33,30 @@
             <div [fxFlex]="50">
               <label>Nombre:</label>
               <input type="text" class="text-box"
-                [formControlName]="controls.name"
-                [class.invalid-control]="formHandler.showInvalidControl(controls.name)">
+                formControlName="name"
+                [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
             </div>
 
             <div fxFlex="none">
               <label>Fecha inicial:</label>
               <emp-ng-datepicker
-                [formControlName]="controls.startDate"
-                [showError]="formHandler.showInvalidControl(controls.startDate)">
+                formControlName="startDate"
+                [showError]="formHelper.isControlInvalid(form.controls.startDate)">
               </emp-ng-datepicker>
             </div>
 
             <div fxFlex="none">
               <label>Fecha final:</label>
               <emp-ng-datepicker
-                [formControlName]="controls.endDate"
-                [showError]="formHandler.showInvalidControl(controls.endDate)">
+                formControlName="endDate"
+                [showError]="formHelper.isControlInvalid(form.controls.endDate)">
               </emp-ng-datepicker>
             </div>
 
             <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
 
               <mat-checkbox name="isHide"
-                [formControlName]="controls.isHide"
+                formControlName="isHide"
                 (click)="$event.stopPropagation">
                 Ocultar columna
               </mat-checkbox>
@@ -73,8 +73,8 @@
               <div [fxFlex]="100">
                 <label>Fórmula:</label>
                 <input type="text" class="text-box"
-                  [formControlName]="controls.formula"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.formula)">
+                  formControlName="formula"
+                  [class.invalid-control]="formHelper.isControlInvalid(form.controls.formula)">
               </div>
 
             </div>
@@ -89,20 +89,20 @@
               <div [fxFlex]="100/3">
                 <label>Posición:</label>
                 <emp-ng-select
-                  [formControlName]="controls.positioningRule"
+                  formControlName="positioningRule"
                   [items]="positioningRuleList"
-                  [showError]="formHandler.showInvalidControl(controls.positioningRule)"
+                  [showError]="formHelper.isControlInvalid(form.controls.positioningRule)"
                   (changes)="onPositioningRuleChanged()">
                 </emp-ng-select>
               </div>
 
               <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffset">
                 <emp-ng-select [fxFlex]="100"
-                  [formControlName]="controls.positioningOffsetUID"
+                  formControlName="positioningOffsetUID"
                   bindValue="column"
                   [items]="financialReportColumnsList"
                   [config]="{searchableFields: ['column', 'title']}"
-                  [showError]="formHandler.showInvalidControl(controls.positioningOffsetUID)">
+                  [showError]="formHelper.isControlInvalid(form.controls.positioningOffsetUID)">
                   <ng-template #labelTemplate let-item="item">
                     ({{item.column}}) {{item.title}}
                   </ng-template>
@@ -115,8 +115,8 @@
               <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
 
                 <input type="text" class="text-box text-align-right"
-                  [formControlName]="controls.position"
-                  [class.invalid-control]="formHandler.showInvalidControl(controls.position)">
+                  formControlName="position"
+                  [class.invalid-control]="formHelper.isControlInvalid(form.controls.position)">
 
               </div>
 
@@ -134,8 +134,8 @@
               <div fxFlex fxLayoutAlign="end center">
 
                 <button
-                  [class.btn]="!formHandler.isValid"
-                  [class.btn-action]="formHandler.isValid"
+                  [class.btn]="!formHelper.isFormReady(form)"
+                  [class.btn-action]="formHelper.isFormReady(form)"
                   (click)="onSubmitDataClicked()">
                   {{isSaved ? 'Guardar' : 'Agregar'}}
                 </button>

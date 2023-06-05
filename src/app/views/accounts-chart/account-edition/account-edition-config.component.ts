@@ -9,25 +9,23 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { SelectionModel } from '@angular/cdk/collections';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { Account, AccountDataToBeUpdated, AccountDataToBeUpdatedList, AccountRole, EmptyAccount,
          getAccountMainRole } from '@app/models';
-
 
 export enum AccountEditionConfigEventType {
   FORM_CHANGED = 'AccountEditionConfigComponent.Event.FormChanged',
 }
 
-enum AccountEditionConfigFormControls {
-  applicationDate = 'applicationDate',
-  dataToUpdate = 'dataToUpdate',
-}
-
+interface AccountEditionConfigFormModel extends FormGroup<{
+  applicationDate: FormControl<DateString>;
+  dataToUpdate: FormControl<Identifiable[]>;
+}> { }
 
 @Component({
   selector: 'emp-fa-account-edition-config',
@@ -39,9 +37,9 @@ export class AccountEditionConfigComponent implements OnInit {
 
   @Output() accountEditionConfigEvent = new EventEmitter<EventInfo>();
 
-  controls = AccountEditionConfigFormControls;
+  form: AccountEditionConfigFormModel;
 
-  formHandler: FormHandler;
+  formHelper = FormHelper;
 
   accountDataToUpdateList: Identifiable[] = AccountDataToBeUpdatedList;
 
@@ -50,6 +48,7 @@ export class AccountEditionConfigComponent implements OnInit {
   minDate: DateString = null;
 
   maxDate: DateString = null;
+
 
   constructor() {
     this.initForm();
@@ -62,8 +61,13 @@ export class AccountEditionConfigComponent implements OnInit {
   }
 
 
+  get isFormValid(): boolean {
+    return this.formHelper.isFormReady(this.form);
+  }
+
+
   invalidateForm() {
-    this.formHandler.invalidateForm();
+    this.formHelper.markFormControlsAsTouched(this.form);
   }
 
 
@@ -80,12 +84,12 @@ export class AccountEditionConfigComponent implements OnInit {
 
 
   private initForm() {
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        applicationDate: new UntypedFormControl('', Validators.required),
-        dataToUpdate: new UntypedFormControl([], [Validators.required, Validators.minLength(1)]),
-      })
-    );
+    const fb = new FormBuilder();
+
+    this.form = fb.group({
+      applicationDate: ['' as DateString, Validators.required],
+      dataToUpdate: [[] as Identifiable[], [Validators.required, Validators.minLength(1)]],
+    });
   }
 
 
@@ -96,7 +100,7 @@ export class AccountEditionConfigComponent implements OnInit {
 
 
   private setFormSelection() {
-    this.formHandler.getControl(this.controls.dataToUpdate).reset(this.selection.selected);
+    this.form.controls.dataToUpdate.reset(this.selection.selected);
   }
 
 
@@ -123,7 +127,7 @@ export class AccountEditionConfigComponent implements OnInit {
 
   private emitChanges() {
     const payload = {
-      applicationDate: this.formHandler.getControl(this.controls.applicationDate).value,
+      applicationDate: this.form.controls.applicationDate.value,
       dataToUpdate: this.selection.selected.map(x => x.uid),
     };
 

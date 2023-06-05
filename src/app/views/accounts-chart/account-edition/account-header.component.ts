@@ -7,36 +7,35 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { DateStringLibrary, EventInfo, isEmpty, Validate } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo, isEmpty, Validate } from '@app/core';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { Account, AccountDataToBeUpdated, AccountEditionCommandType, AccountFields, AccountRole,
-         AccountRoleList, AccountsChartMasterData, DebtorCreditorTypesList, EmptyAccount, getAccountRole,
-         getAccountMainRole } from '@app/models';
+         AccountRoleList, AccountsChartMasterData, DebtorCreditorType, DebtorCreditorTypesList, EmptyAccount,
+         getAccountRole, getAccountMainRole } from '@app/models';
 
 
 export enum AccountHeaderEventType {
   FORM_CHANGED = 'AccountHeaderComponent.Event.FormChanged',
 }
 
-enum AccountHeaderFormControls {
-  accountsChartUID = 'accountsChartUID',
-  startDate = 'startDate',
-  applicationDate = 'applicationDate',
-  accountNumber = 'accountNumber',
-  name = 'name',
-  description = 'description',
-  role = 'role',
-  mainRole = 'mainRole',
-  accountTypeUID = 'accountTypeUID',
-  debtorCreditor = 'debtorCreditor',
-  usesSubledger = 'usesSubledger',
-  usesSector = 'usesSector',
-}
-
+interface AccountFormModel extends FormGroup<{
+  accountsChartUID: FormControl<string>;
+  startDate: FormControl<DateString>;
+  applicationDate: FormControl<DateString>;
+  accountNumber: FormControl<string>;
+  name: FormControl<string>;
+  description: FormControl<string>;
+  role: FormControl<AccountRole>;
+  mainRole: FormControl<AccountRole>;
+  accountTypeUID: FormControl<string>;
+  debtorCreditor: FormControl<DebtorCreditorType>;
+  usesSubledger: FormControl<boolean>;
+  usesSector: FormControl<boolean>;
+}> { }
 
 @Component({
   selector: 'emp-fa-account-header',
@@ -56,9 +55,9 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
   @Output() accountHeaderEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  form: AccountFormModel;
 
-  controls = AccountHeaderFormControls;
+  formHelper = FormHelper;
 
   accountRoleList: AccountRole[] = AccountRoleList;
 
@@ -79,6 +78,11 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     setTimeout(() => this.enableEditor());
+  }
+
+
+  get isFormValid(): boolean {
+    return this.formHelper.isFormReady(this.form);
   }
 
 
@@ -107,18 +111,19 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
     return this.dataToUpdate.includes(AccountDataToBeUpdated.DebtorCreditor);
   }
 
+
   get canEditSubledgerRole(): boolean {
     return this.dataToUpdate.includes(AccountDataToBeUpdated.SubledgerRole);
   }
 
 
   get roleName(): string {
-    return this.formHandler.getControl(this.controls.mainRole).value ?? '';
+    return this.form.controls.mainRole.value ?? '';
   }
 
 
   onAccountChartChanges() {
-    this.formHandler.getControl(this.controls.accountTypeUID).reset('');
+    this.form.controls.accountTypeUID.reset('');
   }
 
 
@@ -135,28 +140,27 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
 
   invalidateForm() {
-    this.formHandler.invalidateForm();
+    this.formHelper.markFormControlsAsTouched(this.form);
   }
 
 
   private initForm() {
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        accountsChartUID: new UntypedFormControl('', Validators.required),
-        startDate: new UntypedFormControl(''),
-        applicationDate: new UntypedFormControl('', Validators.required),
-        accountNumber: new UntypedFormControl('', Validators.required),
-        name: new UntypedFormControl('', Validators.required),
-        description: new UntypedFormControl(''),
-        role: new UntypedFormControl('', Validators.required),
-        mainRole: new UntypedFormControl('', Validators.required),
-        accountTypeUID: new UntypedFormControl('', Validators.required),
-        debtorCreditor: new UntypedFormControl('', Validators.required),
-        usesSubledger: new UntypedFormControl(false),
-        usesSector: new UntypedFormControl(false),
-      })
-    );
+    const fb = new FormBuilder();
 
+    this.form = fb.group({
+      accountsChartUID: ['', Validators.required],
+      startDate: ['' as DateString],
+      applicationDate: ['' as DateString, Validators.required],
+      accountNumber: ['', Validators.required],
+      name: ['', Validators.required],
+      description: [''],
+      role: [null as AccountRole, Validators.required],
+      mainRole: [null as AccountRole, Validators.required],
+      accountTypeUID: ['', Validators.required],
+      debtorCreditor: [null as DebtorCreditorType, Validators.required],
+      usesSubledger: [false],
+      usesSector: [false],
+    });
   }
 
 
@@ -175,7 +179,7 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
 
   private setDefaultFields() {
-    this.formHandler.form.reset({
+    this.form.reset({
       accountsChartUID: this.selectedAccountChart?.uid ?? '',
       applicationDate: DateStringLibrary.today(),
     });
@@ -185,7 +189,7 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
   private setFormData() {
     const isRoleSumaria = this.account.role === AccountRole.Sumaria;
 
-    this.formHandler.form.reset({
+    this.form.reset({
       accountsChartUID: this.selectedAccountChart?.uid ?? '',
       startDate: DateStringLibrary.format(this.account.startDate),
       applicationDate: this.commandType === AccountEditionCommandType.FixAccountName ?
@@ -204,70 +208,70 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
 
   private validateFieldsValidators() {
-    this.formHandler.clearControlValidators(this.controls.applicationDate);
-    this.formHandler.clearControlValidators(this.controls.name);
-    this.formHandler.clearControlValidators(this.controls.mainRole);
-    this.formHandler.clearControlValidators(this.controls.role);
-    this.formHandler.clearControlValidators(this.controls.usesSector);
-    this.formHandler.clearControlValidators(this.controls.usesSubledger);
-    this.formHandler.clearControlValidators(this.controls.accountTypeUID);
-    this.formHandler.clearControlValidators(this.controls.debtorCreditor);
+    this.formHelper.clearControlValidators(this.form.controls.applicationDate);
+    this.formHelper.clearControlValidators(this.form.controls.name);
+    this.formHelper.clearControlValidators(this.form.controls.mainRole);
+    this.formHelper.clearControlValidators(this.form.controls.role);
+    this.formHelper.clearControlValidators(this.form.controls.usesSector);
+    this.formHelper.clearControlValidators(this.form.controls.usesSubledger);
+    this.formHelper.clearControlValidators(this.form.controls.accountTypeUID);
+    this.formHelper.clearControlValidators(this.form.controls.debtorCreditor);
 
     if (this.canEditName) {
-      this.formHandler.setControlValidators(this.controls.name,
+      this.formHelper.setControlValidators(this.form.controls.name,
         [Validators.required, Validate.changeRequired(this.account.name)]);
     }
 
     if (this.canEditRole) {
       const initMainRole =
         getAccountMainRole(this.account.role, this.account.usesSector, this.account.usesSubledger);
-      this.formHandler.setControlValidators(this.controls.role, [Validators.required]);
-      this.formHandler.setControlValidators(this.controls.mainRole,
+      this.formHelper.setControlValidators(this.form.controls.role, [Validators.required]);
+      this.formHelper.setControlValidators(this.form.controls.mainRole,
         [Validators.required, Validate.changeRequired(initMainRole)]);
     }
 
     if (this.canEditType) {
-      this.formHandler.setControlValidators(this.controls.accountTypeUID,
+      this.formHelper.setControlValidators(this.form.controls.accountTypeUID,
         [Validators.required, Validate.changeRequired(this.account.type.uid)]);
     }
 
     if (this.canEditDebtorCreditor) {
-      this.formHandler.setControlValidators(this.controls.debtorCreditor,
+      this.formHelper.setControlValidators(this.form.controls.debtorCreditor,
         [Validators.required, Validate.changeRequired(this.account.debtorCreditor)]);
     }
 
     if (this.canEditSubledgerRole) {
-      this.formHandler.setControlValidators(this.controls.usesSubledger,
+      this.formHelper.setControlValidators(this.form.controls.usesSubledger,
         [Validators.required, Validate.changeRequired(this.account.usesSubledger)]);
     }
   }
 
 
   private validateDisabledFields() {
-    this.formHandler.disableForm();
+    this.form.disable();
 
     if (this.canEditName) {
-      this.formHandler.getControl(this.controls.name).enable();
-      this.formHandler.getControl(this.controls.description).enable();
+      this.form.controls.name.enable();
+      this.form.controls.description.enable();
     }
 
     if (this.canEditRole) {
-      this.formHandler.getControl(this.controls.role).enable();
-      this.formHandler.getControl(this.controls.mainRole).enable();
+      this.form.controls.role.enable();
+      this.form.controls.mainRole.enable();
 
       this.validateDisableSectorsAndSubledgers();
     }
 
     if (this.canEditType) {
-      this.formHandler.getControl(this.controls.accountTypeUID).enable();
+      this.form.controls.accountTypeUID.enable();
     }
 
     if (this.canEditDebtorCreditor) {
-      this.formHandler.getControl(this.controls.debtorCreditor).enable();
+      this.form.controls.debtorCreditor.enable();
     }
 
     if (this.canEditSubledgerRole) {
-      this.formHandler.getControl(this.controls.usesSubledger).enable();
+      this.form.controls.usesSubledger.enable();
     }
   }
 
@@ -276,49 +280,49 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
     const useAccountData = this.isSaved && role !== AccountRole.Sumaria &&
       this.account.role !== AccountRole.Sumaria;
 
-    this.formHandler.getControl(this.controls.usesSector)
+    this.form.controls.usesSector
       .reset(useAccountData ? this.account.usesSector : false);
 
-    this.formHandler.getControl(this.controls.usesSubledger)
+    this.form.controls.usesSubledger
       .reset(useAccountData ? this.account.usesSubledger : false);
   }
 
 
   private validateDisableSectorsAndSubledgers() {
-    const role = this.formHandler.getControl(this.controls.role).value;
+    const role = this.form.controls.role.value;
     const showSectorsAndSubledgersChecks = !!role && role !== AccountRole.Sumaria;
 
-    this.formHandler.disableControl(this.controls.usesSector, !showSectorsAndSubledgersChecks);
-    this.formHandler.disableControl(this.controls.usesSubledger, !showSectorsAndSubledgersChecks);
+    this.formHelper.setDisableControl(this.form.controls.usesSector, !showSectorsAndSubledgersChecks);
+    this.formHelper.setDisableControl(this.form.controls.usesSubledger, !showSectorsAndSubledgersChecks);
   }
 
 
   private suscribeToFormChangesForEmit() {
-    this.formHandler.form.valueChanges.subscribe(x => this.emitChanges());
+    this.form.valueChanges.subscribe(x => this.emitChanges());
   }
 
 
   private setMainRole() {
-    const role = this.formHandler.getControl(this.controls.role).value;
-    let mainRole = '';
+    const role = this.form.controls.role.value;
+    let mainRole: AccountRole = null;
 
     if (!!role) {
-      const usesSector = this.formHandler.getControl(this.controls.usesSector).value;
-      const usesSubledger = this.formHandler.getControl(this.controls.usesSubledger).value;
+      const usesSector = this.form.controls.usesSector.value;
+      const usesSubledger = this.form.controls.usesSubledger.value;
 
       mainRole = getAccountMainRole(role, usesSector, usesSubledger);
     }
-    this.formHandler.getControl(this.controls.mainRole).setValue(mainRole);
+    this.form.controls.mainRole.setValue(mainRole);
   }
 
 
   private emitChanges() {
     const payload = {
       accountFields: this.getFormData(),
-      accountChartUID: this.formHandler.getControl(this.controls.accountsChartUID).value,
-      applicationDate: this.formHandler.getControl(this.controls.applicationDate).value,
-      usesSector: this.formHandler.getControl(this.controls.usesSector).value,
-      usesSubledger: this.formHandler.getControl(this.controls.usesSubledger).value,
+      accountChartUID: this.form.controls.accountsChartUID.value,
+      applicationDate: this.form.controls.applicationDate.value,
+      usesSector: this.form.controls.usesSector.value,
+      usesSubledger: this.form.controls.usesSubledger.value,
     };
 
     sendEvent(this.accountHeaderEvent, AccountHeaderEventType.FORM_CHANGED, payload);
@@ -326,7 +330,7 @@ export class AccountHeaderComponent implements OnInit, OnChanges {
 
 
   private getFormData(): AccountFields {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: AccountFields = {
       accountNumber: formModel.accountNumber ?? '',

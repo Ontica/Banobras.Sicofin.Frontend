@@ -7,7 +7,7 @@
 
     <div class="card-body-padding">
 
-      <form [formGroup]="formHandler.form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+      <form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
         autocomplete="off" class="form-section">
 
         <emp-ng-spinner #spinner [visible]="isLoading">
@@ -42,18 +42,18 @@
               <label>Tipo de contabilidad:</label>
               <emp-ng-select
                 [config]="{selectFirst: true}"
-                [formControlName]="controls.accountsChartUID"
+                formControlName="accountsChartUID"
                 [items]="accountsChartMasterDataList"
                 [loading]="isLoadingAccountChart"
-                [showError]="formHandler.showInvalidControl(controls.accountsChartUID)">
+                [showError]="formHelper.isControlInvalid(form.controls.accountsChartUID)">
               </emp-ng-select>
             </div>
 
             <div fxFlex="none" fxFlex.lt-md="none">
               <label>Fecha de aplicación:</label>
               <emp-ng-datepicker
-                [formControlName]="controls.applicationDate"
-                [showError]="formHandler.showInvalidControl(controls.applicationDate)">
+                formControlName="applicationDate"
+                [showError]="formHelper.isControlInvalid(form.controls.applicationDate)">
 
               </emp-ng-datepicker>
             </div>

@@ -7,22 +7,22 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { EventInfo } from '@app/core';
 
 import { VoucherSpecialCaseType } from '@app/models';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum VoucherSpecialCaseEditorEventType {
   FIELDS_CHANGED = 'VoucherSpecialCaseEditorComponent.Event.FieldsChanged',
 }
 
-enum VoucherSpecialCaseEditorFormControls {
-  calculationDate = 'calculationDate',
-  onVoucherNumber = 'onVoucherNumber',
-}
+interface VoucherSpecialCaseFormModel extends FormGroup<{
+  calculationDate: FormControl<string>;
+  onVoucherNumber: FormControl<string>;
+}> { }
 
 @Component({
   selector: 'emp-fa-voucher-special-case-editor',
@@ -34,9 +34,9 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
 
   @Output() voucherSpecialCaseEditorEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  form: VoucherSpecialCaseFormModel;
 
-  controls = VoucherSpecialCaseEditorFormControls;
+  formHelper = FormHelper;
 
   constructor() {
     this.initForm();
@@ -44,50 +44,46 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
 
 
   ngOnChanges() {
-    this.formHandler.form.reset();
+    this.form.reset();
     this.validateRequiredFormFields();
   }
 
 
   invalidateForm() {
-    this.formHandler.invalidateForm();
+    this.formHelper.markFormControlsAsTouched(this.form);
   }
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        calculationDate: new UntypedFormControl('', Validators.required),
-        onVoucherNumber: new UntypedFormControl('', Validators.required),
-      })
-    );
+    this.form = fb.group({
+      calculationDate: ['', Validators.required],
+      onVoucherNumber: ['', Validators.required],
+    });
 
-    this.formHandler.form.valueChanges.subscribe(v => this.emitChanges());
+    this.form.valueChanges.subscribe(v => this.emitChanges());
   }
 
 
   private validateRequiredFormFields() {
     if (this.voucherSpecialCaseType?.askForCalculationDateField) {
-      this.formHandler.setControlValidators(this.controls.calculationDate, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.calculationDate, Validators.required);
     } else {
-      this.formHandler.clearControlValidators(this.controls.calculationDate);
+      this.formHelper.clearControlValidators(this.form.controls.calculationDate);
     }
 
     if (this.voucherSpecialCaseType?.askForVoucherNumberField) {
-      this.formHandler.setControlValidators(this.controls.onVoucherNumber, Validators.required);
+      this.formHelper.setControlValidators(this.form.controls.onVoucherNumber, Validators.required);
     } else {
-      this.formHandler.clearControlValidators(this.controls.onVoucherNumber);
+      this.formHelper.clearControlValidators(this.form.controls.onVoucherNumber);
     }
   }
 
 
   private emitChanges() {
     const payload = {
-      isFormValid: this.formHandler.form.valid,
+      isFormValid: this.form.valid,
       voucherSpecialCase: this.getFormData(),
     };
 
@@ -99,7 +95,7 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
 
 
   private getFormData() {
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data = {
       calculationDate: formModel.calculationDate ?? null,

@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { AbstractControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { FormatLibrary } from '@app/shared/utils';
 
@@ -58,6 +58,15 @@ export class Validate {
     }
     if (typeof control.value === 'number' && control.value <= 0 ) {
       return { isPositive: true };
+    }
+    return null;
+  }
+
+
+  static fractionValue(control: AbstractControl): ValidationErrors | null {
+    const fractionRegex: RegExp = /[1-9][0-9]*\/[1-9][0-9]*/g;
+    if (!fractionRegex.test(control.value)) {
+      return { fractionValue: true };
     }
     return null;
   }
@@ -135,7 +144,7 @@ export class Validate {
 
 
   static matchOther(controlName: string, matchingControlName: string): ValidatorFn {
-    return (formGroup: UntypedFormGroup) => {
+    return (formGroup: FormGroup<any>) => {
       const control = formGroup.get(controlName);
       const matchingControl = formGroup.get(matchingControlName);
 
@@ -161,7 +170,7 @@ export class Validate {
   }
 
 
-  static hasUpper(control: AbstractControl): ValidationErrors | null  {
+  static hasUpper(control: AbstractControl): ValidationErrors | null {
     const hasUpper = /[A-Z]/.test(control.value);
     if (!hasUpper) {
       return { hasUpper: true };

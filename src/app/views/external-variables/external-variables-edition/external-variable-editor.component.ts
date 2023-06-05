@@ -7,13 +7,13 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Assertion, EventInfo, isEmpty, Validate } from '@app/core';
 
-import { EmptyExternalVariable, ExternalVariable, ExternalVariableFields } from '@app/models';
+import { DateRange, EmptyExternalVariable, ExternalVariable, ExternalVariableFields } from '@app/models';
 
-import { FormHandler, sendEvent } from '@app/shared/utils';
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum ExternalVariableEditorEventType {
   ADD_BUTTON_CLICKED    = 'ExternalVariableEditorComponent.Event.AddButtonClicked',
@@ -21,11 +21,11 @@ export enum ExternalVariableEditorEventType {
   UPDATE_BUTTON_CLICKED = 'ExternalVariableEditorComponent.Event.UpdateButtonClicked',
 }
 
-enum ExternalVariableEditorFormControls {
-  name = 'name',
-  code = 'code',
-  period = 'period',
-}
+interface ExternalVariableFormModel extends FormGroup<{
+  name: FormControl<string>;
+  code: FormControl<string>;
+  period: FormControl<DateRange>;
+}> { }
 
 @Component({
   selector: 'emp-fa-external-variable-editor',
@@ -41,9 +41,9 @@ export class ExternalVariableEditorComponent implements OnChanges {
 
   @Output() externalVariableEditorEvent = new EventEmitter<EventInfo>();
 
-  formHandler: FormHandler;
+  form: ExternalVariableFormModel;
 
-  controls = ExternalVariableEditorFormControls;
+  formHelper = FormHelper;
 
 
   constructor(){
@@ -51,7 +51,7 @@ export class ExternalVariableEditorComponent implements OnChanges {
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.canEdit) {
       this.validateCanEdit();
     }
@@ -68,25 +68,22 @@ export class ExternalVariableEditorComponent implements OnChanges {
 
 
   get isFormValid(): boolean {
-    return this.formHandler.isValid &&
-           !!this.formHandler.getControl(this.controls.period).value.fromDate &&
-           !!this.formHandler.getControl(this.controls.period).value.toDate;
+    return this.formHelper.isFormReady(this.form) &&
+           !!this.form.controls.period.value.fromDate &&
+           !!this.form.controls.period.value.toDate;
   }
 
 
   onAddExternalVariableClicked() {
-    if (!this.isFormValid) {
-      this.formHandler.invalidateForm();
-      return;
-    }
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const payload = {
+        externalVariablesSetUID: this.externalVariablesSetUID,
+        externalVariableFields: this.getFormData()
+      };
 
-    const payload = {
-      externalVariablesSetUID: this.externalVariablesSetUID,
-      externalVariableFields: this.getFormData()
+      sendEvent(this.externalVariableEditorEvent,
+        ExternalVariableEditorEventType.ADD_BUTTON_CLICKED, payload);
     }
-
-    sendEvent(this.externalVariableEditorEvent,
-      ExternalVariableEditorEventType.ADD_BUTTON_CLICKED, payload);
   }
 
 
@@ -97,58 +94,51 @@ export class ExternalVariableEditorComponent implements OnChanges {
 
 
   onUpdateExternalVariableClicked() {
-    if (!this.isFormValid) {
-      this.formHandler.invalidateForm();
-      return;
-    }
+    if (this.formHelper.isFormReadyAndInvalidate(this.form)) {
+      const payload = {
+        externalVariablesSetUID: this.externalVariablesSetUID,
+        externalVariableUID: this.externalVariable.uid,
+        externalVariableFields: this.getFormData()
+      }
 
-    const payload = {
-      externalVariablesSetUID: this.externalVariablesSetUID,
-      externalVariableUID: this.externalVariable.uid,
-      externalVariableFields: this.getFormData()
+      sendEvent(this.externalVariableEditorEvent,
+        ExternalVariableEditorEventType.UPDATE_BUTTON_CLICKED, payload);
     }
-
-    sendEvent(this.externalVariableEditorEvent,
-      ExternalVariableEditorEventType.UPDATE_BUTTON_CLICKED, payload);
   }
 
 
   resetFormData() {
-    this.formHandler.resetForm();
+    this.form.reset();
     this.validateCanEdit();
   }
 
 
   private validateCanEdit() {
     if (this.canEdit) {
-      this.formHandler.disableForm(false);
+      this.formHelper.setDisableForm(this.form, false);
     } else {
-      this.formHandler.resetForm();
-      this.formHandler.disableForm(true);
+      this.form.reset();
+      this.formHelper.setDisableForm(this.form, true);
     }
   }
 
 
   private initForm() {
-    if (this.formHandler) {
-      return;
-    }
+    const fb = new FormBuilder();
 
-    this.formHandler = new FormHandler(
-      new UntypedFormGroup({
-        code: new UntypedFormControl(null, Validators.required),
-        name: new UntypedFormControl('', Validators.required),
-        period: new UntypedFormControl(null, [Validators.required, Validate.periodRequired]),
-      })
-    );
+    this.form = fb.group({
+      code: [null as string, Validators.required],
+      name: ['', Validators.required],
+      period: [null as DateRange, [Validators.required, Validate.periodRequired]],
+    });
 
-    this.formHandler.disableForm(true);
+    this.form.disable()
   }
 
 
 
   private setFormData() {
-    this.formHandler.form.reset({
+    this.form.reset({
       code: this.externalVariable.code,
       name: this.externalVariable.name,
       period: {fromDate: this.externalVariable.startDate, toDate: this.externalVariable.endDate},
@@ -157,10 +147,9 @@ export class ExternalVariableEditorComponent implements OnChanges {
 
 
   private getFormData(): ExternalVariableFields {
-    Assertion.assert(this.formHandler.form.valid,
-      'Programming error: form must be validated before command execution.');
+    Assertion.assert(this.form.valid, 'Programming error: form must be validated before command execution.');
 
-    const formModel = this.formHandler.form.getRawValue();
+    const formModel = this.form.getRawValue();
 
     const data: ExternalVariableFields = {
       code: formModel.code ?? '',

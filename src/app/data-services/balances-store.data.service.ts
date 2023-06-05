@@ -11,8 +11,7 @@ import { Observable } from 'rxjs';
 
 import { Assertion, HttpService } from '@app/core';
 
-import { FileReport, StoredBalanceSet } from '@app/models';
-
+import { BalanceStorageCommand, FileReport, StoredBalanceSet } from '@app/models';
 
 @Injectable()
 export class BalancesStoreDataService {
@@ -38,27 +37,26 @@ export class BalancesStoreDataService {
   }
 
 
-  createStoredBalancesSet(accountsChartUID: string, balanceSet: any): Observable<StoredBalanceSet> {
+  createStoredBalancesSet(accountsChartUID: string,
+                          command: BalanceStorageCommand): Observable<StoredBalanceSet> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
-    Assertion.assertValue(balanceSet, 'balanceSet');
+    Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/balance-store`;
 
-    return this.http.post<StoredBalanceSet>(path, balanceSet);
+    return this.http.post<StoredBalanceSet>(path, command);
   }
 
 
   calculateStoredBalancesSet(accountsChartUID: string,
-                             balanceSetUID: string,
-                             balanceSet: any): Observable<StoredBalanceSet> {
+                             balanceSetUID: string): Observable<StoredBalanceSet> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(balanceSetUID, 'balanceSetUID');
-    Assertion.assertValue(balanceSet, 'balanceSet');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}` +
       `/balance-store/${balanceSetUID}/calculate`;
 
-    return this.http.post<StoredBalanceSet>(path, balanceSet);
+    return this.http.post<StoredBalanceSet>(path);
   }
 
 
