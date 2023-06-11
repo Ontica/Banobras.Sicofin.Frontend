@@ -43,7 +43,7 @@ export class FinancialConceptsTableComponent implements OnChanges {
 
   @Output() financialConceptsTableEvent = new EventEmitter<EventInfo>();
 
-  displayedColumns: string[] = ['code', 'name', 'variableID'];
+  displayedColumns: string[] = ['position', 'code', 'name', 'variableID'];
 
   dataSource: TableVirtualScrollDataSource<FinancialConceptDescriptor>;
 
