@@ -13,8 +13,6 @@ import { Injectable } from '@angular/core';
 })
 export class PrinterService {
 
-  constructor() { }
-
   printFile(url) {
     if (url !== null && url !== undefined && url !== '') {
       const proxyIframe = this.createProxyIframe();

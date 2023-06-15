@@ -46,8 +46,7 @@ export class NavigationMenuComponent implements OnChanges {
     if (!menuItem) {
       return;
     }
-    this.items.filter(x => x.selected)
-      .map(x => x.unselect());
+    this.items.filter(x => x.selected).forEach(x => x.unselect());
 
     menuItem.select();
   }
