@@ -50,7 +50,7 @@ export class Assertion {
     if (typeof object === 'undefined') {
       throw e;
     }
-    if (object === {}) {
+    if (typeof object === 'object' && Object.keys(object).length === 0) {
       throw e;
     }
     if (typeof object === 'string' && object === '') {

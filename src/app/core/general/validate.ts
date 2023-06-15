@@ -13,16 +13,19 @@ import { FormatLibrary } from '@app/shared/utils';
 export class Validate {
 
   static hasValue(object: any): boolean {
-    if (object === null) {
+    if (this.isNullValue(object)) {
       return false;
     }
-    if (typeof object === 'undefined') {
+    if (this.isUndefinedValue(object)) {
       return false;
     }
-    if (object === {}) {
+    if (this.isNaNValue(object)) {
       return false;
     }
-    if (typeof object === 'string' && object === '') {
+    if (this.isEmptyObject(object)) {
+      return false;
+    }
+    if (this.isEmptyString(object)) {
       return false;
     }
     return true;
@@ -45,7 +48,7 @@ export class Validate {
 
 
   static notNull(value: any): boolean {
-    if ((value === null) || (typeof value === 'undefined') || value === {}) {
+    if (this.isNullValue(value) || this.isUndefinedValue(value) || this.isEmptyObject(value)) {
       return false;
     }
     return true;
@@ -53,10 +56,10 @@ export class Validate {
 
 
   static isPositive(control: AbstractControl): ValidationErrors | null {
-    if (typeof control.value === 'string' && FormatLibrary.stringToNumber(control.value) <= 0 ) {
+    if (typeof control.value === 'string' && FormatLibrary.stringToNumber(control.value) <= 0) {
       return { isPositive: true };
     }
-    if (typeof control.value === 'number' && control.value <= 0 ) {
+    if (typeof control.value === 'number' && control.value <= 0) {
       return { isPositive: true };
     }
     return null;
@@ -74,7 +77,7 @@ export class Validate {
 
   static maxCurrencyValue(max: number): ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value && ( FormatLibrary.stringToNumber(control.value) > max )) {
+      if (control.value && (FormatLibrary.stringToNumber(control.value) > max)) {
         return { maxCurrencyValue: true };
       }
       return null;
@@ -84,7 +87,7 @@ export class Validate {
 
   static minCurrencyValue(min: number): ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (control.value && ( FormatLibrary.stringToNumber(control.value) < min )) {
+      if (control.value && (FormatLibrary.stringToNumber(control.value) < min)) {
         return { minCurrencyValue: true };
       }
       return null;
@@ -194,6 +197,31 @@ export class Validate {
       return { hasSpecialCharacters: true };
     }
     return null;
+  }
+
+
+  private static isNullValue(value: any) {
+    return value === null;
+  }
+
+
+  private static isUndefinedValue(value: any) {
+    return typeof value === 'undefined';
+  }
+
+
+  private static isEmptyObject(value: any) {
+    return typeof value === 'object' && Object.keys(value).length === 0;
+  }
+
+
+  private static isEmptyString(value: any) {
+    return typeof value === 'string' && value === '';
+  }
+
+
+  private static isNaNValue(value: any) {
+    return typeof value === 'number' && isNaN(value);
   }
 
 }
