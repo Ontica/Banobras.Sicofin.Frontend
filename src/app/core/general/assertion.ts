@@ -42,22 +42,51 @@ export class Assertion {
    *  @param failMessage The message to throw if the assertion fails.
    */
   static assertValue(object: any, failMessage: string): void {
-    const e = new Exception(`Value of '${failMessage}' can not be null, undefined or an empty object.`);
 
-    if (object === null) {
-      throw e;
+    if (this.isNullValue(object) || this.isUndefinedValue(object) || this.isNaNValue(object) ||
+        this.isEmptyString(object) || this.isEmptyObject(object)) {
+
+      throw new Exception(`Value of '${failMessage}' can not be null, undefined, NaN or an empty object.`);
+
     }
-    if (typeof object === 'undefined') {
-      throw e;
-    }
-    if (typeof object === 'object' && Object.keys(object).length === 0) {
-      throw e;
-    }
-    if (typeof object === 'string' && object === '') {
-      throw e;
-    }
+
   }
 
+
+  static isNullValue(value: any): boolean {
+    return value === null;
+  }
+
+
+  static isUndefinedValue(value: any): boolean {
+    return typeof value === 'undefined';
+  }
+
+
+  static isNaNValue(value: any): boolean {
+    return typeof value === 'number' && isNaN(value);
+  }
+
+
+  static isEmptyString(value: any): boolean {
+    return typeof value === 'string' && value === '';
+  }
+
+
+  static isEmptyObject(value: any): boolean {
+    return !this.isArray(value) && !this.isFile(value) &&
+      typeof value === 'object' && Object.keys(value).length === 0;
+  }
+
+
+  static isArray(value: any): boolean {
+    return Array.isArray(value);
+  }
+
+
+  static isFile(value: any): boolean {
+    return value instanceof File;
+  }
 
   // #endregion Static methods
 

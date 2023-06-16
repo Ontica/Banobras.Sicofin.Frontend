@@ -9,7 +9,7 @@ import { Validate } from './validate';
 
 const _ = Validate;
 
-describe('function hasValue()', () => {
+fdescribe('function hasValue()', () => {
 
   describe('should not have value', () => {
 
@@ -35,11 +35,6 @@ describe('function hasValue()', () => {
 
     it('empty string should be false', () => {
       const value = '';
-      expect(_.hasValue(value)).toBeFalse();
-    });
-
-    it('empty array should be false', () => {
-      const value = [];
       expect(_.hasValue(value)).toBeFalse();
     });
   });
@@ -83,6 +78,16 @@ describe('function hasValue()', () => {
 
     it('array with items should be true', () => {
       const value = [1, 2, 3];
+      expect(_.hasValue(value)).toBeTrue();
+    });
+
+    it('empty array should be true', () => {
+      const value = [];
+      expect(_.hasValue(value)).toBeTrue();
+    });
+
+    it('file should be true', () => {
+      const value = new File(["foo"], "foo.txt", { type: "text/plain" });
       expect(_.hasValue(value)).toBeTrue();
     });
   });

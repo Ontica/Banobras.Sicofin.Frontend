@@ -9,23 +9,25 @@ import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angu
 
 import { FormatLibrary } from '@app/shared/utils';
 
+import { Assertion } from './assertion';
+
 
 export class Validate {
 
   static hasValue(object: any): boolean {
-    if (this.isNullValue(object)) {
+    if (Assertion.isNullValue(object)) {
       return false;
     }
-    if (this.isUndefinedValue(object)) {
+    if (Assertion.isUndefinedValue(object)) {
       return false;
     }
-    if (this.isNaNValue(object)) {
+    if (Assertion.isNaNValue(object)) {
       return false;
     }
-    if (this.isEmptyObject(object)) {
+    if (Assertion.isEmptyString(object)) {
       return false;
     }
-    if (this.isEmptyString(object)) {
+    if (Assertion.isEmptyObject(object)) {
       return false;
     }
     return true;
@@ -48,7 +50,7 @@ export class Validate {
 
 
   static notNull(value: any): boolean {
-    if (this.isNullValue(value) || this.isUndefinedValue(value) || this.isEmptyObject(value)) {
+    if (Assertion.isNullValue(value) || Assertion.isUndefinedValue(value) || Assertion.isEmptyObject(value)) {
       return false;
     }
     return true;
@@ -197,31 +199,6 @@ export class Validate {
       return { hasSpecialCharacters: true };
     }
     return null;
-  }
-
-
-  private static isNullValue(value: any) {
-    return value === null;
-  }
-
-
-  private static isUndefinedValue(value: any) {
-    return typeof value === 'undefined';
-  }
-
-
-  private static isEmptyObject(value: any) {
-    return typeof value === 'object' && Object.keys(value).length === 0;
-  }
-
-
-  private static isEmptyString(value: any) {
-    return typeof value === 'string' && value === '';
-  }
-
-
-  private static isNaNValue(value: any) {
-    return typeof value === 'number' && isNaN(value);
   }
 
 }
