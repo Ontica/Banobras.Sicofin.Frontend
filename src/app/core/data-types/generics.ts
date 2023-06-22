@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 
 
 export function resolve<U>(value?: U): Promise<U> {
@@ -24,7 +24,7 @@ export function toObservable<U>(value: Observable<U>): Observable<U> {
 
 export function getFirstValueFrom<U>(value: Promise<U> | Observable<U>): Promise<U> {
   if (value instanceof Observable) {
-    return value.toPromise<U>();
+    return firstValueFrom<U>(value);
 
   } else if (value instanceof Promise) {
     return value as Promise<U>;
@@ -44,7 +44,7 @@ export class EmpObservable<T> extends Observable<T> {
   }
 
   firstValue<T>(this: Observable<T>): Promise<T> {
-    return this.toPromise();
+    return firstValueFrom<T>(this);
   }
 
 }

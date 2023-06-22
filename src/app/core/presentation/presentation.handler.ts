@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, firstValueFrom } from 'rxjs';
 
 import { Assertion } from '../general/assertion';
 
@@ -184,7 +184,7 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
     const stateItem = this.getStateMapItem(selector);
 
     if (value instanceof Observable) {
-      return value.toPromise<U>()
+      return firstValueFrom<U>(value)
         .then(x => {
           stateItem.next(x);
           return x;
