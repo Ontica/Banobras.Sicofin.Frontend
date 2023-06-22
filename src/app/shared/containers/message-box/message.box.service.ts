@@ -11,7 +11,7 @@ import { of } from 'rxjs';
 
 import { EmpObservable, Exception } from '@app/core';
 
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 
 import { MessageBoxComponent } from './message-box.component';
 

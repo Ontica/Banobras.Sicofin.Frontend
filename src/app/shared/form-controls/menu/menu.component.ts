@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { MenuPositionX, MenuPositionY } from '@angular/material/menu';
+import { LegacyMenuPositionX as MenuPositionX, LegacyMenuPositionY as MenuPositionY } from '@angular/material/legacy-menu';
 
 
 export interface MenuConfig {

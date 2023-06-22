@@ -7,7 +7,7 @@
 
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 
 import { ImportAccountsResult } from '@app/models';
 

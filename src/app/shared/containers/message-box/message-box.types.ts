@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 
 
 export type ConfirmMessageBoxType = 'Accept' | 'AcceptCancel' | 'DeleteCancel';

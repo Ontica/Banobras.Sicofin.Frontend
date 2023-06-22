@@ -8,7 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 
 import { EventInfo, isEmpty } from '@app/core';
 
