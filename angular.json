@@ -26,6 +26,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "quill",
+              "crypto-js",
+              "moment"
+            ],
             "outputPath": "dist/financial-accounting-intranet",
             "index": "src/index.html",
             "main": "src/main.ts",
