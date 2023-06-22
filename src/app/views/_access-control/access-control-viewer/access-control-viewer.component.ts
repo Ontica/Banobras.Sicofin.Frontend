@@ -212,7 +212,7 @@ export class AccessControlViewerComponent implements OnInit {
     this.isLoading = true;
 
     this.accessControlData.searchSubjects(query)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.subjectsList = x;
         this.setControlData(this.subjectsList.length);

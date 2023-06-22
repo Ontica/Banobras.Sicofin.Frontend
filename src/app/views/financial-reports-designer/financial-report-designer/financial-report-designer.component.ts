@@ -362,7 +362,7 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
     this.submitted = true;
 
     this.financialReportsEditionData.insertRow(financialReportTypeUID, command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.messageBox.show('Se agregó el renglón al reporte.', 'Agregar renglón');
         this.setAndEmitFixedRowDataUpdated(x);
@@ -377,7 +377,7 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
     this.submitted = true;
 
     this.financialReportsEditionData.updateRow(financialReportTypeUID, rowUID, command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.messageBox.show('Se actualizó el renglón del reporte.', 'Editar renglón');
         this.setAndEmitFixedRowDataUpdated(x);
@@ -391,7 +391,7 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
     this.submitted = true;
 
     this.financialReportsEditionData.deleteRow(financialReportTypeUID, rowUID)
-      .toPromise()
+      .firstValue()
       .then(() => {
         this.messageBox.show('Se eliminó el renglón del reporte.', 'Eliminar renglón');
         this.setAndEmitFixedRowDataUpdated(EmptyFinancialReportRow);
@@ -441,7 +441,7 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
     this.submitted = true;
 
     this.financialReportsEditionData.insertCell(financialReportTypeUID, command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.messageBox.show('Se agregó la celda al reporte.', 'Agregar celda');
         this.setAndEmitFixedCellDataUpdated(x);
@@ -456,7 +456,7 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
     this.submitted = true;
 
     this.financialReportsEditionData.updateCell(financialReportTypeUID, cellUID, command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.messageBox.show('Se actualizó la celda del reporte.', 'Editar celda');
         this.setAndEmitFixedCellDataUpdated(x);
@@ -470,7 +470,7 @@ export class FinancialReportDesignerComponent implements OnChanges, OnInit {
     this.submitted = true;
 
     this.financialReportsEditionData.deleteCell(financialReportTypeUID, cellUID)
-      .toPromise()
+      .firstValue()
       .then(() => {
         this.messageBox.show('Se eliminó la celda del reporte.', 'Eliminar celda');
         this.setAndEmitFixedCellDataUpdated(EmptyFinancialReportCell);

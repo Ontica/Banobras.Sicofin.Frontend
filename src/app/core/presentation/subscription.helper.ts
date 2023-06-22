@@ -5,12 +5,15 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+
 import { takeUntil } from 'rxjs/operators';
 
 import { PresentationLayer } from './presentation-layer';
 
 import { StateSelector } from './presentation-types';
+
+import { EmpObservable } from '../data-types';
 
 
 export class SubscriptionHelper {
@@ -20,9 +23,11 @@ export class SubscriptionHelper {
   constructor(private uiLayer: PresentationLayer) { }
 
 
-  select<U>(stateSelector: StateSelector, params?: any): Observable<U> {
-    return this.uiLayer.select<U>(stateSelector, params)
-      .pipe(takeUntil(this.unsubscribe));
+  select<U>(stateSelector: StateSelector, params?: any): EmpObservable<U> {
+    return new EmpObservable(
+      this.uiLayer.select<U>(stateSelector, params)
+        .pipe(takeUntil(this.unsubscribe))
+    );
   }
 
 

@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, DateString, HttpService, Identifiable } from '@app/core';
+import { Assertion, DateString, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { ExchangeRate, ExchangeRateDescriptor, ExchangeRatesQuery, ExchangeRateValues,
          FileReport } from '@app/models';
@@ -21,21 +19,21 @@ export class ExchangeRatesDataService {
   constructor(private http: HttpService) { }
 
 
-  getExchangeRatesTypes(): Observable<Identifiable[]> {
+  getExchangeRatesTypes(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/exchange-rates/exchange-rates-types`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getCurrencies(): Observable<Identifiable[]> {
+  getCurrencies(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/catalogues/currencies`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getExchangeRatesForDate(date: DateString): Observable<ExchangeRate[]> {
+  getExchangeRatesForDate(date: DateString): EmpObservable<ExchangeRate[]> {
     Assertion.assertValue(date, 'date');
 
     const path = `v1/financial-accounting/exchange-rates/?date=${date}`;
@@ -44,7 +42,7 @@ export class ExchangeRatesDataService {
   }
 
 
-  searchExchangeRates(query: ExchangeRatesQuery): Observable<ExchangeRateDescriptor> {
+  searchExchangeRates(query: ExchangeRatesQuery): EmpObservable<ExchangeRateDescriptor> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/exchange-rates';
@@ -53,7 +51,7 @@ export class ExchangeRatesDataService {
   }
 
 
-  exportExchangeRatesToExcel(query: ExchangeRatesQuery): Observable<FileReport> {
+  exportExchangeRatesToExcel(query: ExchangeRatesQuery): EmpObservable<FileReport> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/exchange-rates/excel`;
@@ -62,7 +60,7 @@ export class ExchangeRatesDataService {
   }
 
 
-  getExchangeRatesForEdition(query: ExchangeRateValues): Observable<ExchangeRateValues> {
+  getExchangeRatesForEdition(query: ExchangeRateValues): EmpObservable<ExchangeRateValues> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/exchange-rates/for-edition';
@@ -71,7 +69,7 @@ export class ExchangeRatesDataService {
   }
 
 
-  updateExchangeRates(exchangeRateValues: ExchangeRateValues): Observable<ExchangeRateValues> {
+  updateExchangeRates(exchangeRateValues: ExchangeRateValues): EmpObservable<ExchangeRateValues> {
     Assertion.assertValue(exchangeRateValues, 'exchangeRateValues');
 
     const path = 'v2/financial-accounting/exchange-rates/update-all';

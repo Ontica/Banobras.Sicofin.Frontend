@@ -90,7 +90,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
     const message = this.getConfirmMessage(period);
 
     this.messageBox.confirm(message, 'Eliminar período', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.removePeriodFromAccountingCalendar(this.accountingCalendarSelected.uid, period.uid);
@@ -130,7 +130,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
     this.isLoading = true;
 
     this.accountingCalendarsData.getAccountingCalendars()
-      .toPromise()
+      .firstValue()
       .then(x => this.accountingCalendarsList = x)
       .finally(() => this.isLoading = false);
   }
@@ -140,7 +140,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
     this.isLoading = true;
 
     this.accountingCalendarsData.getAccountingCalendar(accountingCalendarUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.accountingCalendarSelected = x)
       .catch(e => this.accountingCalendarSelected = null)
       .finally(() => this.isLoading = false);
@@ -152,7 +152,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
     this.isLoading = true;
 
     this.accountingCalendarsData.addPeriodToAccountingCalendar(accountingCalendarUID, periodFields)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.accountingCalendarSelected = x;
         this.form.reset();
@@ -165,7 +165,7 @@ export class AccountingCalendarsEditorComponent implements OnInit {
     this.isLoading = true;
 
     this.accountingCalendarsData.removePeriodFromAccountingCalendar(accountingCalendarUID, periodUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.accountingCalendarSelected = x)
       .finally(() => this.isLoading = false);
   }

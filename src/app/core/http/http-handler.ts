@@ -6,16 +6,18 @@
  */
 
 import { Injectable } from '@angular/core';
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+
+import { forkJoin } from 'rxjs';
+
 import { map, mergeMap } from 'rxjs/operators';
 
 import { SessionService } from '../general/session.service';
 
-import {
-  DefaultHttpClientOptions, HttpClientOptions,
-  HttpMethod, Service
-} from './common-types';
+import { DefaultHttpClientOptions, HttpClientOptions, HttpMethod, Service } from './common-types';
+
+import { EmpObservable } from '../data-types';
 
 
 @Injectable()
@@ -24,52 +26,54 @@ export class HttpHandler {
   constructor(private http: HttpClient,
               private session: SessionService) { }
 
-  get<T>(path: string, options?: HttpClientOptions, service?: Service): Observable<T> {
+  get<T>(path: string, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.GET, path, undefined, options, service);
   }
 
 
-  post<T>(path: string, body?: any, options?: HttpClientOptions, service?: Service): Observable<T> {
+  post<T>(path: string, body?: any, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.POST, path, body, options, service);
   }
 
 
-  delete<T>(path: string, body?: any, options?: HttpClientOptions, service?: Service): Observable<T> {
+  delete<T>(path: string, body?: any, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.DELETE, path, body, options, service);
   }
 
 
-  put<T>(path: string, body: any, options?: HttpClientOptions, service?: Service): Observable<T> {
+  put<T>(path: string, body: any, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.PUT, path, body, options, service);
   }
 
 
-  patch<T>(path: string, body: any, options?: HttpClientOptions, service?: Service): Observable<T> {
+  patch<T>(path: string, body: any, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.PATCH, path, body, options, service);
   }
 
 
-  head<T>(path: string, options?: HttpClientOptions, service?: Service): Observable<T> {
+  head<T>(path: string, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.HEAD, path, undefined, options, service);
   }
 
 
-  options<T>(path: string, options?: HttpClientOptions, service?: Service): Observable<T> {
+  options<T>(path: string, options?: HttpClientOptions, service?: Service): EmpObservable<T> {
     return this.invokeHttpCall<T>(HttpMethod.OPTIONS, path, undefined, options, service);
   }
 
 
   // Private methods
 
-  private invokeHttpCall<T>(method: HttpMethod, path: string, body: any,
+  private invokeHttpCall<T>(method: HttpMethod,
+                            path: string,
+                            body: any,
                             callerOptions: HttpClientOptions,
-                            service: Service): Observable<T> {
+                            service: Service): EmpObservable<T> {
 
     const payloadDataField = this.getPayloadDataField(path, callerOptions, service);
 
     const requestOptions = this.getRequestOptions(body, callerOptions);
 
-    return forkJoin([
+    const httpCall = forkJoin([
       this.getUrl(path, service),
       this.getHeaders(path, service)
     ]).pipe(
@@ -83,6 +87,8 @@ export class HttpHandler {
                     );
       })
     );
+
+    return new EmpObservable(httpCall);
   }
 
 
@@ -150,7 +156,7 @@ export class HttpHandler {
     }
   }
 
-  private getRequestOptions(body: any, callerOptions: HttpClientOptions){
+  private getRequestOptions(body: any, callerOptions: HttpClientOptions): HttpClientOptions {
     const requestOptions = DefaultHttpClientOptions();
 
     if (body) {

@@ -104,7 +104,7 @@ export class TransactionSlipsMainPageComponent {
     this.isLoading = true;
 
     this.transactionSlipsData.searchTransactionSlips(this.query)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.queryExecuted = true;
         this.transactionSlipsList = x;
@@ -117,7 +117,7 @@ export class TransactionSlipsMainPageComponent {
     this.fileUrl = '';
 
     this.transactionSlipsData.exportTransactionSlips(exportationType, this.query)
-      .toPromise()
+      .firstValue()
       .then(x => this.fileUrl = x.url);
   }
 
@@ -126,7 +126,7 @@ export class TransactionSlipsMainPageComponent {
     this.isLoadingTransaction = true;
 
     this.transactionSlipsData.getTransactionSlip(transactionSlipUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSelectedTransactionSlip(x))
       .finally(() => this.isLoadingTransaction = false);
   }

@@ -329,7 +329,7 @@ export class FixedCellEditorComponent implements OnChanges, OnDestroy {
                    <br><br>¿Elimino la celda?`;
 
     this.messageBox.confirm(message, 'Eliminar celda', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           const payload = {

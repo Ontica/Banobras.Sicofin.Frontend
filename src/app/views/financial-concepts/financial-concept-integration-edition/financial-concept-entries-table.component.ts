@@ -67,7 +67,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
     const message = this.getConfirmMessage(financialConceptEntry);
 
     this.messageBox.confirm(message, 'Eliminar la regla de la integración', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           sendEvent(this.financialConceptEntriesTableEvent,

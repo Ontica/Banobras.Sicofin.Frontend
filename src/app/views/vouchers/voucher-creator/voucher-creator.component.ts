@@ -7,15 +7,13 @@
 
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EmpObservable, EventInfo } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
 import { Voucher, VoucherCreatorCases, VoucherFields, VoucherSpecialCaseType } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
-
-import { Observable } from 'rxjs';
 
 import { VoucherHeaderComponent, VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
 
@@ -105,7 +103,7 @@ export class VoucherCreatorComponent {
       return;
     }
 
-    let observable: Observable<Voucher | string> = this.vouchersData.createVoucher(this.voucherFields);
+    let observable: EmpObservable<Voucher | string> = this.vouchersData.createVoucher(this.voucherFields);
 
     if (this.isSpecialCase) {
       observable = this.vouchersData.createVoucherSpecialCase(this.voucherFields);
@@ -173,11 +171,11 @@ export class VoucherCreatorComponent {
   }
 
 
-  private executeCreateVoucher(observable: Observable<Voucher | string>) {
+  private executeCreateVoucher(observable: EmpObservable<Voucher | string>) {
     this.submitted = true;
 
     observable
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (this.generateAllAccountsChartVouchers) {
           sendEvent(this.voucherCreatorEvent, VoucherCreatorEventType.ALL_VOUCHERS_CREATED, {message: x});

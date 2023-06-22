@@ -212,7 +212,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
 
   private showConfirmUpdateMessage() {
     this.messageBox.confirm(this.getConfirmUpdateMessage(), this.title)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.executeUpdateAccountsFromExcel(false);
@@ -237,7 +237,7 @@ export class AccountsImporterComponent implements OnInit, OnDestroy {
     const command: ImportAccountsCommand = this.getFormData(dryRun);
 
     this.accountsData.updateAccountsChartFromExcel(this.file.file, command)
-      .toPromise()
+      .firstValue()
       .then(x => this.resolveImportResult(x, dryRun))
       .finally(() => this.isLoading = false);
   }

@@ -7,9 +7,7 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, EventInfo, SessionService } from '@app/core';
+import { Assertion, EmpObservable, EventInfo, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -209,11 +207,11 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private getData(observable: Observable<BalanceExplorerResult | TrialBalance>) {
+  private getData(observable: EmpObservable<BalanceExplorerResult | TrialBalance>) {
     this.setSubmitted(true);
 
     observable
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.queryExecuted = true;
         this.showFilters = false;
@@ -223,9 +221,9 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private exportDataToExcel(observable: Observable<FileReport>) {
+  private exportDataToExcel(observable: EmpObservable<FileReport>) {
     observable
-      .toPromise()
+      .firstValue()
       .then(x => this.excelFileUrl = x.url);
   }
 

@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { FileReport, TransactionSlipsQuery, TransactionSlip, TransactionSlipDescriptor,
          TransactionSlipExportationType } from '@app/models';
@@ -21,7 +19,7 @@ export class TransactionSlipsDataService {
   constructor(private http: HttpService) { }
 
 
-  searchTransactionSlips(query: TransactionSlipsQuery): Observable<TransactionSlipDescriptor[]> {
+  searchTransactionSlips(query: TransactionSlipsQuery): EmpObservable<TransactionSlipDescriptor[]> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/transaction-slips`;
@@ -31,7 +29,7 @@ export class TransactionSlipsDataService {
 
 
   exportTransactionSlips(exportationType: TransactionSlipExportationType,
-                         query: TransactionSlipsQuery): Observable<FileReport> {
+                         query: TransactionSlipsQuery): EmpObservable<FileReport> {
     Assertion.assertValue(exportationType, 'exportationType');
     Assertion.assertValue(query, 'query');
 
@@ -41,7 +39,7 @@ export class TransactionSlipsDataService {
   }
 
 
-  getTransactionSlip(transactionSlipUID: string): Observable<TransactionSlip> {
+  getTransactionSlip(transactionSlipUID: string): EmpObservable<TransactionSlip> {
     Assertion.assertValue(transactionSlipUID, 'transactionSlipUID');
 
     const path = `v2/financial-accounting/transaction-slips/${transactionSlipUID}`;

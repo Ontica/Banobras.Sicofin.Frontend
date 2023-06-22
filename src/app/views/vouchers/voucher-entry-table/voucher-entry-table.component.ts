@@ -71,7 +71,7 @@ export class VoucherEntryTableComponent implements OnChanges {
     const message = this.getConfirmMessage(voucherEntry);
 
     this.messageBox.confirm(message, 'Eliminar movimiento', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           sendEvent(this.voucherEntryTableEvent, VoucherEntryTableEventType.REMOVE_VOUCHER_ENTRY_CLICKED,

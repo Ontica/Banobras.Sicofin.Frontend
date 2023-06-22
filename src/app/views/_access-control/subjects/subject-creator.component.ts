@@ -65,7 +65,7 @@ export class SubjectCreatorComponent {
     this.submitted = true;
 
     this.accessControlData.createSubject(subjectFields)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.subjectCreatorEvent, SubjectCreatorEventType.SUBJECT_CREATED, {subject: x});
         this.onClose();

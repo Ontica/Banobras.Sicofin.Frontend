@@ -137,7 +137,7 @@ export class LockedUpBalancesModalComponent {
   private getLockedUpBalances() {
     this.isLoading = true;
     this.reportingData.getLockedUpBalances(this.query)
-      .toPromise()
+      .firstValue()
       .then( x => this.setLockedUpBalancesData(x))
       .finally(() => this.isLoading = false);
   }
@@ -152,7 +152,7 @@ export class LockedUpBalancesModalComponent {
     this.submitted = true;
 
     this.vouchersData.createVoucherSpecialCase(voucherFields)
-      .toPromise()
+      .firstValue()
       .then(x => this.messageBox.show('Se generó la póliza correctamente.', 'Generar póliza'))
       .finally(() => this.submitted = false);
   }
@@ -191,7 +191,7 @@ export class LockedUpBalancesModalComponent {
                       <br><br>¿Genero la póliza?`;
 
       this.messageBox.confirm(message, 'Generar póliza')
-        .toPromise()
+        .firstValue()
         .then(x => {
           if (x) {
             const fields = this.getVoucherFields(entry);

@@ -115,7 +115,7 @@ export class VoucherEntriesEditorComponent {
     this.submitted = true;
 
     this.vouchersData.validateVoucher(this.voucher.id)
-      .toPromise()
+      .firstValue()
       .then(x => {
         const message = x && x.length > 0 ?
           '<ul class="info-list">' + x.map(y => '<li>' + y + '</li>').join('') + '</ul>' :
@@ -130,7 +130,7 @@ export class VoucherEntriesEditorComponent {
     this.submitted = true;
 
     this.vouchersData.appendVoucherEntry(voucherEntryFields.voucherId, voucherEntryFields)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
         sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
@@ -144,7 +144,7 @@ export class VoucherEntriesEditorComponent {
     this.submitted = true;
 
     this.vouchersData.getVoucherEntry(this.voucher.id, voucherEntryId)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSelectedVoucherEntry(x))
       .finally(() => this.submitted = false);
   }
@@ -154,7 +154,7 @@ export class VoucherEntriesEditorComponent {
     this.submitted = true;
 
     this.vouchersData.updateVoucherEntry(this.voucher.id, voucherEntryId, voucherEntryFields)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.setSelectedVoucherEntry(EmptyVoucherEntry);
         sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
@@ -168,7 +168,7 @@ export class VoucherEntriesEditorComponent {
     this.submitted = true;
 
     this.vouchersData.deleteVoucherEntry(this.voucher.id, voucherEntryId)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.voucherEntriesEditorEvent, VoucherEntriesEditorEventType.VOUCHER_UPDATED,
           {voucher: x});

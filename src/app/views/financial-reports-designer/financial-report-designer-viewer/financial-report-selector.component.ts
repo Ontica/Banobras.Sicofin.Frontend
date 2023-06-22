@@ -97,7 +97,7 @@ export class FinancialReportSelectorComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.financialReportsEditionData.getFinancialReportTypesForDesign(accountChartUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.financialReportTypesList = x )
       .finally(() => this.isLoading = false);
   }

@@ -116,7 +116,7 @@ export class ExchangeRatesEditorComponent {
     this.isLoading = true;
 
     this.exchangeRatesData.getExchangeRatesForEdition(this.getSelectorData())
-      .toPromise()
+      .firstValue()
       .then(x => this.setExchangeRateValuesSelected(x))
       .catch(x=> this.exchangeRateValuesSelected = null)
       .finally(() => this.isLoading = false);
@@ -135,7 +135,7 @@ export class ExchangeRatesEditorComponent {
     this.isLoading = true;
 
     this.exchangeRatesData.updateExchangeRates(this.getExchangeRatesData())
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.emitDataUpdated(x);
         this.onClose();

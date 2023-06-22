@@ -142,7 +142,7 @@ export class ExternalVariablesEditionComponent {
     this.isLoading = true;
 
     this.externalVariablesData.getExternalVariables(query.externalVariablesSetUID, query.date)
-      .toPromise()
+      .firstValue()
       .then(x => this.setExternalVariablesList(x, true))
       .catch(e => this.setExternalVariablesList([], false))
       .finally(() => this.isLoading = false);
@@ -153,7 +153,7 @@ export class ExternalVariablesEditionComponent {
     this.submitted = true;
 
     this.externalVariablesData.addExternalVariable(setUID, fields)
-      .toPromise()
+      .firstValue()
       .then(x => this.refreshData())
       .finally(() => this.submitted = false);
   }
@@ -163,7 +163,7 @@ export class ExternalVariablesEditionComponent {
     this.submitted = true;
 
     this.externalVariablesData.updateExternalVariable(setUID, variableUID, fields)
-      .toPromise()
+      .firstValue()
       .then(x => this.refreshData())
       .finally(() => this.submitted = false);
   }
@@ -173,7 +173,7 @@ export class ExternalVariablesEditionComponent {
     this.submitted = true;
 
     this.externalVariablesData.removeExternalVariable(setUID, variableUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.refreshData())
       .finally(() => this.submitted = false);
   }

@@ -105,7 +105,7 @@ export class SubjectRolesComponent implements OnChanges {
 
   private getRolesByContext(contextUID: string) {
     this.accessControlData.getRolesByContext(contextUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.rolesList = x);
   }
 
@@ -114,7 +114,7 @@ export class SubjectRolesComponent implements OnChanges {
     this.isLoading = true;
 
     this.accessControlData.getSubjectRolesByContext(this.subjectUID, contextUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.subjectRolesList = x)
       .finally(() => {
         this.isLoading = false;
@@ -127,7 +127,7 @@ export class SubjectRolesComponent implements OnChanges {
     this.submitted = true;
 
     this.accessControlData.assignRoleToSubject(subjectUID, contextUID, roleUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.subjectRolesList = x)
       .finally(() => this.submitted = false);
   }
@@ -137,7 +137,7 @@ export class SubjectRolesComponent implements OnChanges {
     this.submitted = true;
 
     this.accessControlData.removeRoleToSubject(subjectUID, contextUID, roleUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.subjectRolesList = x)
       .finally(() => this.submitted = false);
   }

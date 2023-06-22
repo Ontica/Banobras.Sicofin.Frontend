@@ -7,9 +7,9 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
-import { Exception } from '@app/core';
+import { EmpObservable, Exception } from '@app/core';
 
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
@@ -24,10 +24,11 @@ export class MessageBoxService {
   constructor(private dialog: MatDialog) { }
 
 
-  confirm(message: string, title: string = '',
+  confirm(message: string,
+          title: string = '',
           messageBoxType: ConfirmMessageBoxType = 'AcceptCancel',
           mainButtonText: string = 'Aceptar',
-          config?: MessageBoxConfig): Observable<boolean> {
+          config?: MessageBoxConfig): EmpObservable<boolean> {
 
     const data: MessageBoxData = {
       messageBoxType: messageBoxType || 'AcceptCancel',
@@ -52,8 +53,9 @@ export class MessageBoxService {
   }
 
 
-  show(message: string, title: string = '',
-       config?: MessageBoxConfig): Observable<void> {
+  show(message: string,
+       title: string = '',
+       config?: MessageBoxConfig): EmpObservable<void> {
 
     const data: MessageBoxData = {
       messageBoxType: 'Accept',
@@ -71,7 +73,7 @@ export class MessageBoxService {
 
 
   showError(error: Error | any,
-            config?: MessageBoxConfig): Observable<void> {
+            config?: MessageBoxConfig): EmpObservable<void> {
 
     const data: MessageBoxData = {
       messageBoxType: 'Accept',
@@ -96,7 +98,7 @@ export class MessageBoxService {
   }
 
 
-  isOpen() {
+  isOpen(): boolean {
     return this.dialog.openDialogs.length > 0;
   }
 
@@ -153,12 +155,14 @@ export class MessageBoxService {
   }
 
 
-  private openMessageBox(config: MessageBoxConfig, data: MessageBoxData): Observable<any> {
+  private openMessageBox(config: MessageBoxConfig, data: MessageBoxData): EmpObservable<any> {
     const dialogConfig = this.getDialogConfig(config, data);
 
     const dialogRef = this.dialog.open(MessageBoxComponent, dialogConfig);
 
-    return dialogRef.afterClosed();
+    return new EmpObservable(
+      dialogRef.afterClosed()
+    );
   }
 
 }

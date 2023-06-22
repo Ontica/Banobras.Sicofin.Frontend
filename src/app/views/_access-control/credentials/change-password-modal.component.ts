@@ -106,7 +106,7 @@ export class ChangePasswordModalComponent  {
     const command = this.getFormData();
 
     this.accessControlData.updateCredentialsToSubject(command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.messageBox.show('La contraseña fue actualizada correctamente.', 'Cambiar contraseña');
         this.onClose();

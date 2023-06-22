@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { SubledgerAccountQuery, SubledgerAccount, SubledgerAccountDescriptor,
          SubledgerAccountFields } from '@app/models';
@@ -21,7 +19,7 @@ export class SubledgerDataService {
   constructor(private http: HttpService) { }
 
 
-  searchSubledgerAccounts(query: SubledgerAccountQuery): Observable<SubledgerAccountDescriptor[]> {
+  searchSubledgerAccounts(query: SubledgerAccountQuery): EmpObservable<SubledgerAccountDescriptor[]> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/subledger-accounts/search';
@@ -30,7 +28,7 @@ export class SubledgerDataService {
   }
 
 
-  getSubledgerAccount(subledgerAccountId: number): Observable<SubledgerAccount> {
+  getSubledgerAccount(subledgerAccountId: number): EmpObservable<SubledgerAccount> {
     Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
 
     const path = `v2/financial-accounting/subledger-accounts/${subledgerAccountId}`;
@@ -39,7 +37,7 @@ export class SubledgerDataService {
   }
 
 
-  createSubledgerAccount(subledgerAccountFields: SubledgerAccountFields): Observable<SubledgerAccount> {
+  createSubledgerAccount(subledgerAccountFields: SubledgerAccountFields): EmpObservable<SubledgerAccount> {
     Assertion.assertValue(subledgerAccountFields, 'subledgerAccountFields');
 
     const path = `v2/financial-accounting/subledger-accounts`;
@@ -49,7 +47,7 @@ export class SubledgerDataService {
 
 
   updateSubledgerAccount(subledgerAccountId: number,
-                         subledgerAccountFields: SubledgerAccountFields): Observable<SubledgerAccount> {
+                         subledgerAccountFields: SubledgerAccountFields): EmpObservable<SubledgerAccount> {
     Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
     Assertion.assertValue(subledgerAccountFields, 'subledgerAccountFields');
 
@@ -59,7 +57,7 @@ export class SubledgerDataService {
   }
 
 
-  activateSubledgerAccount(subledgerAccountId: number): Observable<SubledgerAccount> {
+  activateSubledgerAccount(subledgerAccountId: number): EmpObservable<SubledgerAccount> {
     Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
 
     const path = `v2/financial-accounting/subledger-accounts/${subledgerAccountId}/activate`;
@@ -68,7 +66,7 @@ export class SubledgerDataService {
   }
 
 
-  suspendSubledgerAccount(subledgerAccountId: number): Observable<SubledgerAccount> {
+  suspendSubledgerAccount(subledgerAccountId: number): EmpObservable<SubledgerAccount> {
     Assertion.assertValue(subledgerAccountId, 'subledgerAccountId');
 
     const path = `v2/financial-accounting/subledger-accounts/${subledgerAccountId}/suspend`;

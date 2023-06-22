@@ -133,7 +133,7 @@ export class VoucherEditorComponent implements OnChanges {
     this.submitted = true;
 
     this.vouchersData.updateVoucher(this.voucher.id, voucherFields)
-      .toPromise()
+      .firstValue()
       .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x}))
       .finally(() => this.submitted = false);
   }
@@ -143,7 +143,7 @@ export class VoucherEditorComponent implements OnChanges {
     this.submitted = true;
 
     this.vouchersData.deleteVoucher(this.voucher.id)
-      .toPromise()
+      .firstValue()
       .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_DELETED,
         {voucher: this.voucher}))
       .finally(() => this.submitted = false);
@@ -154,7 +154,7 @@ export class VoucherEditorComponent implements OnChanges {
     this.submitted = true;
 
     this.vouchersData.sendVoucherToSupervision(this.voucher.id)
-      .toPromise()
+      .firstValue()
       .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x}))
       .finally(() => this.submitted = false);
   }
@@ -164,7 +164,7 @@ export class VoucherEditorComponent implements OnChanges {
     this.submitted = true;
 
     this.vouchersData.closeVoucher(this.voucher.id)
-      .toPromise()
+      .firstValue()
       .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x}))
       .finally(() => this.submitted = false);
   }

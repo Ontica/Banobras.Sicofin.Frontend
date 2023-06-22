@@ -73,7 +73,7 @@ export class SubledgerAccountEditorComponent {
     this.submitted = true;
 
     this.subledgerData.updateSubledgerAccount(this.subledgerAccount.id, subledgerAccountFields)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.subledgerAccountEditorEvent, SubledgerAccountEditorEventType.SUBLEDGER_ACCOUNT_UPDATED,
           {subledgerAccount: x});
@@ -86,7 +86,7 @@ export class SubledgerAccountEditorComponent {
     this.submitted = true;
 
     this.subledgerData.activateSubledgerAccount(this.subledgerAccount.id)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.subledgerAccountEditorEvent, SubledgerAccountEditorEventType.SUBLEDGER_ACCOUNT_UPDATED,
           {subledgerAccount: x});
@@ -99,7 +99,7 @@ export class SubledgerAccountEditorComponent {
     this.submitted = true;
 
     this.subledgerData.suspendSubledgerAccount(this.subledgerAccount.id)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.subledgerAccountEditorEvent, SubledgerAccountEditorEventType.SUBLEDGER_ACCOUNT_UPDATED,
           {subledgerAccount: x});

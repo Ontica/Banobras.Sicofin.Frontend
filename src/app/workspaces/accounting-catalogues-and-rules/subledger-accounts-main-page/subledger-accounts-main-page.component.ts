@@ -142,7 +142,7 @@ export class SubledgerAccountsMainPageComponent {
     this.queryExecuted = false;
 
     this.subledgerData.searchSubledgerAccounts(query)
-      .toPromise()
+      .firstValue()
       .then(x =>
         this.subledgerAccountData = Object.assign({}, this.subledgerAccountData, {query, entries: x})
       )
@@ -167,7 +167,7 @@ export class SubledgerAccountsMainPageComponent {
     this.isLoadingSubledgerAccount = true;
 
     this.subledgerData.getSubledgerAccount(idSubledgerAccount)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSelectedSubledgerAccount(x))
       .finally(() => this.isLoadingSubledgerAccount = false);
   }

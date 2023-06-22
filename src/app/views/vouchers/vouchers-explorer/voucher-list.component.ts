@@ -240,7 +240,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
       'DeleteCancel' : 'AcceptCancel';
 
     this.messageBox.confirm(this.getConfirmMessage(), this.getConfirmTitle(), type)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.emitExecuteOperation();

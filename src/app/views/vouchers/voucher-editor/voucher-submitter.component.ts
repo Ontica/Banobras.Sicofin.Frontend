@@ -69,7 +69,7 @@ export class VoucherSubmitterComponent {
       'DeleteCancel' : 'AcceptCancel';
 
     this.messageBox.confirm(this.getConfirmMessage(eventType), this.getConfirmTitle(eventType), type)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           sendEvent(this.voucherSubmitterEvent, eventType, {voucher: this.voucher});

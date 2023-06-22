@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, DateString, HttpService } from '@app/core';
+import { Assertion, DateString, EmpObservable, HttpService } from '@app/core';
 
 import { FinancialReportCell, FinancialReportDesign, FinancialReportEditionCommand, FinancialReportRow,
          FinancialReportTypesForDesign } from '@app/models';
@@ -21,7 +19,7 @@ export class FinancialReportsEditionDataService {
   constructor(private http: HttpService) { }
 
 
-  getFinancialReportTypesForDesign(accountsChartUID: string): Observable<FinancialReportTypesForDesign[]> {
+  getFinancialReportTypesForDesign(accountsChartUID: string): EmpObservable<FinancialReportTypesForDesign[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
     const path = `v2/financial-accounting/financial-reports/design/types/${accountsChartUID}`;
@@ -30,7 +28,7 @@ export class FinancialReportsEditionDataService {
   }
 
 
-  getFinancialReportDesign(reportTypeUID: string, date: DateString): Observable<FinancialReportDesign> {
+  getFinancialReportDesign(reportTypeUID: string, date: DateString): EmpObservable<FinancialReportDesign> {
     Assertion.assertValue(reportTypeUID, 'reportTypeUID');
 
     const path = `v2/financial-accounting/financial-reports/design/${reportTypeUID}/?date=${date}`;
@@ -40,7 +38,7 @@ export class FinancialReportsEditionDataService {
 
 
   insertRow(financialReportTypeUID: string,
-            command: FinancialReportEditionCommand): Observable<FinancialReportRow> {
+            command: FinancialReportEditionCommand): EmpObservable<FinancialReportRow> {
     Assertion.assertValue(financialReportTypeUID, 'financialReportTypeUID');
     Assertion.assertValue(command, 'command');
 
@@ -52,7 +50,7 @@ export class FinancialReportsEditionDataService {
 
   updateRow(financialReportTypeUID: string,
             rowUID: string,
-            command: FinancialReportEditionCommand): Observable<FinancialReportRow> {
+            command: FinancialReportEditionCommand): EmpObservable<FinancialReportRow> {
     Assertion.assertValue(financialReportTypeUID, 'financialReportTypeUID');
     Assertion.assertValue(rowUID, 'rowUID');
     Assertion.assertValue(command, 'command');
@@ -64,7 +62,7 @@ export class FinancialReportsEditionDataService {
 
 
   deleteRow(financialReportTypeUID: string,
-            rowUID: string): Observable<void> {
+            rowUID: string): EmpObservable<void> {
     Assertion.assertValue(financialReportTypeUID, 'financialReportTypeUID');
     Assertion.assertValue(rowUID, 'rowUID');
 
@@ -75,7 +73,7 @@ export class FinancialReportsEditionDataService {
 
 
   insertCell(financialReportTypeUID: string,
-             command: FinancialReportEditionCommand): Observable<FinancialReportCell> {
+             command: FinancialReportEditionCommand): EmpObservable<FinancialReportCell> {
     Assertion.assertValue(financialReportTypeUID, 'financialReportTypeUID');
     Assertion.assertValue(command, 'command');
 
@@ -87,7 +85,7 @@ export class FinancialReportsEditionDataService {
 
   updateCell(financialReportTypeUID: string,
              cellUID: string,
-             command: FinancialReportEditionCommand): Observable<FinancialReportCell> {
+             command: FinancialReportEditionCommand): EmpObservable<FinancialReportCell> {
     Assertion.assertValue(financialReportTypeUID, 'financialReportTypeUID');
     Assertion.assertValue(cellUID, 'cellUID');
     Assertion.assertValue(command, 'command');
@@ -99,7 +97,7 @@ export class FinancialReportsEditionDataService {
 
 
   deleteCell(financialReportTypeUID: string,
-             cellUID: string): Observable<void> {
+             cellUID: string): EmpObservable<void> {
     Assertion.assertValue(financialReportTypeUID, 'financialReportTypeUID');
     Assertion.assertValue(cellUID, 'cellUID');
 

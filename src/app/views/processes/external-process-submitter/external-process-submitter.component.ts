@@ -126,7 +126,7 @@ export class ExternalProcessSubmitterComponent implements OnInit {
       this.getConcilacionSICExternalProcessCommand();
 
     this.externalProcessData.executeExternalProcess(this.externalProcessType, command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.form.reset();
         this.messageBox.show(x, this.title);
@@ -141,7 +141,7 @@ export class ExternalProcessSubmitterComponent implements OnInit {
     const command = this.getExportBalancesCommand();
 
     this.externalProcessData.exportBalances(command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.form.reset();
         this.messageBox.show(x, this.title);

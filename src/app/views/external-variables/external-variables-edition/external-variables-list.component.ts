@@ -90,7 +90,7 @@ export class ExternalVariablesListComponent implements OnChanges {
     const message = this.getConfirmMessage(variable);
 
     this.messageBox.confirm(message, 'Eliminar variable', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           const payload = {

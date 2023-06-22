@@ -6,11 +6,12 @@
  */
 
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Observable } from 'rxjs';
 
-import { Assertion, Command, CommandResult, createCommand as createCommandAlias } from '@app/core';
+import { Assertion, Command, CommandResult, EmpObservable,
+         createCommand as createCommandAlias } from '@app/core';
 
 import { PresentationHandler } from './presentation.handler';
+
 import { CommandType, ActionType, StateEffect, StateSelector } from './presentation-types';
 
 import { MainUIStateAction } from '@app/presentation/exported.presentation.types';
@@ -82,7 +83,7 @@ export class PresentationState {
   }
 
 
-  select<T>(selector: StateSelector, params?: any): Observable<T> {
+  select<T>(selector: StateSelector, params?: any): EmpObservable<T> {
     Assertion.assertValue(selector, 'selector');
 
     const stateHandler = this.getStateHandlerForSelector(selector);

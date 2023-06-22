@@ -277,7 +277,7 @@ export class SubledgerAccountHeaderComponent implements OnInit, OnChanges, OnDes
     }
 
     this.messageBox.confirm(message, title, confirmType)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           sendEvent(this.subledgerAccountHeaderEvent, eventType, {subledgerAccount: this.subledgerAccount});

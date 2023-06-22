@@ -367,7 +367,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
                    <br><br>¿Elimino el concepto?`;
 
     this.messageBox.confirm(message, 'Eliminar concepto', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           sendEvent(this.financialConceptHeaderEvent,

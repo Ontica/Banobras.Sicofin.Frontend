@@ -9,7 +9,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 
 import { Assertion } from '../general/assertion';
 
-import { Cache, Command, KeyValue, resolve } from '../data-types';
+import { Cache, Command, EmpObservable, KeyValue, resolve } from '../data-types';
 
 import { ActionType, CommandType, StateEffect, StateSelector } from './presentation-types';
 
@@ -34,7 +34,7 @@ export interface PresentationHandler {
 
   getValue<U>(selector: StateSelector): U;
 
-  select<U>(selector: StateSelector, params?: any): Observable<U>;
+  select<U>(selector: StateSelector, params?: any): EmpObservable<U>;
 
 }
 
@@ -104,35 +104,37 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
   }
 
 
-  select<U>(selector: StateSelector, params?: any): Observable<U> {
+  select<U>(selector: StateSelector, params?: any): EmpObservable<U> {
     const stateItem = this.getStateMapItem(selector);
 
-    return stateItem.asObservable() as Observable<U>;
+    return new EmpObservable<U>(stateItem.asObservable() as Observable<U>);
   }
 
 
   selectMemoized<U>(selector: StateSelector,
-                    funct: () => Observable<any>,
-                    key: string, defaultValue: any): Observable<U> {
+                    funct: () => EmpObservable<any>,
+                    key: string,
+                    defaultValue: any): EmpObservable<U> {
     Assertion.assertValue(key, 'key');
 
     const cache = this.getMemoizedCache<U>(selector);
 
     if (cache.has(key)) {
-      return cache.get(key).asObservable();
+      return new EmpObservable(cache.get(key).asObservable());
     }
 
     const subject = new BehaviorSubject<U>(defaultValue);
 
     cache.set(key, subject);
 
-    funct().toPromise()
-    .then(x => {
-      subject.next(x);
-      return x;
-    });
+    funct()
+      .firstValue()
+      .then(x => {
+        subject.next(x);
+        return x;
+      });
 
-    return subject.asObservable();
+    return new EmpObservable(subject.asObservable());
   }
 
 
@@ -152,17 +154,16 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
    }
 
 
-  selectFirst<U>(selector: StateSelector, funct: () => any): Observable<U> {
+  selectFirst<U>(selector: StateSelector, funct: () => any): EmpObservable<U> {
     const stateItem = this.getStateMapItem(selector);
 
-
     if (stateItem.value && (Array.isArray(stateItem.value) && stateItem.value.length > 0)) {
-      return stateItem.asObservable() as Observable<U>;
+      return new EmpObservable<U>(stateItem.asObservable());
     }
 
     this.setValue(selector, funct());
 
-    return this.getSubject<U>(selector).asObservable();
+    return new EmpObservable<U>(this.getSubject<U>(selector).asObservable());
   }
 
 
@@ -176,10 +177,10 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
   protected setValue(selector: StateSelector, value: any): void;
 
 
-  protected setValue<U>(selector: StateSelector, value: Observable<any>): Promise<U>;
+  protected setValue<U>(selector: StateSelector, value: EmpObservable<any>): Promise<U>;
 
 
-  protected setValue<U>(selector: StateSelector, value: Observable<any> | any): Promise<U> {
+  protected setValue<U>(selector: StateSelector, value: EmpObservable<any> | any): Promise<U> {
     const stateItem = this.getStateMapItem(selector);
 
     if (value instanceof Observable) {

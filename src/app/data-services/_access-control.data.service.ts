@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService, Identifiable } from '@app/core';
+import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { Subject, SubjectFields, SubjectsQuery, UpdateCredentialsFields } from '@app/models';
 
@@ -20,42 +18,42 @@ export class AccessControlDataService {
   constructor(private http: HttpService) { }
 
 
-  getWorkareas(): Observable<Identifiable[]> {
+  getWorkareas(): EmpObservable<Identifiable[]> {
     const path = `v4/onepoint/security/management/subjects/workareas`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getContexts(): Observable<Identifiable[]> {
+  getContexts(): EmpObservable<Identifiable[]> {
     const path = `v4/onepoint/security/management/contexts`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getRolesByContext(contextUID: string): Observable<Identifiable[]> {
+  getRolesByContext(contextUID: string): EmpObservable<Identifiable[]> {
     const path = `v4/onepoint/security/management/contexts/${contextUID}/roles`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getFeaturesByContext(contextUID: string): Observable<Identifiable[]> {
+  getFeaturesByContext(contextUID: string): EmpObservable<Identifiable[]> {
     const path = `v4/onepoint/security/management/contexts/${contextUID}/features`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  searchSubjects(query: SubjectsQuery): Observable<Subject[]> {
+  searchSubjects(query: SubjectsQuery): EmpObservable<Subject[]> {
     let path = `v4/onepoint/security/management/subjects/search`;
 
     return this.http.post<Subject[]>(path, query);
   }
 
 
-  getSubjectContexts(subjectUID: string): Observable<Identifiable[]> {
+  getSubjectContexts(subjectUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
 
     const path = `v4/onepoint/security/management/subjects/${subjectUID}/contexts`;
@@ -64,7 +62,7 @@ export class AccessControlDataService {
   }
 
 
-  getSubjectRolesByContext(subjectUID: string, contextUID: string): Observable<Identifiable[]> {
+  getSubjectRolesByContext(subjectUID: string, contextUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
 
@@ -74,7 +72,7 @@ export class AccessControlDataService {
   }
 
 
-  getSubjectFeaturesByContext(subjectUID: string, contextUID: string): Observable<Identifiable[]> {
+  getSubjectFeaturesByContext(subjectUID: string, contextUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
 
@@ -84,7 +82,7 @@ export class AccessControlDataService {
   }
 
 
-  createSubject(subjectFields: SubjectFields): Observable<Subject> {
+  createSubject(subjectFields: SubjectFields): EmpObservable<Subject> {
     Assertion.assertValue(subjectFields, 'subjectFields');
 
     const path = `v4/onepoint/security/management/subjects`;
@@ -93,7 +91,7 @@ export class AccessControlDataService {
   }
 
 
-  updateSubject(subjectUID: string, subjectFields: SubjectFields): Observable<Subject> {
+  updateSubject(subjectUID: string, subjectFields: SubjectFields): EmpObservable<Subject> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(subjectFields, 'subjectFields');
 
@@ -103,7 +101,7 @@ export class AccessControlDataService {
   }
 
 
-  deleteSubject(subjectUID: string): Observable<void> {
+  deleteSubject(subjectUID: string): EmpObservable<void> {
     Assertion.assertValue(subjectUID, 'subjectUID');
 
     const path = `v4/onepoint/security/management/subjects/${subjectUID}`;
@@ -112,7 +110,7 @@ export class AccessControlDataService {
   }
 
 
-  resetCredentialsToSubject(subjectUID: string): Observable<any> {
+  resetCredentialsToSubject(subjectUID: string): EmpObservable<any> {
     Assertion.assertValue(subjectUID, 'subjectUID');
 
     const path = `v4/onepoint/security/management/subjects/${subjectUID}/reset-credentials`;
@@ -121,7 +119,7 @@ export class AccessControlDataService {
   }
 
 
-  updateCredentialsToSubject(credentialsFields: UpdateCredentialsFields): Observable<any> {
+  updateCredentialsToSubject(credentialsFields: UpdateCredentialsFields): EmpObservable<any> {
     Assertion.assertValue(credentialsFields, 'credentialsFields');
 
     const path = `v4/onepoint/security/management/update-my-credentials`;
@@ -130,7 +128,7 @@ export class AccessControlDataService {
   }
 
 
-  assignContextToSubject(subjectUID: string, contextUID: string):Observable<Identifiable[]> {
+  assignContextToSubject(subjectUID: string, contextUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
 
@@ -140,7 +138,7 @@ export class AccessControlDataService {
   }
 
 
-  removeContextToSubject(subjectUID: string, contextUID: string):Observable<Identifiable[]> {
+  removeContextToSubject(subjectUID: string, contextUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
 
@@ -152,7 +150,7 @@ export class AccessControlDataService {
 
   assignRoleToSubject(subjectUID: string,
                       contextUID: string,
-                      roleUID: string):Observable<Identifiable[]> {
+                      roleUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(roleUID, 'roleUID');
@@ -166,7 +164,7 @@ export class AccessControlDataService {
 
   removeRoleToSubject(subjectUID: string,
                       contextUID: string,
-                      roleUID: string):Observable<Identifiable[]> {
+                      roleUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(roleUID, 'roleUID');
@@ -180,7 +178,7 @@ export class AccessControlDataService {
 
   assignFeatureToSubject(subjectUID: string,
                          contextUID: string,
-                         featureUID: string):Observable<Identifiable[]> {
+                         featureUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(featureUID, 'featureUID');
@@ -194,7 +192,7 @@ export class AccessControlDataService {
 
   removeFeatureToSubject(subjectUID: string,
                          contextUID: string,
-                         featureUID: string):Observable<Identifiable[]> {
+                         featureUID: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(subjectUID, 'subjectUID');
     Assertion.assertValue(contextUID, 'contextUID');
     Assertion.assertValue(featureUID, 'featureUID');

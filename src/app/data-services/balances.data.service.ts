@@ -7,12 +7,10 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
-import { Assertion, HttpService } from '@app/core';
-
-import { AccountBalance, AccountStatement, AccountStatementQuery, BalanceExplorerResult, BalanceExplorerQuery, FileReport,
-         TrialBalance, TrialBalanceQuery } from '@app/models';
+import { AccountBalance, AccountStatement, AccountStatementQuery, BalanceExplorerResult, BalanceExplorerQuery,
+         FileReport, TrialBalance, TrialBalanceQuery } from '@app/models';
 
 
 @Injectable()
@@ -21,7 +19,7 @@ export class BalancesDataService {
   constructor(private http: HttpService) { }
 
 
-  getLedgersAccountsBalances(standardAccountUID: string): Observable<AccountBalance[]> {
+  getLedgersAccountsBalances(standardAccountUID: string): EmpObservable<AccountBalance[]> {
     Assertion.assertValue(standardAccountUID, 'standardAccountUID');
 
     const path = `v2/financial-accounting/balances/${standardAccountUID}`;
@@ -30,7 +28,7 @@ export class BalancesDataService {
   }
 
 
-  exportBalanceExplorerBalancesToExcel(query: BalanceExplorerQuery): Observable<FileReport> {
+  exportBalanceExplorerBalancesToExcel(query: BalanceExplorerQuery): EmpObservable<FileReport> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/balance-explorer/balances/excel';
@@ -39,7 +37,7 @@ export class BalancesDataService {
   }
 
 
-  getBalancesForBalanceExplorer(query: BalanceExplorerQuery): Observable<BalanceExplorerResult> {
+  getBalancesForBalanceExplorer(query: BalanceExplorerQuery): EmpObservable<BalanceExplorerResult> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/balance-explorer/balances`;
@@ -48,7 +46,7 @@ export class BalancesDataService {
   }
 
 
-  exportTrialBalanceToExcel(query: TrialBalanceQuery): Observable<FileReport> {
+  exportTrialBalanceToExcel(query: TrialBalanceQuery): EmpObservable<FileReport> {
     Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/balance-engine/trial-balance/excel';
@@ -57,7 +55,7 @@ export class BalancesDataService {
   }
 
 
-  getTrialBalance(query: TrialBalanceQuery): Observable<TrialBalance> {
+  getTrialBalance(query: TrialBalanceQuery): EmpObservable<TrialBalance> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/balance-engine/trial-balance`;
@@ -66,7 +64,7 @@ export class BalancesDataService {
   }
 
 
-  exportAccountStatementToExcel(query: AccountStatementQuery): Observable<FileReport> {
+  exportAccountStatementToExcel(query: AccountStatementQuery): EmpObservable<FileReport> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/account-statement/excel`;
@@ -75,7 +73,7 @@ export class BalancesDataService {
   }
 
 
-  getAccountStatement(query: AccountStatementQuery): Observable<AccountStatement> {
+  getAccountStatement(query: AccountStatementQuery): EmpObservable<AccountStatement> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/account-statement`;

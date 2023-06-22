@@ -203,7 +203,7 @@ export class AccountsChartExplorerComponent {
     this.setLoadingAccounts(true);
 
     this.accountsChartData.searchAccounts(accountsChartUID, accountsQuery)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.setAccountData(x);
         this.showFilters = false;
@@ -215,7 +215,7 @@ export class AccountsChartExplorerComponent {
   private exportAccountsToExcel() {
     this.accountsChartData.exportAccountsToExcel(this.selectedAccountChartUID,
                                                  this.accountsQuery)
-      .toPromise()
+      .firstValue()
       .then(x => this.excelFileUrl = x.url);
   }
 
@@ -224,7 +224,7 @@ export class AccountsChartExplorerComponent {
     this.setSubmitted(true);
 
     this.accountsChartData.getAccount(accountsChartUID, accountUID)
-      .toPromise()
+      .firstValue()
       .then(account => sendEvent(this.accountsChartExplorerEvent,
                          AccountsChartExplorerEventType.ACCOUNT_SELECTED, { account }))
       .finally(() => this.setSubmitted(false));

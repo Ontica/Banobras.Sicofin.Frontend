@@ -132,7 +132,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   private getReconciliationTypes() {
     this.setSubmitted(true);
     this.reconciliationData.getReconciliationTypes()
-      .toPromise()
+      .firstValue()
       .then(x => this.reconciliationTypeList = x)
       .finally(() => this.setSubmitted(false));
   }
@@ -141,7 +141,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   private getReconciliationInputDatasets(command: ReconciliationInputDatasetsCommand) {
     this.setSubmitted(true);
     this.reconciliationData.getReconciliationInputDatasets(command)
-      .toPromise()
+      .firstValue()
       .then(x => this.reconciliationDatasets = x)
       .finally(() => this.setSubmitted(false));
   }
@@ -150,7 +150,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   private importInputDatasetFromFile(file: File, command: ReconciliationImportInputDatasetCommand) {
     this.setSubmitted(true);
     this.reconciliationData.importInputDatasetFromFile(file, command)
-      .toPromise()
+      .firstValue()
       .then(x => this.reconciliationDatasets = x)
       .finally(() => this.setSubmitted(false));
   }
@@ -161,7 +161,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
                      <br><br>¿Procedo con la eliminación del archivo?`;
 
     this.messageBox.confirm(message, 'Eliminar Archivo', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.deleteInputDataset(inputDataset.uid);
@@ -173,7 +173,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   private deleteInputDataset(inputDatasetUID: string) {
     this.setSubmitted(true);
     this.reconciliationData.deleteInputDataset(inputDatasetUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.reconciliationDatasets = x)
       .finally(() => this.setSubmitted(false));
   }
@@ -182,7 +182,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
   private executeReconciliation(command: ReconciliationInputDatasetsCommand) {
     this.setSubmitted(true);
     this.reconciliationData.executeReconciliation(command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.reconciliationCommandExecuted = true;
         this.reconciliationDataTable = x;
@@ -193,7 +193,7 @@ export class BalanceReconciliationMainPageComponent implements OnInit {
 
   private exportReconciliation(command: ReconciliationInputDatasetsCommand) {
     this.reconciliationData.exportReconciliation(command)
-      .toPromise()
+      .firstValue()
       .then(x => this.fileUrl = x.url);
   }
 

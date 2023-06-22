@@ -153,7 +153,7 @@ export class FinancialConceptsMainPageComponent implements OnInit {
 
     this.financialConceptsData.getFinancialConceptsInGroup(this.financialConceptQuery.groupUID,
                                                            this.financialConceptQuery.date)
-      .toPromise()
+      .firstValue()
       .then(x => this.setFinancialConceptsListData(x))
       .finally(() => this.isLoading = false);
   }
@@ -161,7 +161,7 @@ export class FinancialConceptsMainPageComponent implements OnInit {
 
   private exportFinancialConceptsToExcel() {
     this.financialConceptsData.exportFinancialConceptsToExcel(this.financialConceptQuery.groupUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.excelFileUrl = x.url);
   }
 
@@ -169,7 +169,7 @@ export class FinancialConceptsMainPageComponent implements OnInit {
   private getFinancialConcept(financialConceptUID: string) {
     this.isLoadingFinancialConcept = true;
     this.financialConceptsData.getFinancialConcept(financialConceptUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSelectedFinancialConcept(x))
       .finally(() => this.isLoadingFinancialConcept = false);
   }

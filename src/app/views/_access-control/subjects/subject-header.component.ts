@@ -206,7 +206,7 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
     const message = this.getConfirmMessage(eventType);
 
     this.messageBox.confirm(message, title, confirmType)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           sendEvent(this.subjectHeaderEvent, eventType, {subject: this.subject});

@@ -57,7 +57,8 @@ export class ErrorMessageService {
   private showErrorMessage(message: string, status?: string) {
     if (!this.messageBox.isOpen()) {
       const statusMessage = status ? `<strong>(${status})</strong>  ` : '';
-      this.messageBox.showError(statusMessage + message);
+      this.messageBox.showError(statusMessage + message)
+        .firstValue();
     }
   }
 
@@ -67,7 +68,7 @@ export class ErrorMessageService {
 
     if (!this.messageBox.isOpen()) {
       this.messageBox.showError(errorMessage)
-        .toPromise()
+        .firstValue()
         .then(x => this.validateRedirectToLogin(withCredentials));
     }
   }

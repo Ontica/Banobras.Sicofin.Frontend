@@ -123,7 +123,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.reportingData.getFinancialReportTypes(accountChartUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.reportTypeList = x)
       .finally(() => this.isLoading = false);
   }

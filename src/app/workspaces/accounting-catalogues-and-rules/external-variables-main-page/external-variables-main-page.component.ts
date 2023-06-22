@@ -173,7 +173,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
   private getExternalValuesDatasets(query: ExternalValuesDatasetsQuery) {
     this.setSubmitted(true);
     this.externalVariablesData.getExternalValuesDatasets(query)
-      .toPromise()
+      .firstValue()
       .then(x => this.externalValuesDatasets = x)
       .finally(() => this.setSubmitted(false));
   }
@@ -182,7 +182,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
   private importExternalValuesDatasetFromFile(file: File, command: ExternalValuesImportDatasetCommand) {
     this.setSubmitted(true);
     this.externalVariablesData.importExternalValuesDatasetFromFile(file, command)
-      .toPromise()
+      .firstValue()
       .then(x => this.externalValuesDatasets = x)
       .finally(() => this.setSubmitted(false));
   }
@@ -193,7 +193,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
                      <br><br>¿Procedo con la eliminación del archivo?`;
 
     this.messageBox.confirm(message, 'Eliminar Archivo', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.deleteExternalValuesDataset(inputDataset.uid);
@@ -205,7 +205,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
   private deleteExternalValuesDataset(inputDatasetUID: string) {
     this.setSubmitted(true);
     this.externalVariablesData.deleteExternalValuesDataset(inputDatasetUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.externalValuesDatasets = x)
       .finally(() => this.setSubmitted(false));
   }
@@ -214,7 +214,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
   private getExternalValues(query: ExternalValuesQuery) {
     this.setSubmitted(true);
     this.externalVariablesData.getExternalValues(query)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.externalValuesQueryExecuted = true;
         this.externalValuesData = x;
@@ -225,7 +225,7 @@ export class ExternalVariablesMainPageComponent implements OnInit, OnDestroy {
 
   private exportExternalValues(query: ExternalValuesQuery) {
     this.externalVariablesData.exportExternalValues(query)
-      .toPromise()
+      .firstValue()
       .then(x => this.fileUrl = x.url);
   }
 

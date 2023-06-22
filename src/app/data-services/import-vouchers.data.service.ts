@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { ImportVouchersResult, ImportVouchersCommand } from '@app/models';
 
@@ -20,14 +18,14 @@ export class ImportVouchersDataService {
   constructor(private http: HttpService) { }
 
 
-  getStatusImportVouchersFromDatabase(): Observable<ImportVouchersResult> {
+  getStatusImportVouchersFromDatabase(): EmpObservable<ImportVouchersResult> {
     const path = `v2/financial-accounting/vouchers/import-from-database/status`;
 
     return this.http.get<ImportVouchersResult>(path);
   }
 
 
-  importVouchersFromDatabase(importVouchersCommand: ImportVouchersCommand): Observable<ImportVouchersResult> {
+  importVouchersFromDatabase(importVouchersCommand: ImportVouchersCommand): EmpObservable<ImportVouchersResult> {
     Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
 
     const path = `v2/financial-accounting/vouchers/import-from-database`;
@@ -37,7 +35,7 @@ export class ImportVouchersDataService {
 
 
   importVouchersFromExcelFile(file: File, importVouchersCommand: ImportVouchersCommand):
-    Observable<ImportVouchersResult> {
+    EmpObservable<ImportVouchersResult> {
     Assertion.assertValue(file, 'file');
     Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
 
@@ -52,7 +50,7 @@ export class ImportVouchersDataService {
 
 
   importVouchersFromTextFile(file: File, importVouchersCommand: ImportVouchersCommand):
-    Observable<ImportVouchersResult> {
+    EmpObservable<ImportVouchersResult> {
     Assertion.assertValue(file, 'file');
     Assertion.assertValue(importVouchersCommand, 'importVouchersCommand');
 

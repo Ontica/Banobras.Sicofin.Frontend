@@ -164,7 +164,7 @@ export class BalanceGenerationMainPageComponent {
     }
 
     this.balancesStoreData.getBalancesSetsList(this.selectedAccountChart.uid)
-      .toPromise()
+      .firstValue()
       .then(x => this.storedBalanceSetList = x)
       .catch(error => this.storedBalanceSetList = []);
   }
@@ -178,7 +178,7 @@ export class BalanceGenerationMainPageComponent {
     this.isLoading = true;
 
     this.balancesStoreData.getStoredBalanceSet(this.selectedAccountChart.uid, balanceSetUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSelectedStoredBalanceSet(x))
       .finally(() => this.isLoading = false);
   }
@@ -188,7 +188,7 @@ export class BalanceGenerationMainPageComponent {
     this.setSubmitted(true);
 
     this.balancesStoreData.createStoredBalancesSet(accountsChartUID, balanceSet)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.displayBalanceSetCreator = false;
         this.setSelectedStoredBalanceSet(x);
@@ -205,7 +205,7 @@ export class BalanceGenerationMainPageComponent {
     this.setSubmitted(true);
 
     this.balancesStoreData.calculateStoredBalancesSet(accountsChartUID, balanceSetUID)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.setSelectedStoredBalanceSet(x);
 
@@ -230,7 +230,7 @@ export class BalanceGenerationMainPageComponent {
   private exportStoredBalanceSetToExcel() {
     this.balancesStoreData.exportStoredBalanceSetToExcel(this.selectedStoredBalanceSet.accountsChart.uid,
                                                          this.selectedStoredBalanceSet.uid)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.excelFileUrl = x.url;
       });

@@ -17,12 +17,12 @@ export function resolve<U>(value?: U): Promise<U> {
 }
 
 
-export function toObservable<U>(value: Observable<any>): Observable<U> {
+export function toObservable<U>(value: Observable<U>): Observable<U> {
   return value as Observable<U>;
 }
 
 
-export function toPromise<U>(value: Promise<any> | Observable<any>): Promise<U> {
+export function getFirstValueFrom<U>(value: Promise<U> | Observable<U>): Promise<U> {
   if (value instanceof Observable) {
     return value.toPromise<U>();
 
@@ -32,4 +32,19 @@ export function toPromise<U>(value: Promise<any> | Observable<any>): Promise<U> 
   } else {
     return Promise.resolve<U>(value);
   }
+}
+
+
+export class EmpObservable<T> extends Observable<T> {
+
+  // TODO: refactor to not use source
+  constructor(source?: Observable<T>){
+    super();
+    this.source = source;
+  }
+
+  firstValue<T>(this: Observable<T>): Promise<T> {
+    return this.toPromise();
+  }
+
 }

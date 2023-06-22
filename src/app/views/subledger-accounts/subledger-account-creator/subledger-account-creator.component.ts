@@ -67,7 +67,7 @@ export class SubledgerAccountCreatorComponent {
     this.submitted = true;
 
     this.subledgerData.createSubledgerAccount(subledgerAccountFields)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.subledgerAccountCreatorEvent,
           SubledgerAccountCreatorEventType.SUBLEDGER_ACCOUNT_CREATED, {subledgerAccount: x});

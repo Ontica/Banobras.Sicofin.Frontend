@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { FileReport, ReconciliationData, ReconciliationDatasets, ReconciliationImportInputDatasetCommand,
          ReconciliationInputDatasetsCommand, ReconciliationType } from '@app/models';
@@ -21,14 +19,14 @@ export class ReconciliationDataService {
   constructor(private http: HttpService) { }
 
 
-  getReconciliationTypes(): Observable<ReconciliationType[]> {
+  getReconciliationTypes(): EmpObservable<ReconciliationType[]> {
     const path = `v2/financial-accounting/reconciliation/reconciliation-types`;
 
     return this.http.get<ReconciliationType[]>(path);
   }
 
 
-  executeReconciliation(command: ReconciliationInputDatasetsCommand): Observable<ReconciliationData> {
+  executeReconciliation(command: ReconciliationInputDatasetsCommand): EmpObservable<ReconciliationData> {
     Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/reconciliation`;
@@ -37,7 +35,7 @@ export class ReconciliationDataService {
   }
 
 
-  exportReconciliation(command: ReconciliationInputDatasetsCommand): Observable<FileReport> {
+  exportReconciliation(command: ReconciliationInputDatasetsCommand): EmpObservable<FileReport> {
     Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/reconciliation/export`;
@@ -46,7 +44,7 @@ export class ReconciliationDataService {
   }
 
 
-  getReconciliationInputDatasets(command: ReconciliationInputDatasetsCommand): Observable<ReconciliationDatasets> {
+  getReconciliationInputDatasets(command: ReconciliationInputDatasetsCommand): EmpObservable<ReconciliationDatasets> {
     Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/reconciliation/datasets`;
@@ -56,7 +54,7 @@ export class ReconciliationDataService {
 
 
   importInputDatasetFromFile(file: File, command: ReconciliationImportInputDatasetCommand)
-    : Observable<ReconciliationDatasets> {
+    : EmpObservable<ReconciliationDatasets> {
     Assertion.assertValue(file, 'file');
     Assertion.assertValue(command, 'command');
 
@@ -70,7 +68,7 @@ export class ReconciliationDataService {
   }
 
 
-  deleteInputDataset(datasetUID: string): Observable<ReconciliationDatasets> {
+  deleteInputDataset(datasetUID: string): EmpObservable<ReconciliationDatasets> {
     Assertion.assertValue(datasetUID, 'datasetUID');
 
     const path = `v2/financial-accounting/reconciliation/datasets/${datasetUID}`;

@@ -128,7 +128,7 @@ export class FinancialConceptIntegrationEditionComponent {
     this.isLoading = true;
 
     this.financialConceptsData.getFinancialConceptEntry(this.financialConcept.uid, financialConceptEntryUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSelectedFinancialConceptEntry(x))
       .finally(() => this.isLoading = false);
   }
@@ -138,7 +138,7 @@ export class FinancialConceptIntegrationEditionComponent {
     this.editionSubmitted = true;
 
     this.financialConceptsData.insertFinancialConceptEntry(this.financialConcept.uid, command)
-      .toPromise()
+      .firstValue()
       .then(x => this.validateEditionResult(x))
       .catch(() => this.editionSubmitted = false);
   }
@@ -150,7 +150,7 @@ export class FinancialConceptIntegrationEditionComponent {
     this.financialConceptsData.updateFinancialConceptEntry(this.financialConcept.uid,
                                                            this.selectedFinancialConceptEntry.uid,
                                                            command)
-      .toPromise()
+      .firstValue()
       .then(x => this.validateEditionResult(x))
       .catch(() => this.editionSubmitted = false);
   }
@@ -187,7 +187,7 @@ export class FinancialConceptIntegrationEditionComponent {
 
   private openValidateResultModal(editionResult: FinancialConceptEntryEditionResult) {
     this.resultModal.validateResult(editionResult)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.submitEntryEdition(editionResult.command);
@@ -212,7 +212,7 @@ export class FinancialConceptIntegrationEditionComponent {
     this.deleteSubmitted = true;
 
     this.financialConceptsData.removeFinancialConceptEntry(financialConceptUID, financialConceptEntryUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.emitIntegrationUpdated('La regla fue eliminada de la agrupación.'))
       .finally(() => this.deleteSubmitted = false);
   }

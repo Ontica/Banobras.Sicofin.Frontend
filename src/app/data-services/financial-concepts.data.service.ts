@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, DateString, HttpService } from '@app/core';
+import { Assertion, DateString, EmpObservable, HttpService } from '@app/core';
 
 import { FileReport, FinancialConcept, FinancialConceptDescriptor,
          FinancialConceptEditionCommand, FinancialConceptEntry, FinancialConceptEntryEditionCommand,
@@ -22,14 +20,14 @@ export class FinancialConceptsDataService {
   constructor(private http: HttpService) { }
 
 
-  getFinancialConceptsGroups(): Observable<FinancialConceptsGroup[]> {
+  getFinancialConceptsGroups(): EmpObservable<FinancialConceptsGroup[]> {
     const path = `v2/financial-accounting/financial-concepts/groups`;
 
     return this.http.get<FinancialConceptsGroup[]>(path);
   }
 
 
-  getFinancialConceptsInGroup(groupUID: string, date: DateString): Observable<FinancialConceptDescriptor[]> {
+  getFinancialConceptsInGroup(groupUID: string, date: DateString): EmpObservable<FinancialConceptDescriptor[]> {
     Assertion.assertValue(groupUID, 'groupUID');
 
     let path = `v2/financial-accounting/financial-concepts/in-group/${groupUID}`;
@@ -42,7 +40,7 @@ export class FinancialConceptsDataService {
   }
 
 
-  exportFinancialConceptsToExcel(financialConceptGroupUID: string): Observable<FileReport> {
+  exportFinancialConceptsToExcel(financialConceptGroupUID: string): EmpObservable<FileReport> {
     Assertion.assertValue(financialConceptGroupUID, 'financialConceptGroupUID');
 
     const path = `v2/financial-accounting/financial-concepts/groups/${financialConceptGroupUID}/excel`;
@@ -51,7 +49,7 @@ export class FinancialConceptsDataService {
   }
 
 
-  getFinancialConcept(financialConceptUID: string): Observable<FinancialConcept> {
+  getFinancialConcept(financialConceptUID: string): EmpObservable<FinancialConcept> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
 
     const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
@@ -61,7 +59,7 @@ export class FinancialConceptsDataService {
 
 
 
-  insertFinancialConcept(command: FinancialConceptEditionCommand): Observable<FinancialConcept> {
+  insertFinancialConcept(command: FinancialConceptEditionCommand): EmpObservable<FinancialConcept> {
     Assertion.assertValue(command, 'command');
 
     const path = `v2/financial-accounting/financial-concepts`;
@@ -71,7 +69,7 @@ export class FinancialConceptsDataService {
 
 
   updateFinancialConcept(financialConceptUID: string,
-                         command: FinancialConceptEditionCommand): Observable<FinancialConcept> {
+                         command: FinancialConceptEditionCommand): EmpObservable<FinancialConcept> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
     Assertion.assertValue(command, 'command');
 
@@ -81,7 +79,7 @@ export class FinancialConceptsDataService {
   }
 
 
-  removeFinancialConcept(financialConceptUID: string): Observable<void> {
+  removeFinancialConcept(financialConceptUID: string): EmpObservable<void> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
 
     const path = `v2/financial-accounting/financial-concepts/${financialConceptUID}`;
@@ -91,7 +89,7 @@ export class FinancialConceptsDataService {
 
 
   getFinancialConceptEntry(financialConceptUID: string,
-                           financialConceptEntryUID: string): Observable<FinancialConceptEntry> {
+                           financialConceptEntryUID: string): EmpObservable<FinancialConceptEntry> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
     Assertion.assertValue(financialConceptEntryUID, 'financialConceptEntryUID');
 
@@ -103,7 +101,7 @@ export class FinancialConceptsDataService {
 
 
   insertFinancialConceptEntry(financialConceptUID: string,
-                              command: FinancialConceptEntryEditionCommand): Observable<FinancialConceptEntryEditionResult> {
+                              command: FinancialConceptEntryEditionCommand): EmpObservable<FinancialConceptEntryEditionResult> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
     Assertion.assertValue(command, 'command');
 
@@ -115,7 +113,7 @@ export class FinancialConceptsDataService {
 
   updateFinancialConceptEntry(financialConceptUID: string,
                               financialConceptEntryUID: string,
-                              command: FinancialConceptEntryEditionCommand): Observable<FinancialConceptEntryEditionResult> {
+                              command: FinancialConceptEntryEditionCommand): EmpObservable<FinancialConceptEntryEditionResult> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
     Assertion.assertValue(financialConceptEntryUID, 'financialConceptEntryUID');
     Assertion.assertValue(command, 'command');
@@ -128,7 +126,7 @@ export class FinancialConceptsDataService {
 
 
   removeFinancialConceptEntry(financialConceptUID: string,
-                              financialConceptEntryUID: string): Observable<void> {
+                              financialConceptEntryUID: string): EmpObservable<void> {
     Assertion.assertValue(financialConceptUID, 'financialConceptUID');
     Assertion.assertValue(financialConceptEntryUID, 'financialConceptEntryUID');
 

@@ -257,7 +257,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.vouchersData.searchVouchers(this.voucherFilterData.query)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.setVoucherListData(x);
         this.setSelectedVoucher(EmptyVoucher);
@@ -279,7 +279,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
     this.isLoadingVoucher = true;
 
     this.vouchersData.getVoucher(idVoucher)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSelectedVoucher(x))
       .finally(() => this.isLoadingVoucher = false);
   }
@@ -289,7 +289,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
     this.isLoadingVoucher = true;
 
     this.vouchersData.bulkOperationVouchers(operation, command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (operation === VouchersOperationType.print) {
           this.displayVouchersToPrint(x);

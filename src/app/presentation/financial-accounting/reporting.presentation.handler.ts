@@ -7,15 +7,13 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
 import { ReportingDataService } from '@app/data-services';
 
 import { EmptyBalanceExplorerData } from '@app/models';
 
-import { Assertion } from '@app/core';
+import { Assertion, EmpObservable } from '@app/core';
 
 
 export enum ActionType {
@@ -47,7 +45,7 @@ export class ReportingPresentationHandler extends AbstractPresentationHandler {
   }
 
 
-  select<U>(selectorType: SelectorType, params?: any): Observable<U> {
+  select<U>(selectorType: SelectorType, params?: any): EmpObservable<U> {
 
     switch (selectorType) {
 

@@ -7,9 +7,7 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, DateString, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
+import { Assertion, DateString, DateStringLibrary, EmpObservable, EventInfo, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -583,11 +581,11 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
   }
 
 
-  private executeAccountOperation(observable: Observable<AccountEditionResult>, dryRun: boolean) {
+  private executeAccountOperation(observable: EmpObservable<AccountEditionResult>, dryRun: boolean) {
     this.submitted = true;
 
     observable
-      .toPromise()
+      .firstValue()
       .then(x => this.resolveAccountEditionResult(x, dryRun))
       .finally(() => this.submitted = false);
   }
@@ -621,7 +619,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
                    <br><br>¿Elimino la cuenta?`;
 
     this.messageBox.confirm(message, 'Eliminar cuenta', 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.deleteAccount(command);
@@ -634,7 +632,7 @@ export class AccountEditionWizardComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     this.accountsData.deleteAccount(command.accountsChartUID, command.accountUID, command)
-      .toPromise()
+      .firstValue()
       .then(x => this.resolveAccountDeleteResponse())
       .finally(() => this.submitted = false);
   }

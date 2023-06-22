@@ -201,7 +201,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoadingAccountingDates = true;
 
     this.vouchersData.getOpenedAccountingDates(accountsChartUID)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.accountingDatesList =
           x.map(item => Object.create({ uid: item, name: DateStringLibrary.format(item) }));

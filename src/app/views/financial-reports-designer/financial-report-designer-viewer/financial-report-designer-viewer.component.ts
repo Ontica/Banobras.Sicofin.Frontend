@@ -87,7 +87,7 @@ export class FinancialReportDesignerViewerComponent {
 
     this.financialReportsEditionData.getFinancialReportDesign(this.query.financialReportTypeUID,
                                                               this.query.date)
-      .toPromise()
+      .firstValue()
       .then(x => this.setFinancialReportDesignData(x, true))
       .catch(e => this.setFinancialReportDesignData(EmptyFinancialReportDesign, true))
       .finally(() => {

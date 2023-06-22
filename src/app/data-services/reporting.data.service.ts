@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { FileReport, FinancialReport, FinancialReportQuery, FinancialReportTypeFlags, LockedUpBalancesData,
          LockedUpBalancesQuery, ReportData, ReportQuery, ReportType, ReportTypeFlags } from '@app/models';
@@ -21,14 +19,14 @@ export class ReportingDataService {
   constructor(private http: HttpService) { }
 
 
-  getReportTypes(): Observable<ReportType<ReportTypeFlags>[]> {
+  getReportTypes(): EmpObservable<ReportType<ReportTypeFlags>[]> {
     const path = `v2/financial-accounting/reporting/report-types`;
 
     return this.http.get<ReportType<ReportTypeFlags>[]>(path);
   }
 
 
-  exportReportData(query: ReportQuery): Observable<FileReport> {
+  exportReportData(query: ReportQuery): EmpObservable<FileReport> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/reporting/${query.reportType}/export`;
@@ -37,7 +35,7 @@ export class ReportingDataService {
   }
 
 
-  getReportData(query: ReportQuery): Observable<ReportData> {
+  getReportData(query: ReportQuery): EmpObservable<ReportData> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/reporting/${query.reportType}/data`;
@@ -46,7 +44,7 @@ export class ReportingDataService {
   }
 
 
-  getLockedUpBalances(query: LockedUpBalancesQuery): Observable<LockedUpBalancesData> {
+  getLockedUpBalances(query: LockedUpBalancesQuery): EmpObservable<LockedUpBalancesData> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/locked-up-balances`;
@@ -59,7 +57,7 @@ export class ReportingDataService {
   // Tmp: Financial Report
   //
 
-  exportFinancialReport(buildQuery: FinancialReportQuery): Observable<FileReport> {
+  exportFinancialReport(buildQuery: FinancialReportQuery): EmpObservable<FileReport> {
     Assertion.assertValue(buildQuery, 'buildQuery');
 
     const path = `v2/financial-accounting/financial-reports/export`;
@@ -68,7 +66,7 @@ export class ReportingDataService {
   }
 
 
-  getFinancialReport(buildQuery: FinancialReportQuery): Observable<FinancialReport> {
+  getFinancialReport(buildQuery: FinancialReportQuery): EmpObservable<FinancialReport> {
     Assertion.assertValue(buildQuery, 'buildQuery');
 
     const path = `v2/financial-accounting/financial-reports/generate`;
@@ -78,7 +76,7 @@ export class ReportingDataService {
 
 
   getFinancialReportBreakdown(financialReportItemUID: string,
-                              buildQuery: FinancialReportQuery): Observable<FinancialReport> {
+                              buildQuery: FinancialReportQuery): EmpObservable<FinancialReport> {
     Assertion.assertValue(financialReportItemUID, 'financialReportItemUID');
     Assertion.assertValue(buildQuery, 'buildQuery');
 
@@ -87,7 +85,7 @@ export class ReportingDataService {
     return this.http.post<FinancialReport>(path, buildQuery);
   }
 
-  getFinancialReportTypes(accountsChartUID: string): Observable<ReportType<FinancialReportTypeFlags>[]> {
+  getFinancialReportTypes(accountsChartUID: string): EmpObservable<ReportType<FinancialReportTypeFlags>[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
     const path = `v2/financial-accounting/financial-reports/types/${accountsChartUID}`;

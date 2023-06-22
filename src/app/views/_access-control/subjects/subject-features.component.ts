@@ -108,7 +108,7 @@ export class SubjectFeaturesComponent implements OnChanges {
 
   private getFeaturesByContext(contextUID: string) {
     this.accessControlData.getFeaturesByContext(contextUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.featuresList = x);
   }
 
@@ -117,7 +117,7 @@ export class SubjectFeaturesComponent implements OnChanges {
     this.isLoading = true;
 
     this.accessControlData.getSubjectFeaturesByContext(this.subjectUID, contextUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.subjectFeaturesList = x)
       .finally(() => {
         this.isLoading = false;
@@ -130,7 +130,7 @@ export class SubjectFeaturesComponent implements OnChanges {
     this.submitted = true;
 
     this.accessControlData.assignFeatureToSubject(subjectUID, contextUID, featureUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.subjectFeaturesList = x)
       .finally(() => this.submitted = false);
   }
@@ -140,7 +140,7 @@ export class SubjectFeaturesComponent implements OnChanges {
     this.submitted = true;
 
     this.accessControlData.removeFeatureToSubject(subjectUID, contextUID, featureUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.subjectFeaturesList = x)
       .finally(() => this.submitted = false);
   }

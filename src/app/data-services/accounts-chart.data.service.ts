@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService, Identifiable } from '@app/core';
+import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { Account, AccountsChart, AccountsChartMasterData, AccountsQuery, FileReport } from '@app/models';
 
@@ -21,21 +19,21 @@ export class AccountsChartDataService {
   constructor(private http: HttpService) { }
 
 
-  getAccountsChartsList(): Observable<Identifiable[]> {
+  getAccountsChartsList(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/accounts-charts`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getAccountsChartsMasterData(): Observable<AccountsChartMasterData[]> {
+  getAccountsChartsMasterData(): EmpObservable<AccountsChartMasterData[]> {
     const path = `v2/financial-accounting/accounts-charts-master-data`;
 
     return this.http.get<AccountsChartMasterData[]>(path);
   }
 
 
-  searchAccounts(accountsChartUID: string, query: AccountsQuery): Observable<AccountsChart> {
+  searchAccounts(accountsChartUID: string, query: AccountsQuery): EmpObservable<AccountsChart> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(query, 'query');
 
@@ -45,7 +43,7 @@ export class AccountsChartDataService {
   }
 
 
-  exportAccountsToExcel(accountsChartUID: string, query: AccountsQuery): Observable<FileReport> {
+  exportAccountsToExcel(accountsChartUID: string, query: AccountsQuery): EmpObservable<FileReport> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(query, 'query');
 
@@ -56,7 +54,7 @@ export class AccountsChartDataService {
 
 
   getAccount(accountsChartUID: string,
-             accountUID: string): Observable<Account> {
+             accountUID: string): EmpObservable<Account> {
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
 
     return this.http.get<Account>(path);

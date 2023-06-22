@@ -9,9 +9,9 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
-import { Assertion, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
+import { Assertion, DateStringLibrary, EmpObservable, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -263,7 +263,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
     this.isLoadingAccountingDates = true;
 
     this.vouchersData.getOpenedAccountingDates(accountsChartUID)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.accountingDatesList =
           x.map(item => Object.create({ uid: item, name: DateStringLibrary.format(item) }));
@@ -434,7 +434,7 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
 
   private showConfirmMessageToImport() {
     this.messageBox.confirm(this.getConfirmMessageToImport(), this.title)
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.validateExecuteImportVouchers(false);
@@ -480,11 +480,11 @@ export class VouchersImporterComponent implements OnInit, OnDestroy {
   }
 
 
-  private importVouchers(importObservable: Observable<ImportVouchersResult>, dryRun: boolean) {
+  private importVouchers(importObservable: EmpObservable<ImportVouchersResult>, dryRun: boolean) {
     this.isLoading = true;
 
     importObservable
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (dryRun) {
           this.resolveDryRunImportVouchersResult(x);

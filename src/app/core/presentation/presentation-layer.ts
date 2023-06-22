@@ -6,9 +6,8 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
-import { Assertion, Command } from '@app/core';
+import { Assertion, Command, EmpObservable } from '@app/core';
 
 import { ActionType, StateSelector, CommandType } from './presentation-types';
 
@@ -49,7 +48,7 @@ export class PresentationLayer {
   }
 
 
-  select<T>(selector: StateSelector, params?: any): Observable<T> {
+  select<T>(selector: StateSelector, params?: any): EmpObservable<T> {
     Assertion.assertValue(selector, 'selector');
 
     return this.presenter.select<T>(selector, params);

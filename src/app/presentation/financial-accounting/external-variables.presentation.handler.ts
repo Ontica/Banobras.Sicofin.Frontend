@@ -7,11 +7,11 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
 import { ExternalVariablesDataService } from '@app/data-services';
+
+import { EmpObservable } from '@app/core';
 
 
 export enum SelectorType {
@@ -35,7 +35,7 @@ export class ExternalVariablesPresentationHandler extends AbstractPresentationHa
   }
 
 
-  select<U>(selectorType: SelectorType, params?: any): Observable<U> {
+  select<U>(selectorType: SelectorType, params?: any): EmpObservable<U> {
 
     let provider: () => any;
 

@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { AccountEditionCommand, AccountEditionResult, ImportAccountsCommand,
          ImportAccountsResult } from '@app/models';
@@ -23,7 +21,7 @@ export class AccountsEditionDataService {
 
 
   createAccount(accountsChartUID: string,
-                command: AccountEditionCommand): Observable<AccountEditionResult> {
+                command: AccountEditionCommand): EmpObservable<AccountEditionResult> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(command, 'command');
 
@@ -35,7 +33,7 @@ export class AccountsEditionDataService {
 
   updateAccount(accountsChartUID: string,
                 accountUID: string,
-                command: AccountEditionCommand): Observable<AccountEditionResult> {
+                command: AccountEditionCommand): EmpObservable<AccountEditionResult> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(accountUID, 'accountUID');
     Assertion.assertValue(command, 'command');
@@ -48,7 +46,7 @@ export class AccountsEditionDataService {
 
   deleteAccount(accountsChartUID: string,
                 accountUID: string,
-                command: AccountEditionCommand): Observable<AccountEditionResult> {
+                command: AccountEditionCommand): EmpObservable<AccountEditionResult> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(accountUID, 'accountUID');
     Assertion.assertValue(command, 'command');
@@ -60,7 +58,7 @@ export class AccountsEditionDataService {
 
 
   updateAccountsChartFromExcel(file: File,
-                               command: ImportAccountsCommand): Observable<ImportAccountsResult[]> {
+                               command: ImportAccountsCommand): EmpObservable<ImportAccountsResult[]> {
     Assertion.assertValue(file, 'file');
     Assertion.assertValue(command, 'command');
 

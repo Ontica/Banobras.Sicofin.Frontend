@@ -73,7 +73,7 @@ export class FinancialConceptEditorComponent {
     this.submitted = true;
 
     this.financialConceptsData.updateFinancialConcept(this.financialConcept.uid, command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.financialConceptEditorEvent, FinancialConceptEditorEventType.FINANCIAL_CONCEPT_UPDATED,
           {financialConcept: x});
@@ -86,7 +86,7 @@ export class FinancialConceptEditorComponent {
     this.submitted = true;
 
     this.financialConceptsData.removeFinancialConcept(financialConceptUID)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.showMessageDeleted();
         sendEvent(this.financialConceptEditorEvent,

@@ -7,7 +7,9 @@
 
 import { Component } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
+
+import { EmpObservable } from '@app/core';
 
 import { EditionResult } from '@app/models';
 
@@ -23,17 +25,17 @@ export class ConfirmEditionResultModalComponent {
   constructor(private messageBox: MessageBoxService) { }
 
 
-  validateResult(result: EditionResult): Observable<boolean> {
+  validateResult(result: EditionResult): EmpObservable<boolean> {
     if (this.hasError(result)) {
       this.showErrorMessage(result);
-      return of(false);
+      return new EmpObservable(of(false));
     }
 
     if (this.hasActionsOrWarnings(result)) {
       return this.showConfirmMessage(result);
     }
 
-    return of(true);
+    return new EmpObservable(of(true));
   }
 
 
@@ -55,7 +57,7 @@ export class ConfirmEditionResultModalComponent {
   }
 
 
-  private showConfirmMessage(result: EditionResult): Observable<boolean> {
+  private showConfirmMessage(result: EditionResult): EmpObservable<boolean> {
     let message = '';
 
     if (result.warnings.length > 0) {
@@ -70,7 +72,7 @@ export class ConfirmEditionResultModalComponent {
 
     message += `¿Continuo con la operación?`
 
-    return this.messageBox.confirm(message, `Confirmar operación`);
+    return new EmpObservable(this.messageBox.confirm(message, `Confirmar operación`));
   }
 
 }

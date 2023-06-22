@@ -386,7 +386,7 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
     }
 
     this.messageBox.confirm(this.getConfirmMessage(type), this.getTitle(type), 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.emitDeleteEventType(type);

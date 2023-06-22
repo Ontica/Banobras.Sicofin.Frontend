@@ -101,7 +101,7 @@ export class SubjectContextsComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     this.accessControlData.assignContextToSubject(subjectUID, contextUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.emitSubjectContextsUpdated(x))
       .finally(() => this.submitted = false);
   }
@@ -111,7 +111,7 @@ export class SubjectContextsComponent implements OnInit, OnDestroy {
     this.submitted = true;
 
     this.accessControlData.removeContextToSubject(subjectUID, contextUID)
-      .toPromise()
+      .firstValue()
       .then(x => this.emitSubjectContextsUpdated(x))
       .finally(() => this.submitted = false);
   }

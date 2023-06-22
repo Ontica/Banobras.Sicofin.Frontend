@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { ConcilacionSICExternalProcessCommand, ExportBalancesCommand, ExternalProcessTypes,
          RentabilidadExternalProcessCommand } from '@app/models';
@@ -23,7 +21,7 @@ export class ExternalProcessDataService {
 
   executeExternalProcess(externalProcessType: ExternalProcessTypes,
                          externalProcessCommand: RentabilidadExternalProcessCommand |
-                                                 ConcilacionSICExternalProcessCommand): Observable<string> {
+                                                 ConcilacionSICExternalProcessCommand): EmpObservable<string> {
     Assertion.assertValue(externalProcessType, 'externalProcessType');
     Assertion.assertValue(externalProcessCommand, 'externalProcessCommand');
 
@@ -33,7 +31,7 @@ export class ExternalProcessDataService {
   }
 
 
-  exportBalances(exportBalancesCommand: ExportBalancesCommand): Observable<string> {
+  exportBalances(exportBalancesCommand: ExportBalancesCommand): EmpObservable<string> {
     Assertion.assertValue(exportBalancesCommand, 'exportBalancesCommand');
 
     const path = `v2/financial-accounting/integration/export-balances`;

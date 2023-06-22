@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, DateString, HttpService } from '@app/core';
+import { Assertion, DateString, EmpObservable, HttpService } from '@app/core';
 
 import { ExternalValuesData, ExternalValuesImportDatasetCommand, ExternalValuesDatasetsQuery,
          ExternalValuesQuery, ExternalVariableSet, FileReport, ImportDatasets, ExternalVariable,
@@ -22,14 +20,14 @@ export class ExternalVariablesDataService {
   constructor(private http: HttpService) { }
 
 
-  getExternalVariablesSets(): Observable<ExternalVariableSet[]> {
+  getExternalVariablesSets(): EmpObservable<ExternalVariableSet[]> {
     const path = `v2/financial-accounting/financial-concepts/external-variables-sets`;
 
     return this.http.get<ExternalVariableSet[]>(path);
   }
 
 
-  getExternalVariables(setUID: string, date?: DateString): Observable<ExternalVariable[]> {
+  getExternalVariables(setUID: string, date?: DateString): EmpObservable<ExternalVariable[]> {
     Assertion.assertValue(setUID, 'setUID');
 
     let path = `v2/financial-accounting/financial-concepts/external-variables-sets/${setUID}/variables`;
@@ -42,7 +40,7 @@ export class ExternalVariablesDataService {
   }
 
 
-  addExternalVariable(setUID: string, fields: ExternalVariableFields): Observable<ExternalVariable> {
+  addExternalVariable(setUID: string, fields: ExternalVariableFields): EmpObservable<ExternalVariable> {
     Assertion.assertValue(setUID, 'setUID');
     Assertion.assertValue(fields, 'fields');
 
@@ -54,7 +52,7 @@ export class ExternalVariablesDataService {
 
   updateExternalVariable(setUID: string,
                          variableUID: string,
-                         fields: ExternalVariableFields): Observable<ExternalVariable> {
+                         fields: ExternalVariableFields): EmpObservable<ExternalVariable> {
     Assertion.assertValue(setUID, 'setUID');
     Assertion.assertValue(variableUID, 'variableUID');
     Assertion.assertValue(fields, 'fields');
@@ -66,7 +64,7 @@ export class ExternalVariablesDataService {
   }
 
 
-  removeExternalVariable(setUID: string, variableUID: string): Observable<void> {
+  removeExternalVariable(setUID: string, variableUID: string): EmpObservable<void> {
     Assertion.assertValue(setUID, 'setUID');
     Assertion.assertValue(variableUID, 'variableUID');
 
@@ -77,7 +75,7 @@ export class ExternalVariablesDataService {
   }
 
 
-  getExternalValues(query: ExternalValuesQuery): Observable<ExternalValuesData> {
+  getExternalValues(query: ExternalValuesQuery): EmpObservable<ExternalValuesData> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/financial-concepts/external-values`;
@@ -86,7 +84,7 @@ export class ExternalVariablesDataService {
   }
 
 
-  exportExternalValues(query: ExternalValuesQuery): Observable<FileReport> {
+  exportExternalValues(query: ExternalValuesQuery): EmpObservable<FileReport> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/financial-concepts/external-values/export`;
@@ -95,7 +93,7 @@ export class ExternalVariablesDataService {
   }
 
 
-  getExternalValuesDatasets(query: ExternalValuesDatasetsQuery): Observable<ImportDatasets> {
+  getExternalValuesDatasets(query: ExternalValuesDatasetsQuery): EmpObservable<ImportDatasets> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/financial-concepts/external-values/datasets`;
@@ -105,7 +103,7 @@ export class ExternalVariablesDataService {
 
 
   importExternalValuesDatasetFromFile(file: File, command: ExternalValuesImportDatasetCommand)
-    : Observable<ImportDatasets> {
+    : EmpObservable<ImportDatasets> {
     Assertion.assertValue(file, 'file');
     Assertion.assertValue(command, 'command');
 
@@ -119,7 +117,7 @@ export class ExternalVariablesDataService {
   }
 
 
-  deleteExternalValuesDataset(datasetUID: string): Observable<ImportDatasets> {
+  deleteExternalValuesDataset(datasetUID: string): EmpObservable<ImportDatasets> {
     Assertion.assertValue(datasetUID, 'datasetUID');
 
     const path = `v2/financial-accounting/financial-concepts/external-values/datasets/${datasetUID}`;

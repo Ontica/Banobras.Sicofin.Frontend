@@ -152,7 +152,7 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
     this.setSubmitted(true);
 
     this.exchangeRatesData.searchExchangeRates(query)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.queryExecuted = true;
         this.exchangeRateData = Object.assign({}, EmptyExchangeRateData, {entries: x});
@@ -163,7 +163,7 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
 
   private exportExchangeRatesToExcel(query) {
     this.exchangeRatesData.exportExchangeRatesToExcel(query)
-      .toPromise()
+      .firstValue()
       .then(x => this.excelFileUrl = x.url);
   }
 

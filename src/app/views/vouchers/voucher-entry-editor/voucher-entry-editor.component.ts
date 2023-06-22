@@ -326,7 +326,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     this.isLoading = true;
 
     this.vouchersData.getCopyOfLastEntry(voucherEntryId)
-      .toPromise()
+      .firstValue()
       .then(x => this.setVoucherEntryToClone(x))
       .finally(() => this.isLoading = false);
   }
@@ -336,7 +336,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     this.isLoading = true;
 
     this.vouchersData.assignAccountToVoucher(this.voucher.id, standardAccountId)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.form.controls.ledgerAccount.reset(x);
         this.subscribeLedgerAccountList();
@@ -521,7 +521,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
       <br><br>¿Desea utilizarla por primera vez?`;
 
     this.messageBox.confirm(message, 'Agregar cuenta')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.assignAccountToVoucher(ledgerAccount.standardAccountId);

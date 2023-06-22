@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService, Identifiable } from '@app/core';
+import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { FileReport, LedgerAccount, VouchersQuery, SubledgerAccountDescriptor,
          Voucher, VoucherDescriptor, VoucherEntry, VoucherEntryFields, VoucherFields,
@@ -23,21 +21,21 @@ export class VouchersDataService {
   constructor(private http: HttpService) { }
 
 
-  getEventTypes(): Observable<Identifiable[]> {
+  getEventTypes(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/vouchers/event-types`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getFunctionalAreas(): Observable<Identifiable[]> {
+  getFunctionalAreas(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/vouchers/functional-areas`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getOpenedAccountingDates(accountsChartUID: string): Observable<string[]> {
+  getOpenedAccountingDates(accountsChartUID: string): EmpObservable<string[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
     const path = `v2/financial-accounting/vouchers/opened-accounting-dates/${accountsChartUID}`;
@@ -46,35 +44,35 @@ export class VouchersDataService {
   }
 
 
-  getTransactionTypes(): Observable<Identifiable[]> {
+  getTransactionTypes(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/vouchers/transaction-types`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getVoucherTypes(): Observable<Identifiable[]> {
+  getVoucherTypes(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/vouchers/voucher-types`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getVoucherSpecialCaseTypes(): Observable<VoucherSpecialCaseType[]> {
+  getVoucherSpecialCaseTypes(): EmpObservable<VoucherSpecialCaseType[]> {
     const path = `v2/financial-accounting/vouchers/special-case-types`;
 
     return this.http.get<VoucherSpecialCaseType[]>(path);
   }
 
 
-  getTransactionalSystems(): Observable<Identifiable[]> {
+  getTransactionalSystems(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/vouchers/transactional-systems`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getVoucher(voucherId: number): Observable<Voucher> {
+  getVoucher(voucherId: number): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}`;
@@ -83,7 +81,7 @@ export class VouchersDataService {
   }
 
 
-  getVoucherForPrint(voucherId: number): Observable<FileReport> {
+  getVoucherForPrint(voucherId: number): EmpObservable<FileReport> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}/print`;
@@ -92,7 +90,7 @@ export class VouchersDataService {
   }
 
 
-  searchAccountsForEdition(voucherId: number, keywords: string): Observable<LedgerAccount[]> {
+  searchAccountsForEdition(voucherId: number, keywords: string): EmpObservable<LedgerAccount[]> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(keywords, 'keywords');
 
@@ -103,7 +101,7 @@ export class VouchersDataService {
   }
 
 
-  searchEditors(keywords: string): Observable<Identifiable[]> {
+  searchEditors(keywords: string): EmpObservable<Identifiable[]> {
     Assertion.assertValue(keywords, 'keywords');
 
     const path = `v2/financial-accounting/vouchers/editors?keywords=${keywords}`;
@@ -114,7 +112,7 @@ export class VouchersDataService {
 
   searchSubledgerAccountsForEdition(voucherId: number,
                                     accountId: number,
-                                    keywords: string): Observable<SubledgerAccountDescriptor[]> {
+                                    keywords: string): EmpObservable<SubledgerAccountDescriptor[]> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(accountId, 'accountId');
     Assertion.assertValue(keywords, 'keywords');
@@ -126,7 +124,7 @@ export class VouchersDataService {
   }
 
 
-  searchVouchers(query: VouchersQuery): Observable<VoucherDescriptor[]> {
+  searchVouchers(query: VouchersQuery): EmpObservable<VoucherDescriptor[]> {
     Assertion.assertValue(query, 'query');
 
     const path = `v2/financial-accounting/vouchers`;
@@ -135,7 +133,7 @@ export class VouchersDataService {
   }
 
 
-  createVoucher(voucherFields: VoucherFields): Observable<Voucher> {
+  createVoucher(voucherFields: VoucherFields): EmpObservable<Voucher> {
     Assertion.assertValue(voucherFields, 'voucherFields');
 
     const path = `v2/financial-accounting/vouchers/create-voucher`;
@@ -144,7 +142,7 @@ export class VouchersDataService {
   }
 
 
-  createVoucherSpecialCase(voucherFields: VoucherFields): Observable<Voucher> {
+  createVoucherSpecialCase(voucherFields: VoucherFields): EmpObservable<Voucher> {
     Assertion.assertValue(voucherFields, 'voucherFields');
 
     const path = `v2/financial-accounting/vouchers/special-case/create-voucher`;
@@ -153,7 +151,7 @@ export class VouchersDataService {
   }
 
 
-  createAllVouchersSpecialCase(voucherFields: VoucherFields): Observable<string> {
+  createAllVouchersSpecialCase(voucherFields: VoucherFields): EmpObservable<string> {
     Assertion.assertValue(voucherFields, 'voucherFields');
 
     const path = `v2/financial-accounting/vouchers/special-case/create-all-vouchers`;
@@ -162,7 +160,7 @@ export class VouchersDataService {
   }
 
 
-  updateVoucher(voucherId: number, voucherFields: VoucherFields): Observable<Voucher> {
+  updateVoucher(voucherId: number, voucherFields: VoucherFields): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherFields, 'voucherFields');
 
@@ -172,7 +170,7 @@ export class VouchersDataService {
   }
 
 
-  validateVoucher(voucherId: number): Observable<string[]> {
+  validateVoucher(voucherId: number): EmpObservable<string[]> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}/validate`;
@@ -181,7 +179,7 @@ export class VouchersDataService {
   }
 
 
-  sendVoucherToSupervision(voucherId: number): Observable<Voucher> {
+  sendVoucherToSupervision(voucherId: number): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}/send-to-supervisor`;
@@ -190,7 +188,7 @@ export class VouchersDataService {
   }
 
 
-  closeVoucher(voucherId: number): Observable<Voucher> {
+  closeVoucher(voucherId: number): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}/close`;
@@ -199,7 +197,7 @@ export class VouchersDataService {
   }
 
 
-  deleteVoucher(voucherId: number): Observable<Voucher> {
+  deleteVoucher(voucherId: number): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}`;
@@ -209,7 +207,7 @@ export class VouchersDataService {
 
 
   bulkOperationVouchers(operationType: VouchersOperationType,
-                        command: VouchersOperationCommand): Observable<VouchersOperationResult> {
+                        command: VouchersOperationCommand): EmpObservable<VouchersOperationResult> {
     Assertion.assertValue(operationType, 'operationType');
     Assertion.assertValue(command, 'command');
 
@@ -219,7 +217,7 @@ export class VouchersDataService {
   }
 
 
-  assignAccountToVoucher(voucherId: number, standardAccountId: number): Observable<LedgerAccount> {
+  assignAccountToVoucher(voucherId: number, standardAccountId: number): EmpObservable<LedgerAccount> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(standardAccountId, 'standardAccountId');
 
@@ -229,7 +227,7 @@ export class VouchersDataService {
   }
 
 
-  appendVoucherEntry(voucherId: number, voucherEntryFields: VoucherEntryFields): Observable<Voucher> {
+  appendVoucherEntry(voucherId: number, voucherEntryFields: VoucherEntryFields): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherEntryFields, 'voucherEntryFields');
 
@@ -241,7 +239,7 @@ export class VouchersDataService {
 
   updateVoucherEntry(voucherId: number,
                      voucherEntryId: number,
-                     voucherEntryFields: VoucherEntryFields): Observable<Voucher> {
+                     voucherEntryFields: VoucherEntryFields): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherEntryId, 'voucherEntryId');
     Assertion.assertValue(voucherEntryFields, 'voucherEntryFields');
@@ -252,7 +250,7 @@ export class VouchersDataService {
   }
 
 
-  deleteVoucherEntry(voucherId: number, voucherEntryId: number): Observable<Voucher> {
+  deleteVoucherEntry(voucherId: number, voucherEntryId: number): EmpObservable<Voucher> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherEntryId, 'voucherEntryId');
 
@@ -262,7 +260,7 @@ export class VouchersDataService {
   }
 
 
-  getCopyOfLastEntry(voucherId: number): Observable<VoucherEntry> {
+  getCopyOfLastEntry(voucherId: number): EmpObservable<VoucherEntry> {
     Assertion.assertValue(voucherId, 'voucherId');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}/get-copy-of-last-entry`;
@@ -271,7 +269,7 @@ export class VouchersDataService {
   }
 
 
-  getVoucherEntry(voucherId: number, voucherEntryId: number): Observable<VoucherEntry> {
+  getVoucherEntry(voucherId: number, voucherEntryId: number): EmpObservable<VoucherEntry> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(voucherEntryId, 'voucherEntryId');
 

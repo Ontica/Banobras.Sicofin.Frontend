@@ -166,7 +166,7 @@ export class SecurityItemEditionComponent implements OnChanges {
       <br><br>¿Elimino el elemento?`;
 
     this.messageBox.confirm(message, title, 'DeleteCancel')
-      .toPromise()
+      .firstValue()
       .then(x => {
         if (x) {
           this.emitEventType(SecurityItemEditionEventType.REMOVE_ITEM, item.uid);

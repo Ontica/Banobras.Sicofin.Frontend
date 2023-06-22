@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService, Identifiable } from '@app/core';
+import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { AccountingCalendar, AccountingCalendarPeriodFields  } from '@app/models';
 
@@ -20,14 +18,14 @@ export class AccountingCalendarsDataService {
   constructor(private http: HttpService) { }
 
 
-  getAccountingCalendars(): Observable<Identifiable[]> {
+  getAccountingCalendars(): EmpObservable<Identifiable[]> {
     const path = `v2/financial-accounting/accounting-calendars`;
 
     return this.http.get<Identifiable[]>(path);
   }
 
 
-  getAccountingCalendar(calendarUID: string): Observable<AccountingCalendar> {
+  getAccountingCalendar(calendarUID: string): EmpObservable<AccountingCalendar> {
     Assertion.assertValue(calendarUID, 'calendarUID');
 
     const path = `v2/financial-accounting/accounting-calendars/${calendarUID}`;
@@ -37,7 +35,7 @@ export class AccountingCalendarsDataService {
 
 
   addPeriodToAccountingCalendar(calendarUID: string, periodFields: AccountingCalendarPeriodFields):
-    Observable<AccountingCalendar> {
+    EmpObservable<AccountingCalendar> {
     Assertion.assertValue(calendarUID, 'calendarUID');
     Assertion.assertValue(periodFields, 'periodFields');
 
@@ -48,7 +46,7 @@ export class AccountingCalendarsDataService {
 
 
   removePeriodFromAccountingCalendar(calendarUID: string,
-                                     periodUID: string): Observable<AccountingCalendar> {
+                                     periodUID: string): EmpObservable<AccountingCalendar> {
     Assertion.assertValue(calendarUID, 'calendarUID');
     Assertion.assertValue(periodUID, 'periodUID');
 

@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, Cache, Identifiable } from '@app/core';
+import { Assertion, Cache, EmpObservable, Identifiable } from '@app/core';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
@@ -43,7 +41,7 @@ export class AccessControlPresentationHandler extends AbstractPresentationHandle
   }
 
 
-  select<U>(selectorType: SelectorType, params?: any): Observable<U> {
+  select<U>(selectorType: SelectorType, params?: any): EmpObservable<U> {
 
     switch (selectorType) {
 
@@ -62,7 +60,7 @@ export class AccessControlPresentationHandler extends AbstractPresentationHandle
       case SelectorType.ROLES_BY_CONTEXT: {
         Assertion.assertValue(params, 'params');
 
-        const contextUID = params;
+        const contextUID = params as string;
 
         const dataProvider = () => this.data.getRolesByContext(contextUID);
 
@@ -71,7 +69,7 @@ export class AccessControlPresentationHandler extends AbstractPresentationHandle
       case SelectorType.FEATURES_BY_CONTEXT: {
         Assertion.assertValue(params, 'params');
 
-        const contextUID = params;
+        const contextUID = params as string;
 
         const dataProvider = () => this.data.getFeaturesByContext(contextUID);
 

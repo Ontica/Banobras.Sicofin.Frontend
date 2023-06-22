@@ -105,7 +105,7 @@ export class SubjectTabbedViewComponent implements OnChanges {
     this.isLoading = true;
 
     this.accessControlData.getSubjectContexts(this.subject.uid)
-      .toPromise()
+      .firstValue()
       .then(x => this.setSubjectContextsList(x))
       .finally(() => this.isLoading = false);
   }

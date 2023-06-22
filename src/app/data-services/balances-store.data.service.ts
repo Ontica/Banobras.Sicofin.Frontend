@@ -7,9 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
-import { Assertion, HttpService } from '@app/core';
+import { Assertion, EmpObservable, HttpService } from '@app/core';
 
 import { BalanceStorageCommand, FileReport, StoredBalanceSet } from '@app/models';
 
@@ -19,7 +17,7 @@ export class BalancesStoreDataService {
   constructor(private http: HttpService) { }
 
 
-  getBalancesSetsList(accountsChartUID: string): Observable<StoredBalanceSet[]> {
+  getBalancesSetsList(accountsChartUID: string): EmpObservable<StoredBalanceSet[]> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/balance-store`;
@@ -28,7 +26,7 @@ export class BalancesStoreDataService {
   }
 
 
-  getStoredBalanceSet(accountsChartUID: string, balanceSetUID: string): Observable<StoredBalanceSet> {
+  getStoredBalanceSet(accountsChartUID: string, balanceSetUID: string): EmpObservable<StoredBalanceSet> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
 
     const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/balance-store/${balanceSetUID}`;
@@ -38,7 +36,7 @@ export class BalancesStoreDataService {
 
 
   createStoredBalancesSet(accountsChartUID: string,
-                          command: BalanceStorageCommand): Observable<StoredBalanceSet> {
+                          command: BalanceStorageCommand): EmpObservable<StoredBalanceSet> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(command, 'command');
 
@@ -49,7 +47,7 @@ export class BalancesStoreDataService {
 
 
   calculateStoredBalancesSet(accountsChartUID: string,
-                             balanceSetUID: string): Observable<StoredBalanceSet> {
+                             balanceSetUID: string): EmpObservable<StoredBalanceSet> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(balanceSetUID, 'balanceSetUID');
 
@@ -60,7 +58,7 @@ export class BalancesStoreDataService {
   }
 
 
-  exportStoredBalanceSetToExcel(accountsChartUID: string, balanceSetUID: string): Observable<FileReport> {
+  exportStoredBalanceSetToExcel(accountsChartUID: string, balanceSetUID: string): EmpObservable<FileReport> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(balanceSetUID, 'balanceSetUID');
 

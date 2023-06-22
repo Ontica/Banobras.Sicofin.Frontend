@@ -70,7 +70,7 @@ export class FinancialConceptCreatorComponent {
     this.submitted = true;
 
     this.financialConceptsData.insertFinancialConcept(command)
-      .toPromise()
+      .firstValue()
       .then(x => {
         sendEvent(this.financialConceptCreatorEvent,
           FinancialConceptCreatorEventType.FINANCIAL_CONCEPT_CREATED, {financialConcept: x});

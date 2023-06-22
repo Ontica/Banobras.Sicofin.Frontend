@@ -150,7 +150,7 @@ export class AccountStatementViewerComponent implements OnChanges {
     this.setSubmitted(true);
 
     this.balancesDataService.getAccountStatement(this.accountStatementQuery)
-      .toPromise()
+      .firstValue()
       .then(x => {
         this.queryExecuted = true;
         this.setAccountStatementData(x);
@@ -162,7 +162,7 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   private exportAccountStatementToExcel() {
     this.balancesDataService.exportAccountStatementToExcel(this.accountStatementQuery)
-      .toPromise()
+      .firstValue()
       .then(x => this.excelFileUrl = x.url);
   }
 
@@ -175,7 +175,7 @@ export class AccountStatementViewerComponent implements OnChanges {
     this.isLoading = true;
 
     this.vouchersData.getVoucherForPrint(accountStatementEntry.voucherId)
-      .toPromise()
+      .firstValue()
       .then(x => this.voucherFile = x)
       .finally(() => this.isLoading = false);
   }

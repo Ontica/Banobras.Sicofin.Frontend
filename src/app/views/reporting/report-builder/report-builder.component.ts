@@ -171,12 +171,12 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
     if (this.reportGroup === ReportGroup.ReportesRegulatorios) {
       this.reportingData.getFinancialReport(this.reportQuery as FinancialReportQuery)
-        .toPromise()
+        .firstValue()
         .then( x => this.setReportData(x))
         .finally(() => this.isLoading = false);
     } else {
       this.reportingData.getReportData(this.reportQuery)
-        .toPromise()
+        .firstValue()
         .then( x => this.setReportData(x))
         .finally(() => this.isLoading = false);
     }
@@ -188,11 +188,11 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
     if (this.reportGroup === ReportGroup.ReportesRegulatorios) {
       this.reportingData.exportFinancialReport(reportQuery as FinancialReportQuery)
-        .toPromise()
+        .firstValue()
         .then(x => this.fileUrl = x.url);
     } else {
       this.reportingData.exportReportData(reportQuery)
-        .toPromise()
+        .firstValue()
         .then(x => this.fileUrl = x.url);
     }
   }
@@ -204,7 +204,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
     this.reportingData.getFinancialReportBreakdown(reportEntry.uid,
                                                    this.reportQuery as FinancialReportQuery)
-      .toPromise()
+      .firstValue()
       .then(x => {
         const reportBreakdown: FinancialReportBreakdown = {
           financialReportEntry: reportEntry,

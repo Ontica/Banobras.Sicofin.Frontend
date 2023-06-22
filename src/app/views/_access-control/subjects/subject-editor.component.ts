@@ -76,7 +76,7 @@ export class SubjectEditorComponent {
     this.submitted = true;
 
     this.accessControlData.updateSubject(subjectUID, subjectFields)
-      .toPromise()
+      .firstValue()
       .then(x => sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_UPDATED, {subject: x}))
       .finally(() => this.submitted = false);
   }
@@ -86,7 +86,7 @@ export class SubjectEditorComponent {
     this.submitted = true;
 
     this.accessControlData.resetCredentialsToSubject(this.subject.uid)
-      .toPromise()
+      .firstValue()
       .then(x =>
         this.messageBox.show('La operación se realizó correctamente.', 'Generar contraseña')
       )
@@ -98,7 +98,7 @@ export class SubjectEditorComponent {
     this.submitted = true;
 
     this.accessControlData.deleteSubject(this.subject.uid)
-      .toPromise()
+      .firstValue()
       .then(x => sendEvent(this.subjectEditorEvent, SubjectEditorEventType.SUBJECT_DELETED,
         {subjectUID: this.subject.uid}))
       .finally(() => this.submitted = false);

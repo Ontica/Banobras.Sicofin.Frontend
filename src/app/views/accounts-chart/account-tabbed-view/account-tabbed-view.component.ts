@@ -62,7 +62,7 @@ export class AccountTabbedViewComponent implements OnChanges {
 
   calculateBalances() {
     this.balancesDataService.getLedgersAccountsBalances(this.account.uid)
-                            .toPromise()
+                            .firstValue()
                             .then(x => this.accountBalancesDS = new MatTableDataSource(x));
   }
 
