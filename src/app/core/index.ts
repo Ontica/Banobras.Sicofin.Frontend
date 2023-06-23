@@ -19,6 +19,7 @@ export { LocalStorageService } from './general/local-storage.service';
 export { LoggerService } from './general/logger.service';
 
 export { AuthenticationService } from './security/authentication.service';
-export { SecurityGuard } from './security/security.guard';
+export { RoutingStateService } from './security/routing-state.service'
+export { ChildRouteGuard, ParentRouteGuard } from './security/security.guard';
 
 export * from './localization';
