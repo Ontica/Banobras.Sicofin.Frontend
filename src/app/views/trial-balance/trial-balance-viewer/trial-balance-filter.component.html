@@ -82,11 +82,11 @@
 
             <div fxFlex="36px" fxFlex.lt-md="none">
 
-              <button [class.btn-icon-action]="trialBalanceFormFieldsValid && exchangeRateFormFieldsValid"
+              <button title="Generar balanza"
+                [class.btn-icon-action]="trialBalanceFormFieldsValid && exchangeRateFormFieldsValid"
                 [class.btn-icon]="!trialBalanceFormFieldsValid || !exchangeRateFormFieldsValid"
                 [disabled]="!trialBalanceFormFieldsValid || !exchangeRateFormFieldsValid"
-                (click)="onBuildTrialBalanceClicked()"
-                title="Generar balanza">
+                (click)="onBuildTrialBalanceClicked()">
 
                 <mat-icon>search</mat-icon>
 
@@ -98,11 +98,10 @@
 
             </mat-divider>
 
-            <div fxFlex="117px" fxFlex.lt-md="none">
+            <div fxFlex="none" fxFlex.lt-md="none">
 
-              <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="100%">
-                {{showFilters ? 'Ocultar' :'Mostrar'}}
-                <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+              <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="100px">
+                {{showFilters ? 'Ocultar' :'Mostrar'}} <mat-icon>filter_list</mat-icon>
               </button>
 
             </div>
@@ -356,11 +355,10 @@
 
           </mat-divider>
 
-          <div fxFlex="117px" [style.paddingBottom.px]="2">
+          <div fxFlex="none" [style.paddingBottom.px]="2">
 
-            <button class="btn-base" fxFlex="100%" (click)="onClearFilters()">
-              Limpiar
-              <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+            <button class="btn-base" fxFlex="100px" (click)="onClearFilters()">
+              Limpiar <mat-icon>filter_list</mat-icon>
             </button>
 
           </div>

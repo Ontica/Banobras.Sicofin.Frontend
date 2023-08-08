@@ -7,16 +7,6 @@
 
 @import "../../../styles/variables";
 
-.mat-menu-item.selected {
-  background: rgba(0, 0, 0, 0.04);
-  color: $primary-color;
-  font-weight: 600;
-}
-
-.mat-menu-trigger.active a {
-  color: $primary-color;
-}
-
 .nav-bar {
   min-height: 28px;
 }

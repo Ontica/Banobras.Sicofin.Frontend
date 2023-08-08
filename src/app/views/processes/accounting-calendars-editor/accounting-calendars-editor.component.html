@@ -87,9 +87,10 @@
             <div fxLayout="column" fxLayoutGap="0.5rem" class="simple-list-container">
 
               <div *ngFor="let period of accountingCalendarSelected.periods"
-                fxLayout="row" fxLayoutAlign="space-between center" class="simple-list-item">
+                fxLayout="row" fxLayoutAlign="space-between center"
+                class="simple-list-item">
 
-                <div fxFlex="300px">
+                <div fxFlex>
                   <strong>{{period.period}}</strong>
                 </div>
 
@@ -97,8 +98,10 @@
                   {{period.fromDate | dateTimeFormat}} - {{period.toDate | dateTimeFormat}}
                 </div>
 
-                <button fxFlex="24px" mat-icon-button (click)="onRemovePeriodClicked(period)">
-                  <mat-icon title="Eliminar fecha"> delete </mat-icon>
+                <button title="Eliminar fecha"
+                  fxFlex="none" mat-icon-button
+                  (click)="onRemovePeriodClicked(period)">
+                  <mat-icon> delete </mat-icon>
                 </button>
 
               </div>

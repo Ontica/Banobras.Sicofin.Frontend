@@ -5,6 +5,22 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+ $cursor-hover: hsla(166, 45%, 40%, 0.3);
+ $in-range: hsla(166, 45%, 40%, 0.2);
+ $hover-selection: hsla(166, 45%, 40%, 0.3);
+ $edge-background: hsl(166, 45%, 40%);
+ $edge-color: white;
+
+.mat-calendar-previous-button {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.mat-calendar-next-button {
+  width: 40px !important;
+  height: 40px !important;
+}
+
 .calendar-container {
   touch-action: none;
   overflow: hidden;
@@ -49,25 +65,26 @@
 }
 
 .calendar-item:hover:not(.is-edge) {
-  background-color: rgba(158, 158, 158, 0.2);
+  background-color: $hover-selection;
   border-radius: 999px;
 }
 
 .is-edge {
-  background-color: #9e9e9e;
+  background-color: $edge-background;
+  color: $edge-color;
   border-radius: 999px;
 }
 
 .in-range {
-  background-color: rgba(158, 158, 158, 0.2);
+  background-color: $in-range;
 }
 
 .is-lower-edge {
-  background: linear-gradient(to right, transparent 50%, rgba(158, 158, 158, 0.2));
+  background: linear-gradient(to right, transparent 50%, $in-range);
 }
 
 .is-upper-edge {
-  background: linear-gradient(to right, rgba(158, 158, 158, 0.2), transparent 50%);
+  background: linear-gradient(to right, $in-range, transparent 50%);
 }
 
 .is-lower-edge.is-upper-edge {

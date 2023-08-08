@@ -9,17 +9,18 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { SelectionModel } from '@angular/cdk/collections';
 
-import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 
 @Component({
   selector: 'emp-ng-check-box-all',
   template: `
     <mat-checkbox
-      [class.mat-checkbox-warning]="showWarning"
+      [color]="showWarning ? 'warn' : 'primary'"
       [checked]="isChecked()"
       [indeterminate]="isIndeterminate()"
       [disabled]="disabled"
+      [class.no-label]="!text"
       (change)="toggleSelection($event)"
       (click)="$event.stopPropagation()">
       {{text}}

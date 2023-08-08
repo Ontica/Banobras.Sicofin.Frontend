@@ -7,7 +7,7 @@
 
 import { Component, Input, OnChanges } from '@angular/core';
 
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { TransactionSlipIssue } from '@app/models';
 

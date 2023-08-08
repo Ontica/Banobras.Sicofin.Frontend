@@ -27,9 +27,12 @@
 
   </mat-date-range-input>
 
-  <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="disabled"></mat-datepicker-toggle>
+  <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="disabled">
+
+  </mat-datepicker-toggle>
 
   <mat-date-range-picker #picker [disabled]="disabled"
+    color="primary"
     [startView]="selectedPickerView"
     [panelClass]="[isYearSelection || isMonthSelection ? 'selection-type-picker': '',
                    isMonthSelection ? 'default-calendar-hidden' : '']"

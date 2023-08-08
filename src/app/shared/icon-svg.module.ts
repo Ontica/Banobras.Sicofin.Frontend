@@ -6,7 +6,9 @@
  */
 
 import { NgModule } from '@angular/core';
+
 import { MatIconRegistry } from '@angular/material/icon';
+
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 

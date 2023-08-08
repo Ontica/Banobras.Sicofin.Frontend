@@ -9,43 +9,39 @@ import { NgModule } from '@angular/core';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatCheckboxModule, MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
-import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
-import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
-import { MatRippleModule } from '@angular/material/core';
+
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
+import { MatSlideToggleModule, MAT_SLIDE_TOGGLE_DEFAULT_OPTIONS } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
-import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 
-import {
-  MomentDateAdapter,
-  MatMomentDateModule
-} from '@angular/material-moment-adapter';
+import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 
-
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE
-} from '@angular/material/core';
-
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatRippleModule } from '@angular/material/core';
 
 import * as moment from 'moment';
 
@@ -88,6 +84,10 @@ export const DATE_FORMATS = {
   },
 };
 
+export const COLOR_PRIMARY = { color: 'primary' };
+
+export const COLOR_ACCENT = { color: 'accent' };
+
 @NgModule({
 
   imports: [
@@ -110,6 +110,7 @@ export const DATE_FORMATS = {
     MatRadioModule,
     MatRippleModule,
     MatSidenavModule,
+    MatSlideToggleModule,
     MatSliderModule,
     MatSnackBarModule,
     MatStepperModule,
@@ -140,6 +141,7 @@ export const DATE_FORMATS = {
     MatRadioModule,
     MatRippleModule,
     MatSidenavModule,
+    MatSlideToggleModule,
     MatSliderModule,
     MatSnackBarModule,
     MatStepperModule,
@@ -153,7 +155,10 @@ export const DATE_FORMATS = {
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: APP_DEFAULT_DATE_LOCAL },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS }
+    { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: COLOR_PRIMARY },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+    { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: COLOR_PRIMARY },
+    { provide: MAT_SLIDE_TOGGLE_DEFAULT_OPTIONS, useValue: COLOR_PRIMARY },
   ]
 
 })

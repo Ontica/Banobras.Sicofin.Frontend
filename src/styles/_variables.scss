@@ -7,8 +7,8 @@
 
 $white: #fdfdfd !default;
 
-$primary-color: #235b4e !default;
-$primary-color-light: #235b4e !default;
+$primary-color: #245c4f !default;
+$primary-color-light: #245c4f !default;
 $primary-color-dark: #10312b !default;
 
 $secondary-color: #98989a !default;
@@ -17,7 +17,7 @@ $secondary-color-semi-light: #808080 !default;
 $secondary-color-dark: #4d4d4d !default;
 
 $warning-color: #9f2241 !default;
-$warning-color-light: $warning-color;
+$warning-color-light: #9f2241;
 $warning-color-dark: #691c32 !default;
 
 $title-color: #bc955c !default;
@@ -153,6 +153,7 @@ $grid-odd-background-color: #f4f4f4 !default;
 $grid-hover-background-color: #fafafa;
 $grid-selected-background-color: #f7fcfb;
 $grid-selected-hover-background-color: #f3fcfb;
+$grid-header-height: 40px;
 $grid-row-height: 32px;
 
 //

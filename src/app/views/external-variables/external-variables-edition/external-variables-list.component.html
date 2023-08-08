@@ -66,14 +66,17 @@
 
   <div fxFlex="24px"></div>
 
-  <button fxFlex="24px" mat-icon-button
+  <button title="Editar"
+    fxFlex="none" mat-icon-button
     [style.marginRight.px]="8"
     (click)="onEditExternalVariableClicked(variable)">
-    <mat-icon title="Editar variable"> edit </mat-icon>
+    <mat-icon> edit </mat-icon>
   </button>
 
-  <button fxFlex="24px" mat-icon-button (click)="onRemoveExternalVariableClicked(variable)">
-    <mat-icon title="Eliminar variable"> delete </mat-icon>
+  <button title="Eliminar"
+    fxFlex="none" mat-icon-button
+    (click)="onRemoveExternalVariableClicked(variable)">
+    <mat-icon> delete </mat-icon>
   </button>
 
 </ng-template>

@@ -50,11 +50,10 @@
 
         </mat-divider>
 
-        <div fxFlex="117px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+        <div fxFlex="none" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
 
-          <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="100%">
-            {{showFilters ? 'Ocultar' :'Mostrar'}}
-            <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+          <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="103px">
+            {{showFilters ? 'Ocultar' :'Mostrar'}} <mat-icon>filter_list</mat-icon>
           </button>
 
         </div>
@@ -208,11 +207,10 @@
 
           </mat-divider>
 
-          <div fxFlex="117px" [style.marginTop.px]="12" [style.marginBottom.px]="2">
+          <div fxFlex="none" [style.marginTop.px]="12" [style.marginBottom.px]="2">
 
-            <button class="btn-base" (click)="onClearFilters()" fxFlex="100%">
-              Limpiar
-              <mat-icon [style.paddingLeft.px]="8">filter_list</mat-icon>
+            <button class="btn-base" (click)="onClearFilters()" fxFlex="103px">
+              Limpiar <mat-icon>filter_list</mat-icon>
             </button>
 
           </div>

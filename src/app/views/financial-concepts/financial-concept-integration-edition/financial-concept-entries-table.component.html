@@ -41,8 +41,9 @@
     <ng-container matColumnDef="actionDelete">
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let row" class="column-action">
-        <button mat-icon-button>
-          <mat-icon title="Eliminar regla" (click)="onRemoveButtonClicked($event, row)">
+        <button title="Eliminar regla"
+          mat-icon-button (click)="onRemoveButtonClicked($event, row)">
+          <mat-icon>
             delete
           </mat-icon>
         </button>

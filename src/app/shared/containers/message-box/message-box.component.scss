@@ -1,28 +1,26 @@
-@import "../../../../styles/general-styles";
+@import "../../../../styles/variables";
 
-.mat-dialog-container {
-  margin: 2px;
-}
-
-.mat-dialog-title {
+.mat-mdc-dialog-title {
   border-bottom: 2px solid $primary-color;
   color: $primary-color;
   font-size: 12pt;
+  line-height: 12pt;
   font-weight: 600;
-  margin-bottom: 16pt;
+  padding: 0 24px 16px;
 }
 
-.mat-dialog-content {
+.mat-mdc-dialog-content {
   font-size: 10pt;
+  color: $secondary-color-dark;
+  padding: 16px 24px;
 }
 
-.mat-dialog-actions {
-  border-bottom: 1px solid $secondary-color;
+.mat-mdc-dialog-actions {
   justify-content: flex-end;
-  vertical-align: bottom;
-  margin-top: 16px;
+  border-top: 1px solid $secondary-color;
+  padding: 16px;
 
   button {
-    margin-left: 24px;
+    margin-left: 16px;
   }
 }

@@ -32,32 +32,33 @@
     </div>
 
 
-    <button fxFlex="none" *ngIf="!isSaved"
+    <button *ngIf="!isSaved" title="Agregar"
+      fxFlex="none"
       [class.btn-icon-action]="canEdit && isFormValid"
       [class.btn-icon]="!canEdit || !isFormValid"
       (click)="onAddExternalVariableClicked()">
 
-      <mat-icon title="Agregar"> add </mat-icon>
+      <mat-icon> add </mat-icon>
 
     </button>
 
 
-    <button *ngIf="isSaved"
+    <button *ngIf="isSaved" title="Cancelar"
       fxFlex="none" mat-icon-button
       (click)="onCancelEditionClicked()">
 
-      <mat-icon title="Cancelar"> close </mat-icon>
+      <mat-icon> close </mat-icon>
 
     </button>
 
 
-    <button *ngIf="isSaved"
+    <button *ngIf="isSaved" title="Guardar"
       fxFlex="none" mat-icon-button
-      [class.btn-icon-active]="isFormValid"
+      [color]="isFormValid ? 'primary' : null"
       [style.marginRight]="0"
       (click)="onUpdateExternalVariableClicked()">
 
-      <mat-icon title="Guardar"> done </mat-icon>
+      <mat-icon [color]="isFormValid ? 'primary' : null"> done </mat-icon>
 
     </button>
 

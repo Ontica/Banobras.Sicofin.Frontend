@@ -9,78 +9,161 @@
 // mat-table row formats (ItemType)
 //
 
-table.mat-table tr.mat-row {
+table.mat-mdc-table tr.mat-mdc-row {
   background-color: $white;
 
   .item-strikethrough {
     text-decoration: line-through;
   }
 
-  &.selectable-row:hover {
-    cursor: pointer;
-  }
-
-  &.item-type-summary {
+  &.item-type-summary td.mat-mdc-cell,
+  &.item-type-group td.mat-mdc-cell,
+  &.item-type-total td.mat-mdc-cell {
     font-weight: 600;
   }
 
-  &.item-type-group td.mat-cell {
-    font-weight: 600;
+  &.item-type-group td.mat-mdc-cell {
     border-top: 1px solid rgba(0, 0, 0, 0.25);
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
   }
 
   &.item-type-total {
     background-color: lighten($grid-footer-background-color, 2%);
-    font-weight: 600;
   }
 
   &.row-selected {
     background-color: $grid-selected-background-color;
 
-    &:hover {
-      background-color: $grid-selected-hover-background-color;
+    &.item-type-total  {
+      background-color: darken($grid-footer-background-color, 3%);
+    }
+  }
+
+  &:hover {
+    background-color: $grid-hover-background-color;
+
+    &.selectable-row {
+      cursor: pointer;
     }
 
     &.item-type-total {
-      background-color: darken($grid-footer-background-color, 3%);
+      background-color: $grid-footer-background-color;
     }
 
-    &.item-type-total:hover {
-      background-color: darken($grid-footer-background-color, 5%);
+    &.row-selected {
+      background-color: $grid-selected-hover-background-color;
+
+      &.item-type-total {
+        background-color: darken($grid-footer-background-color, 5%);
+      }
     }
   }
 }
 
 //
-// mat-table row hovers
+// designer: selections
 //
 
-table.mat-table tr.mat-row:hover {
-  background-color: $grid-hover-background-color;
+// cell selection
 
-  &.item-type-total {
-    background-color: $grid-footer-background-color;
+table.mat-mdc-table.emp-designer tr.mat-mdc-row.fixed-cells-type {
+  cursor: pointer;
+
+  td.mat-mdc-cell:not(:first-of-type):hover {
+    background-color: darken($grid-hover-background-color, 2%);
+  }
+
+  td.mat-mdc-cell.designer-cell-selected:not(:first-of-type) {
+    border: 1px solid $designer-bar-selected-border-color;
+    border-collapse: collapse;
+    background-color: $designer-cell-selected-background-color;
+
+    &:hover {
+      background-color: $designer-cell-selected-hover-background-color;
+    }
+  }
+
+  &:hover {
+    background-color: $white;
   }
 }
 
-table.mat-table.emp-designer tr.mat-row.fixed-cells-type:hover {
-  background-color: $white;
+// row selection
+
+table.mat-mdc-table.emp-designer tr.mat-mdc-row.designer-row-selected {
+  td {
+    border-top: 1px solid $designer-bar-selected-border-color;
+    border-bottom: 1px solid $designer-bar-selected-border-color !important;
+
+    &:first-of-type {
+      border-left: 1px solid $designer-bar-selected-border-color;
+      border-right: 1px solid $designer-bar-selected-border-color;
+    }
+
+    &:last-of-type {
+      border-right: 1px solid $designer-bar-selected-border-color;
+    }
+  }
+
+  .designer-button {
+    background-color: $designer-bar-selected-background-color;
+  }
+
+  .designer-button:hover,
+  .designer-button-active {
+    background-color: $designer-bar-selected-hover-background-color;
+  }
 }
 
-table.mat-table.emp-designer tr.mat-row.fixed-cells-type td.mat-cell:not(:first-of-type):hover {
-  background-color: darken($grid-hover-background-color, 2%);
+// column selection
+
+table.mat-mdc-table.emp-designer {
+
+  tr.designer-columns-header,
+  tr.designer-columns-subheader {
+    th:not(:first-of-type):hover {
+      cursor: pointer;
+      background-color: $designer-border-color;
+    }
+  }
+
+  tr.designer-columns-header {
+    th.designer-column-selected {
+      border: 1px solid $designer-bar-selected-border-color;
+      background-color: $designer-bar-selected-background-color;
+
+      &:hover {
+        background-color: $designer-bar-selected-hover-background-color;
+      }
+    }
+  }
+
+  tr {
+    th.designer-column-selected,
+    td.designer-column-selected {
+      border-left: 1px solid $designer-bar-selected-border-color;
+      border-right: 1px solid $designer-bar-selected-border-color;
+    }
+
+    &:last-of-type td.designer-column-selected {
+      border-bottom: 1px solid $designer-bar-selected-border-color !important;
+    }
+  }
 }
+
 
 //
 // mat-table highlighted rows
 //
 
-table.mat-table tr.mat-row,
-table.mat-table.emp-designer tr.mat-row.fixed-cells-type td.mat-cell:not(:first-of-type),
+table.mat-mdc-table tr.mat-mdc-row,
+table.mat-mdc-table.emp-designer tr.mat-mdc-row.fixed-cells-type td.mat-mdc-cell:not(:first-of-type),
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option div {
 
-  &.Bold {
+  &.Bold,
+  &.VerdeBold,
+  &.Bold td.mat-mdc-cell,
+  &.VerdeBold td.mat-mdc-cell {
     font-weight: 600;
   }
 
@@ -104,19 +187,15 @@ table.mat-table.emp-designer tr.mat-row.fixed-cells-type td.mat-cell:not(:first-
     background-color: $designer-gray-color;
   }
 
-  &.Verde {
-    background-color: $designer-green-color;
-  }
-
+  &.Verde,
   &.VerdeBold {
     background-color: $designer-green-color;
-    font-weight: 600;
   }
 }
 
 
-table.mat-table tr.mat-row:hover,
-table.mat-table.emp-designer tr.mat-row.fixed-cells-type td.mat-cell:not(:first-of-type):hover,
+table.mat-mdc-table tr.mat-mdc-row:hover,
+table.mat-mdc-table.emp-designer tr.mat-mdc-row.fixed-cells-type td.mat-mdc-cell:not(:first-of-type):hover,
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked div {
 
   &.Primario {
@@ -136,7 +215,7 @@ table.mat-table.emp-designer tr.mat-row.fixed-cells-type td.mat-cell:not(:first-
   }
 
   &.Gris {
-    background-color: darken($designer-gray-color, 1%);
+    background-color: darken($designer-gray-color, 2%);
   }
 
   &.Verde,
@@ -145,7 +224,7 @@ table.mat-table.emp-designer tr.mat-row.fixed-cells-type td.mat-cell:not(:first-
   }
 }
 
-table.mat-table tr.mat-row.row-selected {
+table.mat-mdc-table tr.mat-mdc-row.row-selected {
 
   td:first-of-type {
     padding-left: 7px;
@@ -187,82 +266,5 @@ table.mat-table tr.mat-row.row-selected {
     td:first-of-type {
       border-left-color: darken($designer-green-color, 65%);
     }
-  }
-}
-
-
-//
-// designer: row and cell selection
-//
-
-table.mat-table.emp-designer tr.mat-row.fixed-cells-type {
-  cursor: pointer;
-
-  td.designer-cell-selected {
-    border: 1px solid $designer-bar-selected-border-color;
-    border-collapse: collapse;
-    background-color: $designer-cell-selected-background-color;
-  }
-
-  td.mat-cell.designer-cell-selected:not(:first-of-type):hover {
-    background-color: $designer-cell-selected-hover-background-color;
-  }
-}
-
-
-table.mat-table.emp-designer tr.mat-row.designer-row-selected {
-  td {
-    border-top: 1px solid $designer-bar-selected-border-color;
-    border-bottom: 1px solid $designer-bar-selected-border-color;
-  }
-
-  td:first-of-type {
-    border-left: 1px solid $designer-bar-selected-border-color;
-    border-right: 1px solid $designer-bar-selected-border-color;
-  }
-
-  td:last-of-type {
-    border-right: 1px solid $designer-bar-selected-border-color;
-  }
-
-  .designer-button {
-    background-color: $designer-bar-selected-background-color;
-  }
-
-  .designer-button:hover,
-  .designer-button-active {
-    background-color: $designer-bar-selected-hover-background-color;
-  }
-}
-
-table.mat-table.emp-designer {
-
-  tr.designer-columns-header,
-  tr.designer-columns-subheader {
-    th:not(:first-of-type):hover {
-      cursor: pointer;
-      background-color: $designer-border-color;
-    }
-  }
-
-  tr.designer-columns-header {
-    th.designer-column-selected {
-      border: 1px solid $designer-bar-selected-border-color;
-      background-color: $designer-bar-selected-background-color;
-    }
-
-    th.designer-column-selected:hover {
-      background-color: $designer-bar-selected-hover-background-color;
-    }
-  }
-
-  th.designer-column-selected,
-  td.designer-column-selected {
-    border-left: 1px solid $designer-bar-selected-border-color;
-    border-right: 1px solid $designer-bar-selected-border-color;
-  }
-
-  tr:last-of-type td.designer-column-selected {
-    border-bottom: 1px solid $designer-bar-selected-border-color;
   }
 }
