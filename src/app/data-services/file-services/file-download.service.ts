@@ -16,9 +16,7 @@ import { reportHttpProgress, Progress } from './http-progress';
 import { Saver, SAVER } from './saver.provider';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FileDownloadService {
 
   constructor(private http: HttpService,
