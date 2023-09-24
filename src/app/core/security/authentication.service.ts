@@ -55,14 +55,14 @@ export class AuthenticationService {
   logout(): Promise<boolean> {
     const principal = this.session.getPrincipal();
 
-    if (!principal.isAuthenticated) {
-      this.session.clearSession();
-      return Promise.resolve(false);
-    }
+    this.session.clearSession();
 
-    return this.securityService.closeSession()
-      .then(() => Promise.resolve(true))
-      .finally(() => this.session.clearSession());
+    if (!principal.isAuthenticated) {
+      return Promise.resolve(false);
+    } else {
+
+      return Promise.resolve(true);
+    }
   }
 
 
