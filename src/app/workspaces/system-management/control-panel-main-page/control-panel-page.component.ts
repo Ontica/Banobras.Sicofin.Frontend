@@ -26,6 +26,8 @@ export class ControlPanelMainPageComponent {
 
   displayExternalProcessesEditor = false;
 
+  displayOperationsLogModal = false;
+
   controlPanelOptionList = ControlPanelOptionList;
 
   externalProcessType: ExternalProcessTypes = null;
@@ -50,6 +52,10 @@ export class ControlPanelMainPageComponent {
 
       case 'LockedUpBalances':
         this.displayLockedUpBalancesModal = true;
+        return;
+
+      case 'OperationsLog':
+        this.displayOperationsLogModal = true;
         return;
 
       default:

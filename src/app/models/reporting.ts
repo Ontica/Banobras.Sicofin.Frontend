@@ -96,6 +96,12 @@ export interface DateRange {
 }
 
 
+export const EmptyDateRange: DateRange = {
+  fromDate: '',
+  toDate: '',
+}
+
+
 export const DefaultExportationType: ExportationType = {
   uid: FileType.Excel,
   name: FileType.Excel,

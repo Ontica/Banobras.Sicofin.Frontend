@@ -9,7 +9,8 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { Subject, SubjectFields, SubjectsQuery, UpdateCredentialsFields } from '@app/models';
+import { FileReport, OperationsLogQuery, Subject, SubjectFields, SubjectsQuery,
+         UpdateCredentialsFields } from '@app/models';
 
 
 @Injectable()
@@ -201,6 +202,15 @@ export class AccessControlDataService {
       `/contexts/${contextUID}/features/${featureUID}`
 
     return this.http.delete<Identifiable[]>(path);
+  }
+
+
+  exportOperationalLogToExcel(query: OperationsLogQuery): EmpObservable<FileReport> {
+    Assertion.assertValue(query, 'query');
+
+    const path = `v4/onepoint/security/management/operational-logs/excel`;
+
+    return this.http.post<FileReport>(path, query);
   }
 
 }

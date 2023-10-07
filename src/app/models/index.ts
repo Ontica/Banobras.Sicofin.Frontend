@@ -58,6 +58,8 @@ export * from './locked-up-balances';
 
 export * from './operational-reports';
 
+export * from './operations-log';
+
 export * from './reconciliation';
 
 export * from './reporting';

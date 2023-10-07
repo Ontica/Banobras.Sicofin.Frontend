@@ -16,7 +16,8 @@ type ControlPanelOptionType = 'ChangePassword' |
                               'ExternalProcessConciliacionSIC' |
                               'ExternalProcessExportacionSaldosMensuales' |
                               'ExternalProcessExportacionSaldosDiarios' |
-                              'LockedUpBalances';
+                              'LockedUpBalances' |
+                              'OperationsLog';
 
 
 
@@ -83,5 +84,12 @@ export const ControlPanelOptionList: ControlPanelOption[] = [
     actionTitle: 'Buscar',
     type: 'LockedUpBalances',
     permission: PERMISSIONS.FEATURE_SALDOS_ENCERRADOS,
+  },
+  {
+    title: 'Bitácoras de operación',
+    description: 'Herramienta de generación y exportación de bitácoras de operación.',
+    actionTitle: 'Generar',
+    type: 'OperationsLog',
+    permission: PERMISSIONS.FEATURE_BITACORAS_OPERACION,
   },
 ];

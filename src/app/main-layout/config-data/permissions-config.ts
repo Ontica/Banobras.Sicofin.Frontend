@@ -12,7 +12,7 @@ export enum PERMISSIONS {
   // DEFAULT
   //
 
-  NOT_REQUIRED = 'permission-not-required',
+  NOT_REQUIRED = 'permiso-no-requerido',
 
   //
   // EXPLORADOR DE SALDOS (HERRAMIENTA)
@@ -109,7 +109,7 @@ export enum PERMISSIONS {
   // PANEL DE CONTROL
   ROUTE_PANEL_CONTROL = 'route-panel-control',
 
-  FEATURE_CHANGE_PASSWORD = 'feature-change-password',
+  FEATURE_CHANGE_PASSWORD = 'feature-modificar-password',
   FEATURE_EDICION_PERIODOS = 'feature-edicion-periodos',
   FEATURE_RENTABILIDAD = 'feature-rentabilidad',
   FEATURE_CONCILIACION_SIC = 'feature-conciliacion-sic',
@@ -117,6 +117,7 @@ export enum PERMISSIONS {
   FEATURE_EXPORTACION_SALDOS_DIARIOS = 'feature-exportacion-saldos-diarios',
   FEATURE_SALDOS_ENCERRADOS = 'feature-saldos-encerrados',
   FEATURE_SALDOS_ENCERRADOS_GENERAR_POLIZA = 'feature-saldos-encerrados-generar-poliza',
+  FEATURE_BITACORAS_OPERACION = 'feature-bitacoras-operacion',
 
   // CONTROL DE ACCESOS
   ROUTE_CONTROL_DE_ACCESOS = 'route-control-de-accesos',
