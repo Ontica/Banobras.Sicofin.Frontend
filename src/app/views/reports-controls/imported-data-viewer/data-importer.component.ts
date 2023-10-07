@@ -12,7 +12,7 @@ import { EventInfo, Identifiable } from '@app/core';
 import { EmptyImportDatasets, ImportDatasets, ImportInputDatasetCommand, InputDatasetsQuery, InputDatasetType,
          mapToFileDataFromInputDataset } from '@app/models';
 
-import { FileControlActions, FileData,
+import { FileControlActions, FileControlEventData, FileData,
          FileType } from '@app/shared/form-controls/file-control/file-control-data';
 
 import { sendEvent } from '@app/shared/utils';
@@ -129,7 +129,7 @@ export class DataImporterComponent implements OnChanges{
   }
 
 
-  onFileControlEvent(event) {
+  onFileControlEvent(event: FileControlEventData) {
     switch (event.option as FileControlActions) {
       case 'CANCEL':
         this.validateImporterDatasets();

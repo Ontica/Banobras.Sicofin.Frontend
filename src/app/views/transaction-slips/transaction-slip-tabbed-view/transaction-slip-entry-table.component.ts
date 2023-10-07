@@ -11,6 +11,8 @@ import { Component, Input, OnChanges, ViewChild } from '@angular/core';
 
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
+import { EventInfo } from '@app/core';
+
 import { TransactionSlipEntry, TransactionSlipIssue } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
@@ -57,7 +59,7 @@ export class TransactionSlipEntryTableComponent implements OnChanges {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:

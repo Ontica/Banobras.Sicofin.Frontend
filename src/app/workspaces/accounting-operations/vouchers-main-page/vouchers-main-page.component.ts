@@ -137,7 +137,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:

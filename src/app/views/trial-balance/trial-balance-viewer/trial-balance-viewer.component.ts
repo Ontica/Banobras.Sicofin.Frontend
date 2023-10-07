@@ -106,7 +106,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  onFilterEvent(event) {
+  onFilterEvent(event: EventInfo) {
     if (this.submitted) {
       return;
     }
@@ -143,7 +143,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  onDataTableEvent(event) {
+  onDataTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
@@ -167,7 +167,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:

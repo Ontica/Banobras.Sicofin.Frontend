@@ -60,7 +60,7 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
   }
 
 
-  onTransactionSlipsFilterEvent(event) {
+  onTransactionSlipsFilterEvent(event: EventInfo) {
     switch (event.type as TransactionSlipsFilterEventType) {
 
       case TransactionSlipsFilterEventType.SEARCH_TRANSACTION_SLIPS_CLICKED:
@@ -75,7 +75,7 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
   }
 
 
-  onTransactionSlipsListEvent(event) {
+  onTransactionSlipsListEvent(event: EventInfo) {
     switch (event.type as TransactionSlipsListEventType) {
 
       case TransactionSlipsListEventType.EXPORT_BUTTON_CLICKED:
@@ -94,7 +94,7 @@ export class TransactionSlipsExplorerComponent implements OnChanges {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:

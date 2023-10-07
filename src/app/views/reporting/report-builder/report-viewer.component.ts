@@ -74,7 +74,7 @@ export class ReportViewerComponent implements OnChanges {
   }
 
 
-  onDataTableEvent(event) {
+  onDataTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
@@ -99,7 +99,7 @@ export class ReportViewerComponent implements OnChanges {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:

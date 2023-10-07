@@ -79,7 +79,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
   }
 
 
-  onChangeFilter(event) {
+  onChangeFilter(event: EventInfo) {
     switch (event.type as VoucherFilterEventType) {
 
       case VoucherFilterEventType.SEARCH_VOUCHERS_CLICKED:
@@ -119,7 +119,7 @@ export class VouchersExplorerComponent implements OnInit, OnChanges {
   }
 
 
-  onVoucherListEvent(event) {
+  onVoucherListEvent(event: EventInfo) {
     switch (event.type as VoucherListEventType) {
 
       case VoucherListEventType.VOUCHER_CLICKED:

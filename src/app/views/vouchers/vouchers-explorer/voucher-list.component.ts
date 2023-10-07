@@ -122,7 +122,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  onVoucherListItemEvent(event) {
+  onVoucherListItemEvent(event: EventInfo) {
 
     switch (event.type as VoucherListItemEventType) {
       case VoucherListItemEventType.VOUCHER_CLICKED:

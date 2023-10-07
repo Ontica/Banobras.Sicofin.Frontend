@@ -113,3 +113,9 @@ export const EmptyFileViewerData: FileViewerData = {
   title: 'Visor de Archivos',
   hint: '',
 };
+
+
+export interface FileControlEventData {
+  option: string;
+  file: any;
+}

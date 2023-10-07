@@ -101,7 +101,7 @@ export class SubledgerAccountsMainPageComponent {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
         this.setDisplayExportModal(false);

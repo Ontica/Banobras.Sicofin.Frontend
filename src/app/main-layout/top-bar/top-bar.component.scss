@@ -23,7 +23,7 @@
 .toolbar-item {
   flex: 0 0 auto;
   margin: auto 10px auto 0;
-  background-color: #f3f3f3;
+  background-color: $toolbar-item-background;
   height: $toolbar-item-size;
   width: $toolbar-item-size;
   border-radius: 3px;
@@ -32,14 +32,14 @@
     width: $toolbar-icon-size;
     height: $toolbar-icon-size;
     font-size: $toolbar-icon-size;
-    color: $checkbox-background-color;
+    color: $toolbar-icon-color;
     margin-top: calc(($toolbar-item-size - $toolbar-icon-size) / 2);
   }
 }
 
 .toolbar-item.activate,
 .toolbar-item:hover {
-  background-color: lighten($primary-color, 70);
+  background-color: $toolbar-item-background-hover;
   transition: 0.3s ease-out;
 
   .mat-icon {

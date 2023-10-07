@@ -61,7 +61,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
   }
 
 
-  onSubledgerAccountsFilterEvent(event) {
+  onSubledgerAccountsFilterEvent(event: EventInfo) {
     switch (event.type as SubledgerAccountsFilterEventType) {
 
       case SubledgerAccountsFilterEventType.SEARCH_SUBLEDGER_ACCOUNTS_CLICKED:
@@ -81,7 +81,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
   }
 
 
-  onSubledgerAccountsTableEvent(event) {
+  onSubledgerAccountsTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:

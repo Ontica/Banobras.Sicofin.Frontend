@@ -107,7 +107,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
   }
 
 
-  onReportViewerEvent(event) {
+  onReportViewerEvent(event: EventInfo) {
     switch (event.type as ReportViewerEventType) {
       case ReportViewerEventType.REPORT_ENTRY_CLICKED:
         Assertion.assertValue(event.payload.reportEntry, 'event.payload.reportEntry');

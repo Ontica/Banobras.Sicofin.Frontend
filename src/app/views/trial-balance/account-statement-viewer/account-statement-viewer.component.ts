@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 
-import { Assertion } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
 import { BalancesDataService, VouchersDataService } from '@app/data-services';
 
@@ -79,7 +79,7 @@ export class AccountStatementViewerComponent implements OnChanges {
   }
 
 
-  onFilterEvent(event) {
+  onFilterEvent(event: EventInfo) {
     if (this.submitted) {
       return;
     }
@@ -99,7 +99,7 @@ export class AccountStatementViewerComponent implements OnChanges {
   }
 
 
-  onDataTableEvent(event) {
+  onDataTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
@@ -124,7 +124,7 @@ export class AccountStatementViewerComponent implements OnChanges {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:

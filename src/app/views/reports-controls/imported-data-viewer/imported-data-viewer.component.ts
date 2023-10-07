@@ -121,7 +121,7 @@ export class ImportedDataViewerComponent implements OnChanges {
   }
 
 
-  onImportedDataFilterEvent(event) {
+  onImportedDataFilterEvent(event: EventInfo) {
     switch (event.type as ImportedDataFilterEventType) {
 
       case ImportedDataFilterEventType.EXECUTE_DATA_CLICKED:
@@ -137,7 +137,7 @@ export class ImportedDataViewerComponent implements OnChanges {
   }
 
 
-  onDataTableEvent(event) {
+  onDataTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
 
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
@@ -156,7 +156,7 @@ export class ImportedDataViewerComponent implements OnChanges {
   }
 
 
-  onExportReportModalEvent(event) {
+  onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:

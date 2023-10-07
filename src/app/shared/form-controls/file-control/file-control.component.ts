@@ -12,7 +12,7 @@ import { FileDownloadService } from '@app/data-services/file-services/file-downl
 import { FormatLibrary } from '@app/shared/utils';
 
 import { DefaultFileControlConfig, FileData, FileControlActions, FileControlConfig, FileControlMenuOptions,
-         FileTypeAccepted, FileType, CsvFileTypeException } from './file-control-data';
+         FileTypeAccepted, FileType, CsvFileTypeException, FileControlEventData } from './file-control-data';
 
 @Component({
   selector: 'emp-ng-file-control',
@@ -25,7 +25,7 @@ export class FileControlComponent implements OnChanges {
 
   @Output() fileControlChange = new EventEmitter<FileData[] | FileData | null>();
 
-  @Output() fileControlEvent = new EventEmitter<any>();
+  @Output() fileControlEvent = new EventEmitter<FileControlEventData>();
 
   @Input() readonly = false;
 

@@ -47,7 +47,7 @@ export class TransactionSlipsListComponent implements OnChanges {
   }
 
 
-  onTransactionSlipsListItemEvent(event) {
+  onTransactionSlipsListItemEvent(event: EventInfo) {
     switch (event.type as TransactionSlipsListItemEventType) {
       case TransactionSlipsListItemEventType.TRANSACTION_SLIP_CLICKED:
         Assertion.assertValue(event.payload.transactionSlip, 'event.payload.transactionSlip');
