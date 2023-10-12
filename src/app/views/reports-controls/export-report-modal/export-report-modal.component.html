@@ -24,7 +24,9 @@
         </ng-container>
 
         <div *ngIf="exportationTypes.length > 0" class="export-instruction-text">
-          {{message || 'Se generará la exportación a '+ selectedExportationType.fileType +' con el último filtro consultado.'}}
+          <span [innerHTML]="message || 'Se generará la exportación a '+ selectedExportationType.fileType +' con el último filtro consultado.'">
+
+          </span>
         </div>
 
         <div *ngIf="exportationTypes.length === 0" class="export-instruction-text">
