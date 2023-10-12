@@ -1,12 +1,24 @@
 <div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
 
-    <emp-ng-spinner #spinner [visible]="submitted">
+  <emp-ng-spinner #spinner [visible]="submitted">
 
-    </emp-ng-spinner>
+  </emp-ng-spinner>
+
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+
+    <div fxFlex="none">
+
+      <button
+        class="btn"
+        (click)="onExportButtonClicked()">
+        Exportar movimientos
+      </button>
+
+    </div>
 
     <ng-container *ngIf="canEditVoucher">
 
-      <div fxFlex="none" fxLayoutAlign="end center">
+      <div fxFlex="none">
 
         <button
           class="btn-action"
@@ -17,18 +29,19 @@
 
       </div>
 
-      <br>
-
     </ng-container>
 
+  </div>
 
-    <emp-fa-voucher-entry-table fxFlex
-      [voucherEntryList]="voucher.entries"
-      [canDelete]="canEditVoucher"
-      [canReviewVoucher]="voucher.actions?.reviewVoucher"
-      (voucherEntryTableEvent)="onVoucherEntryTableEvent($event)">
+  <br>
 
-    </emp-fa-voucher-entry-table>
+  <emp-fa-voucher-entry-table fxFlex
+    [voucherEntryList]="voucher.entries"
+    [canDelete]="canEditVoucher"
+    [canReviewVoucher]="voucher.actions?.reviewVoucher"
+    (voucherEntryTableEvent)="onVoucherEntryTableEvent($event)">
+
+  </emp-fa-voucher-entry-table>
 
 </div>
 
@@ -39,3 +52,12 @@
   (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
 
 </emp-fa-voucher-entry-editor>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  title="Exportar movimientos"
+  message="Se generará la exportación a Excel de los movimientos de la póliza."
+  [fileUrl]="fileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

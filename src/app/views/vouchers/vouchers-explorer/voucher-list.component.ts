@@ -42,7 +42,6 @@ import { VoucherListItemEventType } from './voucher-list-item.component';
 export enum VoucherListEventType {
   VOUCHER_CLICKED                    = 'VoucherListComponent.Event.VoucherClicked',
   EXECUTE_VOUCHERS_OPERATION_CLICKED = 'VoucherListComponent.Event.ExecuteVouchersOperationClicked',
-  EXPORT_BUTTON_CLICKED              = 'VoucherListComponent.Event.ExportButtonClicked',
 }
 
 
@@ -158,12 +157,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    this.showConfirmMessage();
-  }
-
-
-  onExportButtonClicked() {
-    sendEvent(this.voucherListEvent, VoucherListEventType.EXPORT_BUTTON_CLICKED);
+    this.validateShowConfirmMessage();
   }
 
 
@@ -199,6 +193,10 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
       list.push(getVoucherOperation(VouchersOperationType.print));
     }
 
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_EXPORTAR_MOVIMIENTOS)) {
+      list.push(getVoucherOperation(VouchersOperationType.excel));
+    }
+
     this.operationsList = list;
   }
 
@@ -231,6 +229,15 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
   private scrollToTop() {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(0);
+    }
+  }
+
+
+  private validateShowConfirmMessage() {
+    if (this.operationSelected.uid === VouchersOperationType.excel) {
+      this.emitExecuteOperation();
+    } else {
+      this.showConfirmMessage();
     }
   }
 

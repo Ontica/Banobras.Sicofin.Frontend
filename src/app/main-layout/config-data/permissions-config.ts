@@ -42,6 +42,7 @@ export enum PERMISSIONS {
   FEATURE_POLIZAS_REASIGNAR = 'feature-polizas-reasignar',
   FEATURE_POLIZAS_ELIMINAR = 'feature-polizas-eliminar',
   FEATURE_POLIZAS_IMPRIMIR = 'feature-polizas-imprimir',
+  FEATURE_POLIZAS_EXPORTAR_MOVIMIENTOS = 'feature-polizas-exportar-movimientos',
 
   //
   // SALDOS Y REPORTES

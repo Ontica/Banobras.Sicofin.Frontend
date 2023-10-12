@@ -69,6 +69,7 @@ export enum VouchersOperationType {
   reasign = 'reasign',
   delete = 'delete',
   print = 'print',
+  excel = 'excel',
 }
 
 
@@ -85,6 +86,7 @@ export const VouchersOperationList: VouchersOperation[] = [
   {uid: VouchersOperationType.reasign,          name: 'Reasignar a', assignToRequired: true},
   {uid: VouchersOperationType.delete,           name: 'Eliminar'},
   {uid: VouchersOperationType.print,            name: 'Imprimir'},
+  {uid: VouchersOperationType.excel,            name: 'Exportar movimientos'},
 ];
 
 
@@ -96,6 +98,12 @@ export function getVoucherOperation(operationType: VouchersOperationType): Vouch
 export interface VouchersOperationCommand {
   vouchers: number[];
   assignToUID?: string;
+}
+
+
+export interface VouchersBulkOperationData {
+  operation: VouchersOperationType,
+  command: VouchersOperationCommand;
 }
 
 

@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
+import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 import { SubledgerAccountsModule } from '../subledger-accounts/subledger-accounts.module';
 
 import { VoucherCreatorComponent } from './voucher-creator/voucher-creator.component';
@@ -40,6 +41,7 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     AngularMaterialModule,
     AngularFlexLayoutModule,
     SharedModule,
+    ReportsControlsModule,
     SubledgerAccountsModule,
   ],
   declarations: [

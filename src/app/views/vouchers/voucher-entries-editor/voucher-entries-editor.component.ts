@@ -17,6 +17,10 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
+import {
+  ExportReportModalEventType
+} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+
 import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-entry-editor.component';
 
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
@@ -44,8 +48,35 @@ export class VoucherEntriesEditorComponent {
 
   selectedVoucherEntry: VoucherEntry = EmptyVoucherEntry;
 
+  displayExportModal = false;
+
+  fileUrl = '';
+
   constructor(private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {}
+
+
+  onExportButtonClicked() {
+    this.setDisplayExportModal(true);
+  }
+
+
+  onExportReportModalEvent(event: EventInfo) {
+    switch (event.type as ExportReportModalEventType) {
+
+      case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayExportModal(false);
+        return;
+
+      case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
+        this.exportVoucherEntries();
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
 
 
   onAddVoucherEntryClicked() {
@@ -177,9 +208,22 @@ export class VoucherEntriesEditorComponent {
   }
 
 
+  private exportVoucherEntries() {
+    this.vouchersData.exportVoucherEntries(this.voucher.id)
+      .firstValue()
+      .then(x => this.fileUrl = x.url);
+  }
+
+
   private setSelectedVoucherEntry(voucherEntry: VoucherEntry, display?: boolean) {
     this.selectedVoucherEntry = voucherEntry;
     this.displayVoucherEntryEditor = display ?? this.selectedVoucherEntry.id > 0;
+  }
+
+
+  private setDisplayExportModal(display: boolean) {
+    this.displayExportModal = display;
+    this.fileUrl = '';
   }
 
 }

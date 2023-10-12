@@ -90,6 +90,15 @@ export class VouchersDataService {
   }
 
 
+  exportVoucherEntries(voucherId: number): EmpObservable<FileReport> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/excel`;
+
+    return this.http.get<FileReport>(path);
+  }
+
+
   searchAccountsForEdition(voucherId: number, keywords: string): EmpObservable<LedgerAccount[]> {
     Assertion.assertValue(voucherId, 'voucherId');
     Assertion.assertValue(keywords, 'keywords');

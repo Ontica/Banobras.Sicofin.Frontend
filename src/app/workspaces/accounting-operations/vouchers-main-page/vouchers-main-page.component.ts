@@ -15,8 +15,9 @@ import { MainUIStateSelector, VoucherAction,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { EmptyVoucher, EmptyVoucherFilterData, FileReport, mapVoucherDescriptorFromVoucher,
-         mapVoucherStageFromViewName, Voucher, VoucherDescriptor, VoucherFilterData, VouchersOperationCommand,
-         VouchersOperationResult, VouchersOperationType } from '@app/models';
+         mapVoucherStageFromViewName, Voucher, VoucherDescriptor, VoucherFilterData,
+         VouchersBulkOperationData, VouchersOperationCommand, VouchersOperationResult,
+         VouchersOperationType } from '@app/models';
 
 import { View } from '@app/main-layout';
 
@@ -26,7 +27,9 @@ import { VouchersDataService } from '@app/data-services';
 
 import { ArrayLibrary } from '@app/shared/utils';
 
-import { ExportReportModalEventType } from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+import {
+  ExportReportModalEventType
+} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
 
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
 
@@ -34,7 +37,9 @@ import { VouchersImporterEventType } from '@app/views/vouchers/vouchers-importer
 
 import { VoucherCreatorEventType } from '@app/views/vouchers/voucher-creator/voucher-creator.component';
 
-import { VoucherTabbedViewEventType } from '@app/views/vouchers/voucher-tabbed-view/voucher-tabbed-view.component';
+import {
+  VoucherTabbedViewEventType
+} from '@app/views/vouchers/voucher-tabbed-view/voucher-tabbed-view.component';
 
 type VouchersMainPageModalOptions = 'VoucherCreator' | 'VouchersImporter';
 
@@ -59,7 +64,11 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   displayExportModal = false;
 
-  excelFileUrl = '';
+  exportModalMessage = 'Esta operación exportará los movimientos de las pólizas.';
+
+  exportDataSelected: VouchersBulkOperationData = { operation: null, command: null };
+
+  fileUrl = '';
 
   vouchersToPrintFile: FileReport;
 
@@ -122,12 +131,8 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
         Assertion.assertValue(event.payload.operation, 'event.payload.operation');
         Assertion.assertValue(event.payload.command, 'event.payload.command');
         Assertion.assertValue(event.payload.command.vouchers, 'event.payload.command.vouchers');
-        this.bulkOperationVouchers(event.payload.operation as VouchersOperationType,
-                                   event.payload.command);
-        return;
-
-      case VouchersExplorerEventType.EXPORT_VOUCHERS_BUTTON_CLICKED:
-        this.setDisplayExportModal(true);
+        this.validateBulkOperationVouchers(event.payload.operation as VouchersOperationType,
+                                           event.payload.command)
         return;
 
       default:
@@ -141,15 +146,17 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
     switch (event.type as ExportReportModalEventType) {
 
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
+        this.exportDataSelected = { operation: null, command: null };
         this.setDisplayExportModal(false);
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (!this.voucherFilterData.query.accountsChartUID ) {
-          return;
+
+        if (this.exportDataSelected.operation === VouchersOperationType.excel) {
+          this.bulkOperationVouchers(this.exportDataSelected.operation,
+                                     this.exportDataSelected.command);
         }
 
-        this.exportVouchersToExcel();
         return;
 
       default:
@@ -266,15 +273,6 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private exportVouchersToExcel() {
-    setTimeout(() => {
-      this.excelFileUrl = 'data-dummy';
-      this.messageBox.showInDevelopment('Exportar pólizas',
-        {type: 'EXPORT_VOUCHERS', query: this.voucherFilterData.query});
-    }, 500);
-  }
-
-
   private getVoucher(idVoucher: number) {
     this.isLoadingVoucher = true;
 
@@ -290,15 +288,35 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
     this.vouchersData.bulkOperationVouchers(operation, command)
       .firstValue()
-      .then(x => {
-        if (operation === VouchersOperationType.print) {
-          this.displayVouchersToPrint(x);
-        } else {
-          this.messageBox.show(x.message, 'Operación ejecutada');
-          this.searchVouchers();
-        }
-      })
+      .then(x => this.resolveBulkOperationVouchersResponse(operation, x))
       .finally(() => this.isLoadingVoucher = false);
+  }
+
+
+  private validateBulkOperationVouchers(operation: VouchersOperationType, command: VouchersOperationCommand) {
+    if (operation === VouchersOperationType.excel) {
+      this.showExportVouchersEntries(operation, command);
+    } else {
+      this.bulkOperationVouchers(operation, command);
+    }
+  }
+
+
+  private resolveBulkOperationVouchersResponse(operation: VouchersOperationType,
+                                               result: VouchersOperationResult) {
+    switch (operation) {
+      case VouchersOperationType.print:
+        this.resolvePrintVouchers(result);
+        return;
+
+      case VouchersOperationType.excel:
+        this.resolveExportVouchersEntries(result);
+        return;
+
+      default:
+        this.resolveBulkOperation(result);
+        return;
+    }
   }
 
 
@@ -328,9 +346,21 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private setDisplayExportModal(display) {
+  private showExportVouchersEntries(operation: VouchersOperationType, command: VouchersOperationCommand) {
+    this.exportDataSelected = {operation, command};
+
+    const message = `Esta operación exportará los movimientos de las ` +
+                    `<strong> ${command.vouchers.length} pólizas</strong> seleccionadas.` +
+                    `<br><br>¿Exporto los movimientos de las pólizas?`;
+
+    this.setDisplayExportModal(true, message);
+  }
+
+
+  private setDisplayExportModal(display: boolean, message?: string) {
     this.displayExportModal = display;
-    this.excelFileUrl = '';
+    this.exportModalMessage = message ?? '';
+    this.fileUrl = '';
   }
 
 
@@ -339,12 +369,24 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private displayVouchersToPrint(result: VouchersOperationResult) {
+  private resolveBulkOperation(result: VouchersOperationResult) {
+    this.messageBox.show(result.message, 'Operación ejecutada');
+    this.searchVouchers();
+  }
+
+
+  private resolvePrintVouchers(result: VouchersOperationResult) {
     if (StringLibrary.isValidHttpUrl(result?.file?.url || '')) {
       this.vouchersToPrintFile = result.file;
       return;
     }
     this.messageBox.showError(result?.message || '');
+  }
+
+
+  private resolveExportVouchersEntries(result: VouchersOperationResult) {
+    this.fileUrl = result.file.url;
+    this.exportModalMessage = result.message;
   }
 
 }
