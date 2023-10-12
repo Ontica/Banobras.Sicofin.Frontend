@@ -18,7 +18,7 @@ export enum OperationsLogType {
 
 export const OperationsLogTypeList: Identifiable[] = [
   { uid: OperationsLogType.Successful,            name: 'Accesos exitosos' },
-  { uid: OperationsLogType.Error,                 name: 'Accesos no existosos' },
+  { uid: OperationsLogType.Error,                 name: 'Accesos no exitosos' },
   { uid: OperationsLogType.PermissionsManagement, name: 'Gestión de perfiles' },
   { uid: OperationsLogType.UserManagement,        name: 'Gestión de usuarios' }
 ];
