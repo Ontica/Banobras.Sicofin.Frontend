@@ -17,6 +17,7 @@ import {
   AccountingCataloguesAndRulesWorkspaceRoutingModule
 } from './accounting-catalogues-and-rules-workspace-routing.module';
 import { AccountsChartModule } from '@app/views/accounts-chart/accounts-chart.module';
+import { AccountsListsModule } from '@app/views/accounts-lists/accounts-lists.module';
 import { ExternalVariablesModule } from '@app/views/external-variables/external-variables.module';
 import { FinancialConceptsModule } from '@app/views/financial-concepts/financial-concepts.module';
 import {
@@ -28,6 +29,9 @@ import { SubledgerAccountsModule } from '@app/views/subledger-accounts/subledger
 import {
   AccountsChartMainPageComponent
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
+import {
+  AccountsListsMainPageComponent
+} from './accounts-lists-main-page/accounts-lists-main-page.component';
 import {
   ExternalVariablesMainPageComponent
 } from './external-variables-main-page/external-variables-main-page.component';
@@ -55,6 +59,7 @@ import {
 
     AccountingCataloguesAndRulesWorkspaceRoutingModule,
     AccountsChartModule,
+    AccountsListsModule,
     ExternalVariablesModule,
     FinancialConceptsModule,
     FinancialReportsDesignerModule,
@@ -64,6 +69,7 @@ import {
 
   declarations: [
     AccountsChartMainPageComponent,
+    AccountsListsMainPageComponent,
     ExternalVariablesMainPageComponent,
     FinancialConceptsMainPageComponent,
     ReportDesignerMainPageComponent,

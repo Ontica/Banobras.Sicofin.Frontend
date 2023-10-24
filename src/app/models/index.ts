@@ -28,6 +28,8 @@ export * from './accounts-chart';
 
 export * from './account-edition';
 
+export * from './accounts-lists';
+
 export * from './balances-store';
 
 export * from './balance-explorer';

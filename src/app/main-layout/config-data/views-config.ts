@@ -102,6 +102,12 @@ export const AccountingCataloguesAndRulesViews: View[] = [
     permission: ROUTES.reglas_y_catalogos_auxiliares.permission,
   },
   {
+    name: 'AccountingCataloguesAndRulesViews.AccountsLists',
+    title: 'Listas',
+    url: ROUTES.reglas_y_catalogos_listas_de_cuentas.fullpath,
+    permission: ROUTES.reglas_y_catalogos_listas_de_cuentas.permission,
+  },
+  {
     name: 'AccountingCataloguesAndRulesViews.ExternalVariables',
     title: 'Valores externos',
     url: ROUTES.reglas_y_catalogos_valores_externos.fullpath,

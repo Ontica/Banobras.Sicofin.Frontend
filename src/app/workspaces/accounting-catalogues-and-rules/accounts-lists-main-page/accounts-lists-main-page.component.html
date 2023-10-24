@@ -1,0 +1,23 @@
+<div class="explorer">
+
+  <div class="primary priority" [fxHide.lt-lg]="displayAccountTabbedView">
+
+    <emp-fa-accounts-lists-viewer
+      [accountsListData]="accountsListData"
+      [queryExecuted]="queryExecuted"
+      [isLoading]="isLoading"
+      (accountsListsViewerEvent)="onAccountsListsViewerEvent($event)">
+
+    </emp-fa-accounts-lists-viewer>
+
+  </div>
+
+</div>
+
+
+<emp-fa-export-report-modal *ngIf="displayExportModal"
+  title="Exportar lista de cuentas"
+  [fileUrl]="fileUrl"
+  (exportReportModalEvent)="onExportReportModalEvent($event)">
+
+</emp-fa-export-report-modal>

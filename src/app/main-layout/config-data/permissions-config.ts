@@ -76,6 +76,9 @@ export enum PERMISSIONS {
 
   FEATURE_EDICION_AUXILIARES = 'feature-edicion-auxiliares',
 
+  // LISTAS DE CUENTAS
+  ROUTE_LISTAS_DE_CUENTAS = 'route-listas-de-cuentas',
+
   // VALORES EXTERNOS
   ROUTE_VALORES_EXTERNOS = 'route-valores-externos',
 

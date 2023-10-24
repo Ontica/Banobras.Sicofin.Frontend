@@ -16,6 +16,10 @@ import {
 } from './accounts-chart-main-page/accounts-chart-main-page.component';
 
 import {
+  AccountsListsMainPageComponent
+} from './accounts-lists-main-page/accounts-lists-main-page.component';
+
+import {
   ExternalVariablesMainPageComponent
 } from './external-variables-main-page/external-variables-main-page.component';
 
@@ -42,6 +46,11 @@ const routes: Routes = [
     data: { permission: ROUTES.reglas_y_catalogos_auxiliares.permission },
     path: ROUTES.reglas_y_catalogos_auxiliares.path,
     component: SubledgerAccountsMainPageComponent,
+  },
+  {
+    data: { permission: ROUTES.reglas_y_catalogos_listas_de_cuentas.permission },
+    path: ROUTES.reglas_y_catalogos_listas_de_cuentas.path,
+    component: AccountsListsMainPageComponent,
   },
   {
     data: { permission: ROUTES.reglas_y_catalogos_valores_externos.permission },

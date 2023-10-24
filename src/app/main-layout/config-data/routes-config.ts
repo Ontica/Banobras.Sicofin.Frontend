@@ -134,6 +134,12 @@ export const ROUTES = {
     path: 'auxiliares',
     fullpath: '/reglas-y-catalogos/auxiliares',
   },
+  reglas_y_catalogos_listas_de_cuentas: {
+    permission: PERMISSIONS.ROUTE_LISTAS_DE_CUENTAS,
+    parent: 'reglas-y-catalogos',
+    path: 'listas-de-cuentas',
+    fullpath: '/reglas-y-catalogos/listas-de-cuentas',
+  },
   reglas_y_catalogos_valores_externos: {
     permission: PERMISSIONS.ROUTE_VALORES_EXTERNOS,
     parent: 'reglas-y-catalogos',
