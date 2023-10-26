@@ -55,6 +55,8 @@ export class DataTableComponent implements OnChanges {
 
   @Input() countOnlyEntries = false;
 
+  @Input() functionToSelect: (entry: DataTableEntry) => any;
+
   @Input() notQueryExecutedText = 'No se ha invocado la consulta.';
 
   @Output() dataTableEvent = new EventEmitter<EventInfo>();
@@ -77,7 +79,7 @@ export class DataTableComponent implements OnChanges {
 
   entryItemTypeList = EntryItemTypeList;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.dataTable) {
       this.filter = '';
       this.initDataSource();
@@ -86,21 +88,26 @@ export class DataTableComponent implements OnChanges {
   }
 
 
-  get entriesTotal() {
+  get entriesTotal(): number {
     return this.countOnlyEntries ?
       this.dataTable.entries.filter(x => EntryItemTypeList.includes(x.itemType)).length :
       this.dataTable.entries.length;
   }
 
 
-  get filteredEntriesTotal() {
+  get filteredEntriesTotal(): number {
     return this.countOnlyEntries ?
       this.dataSource.filteredData.filter(x => EntryItemTypeList.includes(x.itemType)).length :
       this.dataSource.filteredData.length;
   }
 
 
-  isClickableEntry(entry: DataTableEntry) {
+  isSelectedEntry(entry: DataTableEntry): boolean {
+    return entry === this.selectedEntry || (!!this.functionToSelect && this.functionToSelect(entry));
+  }
+
+
+  isClickableEntry(entry: DataTableEntry): boolean {
     return this.canClickRow && (
       !!entry.clickableEntry ||
       (this.clickableEntry && ClickeableItemTypeList.includes(entry.itemType))

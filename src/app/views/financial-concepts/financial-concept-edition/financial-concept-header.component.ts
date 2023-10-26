@@ -324,7 +324,7 @@ export class FinancialConceptHeaderComponent implements OnInit, OnChanges, OnDes
 
   private setAccountsChartDefault() {
     let accountsChartUID = this.accountsChartMasterDataList.length === 0 ? null :
-        this.accountsChartMasterDataList[0].uid;;
+        this.accountsChartMasterDataList[0].uid;
 
     if (this.isSaved) {
       accountsChartUID = this.financialConcept.accountsChart.uid;
