@@ -4,11 +4,23 @@
 
     <emp-fa-accounts-lists-viewer
       [accountsListData]="accountsListData"
+      [selectedAccountsListEntry]="selectedAccountListEntry"
       [queryExecuted]="queryExecuted"
       [isLoading]="isLoading"
       (accountsListsViewerEvent)="onAccountsListsViewerEvent($event)">
 
     </emp-fa-accounts-lists-viewer>
+
+  </div>
+
+  <div class="secondary" *ngIf="displayAccountTabbedView">
+
+    <emp-fa-account-list-entry-tabbed-view
+      [accountsList]="accountsList"
+      [accountListEntry]="selectedAccountListEntry"
+      (accountListEntryTabbedViewEvent)="onAccountListEntryTabbedViewEvent($event)">
+
+    </emp-fa-account-list-entry-tabbed-view>
 
   </div>
 
@@ -21,3 +33,10 @@
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
 </emp-fa-export-report-modal>
+
+
+<emp-fa-account-list-entry-creator *ngIf="displayAccountCreator"
+  [accountsList]="accountsList"
+  (accountListEntryCreatorEvent)="onAccountListEntryCreatorEvent($event)">
+
+</emp-fa-account-list-entry-creator>

@@ -7,7 +7,7 @@
 
 import { Component } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { AccountsListsDataService } from '@app/data-services';
 
@@ -23,12 +23,22 @@ import {
   AccountsListsViewerEventType
 } from '@app/views/accounts-lists/accounts-lists-viewer/accounts-lists-viewer.component';
 
+import {
+  AccountListEntryCreatorEventType
+} from '@app/views/accounts-lists/account-list-entry-creator/account-list-entry-creator.component';
+
+import {
+  AccountListEntryTabbedViewEventType
+} from '@app/views/accounts-lists/account-list-entry-tabbed-view/account-list-entry-tabbed-view.component';
+
 
 @Component({
   selector: 'emp-fa-accounts-lists-main-page',
   templateUrl: './accounts-lists-main-page.component.html',
 })
 export class AccountsListsMainPageComponent {
+
+  accountsList: Identifiable = null;
 
   accountsListQuery: AccountsListQuery = null;
 
@@ -53,15 +63,34 @@ export class AccountsListsMainPageComponent {
               private messageBox: MessageBoxService ){}
 
 
+  onAccountListEntryCreatorEvent(event: EventInfo) {
+    switch (event.type as AccountListEntryCreatorEventType) {
+      case AccountListEntryCreatorEventType.CLOSE_MODAL_CLICKED:
+        this.setDisplayAccountCreator(false);
+        return;
+      case AccountListEntryCreatorEventType.ENTRY_CREATED:
+        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
+        this.refreshAccountsListData(event.payload.entry as AccountsListEntry);
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
   onAccountsListsViewerEvent(event: EventInfo) {
     switch (event.type as AccountsListsViewerEventType) {
       case AccountsListsViewerEventType.CREATE_ACCOUNT_BUTTON_CLICKED:
         this.setDisplayAccountCreator(true);
         return;
       case AccountsListsViewerEventType.SEARCH_ACCOUNTS_CLICKED:
+        Assertion.assertValue(event.payload.accountsList, 'event.payload.accountsList');
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         Assertion.assertValue(event.payload.query.type, 'event.payload.query.type');
+        this.accountsList = event.payload.accountsList as Identifiable;
         this.accountsListQuery = event.payload.query as AccountsListQuery;
+
         this.clearAccountsListData();
         this.searchAccountsList();
         return;
@@ -70,7 +99,27 @@ export class AccountsListsMainPageComponent {
         return;
       case AccountsListsViewerEventType.SELECT_ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.entry, ' event.payload.entry');
-        this.setSelectedAccountListEntry(event.payload.entry as AccountsListEntry, true);
+        this.setSelectedAccountListEntry(event.payload.entry as AccountsListEntry);
+        return;
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onAccountListEntryTabbedViewEvent(event: EventInfo) {
+    switch (event.type as AccountListEntryTabbedViewEventType) {
+      case AccountListEntryTabbedViewEventType.CLOSE_BUTTON_CLICKED:
+        this.setSelectedAccountListEntry(null);
+        return;
+      case AccountListEntryTabbedViewEventType.ENTRY_UPDATED:
+        Assertion.assertValue(event.payload.entry, 'event.payload.entry');
+        this.refreshAccountsListData(event.payload.entry as AccountsListEntry);
+        return;
+      case AccountListEntryTabbedViewEventType.ENTRY_DELETED:
+        Assertion.assertValue(event.payload.entryUID, 'event.payload.entryUID');
+        this.refreshAccountsListData(null);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
@@ -120,8 +169,15 @@ export class AccountsListsMainPageComponent {
   }
 
 
+  private refreshAccountsListData(entry: AccountsListEntry) {
+    this.setSelectedAccountListEntry(entry);
+    this.searchAccountsList();
+  }
+
+
   private clearAccountsListData() {
-    this.accountsListData = Object.assign({}, EmptyAccountsListData);;
+    this.setSelectedAccountListEntry(null);
+    this.accountsListData = Object.assign({}, EmptyAccountsListData);
     this.queryExecuted = false;
   }
 
@@ -134,16 +190,12 @@ export class AccountsListsMainPageComponent {
 
   private setDisplayAccountCreator(display: boolean) {
     this.displayAccountCreator = display;
-
-    this.messageBox.showInDevelopment('Agregar cuentas', {
-      eventType: 'DISPLAY_ACCOUNT_CREATOR', query: this.accountsListQuery,
-    });
   }
 
 
-  private setSelectedAccountListEntry(entry: AccountsListEntry, display: boolean) {
+  private setSelectedAccountListEntry(entry: AccountsListEntry) {
     this.selectedAccountListEntry = entry;
-    this.displayAccountTabbedView = display;
+    this.displayAccountTabbedView = !isEmpty(entry);
   }
 
 }

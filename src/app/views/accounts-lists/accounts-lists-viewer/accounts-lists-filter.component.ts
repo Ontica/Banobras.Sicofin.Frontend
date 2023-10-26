@@ -58,7 +58,7 @@ export class AccountsListsFilterComponent implements OnInit {
   onSearchClicked() {
     if (this.isFormValid) {
       const payload = {
-        accountsListName: this.formData.type.name,
+        accountsList: this.formData.type,
         query: this.getFormData(),
       };
 

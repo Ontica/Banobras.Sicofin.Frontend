@@ -43,6 +43,15 @@ export class AccountsChartDataService {
   }
 
 
+  searchAccountsIFRS(query: AccountsQuery): EmpObservable<AccountsChart> {
+    Assertion.assertValue(query, 'query');
+
+    const path = `v2/financial-accounting/accounts-charts/ifrs`;
+
+    return this.http.post<AccountsChart>(path, query);
+  }
+
+
   exportAccountsToExcel(accountsChartUID: string, query: AccountsQuery): EmpObservable<FileReport> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(query, 'query');

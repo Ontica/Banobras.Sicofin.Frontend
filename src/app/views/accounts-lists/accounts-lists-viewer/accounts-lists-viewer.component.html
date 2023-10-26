@@ -42,6 +42,7 @@
       <emp-fa-data-table fxFlex
         [dataTable]="accountsListData"
         [executed]="queryExecuted"
+        [selectedEntry]="selectedAccountsListEntry"
         [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
         (dataTableEvent)="onAccountsListsTableEvent($event)">
 

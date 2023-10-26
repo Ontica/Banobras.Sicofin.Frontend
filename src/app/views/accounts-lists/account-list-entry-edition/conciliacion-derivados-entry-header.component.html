@@ -1,0 +1,122 @@
+<form [formGroup]="form" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
+  autocomplete="off" class="form-section">
+
+  <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
+
+  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+    <div fxLayout="row">
+
+      <div fxFlex="calc(100% - 240px)">
+        <label>Cuenta:</label>
+        <emp-ng-select
+          [config]="{ minTermLength: accountMinTermLength,
+                      virtualScroll: true,
+                      typeToSearchText: 'Ingresar ' + accountMinTermLength +' o más caracteres'}"
+          formControlName="accountNumber"
+          [items]="accountList$ | async"
+          [typeahead]="accountInput$"
+          [loading]="accountLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.accountNumber)"
+          bindValue="number"
+          bindLabel="number"
+          placeholder="Buscar cuenta">
+          <ng-template #labelTemplate let-item="item">
+            {{item.number}}: {{item.name}}
+          </ng-template>
+          <ng-template #optionTemplate let-item="item">
+            <div class="item">
+              <span class="item-highlight">{{item.number}}</span> <br>
+              <span class="item-text-xs">{{item.name}}</span>
+            </div>
+          </ng-template>
+        </emp-ng-select>
+      </div>
+
+      <div fxFlex="120px">
+        <label>Fecha inicio:</label>
+        <emp-ng-datepicker
+          formControlName="startDate"
+          [showError]="formHelper.isControlInvalid(form.controls.startDate)">
+        </emp-ng-datepicker>
+      </div>
+
+      <div fxFlex="120px">
+        <label>Fecha fin:</label>
+        <emp-ng-datepicker
+          formControlName="endDate"
+          [showError]="formHelper.isControlInvalid(form.controls.endDate)">
+        </emp-ng-datepicker>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <mat-divider class="horizontal">
+
+  </mat-divider>
+
+
+  <div #rowFooter fxLayout="row">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button (click)="onSubmitButtonClicked()"
+          [class.btn]="!formHelper.isFormReady(form)"
+          [class.btn-action]="formHelper.isFormReady(form)">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved">
+
+      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+
+        <button type="button" class="btn-warning"
+          (click)="onDeleteButtonClicked()">
+          Eliminar
+        </button>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <ng-container *ngIf="editionMode">
+
+          <button (click)="onSubmitButtonClicked()"
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)">
+            Guardar
+          </button>
+
+          <button (click)="enableEditor(false)"
+            class="btn-base uppercase">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
+            Editar
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

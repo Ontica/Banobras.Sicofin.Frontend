@@ -7,9 +7,9 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, EventInfo, isEmpty } from '@app/core';
 
-import { AccountsListData, EmptyAccountsListData } from '@app/models';
+import { AccountsListData, AccountsListEntry, EmptyAccountsListData } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -31,6 +31,8 @@ export enum AccountsListsViewerEventType {
 export class AccountsListsViewerComponent implements OnChanges {
 
   @Input() accountsListData: AccountsListData = Object.assign({}, EmptyAccountsListData);
+
+  @Input() selectedAccountsListEntry: AccountsListEntry = null;
 
   @Input() queryExecuted = false;
 
@@ -61,8 +63,8 @@ export class AccountsListsViewerComponent implements OnChanges {
     switch (event.type as AccountsListsFilterEventType) {
 
       case AccountsListsFilterEventType.SEARCH_CLICKED:
-        Assertion.assertValue(event.payload.accountsListName, 'event.payload.accountsListName');
-        this.accountsListName = event.payload.accountsListName;
+        Assertion.assertValue(event.payload.accountsList.name, 'event.payload.accountsList.name');
+        this.accountsListName = event.payload.accountsList.name;
         sendEvent(this.accountsListsViewerEvent, AccountsListsViewerEventType.SEARCH_ACCOUNTS_CLICKED,
           event.payload);
         return;
@@ -90,7 +92,7 @@ export class AccountsListsViewerComponent implements OnChanges {
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         sendEvent(this.accountsListsViewerEvent, AccountsListsViewerEventType.SELECT_ACCOUNT_CLICKED,
-          event.payload.entry);
+          event.payload);
         return;
 
       default:

@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { AccountsListData } from '@app/models';
+import { AccountsListData, AccountsListEntry, AccountsListEntryFields, AccountsListType } from '@app/models';
 
 
 @Injectable()
@@ -36,6 +36,43 @@ export class AccountsListsDataService {
     }
 
     return this.http.get<AccountsListData>(path);
+  }
+
+
+  addAccountListEntry(type: AccountsListType,
+                      entryFields: AccountsListEntryFields): EmpObservable<AccountsListEntry> {
+    Assertion.assertValue(type, 'type');
+    Assertion.assertValue(entryFields, 'entryFields');
+
+    const path = `v2/financial-accounting/accounts-lists-for-edition/${type}`;
+
+    return this.http.post<AccountsListEntry>(path, entryFields);
+  }
+
+
+  updateAccountListEntry(type: AccountsListType,
+                         entryUID: string,
+                         entryFields: AccountsListEntryFields): EmpObservable<AccountsListEntry> {
+    Assertion.assertValue(type, 'type');
+    Assertion.assertValue(entryUID, 'entryUID');
+    Assertion.assertValue(entryFields, 'entryFields');
+
+    const path = `v2/financial-accounting/accounts-lists-for-edition/${type}/${entryUID}`;
+
+    return this.http.put<AccountsListEntry>(path, entryFields);
+  }
+
+
+  deleteAccountListEntry(type: AccountsListType,
+                         entryUID: string,
+                         entryFields: AccountsListEntryFields): EmpObservable<void> {
+    Assertion.assertValue(type, 'type');
+    Assertion.assertValue(entryUID, 'entryUID');
+    Assertion.assertValue(entryFields, 'entryFields');
+
+    const path = `v2/financial-accounting/accounts-lists-for-edition/${type}/${entryUID}`;
+
+    return this.http.delete<void>(path, entryFields);
   }
 
 }

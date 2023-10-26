@@ -16,8 +16,20 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
 
+import {
+  AccountListEntryCreatorComponent
+} from './account-list-entry-creator/account-list-entry-creator.component';
+import {
+  AccountListEntryEditorComponent
+} from './account-list-entry-editor/account-list-entry-editor.component';
+import {
+  AccountListEntryTabbedViewComponent
+} from './account-list-entry-tabbed-view/account-list-entry-tabbed-view.component';
 import { AccountsListsFilterComponent } from './accounts-lists-viewer/accounts-lists-filter.component';
 import { AccountsListsViewerComponent } from './accounts-lists-viewer/accounts-lists-viewer.component';
+import {
+  ConciliacionDerivadosEntryHeaderComponent
+} from './account-list-entry-edition/conciliacion-derivados-entry-header.component';
 
 @NgModule({
   imports: [
@@ -32,10 +44,16 @@ import { AccountsListsViewerComponent } from './accounts-lists-viewer/accounts-l
     ReportsControlsModule,
   ],
   declarations: [
+    AccountListEntryCreatorComponent,
+    AccountListEntryEditorComponent,
+    AccountListEntryTabbedViewComponent,
     AccountsListsFilterComponent,
     AccountsListsViewerComponent,
+    ConciliacionDerivadosEntryHeaderComponent,
   ],
   exports: [
+    AccountListEntryCreatorComponent,
+    AccountListEntryTabbedViewComponent,
     AccountsListsViewerComponent,
   ]
 })

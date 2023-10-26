@@ -1,0 +1,27 @@
+<emp-ng-modal-window [config]="{width:'750px'}">
+
+    <emp-ng-card
+      title="Agregar cuenta"
+      [hint]="'Información de la cuenta a agregar a ' + accountsList?.name"
+      (cardClose)="onClose()">
+
+        <div class="card-body-padding" [empNgSpinnerHost]="spinner">
+
+          <emp-ng-spinner #spinner [visible]="submitted">
+
+          </emp-ng-spinner>
+
+          <ng-container [ngSwitch]="accountsList?.uid">
+
+            <emp-fa-conciliacion-derivados-entry-header *ngSwitchCase="AccountsListType.ConciliacionDerivados"
+              (conciliacionDerivadosEntryHeaderEvent)="onConciliacionDerivadosEntryHeaderEvent($event)">
+
+            </emp-fa-conciliacion-derivados-entry-header>
+
+          </ng-container>
+
+        </div>
+
+    </emp-ng-card>
+
+</emp-ng-modal-window>
