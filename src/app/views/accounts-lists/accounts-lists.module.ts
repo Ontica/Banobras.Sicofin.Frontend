@@ -33,6 +33,9 @@ import {
 import {
   DepreciacionActivoFijoEntryHeaderComponent
 } from './account-list-entry-edition/depreciacion-activo-fijo-entry-header.component';
+import {
+  SwapsCoberturaEntryHeaderComponent
+} from './account-list-entry-edition/swaps-cobertura-entry-header.component';
 
 @NgModule({
   imports: [
@@ -54,6 +57,7 @@ import {
     AccountsListsViewerComponent,
     ConciliacionDerivadosEntryHeaderComponent,
     DepreciacionActivoFijoEntryHeaderComponent,
+    SwapsCoberturaEntryHeaderComponent,
   ],
   exports: [
     AccountListEntryCreatorComponent,

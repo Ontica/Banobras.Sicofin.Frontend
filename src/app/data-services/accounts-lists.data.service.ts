@@ -26,6 +26,13 @@ export class AccountsListsDataService {
   }
 
 
+  getClassificationsForSwapsCobertura(): EmpObservable<string[]> {
+    const path = `v2/financial-accounting/accounts-lists-for-edition/SwapsCobertura/classifications`;
+
+    return this.http.get<string[]>(path);
+  }
+
+
   searchAccountsLists(type: string, keywords: string): EmpObservable<AccountsListData> {
     Assertion.assertValue(type, 'type');
 

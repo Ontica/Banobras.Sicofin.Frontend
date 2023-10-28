@@ -99,6 +99,15 @@ export interface DepreciacionActivoFijoFields extends AccountsListEntryFields {
 }
 
 
+export interface SwapsCoberturaFields extends AccountsListEntryFields {
+  uid: string;
+  subledgerAccountNumber: string;
+  classification: string;
+  startDate: DateString;
+  endDate: DateString;
+}
+
+
 export const EmptyAccountsListData: AccountsListData = {
   uid: '',
   name: '',

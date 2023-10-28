@@ -23,6 +23,10 @@ import {
   DepreciacionActivoFijoEntryHeaderEventType
 } from '../account-list-entry-edition/depreciacion-activo-fijo-entry-header.component';
 
+import {
+  SwapsCoberturaEntryHeaderEventType
+} from '../account-list-entry-edition/swaps-cobertura-entry-header.component';
+
 
 export enum AccountListEntryCreatorEventType {
   CLOSE_MODAL_CLICKED = 'AccountListEntryCreatorComponent.Event.CloseModalClicked',
@@ -78,6 +82,22 @@ export class AccountListEntryCreatorComponent {
       case DepreciacionActivoFijoEntryHeaderEventType.CREATE_ENTRY:
         Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
         this.addAccountListEntry(AccountsListType.DepreciacionActivoFijo,
+                                 event.payload.entryFields as AccountsListEntry);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onSwapsCoberturaEntryHeaderEvent(event: EventInfo) {
+    switch (event.type as SwapsCoberturaEntryHeaderEventType) {
+
+      case SwapsCoberturaEntryHeaderEventType.CREATE_ENTRY:
+        Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
+        this.addAccountListEntry(AccountsListType.SwapsCobertura,
                                  event.payload.entryFields as AccountsListEntry);
         return;
 

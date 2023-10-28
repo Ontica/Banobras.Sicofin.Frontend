@@ -53,8 +53,6 @@ export class ConciliacionDerivadosEntryHeaderComponent implements OnChanges, OnI
 
   editionMode = false;
 
-  isLoading = false;
-
   accountList$: Observable<FlexibleIdentifiable[]>;
 
   accountInput$ = new Subject<string>();

@@ -4,20 +4,20 @@
 
     <div fxLayout="row">
 
-      <div fxFlex="calc(100% - 240px)">
-        <label>Cuenta:</label>
+      <div fxFlex="100">
+        <label>Auxiliar:</label>
         <emp-ng-select
-          [config]="{ minTermLength: accountMinTermLength,
+          [config]="{ minTermLength: subledgerAccountMinTermLength,
                       virtualScroll: true,
-                      typeToSearchText: 'Ingresar ' + accountMinTermLength +' o más caracteres'}"
-          formControlName="accountNumber"
-          [items]="accountList$ | async"
-          [typeahead]="accountInput$"
-          [loading]="accountLoading"
-          [showError]="formHelper.isControlInvalid(form.controls.accountNumber)"
+                      typeToSearchText: 'Ingresar ' + subledgerAccountMinTermLength +' o más caracteres'}"
+          formControlName="subledgerAccount"
+          [items]="subledgerAccountList$ | async"
+          [typeahead]="subledgerAccountInput$"
+          [loading]="subledgerAccountLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.subledgerAccount)"
           bindValue="number"
           bindLabel="number"
-          placeholder="Buscar cuenta">
+          placeholder="Buscar auxiliar">
           <ng-template #labelTemplate let-item="item">
             {{item.number}}: {{item.name}}
           </ng-template>
@@ -28,6 +28,24 @@
             </div>
           </ng-template>
         </emp-ng-select>
+      </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div fxFlex>
+        <label>Clasificación:</label>
+        <emp-ng-select
+          formControlName="classification"
+          [config]="{bindByValue: false}"
+          [items]="classificationList"
+          [loading]="isClassificationLoading"
+          [bindLabel]="null"
+          [showError]="formHelper.isControlInvalid(form.controls.classification)">
+
+        </emp-ng-select>
+
       </div>
 
       <div fxFlex="120px">
