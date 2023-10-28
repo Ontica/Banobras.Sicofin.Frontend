@@ -33,6 +33,13 @@ export class AccountsChartDataService {
   }
 
 
+  getLedgersIFRS(): EmpObservable<Identifiable[]> {
+    const path = `v2/financial-accounting/ledgers/ifrs`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   searchAccounts(accountsChartUID: string, query: AccountsQuery): EmpObservable<AccountsChart> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(query, 'query');

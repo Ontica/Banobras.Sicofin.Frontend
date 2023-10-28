@@ -37,14 +37,13 @@ export interface AccountsListEntry extends DataTableEntry {
 }
 
 
-
 export interface ConciliacionDerivadosEntry extends AccountsListEntry {
   uid: string;
   accountUID: string;
-  accountNumber: string,
+  accountNumber: string;
   accountName: string;
-  startDate: DateString,
-  endDate: DateString,
+  startDate: DateString;
+  endDate: DateString;
 }
 
 
@@ -67,9 +66,9 @@ export interface DepreciacionActivoFijoEntry extends AccountsListEntry {
   numeroInventario: string;
   numeroDelegacion: string;
   delegacion: string;
-  delegacionId: number;
-  fechaDepreciacion: DateString;
-  inicioDepreciacion: DateString;
+  delegacionUID: string;
+  fechaAdquisicion: DateString;
+  fechaInicioDepreciacion: DateString;
   mesesDepreciacion: number;
   auxiliarRevaluacion: string;
   auxiliarRevaluacionNombre: string;
@@ -83,9 +82,20 @@ export interface AccountsListEntryFields {
 
 
 export interface ConciliacionDerivadosFields extends AccountsListEntryFields {
-  accountNumber: string,
-  startDate: DateString,
-  endDate: DateString,
+  accountNumber: string;
+  startDate: DateString;
+  endDate: DateString;
+}
+
+
+export interface DepreciacionActivoFijoFields extends AccountsListEntryFields {
+  uid: string;
+  auxiliarHistorico: string;
+  delegacionUID: string;
+  fechaAdquisicion: DateString;
+  fechaInicioDepreciacion: DateString;
+  mesesDepreciacion: number;
+  auxiliarRevaluacion: string;
 }
 
 

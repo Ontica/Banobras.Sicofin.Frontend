@@ -18,6 +18,11 @@
 
             </emp-fa-conciliacion-derivados-entry-header>
 
+            <emp-fa-depreciacion-activo-fijo-entry-header *ngSwitchCase="AccountsListType.DepreciacionActivoFijo"
+              (depreciacionActivoFijoEntryHeaderEvent)="onDepreciacionActivoFijoEntryHeaderEvent($event)">
+
+            </emp-fa-depreciacion-activo-fijo-entry-header>
+
           </ng-container>
 
         </div>

@@ -64,6 +64,12 @@ export interface SubledgerAccountQuery extends DataTableQuery {
 }
 
 
+export interface SubledgerAccountIFRSQuery extends DataTableQuery {
+  ledgerUID?: string;
+  keywords: string;
+}
+
+
 export interface SubledgerAccountDataTable extends DataTable {
   query: SubledgerAccountQuery;
   entries: SubledgerAccountDescriptor[];

@@ -9,8 +9,8 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService } from '@app/core';
 
-import { SubledgerAccountQuery, SubledgerAccount, SubledgerAccountDescriptor,
-         SubledgerAccountFields } from '@app/models';
+import { SubledgerAccountQuery, SubledgerAccount, SubledgerAccountDescriptor, SubledgerAccountFields,
+         SubledgerAccountIFRSQuery } from '@app/models';
 
 
 @Injectable()
@@ -23,6 +23,15 @@ export class SubledgerDataService {
     Assertion.assertValue(query, 'query');
 
     const path = 'v2/financial-accounting/subledger-accounts/search';
+
+    return this.http.post<SubledgerAccountDescriptor[]>(path, query);
+  }
+
+
+  searchSubledgerAccountsIFRS(query: SubledgerAccountIFRSQuery): EmpObservable<SubledgerAccountDescriptor[]> {
+    Assertion.assertValue(query, 'query');
+
+    const path = 'v2/financial-accounting/subledger-accounts/search/ifrs';
 
     return this.http.post<SubledgerAccountDescriptor[]>(path, query);
   }

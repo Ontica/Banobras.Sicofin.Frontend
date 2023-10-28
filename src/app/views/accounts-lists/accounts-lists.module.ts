@@ -30,6 +30,9 @@ import { AccountsListsViewerComponent } from './accounts-lists-viewer/accounts-l
 import {
   ConciliacionDerivadosEntryHeaderComponent
 } from './account-list-entry-edition/conciliacion-derivados-entry-header.component';
+import {
+  DepreciacionActivoFijoEntryHeaderComponent
+} from './account-list-entry-edition/depreciacion-activo-fijo-entry-header.component';
 
 @NgModule({
   imports: [
@@ -50,6 +53,7 @@ import {
     AccountsListsFilterComponent,
     AccountsListsViewerComponent,
     ConciliacionDerivadosEntryHeaderComponent,
+    DepreciacionActivoFijoEntryHeaderComponent,
   ],
   exports: [
     AccountListEntryCreatorComponent,

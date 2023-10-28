@@ -1,0 +1,174 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+    <div fxLayout="row">
+
+      <div fxFlex="240px">
+        <label>Delegación:</label>
+        <emp-ng-select
+          formControlName="delegacionUID"
+          [items]="ledgerIFRSList"
+          [loading]="isLedgerLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.delegacionUID)"
+          (changes)="onDelegacionUIDChanges()">
+
+        </emp-ng-select>
+      </div>
+
+      <div fxFlex="calc(100% - 240px)">
+        <label>Auxiliar Historico:</label>
+        <emp-ng-select
+          [config]="{ minTermLength: auxiliarHistoricoMinTermLength,
+                      virtualScroll: true,
+                      typeToSearchText: 'Ingresar ' + auxiliarHistoricoMinTermLength +' o más caracteres'}"
+          formControlName="auxiliarHistorico"
+          [items]="auxiliarHistoricoList$ | async"
+          [typeahead]="auxiliarHistoricoInput$"
+          [loading]="auxiliarHistoricoLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.auxiliarHistorico)"
+          bindValue="number"
+          bindLabel="number"
+          [placeholder]="form.controls.delegacionUID.valid ? 'Buscar auxiliar' : 'Seleccione la delegación'">
+          <ng-template #labelTemplate let-item="item">
+            {{item.number}}: {{item.name}}
+          </ng-template>
+          <ng-template #optionTemplate let-item="item">
+            <div class="item">
+              <span class="item-highlight">{{item.number}}</span> <br>
+              <span class="item-text-xs">{{item.name}}</span>
+            </div>
+          </ng-template>
+        </emp-ng-select>
+      </div>
+
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div fxFlex="120px">
+        <label>Adquisición:</label>
+        <emp-ng-datepicker
+          formControlName="fechaAdquisicion"
+          [showError]="formHelper.isControlInvalid(form.controls.fechaAdquisicion)">
+        </emp-ng-datepicker>
+      </div>
+
+      <div fxFlex="120px">
+        <label>Inicio Depreciación:</label>
+        <emp-ng-datepicker
+          formControlName="fechaInicioDepreciacion"
+          [showError]="formHelper.isControlInvalid(form.controls.fechaInicioDepreciacion)">
+        </emp-ng-datepicker>
+      </div>
+
+      <div fxFlex="calc(100% - 240px)">
+        <label>Auxiliar Revaluación:</label>
+        <emp-ng-select
+          [config]="{ clearable: true,
+                      minTermLength: auxiliarRevaluacionMinTermLength,
+                      virtualScroll: true,
+                      typeToSearchText: 'Ingresar ' + auxiliarRevaluacionMinTermLength +' o más caracteres'}"
+          formControlName="auxiliarRevaluacion"
+          [items]="auxiliarRevaluacionList$ | async"
+          [typeahead]="auxiliarRevaluacionInput$"
+          [loading]="auxiliarRevaluacionLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.auxiliarRevaluacion)"
+          bindValue="number"
+          bindLabel="number"
+          [placeholder]="form.controls.delegacionUID.valid ? 'Buscar auxiliar' : 'Seleccione la delegación'">
+          <ng-template #labelTemplate let-item="item">
+            {{item.number}}: {{item.name}}
+          </ng-template>
+          <ng-template #optionTemplate let-item="item">
+            <div class="item">
+              <span class="item-highlight">{{item.number}}</span> <br>
+              <span class="item-text-xs">{{item.name}}</span>
+            </div>
+          </ng-template>
+        </emp-ng-select>
+      </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div fxFlex="240px">
+        <label>Vida útil:</label>
+        <input type="text" class="text-box" empNgInteger
+          formControlName="mesesDepreciacion"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.mesesDepreciacion)">
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <mat-divider class="horizontal">
+
+  </mat-divider>
+
+
+  <div #rowFooter fxLayout="row">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button (click)="onSubmitButtonClicked()"
+          [class.btn]="!formHelper.isFormReady(form)"
+          [class.btn-action]="formHelper.isFormReady(form)">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved">
+
+      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+
+        <button type="button" class="btn-warning"
+          (click)="onDeleteButtonClicked()">
+          Eliminar
+        </button>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <ng-container *ngIf="editionMode">
+
+          <button (click)="onSubmitButtonClicked()"
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)">
+            Guardar
+          </button>
+
+          <button (click)="enableEditor(false)"
+            class="btn-base uppercase">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
+            Editar
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

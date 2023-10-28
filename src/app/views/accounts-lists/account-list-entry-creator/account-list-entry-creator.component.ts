@@ -19,6 +19,10 @@ import {
   ConciliacionDerivadosEntryHeaderEventType
 } from '../account-list-entry-edition/conciliacion-derivados-entry-header.component';
 
+import {
+  DepreciacionActivoFijoEntryHeaderEventType
+} from '../account-list-entry-edition/depreciacion-activo-fijo-entry-header.component';
+
 
 export enum AccountListEntryCreatorEventType {
   CLOSE_MODAL_CLICKED = 'AccountListEntryCreatorComponent.Event.CloseModalClicked',
@@ -58,6 +62,22 @@ export class AccountListEntryCreatorComponent {
       case ConciliacionDerivadosEntryHeaderEventType.CREATE_ENTRY:
         Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
         this.addAccountListEntry(AccountsListType.ConciliacionDerivados,
+                                 event.payload.entryFields as AccountsListEntry);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onDepreciacionActivoFijoEntryHeaderEvent(event: EventInfo) {
+    switch (event.type as DepreciacionActivoFijoEntryHeaderEventType) {
+
+      case DepreciacionActivoFijoEntryHeaderEventType.CREATE_ENTRY:
+        Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
+        this.addAccountListEntry(AccountsListType.DepreciacionActivoFijo,
                                  event.payload.entryFields as AccountsListEntry);
         return;
 

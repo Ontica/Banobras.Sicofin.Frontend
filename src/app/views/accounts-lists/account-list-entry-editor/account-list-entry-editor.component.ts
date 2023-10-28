@@ -19,6 +19,10 @@ import {
   ConciliacionDerivadosEntryHeaderEventType
 } from '../account-list-entry-edition/conciliacion-derivados-entry-header.component';
 
+import {
+  DepreciacionActivoFijoEntryHeaderEventType
+} from '../account-list-entry-edition/depreciacion-activo-fijo-entry-header.component';
+
 export enum AccountListEntryEditorEventType {
   ENTRY_UPDATED = 'AccountListEntryEditorComponent.Event.EntryUpdated',
   ENTRY_DELETED = 'AccountListEntryEditorComponent.Event.EntryDeleted',
@@ -63,11 +67,36 @@ export class AccountListEntryEditorComponent {
       case ConciliacionDerivadosEntryHeaderEventType.DELETE_ENTRY:
         Assertion.assertValue(event.payload.entryUID, 'event.payload.entryUID');
         Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
-
         this.deleteAccountListEntry(AccountsListType.ConciliacionDerivados,
                                     event.payload.entryUID,
                                     event.payload.entryFields as AccountsListEntry);
           return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onDepreciacionActivoFijoEntryHeaderEvent(event: EventInfo) {
+    switch (event.type as DepreciacionActivoFijoEntryHeaderEventType) {
+
+      case DepreciacionActivoFijoEntryHeaderEventType.UPDATE_ENTRY:
+        Assertion.assertValue(event.payload.entryUID, 'event.payload.entryUID');
+        Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
+        this.updateAccountListEntry(AccountsListType.DepreciacionActivoFijo,
+                                    event.payload.entryUID,
+                                    event.payload.entryFields as AccountsListEntry);
+        return;
+
+      case DepreciacionActivoFijoEntryHeaderEventType.DELETE_ENTRY:
+        Assertion.assertValue(event.payload.entryUID, 'event.payload.entryUID');
+        Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
+        this.deleteAccountListEntry(AccountsListType.DepreciacionActivoFijo,
+                                    event.payload.entryUID,
+                                    event.payload.entryFields as AccountsListEntry);
+        return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
