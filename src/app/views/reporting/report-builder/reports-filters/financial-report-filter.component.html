@@ -9,7 +9,6 @@
         <label>Catálogo de cuentas:</label>
 
         <emp-ng-select name="accountsChartUID" required
-          [config]="{selectFirst: true}"
           [(ngModel)]="query.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
@@ -19,22 +18,22 @@
 
       </div>
 
-      <div fxFlex="calc(50% - {{selectedReportType?.show.datePeriod ? '225px' : '120px'}})">
+      <div fxFlex="calc(50% - {{selectedReportType?.show.datePeriod ? '261px' : '156px'}})">
 
         <label>Reporte:</label>
 
         <emp-ng-select name="reportType" required
-          [(ngModel)]="query.financialReportType"
-          [items]="reportTypeList"
-          [showError]="!query.financialReportType"
+          [(ngModel)]="query.reportType"
+          [items]="filteredReportTypeList"
+          [showError]="!query.reportType"
           (changes)="onReportTypeChanges($event)">
         </emp-ng-select>
 
       </div>
 
-      <div [fxFlex]="selectedReportType?.show.datePeriod ? '225px' : '120px'">
+      <div [fxFlex]="showField.datePeriod ? '225px' : '120px'" fxFlex.lt-md="none">
 
-        <ng-container *ngIf="selectedReportType?.show.singleDate">
+        <ng-container *ngIf="showField.singleDate">
 
           <label>Fecha:</label>
 
@@ -46,7 +45,7 @@
 
         </ng-container>
 
-        <ng-container *ngIf="selectedReportType?.show.datePeriod">
+        <ng-container *ngIf="showField.datePeriod">
 
           <label>Período:</label>
 
@@ -65,28 +64,14 @@
       <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
         <button title="Generar reporte"
-          [class.btn-icon]="form.invalid || !periodValid"
-          [class.btn-icon-action]="form.valid && periodValid"
-          [disabled]="form.invalid || !periodValid"
+          [class.btn-icon]="form.invalid || !isPeriodValid"
+          [class.btn-icon-action]="form.valid && isPeriodValid"
+          [disabled]="form.invalid || !isPeriodValid"
           (click)="onBuildReportClicked()">
 
           <mat-icon>search</mat-icon>
 
         </button>
-
-      </div>
-
-    </div>
-
-    <div fxLayout="row" *ngIf="selectedReportType?.show.getAccountsIntegration">
-
-      <div fxFlex="none">
-
-        <mat-checkbox name="getAccountsIntegration"
-          [(ngModel)]="query.getAccountsIntegration"
-          (click)="$event.stopPropagation">
-          Generar integración de cuentas
-        </mat-checkbox>
 
       </div>
 

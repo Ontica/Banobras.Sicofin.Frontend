@@ -7,7 +7,7 @@
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty } from '@app/core';
+import { Assertion, EmpObservable, EventInfo, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -18,7 +18,8 @@ import { View } from '@app/main-layout';
 import { ReportingDataService } from '@app/data-services';
 
 import { FileType, FinancialReportBreakdown, FinancialReportQuery, ReportGroup, ReportQuery, ReportType,
-         ReportData, EmptyReportData, ReportTypeFlags, EmptyReportType } from '@app/models';
+         ReportData, EmptyReportData, ReportTypeFlags, EmptyReportType, ReportEntry, FinancialReportEntry,
+         ReportController, FileReport } from '@app/models';
 
 import { ReportViewerEventType } from './report-viewer.component';
 
@@ -54,7 +55,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   displayReportBreakdown = false;
 
-  selectedReportBreakdown: any = null;
+  selectedReportBreakdown: FinancialReportBreakdown = null;
 
   fileUrl = '';
 
@@ -78,7 +79,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
 
   get hasReportBreakdown(): boolean {
-    return this.reportGroup === ReportGroup.ReportesRegulatorios;
+    return this.selectedReportType.controller === ReportController.FinancialReport;
   }
 
 
@@ -94,10 +95,9 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
         Assertion.assertValue(event.payload.query, 'event.payload.query');
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
 
-        this.reportQuery = event.payload.query as ReportQuery;
+        this.setReportQuery(event.payload.query as ReportQuery);
         this.setReportType(event.payload.reportType as ReportType<ReportTypeFlags>);
-        this.setReportData(EmptyReportData, false);
-        this.getReportData();
+        this.validateGetReportData();
         return;
 
       default:
@@ -116,7 +116,8 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
       case ReportViewerEventType.EXPORT_DATA_CLICKED:
         Assertion.assertValue(event.payload.exportationType, 'event.payload.exportationType');
-        this.exportReportData(event.payload.exportationType as FileType);
+        const reportQuery = this.getReportQueryForExport(event.payload.exportationType as FileType);
+        this.validateExportReportData(reportQuery);
         return;
 
       default:
@@ -127,7 +128,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
 
   onReportBreakdownEvent(event: EventInfo) {
-    switch (event.type as any) {
+    switch (event.type as FinancialReportBreakdownTabbedViewEventType) {
       case FinancialReportBreakdownTabbedViewEventType.CLOSE_BUTTON_CLICKED:
         this.setReportBreakdown(null);
         return;
@@ -166,40 +167,64 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
   }
 
 
-  private getReportData() {
+  private validateGetReportData() {
+    this.clearReportData();
+    let observable: EmpObservable<ReportData> = null;
+
+    switch (this.selectedReportType.controller) {
+      case ReportController.FinancialReport:
+        observable = this.reportingData.getFinancialReport(this.reportQuery);
+        break;
+      case ReportController.Reporting:
+        observable = this.reportingData.getReportData(this.reportQuery);
+        break;
+      default:
+        console.log(`Unhandled controller ${this.selectedReportType.controller}`);
+        return;
+    }
+
+    this.getReportData(observable);
+  }
+
+
+  private validateExportReportData(reportQuery: ReportQuery) {
+    let observable: EmpObservable<FileReport> = null;
+
+    switch (this.selectedReportType.controller) {
+      case ReportController.FinancialReport:
+        observable = this.reportingData.exportFinancialReport(reportQuery);
+        break;
+      case ReportController.Reporting:
+        this.reportingData.exportReportData(reportQuery);
+        break;
+      default:
+        console.log(`Unhandled report controller ${this.selectedReportType.controller}`);
+        return;
+    }
+
+    this.exportReportData(observable);
+  }
+
+
+  private getReportData(observable: EmpObservable<ReportData>) {
     this.isLoading = true;
 
-    if (this.reportGroup === ReportGroup.ReportesRegulatorios) {
-      this.reportingData.getFinancialReport(this.reportQuery as FinancialReportQuery)
-        .firstValue()
-        .then( x => this.setReportData(x))
-        .finally(() => this.isLoading = false);
-    } else {
-      this.reportingData.getReportData(this.reportQuery)
-        .firstValue()
-        .then( x => this.setReportData(x))
-        .finally(() => this.isLoading = false);
-    }
+    observable
+      .firstValue()
+      .then(x => this.setReportData(x))
+      .finally(() => this.isLoading = false);
   }
 
 
-  private exportReportData(exportTo: FileType) {
-    const reportQuery = Object.assign({}, this.reportQuery, {exportTo});
-
-    if (this.reportGroup === ReportGroup.ReportesRegulatorios) {
-      this.reportingData.exportFinancialReport(reportQuery as FinancialReportQuery)
-        .firstValue()
-        .then(x => this.fileUrl = x.url);
-    } else {
-      this.reportingData.exportReportData(reportQuery)
-        .firstValue()
-        .then(x => this.fileUrl = x.url);
-    }
+  private exportReportData(observable: EmpObservable<FileReport>) {
+    observable
+      .firstValue()
+      .then(x => this.fileUrl = x.url);
   }
 
 
 
-  private getReportBreakdown(reportEntry) {
+  private getReportBreakdown(reportEntry: ReportEntry) {
     this.isLoadingBreakdown = true;
 
     this.reportingData.getFinancialReportBreakdown(reportEntry.uid,
@@ -207,12 +232,17 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
       .firstValue()
       .then(x => {
         const reportBreakdown: FinancialReportBreakdown = {
-          financialReportEntry: reportEntry,
+          financialReportEntry: reportEntry as FinancialReportEntry,
           financialReportBreakdown: x,
         };
         this.setReportBreakdown(reportBreakdown);
       })
       .finally(() => this.isLoadingBreakdown = false);
+  }
+
+
+  private setReportQuery(query: ReportQuery) {
+    this.reportQuery = query;
   }
 
 
@@ -227,9 +257,20 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
   }
 
 
-  private setReportBreakdown(reportBreakdown: any) {
+  private setReportBreakdown(reportBreakdown: FinancialReportBreakdown) {
     this.selectedReportBreakdown = reportBreakdown;
     this.displayReportBreakdown = !isEmpty(this.selectedReportBreakdown?.financialReportEntry);
+  }
+
+
+  private clearReportData() {
+    this.setReportData(EmptyReportData, false);
+    this.setReportBreakdown(null);
+  }
+
+
+  private getReportQueryForExport(exportTo: FileType): ReportQuery {
+    return Object.assign({}, this.reportQuery, { exportTo });;
   }
 
 }

@@ -18,7 +18,7 @@
 
       </div>
 
-      <div fxFlex>
+      <div fxFlex="calc(50% - {{selectedReportType?.show.datePeriod ? '261px' : '156px'}})">
 
         <label>Reporte:</label>
 
@@ -64,9 +64,9 @@
       <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
         <button title="Generar reporte"
-          [class.btn-icon]="form.invalid || !periodValid"
-          [class.btn-icon-action]="form.valid && periodValid"
-          [disabled]="form.invalid || !periodValid"
+          [class.btn-icon]="form.invalid || !isPeriodValid"
+          [class.btn-icon-action]="form.valid && isPeriodValid"
+          [disabled]="form.invalid || !isPeriodValid"
           (click)="onBuildOperationalReportClicked()">
 
           <mat-icon>search</mat-icon>

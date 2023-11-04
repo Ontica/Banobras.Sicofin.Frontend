@@ -1,7 +1,7 @@
 <div class="explorer">
 
   <div class="primary"
-    [class.priority]="!hasReportBreakdown"
+    [class.priority]="!displayReportBreakdown"
     [fxHide.notebook]="displayReportBreakdown">
 
     <emp-fa-report-viewer
@@ -15,7 +15,24 @@
       [isLoading]="isLoading || isLoadingBreakdown"
       (reportViewerEvent)="onReportViewerEvent($event)">
 
-      <ng-container *ngTemplateOutlet="reportFilter">
+      <ng-container [ngSwitch]="reportGroup">
+
+        <emp-fa-financial-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesRegulatorios"
+          (financialReportFilterEvent)="onReportFilterEvent($event)">
+
+        </emp-fa-financial-report-filter>
+
+        <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesOperativos"
+          [reportGroup]="reportGroup"
+          (operationalReportFilterEvent)="onReportFilterEvent($event)">
+
+        </emp-fa-operational-report-filter>
+
+        <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesFiscales"
+          [reportGroup]="reportGroup"
+          (operationalReportFilterEvent)="onReportFilterEvent($event)">
+
+        </emp-fa-operational-report-filter>
 
       </ng-container>
 
@@ -23,54 +40,15 @@
 
   </div>
 
-  <div class="secondary" *ngIf="displayReportBreakdown"
-    [class.priority]="hasReportBreakdown">
 
-    <ng-container *ngTemplateOutlet="reportBreakdown">
+  <div class="secondary priority" *ngIf="displayReportBreakdown">
 
-    </ng-container>
+    <emp-fa-financial-report-breakdown-tabbed-view
+      [financialReportBreakdown]="selectedReportBreakdown"
+      (financialReportBreakdownTabbedViewEvent)="onReportBreakdownEvent($event)">
+
+    </emp-fa-financial-report-breakdown-tabbed-view>
 
   </div>
 
 </div>
-
-
-<ng-template #reportFilter>
-
-  <ng-container [ngSwitch]="reportGroup">
-
-    <emp-fa-financial-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesRegulatorios"
-      (financialReportFilterEvent)="onReportFilterEvent($event)">
-
-    </emp-fa-financial-report-filter>
-
-    <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesOperativos"
-      [reportGroup]="reportGroup"
-      (operationalReportFilterEvent)="onReportFilterEvent($event)">
-
-    </emp-fa-operational-report-filter>
-
-    <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesFiscales"
-      [reportGroup]="reportGroup"
-      (operationalReportFilterEvent)="onReportFilterEvent($event)">
-
-    </emp-fa-operational-report-filter>
-
-  </ng-container>
-
-</ng-template>
-
-
-<ng-template #reportBreakdown>
-
-    <ng-container [ngSwitch]="reportGroup">
-
-      <emp-fa-financial-report-breakdown-tabbed-view *ngSwitchCase="ReportGroups.ReportesRegulatorios"
-        [financialReportBreakdown]="selectedReportBreakdown"
-        (financialReportBreakdownTabbedViewEvent)="onReportBreakdownEvent($event)">
-
-      </emp-fa-financial-report-breakdown-tabbed-view>
-
-    </ng-container>
-
-</ng-template>

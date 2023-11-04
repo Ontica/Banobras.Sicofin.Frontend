@@ -7,20 +7,20 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
+import { combineLatest } from 'rxjs';
+
 import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+import { sendEvent } from '@app/shared/utils';
 
-import { AccountsChartMasterData, EmptyOperationalReportQuery, EmptyOperationalReportType,
-         EmptyOperationalReportTypeFlags, EmtyAccountsChartMasterData, OperationalReportQuery,
-         OperationalReportTypeFlags, ReportGroup, ReportType, SendTypesList } from '@app/models';
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { AccountChartStateSelector,
          ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { sendEvent } from '@app/shared/utils';
-
-import { combineLatest } from 'rxjs';
+import { AccountsChartMasterData, EmptyOperationalReportQuery, EmptyOperationalReportType,
+         EmptyOperationalReportTypeFlags, EmtyAccountsChartMasterData, OperationalReportQuery,
+         OperationalReportTypeFlags, ReportGroup, ReportType, SendTypesList } from '@app/models';
 
 
 export enum OperationalReportFilterEventType {
@@ -37,23 +37,24 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   @Output() operationalReportFilterEvent = new EventEmitter<EventInfo>();
 
+  query: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
+
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
   selectedAccountChart: AccountsChartMasterData = EmtyAccountsChartMasterData;
 
-  query: OperationalReportQuery = Object.assign({}, EmptyOperationalReportQuery);
-
-  selectedReportType: ReportType<OperationalReportTypeFlags> = EmptyOperationalReportType;
-
   reportTypeList: ReportType<OperationalReportTypeFlags>[] = [];
 
   filteredReportTypeList: ReportType<OperationalReportTypeFlags>[] = [];
+
+  selectedReportType: ReportType<OperationalReportTypeFlags> = EmptyOperationalReportType;
 
   sendTypesList: Identifiable[] = SendTypesList;
 
   isLoading = false;
 
   helper: SubscriptionHelper;
+
 
   constructor(private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
@@ -75,7 +76,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get periodValid(): boolean {
+  get isPeriodValid(): boolean {
     if (this.showField.datePeriod) {
       return !!this.query.fromDate && !!this.query.toDate;
     }
@@ -100,7 +101,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
   onBuildOperationalReportClicked() {
     const payload = {
-      query: this.getOperationalReportQuery(),
+      query: this.getReportQuery(),
       reportType: this.selectedReportType,
     };
 
@@ -121,14 +122,14 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     .subscribe(([x, y]) => {
       this.accountsChartMasterDataList = x;
       this.reportTypeList = y;
-      this.setDefaultAccountsChartUID();
+      this.setDefaultAccountsChart();
       this.setFilteredReportTypeList();
       this.isLoading = false;
     });
   }
 
 
-  private setDefaultAccountsChartUID() {
+  private setDefaultAccountsChart() {
     this.selectedAccountChart = this.accountsChartMasterDataList.length > 0 ?
       this.accountsChartMasterDataList[0] : EmtyAccountsChartMasterData;
     this.query.accountsChartUID = this.selectedAccountChart.uid;
@@ -148,19 +149,19 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getOperationalReportQuery(): OperationalReportQuery {
+  private getReportQuery(): OperationalReportQuery {
     const data: OperationalReportQuery = {
       reportType: this.query.reportType,
       accountsChartUID: this.query.accountsChartUID,
     };
 
-    this.validateQueryFields(data);
+    this.validateReportQueryFields(data);
 
     return data;
   }
 
 
-  private validateQueryFields(data: OperationalReportQuery) {
+  private validateReportQueryFields(data: OperationalReportQuery) {
     if (this.showField.ledgers) {
       data.ledgers = this.query.ledgers ?? [];
     }

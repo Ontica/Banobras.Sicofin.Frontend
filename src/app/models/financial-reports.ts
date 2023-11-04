@@ -13,18 +13,16 @@ import { ReportData, ReportEntry, ReportQuery, ReportType } from './reporting';
 
 
 export interface FinancialReportTypeFlags {
-  getAccountsIntegration: boolean;
   datePeriod: boolean;
   singleDate: boolean;
 }
 
 
 export interface FinancialReportQuery extends ReportQuery {
-  financialReportType: string;
+  reportType: string;
   accountsChartUID: string;
   fromDate?: DateString;
   toDate?: DateString;
-  getAccountsIntegration?: boolean;
   exportTo?: string;
 }
 
@@ -58,7 +56,6 @@ export interface FinancialReportBreakdown {
 
 
 export const EmptyFinancialReportTypeFlags: FinancialReportTypeFlags = {
-  getAccountsIntegration: false,
   datePeriod: false,
   singleDate: false,
 }
@@ -67,7 +64,8 @@ export const EmptyFinancialReportTypeFlags: FinancialReportTypeFlags = {
 export const EmptyFinancialReportType: ReportType<FinancialReportTypeFlags> = {
   uid: '',
   name: '',
-  group: '',
+  group: null,
+  controller: null,
   show: EmptyFinancialReportTypeFlags,
   exportTo: [],
 }
@@ -75,11 +73,9 @@ export const EmptyFinancialReportType: ReportType<FinancialReportTypeFlags> = {
 
 export const EmptyFinancialReportQuery: FinancialReportQuery = {
   reportType: '',
-  financialReportType: '',
   accountsChartUID: '',
   fromDate: '',
   toDate: '',
-  getAccountsIntegration: false,
 };
 
 

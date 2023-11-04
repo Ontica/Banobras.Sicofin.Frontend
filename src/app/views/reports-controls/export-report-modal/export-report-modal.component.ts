@@ -94,7 +94,7 @@ export class ExportReportModalComponent implements OnInit, OnChanges {
     } else {
 
       sendEvent(this.exportReportModalEvent, ExportReportModalEventType.NOT_READY_EXPORT_BUTTON_CLICKED,
-        { exportationType: this.selectedExportationType.uid });
+        { exportationType: this.selectedExportationType?.uid });
 
     }
   }

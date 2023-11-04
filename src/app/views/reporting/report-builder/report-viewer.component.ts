@@ -158,21 +158,14 @@ export class ReportViewerComponent implements OnChanges {
   }
 
 
-  private setDisplayExportModal(display) {
+  private setDisplayExportModal(display: boolean) {
     this.displayExportModal = display;
     this.fileUrl = '';
   }
 
 
   private setExportationType() {
-    const exportTo = this.selectedReportType?.exportTo ?? [];
-
-    if (this.reportGroup === ReportGroup.ReportesRegulatorios) {
-      this.exportationTypesList = this.getExportationTypesFiltered(exportTo as ExportationType[] ?? []);
-    } else {
-      this.exportationTypesList = !exportTo ? [] :
-        exportTo.map(x => this.buildExportationTypeFromFileType(x));
-    }
+    this.exportationTypesList = this.getExportationTypesFiltered(this.selectedReportType?.exportTo ?? []);
   }
 
 
@@ -190,15 +183,6 @@ export class ReportViewerComponent implements OnChanges {
   private isDateInRange(date: DateString, startDate: DateString, endDate: DateString): boolean {
     return DateStringLibrary.compareDates(date, startDate) >= 0 &&
            DateStringLibrary.compareDates(date, endDate) <= 0;
-  }
-
-
-  private buildExportationTypeFromFileType(fileType: FileType): ExportationType {
-    return {
-      uid: fileType,
-      name: fileType,
-      fileType: fileType,
-    };
   }
 
 }

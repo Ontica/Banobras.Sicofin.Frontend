@@ -9,8 +9,8 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService } from '@app/core';
 
-import { FileReport, FinancialReport, FinancialReportQuery, FinancialReportTypeFlags, LockedUpBalancesData,
-         LockedUpBalancesQuery, ReportData, ReportQuery, ReportType, ReportTypeFlags } from '@app/models';
+import { FileReport, FinancialReport, FinancialReportQuery, LockedUpBalancesData, LockedUpBalancesQuery,
+         ReportData, ReportQuery, ReportType, ReportTypeFlags } from '@app/models';
 
 
 @Injectable()
@@ -25,24 +25,62 @@ export class ReportingDataService {
     return this.http.get<ReportType<ReportTypeFlags>[]>(path);
   }
 
+  //
+  // Reporting
+  //
+
+  getReportData(query: ReportQuery): EmpObservable<ReportData> {
+    Assertion.assertValue(query, 'query');
+
+    const path = `v2/financial-accounting/reporting/data`;
+
+    return this.http.post<ReportData>(path, query);
+  }
+
 
   exportReportData(query: ReportQuery): EmpObservable<FileReport> {
     Assertion.assertValue(query, 'query');
 
-    const path = `v2/financial-accounting/reporting/${query.reportType}/export`;
+    const path = `v2/financial-accounting/reporting/export`;
+
+    return this.http.post<FileReport>(path, query);
+  }
+
+  //
+  // Financial Report
+  //
+
+  getFinancialReport(query: ReportQuery): EmpObservable<FinancialReport> {
+    Assertion.assertValue(query, 'query');
+
+    const path = `v2/financial-accounting/financial-reports/data`;
+
+    return this.http.post<FinancialReport>(path, query);
+  }
+
+
+  exportFinancialReport(query: ReportQuery): EmpObservable<FileReport> {
+    Assertion.assertValue(query, 'query');
+
+    const path = `v2/financial-accounting/financial-reports/export`;
 
     return this.http.post<FileReport>(path, query);
   }
 
 
-  getReportData(query: ReportQuery): EmpObservable<ReportData> {
+  getFinancialReportBreakdown(reportItemUID: string,
+                              query: FinancialReportQuery): EmpObservable<FinancialReport> {
+    Assertion.assertValue(reportItemUID, 'reportItemUID');
     Assertion.assertValue(query, 'query');
 
-    const path = `v2/financial-accounting/reporting/${query.reportType}/data`;
+    const path = `v2/financial-accounting/financial-reports/generate/breakdown/${reportItemUID}`;
 
-    return this.http.post<ReportData>(path, query);
+    return this.http.post<FinancialReport>(path, query);
   }
 
+  //
+  // Locked Up Balances
+  //
 
   getLockedUpBalances(query: LockedUpBalancesQuery): EmpObservable<LockedUpBalancesData> {
     Assertion.assertValue(query, 'query');
@@ -50,47 +88,6 @@ export class ReportingDataService {
     const path = `v2/financial-accounting/locked-up-balances`;
 
     return this.http.post<LockedUpBalancesData>(path, query);
-  }
-
-
-  //
-  // Tmp: Financial Report
-  //
-
-  exportFinancialReport(buildQuery: FinancialReportQuery): EmpObservable<FileReport> {
-    Assertion.assertValue(buildQuery, 'buildQuery');
-
-    const path = `v2/financial-accounting/financial-reports/export`;
-
-    return this.http.post<FileReport>(path, buildQuery);
-  }
-
-
-  getFinancialReport(buildQuery: FinancialReportQuery): EmpObservable<FinancialReport> {
-    Assertion.assertValue(buildQuery, 'buildQuery');
-
-    const path = `v2/financial-accounting/financial-reports/generate`;
-
-    return this.http.post<FinancialReport>(path, buildQuery);
-  }
-
-
-  getFinancialReportBreakdown(financialReportItemUID: string,
-                              buildQuery: FinancialReportQuery): EmpObservable<FinancialReport> {
-    Assertion.assertValue(financialReportItemUID, 'financialReportItemUID');
-    Assertion.assertValue(buildQuery, 'buildQuery');
-
-    const path = `v2/financial-accounting/financial-reports/generate/breakdown/${financialReportItemUID}`;
-
-    return this.http.post<FinancialReport>(path, buildQuery);
-  }
-
-  getFinancialReportTypes(accountsChartUID: string): EmpObservable<ReportType<FinancialReportTypeFlags>[]> {
-    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
-
-    const path = `v2/financial-accounting/financial-reports/types/${accountsChartUID}`;
-
-    return this.http.get<ReportType<FinancialReportTypeFlags>[]>(path);
   }
 
 }

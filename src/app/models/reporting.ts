@@ -14,28 +14,29 @@ export const DefaultEndDate: DateString = '2049-12-31';
 
 
 export enum ReportGroup {
-  SaldosYBalanzas = 'SaldosYBalanzas',
-  ExploradorSaldos = 'ExploradorSaldos',
-  ReportesFiscales = 'ReportesFiscales',
+  SaldosYBalanzas      = 'SaldosYBalanzas',
+  ExploradorSaldos     = 'ExploradorSaldos',
+  ReportesFiscales     = 'ReportesFiscales',
   ReportesRegulatorios = 'ReportesRegulatorios',
-  ReportesOperativos = 'ReportesOperativos',
+  ReportesOperativos   = 'ReportesOperativos',
+}
+
+
+export enum ReportController {
+  Reporting       = 'Reporting',
+  FinancialReport = 'FinancialReport',
 }
 
 
 export interface ReportType<T> extends Identifiable {
   uid: string;
   name: string;
-  group: string;
-  accountsCharts?: string[];
+  group: ReportGroup;
+  controller: ReportController;
   show?: T;
-  exportTo?: FileType[] | ExportationType[];
+  accountsCharts?: string[];
   outputType?: Identifiable[];
-  payloadType?: ReportPayloadType;
-}
-
-
-export enum ReportPayloadType {
-
+  exportTo?: ExportationType[];
 }
 
 
@@ -70,7 +71,7 @@ export interface ReportTypeFlags {
 
 
 export interface ReportQuery extends DataTableQuery {
-  reportType?: string;
+  reportType: string;
   accountsChartUID: string;
   fromDate?: DateString;
   toDate?: DateString;
@@ -86,7 +87,7 @@ export interface ReportData extends DataTable {
 
 
 export interface ReportEntry extends DataTableEntry {
-
+  uid: string;
 }
 
 
@@ -117,7 +118,8 @@ export const EmptyReportTypeFlags: ReportTypeFlags = {
 export const EmptyReportType: ReportType<ReportTypeFlags> = {
   uid: '',
   name: '',
-  group: '',
+  group: null,
+  controller: null,
 }
 
 

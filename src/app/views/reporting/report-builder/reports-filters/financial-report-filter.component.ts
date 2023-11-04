@@ -7,19 +7,20 @@
 
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 
+import { combineLatest } from 'rxjs';
+
 import { EventInfo, isEmpty } from '@app/core';
+
+import { sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { ReportingDataService } from '@app/data-services';
+import { AccountChartStateSelector,
+         ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { AccountsChartMasterData, EmptyFinancialReportQuery, EmptyFinancialReportType,
-         EmptyFinancialReportTypeFlags, FinancialReportQuery, FinancialReportTypeFlags,
-         ReportType } from '@app/models';
-
-import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
-
-import { sendEvent } from '@app/shared/utils';
+         EmptyFinancialReportTypeFlags, EmtyAccountsChartMasterData, FinancialReportQuery,
+         FinancialReportTypeFlags, ReportGroup, ReportType } from '@app/models';
 
 
 export enum FinancialReportFilterEventType {
@@ -36,24 +37,27 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
   query: FinancialReportQuery = Object.assign({}, EmptyFinancialReportQuery);
 
-  selectedReportType: ReportType<FinancialReportTypeFlags> = EmptyFinancialReportType;
-
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
 
+  selectedAccountChart: AccountsChartMasterData = EmtyAccountsChartMasterData;
+
   reportTypeList: ReportType<FinancialReportTypeFlags>[] = [];
+
+  filteredReportTypeList: ReportType<FinancialReportTypeFlags>[] = [];
+
+  selectedReportType: ReportType<FinancialReportTypeFlags> = EmptyFinancialReportType;
 
   isLoading = false;
 
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer,
-              private reportingData: ReportingDataService) {
+  constructor(private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
 
   ngOnInit() {
-    this.loadAccountsCharts();
+    this.loadDataLists();
   }
 
 
@@ -67,7 +71,7 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get periodValid(): boolean {
+  get isPeriodValid(): boolean {
     if (this.showField.datePeriod) {
       return !!this.query.fromDate && !!this.query.toDate;
     }
@@ -77,24 +81,21 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
 
 
   onAccountsChartChanges(accountChart: AccountsChartMasterData) {
-    this.resetReportType();
+    this.selectedAccountChart = accountChart;
+    this.setFilteredReportTypeList();
     this.onReportTypeChanges(null);
-
-    if (accountChart.uid) {
-      this.getFinancialReportTypes(accountChart.uid);
-    }
   }
 
 
   onReportTypeChanges(reportType: ReportType<FinancialReportTypeFlags>) {
     this.selectedReportType = isEmpty(reportType) ? EmptyFinancialReportType : reportType;
-    this.query.financialReportType = this.selectedReportType.uid ?? '';
+    this.query.reportType = this.selectedReportType.uid ?? '';
   }
 
 
   onBuildReportClicked() {
     const payload = {
-      query: this.getReportQueryData(),
+      query: this.getReportQuery(),
       reportType: this.selectedReportType,
     };
 
@@ -102,36 +103,43 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private loadAccountsCharts() {
+  private loadDataLists() {
     this.isLoading = true;
 
-    this.helper.select<AccountsChartMasterData[]>(AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST)
-      .subscribe(x => {
+    combineLatest([
+      this.helper.select<AccountsChartMasterData[]>
+        (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
+      this.helper.select<ReportType<FinancialReportTypeFlags>[]>
+        (ReportingStateSelector.REPORT_TYPES_LIST),
+    ])
+      .subscribe(([x, y]) => {
         this.accountsChartMasterDataList = x;
+        this.reportTypeList = y;
+        this.setDefaultAccountsChart();
+        this.setFilteredReportTypeList();
         this.isLoading = false;
       });
   }
 
 
-  private resetReportType() {
-    this.query.financialReportType = '';
-    this.reportTypeList = [];
+  private setDefaultAccountsChart() {
+    this.selectedAccountChart = this.accountsChartMasterDataList.length > 0 ?
+      this.accountsChartMasterDataList[0] : EmtyAccountsChartMasterData;
+    this.query.accountsChartUID = this.selectedAccountChart.uid;
   }
 
 
-  private getFinancialReportTypes(accountChartUID: string) {
-    this.isLoading = true;
-
-    this.reportingData.getFinancialReportTypes(accountChartUID)
-      .firstValue()
-      .then(x => this.reportTypeList = x)
-      .finally(() => this.isLoading = false);
+  private setFilteredReportTypeList() {
+    this.filteredReportTypeList = this.reportTypeList.filter(x =>
+      x.accountsCharts.includes(this.query.accountsChartUID) &&
+      x.group === ReportGroup.ReportesRegulatorios
+    );
   }
 
 
-  private getReportQueryData(): FinancialReportQuery {
+  private getReportQuery(): FinancialReportQuery {
     const data: FinancialReportQuery = {
-      financialReportType: this.query.financialReportType,
+      reportType: this.query.reportType,
       accountsChartUID: this.query.accountsChartUID,
     };
 
@@ -142,10 +150,6 @@ export class FinancialReportFilterComponent implements OnInit, OnDestroy {
     if (this.showField.datePeriod) {
       data.fromDate = this.query.fromDate ?? null;
       data.toDate = this.query.toDate ?? null;
-    }
-
-    if (this.showField.getAccountsIntegration) {
-      data.getAccountsIntegration = this.query?.getAccountsIntegration ?? false;
     }
 
     return data;
