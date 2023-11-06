@@ -195,7 +195,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
         observable = this.reportingData.exportFinancialReport(reportQuery);
         break;
       case ReportController.Reporting:
-        this.reportingData.exportReportData(reportQuery);
+        observable = this.reportingData.exportReportData(reportQuery);
         break;
       default:
         console.log(`Unhandled report controller ${this.selectedReportType.controller}`);
@@ -270,7 +270,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
 
   private getReportQueryForExport(exportTo: FileType): ReportQuery {
-    return Object.assign({}, this.reportQuery, { exportTo });;
+    return Object.assign({}, this.reportQuery, { exportTo });
   }
 
 }
