@@ -23,6 +23,11 @@
 
             </emp-fa-depreciacion-activo-fijo-entry-header>
 
+            <emp-fa-prestamos-interbancarios-entry-header *ngSwitchCase="AccountsListType.PrestamosInterbancarios"
+              (prestamosInterbancariosEntryHeaderEvent)="onPrestamosInterbancariosEntryHeaderEvent($event)">
+
+            </emp-fa-prestamos-interbancarios-entry-header>
+
             <emp-fa-swaps-cobertura-entry-header *ngSwitchCase="AccountsListType.SwapsCobertura"
               (swapsCoberturaEntryHeaderEvent)="onSwapsCoberturaEntryHeaderEvent($event)">
 

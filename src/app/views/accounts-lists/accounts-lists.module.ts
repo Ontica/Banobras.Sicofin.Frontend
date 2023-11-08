@@ -34,6 +34,9 @@ import {
   DepreciacionActivoFijoEntryHeaderComponent
 } from './account-list-entry-edition/depreciacion-activo-fijo-entry-header.component';
 import {
+  PrestamosInterbancariosEntryHeaderComponent
+} from './account-list-entry-edition/prestamos-interbancarios-entry-header.component';
+import {
   SwapsCoberturaEntryHeaderComponent
 } from './account-list-entry-edition/swaps-cobertura-entry-header.component';
 
@@ -57,6 +60,7 @@ import {
     AccountsListsViewerComponent,
     ConciliacionDerivadosEntryHeaderComponent,
     DepreciacionActivoFijoEntryHeaderComponent,
+    PrestamosInterbancariosEntryHeaderComponent,
     SwapsCoberturaEntryHeaderComponent,
   ],
   exports: [

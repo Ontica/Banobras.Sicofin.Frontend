@@ -11,9 +11,10 @@ import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from "./da
 
 
 export enum AccountsListType {
-  ConciliacionDerivados  = 'ConciliacionDerivados',
-  DepreciacionActivoFijo = 'DepreciacionActivoFijo',
-  SwapsCobertura         = 'SwapsCobertura',
+  ConciliacionDerivados   = 'ConciliacionDerivados',
+  DepreciacionActivoFijo  = 'DepreciacionActivoFijo',
+  PrestamosInterbancarios = 'PrestamosInterbancarios',
+  SwapsCobertura          = 'SwapsCobertura',
 }
 
 
@@ -47,17 +48,6 @@ export interface ConciliacionDerivadosEntry extends AccountsListEntry {
 }
 
 
-export interface SwapsCoberturaEntry extends AccountsListEntry {
-  uid: string;
-  subledgerAccountId: number;
-  subledgerAccountName: string;
-  subledgerAccountNumber: string;
-  classification: string;
-  startDate: DateString;
-  endDate: DateString;
-}
-
-
 export interface DepreciacionActivoFijoEntry extends AccountsListEntry {
   uid: string;
   auxiliarHistoricoId: number;
@@ -73,6 +63,30 @@ export interface DepreciacionActivoFijoEntry extends AccountsListEntry {
   auxiliarRevaluacion: string;
   auxiliarRevaluacionNombre: string;
   auxiliarRevaluacionId: number;
+}
+
+
+export interface PrestamosInterbancariosEntry extends AccountsListEntry {
+  uid: string;
+  prestamoUID: string;
+  prestamoName: string;
+  subledgerAccountId: number;
+  subledgerAccountName: string;
+  subledgerAccountNumber: string;
+  sectorCode: string;
+  currencyCode: string;
+  vencimiento: DateString;
+}
+
+
+export interface SwapsCoberturaEntry extends AccountsListEntry {
+  uid: string;
+  subledgerAccountId: number;
+  subledgerAccountName: string;
+  subledgerAccountNumber: string;
+  classification: string;
+  startDate: DateString;
+  endDate: DateString;
 }
 
 
@@ -96,6 +110,16 @@ export interface DepreciacionActivoFijoFields extends AccountsListEntryFields {
   fechaInicioDepreciacion: DateString;
   mesesDepreciacion: number;
   auxiliarRevaluacion: string;
+}
+
+
+export interface PrestamosInterbancariosFields extends AccountsListEntryFields {
+  uid: string;
+  prestamoUID: string;
+  subledgerAccountNumber: string;
+  sectorCode: string;
+  currencyCode: string;
+  vencimiento: DateString;
 }
 
 

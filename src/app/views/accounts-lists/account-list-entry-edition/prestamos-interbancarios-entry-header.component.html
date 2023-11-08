@@ -1,0 +1,154 @@
+<form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
+
+  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100/3">
+        <label>Préstamo:</label>
+        <emp-ng-select
+          formControlName="prestamoUID"
+          [items]="prestamoList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.prestamoUID)">
+
+        </emp-ng-select>
+      </div>
+
+      <div [fxFlex]="200/3">
+        <label>Auxiliar:</label>
+        <emp-ng-select
+          [config]="{ minTermLength: subledgerAccountMinTermLength,
+                      virtualScroll: true,
+                      typeToSearchText: 'Ingresar ' + subledgerAccountMinTermLength +' o más caracteres'}"
+          formControlName="subledgerAccountNumber"
+          [items]="subledgerAccountList$ | async"
+          [typeahead]="subledgerAccountInput$"
+          [loading]="subledgerAccountLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.subledgerAccountNumber)"
+          bindValue="number"
+          bindLabel="number"
+          placeholder="Buscar auxiliar">
+          <ng-template #labelTemplate let-item="item">
+            {{item.number}}: {{item.name}}
+          </ng-template>
+          <ng-template #optionTemplate let-item="item">
+            <div class="item">
+              <span class="item-highlight">{{item.number}}</span> <br>
+              <span class="item-text-xs">{{item.name}}</span>
+            </div>
+          </ng-template>
+        </emp-ng-select>
+      </div>
+
+    </div>
+
+    <div fxLayout="row">
+
+      <div [fxFlex]="100/3">
+        <label>Moneda:</label>
+        <emp-ng-select
+          formControlName="currencyCode"
+          [items]="currencyList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.currencyCode)">
+
+          <ng-template #labelTemplate let-item="item"> ({{item.uid}}) {{item.name}} </ng-template>
+          <ng-template #optionTemplate let-item="item"> ({{item.uid}}) {{item.name}} </ng-template>
+
+        </emp-ng-select>
+      </div>
+
+      <div fxFlex="calc(200% / 3 - 120px)">
+        <label>Sector:</label>
+        <emp-ng-select
+          formControlName="sectorCode"
+          [items]="sectorList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.sectorCode)">
+
+          <ng-template #labelTemplate let-item="item"> ({{item.uid}}) {{item.name}} </ng-template>
+          <ng-template #optionTemplate let-item="item"> ({{item.uid}}) {{item.name}} </ng-template>
+
+        </emp-ng-select>
+      </div>
+
+      <div fxFlex="120px">
+        <label>Vencimiento:</label>
+        <emp-ng-datepicker
+          formControlName="vencimiento"
+          [showError]="formHelper.isControlInvalid(form.controls.vencimiento)">
+        </emp-ng-datepicker>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <mat-divider class="horizontal">
+
+  </mat-divider>
+
+
+  <div #rowFooter fxLayout="row">
+
+    <ng-container *ngIf="!isSaved">
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <button (click)="onSubmitButtonClicked()"
+          [class.btn]="!formHelper.isFormReady(form)"
+          [class.btn-action]="formHelper.isFormReady(form)">
+          Agregar
+        </button>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isSaved">
+
+      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+
+        <button type="button" class="btn-warning"
+          (click)="onDeleteButtonClicked()">
+          Eliminar
+        </button>
+
+      </div>
+
+      <div fxFlex fxLayoutAlign="end center">
+
+        <ng-container *ngIf="editionMode">
+
+          <button (click)="onSubmitButtonClicked()"
+            [class.btn]="!formHelper.isFormReady(form)"
+            [class.btn-action]="formHelper.isFormReady(form)">
+            Guardar
+          </button>
+
+          <button (click)="enableEditor(false)"
+            class="btn-base uppercase">
+            Descartar Cambios
+          </button>
+
+        </ng-container>
+
+        <ng-container *ngIf="!editionMode">
+
+          <button
+            class="btn-action"
+            (click)="enableEditor(true)">
+            Editar
+          </button>
+
+        </ng-container>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+</form>

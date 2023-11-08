@@ -33,6 +33,13 @@ export class AccountsListsDataService {
   }
 
 
+  getPrestamosForPrestamosInterbancarios(): EmpObservable<Identifiable[]> {
+    const path = `v2/financial-accounting/accounts-lists-for-edition/PrestamosInterbancarios/prestamos`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   searchAccountsLists(type: string, keywords: string): EmpObservable<AccountsListData> {
     Assertion.assertValue(type, 'type');
 

@@ -10,7 +10,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
 import { AccountsListEntry, AccountsListType, ConciliacionDerivadosEntry, DepreciacionActivoFijoEntry,
-         SwapsCoberturaEntry } from '@app/models';
+         PrestamosInterbancariosEntry, SwapsCoberturaEntry } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
@@ -53,13 +53,19 @@ export class AccountListEntryTabbedViewComponent implements OnChanges {
   }
 
 
-  get swapsCoberturaEntry(): SwapsCoberturaEntry {
-    return this.accountListEntry as SwapsCoberturaEntry;
+  get depreciacionActivoFijoEntry(): DepreciacionActivoFijoEntry {
+    return this.accountListEntry as DepreciacionActivoFijoEntry;
   }
 
 
-  get depreciacionActivoFijoEntry(): DepreciacionActivoFijoEntry {
-    return this.accountListEntry as DepreciacionActivoFijoEntry;
+  get prestamosInterbancariosEntry(): PrestamosInterbancariosEntry {
+    return this.accountListEntry as PrestamosInterbancariosEntry;
+  }
+
+
+
+  get swapsCoberturaEntry(): SwapsCoberturaEntry {
+    return this.accountListEntry as SwapsCoberturaEntry;
   }
 
 
@@ -99,13 +105,6 @@ export class AccountListEntryTabbedViewComponent implements OnChanges {
           `${this.conciliacionDerivadosEntry.accountName}`;
         break;
 
-      case AccountsListType.SwapsCobertura:
-        this.title = `${this.swapsCoberturaEntry.subledgerAccountNumber}: ` +
-          `${this.swapsCoberturaEntry.subledgerAccountName}`;
-
-        this.hint += `<span class="tag tag-small nowrap">${this.swapsCoberturaEntry.classification}</span>`;
-        break;
-
       case AccountsListType.DepreciacionActivoFijo:
         this.title = `${this.depreciacionActivoFijoEntry.auxiliarHistorico}: ` +
           `${this.depreciacionActivoFijoEntry.auxiliarHistoricoNombre}`;
@@ -113,6 +112,20 @@ export class AccountListEntryTabbedViewComponent implements OnChanges {
         this.hint += `<span class="tag tag-small nowrap">` +
           `(${this.depreciacionActivoFijoEntry.numeroDelegacion}) ` +
           `${this.depreciacionActivoFijoEntry.delegacion}</span>`;
+        break;
+
+      case AccountsListType.PrestamosInterbancarios:
+        this.title = `${this.prestamosInterbancariosEntry.subledgerAccountNumber}: ` +
+          `${this.prestamosInterbancariosEntry.subledgerAccountName}`;
+
+        this.hint += `<span class="tag tag-small nowrap">${this.prestamosInterbancariosEntry.prestamoName}</span>`;
+        break;
+
+      case AccountsListType.SwapsCobertura:
+        this.title = `${this.swapsCoberturaEntry.subledgerAccountNumber}: ` +
+          `${this.swapsCoberturaEntry.subledgerAccountName}`;
+
+        this.hint += `<span class="tag tag-small nowrap">${this.swapsCoberturaEntry.classification}</span>`;
         break;
 
       default:

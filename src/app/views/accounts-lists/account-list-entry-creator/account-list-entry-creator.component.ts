@@ -24,6 +24,10 @@ import {
 } from '../account-list-entry-edition/depreciacion-activo-fijo-entry-header.component';
 
 import {
+  PrestamosInterbancariosEntryHeaderEventType
+} from '../account-list-entry-edition/prestamos-interbancarios-entry-header.component';
+
+import {
   SwapsCoberturaEntryHeaderEventType
 } from '../account-list-entry-edition/swaps-cobertura-entry-header.component';
 
@@ -82,6 +86,22 @@ export class AccountListEntryCreatorComponent {
       case DepreciacionActivoFijoEntryHeaderEventType.CREATE_ENTRY:
         Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
         this.addAccountListEntry(AccountsListType.DepreciacionActivoFijo,
+                                 event.payload.entryFields as AccountsListEntry);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
+    }
+  }
+
+
+  onPrestamosInterbancariosEntryHeaderEvent(event: EventInfo) {
+    switch (event.type as PrestamosInterbancariosEntryHeaderEventType) {
+
+      case PrestamosInterbancariosEntryHeaderEventType.CREATE_ENTRY:
+        Assertion.assertValue(event.payload.entryFields, 'event.payload.entryFields');
+        this.addAccountListEntry(AccountsListType.PrestamosInterbancarios,
                                  event.payload.entryFields as AccountsListEntry);
         return;
 
