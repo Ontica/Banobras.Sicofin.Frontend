@@ -64,7 +64,7 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
   auxiliarHistoricoInput$ = new Subject<string>();
 
-  auxiliarHistoricoMinTermLength = 1;
+  auxiliarHistoricoMinTermLength = 3;
 
   auxiliarHistoricoLoading = false;
 
@@ -72,7 +72,7 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
   auxiliarRevaluacionInput$ = new Subject<string>();
 
-  auxiliarRevaluacionMinTermLength = 1;
+  auxiliarRevaluacionMinTermLength = 3;
 
   auxiliarRevaluacionLoading = false;
 

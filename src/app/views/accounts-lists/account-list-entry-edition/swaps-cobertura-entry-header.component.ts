@@ -56,13 +56,13 @@ export class SwapsCoberturaEntryHeaderComponent implements OnChanges, OnInit {
 
   isClassificationLoading = false;
 
-  classificationList: any[] = [];
+  classificationList: string[] = [];
 
   subledgerAccountList$: Observable<FlexibleIdentifiable[]>;
 
   subledgerAccountInput$ = new Subject<string>();
 
-  subledgerAccountMinTermLength = 1;
+  subledgerAccountMinTermLength = 3;
 
   subledgerAccountLoading = false;
 
@@ -89,7 +89,7 @@ export class SwapsCoberturaEntryHeaderComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.loadDataList();
-    this.subscribeAuxiliarHistoricoList();
+    this.subscribeSubledgerAccountList();
   }
 
 
@@ -157,7 +157,7 @@ export class SwapsCoberturaEntryHeaderComponent implements OnChanges, OnInit {
       endDate: this.swapsCoberturaEntry.endDate,
     });
 
-    this.subscribeAuxiliarHistoricoList();
+    this.subscribeSubledgerAccountList();
   }
 
 
@@ -188,11 +188,11 @@ export class SwapsCoberturaEntryHeaderComponent implements OnChanges, OnInit {
   }
 
 
-  private subscribeAuxiliarHistoricoList() {
+  private subscribeSubledgerAccountList() {
     this.subledgerAccountList$ = concat(
-      of(this.getDefaultAuxiliarList(this.swapsCoberturaEntry?.subledgerAccountId,
-                                     this.swapsCoberturaEntry?.subledgerAccountNumber,
-                                     this.swapsCoberturaEntry?.subledgerAccountName)),
+      of(this.getDefaultSubledgerAccountList(this.swapsCoberturaEntry?.subledgerAccountId,
+                                             this.swapsCoberturaEntry?.subledgerAccountNumber,
+                                             this.swapsCoberturaEntry?.subledgerAccountName)),
       this.subledgerAccountInput$.pipe(
         filter(keywords => keywords !== null && keywords.length >= this.subledgerAccountMinTermLength),
         distinctUntilChanged(),
@@ -217,10 +217,10 @@ export class SwapsCoberturaEntryHeaderComponent implements OnChanges, OnInit {
   }
 
 
-  private getDefaultAuxiliarList(id: number, number: string, name: string): FlexibleIdentifiable[] {
+  private getDefaultSubledgerAccountList(id: number, number: string, name: string): FlexibleIdentifiable[] {
     if (this.isSaved && id && id > 0) {
-      const auxiliar: FlexibleIdentifiable = { id, number, name }
-      return [auxiliar];
+      const subledgerAccount: FlexibleIdentifiable = { id, number, name };
+      return [subledgerAccount];
     }
 
     return [];
