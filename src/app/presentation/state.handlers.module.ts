@@ -15,6 +15,8 @@ import { AccessControlPresentationHandler } from './security-management/access-c
 
 import { AccountChartPresentationHandler } from './financial-accounting/account-chart.presentation.handler';
 
+import { CataloguesPresentationHandler } from './financial-accounting/catalogues.presentation.handler';
+
 import { ExchangeRatesPresentationHandler } from './financial-accounting/exchange-rates.presentation.handler';
 
 import { ExternalVariablesPresentationHandler } from './financial-accounting/external-variables.presentation.handler';
@@ -31,6 +33,7 @@ import { VoucherPresentationHandler } from './financial-accounting/voucher.prese
     MainLayoutPresentationHandler,
     AccessControlPresentationHandler,
     AccountChartPresentationHandler,
+    CataloguesPresentationHandler,
     ExchangeRatesPresentationHandler,
     ExternalVariablesPresentationHandler,
     FinancialConceptsPresentationHandler,
@@ -40,6 +43,7 @@ import { VoucherPresentationHandler } from './financial-accounting/voucher.prese
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccessControlPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccountChartPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: CataloguesPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: ExchangeRatesPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: ExternalVariablesPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: FinancialConceptsPresentationHandler, multi: true },

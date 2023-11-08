@@ -15,7 +15,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { PERMISSIONS } from '@app/main-layout';
 
-import { ExchangeRatesStateSelector } from '@app/presentation/exported.presentation.types';
+import { CataloguesStateSelector, ExchangeRatesStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { ExchangeRatesDataService } from '@app/data-services';
 
@@ -138,7 +138,7 @@ export class ExchangeRatesMainPageComponent implements OnInit, OnDestroy {
 
     combineLatest([
       this.helper.select<Identifiable[]>(ExchangeRatesStateSelector.EXCHANGE_RATES_TYPES_LIST),
-      this.helper.select<Identifiable[]>(ExchangeRatesStateSelector.CURRENCIES_LIST),
+      this.helper.select<Identifiable[]>(CataloguesStateSelector.CURRENCIES_LIST),
     ])
     .subscribe(([a, b]) => {
       this.exchangeRateTypeList = a;

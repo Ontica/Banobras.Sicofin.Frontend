@@ -32,6 +32,9 @@ export type FAEffects = '';
 import { SelectorType as AccountChartStateSelector } from './account-chart.presentation.handler';
 export { SelectorType as AccountChartStateSelector } from './account-chart.presentation.handler';
 
+import { SelectorType as CataloguesStateSelector } from './catalogues.presentation.handler';
+export { SelectorType as CataloguesStateSelector } from './catalogues.presentation.handler';
+
 import { SelectorType as ExchangeRatesStateSelector } from './exchange-rates.presentation.handler';
 export { SelectorType as ExchangeRatesStateSelector } from './exchange-rates.presentation.handler';
 
@@ -48,6 +51,7 @@ import { SelectorType as VoucherStateSelector } from './voucher.presentation.han
 export { SelectorType as VoucherStateSelector } from './voucher.presentation.handler';
 
 export type FASelectors = AccountChartStateSelector |
+                          CataloguesStateSelector |
                           ExchangeRatesStateSelector |
                           ExternalVariablesStateSelector |
                           FinancialConceptsStateSelector |

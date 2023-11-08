@@ -12,6 +12,7 @@ export * from './accounts-edition.data.service';
 export * from './accounts-lists.data.service';
 export * from './balances-store.data.service';
 export * from './balances.data.service';
+export * from './catalogues.data.service';
 export * from './exchange-rates.data.service';
 export * from './external-process.data.service';
 export * from './external-variables.data.service';

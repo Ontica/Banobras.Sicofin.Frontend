@@ -15,6 +15,7 @@ import { AccountsEditionDataService } from './accounts-edition.data.service';
 import { AccountsListsDataService } from './accounts-lists.data.service';
 import { BalancesDataService } from './balances.data.service';
 import { BalancesStoreDataService } from './balances-store.data.service';
+import { CataloguesDataService } from './catalogues.data.service';
 import { ExchangeRatesDataService } from './exchange-rates.data.service';
 import { ExternalProcessDataService } from './external-process.data.service';
 import { ExternalVariablesDataService } from './external-variables.data.service';
@@ -41,6 +42,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     AccountsListsDataService,
     BalancesDataService,
     BalancesStoreDataService,
+    CataloguesDataService,
     ExchangeRatesDataService,
     ExternalProcessDataService,
     ExternalVariablesDataService,

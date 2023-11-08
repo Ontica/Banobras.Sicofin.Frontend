@@ -26,13 +26,6 @@ export class ExchangeRatesDataService {
   }
 
 
-  getCurrencies(): EmpObservable<Identifiable[]> {
-    const path = `v2/financial-accounting/catalogues/currencies`;
-
-    return this.http.get<Identifiable[]>(path);
-  }
-
-
   getExchangeRatesForDate(date: DateString): EmpObservable<ExchangeRate[]> {
     Assertion.assertValue(date, 'date');
 

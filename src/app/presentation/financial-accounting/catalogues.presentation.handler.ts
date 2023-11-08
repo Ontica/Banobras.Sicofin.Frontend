@@ -9,25 +9,27 @@ import { Injectable } from '@angular/core';
 
 import { AbstractPresentationHandler, StateValues } from '@app/core/presentation/presentation.handler';
 
-import { ExchangeRatesDataService } from '@app/data-services';
+import { CataloguesDataService } from '@app/data-services';
 
 import { EmpObservable } from '@app/core';
 
 
 export enum SelectorType {
-  EXCHANGE_RATES_TYPES_LIST = 'FA.ExchangeRates.Selector.ExchangeRatesTypes.List',
+  CURRENCIES_LIST = 'FA.Catalogues.Selector.Currencies.List',
+  SECTORS_LIST    = 'FA.Catalogues.Selector.Sectors.List',
 }
 
 
 const initialState: StateValues = [
-  { key: SelectorType.EXCHANGE_RATES_TYPES_LIST, value: [] },
+  { key: SelectorType.CURRENCIES_LIST, value: [] },
+  { key: SelectorType.SECTORS_LIST, value: [] },
 ];
 
 
 @Injectable()
-export class ExchangeRatesPresentationHandler extends AbstractPresentationHandler {
+export class CataloguesPresentationHandler extends AbstractPresentationHandler {
 
-  constructor(private data: ExchangeRatesDataService) {
+  constructor(private data: CataloguesDataService) {
     super({
       initialState,
       selectors: SelectorType,
@@ -41,8 +43,13 @@ export class ExchangeRatesPresentationHandler extends AbstractPresentationHandle
 
     switch (selectorType) {
 
-      case SelectorType.EXCHANGE_RATES_TYPES_LIST:
-        provider = () => this.data.getExchangeRatesTypes();
+      case SelectorType.SECTORS_LIST:
+        provider = () => this.data.getSectors();
+
+        return super.selectFirst<U>(selectorType, provider);
+
+      case SelectorType.CURRENCIES_LIST:
+        provider = () => this.data.getCurrencies();
 
         return super.selectFirst<U>(selectorType, provider);
 
