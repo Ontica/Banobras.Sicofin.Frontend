@@ -9,7 +9,8 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { AccountsListData, AccountsListEntry, AccountsListEntryFields, AccountsListType } from '@app/models';
+import { AccountsListData, AccountsListEntry, AccountsListEntryFields, AccountsListType,
+         FileReport } from '@app/models';
 
 
 @Injectable()
@@ -50,6 +51,19 @@ export class AccountsListsDataService {
     }
 
     return this.http.get<AccountsListData>(path);
+  }
+
+
+  exportAccountsLists(type: string, keywords: string): EmpObservable<FileReport> {
+    Assertion.assertValue(type, 'type');
+
+    let path = `v2/financial-accounting/accounts-lists-for-edition/${type}/excel`;
+
+    if (keywords) {
+      path += `/?keywords=${keywords}`;
+    }
+
+    return this.http.get<FileReport>(path);
   }
 
 

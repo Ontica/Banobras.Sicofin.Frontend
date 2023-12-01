@@ -154,12 +154,9 @@ export class AccountsListsMainPageComponent {
 
 
   private exportAccountsList() {
-    setTimeout(() => {
-      this.messageBox.showInDevelopment('Exportar lista de cuentas', {
-        eventType: 'EXPORT_ACCOUNTS_LIST', query: this.accountsListQuery,
-      });
-      this.fileUrl = 'dummyurl';
-    }, 500);
+    this.accountsListsData.exportAccountsLists(this.accountsListQuery.type, this.accountsListQuery.keywords)
+      .firstValue()
+      .then(x => this.fileUrl = x.url);
   }
 
 
