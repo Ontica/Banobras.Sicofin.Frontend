@@ -17,7 +17,7 @@
       </div>
 
       <div fxFlex="calc(100% - 240px)">
-        <label>Auxiliar Historico:</label>
+        <label>Auxiliar Histórico:</label>
         <emp-ng-select
           [config]="{ minTermLength: auxiliarHistoricoMinTermLength,
                       virtualScroll: true,
@@ -77,7 +77,8 @@
           [showError]="formHelper.isControlInvalid(form.controls.auxiliarRevaluacion)"
           bindValue="number"
           bindLabel="number"
-          [placeholder]="form.controls.delegacionUID.valid ? 'Buscar auxiliar' : 'Seleccione la delegación'">
+          [placeholder]="form.controls.delegacionUID.valid ? 'Buscar auxiliar' : 'Seleccione la delegación'"
+          (changes)="onAuxiliarRevaluacionChanges()">
           <ng-template #labelTemplate let-item="item">
             {{item.number}}: {{item.name}}
           </ng-template>
@@ -95,10 +96,18 @@
     <div fxLayout="row">
 
       <div fxFlex="240px">
-        <label>Vida útil:</label>
+        <label>Vida útil (meses):</label>
         <input type="text" class="text-box" empNgInteger
           formControlName="mesesDepreciacion"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.mesesDepreciacion)">
+      </div>
+
+      <div fxFlex="240px" *ngIf="isMontoRevaluacionRequired">
+        <label>Monto revaluación:</label>
+        <input type="text" class="text-box text-align-right" empNgCurrency
+          empNgCurrencyDisplaySymbol=""
+          formControlName="montoRevaluacion"
+          [class.invalid-control]="formHelper.isControlInvalid(form.controls.montoRevaluacion)">
       </div>
 
     </div>

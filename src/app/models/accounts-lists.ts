@@ -63,6 +63,7 @@ export interface DepreciacionActivoFijoEntry extends AccountsListEntry {
   auxiliarRevaluacion: string;
   auxiliarRevaluacionNombre: string;
   auxiliarRevaluacionId: number;
+  montoRevaluacion: number;
 }
 
 
@@ -110,6 +111,7 @@ export interface DepreciacionActivoFijoFields extends AccountsListEntryFields {
   fechaInicioDepreciacion: DateString;
   mesesDepreciacion: number;
   auxiliarRevaluacion: string;
+  montoRevaluacion: number;
 }
 
 

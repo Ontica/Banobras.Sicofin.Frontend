@@ -12,7 +12,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Observable, Subject, catchError, concat, debounceTime, distinctUntilChanged, filter, of,
          switchMap, tap } from 'rxjs';
 
-import { Assertion, DateString, EventInfo, FlexibleIdentifiable } from '@app/core';
+import { Assertion, DateString, EventInfo, FlexibleIdentifiable, Validate } from '@app/core';
 
 import { AccountsChartDataService, SubledgerDataService } from '@app/data-services';
 
@@ -36,6 +36,7 @@ interface DepreciacionActivoFijoEntryFormModel extends FormGroup<{
   fechaInicioDepreciacion: FormControl<DateString>;
   mesesDepreciacion: FormControl<number>;
   auxiliarRevaluacion: FormControl<string>;
+  montoRevaluacion: FormControl<number>;
 }> { }
 
 @Component({
@@ -90,6 +91,11 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
   }
 
 
+  get isMontoRevaluacionRequired(): boolean {
+    return !!this.form.value.auxiliarRevaluacion;
+  }
+
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.accountListEntry && this.isSaved) {
       this.enableEditor(false);
@@ -110,6 +116,11 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
     this.subscribeAuxiliarHistoricoList();
     this.subscribeAuxiliarRevaluacionList();
+  }
+
+
+  onAuxiliarRevaluacionChanges() {
+    this.setMontoRevaluacionValidator();
   }
 
 
@@ -167,6 +178,7 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
       delegacionUID: ['', Validators.required],
       mesesDepreciacion: [null as number, Validators.required],
       auxiliarRevaluacion: [null],
+      montoRevaluacion: [null],
     });
   }
 
@@ -179,10 +191,24 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
       delegacionUID: this.depreciacionActivoFijoEntry.delegacionUID,
       mesesDepreciacion: this.depreciacionActivoFijoEntry.mesesDepreciacion,
       auxiliarRevaluacion: this.depreciacionActivoFijoEntry.auxiliarRevaluacion,
+      montoRevaluacion: this.depreciacionActivoFijoEntry.montoRevaluacion > 0 ?
+        this.depreciacionActivoFijoEntry.montoRevaluacion : null,
     });
+
+    this.setMontoRevaluacionValidator();
 
     this.subscribeAuxiliarHistoricoList();
     this.subscribeAuxiliarRevaluacionList();
+  }
+
+
+  private setMontoRevaluacionValidator() {
+    FormHelper.clearControlValidators(this.form.controls.montoRevaluacion);
+
+    if (this.isMontoRevaluacionRequired) {
+      FormHelper.setControlValidators(this.form.controls.montoRevaluacion,
+        [Validators.required, Validate.isPositive]);
+    }
   }
 
 
@@ -199,6 +225,7 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
       delegacionUID: formModel.delegacionUID ?? '',
       mesesDepreciacion: formModel.mesesDepreciacion ?? null,
       auxiliarRevaluacion: formModel.auxiliarRevaluacion ?? '',
+      montoRevaluacion: this.isMontoRevaluacionRequired ? formModel.montoRevaluacion : null,
     };
 
     return data;
