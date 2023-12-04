@@ -37,6 +37,7 @@
 
     <emp-fa-voucher-special-case-editor #voucherSpecialCaseEditor *ngIf="isSpecialCase"
       [voucherSpecialCaseType]="selectedVoucherType"
+      [ledgerUID]="ledgerUIDSelected"
       (voucherSpecialCaseEditorEvent)="onVoucherSpecialCaseEditorEvent($event)">
 
     </emp-fa-voucher-special-case-editor>

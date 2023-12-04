@@ -72,6 +72,11 @@ export class VoucherCreatorComponent {
   }
 
 
+  get ledgerUIDSelected(): string {
+    return this.voucherFields?.ledgerUID ?? '';
+  }
+
+
   get readyForSubmit(): boolean {
     if (this.isSpecialCase && !this.voucherSpecialCaseFieldsValid) {
       return false;

@@ -5,13 +5,13 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { EventInfo } from '@app/core';
 
-import { VoucherSpecialCaseType } from '@app/models';
+import { VoucherSpecialCaseFields, VoucherSpecialCaseType } from '@app/models';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 
@@ -22,6 +22,7 @@ export enum VoucherSpecialCaseEditorEventType {
 interface VoucherSpecialCaseFormModel extends FormGroup<{
   calculationDate: FormControl<string>;
   onVoucherNumber: FormControl<string>;
+  generateForAllChildrenLedgers: FormControl<boolean>;
 }> { }
 
 @Component({
@@ -32,20 +33,27 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
 
   @Input() voucherSpecialCaseType: VoucherSpecialCaseType;
 
+  @Input() ledgerUID: string = '';
+
   @Output() voucherSpecialCaseEditorEvent = new EventEmitter<EventInfo>();
 
   form: VoucherSpecialCaseFormModel;
 
   formHelper = FormHelper;
 
+
   constructor() {
     this.initForm();
   }
 
 
-  ngOnChanges() {
-    this.form.reset();
-    this.validateRequiredFormFields();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.voucherSpecialCaseType) {
+      this.form.reset();
+      this.validateRequiredFormFields();
+    }
+
+    this.resetGenerateForAllChildrenLedgersField();
   }
 
 
@@ -60,6 +68,7 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
     this.form = fb.group({
       calculationDate: ['', Validators.required],
       onVoucherNumber: ['', Validators.required],
+      generateForAllChildrenLedgers: [false],
     });
 
     this.form.valueChanges.subscribe(v => this.emitChanges());
@@ -81,6 +90,12 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
   }
 
 
+  private resetGenerateForAllChildrenLedgersField() {
+    this.formHelper.setDisableControl(this.form.controls.generateForAllChildrenLedgers, !!this.ledgerUID);
+    this.form.controls.generateForAllChildrenLedgers.reset(false);
+  }
+
+
   private emitChanges() {
     const payload = {
       isFormValid: this.form.valid,
@@ -97,9 +112,11 @@ export class VoucherSpecialCaseEditorComponent implements OnChanges {
   private getFormData() {
     const formModel = this.form.getRawValue();
 
-    const data = {
+    const data: VoucherSpecialCaseFields = {
       calculationDate: formModel.calculationDate ?? null,
       onVoucherNumber: formModel.onVoucherNumber ?? '',
+      generateForAllChildrenLedgers: this.voucherSpecialCaseType?.allowAllChildrenLedgersSelection ?
+        formModel.generateForAllChildrenLedgers : false,
     };
 
     return data;

@@ -10,21 +10,36 @@
           Seleccionar el tipo de póliza
         </div>
 
-        <div [fxFlex]="100/3" *ngIf="voucherSpecialCaseType?.askForCalculationDateField">
-          <label>{{voucherSpecialCaseType?.calculationDateFieldName}}:</label>
-          <emp-ng-datepicker
-            formControlName="calculationDate"
-            [showError]="formHelper.isControlInvalid(form.controls.calculationDate)">
+        <ng-container *ngIf="!!voucherSpecialCaseType">
 
-          </emp-ng-datepicker>
-        </div>
+          <div *ngIf="voucherSpecialCaseType.askForCalculationDateField"
+            [fxFlex]="100/3">
+            <label>{{voucherSpecialCaseType?.calculationDateFieldName}}:</label>
+            <emp-ng-datepicker
+              formControlName="calculationDate"
+              [showError]="formHelper.isControlInvalid(form.controls.calculationDate)">
 
-        <div [fxFlex]="100/3" *ngIf="voucherSpecialCaseType?.askForVoucherNumberField">
-          <label>Número de póliza:</label>
-          <input type="text" class="text-box" empNgNumeration
-            formControlName="onVoucherNumber"
-            [class.invalid-control]="formHelper.isControlInvalid(form.controls.onVoucherNumber)">
-        </div>
+            </emp-ng-datepicker>
+          </div>
+
+          <div *ngIf="voucherSpecialCaseType.askForVoucherNumberField"
+            [fxFlex]="100/3">
+            <label>Número de póliza:</label>
+            <input type="text" class="text-box" empNgNumeration
+              formControlName="onVoucherNumber"
+              [class.invalid-control]="formHelper.isControlInvalid(form.controls.onVoucherNumber)">
+          </div>
+
+          <div *ngIf="voucherSpecialCaseType.allowAllChildrenLedgersSelection"
+            fxFlex="none" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+            <mat-checkbox
+              formControlName="generateForAllChildrenLedgers"
+              (click)="$event.stopPropagation">
+              Todas las contabilidades excepto Distrito Federal
+            </mat-checkbox>
+          </div>
+
+        </ng-container>
 
       </div>
 
