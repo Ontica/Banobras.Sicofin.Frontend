@@ -41,6 +41,13 @@ export class AccountsListsDataService {
   }
 
 
+  getTipoActivoFijoForDepreciacionActivoFijo(): EmpObservable<Identifiable[]> {
+    const path = `v2/financial-accounting/accounts-lists-for-edition/DepreciacionActivoFijo/tipos-activo-fijo`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   searchAccountsLists(type: string, keywords: string): EmpObservable<AccountsListData> {
     Assertion.assertValue(type, 'type');
 

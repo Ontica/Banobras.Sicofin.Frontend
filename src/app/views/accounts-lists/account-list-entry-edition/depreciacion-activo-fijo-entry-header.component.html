@@ -9,7 +9,7 @@
         <emp-ng-select
           formControlName="delegacionUID"
           [items]="ledgerIFRSList"
-          [loading]="isLedgerLoading"
+          [loading]="isLoading"
           [showError]="formHelper.isControlInvalid(form.controls.delegacionUID)"
           (changes)="onDelegacionUIDChanges()">
 
@@ -47,20 +47,15 @@
 
     <div fxLayout="row">
 
-      <div fxFlex="120px">
-        <label>Adquisición:</label>
-        <emp-ng-datepicker
-          formControlName="fechaAdquisicion"
-          [showError]="formHelper.isControlInvalid(form.controls.fechaAdquisicion)">
-        </emp-ng-datepicker>
-      </div>
+      <div fxFlex="240px">
+        <label>Tipo de Activo Fijo:</label>
+        <emp-ng-select
+          formControlName="tipoActivoFijoUID"
+          [items]="tipoActivoFijoList"
+          [loading]="isLoading"
+          [showError]="formHelper.isControlInvalid(form.controls.tipoActivoFijoUID)">
 
-      <div fxFlex="120px">
-        <label>Inicio Depreciación:</label>
-        <emp-ng-datepicker
-          formControlName="fechaInicioDepreciacion"
-          [showError]="formHelper.isControlInvalid(form.controls.fechaInicioDepreciacion)">
-        </emp-ng-datepicker>
+        </emp-ng-select>
       </div>
 
       <div fxFlex="calc(100% - 240px)">
@@ -102,7 +97,23 @@
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.mesesDepreciacion)">
       </div>
 
-      <div fxFlex="240px" *ngIf="isMontoRevaluacionRequired">
+      <div fxFlex="120px">
+        <label>Adquisición:</label>
+        <emp-ng-datepicker
+          formControlName="fechaAdquisicion"
+          [showError]="formHelper.isControlInvalid(form.controls.fechaAdquisicion)">
+        </emp-ng-datepicker>
+      </div>
+
+      <div fxFlex="120px">
+        <label>Inicio Depreciación:</label>
+        <emp-ng-datepicker
+          formControlName="fechaInicioDepreciacion"
+          [showError]="formHelper.isControlInvalid(form.controls.fechaInicioDepreciacion)">
+        </emp-ng-datepicker>
+      </div>
+
+      <div fxFlex *ngIf="isMontoRevaluacionRequired">
         <label>Monto revaluación:</label>
         <input type="text" class="text-box text-align-right" empNgCurrency
           empNgCurrencyDisplaySymbol=""

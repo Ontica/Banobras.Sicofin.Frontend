@@ -50,13 +50,15 @@ export interface ConciliacionDerivadosEntry extends AccountsListEntry {
 
 export interface DepreciacionActivoFijoEntry extends AccountsListEntry {
   uid: string;
+  delegacionUID: string;
+  numeroDelegacion: string;
+  delegacion: string;
   auxiliarHistoricoId: number;
   auxiliarHistoricoNombre: string;
   auxiliarHistorico: string;
   numeroInventario: string;
-  numeroDelegacion: string;
-  delegacion: string;
-  delegacionUID: string;
+  tipoActivoFijoUID: string;
+  tipoActivoFijoName: string;
   fechaAdquisicion: DateString;
   fechaInicioDepreciacion: DateString;
   mesesDepreciacion: number;
@@ -105,8 +107,9 @@ export interface ConciliacionDerivadosFields extends AccountsListEntryFields {
 
 export interface DepreciacionActivoFijoFields extends AccountsListEntryFields {
   uid: string;
-  auxiliarHistorico: string;
   delegacionUID: string;
+  auxiliarHistorico: string;
+  tipoActivoFijoUID: string;
   fechaAdquisicion: DateString;
   fechaInicioDepreciacion: DateString;
   mesesDepreciacion: number;

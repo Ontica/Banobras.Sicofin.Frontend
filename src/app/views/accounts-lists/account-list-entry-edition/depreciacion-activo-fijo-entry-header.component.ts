@@ -9,12 +9,12 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Observable, Subject, catchError, concat, debounceTime, distinctUntilChanged, filter, of,
-         switchMap, tap } from 'rxjs';
+import { Observable, Subject, catchError, combineLatest, concat, debounceTime, distinctUntilChanged, filter,
+         of, switchMap, tap } from 'rxjs';
 
-import { Assertion, DateString, EventInfo, FlexibleIdentifiable, Validate } from '@app/core';
+import { Assertion, DateString, EventInfo, FlexibleIdentifiable, Identifiable, Validate } from '@app/core';
 
-import { AccountsChartDataService, SubledgerDataService } from '@app/data-services';
+import { AccountsChartDataService, AccountsListsDataService, SubledgerDataService } from '@app/data-services';
 
 import { AccountsListEntry, DepreciacionActivoFijoEntry, DepreciacionActivoFijoFields,
          SubledgerAccountIFRSQuery } from '@app/models';
@@ -32,6 +32,7 @@ export enum DepreciacionActivoFijoEntryHeaderEventType {
 interface DepreciacionActivoFijoEntryFormModel extends FormGroup<{
   delegacionUID: FormControl<string>;
   auxiliarHistorico: FormControl<string>;
+  tipoActivoFijoUID: FormControl<string>;
   fechaAdquisicion: FormControl<DateString>;
   fechaInicioDepreciacion: FormControl<DateString>;
   mesesDepreciacion: FormControl<number>;
@@ -57,9 +58,11 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
   editionMode = false;
 
-  isLedgerLoading = false;
+  isLoading = false;
 
-  ledgerIFRSList: any[] = [];
+  ledgerIFRSList: Identifiable[] = [];
+
+  tipoActivoFijoList: Identifiable[] = [];
 
   auxiliarHistoricoList$: Observable<FlexibleIdentifiable[]>;
 
@@ -80,6 +83,7 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
   constructor(private subledgerData: SubledgerDataService,
               private accountsChartData: AccountsChartDataService,
+              private accountsListsData: AccountsListsDataService,
               private messageBox: MessageBoxService) {
     this.initForm();
     this.enableEditor(true);
@@ -172,10 +176,11 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
     const fb = new FormBuilder();
 
     this.form = fb.group({
+      delegacionUID: ['', Validators.required],
       auxiliarHistorico: ['', Validators.required],
+      tipoActivoFijoUID: ['', Validators.required],
       fechaAdquisicion: [null as DateString, Validators.required],
       fechaInicioDepreciacion: [null as DateString, Validators.required],
-      delegacionUID: ['', Validators.required],
       mesesDepreciacion: [null as number, Validators.required],
       auxiliarRevaluacion: [null],
       montoRevaluacion: [null],
@@ -185,10 +190,11 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
   private setFormData() {
     this.form.reset({
+      delegacionUID: this.depreciacionActivoFijoEntry.delegacionUID,
       auxiliarHistorico: this.depreciacionActivoFijoEntry.auxiliarHistorico,
+      tipoActivoFijoUID: this.depreciacionActivoFijoEntry.tipoActivoFijoUID,
       fechaAdquisicion: this.depreciacionActivoFijoEntry.fechaAdquisicion,
       fechaInicioDepreciacion: this.depreciacionActivoFijoEntry.fechaInicioDepreciacion,
-      delegacionUID: this.depreciacionActivoFijoEntry.delegacionUID,
       mesesDepreciacion: this.depreciacionActivoFijoEntry.mesesDepreciacion,
       auxiliarRevaluacion: this.depreciacionActivoFijoEntry.auxiliarRevaluacion,
       montoRevaluacion: this.depreciacionActivoFijoEntry.montoRevaluacion > 0 ?
@@ -219,10 +225,11 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
     const data: DepreciacionActivoFijoFields = {
       uid: this.depreciacionActivoFijoEntry?.uid ?? '',
+      delegacionUID: formModel.delegacionUID ?? '',
       auxiliarHistorico: formModel.auxiliarHistorico ?? '',
+      tipoActivoFijoUID: formModel.tipoActivoFijoUID ?? '',
       fechaAdquisicion: formModel.fechaAdquisicion ?? '',
       fechaInicioDepreciacion: formModel.fechaInicioDepreciacion ?? '',
-      delegacionUID: formModel.delegacionUID ?? '',
       mesesDepreciacion: formModel.mesesDepreciacion ?? null,
       auxiliarRevaluacion: formModel.auxiliarRevaluacion ?? '',
       montoRevaluacion: this.isMontoRevaluacionRequired ? formModel.montoRevaluacion : null,
@@ -233,12 +240,17 @@ export class DepreciacionActivoFijoEntryHeaderComponent implements OnChanges, On
 
 
   private loadDataList() {
-    this.isLedgerLoading = true;
+    this.isLoading = true;
 
-    this.accountsChartData.getLedgersIFRS()
-      .firstValue()
-      .then(x => this.ledgerIFRSList = x)
-      .finally(() => this.isLedgerLoading = false);
+    combineLatest([
+      this.accountsChartData.getLedgersIFRS(),
+      this.accountsListsData.getTipoActivoFijoForDepreciacionActivoFijo(),
+    ])
+    .subscribe(([x, y]) => {
+      this.ledgerIFRSList = x
+      this.tipoActivoFijoList = y;
+      this.isLoading = false;
+    });
   }
 
 
