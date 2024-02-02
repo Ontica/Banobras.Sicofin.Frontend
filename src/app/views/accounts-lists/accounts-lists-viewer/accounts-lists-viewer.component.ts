@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { Assertion, EventInfo, isEmpty } from '@app/core';
+import { Assertion, EventInfo } from '@app/core';
 
 import { AccountsListData, AccountsListEntry, EmptyAccountsListData } from '@app/models';
 

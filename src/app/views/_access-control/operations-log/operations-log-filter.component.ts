@@ -13,9 +13,7 @@ import { pairwise, startWith } from 'rxjs';
 
 import { EventInfo, Identifiable, Validate } from '@app/core';
 
-import { DateRange, EmptyDateRange } from '@app/models';
-
-import { OperationsLogQuery, OperationsLogTypeList } from '@app/models';
+import { OperationsLogQuery, OperationsLogTypeList, DateRange, EmptyDateRange } from '@app/models';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
 

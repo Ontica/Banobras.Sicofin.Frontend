@@ -67,7 +67,7 @@ export class BalanceGenerationMainPageComponent {
       case StoredBalanceSetsTableEventType.SELECT_BALANCES_SET:
         Assertion.assertValue(event.payload.storedBalanceSet, 'event.payload.storedBalanceSet');
         Assertion.assertValue(event.payload.storedBalanceSet.uid, 'event.payload.storedBalanceSet.uid');
-        this.getStoredBalanceSet(event.payload.storedBalanceSet.uid);
+        this.setSelectedStoredBalanceSet(event.payload.storedBalanceSet);
         return;
 
       case StoredBalanceSetsTableEventType.CREATE_BALANCE_SET:
@@ -167,20 +167,6 @@ export class BalanceGenerationMainPageComponent {
       .firstValue()
       .then(x => this.storedBalanceSetList = x)
       .catch(error => this.storedBalanceSetList = []);
-  }
-
-
-  private getStoredBalanceSet(balanceSetUID: string) {
-    if (isEmpty(this.selectedAccountChart) || !balanceSetUID) {
-      return;
-    }
-
-    this.isLoading = true;
-
-    this.balancesStoreData.getStoredBalanceSet(this.selectedAccountChart.uid, balanceSetUID)
-      .firstValue()
-      .then(x => this.setSelectedStoredBalanceSet(x))
-      .finally(() => this.isLoading = false);
   }
 
 

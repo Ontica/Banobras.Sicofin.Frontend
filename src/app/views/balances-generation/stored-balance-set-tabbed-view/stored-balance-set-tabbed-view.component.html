@@ -6,7 +6,11 @@
 
       <ng-template matTabContent>
 
-        <div fxLayout="column" fxFlexFill>
+        <div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
+
+          <emp-ng-spinner #spinner [visible]="isLoading">
+
+          </emp-ng-spinner>
 
           <form #filterForm="ngForm" empNgFormKeyDownEnter fxFlex="none"
             autocomplete="off" class="form-section form-container"
@@ -42,7 +46,7 @@
 
                 <div fxFlex>
 
-                  <label>
+                  <label [style.height.px]="12">
                     {{ displayedItemsText }}
                   </label>
 
@@ -56,9 +60,9 @@
                 <div fxFlex="28px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
 
                   <button title="Buscar"
-                    [class.btn-icon-action]="filterForm.valid"
-                    [class.btn-icon]="filterForm.invalid"
-                    [disabled]="filterForm.invalid"
+                    [class.btn-icon-action]="filterForm.valid && storedBalanceSet.calculated"
+                    [class.btn-icon]="filterForm.invalid || !storedBalanceSet.calculated"
+                    [disabled]="filterForm.invalid || !storedBalanceSet.calculated"
                     [style.margin]="0"
                     (click)="onFilterDataClicked()">
                     <mat-icon>search</mat-icon>
@@ -77,15 +81,15 @@
 
           </mat-divider>
 
-          <div fxLayout="row" fxLayoutAlign="space-between center" class="list-selection-header"
-            [style.paddingLeft.px]="2" [style.paddingRight.px]="2"
-            [style.marginLeft.px]="0" [style.marginRight.px]="0">
+          <div fxLayout="row" fxLayoutAlign="end end"
+            class="list-selection-header">
 
-            <div fxFlex fxLayoutAlign="end">
-
-              <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
-
-            </div>
+              <button class="btn"
+                [disabled]="!isDataLoaded"
+                [style.marginRight.px]="-6"
+                (click)="onExportButtonClicked()">
+                Exportar
+              </button>
 
           </div>
 
@@ -93,7 +97,7 @@
 
             <cdk-virtual-scroll-viewport tvsItemSize="32" headerHeight="40" [bufferMultiplier]="0">
 
-              <table mat-table [dataSource]="storedBalanceListDS">
+              <table mat-table [dataSource]="dataSource">
 
                 <ng-container matColumnDef="ledger">
                   <th mat-header-cell *matHeaderCellDef> Contabilidad </th>
@@ -130,14 +134,33 @@
                 <tr mat-row *matRowDef="let row; columns: storedBalanceDisplayedColumns;"></tr>
               </table>
 
-              <div class="text-not-found" *ngIf="storedBalanceListDS.data.length === 0">
-                <p>A este grupo no se le han generado saldos.</p>
+              <div class="text-not-found" *ngIf="isLoading">
+                Cargando...
               </div>
 
-              <div class="text-not-found" *ngIf="storedBalanceListDS.data.length > 0 &&
-                                                 storedBalanceListDS.filteredData.length === 0">
-                <p>No se encontraron saldos con el filtro proporcionado.</p>
-              </div>
+              <ng-container *ngIf="!isLoading">
+
+                <div class="text-not-found" *ngIf="!storedBalanceSet.calculated">
+                  A este grupo no se le han generado saldos.
+                </div>
+
+                <div class="text-not-found" *ngIf="storedBalanceSet.calculated && !isDataLoaded">
+                  No se ha invocado la consulta.
+                </div>
+
+
+                <div class="text-not-found" *ngIf="storedBalanceSet.calculated && isDataLoaded &&
+                                                   dataSource.data.length === 0">
+                  No se encontraron saldos.
+                </div>
+
+                <div class="text-not-found" *ngIf="storedBalanceSet.calculated && isDataLoaded &&
+                                                   dataSource.data.length > 0 &&
+                                                   dataSource.filteredData.length === 0">
+                  No se encontraron saldos con el filtro proporcionado.
+                </div>
+
+              </ng-container>
 
             </cdk-virtual-scroll-viewport>
 

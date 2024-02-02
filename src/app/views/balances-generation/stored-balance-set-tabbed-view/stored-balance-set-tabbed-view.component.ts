@@ -7,15 +7,17 @@
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
-import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
-
-import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet } from '@app/models';
-
-import { EventInfo, Identifiable } from '@app/core';
-
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+
+import { EventInfo, Identifiable, isEmpty } from '@app/core';
+
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
+
+import { BalancesStoreDataService } from '@app/data-services';
+
+import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet } from '@app/models';
 
 export enum StoredBalanceSetTabbedViewEventType {
   CLOSE_MODAL_CLICKED = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',
@@ -58,18 +60,25 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
   storedBalanceDisplayedColumns: string[] =
     ['ledger', 'sectorCode', 'accountNumber', 'accountName', 'balance'];
 
-  storedBalanceListDS: TableVirtualScrollDataSource<StoredBalance>;
+  dataSource: TableVirtualScrollDataSource<StoredBalance>;
 
   displayedItemsText = '';
+
+  isLoading = false;
+
+  isDataLoaded = false;
+
+
+  constructor(private balancesStoreData: BalancesStoreDataService) {
+
+  }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.storedBalanceSet) {
       this.setTitle();
-      this.clearFilters();
-      this.initDataSource();
-      this.setDisplayedItemsText();
-      this.scrollToTop();
+      this.initQueryData();
+      this.initDataTable();
     }
   }
 
@@ -80,10 +89,11 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
 
   onFilterDataClicked() {
-    this.setDisplayedColumns();
-    this.applyFilter();
-    this.setDisplayedItemsText();
-    this.scrollToTop();
+    if (this.storedBalanceSet.calculated && !this.isDataLoaded) {
+      this.getStoredBalanceSet();
+    } else {
+      this.filterDataTable();
+    }
   }
 
 
@@ -104,34 +114,84 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
   }
 
 
-  private setTitle() {
-    this.hint = `<strong>${this.storedBalanceSet.accountsChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>`
-                + `${this.storedBalanceSet.name}`;
-  }
-
-
-  private setDisplayedItemsText() {
-    if (this.storedBalanceListDS.filteredData.length === this.storedBalanceListDS.data.length ) {
-      this.displayedItemsText = FormatLibrary.numberWithCommas(this.storedBalanceListDS.data.length) +
-        ' registros encontrados';
-    } else {
-      this.displayedItemsText = FormatLibrary.numberWithCommas(this.storedBalanceListDS.filteredData.length) +
-        ' de ' + FormatLibrary.numberWithCommas(this.storedBalanceListDS.data.length) +
-        ' registros mostrados';
+  private getStoredBalanceSet() {
+    if (isEmpty(this.storedBalanceSet.accountsChart) || !this.storedBalanceSet.uid) {
+      return;
     }
+
+    this.isLoading = true;
+
+    this.balancesStoreData.getStoredBalanceSet(this.storedBalanceSet.accountsChart.uid,
+                                               this.storedBalanceSet.uid)
+      .firstValue()
+      .then(x => this.resolveGetStoredBalanceSet(x))
+      .finally(() => this.isLoading = false);
   }
 
 
-  private clearFilters() {
+  private initQueryData() {
     this.selectedLedger = null;
     this.keywords = '';
   }
 
 
-  private initDataSource() {
+  private initDataTable() {
+    this.isDataLoaded = false;
     this.setDisplayedColumns();
-    this.storedBalanceListDS = new TableVirtualScrollDataSource(this.storedBalanceSet.balances ?? []);
-    this.storedBalanceListDS.filterPredicate = this.getFilterPredicate();
+    this.dataSource = new TableVirtualScrollDataSource([]);
+    this.initFilterPredicate();
+    this.setDisplayedItemsText();
+    this.scrollToTop();
+  }
+
+
+  private resetDataTable() {
+    this.dataSource = new TableVirtualScrollDataSource(this.storedBalanceSet.balances ?? []);
+    this.initFilterPredicate();
+    this.filterDataTable();
+  }
+
+
+  private initFilterPredicate() {
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+  }
+
+
+  private filterDataTable() {
+    this.applyFilter();
+    this.setDisplayedColumns();
+    this.setDisplayedItemsText();
+    this.scrollToTop();
+  }
+
+
+  private resolveGetStoredBalanceSet(storedBalanceSet: StoredBalanceSet) {
+    this.isDataLoaded = true;
+    this.storedBalanceSet = storedBalanceSet;
+    this.resetDataTable();
+  }
+
+
+  private setTitle() {
+    this.hint = `<strong>${this.storedBalanceSet.accountsChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>`
+      + `${this.storedBalanceSet.name}`;
+  }
+
+
+  private setDisplayedItemsText() {
+    if (!this.isDataLoaded || !this.storedBalanceSet.calculated) {
+      this.displayedItemsText = '';
+      return;
+    }
+
+    if (this.dataSource.filteredData.length === this.dataSource.data.length ) {
+      this.displayedItemsText = FormatLibrary.numberWithCommas(this.dataSource.data.length) +
+        ' registros encontrados';
+    } else {
+      this.displayedItemsText = FormatLibrary.numberWithCommas(this.dataSource.filteredData.length) +
+        ' de ' + FormatLibrary.numberWithCommas(this.dataSource.data.length) +
+        ' registros mostrados';
+    }
   }
 
 
@@ -185,7 +245,7 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
       }
     ];
 
-    this.storedBalanceListDS.filter = JSON.stringify(filtersList);
+    this.dataSource.filter = JSON.stringify(filtersList);
   }
 
 
