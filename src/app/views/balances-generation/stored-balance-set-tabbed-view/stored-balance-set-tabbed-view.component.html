@@ -1,4 +1,7 @@
-<emp-ng-card [title]="title" [hint]="hint" (cardClose)="onClose()">
+<emp-ng-card
+  [title]="title"
+  [hint]="hint"
+  (cardClose)="onClose()">
 
   <mat-tab-group mat-stretch-tabs="false" [(selectedIndex)]="selectedTabIndex">
 
@@ -172,7 +175,7 @@
 
     </mat-tab>
 
-    <mat-tab label="Recalcular">
+    <mat-tab label="Acciones">
 
       <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
 
@@ -191,14 +194,21 @@
 
           </div>
 
-          <div fxFlex="none" fxLayoutAlign="end center">
+        </div>
 
-            <button type="submit" class="btn-action"
-              (click)="onCalculateStoredBalanceSetClicked()">
-              {{storedBalanceSet.calculated ? 'Recalcular saldos' : 'Calcular saldos'}}
-            </button>
+        <mat-divider class="horizontal"></mat-divider>
 
-          </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+
+          <button type="submit" class="btn-warning" fxFlex="none"
+            (click)="onDeleteStoreBalanceSetClicked()">
+            Eliminar grupo de saldos
+          </button>
+
+          <button type="submit" class="btn-action" fxFlex="none"
+            (click)="onCalculateStoredBalanceSetClicked()">
+            {{storedBalanceSet.calculated ? 'Recalcular saldos' : 'Calcular saldos'}}
+          </button>
 
         </div>
 

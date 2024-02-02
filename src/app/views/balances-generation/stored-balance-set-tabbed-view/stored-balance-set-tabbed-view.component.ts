@@ -15,14 +15,17 @@ import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 import { BalancesStoreDataService } from '@app/data-services';
 
 import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet } from '@app/models';
 
 export enum StoredBalanceSetTabbedViewEventType {
-  CLOSE_MODAL_CLICKED = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',
+  CLOSE_MODAL_CLICKED          = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',
   CALCULATE_STORED_BALANCE_SET = 'StoredBalanceSetTabbedViewComponent.Event.CalculateStoredBalanceSetClicked',
-  EXPORT_STORED_BALANCE_SET = 'StoredBalanceSetTabbedViewComponent.Event.ExportStoredBalanceSetClicked',
+  DELETE_STORED_BALANCE_SET    = 'StoredBalanceSetTabbedViewComponent.Event.DeleteStoredBalanceSetClicked',
+  EXPORT_STORED_BALANCE_SET    = 'StoredBalanceSetTabbedViewComponent.Event.ExportStoredBalanceSetClicked',
 }
 
 interface FilterDef {
@@ -69,9 +72,8 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
   isDataLoaded = false;
 
 
-  constructor(private balancesStoreData: BalancesStoreDataService) {
-
-  }
+  constructor(private balancesStoreData: BalancesStoreDataService,
+              private messageBox: MessageBoxService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -111,6 +113,11 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
     sendEvent(this.storedBalanceSetTabbedViewEvent,
       StoredBalanceSetTabbedViewEventType.CALCULATE_STORED_BALANCE_SET, payload);
+  }
+
+
+  onDeleteStoreBalanceSetClicked() {
+    this.confirmDeleteStoreBalanceSet();
   }
 
 
@@ -173,8 +180,10 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
-    this.hint = `<strong>${this.storedBalanceSet.accountsChart.name} &nbsp; &nbsp; | &nbsp; &nbsp; </strong>`
-      + `${this.storedBalanceSet.name}`;
+    this.title = `Saldos acumulados <span class="tag tag-info tag-small">` +
+      `${this.storedBalanceSet.calculated ? 'Generados' : 'No generados'}</span>`;
+    this.hint = `<strong>${this.storedBalanceSet.accountsChart.name}&nbsp; &nbsp; | &nbsp; &nbsp;</strong>` +
+      `${this.storedBalanceSet.name}`;
   }
 
 
@@ -253,6 +262,32 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
     if (this.virtualScroll) {
       this.virtualScroll.scrollToIndex(-1);
     }
+  }
+
+
+  private confirmDeleteStoreBalanceSet() {
+    const message = `Esta operación eliminará el grupo de saldos ` +
+      `<strong>${this.storedBalanceSet.accountsChart.name} | ${this.storedBalanceSet.name}</strong>` +
+      `<br><br>¿Elimino el grupo de saldos?`;;
+
+    this.messageBox.confirm(message, 'Eliminar grupo de saldos', 'DeleteCancel')
+      .firstValue()
+      .then(x => {
+        if (x) {
+          this.emitDeleteStoreBalanceSet();
+        }
+      });
+  }
+
+
+  private emitDeleteStoreBalanceSet() {
+    const payload = {
+      accountsChartUID: this.storedBalanceSet.accountsChart.uid,
+      balanceSetUID: this.storedBalanceSet.uid,
+    };
+
+    sendEvent(this.storedBalanceSetTabbedViewEvent,
+      StoredBalanceSetTabbedViewEventType.DELETE_STORED_BALANCE_SET, payload);
   }
 
 }

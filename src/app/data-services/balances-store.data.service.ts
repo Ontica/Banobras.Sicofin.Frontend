@@ -58,6 +58,18 @@ export class BalancesStoreDataService {
   }
 
 
+  deleteStoredBalancesSet(accountsChartUID: string,
+                          balanceSetUID: string): EmpObservable<void> {
+    Assertion.assertValue(accountsChartUID, 'accountsChartUID');
+    Assertion.assertValue(balanceSetUID, 'balanceSetUID');
+
+    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}` +
+      `/balance-store/${balanceSetUID}`;
+
+    return this.http.delete<void>(path);
+  }
+
+
   exportStoredBalanceSetToExcel(accountsChartUID: string, balanceSetUID: string): EmpObservable<FileReport> {
     Assertion.assertValue(accountsChartUID, 'accountsChartUID');
     Assertion.assertValue(balanceSetUID, 'balanceSetUID');

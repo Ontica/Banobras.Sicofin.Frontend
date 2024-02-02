@@ -125,6 +125,12 @@ export class BalanceGenerationMainPageComponent {
         this.calculateStoredBalancesSet(event.payload.accountsChartUID, event.payload.balanceSetUID);
         return;
 
+      case StoredBalanceSetTabbedViewEventType.DELETE_STORED_BALANCE_SET:
+        Assertion.assertValue(event.payload.accountsChartUID, 'event.payload.accountsChartUID');
+        Assertion.assertValue(event.payload.balanceSetUID, 'event.payload.balanceSetUID');
+        this.deleteStoredBalancesSet(event.payload.accountsChartUID, event.payload.balanceSetUID);
+        return;
+
       case StoredBalanceSetTabbedViewEventType.EXPORT_STORED_BALANCE_SET:
         this.setDisplayExportModal(true);
         return;
@@ -192,18 +198,38 @@ export class BalanceGenerationMainPageComponent {
 
     this.balancesStoreData.calculateStoredBalancesSet(accountsChartUID, balanceSetUID)
       .firstValue()
-      .then(x => {
-        this.setSelectedStoredBalanceSet(x);
-
-        this.messageBox.show(`Se han generado los saldos acumulados al día
-          ${DateStringLibrary.format(this.selectedStoredBalanceSet.calculationTime)}.`,
-          'Saldos generados');
-
-        if (this.selectedAccountChart?.uid === accountsChartUID) {
-          this.getBalancesSetsList();
-        }
-      })
+      .then(x => this.resolveCalculateStoredBalancesSet(x))
       .finally(() => this.setSubmitted(false));
+  }
+
+
+  private deleteStoredBalancesSet(accountsChartUID: string, balanceSetUID: string) {
+    this.setSubmitted(true);
+
+    this.balancesStoreData.deleteStoredBalancesSet(accountsChartUID, balanceSetUID)
+      .firstValue()
+      .then(x => this.resolveDeleteStoredBalancesSet(balanceSetUID))
+      .finally(() => this.setSubmitted(false));
+  }
+
+
+  private resolveCalculateStoredBalancesSet(storedBalanceSet: StoredBalanceSet) {
+    this.setSelectedStoredBalanceSet(storedBalanceSet);
+
+    this.messageBox.show(`Se han generado los saldos acumulados al día
+          ${DateStringLibrary.format(this.selectedStoredBalanceSet.calculationTime)}.`,
+      'Saldos generados');
+
+    if (this.selectedAccountChart?.uid === storedBalanceSet.accountsChart.uid) {
+      this.getBalancesSetsList();
+    }
+  }
+
+
+  private resolveDeleteStoredBalancesSet(balanceSetUID: string) {
+    this.messageBox.show(`Se ha eliminado el grupo de saldos.`, 'Eliminar grupo de saldos');
+    this.storedBalanceSetList = this.storedBalanceSetList.filter(x => x.uid !== balanceSetUID);
+    this.setSelectedStoredBalanceSet(EmptyStoredBalanceSet);
   }
 
 
