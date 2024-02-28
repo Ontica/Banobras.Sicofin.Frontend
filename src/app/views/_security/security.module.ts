@@ -10,8 +10,9 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
-import { SecurityUIRoutingModule } from './security-ui-routing.module';
+
 import { UserLoginComponent } from './user-login/user-login.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 
 @NgModule({
@@ -20,15 +21,18 @@ import { UserLoginComponent } from './user-login/user-login.component';
     CommonModule,
     ReactiveFormsModule,
 
-    SecurityUIRoutingModule,
     AngularMaterialModule,
   ],
 
   declarations: [
     UserLoginComponent,
+    UnauthorizedComponent,
   ],
 
-  exports: []
+  exports: [
+    UserLoginComponent,
+    UnauthorizedComponent,
+  ]
 
 })
-export class SecurityUIModule { }
+export class SecurityModule { }

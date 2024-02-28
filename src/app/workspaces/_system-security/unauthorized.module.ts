@@ -9,7 +9,10 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 
-import { UnauthorizedComponent } from './unauthorized.component';
+import { SecurityModule } from '@app/views/_security/security.module';
+
+import { UnauthorizedComponent } from '@app/views/_security/unauthorized/unauthorized.component';
+
 
 const routes: Routes = [
   {
@@ -24,13 +27,8 @@ const routes: Routes = [
 
   imports: [
     RouterModule.forChild(routes),
+    SecurityModule,
   ],
-
-  declarations: [
-    UnauthorizedComponent,
-  ],
-
-  exports: []
 
 })
 export class UnauthorizedModule { }
