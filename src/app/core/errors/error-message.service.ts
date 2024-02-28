@@ -71,7 +71,7 @@ export class ErrorMessageService {
 
       this.messageBox.showError(statusMessage)
           .firstValue()
-          .then(x => this.router.navigateByUrl('security/login'))
+          .then(x => this.router.navigateByUrl('seguridad/login'))
     }
   }
 

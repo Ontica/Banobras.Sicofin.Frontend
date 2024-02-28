@@ -45,7 +45,7 @@ export const ChildRouteGuard: CanActivateChildFn = (route: ActivatedRouteSnapsho
 
 const isAuthenticated = (): boolean => {
   if (!inject(SessionService).getPrincipal().isAuthenticated) {
-    inject(Router).navigateByUrl('security/login');
+    inject(Router).navigateByUrl('seguridad/login');
     return false;
   }
 

@@ -45,7 +45,7 @@ export class UserLoginComponent implements OnInit {
 
 
   ngOnInit() {
-    this.logout();
+    this.clearSession();
   }
 
 
@@ -76,10 +76,8 @@ export class UserLoginComponent implements OnInit {
   }
 
 
-  private logout() {
-    this.submitted = true;
-    this.authenticationService.logout()
-      .finally(() => this.submitted = false);
+  private clearSession() {
+    this.authenticationService.clearSession();
   }
 
 }

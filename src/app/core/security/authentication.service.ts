@@ -7,8 +7,8 @@
 
 import { Injectable } from '@angular/core';
 
-import { APP_CONFIG, DEFAULT_ROUTE, DEFAULT_URL, getAllPermissions, ROUTES_LIST,
-         UNAUTHORIZED_ROUTE } from '@app/main-layout';
+import { APP_CONFIG, CHANGE_PASSWORD_PATH, DEFAULT_ROUTE, DEFAULT_PATH, getAllPermissions, ROUTES_LIST,
+         UNAUTHORIZED_PATH } from '@app/main-layout';
 
 import { ACCESS_PROBLEM_MESSAGE, INVALID_CREDENTIALS_MESSAGE } from '../errors/error-messages';
 
@@ -53,16 +53,20 @@ export class AuthenticationService {
 
 
   logout(): Promise<boolean> {
-    const principal = this.session.getPrincipal();
-
-    this.session.clearSession();
-
-    if (!principal.isAuthenticated) {
+    if (!this.session.getPrincipal().isAuthenticated) {
+      this.session.clearSession();
       return Promise.resolve(false);
-    } else {
-
-      return Promise.resolve(true);
     }
+
+    return this.securityService.closeSession()
+      .then(() => Promise.resolve(true))
+      .finally(() => this.session.clearSession());
+  }
+
+
+  clearSession() {
+    // TODO: clear presentation state
+    this.session.clearSession();
   }
 
 
@@ -71,12 +75,14 @@ export class AuthenticationService {
       principalData.permissions = getAllPermissions();
     }
 
-    const defaultRoute =  this.getDefaultRoute(principalData.permissions);
+    const defaultRoute = this.getDefaultRoute(principalData.permissions,
+                                              principalData.changePasswordRequired);
 
     const principal = new Principal(sessionToken,
                                     principalData.identity,
                                     principalData.permissions,
                                     defaultRoute);
+
     this.session.setPrincipal(principal);
   }
 
@@ -91,24 +97,26 @@ export class AuthenticationService {
   }
 
 
-  private getDefaultRoute(permissions: string[]): string {
+  private getDefaultRoute(permissions: string[], changePasswordRequired: boolean): string {
+    if (changePasswordRequired) {
+      return CHANGE_PASSWORD_PATH;
+    }
+
     if (permissions.includes(DEFAULT_ROUTE.permission)) {
-      return DEFAULT_URL;
+      return DEFAULT_PATH;
     }
 
     const routesValid = this.getValitRoutes(permissions);
 
-    if (routesValid.length === 0) {
-      return UNAUTHORIZED_ROUTE;
-    }
-
-    for (const route of ROUTES_LIST) {
-      if (route.permission === routesValid[0]) {
-        return route.parent + '/' + route.path;
+    if (routesValid.length > 0) {
+      for (const route of ROUTES_LIST) {
+        if (route.permission === routesValid[0]) {
+          return route.parent + '/' + route.path;
+        }
       }
     }
 
-    return UNAUTHORIZED_ROUTE;
+    return UNAUTHORIZED_PATH;
   }
 
 

@@ -11,7 +11,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ChildRouteGuard, ParentRouteGuard } from './core';
 
-import { DEFAULT_URL, MainLayoutComponent, NoContentComponent, ROUTES } from '@app/main-layout';
+import { DEFAULT_PATH, MainLayoutComponent, NoContentComponent, ROUTES } from '@app/main-layout';
 
 const routes: Routes = [
   {
@@ -62,7 +62,7 @@ const routes: Routes = [
     loadChildren: () => import('./views/_security/security-ui.module')
                               .then(m => m.SecurityUIModule)
   },
-  { path: '', redirectTo: DEFAULT_URL, pathMatch: 'full' },
+  { path: '', redirectTo: DEFAULT_PATH, pathMatch: 'full' },
   { path: '**', component: NoContentComponent }
 ];
 

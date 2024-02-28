@@ -48,7 +48,7 @@ export class UserSessionComponent implements OnInit {
     this.authenticationService.logout()
       .finally(() => {
         this.store.dispatch(MainUIStateAction.SET_IS_PROCESSING_FLAG, false);
-        this.router.navigateByUrl('security/login');
+        this.router.navigateByUrl('seguridad/login');
       });
   }
 

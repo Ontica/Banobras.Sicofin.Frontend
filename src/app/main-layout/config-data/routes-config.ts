@@ -38,8 +38,8 @@ export const ROUTES = {
   },
   security: {
     parent: '',
-    path: 'security',
-    fullpath: '/security',
+    path: 'seguridad',
+    fullpath: '/seguridad',
   },
 
   unauthorized: {
@@ -192,10 +192,16 @@ export const ROUTES = {
 
   // #region security-routing module
 
-  security_login: {
-    parent: 'security',
+  seguridad_login: {
+    parent: 'seguridad',
     path: 'login',
-    fullpath: '/security/login'
+    fullpath: '/seguridad/login'
+  },
+
+  seguridad_cambio_de_contrasena: {
+    parent: 'seguridad',
+    path: 'cambio-de-contrasena',
+    fullpath: '/seguridad/cambio-de-contrasena'
   },
 
   // #endregion
@@ -206,10 +212,13 @@ export const ROUTES = {
 export const DEFAULT_ROUTE = ROUTES.tableros_saldos_y_balanzas;
 
 
-export const DEFAULT_URL = ( DEFAULT_ROUTE.parent ? DEFAULT_ROUTE.parent + '/' : '' ) + DEFAULT_ROUTE.path;
+export const DEFAULT_PATH = DEFAULT_ROUTE.fullpath;
 
 
-export const UNAUTHORIZED_ROUTE = ROUTES.unauthorized.path;
+export const CHANGE_PASSWORD_PATH = ROUTES.seguridad_cambio_de_contrasena.fullpath;
+
+
+export const UNAUTHORIZED_PATH = ROUTES.unauthorized.path;
 
 
 export const ROUTES_LIST = Object.keys(ROUTES)
