@@ -14,6 +14,7 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { SharedModule } from '@app/shared/shared.module';
 
 import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { SecurityModule } from '../_security/security.module';
 
 import { AccessControlControlsComponent } from './access-control-viewer/access-control-controls.component';
 import { AccessControlFilterComponent } from './access-control-viewer/access-control-filter.component';
@@ -45,6 +46,7 @@ import { OperationsLogFilterComponent } from './operations-log/operations-log-fi
     SharedModule,
 
     ReportsControlsModule,
+    SecurityModule,
   ],
   declarations: [
     AccessControlControlsComponent,
