@@ -25,4 +25,29 @@ export interface SessionToken {
 export interface PrincipalData {
   readonly identity: Identity;
   permissions: string[];
+  changePasswordRequired: boolean;
+}
+
+
+export const FakeSessionToken: SessionToken = {
+  accessToken: 'FakeAccessToken',
+  expiresIn: 9999999,
+  refreshToken: 'FakeRefreshToken',
+  tokenType: 'FakeTokenType',
+};
+
+
+export function getFakePrincipalData(user: string): PrincipalData {
+  const fakePrincipalData: PrincipalData = {
+    identity: {
+      username: user,
+      email: user,
+      fullname: user,
+      name: user,
+    },
+    permissions: [],
+    changePasswordRequired: false,
+  };
+
+  return fakePrincipalData;
 }

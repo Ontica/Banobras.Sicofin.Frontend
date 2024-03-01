@@ -16,11 +16,13 @@ import { Assertion } from '../general/assertion';
 
 import { SessionService } from '../general/session.service';
 
-import { Principal } from './principal';
-
 import { SecurityDataService } from './security-data.service';
 
-import { PrincipalData, SessionToken } from './security-types';
+import { resolve } from '../data-types';
+
+import { Principal } from './principal';
+
+import { FakeSessionToken, PrincipalData, SessionToken, getFakePrincipalData } from './security-types';
 
 
 @Injectable()
@@ -34,14 +36,14 @@ export class AuthenticationService {
     Assertion.assertValue(userID, 'userID');
     Assertion.assertValue(userPassword, 'userPassword');
 
-    const sessionToken = await this.securityService.createSession(userID, userPassword)
+    const sessionToken = await this.createSession(userID, userPassword)
       .then(x => {
         this.session.setSessionToken(x);
         return x;
       })
       .catch((e) => this.handleAuthenticationError(e));
 
-    const principal = this.securityService.getPrincipal();
+    const principal = this.getPrincipal(userID);
 
     return Promise.all([sessionToken, principal])
       .then(([x, y]) => {
@@ -58,7 +60,7 @@ export class AuthenticationService {
       return Promise.resolve(false);
     }
 
-    return this.securityService.closeSession()
+    return this.closeSession()
       .then(() => Promise.resolve(true))
       .finally(() => this.session.clearSession());
   }
@@ -67,6 +69,18 @@ export class AuthenticationService {
   clearSession() {
     // TODO: clear presentation state
     this.session.clearSession();
+  }
+
+
+  private createSession(userID: string, userPassword: string): Promise<SessionToken> {
+    return APP_CONFIG.security.fakeLogin ? resolve(FakeSessionToken) :
+      this.securityService.createSession(userID, userPassword);
+  }
+
+
+  private getPrincipal(userID: string): Promise<PrincipalData> {
+    return APP_CONFIG.security.fakeLogin ? resolve(getFakePrincipalData(userID)) :
+      this.securityService.getPrincipal();
   }
 
 
@@ -122,6 +136,11 @@ export class AuthenticationService {
 
   private getValitRoutes(permissions): string[] {
     return permissions ? permissions.filter(x => x.startsWith('route-')) : [];
+  }
+
+
+  private closeSession(): Promise<void> {
+    return APP_CONFIG.security.fakeLogin ? resolve(null) : this.securityService.closeSession();
   }
 
 }
