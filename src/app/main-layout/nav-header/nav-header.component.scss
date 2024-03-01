@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import "../../../styles/general-styles";
+@import '../../../styles/variables', '../../../styles/mixins';
 
 .header {
   background: -prefix-linear-gradient(top, $layout-gradient-initial-color, $layout-gradient-final-color);

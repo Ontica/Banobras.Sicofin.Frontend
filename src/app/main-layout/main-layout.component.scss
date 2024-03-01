@@ -5,8 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import "../../styles/general-styles";
-@import "top-bar/top-bar.component.scss";
+@import '../../styles/variables', '../../styles/mixins';
+
+@import 'top-bar/top-bar.component.scss';
 
 $breakpoint-width: 1600px;
 $margin-size: 16px;

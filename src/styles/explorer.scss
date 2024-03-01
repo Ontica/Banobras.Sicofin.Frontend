@@ -5,14 +5,6 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@mixin explorer-defaults {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  flex: auto;
-  margin: 8px;
-}
-
 .explorer {
   display: flex;
   flex-flow: row nowrap;
@@ -51,6 +43,10 @@
     right: 0;
     left: 100%;
     margin: auto;
+  }
+
+  .primary-resizable.primary-floating::after {
+    margin-right: -15px;
   }
 
   .primary-resizable-disable {

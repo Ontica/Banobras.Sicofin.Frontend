@@ -5,6 +5,12 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+@import "../../../../styles/variables";
+
+.range-picker {
+  width: $range-picker-width !important;
+}
+
 .appended-container {
   align-items: center;
   box-sizing: border-box;

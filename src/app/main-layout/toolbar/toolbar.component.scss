@@ -4,8 +4,9 @@
  *
  * See LICENSE.txt in the project root for complete license information.
  */
-@import "../../../styles/general-styles.scss";
-@import "../top-bar/top-bar.component.scss";
+@import '../../../styles/mixins';
+
+@import '../top-bar/top-bar.component.scss';
 
 .toolbar-container {
   display: flex;

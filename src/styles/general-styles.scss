@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import 'variables', 'responsive';
+@import 'mixins', 'variables';
 
 table {
   border: 0;
@@ -21,16 +21,6 @@ table td {
 
 table td:last-child {
   width: 100%;
-}
-
-@mixin input-button-settings {
-  font: $button-font;
-  text-transform: uppercase;
-  border: $button-border;
-  height: $button-height;
-  min-width: 88px;
-  padding: 4pt 8pt;
-  white-space: nowrap;
 }
 
 .circled {
@@ -224,29 +214,6 @@ button.btn-margin-right {
   margin-right: 32px;
 }
 
-@mixin input-settings {
-  background-color: $control-background-color;
-  border-top: $control-border;
-  border-bottom: $control-border;
-  border-left: $control-border;
-  border-right: $control-border;
-  color: $control-color;
-  font: $control-font;
-  font-weight: normal;
-  margin: $control-margin;
-  padding: $control-padding;
-  vertical-align: middle;
-  height: $control-height;
-  width: $control-width;
-  border-radius: $control-border-radius;
-  transition: 0.3s ease-out;
-}
-
-@mixin disabled-element {
-  color: $control-disabled-color;
-  background: $control-disabled-background;
-}
-
 select.select-box {
   @include input-settings;
 }
@@ -318,6 +285,10 @@ input::placeholder {
   cursor: pointer;
 }
 
+input.text-box.no-margin {
+  margin: 0;
+}
+
 .text-area {
   background-color: $control-background-color;
   border: $control-border;
@@ -341,6 +312,11 @@ textarea:focus {
   background-color: $selected-control-background-color;
   border: $selected-control-border;
   box-shadow: inset 0 0 2px $selected-control-border;
+}
+
+.text-monospace {
+  font-family: $font-family-secondary;
+  font-size: 11pt;
 }
 
 .text-align-left {
@@ -380,6 +356,10 @@ textarea:focus {
 .wrap {
   word-wrap: break-word;
   white-space: normal !important;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 
 .info-text {
@@ -438,10 +418,6 @@ a.warning-indicator-text:hover {
 
 .ghost-icon:hover {
   color: $icon-color-dark;
-}
-
-@mixin raised-header {
-  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.28);
 }
 
 .small-italic-notification {
@@ -541,30 +517,50 @@ i.disabled {
 // tags
 
 .tag {
-  background-color: $tag-background-color;
+  background-color: $tag-default-background-color;
   border-radius: 10px;
-  color: $primary-color-light;
+  color: $tag-default-color;
   padding: 4px 8px;
   width: fit-content;
+  white-space: nowrap;
+
+  &.tag-base {
+    background-color: $white;
+    color: $tag-default-color;
+    border: 1px solid $tag-default-color;
+  }
+
+  &.tag-base-warning {
+    background-color: $white;
+    color: $tag-warning-color;
+    border: 1px solid $tag-warning-color;
+  }
 
   &.tag-info {
-    background-color: $primary-color-light;
+    background-color: $tag-info-background-color;
     color: $white;
   }
 
   &.tag-error {
-    background-color: $warning-color-light;
+    background-color: $tag-error-background-color;
     color: $white;
   }
 
   &.tag-warning {
-    background-color: $title-color;
+    background-color: $tag-warning-color;
     color: $white;
   }
 
   &.tag-small {
-    font-size: 8px;
+    font-size: 0.5rem;
     margin: 0 8px;
+    padding: 4px 8px;
+  }
+
+  &.tag-medium {
+    font-size: 0.75rem;
+    margin: 0 8px;
+    padding: 4px 8px;
   }
 }
 
@@ -572,22 +568,26 @@ a.tag {
   text-decoration: underline;
 
   &:hover {
-    background-color: darken($tag-background-color, 4%);
+    background-color: darken($tag-default-background-color, 4%);
     color: $primary-color-light;
     cursor: pointer;
 
+    &.tag-base {
+      background-color: lighten($tag-default-color, 55%);
+    }
+
     &.tag-info {
-      background-color: darken($primary-color-light, 4%);
+      background-color: darken($tag-info-background-color, 4%);
       color: $white;
     }
 
     &.tag-error {
-      background-color: darken($warning-color-light, 4%);
+      background-color: darken($tag-error-background-color, 4%);
       color: $white;
     }
 
     &.tag-warning {
-      background-color: darken($title-color, 4%);
+      background-color: darken($tag-warning-color, 4%);
       color: $white;
     }
   }
@@ -666,6 +666,11 @@ ul.default-list {
 
   li {
 
+    label {
+      color: $primary-color;
+      font-weight: 600;
+    }
+
     &.limit-list {
       font-weight: 600;
       font-size: 8.5pt;
@@ -722,4 +727,57 @@ ul.default-list {
   color: $primary-color;
   font-style: $text-italic;
   padding: 1rem 0 0.5rem 0;
+}
+
+
+.list-container {
+  border: 1px solid $secondary-color-light;
+  border-radius: 3px;
+  padding: 8px;
+}
+
+
+.list-selection-item {
+  padding: 8px 8px 8px 4px;
+}
+
+
+.list-selection-item:not(:last-child) {
+  border-bottom: 1px dashed $secondary-color-light;
+}
+
+
+.workarea-color {
+  background: hsl(207, 91%, 98%);
+}
+
+
+.info-container {
+  @include message-container;
+
+  border-color: $primary-color;
+}
+
+
+.warning-container {
+  @include message-container;
+
+  border-color: darken($icon-color-warning, 35%);
+}
+
+
+.container-expand-half {
+  max-height: 35vh;
+  overflow-y: auto;
+}
+
+
+.container-expand-all {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+
+.text-expandable-selection {
+  font-size: 0.75rem;
 }

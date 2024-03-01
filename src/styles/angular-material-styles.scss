@@ -182,7 +182,7 @@ table.mat-mdc-table {
 
   th {
     font-weight: 500;
-    padding: 12px 15px 12px 0;
+    padding: $grid-entry-padding-vertical $grid-entry-padding-horizontal $grid-entry-padding-vertical 0;
 
     &.mat-mdc-header-cell {
       border-bottom: 2pt solid $title-color;
@@ -195,36 +195,46 @@ table.mat-mdc-table {
     }
 
     &:first-of-type {
-      padding-left: 10px;
+      padding-left: $grid-entry-padding-vertical-first;
     }
 
     &:last-of-type {
-      padding-right: 10px !important;
+      padding-right: $grid-entry-padding-vertical-first !important;
+    }
+
+    &.column-action {
+      text-align: center;
+      width: $grid-row-height !important;
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+      padding-right: $grid-entry-padding-vertical;
     }
   }
 
   td {
     vertical-align: top;
-    padding: 8px 15px 8px 0;
+    padding: $grid-entry-padding-vertical-default $grid-entry-padding-horizontal $grid-entry-padding-vertical-default 0;
     font-family: $font-family-secondary;
     font-size: $font-size-grid;
     line-height: $font-size-grid;
 
     &:first-of-type {
-      padding-left: 10px;
+      padding-left: $grid-entry-padding-vertical-first;
     }
 
     &.mat-mdc-cell:last-of-type,
     &.mat-mdc-footer-cell:last-of-type {
-      padding-right: 10px;
+      padding-right: $grid-entry-padding-vertical-first;
       width: auto;
     }
 
     &.column-action {
       text-align: center;
-      width: 32px !important;
+      width: $grid-row-height !important;
       padding-top: 2px;
       padding-bottom: 2px;
+      // padding-right: $grid-entry-padding-vertical;
+      // vertical-align: middle;
     }
 
     &.column-action-check {
@@ -246,6 +256,8 @@ table.mat-mdc-table {
 
     a.item-link {
       color: $link-color;
+      text-decoration: underline;
+      white-space: nowrap;
     }
 
     a.item-link:hover {
@@ -257,6 +269,10 @@ table.mat-mdc-table {
       color: $primary-color;
       text-decoration: underline;
       white-space: nowrap;
+    }
+
+    .text-label {
+      font-size: $font-size-grid * 0.95;
     }
 
     .text-highlight {
@@ -289,7 +305,7 @@ table.mat-mdc-table {
     &.mat-mdc-footer-row {
 
       &.text-not-found > td {
-        padding: 1rem;
+        padding: $grid-entry-padding-vertical $grid-entry-padding-horizontal;
         text-align: center;
       }
 
@@ -301,6 +317,14 @@ table.mat-mdc-table {
     &.mat-mdc-row {
       background-color: $white;
     }
+  }
+
+  &.table-no-margin {
+    margin: 0;
+  }
+
+  &.data-centered td {
+    vertical-align: middle;
   }
 
   .text-align-right {

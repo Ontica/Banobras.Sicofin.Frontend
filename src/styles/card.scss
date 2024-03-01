@@ -5,11 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-@import 'general-styles';
+@import 'mixins', 'variables';
 
-@mixin raised-header {
-  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.28);
-}
+
+
+
 
 .card {
   @include column;
@@ -80,6 +80,11 @@
   padding: 0 16px 16px 16px !important;
 }
 
+.card-body-without-top {
+  margin-top: 0;
+  padding: 0 16px 16px 16px !important;
+}
+
 .card-header-raised {
   border-bottom: 3px solid $title-border-color;
 
@@ -107,4 +112,37 @@
   &:hover {
     border: 1px solid $border-color;
   }
+}
+
+.card-floating-container {
+  background-color: $white;
+  border: 1px solid $border-color-light;
+  height: calc(100% - 10px) !important;
+  margin-top: 10px;
+
+  .card-floating-primary.card,
+  .card-floating-primary > .card {
+    margin: -10px -10px 0 10px;
+  }
+
+  .card-floating-secondary.card,
+  .card-floating-secondary > .card {
+    margin: -10px 0 0 -10px;
+  }
+}
+
+//
+// Responsive
+//
+@include medium() {
+
+  .card-header {
+    min-height: 39px;
+    padding: 16px 16px 0 16px;
+
+    &.card-header-flat {
+      padding: 16px;
+    }
+  }
+
 }
