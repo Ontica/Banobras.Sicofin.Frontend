@@ -15,11 +15,19 @@ import { SecurityModule } from '@app/views/_security/security.module';
 
 import { UserLoginComponent } from '@app/views/_security/user-login/user-login.component';
 
+import {
+  UserChangePasswordComponent
+} from '@app/views/_security/user-change-password/user-change-password.component';
+
 
 const routes: Routes = [
   {
     path: ROUTES.seguridad_login.path,
     component: UserLoginComponent,
+  },
+  {
+    path: ROUTES.seguridad_cambio_de_contrasena.path,
+    component: UserChangePasswordComponent,
   },
   {
     path: '',

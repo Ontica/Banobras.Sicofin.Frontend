@@ -10,6 +10,7 @@
 $medium-max-width: 1024px;
 $logo-width: 335px;
 $logo-padding: 20px;
+$width: 450px;
 
 .outer {
   align-items: center;
@@ -25,7 +26,7 @@ $logo-padding: 20px;
   display: flex;
   align-items: center;
   height: 100%;
-  max-width: 450px;
+  max-width: $width;
   background: -prefix-linear-gradient(top, $layout-gradient-initial-color, $layout-gradient-final-color);
   background: linear-gradient(to top, $layout-gradient-initial-color, $layout-gradient-final-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
@@ -55,6 +56,13 @@ $logo-padding: 20px;
   padding: 30px $logo-padding;
   font-size: 14.5pt;
   text-transform: uppercase;
+  color: $layout-secondary-color;
+  line-height: 16pt;
+}
+
+.authentication-section-instruction {
+  padding: 30px $logo-padding;
+  font-size: 14pt;
   color: $layout-secondary-color;
   line-height: 16pt;
 }
@@ -104,7 +112,7 @@ label {
   font-weight: 800;
 }
 
-.inline-error {
+.inline-warning {
   color: $layout-secondary-color;
   padding: 4px;
   border: 1px solid $layout-secondary-color;

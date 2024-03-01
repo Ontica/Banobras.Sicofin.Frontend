@@ -15,7 +15,8 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
-import { ChangePasswordFormComponent } from './change-password/change-password-form.component';
+import { ChangePasswordFormComponent } from './user-change-password/change-password-form.component';
+import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { ChangePasswordFormComponent } from './change-password/change-password-f
     UserLoginComponent,
     UnauthorizedComponent,
     ChangePasswordFormComponent,
+    UserChangePasswordComponent,
   ],
 
   exports: [

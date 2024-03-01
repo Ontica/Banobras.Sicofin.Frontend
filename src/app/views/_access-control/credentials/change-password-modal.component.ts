@@ -17,7 +17,7 @@ import { UpdateCredentialsFields} from '@app/models';
 
 import {
   ChangePasswordFormEventType
-} from '@app/views/_security/change-password/change-password-form.component';
+} from '@app/views/_security/user-change-password/change-password-form.component';
 
 @Component({
   selector: 'emp-ng-change-password-modal',

@@ -479,6 +479,10 @@ table.mat-mdc-table.emp-designer {
     margin: 0 0.75rem;
     height: $control-height;
   }
+
+  &.white {
+    border-top-color: rgba(255, 255, 255, 0.45);
+  }
 }
 
 //

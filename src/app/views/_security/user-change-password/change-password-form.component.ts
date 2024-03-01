@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -49,8 +49,13 @@ export enum ChangePasswordFormEventType {
 @Component({
   selector: 'emp-ng-change-password-form',
   templateUrl: './change-password-form.component.html',
+  styleUrls: ['./user-change-password.component.scss']
 })
 export class ChangePasswordFormComponent {
+
+  @Input() isRequiredAction = false;
+
+  @Input() submitted = false;
 
   @Output() changePasswordFormEvent = new EventEmitter<EventInfo>();
 
@@ -70,15 +75,22 @@ export class ChangePasswordFormComponent {
 
   get newPasswordErrorsText(): string {
     const errors = this.getNewPasswordErrorsList();
+    const isMatchError = this.form.errors?.matchOther && this.isRequiredAction;
+    let errorText = '';
 
-    if (errors.length === 0) {
-      return '';
+    if (errors.length > 0) {
+      const errorsText =
+        [errors.slice(0, -1).join(', '), errors.slice(-1)[0]].join(errors.length < 2 ? '' : ' y ');
+
+      errorText += `La nueva contraseña debe contener ${errorsText}.`;
     }
 
-    const errorsText =
-      [errors.slice(0, -1).join(', '), errors.slice(-1)[0]].join(errors.length < 2 ? '' : ' y ');
+    if (isMatchError) {
+      errorText += errorText !== '' ? '<br><br>' : '';
+      errorText += 'Las contraseñas no coinciden.';
+    }
 
-    return `La nueva contraseña debe contener ${errorsText}.`;
+    return errorText;
   }
 
 
@@ -145,24 +157,24 @@ export class ChangePasswordFormComponent {
     let rules: string[] = [];
 
     if (this.passwordRules.minlengthRequired &&
-      (this.form.controls.newPassword.errors.required || this.form.controls.newPassword.errors.minlength)) {
+      (this.form.controls.newPassword.errors?.required || this.form.controls.newPassword.errors?.minlength)) {
       rules.push(`al menos ${this.passwordRules.minlength ?? 5} caracteres`);
     }
 
-    if (this.passwordRules.upperRequired && this.form.controls.newPassword.errors.hasUpper) {
+    if (this.passwordRules.upperRequired && this.form.controls.newPassword.errors?.hasUpper) {
       rules.push('mayúsculas');
     }
 
-    if (this.passwordRules.lowerRequired && this.form.controls.newPassword.errors.hasLower) {
+    if (this.passwordRules.lowerRequired && this.form.controls.newPassword.errors?.hasLower) {
       rules.push('minúsculas');
     }
 
-    if (this.passwordRules.numberRequired && this.form.controls.newPassword.errors.hasNumber) {
+    if (this.passwordRules.numberRequired && this.form.controls.newPassword.errors?.hasNumber) {
       rules.push('números');
     }
 
     if (this.passwordRules.specialCharactersRequired &&
-      this.form.controls.newPassword.errors.hasSpecialCharacters) {
+      this.form.controls.newPassword.errors?.hasSpecialCharacters) {
       rules.push('caracteres especiales');
     }
 
@@ -184,6 +196,5 @@ export class ChangePasswordFormComponent {
 
     return data;
   }
-
 
 }

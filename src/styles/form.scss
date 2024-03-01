@@ -26,6 +26,11 @@ form.form-section {
     font-weight: 600;
   }
 
+  &.text-white label {
+    color: $white;
+    font-weight: 500;
+  }
+
   button {
     margin-right: 8px;
   }
@@ -39,21 +44,31 @@ form.submitted select.ng-invalid {
 
 form .inline-error {
   color: $warning-color;
+  border: 1px solid $warning-color;
+  padding: 8pt;
   font-size: 10pt;
   font-weight: 400;
-  padding: 8pt;
   margin: 0 8px 12px 0;
-  border: 1px solid $warning-color;
+  border-radius: 1px;
+}
+
+form .inline-warning {
+  color: $layout-secondary-color;
+  border: 1px solid $layout-secondary-color;
+  padding: 4px;
+  font-size: 10pt;
+  font-weight: 400;
+  margin: 0 8px 12px 0;
   border-radius: 1px;
 }
 
 form .inline-info {
   color: $primary-color;
+  border: 1px solid $primary-color;
+  padding: 8pt;
   font-size: 10pt;
   font-weight: 400;
-  padding: 8pt;
   margin: 0 10px 12px 0;
-  border: 1px solid $primary-color;
   border-radius: 1px;
 }
 
