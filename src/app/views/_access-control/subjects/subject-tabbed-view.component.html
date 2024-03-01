@@ -9,9 +9,9 @@
 
     <mat-tab label="Usuario">
 
-      <div fxLayout="column" fxFlexFill fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+      <div class="fx-column-container-fill fx-gap-three-quarter">
 
-        <emp-ng-subject-editor fxFlex="none"
+        <emp-ng-subject-editor class="fx-item-none"
           [subject]="subject"
           [canEdit]="canEdit"
           [canGeneratePassword]="!isDeleted && hasContexts"
@@ -20,7 +20,7 @@
 
         </emp-ng-subject-editor>
 
-        <div fxFlex="none">
+        <div class="fx-item-none">
 
           <div class="section-title"> Aplicaciones </div>
 

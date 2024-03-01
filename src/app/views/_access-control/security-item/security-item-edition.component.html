@@ -1,15 +1,15 @@
-<div fxLayout="column" fxFlexFill [style.paddingRight.px]="8" [empNgSpinnerHost]="spinner">
+<div class="fx-column-container-fill" [style.paddingRight.px]="8" [empNgSpinnerHost]="spinner">
 
   <emp-ng-spinner #spinner [visible]="!displayItemAssign && submitted">
 
   </emp-ng-spinner>
 
-  <div fxLayout="row">
+  <div class="fx-row-container fx-space-between">
 
-    <div fxFlex fxLayoutAlign="start center">
+    <div class="fx-item-half">
 
       <emp-ng-select *ngIf="selectorRequired"
-        name="selectedSelector" [fxFlex]="50"
+        name="selectedSelector"
         [(ngModel)]="selectedSelectorUID" [ngModelOptions]="{standalone: true}"
         [items]="itemsForSelectorList"
         [showError]="!selectedSelectorUID"
@@ -19,7 +19,7 @@
 
     </div>
 
-    <div *ngIf="canEdit" fxFlex="none" fxLayoutAlign="end center">
+    <div *ngIf="canEdit" class="fx-item-none fx-end fx-items-center">
 
       <button
         [disabled]="!isSelectorValid"

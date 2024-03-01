@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-sm="column">
+    <div class="fx-row-container md-fx-column-container">
 
-      <div [fxFlex]="50">
+      <div class="fx-item-half md-fx-item">
 
         <label>Tipo de consulta:</label>
 
@@ -18,7 +18,7 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="start end">
+      <div class="fx-item md-fx-item fx-start fx-items-end">
 
         <div class="input-search-container">
 
@@ -32,8 +32,7 @@
 
       </div>
 
-      <div fxFlex="36px" fxFlex.lt-md="none"
-        [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+      <div class="fx-item-none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
         <button title="Buscar"
           [disabled]="!isFormValid"
@@ -49,9 +48,9 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="50">
+      <div class="fx-item-half">
 
         <label>Aplicación:</label>
 
@@ -67,7 +66,7 @@
       </div>
 
 
-      <div [fxFlex]="50" *ngIf="displayWorkarea">
+      <div class="fx-item-half" *ngIf="displayWorkarea">
 
         <label>Área de trabajo:</label>
 

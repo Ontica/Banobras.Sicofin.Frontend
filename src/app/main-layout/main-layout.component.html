@@ -19,17 +19,17 @@
 
     <mat-sidenav-content #sidenavContent class="content">
 
-      <div fxLayout="column" fxFlexFill>
+      <div class="fx-column-container-fill">
 
-        <emp-ng-nav-bar fxFlex="none">
+        <emp-ng-nav-bar class="fx-item-none">
 
         </emp-ng-nav-bar>
 
-        <emp-ng-header fxFlex="none" (action)="onAction($event)">
+        <emp-ng-header class="fx-item-none" (action)="onAction($event)">
 
         </emp-ng-header>
 
-        <div class="workarea" fxFlex>
+        <div class="workarea">
 
           <router-outlet>
 
@@ -37,7 +37,7 @@
 
         </div>
 
-        <emp-ng-footer fxFlex="none" *ngIf="appLayoutConfig.displayFooter">
+        <emp-ng-footer class="fx-item-none" *ngIf="appLayoutConfig.displayFooter">
 
         </emp-ng-footer>
 

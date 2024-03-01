@@ -3,18 +3,18 @@
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 
-  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+  <div class="fx-column-container fx-gap-three-quarter">
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-        <div [fxFlex]="200/3">
+        <div class="fx-item-two-third">
           <label>Nombre:</label>
           <input type="text" class="text-box"
             formControlName="fullName"
             [class.invalid-control]="formHelper.isControlInvalid(form.controls.fullName)">
         </div>
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Identificador:</label>
           <input type="text" class="text-box"
             formControlName="userID"
@@ -23,16 +23,16 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="200/3">
+      <div class="fx-item-two-third">
         <label>Correo:</label>
         <input type="text" class="text-box"
           formControlName="eMail"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.eMail)">
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Número de empleado:</label>
         <input type="text" class="text-box"
           formControlName="employeeNo"
@@ -41,9 +41,9 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="200/3">
+      <div class="fx-item-two-third">
         <label>Área de trabajo:</label>
         <emp-ng-select
           formControlName="workareaUID"
@@ -53,7 +53,7 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Puesto de trabajo:</label>
         <input type="text" class="text-box"
           formControlName="jobPosition"
@@ -68,11 +68,11 @@
   <mat-divider class="horizontal" *ngIf="!isSaved || (isSaved && canEdit && !isDeleted)"></mat-divider>
 
 
-  <div #rowFooter fxLayout="row">
+  <div #rowFooter class="fx-row-container">
 
     <ng-container *ngIf="!isSaved">
 
-      <div fxFlex fxLayoutAlign="end center">
+      <div class="fx-item fx-end fx-items-center">
 
         <button
           [class.btn]="!formHelper.isFormReady(form)"
@@ -87,7 +87,7 @@
 
     <ng-container *ngIf="isSaved && canEdit && !isDeleted">
 
-      <div fxFlex fxLayoutAlign="start center">
+      <div class="fx-item fx-start fx-items-center">
 
         <button *ngIf="!editionMode && canGeneratePassword"
           class="btn-action"
@@ -103,7 +103,7 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="end center">
+      <div class="fx-item fx-end fx-items-center">
 
         <button *ngIf="!editionMode"
           class="btn-action"

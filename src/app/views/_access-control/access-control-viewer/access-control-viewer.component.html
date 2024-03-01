@@ -16,7 +16,7 @@
     <div class="card-header-options">
 
       <button *empNgHasPermission="Permissions.FEATURE_EDICION_CONTROL_DE_ACCESOS"
-        class="btn-action" fxFlexOffset="1.5rem"
+        class="btn-action"
         (click)="onCreateSubjectClicked()">
         Agregar usuario
       </button>
@@ -27,13 +27,13 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-ng-access-control-filter fxFlex="none"
+      <emp-ng-access-control-filter class="fx-item-none"
         (accessControlFilterEvent)="onAccessControlFilterEvent($event)">
 
       </emp-ng-access-control-filter>
@@ -47,7 +47,8 @@
 
         <ng-container [ngSwitch]="query.queryType">
 
-          <emp-ng-subjects-table *ngSwitchCase="QueryTypes.Subjects" fxFlex
+          <emp-ng-subjects-table *ngSwitchCase="QueryTypes.Subjects"
+            class="fx-item"
             [dataList]="subjectsList"
             [selected]="selectedSubject"
             (subjectsTableEvent)="onSubjectsTableEvent($event)">

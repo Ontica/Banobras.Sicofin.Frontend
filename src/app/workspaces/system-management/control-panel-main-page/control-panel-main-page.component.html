@@ -8,15 +8,17 @@
       [showCardHeaderFlat]="true"
       [disableClose]="true">
 
-        <div class="card-info-container"
-          fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+        <div class="card-info-container fx-row-container fx-wrap fx-space-between
+                    md-fx-column-container">
 
           <ng-container *ngFor="let option of controlPanelOptionList">
 
             <div *empNgHasPermission="option.permission"
-              class="card-info" fxFlex="0 1 calc(50% - 8px)" fxFlex.lt-md="100" fxLayoutAlign="space-around center">
+              class="card-info
+                     fx-row-container fx-space-around fx-items-center
+                     fx-item-half-margin md-fx-item">
 
-              <div fxFlex>
+              <div class="fx-item">
 
                 <span class="card-info-title">{{option.title}}</span>
                 <span class="card-info-hint">{{option.description}}</span>

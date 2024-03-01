@@ -12,13 +12,13 @@
 
         <emp-ng-spinner #spinner [visible]="submitted"></emp-ng-spinner>
 
-        <div fxLayout="column">
+        <div class="fx-column-container">
 
           <ng-container *ngIf="hasGroups">
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div fxFlex="50">
+              <div class="fx-item-half">
 
                 <label>Grupo de permiso:</label>
                 <emp-ng-select
@@ -41,11 +41,11 @@
 
           <div *ngIf="hasGroups || itemsToAssignFilteredList.length > 0" class="items-scroll-container">
 
-            <mat-radio-group class="radio-group-vertical" fxLayout="column" fxLayoutGap="0.25rem"
+            <mat-radio-group class="radio-group-vertical fx-column-container fx-gap-quarter"
               [(ngModel)]="itemToAssign" name="itemToAssign" required>
 
               <div *ngFor="let item of itemsToAssignFilteredList"
-                class="simple-list-item radio-list" fxLayout="row">
+                class="simple-list-item radio-list fx-row-container">
 
                 <mat-radio-button class="radio-list-item" [value]="item">
 
@@ -74,9 +74,9 @@
 
           <mat-divider class="horizontal"></mat-divider>
 
-          <div #rowFooter fxLayout="row">
+          <div #rowFooter class="fx-row-container">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item fx-end fx-items-center">
 
               <button
                 [disabled]="!isItemToAssignValid"
