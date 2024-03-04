@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from '@app/core';
 
+import { LoginErrorAction, LoginErrorActionType } from '@app/core/security/authentication.service';
+
 import { APP_CONFIG } from '@app/main-layout';
 
 type ShowPasswordMode = 'icon' | 'check';
@@ -70,9 +72,32 @@ export class UserLoginComponent implements OnInit {
     this.authenticationService.login(this.form.value.userID, this.form.value.password)
       .then(
         x => this.router.navigate([x]),
-        err => this.exceptionMsg = err
+        err => this.resolveLoginError(err)
       )
       .finally(() => this.submitted = false);
+  }
+
+
+  private resolveLoginError(error: LoginErrorAction) {
+    switch (error.actionType) {
+      case LoginErrorActionType.ChangePassword:
+        this.changePasswordRequired();
+        this.exceptionMsg = error.message;
+        return;
+
+      case LoginErrorActionType.None:
+        this.exceptionMsg = error.message;
+        return;
+
+      default:
+        console.log(`Unhandled login error type ${error.actionType}`);
+        return;
+    }
+  }
+
+
+  private changePasswordRequired() {
+    // TODO: handle required action
   }
 
 

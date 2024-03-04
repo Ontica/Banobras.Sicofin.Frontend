@@ -65,7 +65,6 @@ export class ErrorMessageService {
 
 
   private handle401Error(message) {
-
     if (!this.messageBox.isOpen()) {
       const statusMessage = `<strong>(401)</strong>  ${message}`;
 

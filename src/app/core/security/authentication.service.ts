@@ -10,7 +10,8 @@ import { Injectable } from '@angular/core';
 import { APP_CONFIG, CHANGE_PASSWORD_PATH, DEFAULT_ROUTE, DEFAULT_PATH, getAllPermissions, ROUTES_LIST,
          UNAUTHORIZED_PATH } from '@app/main-layout';
 
-import { ACCESS_PROBLEM_MESSAGE, INVALID_CREDENTIALS_MESSAGE } from '../errors/error-messages';
+import { ACCESS_PROBLEM_MESSAGE, INVALID_CREDENTIALS_MESSAGE,
+         NOT_ACTIVE_CREDENTIALS_MESSAGE } from '../errors/error-messages';
 
 import { Assertion } from '../general/assertion';
 
@@ -23,6 +24,25 @@ import { resolve } from '../data-types';
 import { Principal } from './principal';
 
 import { FakeSessionToken, PrincipalData, SessionToken, getFakePrincipalData } from './security-types';
+
+
+enum LoginErrorType {
+  InvalidUserCredentials = 'SecurityException.InvalidUserCredentials',
+  NotActiveUser          = 'SecurityException.NotActiveUser',
+  UserPasswordExpired    = 'SecurityException.UserPasswordExpired',
+  MustChangePassword     = 'SecurityException.MustChangePassword',
+};
+
+
+export enum LoginErrorActionType {
+  ChangePassword = 'ChangePassword',
+  None           = 'None',
+}
+
+export interface LoginErrorAction {
+  actionType: LoginErrorActionType;
+  message: string;
+}
 
 
 @Injectable()
@@ -101,13 +121,36 @@ export class AuthenticationService {
   }
 
 
-  private handleAuthenticationError(error): Promise<never> {
+  private handleAuthenticationError(error): Promise<any> {
     if (error.status === 401) {
-      return Promise.reject(new Error(INVALID_CREDENTIALS_MESSAGE));
+
+      if ([LoginErrorType.MustChangePassword,
+           LoginErrorType.UserPasswordExpired].includes(error.error.code)) {
+
+        return Promise.reject(this.getLoginErrorAction(LoginErrorActionType.ChangePassword,
+          NOT_ACTIVE_CREDENTIALS_MESSAGE));
+
+      }
+
+      return Promise.reject(this.getLoginErrorAction(LoginErrorActionType.None,
+        INVALID_CREDENTIALS_MESSAGE));
+
     } else {
-      return Promise.reject(new Error(`${ACCESS_PROBLEM_MESSAGE}: ` +
-        `${error.status} ${error.statusText} ${error.message}`));
+
+      return Promise.reject(this.getLoginErrorAction(LoginErrorActionType.None,
+        `${ACCESS_PROBLEM_MESSAGE}: ${error.status} ${error.statusText} ${error.message}`));
+
     }
+  }
+
+
+  private getLoginErrorAction(actionType: LoginErrorActionType, message: string) {
+    const loginErrorAction: LoginErrorAction = {
+      actionType,
+      message
+    };
+
+    return loginErrorAction;
   }
 
 
