@@ -7,27 +7,23 @@
 
 import { NgModule } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+
 import { RouterModule, Routes } from '@angular/router';
 
 import { ROUTES } from '@app/main-layout';
 
 import { SecurityModule } from '@app/views/_security/security.module';
 
-import { UserLoginComponent } from '@app/views/_security/user-login/user-login.component';
-
 import {
-  UserChangePasswordComponent
-} from '@app/views/_security/user-change-password/user-change-password.component';
+  AuthenticationMainPageComponent
+} from './authentication-main-page/authentication-main-page.component';
 
 
 const routes: Routes = [
   {
     path: ROUTES.seguridad_login.path,
-    component: UserLoginComponent,
-  },
-  {
-    path: ROUTES.seguridad_cambio_de_contrasena.path,
-    component: UserChangePasswordComponent,
+    component: AuthenticationMainPageComponent,
   },
   {
     path: '',
@@ -41,8 +37,13 @@ const routes: Routes = [
 
   imports: [
     RouterModule.forChild(routes),
+    CommonModule,
     SecurityModule,
   ],
+
+  declarations: [
+    AuthenticationMainPageComponent,
+  ]
 
 })
 export class AuthenticationModule { }

@@ -33,7 +33,7 @@ $width: 450px;
 }
 
 .authentication-center {
-  margin-top: -25%;
+
 }
 
 .authentication-section-logo {
@@ -69,32 +69,16 @@ $width: 450px;
 
 .authentication-section-form {
   padding: 0 12px 0 $logo-padding;
-  height: 164px;
-
-  .login-field-container {
-    position: relative;
-    height: 32px;
-    margin-bottom: $logo-padding;
-  }
-
-  .footer-submit-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  height: auto;
 }
 
-.authentication-section-footer {
-  margin-left: $logo-padding;
-  margin-top: $logo-padding;
-  font-size: 10pt;
+.authentication-error {
+  width: calc($width - 32px);
+  min-height: 74px;
 }
 
-label {
-  font-size: 10pt;
-  font-weight: 500;
-  padding-top: 12px;
-  color: $white;
+.authentication-space {
+  height: 5vh;
 }
 
 .hint {
@@ -110,17 +94,6 @@ label {
   color: $white;
   margin-top: 4px;
   font-weight: 800;
-}
-
-.inline-warning {
-  color: $layout-secondary-color;
-  padding: 4px;
-  border: 1px solid $layout-secondary-color;
-}
-
-input:-webkit-autofill {
-  box-shadow: 0 0 0 32px $control-background-color inset;
-  -webkit-box-shadow: 0 0 0 32px $control-background-color inset;
 }
 
 @media only screen and (max-width: $medium-max-width) {

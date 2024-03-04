@@ -1,0 +1,37 @@
+/**
+ * @license
+ * Copyright (c) La Vía Óntica SC, Ontica LLC and contributors. All rights reserved.
+ *
+ * See LICENSE.txt in the project root for complete license information.
+ */
+
+
+@import "../user-authentication/user-authentication.component.scss";
+
+.authentication-section-form {
+
+  .login-field-container {
+    position: relative;
+    height: 32px;
+    margin-bottom: $logo-padding;
+  }
+
+  .footer-submit-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+}
+
+label {
+  font-size: 10pt;
+  font-weight: 500;
+  padding-top: 12px;
+  color: $white;
+}
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0 32px $control-background-color inset;
+  -webkit-box-shadow: 0 0 0 32px $control-background-color inset;
+}

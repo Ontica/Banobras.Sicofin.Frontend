@@ -5,28 +5,32 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from '@app/core';
+import { AuthenticationService, EventInfo } from '@app/core';
 
 import { LoginErrorAction, LoginErrorActionType } from '@app/core/security/authentication.service';
 
-import { APP_CONFIG } from '@app/main-layout';
+import { sendEvent } from '@app/shared/utils';
 
 type ShowPasswordMode = 'icon' | 'check';
 
-@Component({
-  selector: 'emp-ng-user-login',
-  templateUrl: './user-login.component.html',
-  styleUrls: ['./user-login.component.scss'],
-})
-export class UserLoginComponent implements OnInit {
+export enum LoginEventType {
+  CHANGE_PASSWORD_REQUIRED = 'LoginComponent.Event.ChangePasswordRequired',
+}
 
-  appLayoutData = APP_CONFIG.data;
+@Component({
+  selector: 'emp-ng-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+})
+export class LoginComponent implements OnInit {
+
+  @Output() loginEvent = new EventEmitter<EventInfo>();
 
   showPasswordModeSelected: ShowPasswordMode = 'check';
 
@@ -81,7 +85,7 @@ export class UserLoginComponent implements OnInit {
   private resolveLoginError(error: LoginErrorAction) {
     switch (error.actionType) {
       case LoginErrorActionType.ChangePassword:
-        this.changePasswordRequired();
+        this.emitChangePasswordRequired()
         this.exceptionMsg = error.message;
         return;
 
@@ -96,8 +100,8 @@ export class UserLoginComponent implements OnInit {
   }
 
 
-  private changePasswordRequired() {
-    // TODO: handle required action
+  private emitChangePasswordRequired() {
+    sendEvent(this.loginEvent, LoginEventType.CHANGE_PASSWORD_REQUIRED);
   }
 
 

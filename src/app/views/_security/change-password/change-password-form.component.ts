@@ -49,7 +49,7 @@ export enum ChangePasswordFormEventType {
 @Component({
   selector: 'emp-ng-change-password-form',
   templateUrl: './change-password-form.component.html',
-  styleUrls: ['./user-change-password.component.scss']
+  styleUrls: ['./change-password-form.component.scss']
 })
 export class ChangePasswordFormComponent {
 

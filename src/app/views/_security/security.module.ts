@@ -13,10 +13,11 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { UserLoginComponent } from './user-login/user-login.component';
+import { LoginComponent } from './login/login.component';
+import { ChangePasswordFormComponent } from './change-password/change-password-form.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { UserAuthenticationComponent } from './user-authentication/user-authentication.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
-import { ChangePasswordFormComponent } from './user-change-password/change-password-form.component';
-import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
 
 
 @NgModule({
@@ -29,21 +30,20 @@ import { UserChangePasswordComponent } from './user-change-password/user-change-
     AngularMaterialModule,
     AngularFlexLayoutModule,
     SharedModule,
-
-    AngularMaterialModule,
   ],
 
   declarations: [
-    UserLoginComponent,
-    UnauthorizedComponent,
+    LoginComponent,
     ChangePasswordFormComponent,
-    UserChangePasswordComponent,
+    ChangePasswordComponent,
+    UserAuthenticationComponent,
+    UnauthorizedComponent,
   ],
 
   exports: [
-    UserLoginComponent,
-    UnauthorizedComponent,
+    UserAuthenticationComponent,
     ChangePasswordFormComponent,
+    UnauthorizedComponent,
   ]
 
 })

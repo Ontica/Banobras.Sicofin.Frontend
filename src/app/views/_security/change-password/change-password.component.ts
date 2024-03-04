@@ -5,9 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component } from '@angular/core';
-
-import { Router } from '@angular/router';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
@@ -15,25 +13,31 @@ import { APP_CONFIG } from '@app/main-layout';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
+import { sendEvent } from '@app/shared/utils';
+
 import { UpdateCredentialsFields } from '@app/models';
 
 import { ChangePasswordFormEventType } from './change-password-form.component';
 
+export enum ChangePasswordEventType {
+  CHANGE_PASSWORD = 'ChangePasswordComponent.Event.ChangePassword',
+}
 
 @Component({
-  selector: 'emp-ng-user-change-password',
-  templateUrl: './user-change-password.component.html',
-  styleUrls: ['./user-change-password.component.scss']
+  selector: 'emp-ng-change-password',
+  templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.scss']
 })
-export class UserChangePasswordComponent {
+export class ChangePasswordComponent {
+
+  @Output() changePasswordEvent = new EventEmitter<EventInfo>();
 
   appLayoutData = APP_CONFIG.data;
 
   submitted = false;
 
 
-  constructor(private router: Router,
-              private messageBox: MessageBoxService) {
+  constructor(private messageBox: MessageBoxService) {
 
   }
 
@@ -67,8 +71,8 @@ export class UserChangePasswordComponent {
 
 
   private resolveUpdateCredentials() {
-    this.messageBox.show('La contraseña fue actualizada correctamente.', 'Cambiar contraseña');
-    this.router.navigateByUrl('seguridad/login');
+    this.messageBox.showInDevelopment('Cambiar contraseña');
+    sendEvent(this.changePasswordEvent, ChangePasswordEventType.CHANGE_PASSWORD);
   }
 
 }
