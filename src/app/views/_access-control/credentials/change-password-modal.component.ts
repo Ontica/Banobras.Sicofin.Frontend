@@ -48,8 +48,17 @@ export class ChangePasswordModalComponent  {
 
     switch (event.type as ChangePasswordFormEventType) {
       case ChangePasswordFormEventType.CHANGE_PASSWORD:
-        Assertion.assertValue(event.payload.credentialsFields, 'event.payload.credentialsFields');
-        this.updateCredentialsToSubject(event.payload.credentialsFields as UpdateCredentialsFields);
+        Assertion.assertValue(event.payload.userID, 'event.payload.userID');
+        Assertion.assertValue(event.payload.currentPassword, 'event.payload.currentPassword');
+        Assertion.assertValue(event.payload.newPassword, 'event.payload.newPassword');
+
+        const credentialsFields: UpdateCredentialsFields = {
+          userID: event.payload.userID,
+          currentPassword: event.payload.currentPassword,
+          newPassword: event.payload.newPassword,
+        };
+
+        this.updateCredentialsToSubject(credentialsFields);
         return;
 
       default:

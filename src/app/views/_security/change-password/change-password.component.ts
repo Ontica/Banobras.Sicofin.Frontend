@@ -7,15 +7,11 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
-
-import { APP_CONFIG } from '@app/main-layout';
+import { Assertion, AuthenticationService, EventInfo } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
-
-import { UpdateCredentialsFields } from '@app/models';
 
 import { ChangePasswordFormEventType } from './change-password-form.component';
 
@@ -32,12 +28,11 @@ export class ChangePasswordComponent {
 
   @Output() changePasswordEvent = new EventEmitter<EventInfo>();
 
-  appLayoutData = APP_CONFIG.data;
-
   submitted = false;
 
 
-  constructor(private messageBox: MessageBoxService) {
+  constructor(private authenticationService: AuthenticationService,
+              private messageBox: MessageBoxService) {
 
   }
 
@@ -49,8 +44,13 @@ export class ChangePasswordComponent {
 
     switch (event.type as ChangePasswordFormEventType) {
       case ChangePasswordFormEventType.CHANGE_PASSWORD:
-        Assertion.assertValue(event.payload.credentialsFields, 'event.payload.credentialsFields');
-        this.updateCredentials(event.payload.credentialsFields as UpdateCredentialsFields);
+        Assertion.assertValue(event.payload.userID, 'event.payload.userID');
+        Assertion.assertValue(event.payload.currentPassword, 'event.payload.currentPassword');
+        Assertion.assertValue(event.payload.newPassword, 'event.payload.newPassword');
+
+        this.changePassword(event.payload.userID,
+                            event.payload.currentPassword,
+                            event.payload.newPassword);
         return;
 
       default:
@@ -60,17 +60,17 @@ export class ChangePasswordComponent {
   }
 
 
-  private updateCredentials(fields: UpdateCredentialsFields) {
+  private changePassword(userID: string, currentPassword: string, newPassword: string) {
     this.submitted = true;
 
     setTimeout(() => {
-      this.resolveUpdateCredentials();
+      this.resolveChangePassword();
       this.submitted = false;
     }, 600);
   }
 
 
-  private resolveUpdateCredentials() {
+  private resolveChangePassword() {
     this.messageBox.showInDevelopment('Cambiar contraseña');
     sendEvent(this.changePasswordEvent, ChangePasswordEventType.CHANGE_PASSWORD);
   }

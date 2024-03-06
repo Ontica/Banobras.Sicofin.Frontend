@@ -9,11 +9,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Assertion, EventInfo, Validate } from '@app/core';
+import { EventInfo, Validate } from '@app/core';
 
 import { FormHelper, sendEvent } from '@app/shared/utils';
-
-import { UpdateCredentialsFields } from '@app/models';
 
 
 interface ChangePasswordFormModel extends FormGroup<{
@@ -100,7 +98,9 @@ export class ChangePasswordFormComponent {
     }
 
     const payload = {
-      credentialsFields: this.getFormData()
+      userID: this.form.value.userID ?? '',
+      currentPassword: this.form.value.currentPassword ?? '',
+      newPassword: this.form.value.newPassword ?? '',
     };
 
     sendEvent(this.changePasswordFormEvent, ChangePasswordFormEventType.CHANGE_PASSWORD, payload);
@@ -179,22 +179,6 @@ export class ChangePasswordFormComponent {
     }
 
     return rules;
-  }
-
-
-  private getFormData(): UpdateCredentialsFields {
-    Assertion.assert(this.form.valid,
-      'Programming error: form must be validated before command execution.');
-
-    const formModel = this.form.getRawValue();
-
-    const data: UpdateCredentialsFields = {
-      userID: formModel.userID ?? '',
-      currentPassword: formModel.currentPassword ?? '',
-      newPassword: formModel.newPassword ?? '',
-    };
-
-    return data;
   }
 
 }
