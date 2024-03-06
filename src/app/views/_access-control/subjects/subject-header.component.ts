@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -43,7 +43,7 @@ interface SubjectFormModel extends FormGroup<{
   selector: 'emp-ng-subject-header',
   templateUrl: './subject-header.component.html',
 })
-export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
+export class SubjectHeaderComponent implements OnChanges, OnDestroy {
 
   @Input() subject: Subject = EmptySubject;
 
@@ -80,10 +80,6 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnChanges() {
     this.enableEditor(!this.isSaved);
-  }
-
-
-  ngOnInit() {
     this.loadWorkareas();
   }
 
@@ -154,17 +150,10 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
 
   private validateSubjectWorkareaInList() {
-    if (!this.subject.workareaUID) {
-
-      return;
+    if (!isEmpty(this.subject.workarea)) {
+      this.workareasList =
+        ArrayLibrary.insertIfNotExist(this.workareasList ?? [], this.subject.workarea, 'uid');
     }
-
-    const subjectWorkarea: Identifiable = {
-      uid: this.subject.workareaUID,
-      name: this.subject.workarea,
-    };
-
-    this.workareasList = ArrayLibrary.insertIfNotExist(this.workareasList ?? [], subjectWorkarea, 'uid');
   }
 
 
@@ -189,7 +178,7 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
       eMail: this.subject.eMail,
       employeeNo: this.subject.employeeNo,
       jobPosition: this.subject.jobPosition,
-      workareaUID: this.subject.workareaUID,
+      workareaUID: this.subject.workarea.uid,
     });
   }
 

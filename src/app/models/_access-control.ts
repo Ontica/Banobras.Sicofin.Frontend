@@ -83,11 +83,10 @@ export interface Subject {
   eMail: string;
   employeeNo: string;
   jobPosition: string;
-  workarea: string;
-  workareaUID: string;
+  workarea: Identifiable;
   credentialsLastUpdate: DateString;
   lastAccess: DateString;
-  status: string;
+  status: Identifiable;
 }
 
 
@@ -125,11 +124,10 @@ export const EmptySubject: Subject = {
   eMail: '',
   employeeNo: '',
   jobPosition: '',
-  workarea: '',
-  workareaUID: '',
+  workarea: Empty,
   credentialsLastUpdate: '',
   lastAccess: '',
-  status: '',
+  status: Empty,
 }
 
 
