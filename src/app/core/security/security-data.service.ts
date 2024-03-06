@@ -29,23 +29,11 @@ interface ExternalSessionToken {
 @Injectable()
 export class SecurityDataService {
 
+
   constructor(private httpHandler: HttpHandler) { }
 
-  changePassword(event: EventInfo): Promise<boolean> {
-    Assertion.assertValue(event, 'event');
 
-    return this.httpHandler.post<boolean>('v3/security/change-password', event)
-      .firstValue();
-  }
-
-
-  closeSession(): Promise<void> {
-    return this.httpHandler.post<void>('v3/security/logout')
-      .firstValue();
-  }
-
-
-  async createSession(userID: string, userPassword: string): Promise<SessionToken> {
+  async createLoginSession(userID: string, userPassword: string): Promise<SessionToken> {
     const body = {
       userID,
       password: ''
@@ -63,8 +51,22 @@ export class SecurityDataService {
   }
 
 
-  getPrincipal(): Promise<PrincipalData> {
+  async getPrincipalData(): Promise<PrincipalData> {
     return this.httpHandler.get<PrincipalData>('v3/security/principal')
+      .firstValue();
+  }
+
+
+  async changePassword(event: EventInfo): Promise<boolean> {
+    Assertion.assertValue(event, 'event');
+
+    return this.httpHandler.post<boolean>('v3/security/change-password', event)
+      .firstValue();
+  }
+
+
+  async closeSession(): Promise<void> {
+    return this.httpHandler.post<void>('v3/security/logout')
       .firstValue();
   }
 

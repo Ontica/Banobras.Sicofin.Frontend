@@ -29,6 +29,26 @@ export interface PrincipalData {
 }
 
 
+export enum LoginErrorType {
+  InvalidUserCredentials = 'SecurityException.InvalidUserCredentials',
+  NotActiveUser          = 'SecurityException.NotActiveUser',
+  UserPasswordExpired    = 'SecurityException.UserPasswordExpired',
+  MustChangePassword     = 'SecurityException.MustChangePassword',
+};
+
+
+export enum LoginErrorActionType {
+  ChangePassword = 'ChangePassword',
+  None = 'None',
+}
+
+
+export interface LoginErrorAction {
+  actionType: LoginErrorActionType;
+  message: string;
+}
+
+
 export const FakeSessionToken: SessionToken = {
   accessToken: 'FakeAccessToken',
   expiresIn: 9999999,

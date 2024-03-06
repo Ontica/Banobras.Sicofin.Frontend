@@ -13,6 +13,8 @@ export { Exception } from './general/exception';
 export { Assertion } from './general/assertion';
 export { Validate } from './general/validate';
 
+export *  from './security/security-types';
+
 export { SessionService } from './general/session.service';
 export { HttpService } from './http/http.service';
 export { LocalStorageService } from './general/local-storage.service';

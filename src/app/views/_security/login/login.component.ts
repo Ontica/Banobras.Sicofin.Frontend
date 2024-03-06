@@ -11,9 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
-import { AuthenticationService, EventInfo } from '@app/core';
-
-import { LoginErrorAction, LoginErrorActionType } from '@app/core/security/authentication.service';
+import { AuthenticationService, EventInfo, LoginErrorAction, LoginErrorActionType } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 

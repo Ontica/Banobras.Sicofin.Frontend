@@ -23,26 +23,8 @@ import { resolve } from '../data-types';
 
 import { Principal } from './principal';
 
-import { FakeSessionToken, PrincipalData, SessionToken, getFakePrincipalData } from './security-types';
-
-
-enum LoginErrorType {
-  InvalidUserCredentials = 'SecurityException.InvalidUserCredentials',
-  NotActiveUser          = 'SecurityException.NotActiveUser',
-  UserPasswordExpired    = 'SecurityException.UserPasswordExpired',
-  MustChangePassword     = 'SecurityException.MustChangePassword',
-};
-
-
-export enum LoginErrorActionType {
-  ChangePassword = 'ChangePassword',
-  None           = 'None',
-}
-
-export interface LoginErrorAction {
-  actionType: LoginErrorActionType;
-  message: string;
-}
+import { FakeSessionToken, LoginErrorAction, LoginErrorActionType, LoginErrorType, PrincipalData,
+         SessionToken, getFakePrincipalData } from './security-types';
 
 
 @Injectable()
@@ -52,11 +34,17 @@ export class AuthenticationService {
               private securityService: SecurityDataService) { }
 
 
+  clearSession() {
+    // TODO: clear presentation state
+    this.session.clearSession();
+  }
+
+
   async login(userID: string, userPassword: string): Promise<string> {
     Assertion.assertValue(userID, 'userID');
     Assertion.assertValue(userPassword, 'userPassword');
 
-    const sessionToken = await this.createSession(userID, userPassword)
+    const sessionToken = await this.createLoginSession(userID, userPassword)
       .then(x => {
         this.session.setSessionToken(x);
         return x;
@@ -74,7 +62,7 @@ export class AuthenticationService {
   }
 
 
-  logout(): Promise<boolean> {
+  async logout(): Promise<boolean> {
     if (!this.session.getPrincipal().isAuthenticated) {
       this.session.clearSession();
       return Promise.resolve(false);
@@ -86,42 +74,25 @@ export class AuthenticationService {
   }
 
 
-  clearSession() {
-    // TODO: clear presentation state
-    this.session.clearSession();
-  }
-
-
-  private createSession(userID: string, userPassword: string): Promise<SessionToken> {
+  private async createLoginSession(userID: string,
+                                   userPassword: string): Promise<SessionToken> {
     return APP_CONFIG.security.fakeLogin ? resolve(FakeSessionToken) :
-      this.securityService.createSession(userID, userPassword);
+      this.securityService.createLoginSession(userID, userPassword);
   }
 
 
-  private getPrincipal(userID: string): Promise<PrincipalData> {
+  private async getPrincipal(userID: string): Promise<PrincipalData> {
     return APP_CONFIG.security.fakeLogin ? resolve(getFakePrincipalData(userID)) :
-      this.securityService.getPrincipal();
+      this.securityService.getPrincipalData();
   }
 
 
-  private setSession(sessionToken: SessionToken, principalData: PrincipalData){
-    if (!APP_CONFIG.security.enablePermissions) {
-      principalData.permissions = getAllPermissions();
-    }
-
-    const defaultRoute = this.getDefaultRoute(principalData.permissions,
-                                              principalData.changePasswordRequired);
-
-    const principal = new Principal(sessionToken,
-                                    principalData.identity,
-                                    principalData.permissions,
-                                    defaultRoute);
-
-    this.session.setPrincipal(principal);
+  private async closeSession(): Promise<void> {
+    return APP_CONFIG.security.fakeLogin ? resolve(null) : this.securityService.closeSession();
   }
 
 
-  private handleAuthenticationError(error): Promise<any> {
+  private async handleAuthenticationError(error): Promise<any> {
     if (error.status === 401) {
 
       if ([LoginErrorType.MustChangePassword,
@@ -141,6 +112,23 @@ export class AuthenticationService {
         `${ACCESS_PROBLEM_MESSAGE}: ${error.status} ${error.statusText} ${error.message}`));
 
     }
+  }
+
+
+  private setSession(sessionToken: SessionToken, principalData: PrincipalData){
+    if (!APP_CONFIG.security.enablePermissions) {
+      principalData.permissions = getAllPermissions();
+    }
+
+    const defaultRoute = this.getDefaultRoute(principalData.permissions,
+                                              principalData.changePasswordRequired);
+
+    const principal = new Principal(sessionToken,
+                                    principalData.identity,
+                                    principalData.permissions,
+                                    defaultRoute);
+
+    this.session.setPrincipal(principal);
   }
 
 
@@ -179,11 +167,6 @@ export class AuthenticationService {
 
   private getValitRoutes(permissions): string[] {
     return permissions ? permissions.filter(x => x.startsWith('route-')) : [];
-  }
-
-
-  private closeSession(): Promise<void> {
-    return APP_CONFIG.security.fakeLogin ? resolve(null) : this.securityService.closeSession();
   }
 
 }
