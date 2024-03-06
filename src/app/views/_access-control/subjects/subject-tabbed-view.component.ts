@@ -63,7 +63,12 @@ export class SubjectTabbedViewComponent implements OnChanges {
 
 
   get isDeleted(): boolean {
-    return this.subject.status === 'Deleted';
+    return this.subject.status.uid === 'Deleted';
+  }
+
+
+  get isSuspended(): boolean {
+    return this.subject.status.uid === 'Suspended';
   }
 
 

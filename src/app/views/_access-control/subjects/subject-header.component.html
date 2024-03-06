@@ -89,11 +89,27 @@
 
       <div class="fx-item fx-start fx-items-center">
 
-        <button *ngIf="!editionMode && canGeneratePassword"
-          class="btn-action"
-          (click)="onGeneratePasswordButtonClicked()">
-          Generar contraseña
-        </button>
+        <ng-container *ngIf="!editionMode">
+
+          <button *ngIf="canGeneratePassword"
+            class="btn-action"
+            (click)="onGeneratePasswordButtonClicked()">
+            Generar contraseña
+          </button>
+
+          <button *ngIf="isSuspended"
+            class="btn"
+            (click)="onActivateButtonClicked()">
+            Desbloquear contraseña
+          </button>
+
+          <button *ngIf="!isSuspended"
+            class="btn"
+            (click)="onSuspendButtonClicked()">
+            Bloquear contraseña
+          </button>
+
+        </ng-container>
 
         <button *ngIf="editionMode"
           type="button" class="btn-warning"

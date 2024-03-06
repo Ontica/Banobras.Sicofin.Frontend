@@ -14,8 +14,9 @@
         <emp-ng-subject-editor class="fx-item-none"
           [subject]="subject"
           [canEdit]="canEdit"
-          [canGeneratePassword]="!isDeleted && hasContexts"
+          [canGeneratePassword]="!isDeleted && !isSuspended && hasContexts"
           [isDeleted]="isDeleted"
+          [isSuspended]="isSuspended"
           (subjectEditorEvent)="onSubjectEditorEvent($event)">
 
         </emp-ng-subject-editor>

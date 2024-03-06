@@ -26,6 +26,8 @@ export enum SubjectHeaderEventType {
   UPDATE_SUBJECT    = 'SubjectHeaderComponent.Event.UpdateSubject',
   DELETE_SUBJECT    = 'SubjectHeaderComponent.Event.DeleteSubject',
   GENERATE_PASSWORD = 'SubjectHeaderComponent.Event.GeneratePassword',
+  ACTIVATE_SUBJECT  = 'SubjectHeaderComponent.Event.ActivateSubject',
+  SUSPEND_SUBJECT   = 'SubjectHeaderComponent.Event.SuspendSubject',
 }
 
 interface SubjectFormModel extends FormGroup<{
@@ -50,6 +52,8 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
   @Input() canGeneratePassword = false;
 
   @Input() isDeleted = false;
+
+  @Input() isSuspended = false;
 
   @Output() subjectHeaderEvent = new EventEmitter<EventInfo>();
 
@@ -119,6 +123,16 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
 
   onGeneratePasswordButtonClicked() {
     this.showConfirmMessage(SubjectHeaderEventType.GENERATE_PASSWORD);
+  }
+
+
+  onActivateButtonClicked() {
+    this.showConfirmMessage(SubjectHeaderEventType.ACTIVATE_SUBJECT);
+  }
+
+
+  onSuspendButtonClicked() {
+    this.showConfirmMessage(SubjectHeaderEventType.SUSPEND_SUBJECT);
   }
 
 
@@ -218,6 +232,8 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
   private getConfirmTitle(eventType: SubjectHeaderEventType): string {
     switch (eventType) {
       case SubjectHeaderEventType.GENERATE_PASSWORD: return 'Generar contraseña';
+      case SubjectHeaderEventType.ACTIVATE_SUBJECT: return 'Desbloquear contraseña';
+      case SubjectHeaderEventType.SUSPEND_SUBJECT: return 'Bloquear contraseña';
       case SubjectHeaderEventType.DELETE_SUBJECT: return 'Dar de baja al usuario';
       default: return '';
     }
@@ -228,12 +244,22 @@ export class SubjectHeaderComponent implements OnChanges, OnInit, OnDestroy {
     switch (eventType) {
       case SubjectHeaderEventType.GENERATE_PASSWORD:
         return `Esta operación generará la contraseña y se enviará al correo del usuario:
-                <strong> ${this.subject.eMail}</strong>.
+                <strong> ${this.subject.eMail} </strong>.
                 <br><br>¿Genero la contraseña?`;
+
+      case SubjectHeaderEventType.ACTIVATE_SUBJECT:
+        return `Esta operación desbloqueará la contraseña del usuario:
+                <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo} </strong>.
+                <br><br>¿Desbloqueo la contraseña?`;
+
+      case SubjectHeaderEventType.SUSPEND_SUBJECT:
+        return `Esta operación bloqueará la contraseña del usuario:
+                <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo} </strong>.
+                <br><br>¿Bloqueo la contraseña?`;
 
       case SubjectHeaderEventType.DELETE_SUBJECT:
         return `Esta operación <strong>dará de baja / eliminará</strong> al usuario
-                <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo}</strong>.
+                <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo} </strong>.
                 <br><br>¿Doy de baja al usuario?`;
 
       default: return '';
