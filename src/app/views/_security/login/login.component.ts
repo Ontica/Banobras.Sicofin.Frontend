@@ -15,8 +15,6 @@ import { AuthenticationService, EventInfo, LoginErrorAction, LoginErrorActionTyp
 
 import { sendEvent } from '@app/shared/utils';
 
-type ShowPasswordMode = 'icon' | 'check';
-
 export enum LoginEventType {
   CHANGE_PASSWORD_REQUIRED = 'LoginComponent.Event.ChangePasswordRequired',
 }
@@ -29,8 +27,6 @@ export enum LoginEventType {
 export class LoginComponent implements OnInit {
 
   @Output() loginEvent = new EventEmitter<EventInfo>();
-
-  showPasswordModeSelected: ShowPasswordMode = 'check';
 
   showPassword = false;
 

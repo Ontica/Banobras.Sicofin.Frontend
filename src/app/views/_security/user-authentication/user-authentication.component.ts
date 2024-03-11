@@ -9,6 +9,8 @@ import { Component } from '@angular/core';
 
 import { APP_CONFIG } from '@app/main-layout';
 
+import { MessageBoxService } from '@app/shared/containers/message-box';
+
 export enum UserAuthenticationEventType {
   CHANGE_PASSWORD_REQUIRED = 'UserAuthenticationComponent.Event.ChangePasswordRequired',
 }
@@ -32,6 +34,9 @@ export class UserAuthenticationComponent {
   AuthenticationModes = AuthenticationModes;
 
 
+  constructor(private messageBox: MessageBoxService) { }
+
+
   onLoginEvent() {
     this.currentAuthenticationMode = AuthenticationModes.ChangePassword;
   }
@@ -39,6 +44,9 @@ export class UserAuthenticationComponent {
 
   onChangePasswordEvent() {
     this.currentAuthenticationMode = AuthenticationModes.Login;
+    const message = 'El cambio de contraseña se realizó correctamente. <br>' +
+      'Inicie sesión con su nueva contraseña para continuar.'
+    this.messageBox.show(message, 'Cambiar contraseña');
   }
 
 }

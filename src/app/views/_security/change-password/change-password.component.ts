@@ -5,18 +5,16 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, AuthenticationService, EventInfo } from '@app/core';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { ChangePasswordFormEventType } from './change-password-form.component';
 
 export enum ChangePasswordEventType {
-  CHANGE_PASSWORD = 'ChangePasswordComponent.Event.ChangePassword',
+  PASSWORD_CHANGED = 'ChangePasswordComponent.Event.PasswordChanged',
 }
 
 @Component({
@@ -26,15 +24,14 @@ export enum ChangePasswordEventType {
 })
 export class ChangePasswordComponent {
 
+  @Input() isRequiredAction = false;
+
   @Output() changePasswordEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
 
 
-  constructor(private authenticationService: AuthenticationService,
-              private messageBox: MessageBoxService) {
-
-  }
+  constructor(private authenticationService: AuthenticationService) { }
 
 
   onChangePasswordFormEvent(event: EventInfo) {
@@ -63,16 +60,14 @@ export class ChangePasswordComponent {
   private changePassword(userID: string, currentPassword: string, newPassword: string) {
     this.submitted = true;
 
-    setTimeout(() => {
-      this.resolveChangePassword();
-      this.submitted = false;
-    }, 600);
+    this.authenticationService.changePassword(userID, currentPassword, newPassword)
+      .then(x => this.resolveChangePassword())
+      .finally(() => this.submitted = false);
   }
 
 
   private resolveChangePassword() {
-    this.messageBox.showInDevelopment('Cambiar contraseña');
-    sendEvent(this.changePasswordEvent, ChangePasswordEventType.CHANGE_PASSWORD);
+    sendEvent(this.changePasswordEvent, ChangePasswordEventType.PASSWORD_CHANGED);
   }
 
 }

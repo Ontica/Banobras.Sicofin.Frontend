@@ -9,10 +9,6 @@ import { Injectable } from '@angular/core';
 
 import { Cryptography } from './cryptography';
 
-import { EventInfo } from '../data-types/command';
-
-import { Assertion } from '../general/assertion';
-
 import { HttpHandler } from '../http/http-handler';
 
 import { SessionToken, PrincipalData } from './security-types';
@@ -26,6 +22,19 @@ interface ExternalSessionToken {
 }
 
 
+export interface Credentials {
+  userID: string;
+  password: string;
+}
+
+
+interface NewCredentials {
+  userID: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+
 @Injectable()
 export class SecurityDataService {
 
@@ -34,18 +43,19 @@ export class SecurityDataService {
 
 
   async createLoginSession(userID: string, userPassword: string): Promise<SessionToken> {
-    const body = {
+    const credentials: Credentials = {
       userID,
       password: ''
     };
 
-    const token = await this.httpHandler.post<string>('v3/security/login-token', body)
-                                        .firstValue();
+    const token = await
+      this.httpHandler.post<string>('v3/security/login-token', credentials)
+        .firstValue();
 
-    body.password = Cryptography.createHash(userPassword);
-    body.password = Cryptography.createHash(body.password + token);
+    credentials.password = Cryptography.createHash(userPassword);
+    credentials.password = Cryptography.createHash(credentials.password + token);
 
-    return this.httpHandler.post<ExternalSessionToken>('v3/security/login', body)
+    return this.httpHandler.post<ExternalSessionToken>('v3/security/login', credentials)
       .firstValue()
       .then(x => this.mapToSessionToken(x));
   }
@@ -57,10 +67,24 @@ export class SecurityDataService {
   }
 
 
-  async changePassword(event: EventInfo): Promise<boolean> {
-    Assertion.assertValue(event, 'event');
 
-    return this.httpHandler.post<boolean>('v3/security/change-password', event)
+  async changePassword(userID: string, currentPassword: string, newPassword: string): Promise<void> {
+    const credentials: NewCredentials = {
+      userID,
+      currentPassword: '',
+      newPassword: '',
+    };
+
+    const token = await
+      this.httpHandler.post<string>('v4/onepoint/security/management/new-credentials-token', credentials)
+        .firstValue();
+
+    credentials.currentPassword = Cryptography.createHash(currentPassword);
+    credentials.currentPassword = Cryptography.createHash(credentials.currentPassword + token);
+
+    credentials.newPassword = Cryptography.encryptAES(token, newPassword);
+
+    return this.httpHandler.post<void>('v4/onepoint/security/management/update-my-credentials', credentials)
       .firstValue();
   }
 

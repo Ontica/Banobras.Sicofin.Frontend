@@ -9,8 +9,7 @@ import { Injectable } from '@angular/core';
 
 import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 
-import { FileReport, OperationsLogQuery, Subject, SubjectFields, SubjectsQuery,
-         UpdateCredentialsFields } from '@app/models';
+import { FileReport, OperationsLogQuery, Subject, SubjectFields, SubjectsQuery } from '@app/models';
 
 
 @Injectable()
@@ -135,15 +134,6 @@ export class AccessControlDataService {
     const path = `v4/onepoint/security/management/subjects/${subjectUID}/suspend`;
 
     return this.http.post<Subject>(path);
-  }
-
-
-  updateCredentialsToSubject(credentialsFields: UpdateCredentialsFields): EmpObservable<any> {
-    Assertion.assertValue(credentialsFields, 'credentialsFields');
-
-    const path = `v4/onepoint/security/management/update-my-credentials`;
-
-    return this.http.post<any>(path, credentialsFields);
   }
 
 

@@ -7,17 +7,11 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { EventInfo } from '@app/core';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { AccessControlDataService } from '@app/data-services';
-
-import { UpdateCredentialsFields} from '@app/models';
-
-import {
-  ChangePasswordFormEventType
-} from '@app/views/_security/change-password/change-password-form.component';
+import { ChangePasswordEventType } from '@app/views/_security/change-password/change-password.component';
 
 @Component({
   selector: 'emp-ng-change-password-modal',
@@ -27,13 +21,8 @@ export class ChangePasswordModalComponent  {
 
   @Output() closeEvent = new EventEmitter<void>();
 
-  submitted = false;
 
-
-  constructor(private accessControlData: AccessControlDataService,
-              private messageBox: MessageBoxService) {
-
-  }
+  constructor(private messageBox: MessageBoxService) { }
 
 
   onClose() {
@@ -41,43 +30,17 @@ export class ChangePasswordModalComponent  {
   }
 
 
-  onChangePasswordFormEvent(event: EventInfo) {
-    if (this.submitted) {
-      return;
-    }
-
-    switch (event.type as ChangePasswordFormEventType) {
-      case ChangePasswordFormEventType.CHANGE_PASSWORD:
-        Assertion.assertValue(event.payload.userID, 'event.payload.userID');
-        Assertion.assertValue(event.payload.currentPassword, 'event.payload.currentPassword');
-        Assertion.assertValue(event.payload.newPassword, 'event.payload.newPassword');
-
-        const credentialsFields: UpdateCredentialsFields = {
-          userID: event.payload.userID,
-          currentPassword: event.payload.currentPassword,
-          newPassword: event.payload.newPassword,
-        };
-
-        this.updateCredentialsToSubject(credentialsFields);
+  onChangePasswordEvent(event: EventInfo) {
+    switch (event.type as ChangePasswordEventType) {
+      case ChangePasswordEventType.PASSWORD_CHANGED:
+        this.messageBox.show('La contraseña fue actualizada correctamente.', 'Cambiar contraseña');
+        this.onClose();
         return;
 
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-  }
-
-
-  private updateCredentialsToSubject(fields: UpdateCredentialsFields) {
-    this.submitted = true;
-
-    this.accessControlData.updateCredentialsToSubject(fields)
-      .firstValue()
-      .then(x => {
-        this.messageBox.show('La contraseña fue actualizada correctamente.', 'Cambiar contraseña');
-        this.onClose();
-      })
-      .finally(() => this.submitted = false);
   }
 
 }

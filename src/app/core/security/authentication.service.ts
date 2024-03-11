@@ -62,6 +62,17 @@ export class AuthenticationService {
   }
 
 
+  async changePassword(userID: string,
+                       currentPassword: string,
+                       newPassword: string): Promise<void> {
+    Assertion.assertValue(userID, 'userID');
+    Assertion.assertValue(currentPassword, 'currentPassword');
+    Assertion.assertValue(newPassword, 'newPassword');
+
+    return this.createChangePasswordSession(userID, currentPassword, newPassword);
+  }
+
+
   async logout(): Promise<boolean> {
     if (!this.session.getPrincipal().isAuthenticated) {
       this.session.clearSession();
@@ -84,6 +95,14 @@ export class AuthenticationService {
   private async getPrincipal(userID: string): Promise<PrincipalData> {
     return APP_CONFIG.security.fakeLogin ? resolve(getFakePrincipalData(userID)) :
       this.securityService.getPrincipalData();
+  }
+
+
+  private async createChangePasswordSession(userID: string,
+                                            currentPassword: string,
+                                            newPassword: string): Promise<void> {
+    return APP_CONFIG.security.fakeLogin ? resolve(null) :
+      this.securityService.changePassword(userID, currentPassword, newPassword);
   }
 
 

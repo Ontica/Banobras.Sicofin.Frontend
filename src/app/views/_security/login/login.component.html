@@ -1,59 +1,62 @@
-<div class="authentication-section-form">
+  <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off"
+    class="form-section text-white">
 
-  <form autocomplete="off" [formGroup]="form">
+    <div class="fx-column-container fx-gap">
 
-    <label for="userID">Usuario:</label>
-    <div class="login-field-container">
-      <input type="text" class="text-box" id="userID" autocomplete="username" autofocus
-        formControlName="userID"
-        [class.invalid-control]="form.controls.userID.invalid && form.controls.userID.touched">
-    </div>
+      <div class="fx-item">
+        <label for="userID">Usuario:</label>
+        <input type="text" id="userID" name="userID" autocomplete="username" class="text-box" autofocus
+          formControlName="userID"
+          [class.invalid-control]="form.controls.userID.invalid && form.controls.userID.touched">
+      </div>
 
-    <label for="password">Contraseña:</label>
-    <div class="login-field-container">
-      <input [type]="showPassword ? 'text' : 'password'" class="text-box"
-        id="password" autocomplete="current-password"
-        formControlName="password"
-        [class.invalid-control]="form.controls.password.invalid && form.controls.password.touched">
-      <mat-icon class="input-icon" *ngIf="showPasswordModeSelected === 'icon'"
-        (click)="toggleShowPassword()">
-        {{showPassword ? 'visibility_off' : 'visibility'}}
-      </mat-icon>
-    </div>
+      <div class="fx-item">
+        <label for="password">Contraseña:</label>
+        <input [type]="showPassword ? 'text' : 'password'"
+          id="password" name="password" autocomplete="current-password" class="text-box"
+          formControlName="password"
+          [class.invalid-control]="form.controls.password.invalid && form.controls.password.touched">
+      </div>
 
-    <div class="footer-submit-container">
-      <mat-checkbox *ngIf="showPasswordModeSelected === 'check'"
-        [checked]="showPassword"
-        (click)="$event.stopPropagation"
-        (change)="toggleShowPassword()"
-        color="warn">
-        Mostrar contraseña
-      </mat-checkbox>
+      <div class="fx-row-container fx-space-between fx-items-center">
 
-      <div></div>
+        <div class="fx-item-none">
 
-      <button type="sumbit" class="btn-warning"
-        [class.spinner]="submitted"
-        [style.marginRight.px]="8"
-        (click)="login()">
-        Ingresar
-      </button>
-    </div>
+          <mat-checkbox
+            [checked]="showPassword"
+            (click)="$event.stopPropagation"
+            (change)="toggleShowPassword()"
+            color="warn">
+            Mostrar contraseña
+          </mat-checkbox>
 
-    <div class="authentication-error">
+        </div>
 
-      <br>
+        <div class="fx-item-none">
 
-      <div *ngIf="exceptionMsg" class="inline-warning">
-        {{exceptionMsg}}
+          <button type="sumbit" class="btn-warning"
+            [class.spinner]="submitted"
+            [style.marginRight.px]="8"
+            (click)="login()">
+            Ingresar
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="authentication-error">
+
+        <div *ngIf="exceptionMsg" class="inline-warning">
+          {{exceptionMsg}}
+        </div>
+
+      </div>
+
+      <div class="authentication-space sm-hide">
+
       </div>
 
     </div>
 
-    <div class="authentication-space sm-hide">
-
-    </div>
-
   </form>
-
-</div>

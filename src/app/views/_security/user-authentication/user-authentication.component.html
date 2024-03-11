@@ -20,10 +20,14 @@
               <div class="hint-bold" *ngIf="appLayoutData.organization">{{appLayoutData.organization}}</div>
             </div>
 
-            <emp-ng-login
-              (loginEvent)="onLoginEvent()">
+            <div class="authentication-section-form">
 
-            </emp-ng-login>
+              <emp-ng-login
+                (loginEvent)="onLoginEvent()">
+
+              </emp-ng-login>
+
+            </div>
 
           </ng-container>
 
@@ -35,10 +39,15 @@
               <div class="hint">Ingrese la información requerida para actualizar la contraseña.</div>
             </div>
 
-            <emp-ng-change-password
-              (changePasswordEvent)="onChangePasswordEvent()">
+            <div class="authentication-section-form">
 
-            </emp-ng-change-password>
+              <emp-ng-change-password
+                [isRequiredAction]="true"
+                (changePasswordEvent)="onChangePasswordEvent()">
+
+              </emp-ng-change-password>
+
+            </div>
 
           </ng-container>
 

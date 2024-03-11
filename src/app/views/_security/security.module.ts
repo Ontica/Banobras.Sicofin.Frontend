@@ -42,7 +42,7 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
   exports: [
     UserAuthenticationComponent,
-    ChangePasswordFormComponent,
+    ChangePasswordComponent,
     UnauthorizedComponent,
   ]
 
