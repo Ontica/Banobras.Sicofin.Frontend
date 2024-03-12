@@ -11,7 +11,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ChildRouteGuard, ParentRouteGuard } from './core';
 
-import { DEFAULT_PATH, MainLayoutComponent, NoContentComponent, ROUTES } from '@app/main-layout';
+import { DEFAULT_PATH, LOGIN_PATH, MainLayoutComponent, NoContentComponent, OLD_LOGIN_PATH,
+         ROUTES } from '@app/main-layout';
 
 const routes: Routes = [
   {
@@ -63,6 +64,7 @@ const routes: Routes = [
                               .then(m => m.AuthenticationModule)
   },
   { path: '', redirectTo: DEFAULT_PATH, pathMatch: 'full' },
+  { path: OLD_LOGIN_PATH, redirectTo: LOGIN_PATH },
   { path: '**', component: NoContentComponent }
 ];
 
