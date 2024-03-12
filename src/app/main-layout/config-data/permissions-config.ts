@@ -133,6 +133,6 @@ export const PERMISSION_NOT_REQUIRED = PERMISSIONS.NOT_REQUIRED;
 
 
 export function getAllPermissions() {
-    return Object.keys(PERMISSIONS)
-                 .map(key => PERMISSIONS[key]);
+  return Object.keys(PERMISSIONS)
+                .map(key => PERMISSIONS[key]);
 }

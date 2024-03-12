@@ -120,7 +120,7 @@ export class SessionService {
     const validRouteInModule = routesInModule.find(x => this.principal.permissions.includes(x.permission));
 
     if (!!validRouteInModule) {
-      return validRouteInModule.parent +  '/' + validRouteInModule.path;
+      return validRouteInModule.fullpath;
     }
 
     return null;

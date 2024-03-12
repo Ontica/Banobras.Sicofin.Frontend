@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
+import { LOGIN_PATH } from '@app/main-layout';
+
 import { CLIENT_SIDE_ERROR_MESSAGE, OFFLINE_ERROR_MESSAGE, } from './error-messages';
 
 
@@ -70,7 +72,7 @@ export class ErrorMessageService {
 
       this.messageBox.showError(statusMessage)
           .firstValue()
-          .then(x => this.router.navigateByUrl('seguridad/login'))
+          .then(x => this.router.navigateByUrl(LOGIN_PATH))
     }
   }
 

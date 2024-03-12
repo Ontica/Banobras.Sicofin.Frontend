@@ -7,7 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { APP_CONFIG, CHANGE_PASSWORD_PATH, DEFAULT_ROUTE, DEFAULT_PATH, getAllPermissions, ROUTES_LIST,
+import { APP_CONFIG, DEFAULT_ROUTE, DEFAULT_PATH, getAllPermissions, ROUTES_LIST,
          UNAUTHORIZED_PATH } from '@app/main-layout';
 
 import { ACCESS_PROBLEM_MESSAGE, INVALID_CREDENTIALS_MESSAGE,
@@ -139,8 +139,7 @@ export class AuthenticationService {
       principalData.permissions = getAllPermissions();
     }
 
-    const defaultRoute = this.getDefaultRoute(principalData.permissions,
-                                              principalData.changePasswordRequired);
+    const defaultRoute = this.getDefaultRoute(principalData.permissions);
 
     const principal = new Principal(sessionToken,
                                     principalData.identity,
@@ -161,21 +160,17 @@ export class AuthenticationService {
   }
 
 
-  private getDefaultRoute(permissions: string[], changePasswordRequired: boolean): string {
-    if (changePasswordRequired) {
-      return CHANGE_PASSWORD_PATH;
-    }
-
+  private getDefaultRoute(permissions: string[]): string {
     if (permissions.includes(DEFAULT_ROUTE.permission)) {
       return DEFAULT_PATH;
     }
 
-    const routesValid = this.getValitRoutes(permissions);
+    const firstRouteValid = this.getFirstRouteValid(permissions);
 
-    if (routesValid.length > 0) {
+    if (!!firstRouteValid) {
       for (const route of ROUTES_LIST) {
-        if (route.permission === routesValid[0]) {
-          return route.parent + '/' + route.path;
+        if (route.permission === firstRouteValid) {
+          return route.fullpath;
         }
       }
     }
@@ -184,8 +179,12 @@ export class AuthenticationService {
   }
 
 
-  private getValitRoutes(permissions): string[] {
-    return permissions ? permissions.filter(x => x.startsWith('route-')) : [];
+  private getFirstRouteValid(permissions: string[]): string {
+    if (!permissions) {
+      return null;
+    }
+
+    return permissions.find(x => x.startsWith('route-')) ?? null;
   }
 
 }

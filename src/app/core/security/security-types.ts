@@ -25,7 +25,6 @@ export interface SessionToken {
 export interface PrincipalData {
   readonly identity: Identity;
   permissions: string[];
-  changePasswordRequired: boolean;
 }
 
 
@@ -66,7 +65,6 @@ export function getFakePrincipalData(user: string): PrincipalData {
       name: user,
     },
     permissions: [],
-    changePasswordRequired: false,
   };
 
   return fakePrincipalData;

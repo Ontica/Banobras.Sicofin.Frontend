@@ -9,6 +9,8 @@ import { inject } from '@angular/core';
 
 import { Router, ActivatedRouteSnapshot, CanActivateFn, CanActivateChildFn } from '@angular/router';
 
+import { LOGIN_PATH, UNAUTHORIZED_PATH } from '@app/main-layout';
+
 import { SessionService } from '../general/session.service';
 
 import { RoutingStateService } from './routing-state.service';
@@ -34,7 +36,7 @@ export const ChildRouteGuard: CanActivateChildFn = (route: ActivatedRouteSnapsho
     const firstValidRouteInModule = isRoutingInicialized ?
       session.getFirstValidRouteInModule(route.data.permission) : null;
 
-    inject(Router).navigateByUrl(firstValidRouteInModule ?? 'unauthorized');
+    inject(Router).navigateByUrl(firstValidRouteInModule ?? UNAUTHORIZED_PATH);
 
     return false;
   }
@@ -45,7 +47,7 @@ export const ChildRouteGuard: CanActivateChildFn = (route: ActivatedRouteSnapsho
 
 const isAuthenticated = (): boolean => {
   if (!inject(SessionService).getPrincipal().isAuthenticated) {
-    inject(Router).navigateByUrl('seguridad/login');
+    inject(Router).navigateByUrl(LOGIN_PATH);
     return false;
   }
 

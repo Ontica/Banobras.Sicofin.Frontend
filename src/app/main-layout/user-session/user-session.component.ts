@@ -17,7 +17,7 @@ import { AuthenticationService, SessionService } from '@app/core';
 
 import { Principal } from '@app/core/security/principal';
 
-import { APP_CONFIG } from '../config-data';
+import { APP_CONFIG, LOGIN_PATH } from '../config-data';
 
 
 @Component({
@@ -48,7 +48,7 @@ export class UserSessionComponent implements OnInit {
     this.authenticationService.logout()
       .finally(() => {
         this.store.dispatch(MainUIStateAction.SET_IS_PROCESSING_FLAG, false);
-        this.router.navigateByUrl('seguridad/login');
+        this.router.navigateByUrl(LOGIN_PATH);
       });
   }
 

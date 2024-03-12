@@ -22,12 +22,12 @@ import {
 
 const routes: Routes = [
   {
-    path: ROUTES.seguridad_login.path,
+    path: ROUTES.security_login.path,
     component: AuthenticationMainPageComponent,
   },
   {
     path: '',
-    redirectTo: ROUTES.seguridad_login.path,
+    redirectTo: ROUTES.security_login.path,
     pathMatch: 'full',
   },
 ];
