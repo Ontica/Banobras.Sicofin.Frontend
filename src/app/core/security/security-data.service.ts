@@ -52,8 +52,7 @@ export class SecurityDataService {
       this.httpHandler.post<string>('v3/security/login-token', credentials)
         .firstValue();
 
-    credentials.password = Cryptography.createHash(userPassword);
-    credentials.password = Cryptography.createHash(credentials.password + token);
+    credentials.password = this.encryptUserPassword(userPassword, token);
 
     return this.httpHandler.post<ExternalSessionToken>('v3/security/login', credentials)
       .firstValue()
@@ -63,7 +62,7 @@ export class SecurityDataService {
 
   async getPrincipalData(): Promise<PrincipalData> {
     return this.httpHandler.get<PrincipalData>('v3/security/principal')
-      .firstValue();
+                           .firstValue();
   }
 
 
@@ -79,19 +78,18 @@ export class SecurityDataService {
       this.httpHandler.post<string>('v4/onepoint/security/management/new-credentials-token', credentials)
         .firstValue();
 
-    credentials.currentPassword = Cryptography.createHash(currentPassword);
-    credentials.currentPassword = Cryptography.createHash(credentials.currentPassword + token);
+    credentials.currentPassword = this.encryptUserPassword(currentPassword, token);
 
-    credentials.newPassword = Cryptography.encryptAES(token, newPassword);
+    credentials.newPassword = Cryptography.encryptAES2(newPassword, token);
 
     return this.httpHandler.post<void>('v4/onepoint/security/management/update-my-credentials', credentials)
-      .firstValue();
+                           .firstValue();
   }
 
 
   async closeSession(): Promise<void> {
     return this.httpHandler.post<void>('v3/security/logout')
-      .firstValue();
+                           .firstValue();
   }
 
 
@@ -102,6 +100,13 @@ export class SecurityDataService {
       refreshToken: source.refresh_token,
       tokenType: source.token_type
     };
+  }
+
+
+  private encryptUserPassword(userPassword: string, token: string): string {
+    const encryptedPassword = Cryptography.createHash(userPassword);
+
+    return Cryptography.createHash(encryptedPassword + token);
   }
 
 }
