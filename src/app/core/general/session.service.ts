@@ -116,7 +116,7 @@ export class SessionService {
 
   getFirstValidRouteInModule(permission: string): string {
     const route = ROUTES_LIST.find(x => x.permission === permission);
-    const routesInModule = ROUTES_LIST.filter(x => route.parent === x.parent);
+    const routesInModule = ROUTES_LIST.filter(x => route?.parent === x.parent);
     const validRouteInModule = routesInModule.find(x => this.principal.permissions.includes(x.permission));
 
     if (!!validRouteInModule) {
