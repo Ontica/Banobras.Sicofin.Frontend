@@ -35,7 +35,7 @@
 
           </div>
 
-          <div fxFlex="calc(100% - 460px)" *ngIf="operationSelected?.assignToRequired">
+          <div fxFlex="calc(100% - 524px)" *ngIf="operationSelected?.assignToRequired">
 
             <emp-ng-select name="editor"
               [config]="{bindByValue: false,
@@ -47,7 +47,7 @@
               [typeahead]="editorInput$"
               [loading]="editorLoading"
               [showError]="!operationValid"
-              placeholder="Buscar usuario">
+              placeholder="Buscar persona o cuenta de acceso">
 
             </emp-ng-select>
 

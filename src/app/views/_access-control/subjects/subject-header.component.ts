@@ -221,9 +221,9 @@ export class SubjectHeaderComponent implements OnChanges, OnDestroy {
   private getConfirmTitle(eventType: SubjectHeaderEventType): string {
     switch (eventType) {
       case SubjectHeaderEventType.GENERATE_PASSWORD: return 'Generar contraseña';
-      case SubjectHeaderEventType.ACTIVATE_SUBJECT: return 'Desbloquear contraseña';
-      case SubjectHeaderEventType.SUSPEND_SUBJECT: return 'Bloquear contraseña';
-      case SubjectHeaderEventType.DELETE_SUBJECT: return 'Dar de baja al usuario';
+      case SubjectHeaderEventType.ACTIVATE_SUBJECT: return 'Desbloquear cuenta';
+      case SubjectHeaderEventType.SUSPEND_SUBJECT: return 'Suspender cuenta';
+      case SubjectHeaderEventType.DELETE_SUBJECT: return 'Dar de baja la cuenta';
       default: return '';
     }
   }
@@ -232,24 +232,24 @@ export class SubjectHeaderComponent implements OnChanges, OnDestroy {
   private getConfirmMessage(eventType: SubjectHeaderEventType): string {
     switch (eventType) {
       case SubjectHeaderEventType.GENERATE_PASSWORD:
-        return `Esta operación generará la contraseña y se enviará al correo del usuario:
+        return `Esta operación generará la contraseña y se enviará al correo:
                 <strong> ${this.subject.eMail} </strong>.
                 <br><br>¿Genero la contraseña?`;
 
       case SubjectHeaderEventType.ACTIVATE_SUBJECT:
-        return `Esta operación desbloqueará la contraseña del usuario:
+        return `Esta operación desbloqueará la cuenta:
                 <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo} </strong>.
-                <br><br>¿Desbloqueo la contraseña?`;
+                <br><br>¿Desbloqueo la cuenta?`;
 
       case SubjectHeaderEventType.SUSPEND_SUBJECT:
-        return `Esta operación bloqueará la contraseña del usuario:
+        return `Esta operación suspenderá la cuenta:
                 <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo} </strong>.
-                <br><br>¿Bloqueo la contraseña?`;
+                <br><br>¿Suspendo la cuenta?`;
 
       case SubjectHeaderEventType.DELETE_SUBJECT:
-        return `Esta operación <strong>dará de baja / eliminará</strong> al usuario
+        return `Esta operación <strong>dará de baja / eliminará</strong> la cuenta
                 <strong> (${this.subject.userID}) ${this.subject.fullName} - ${this.subject.employeeNo} </strong>.
-                <br><br>¿Doy de baja al usuario?`;
+                <br><br>¿Doy de baja la cuenta?`;
 
       default: return '';
     }

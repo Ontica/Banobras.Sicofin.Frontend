@@ -34,7 +34,7 @@ export interface ControlPanelOption {
 export const ControlPanelOptionList: ControlPanelOption[] = [
   {
     title: 'Cambiar contraseña',
-    description: 'Herramienta para actualizar la contraseña de usuario.' ,
+    description: 'Herramienta para actualizar la contraseña de la cuenta de acceso.' ,
     actionTitle: 'Cambiar',
     type: 'ChangePassword',
     permission: PERMISSIONS.FEATURE_CHANGE_PASSWORD,

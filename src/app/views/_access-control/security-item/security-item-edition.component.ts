@@ -161,7 +161,7 @@ export class SecurityItemEditionComponent implements OnChanges {
 
   private showConfirmMessage(item: Identifiable) {
     const title = `Eliminar ${this.itemTypeName.toLowerCase()}`;
-    const message = `Esta operación eliminara del usuario el elemento
+    const message = `Esta operación eliminara de la cuenta el elemento
       <strong> ${this.itemTypeName}: ${item.name}</strong>.
       <br><br>¿Elimino el elemento?`;
 

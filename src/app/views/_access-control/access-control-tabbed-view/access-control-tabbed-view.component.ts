@@ -64,7 +64,7 @@ export class AccessControlTabbedViewComponent implements OnInit, OnChanges {
 
   get typeName(): string {
     switch (this.accessControlItem.type) {
-      case AccessControlQueryType.Subjects: return 'Usuario';
+      case AccessControlQueryType.Subjects: return 'Cuenta de acceso';
       case AccessControlQueryType.Roles: return 'Rol';
       case AccessControlQueryType.Features: return 'Permiso';
       default: return this.accessControlItem.type;
