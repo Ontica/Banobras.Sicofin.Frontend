@@ -29,7 +29,7 @@ import {
 
 import {
   ExportReportModalEventType
-} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+} from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
 
 @Component({

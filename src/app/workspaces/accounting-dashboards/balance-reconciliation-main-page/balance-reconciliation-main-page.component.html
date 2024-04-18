@@ -2,7 +2,7 @@
 
   <div class="primary">
 
-    <emp-fa-imported-data-viewer
+    <emp-ng-imported-data-viewer
       dataType="conciliaciones"
       [showImportData]="hasPermissionToImport"
       [typeFieldConfig]="{show: true, required: true, list: reconciliationTypeList}"
@@ -17,7 +17,7 @@
       [isLoading]="isLoading"
       (importedDataViewerEvent)="onImportedDataViewerEvent($event)">
 
-    </emp-fa-imported-data-viewer>
+    </emp-ng-imported-data-viewer>
 
   </div>
 

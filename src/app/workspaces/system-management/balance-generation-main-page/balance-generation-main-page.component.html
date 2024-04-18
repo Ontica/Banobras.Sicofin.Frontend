@@ -32,10 +32,10 @@
 
 </emp-fa-stored-balance-set-creator>
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   title="Exportar saldos"
   [message]="'Se generará la exportación a Excel para ' + ( selectedStoredBalanceSet.name | lowercase )"
   [fileUrl]="excelFileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>

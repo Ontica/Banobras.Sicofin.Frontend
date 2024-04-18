@@ -15,7 +15,7 @@ import { AccessControlDataService } from '@app/data-services';
 
 import {
   ExportReportModalEventType
-} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+} from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
 import {
   OperationsLogFilterComponent,
@@ -24,7 +24,7 @@ import {
 
 
 @Component({
-  selector: 'emp-fa-operations-log-modal',
+  selector: 'emp-ng-operations-log-modal',
   templateUrl: './operations-log-modal.component.html',
 })
 export class OperationsLogModalComponent {

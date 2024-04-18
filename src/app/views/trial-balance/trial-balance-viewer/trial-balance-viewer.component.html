@@ -35,7 +35,7 @@
 
       </emp-fa-balance-quick-filter>
 
-      <emp-fa-data-table fxFlex
+      <emp-ng-data-table fxFlex
         [dataTable]="data"
         [executed]="queryExecuted"
         [controlsAligned]="isQuickQuery"
@@ -43,7 +43,7 @@
         [canClickRow]="hasPermissionToAccountStatement"
         (dataTableEvent)="onDataTableEvent($event)">
 
-      </emp-fa-data-table>
+      </emp-ng-data-table>
 
     </div>
 
@@ -52,9 +52,9 @@
 </div>
 
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   [title]="'Exportar ' + reportType.name.toLowerCase()"
   [fileUrl]="excelFileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>

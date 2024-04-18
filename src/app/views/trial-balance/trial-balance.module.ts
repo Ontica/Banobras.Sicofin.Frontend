@@ -13,7 +13,7 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 
 import { AccountStatementFilterComponent } from './account-statement-viewer/account-statement-filter.component';
 import { AccountStatementViewerComponent } from './account-statement-viewer/account-statement-viewer.component';

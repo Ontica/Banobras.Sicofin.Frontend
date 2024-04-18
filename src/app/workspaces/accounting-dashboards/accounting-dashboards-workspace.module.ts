@@ -15,7 +15,7 @@ import { SharedModule } from '@app/shared/shared.module';
 
 import { AccountingDashboardsWorkspaceRoutingModule } from './accounting-dashboards-workspace-routing.module';
 import { ReportingModule } from '@app/views/reporting/reporting.module';
-import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '@app/views/_reports-controls/reports-controls.module';
 import { TrialBalanceModule } from '@app/views/trial-balance/trial-balance.module';
 
 import {

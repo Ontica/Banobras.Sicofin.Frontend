@@ -13,7 +13,7 @@ import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 
 import { FinancialReportDesignerComponent } from './financial-report-designer/financial-report-designer.component';
 import { FinancialReportDesignerControlsComponent } from './financial-report-designer/financial-report-designer-controls.component';

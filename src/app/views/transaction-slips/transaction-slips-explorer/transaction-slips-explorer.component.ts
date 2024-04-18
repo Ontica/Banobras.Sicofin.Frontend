@@ -16,7 +16,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import {
   ExportReportModalEventType
-} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+} from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
 import { TransactionSlipsFilterEventType } from './transaction-slips-filter.component';
 

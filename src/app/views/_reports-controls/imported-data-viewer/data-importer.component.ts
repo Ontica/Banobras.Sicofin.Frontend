@@ -25,7 +25,7 @@ export enum DataImporterEventType {
 }
 
 @Component({
-  selector: 'emp-fa-data-importer',
+  selector: 'emp-ng-data-importer',
   templateUrl: './data-importer.component.html',
 })
 export class DataImporterComponent implements OnChanges{

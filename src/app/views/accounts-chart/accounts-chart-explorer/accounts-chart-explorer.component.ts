@@ -20,7 +20,7 @@ import { sendEvent } from '@app/shared/utils';
 
 import {
   ExportReportModalEventType
-} from '../../reports-controls/export-report-modal/export-report-modal.component';
+} from '../../_reports-controls/export-report-modal/export-report-modal.component';
 
 import { AccountEditionWizardEventType } from '../account-edition/account-edition-wizard.component';
 

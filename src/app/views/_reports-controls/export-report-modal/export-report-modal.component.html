@@ -43,11 +43,12 @@
 
         </mat-divider>
 
-        <div fxLayout="row">
+        <div class="fx-row-container">
 
-          <div fxFlex="none" fxLayoutAlign="start center">
+          <div class="fx-item-none">
 
             <button *ngIf="!working && !hasFileUrl"
+              [disabled]="!isExportButtonReady"
               [class.btn]="!isExportButtonReady"
               [class.btn-action]="isExportButtonReady"
               (click)="onExportButtonClicked()">
@@ -61,7 +62,7 @@
 
           </div>
 
-          <div fxFlex fxLayoutAlign="end center" class="export-file-url">
+          <div class="fx-item fx-row-container fx-end fx-items-center export-file-url">
 
             <a *ngIf="fileUrl" [href]="fileUrl" target="_blank">
               El archivo {{selectedExportationType.fileType}} está listo. Hacer clic para descargarlo.</a>

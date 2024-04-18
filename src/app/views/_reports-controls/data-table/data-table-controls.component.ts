@@ -17,19 +17,8 @@ export enum DataTableControlsEventType {
 }
 
 @Component({
-  selector: 'emp-fa-data-table-controls',
+  selector: 'emp-ng-data-table-controls',
   templateUrl: './data-table-controls.component.html',
-  styles: [`
-    .controls-container {
-      padding: 5px;
-      margin: 3px;
-    }
-
-    .controls-container-aligned {
-      padding-bottom: 5px;
-      margin-bottom: 3px;
-    }`
-  ],
 })
 export class DataTableControlsComponent {
 
@@ -50,7 +39,7 @@ export class DataTableControlsComponent {
 
   onFilterData() {
     sendEvent(this.dataTableControlsEvent, DataTableControlsEventType.FILTER_CHANGED,
-      {filter: this.filter});
+      { filter: this.filter });
   }
 
 

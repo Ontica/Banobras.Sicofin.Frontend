@@ -20,7 +20,7 @@ import { BalancesGenerationModule } from '@app/views/balances-generation/balance
 import { ExchangeRatesModule } from '@app/views/exchange-rates/exchange-rates.module';
 import { ProcessesModule } from '@app/views/processes/processes.module';
 import { ReportingModule } from '@app/views/reporting/reporting.module';
-import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '@app/views/_reports-controls/reports-controls.module';
 
 import {
   AccessControlMainPageComponent

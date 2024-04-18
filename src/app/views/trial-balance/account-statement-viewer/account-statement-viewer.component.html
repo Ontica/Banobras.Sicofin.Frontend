@@ -17,7 +17,7 @@
 
       </emp-fa-account-statement-filter>
 
-      <emp-fa-data-table fxFlex
+      <emp-ng-data-table fxFlex
         [dataTable]="accountStatement"
         [executed]="queryExecuted"
         [notQueryExecutedText]="'Cargando...'"
@@ -26,7 +26,7 @@
         [countOnlyEntries]="true"
         (dataTableEvent)="onDataTableEvent($event)">
 
-      </emp-fa-data-table>
+      </emp-ng-data-table>
 
     </div>
 
@@ -35,12 +35,12 @@
 </emp-ng-card>
 
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   title="Exportar estado de cuenta"
   [fileUrl]="excelFileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>
 
 
 <emp-ng-file-print-preview

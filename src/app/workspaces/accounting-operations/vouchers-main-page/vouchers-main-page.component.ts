@@ -29,7 +29,7 @@ import { ArrayLibrary } from '@app/shared/utils';
 
 import {
   ExportReportModalEventType
-} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+} from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
 import { VouchersExplorerEventType } from '@app/views/vouchers/vouchers-explorer/vouchers-explorer.component';
 

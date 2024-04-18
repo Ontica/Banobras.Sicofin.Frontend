@@ -12,7 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
-import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 
 import { SubledgerAccountCreatorComponent } from './subledger-account-creator/subledger-account-creator.component';
 import { SubledgerAccountEditorComponent } from './subledger-account-editor/subledger-account-editor.component';

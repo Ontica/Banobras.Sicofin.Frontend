@@ -27,7 +27,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import {
   ImportedDataViewerEventType
-} from '@app/views/reports-controls/imported-data-viewer/imported-data-viewer.component';
+} from '@app/views/_reports-controls/imported-data-viewer/imported-data-viewer.component';
 
 
 @Component({

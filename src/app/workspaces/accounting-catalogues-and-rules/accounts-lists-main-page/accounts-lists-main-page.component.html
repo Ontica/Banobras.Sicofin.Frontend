@@ -27,12 +27,12 @@
 </div>
 
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   title="Exportar lista de cuentas"
   [fileUrl]="fileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>
 
 
 <emp-fa-account-list-entry-creator *ngIf="displayAccountCreator"

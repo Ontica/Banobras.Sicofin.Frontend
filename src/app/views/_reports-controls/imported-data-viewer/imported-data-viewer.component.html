@@ -38,7 +38,7 @@
 
       </emp-ng-spinner>
 
-      <emp-fa-imported-data-filter fxFlex="none"
+      <emp-ng-imported-data-filter fxFlex="none"
         [dataType]="dataType"
         [showIconButtonToSubmit]="showIconButtonToSubmit"
         [periodRequired]="periodRequired"
@@ -47,14 +47,14 @@
         [searchButtonText]="searchButtonText"
         (importDataFilterEvent)="onImportedDataFilterEvent($event)">
 
-      </emp-fa-imported-data-filter>
+      </emp-ng-imported-data-filter>
 
-      <emp-fa-data-table fxFlex
+      <emp-ng-data-table fxFlex
         [dataTable]="data"
         [executed]="queryExecuted"
         (dataTableEvent)="onDataTableEvent($event)">
 
-      </emp-fa-data-table>
+      </emp-ng-data-table>
 
     </div>
 
@@ -63,7 +63,7 @@
 </div>
 
 
-<emp-fa-data-importer *ngIf="displayImportModal"
+<emp-ng-data-importer *ngIf="displayImportModal"
   [dataType]="dataType"
   [importTypeRequired]="importTypeRequired"
   [importTypeList]="importTypeRequired ? typeFieldConfig.list : []"
@@ -71,13 +71,13 @@
   [importerDatasets]="importerDatasets"
   (dataImporterEvent)="onDataImporterEvent($event)">
 
-</emp-fa-data-importer>
+</emp-ng-data-importer>
 
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   [title]="'Exportar ' + dataType"
   [fileUrl]="fileUrl"
   [exportationTypes]="exportationTypesList"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>

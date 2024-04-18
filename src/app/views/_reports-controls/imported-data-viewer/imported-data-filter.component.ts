@@ -18,7 +18,7 @@ export enum ImportedDataFilterEventType {
 }
 
 @Component({
-  selector: 'emp-fa-imported-data-filter',
+  selector: 'emp-ng-imported-data-filter',
   templateUrl: './imported-data-filter.component.html',
 })
 export class ImportedDataFilterComponent implements OnInit {

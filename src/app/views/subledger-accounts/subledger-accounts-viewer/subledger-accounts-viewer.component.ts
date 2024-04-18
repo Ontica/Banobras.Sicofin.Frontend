@@ -15,7 +15,7 @@ import { EmptySubledgerAccountDataTable, SubledgerAccountDataTable } from '@app/
 
 import { sendEvent } from '@app/shared/utils';
 
-import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
+import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
 import { SubledgerAccountsFilterEventType} from './subledger-accounts-filter.component';
 

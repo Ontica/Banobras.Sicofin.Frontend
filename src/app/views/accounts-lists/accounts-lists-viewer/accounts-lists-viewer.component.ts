@@ -13,7 +13,7 @@ import { AccountsListData, AccountsListEntry, EmptyAccountsListData } from '@app
 
 import { sendEvent } from '@app/shared/utils';
 
-import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
+import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
 import { AccountsListsFilterEventType} from './accounts-lists-filter.component';
 

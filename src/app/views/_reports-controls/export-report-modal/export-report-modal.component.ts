@@ -20,11 +20,10 @@ export enum ExportReportModalEventType {
 }
 
 @Component({
-  selector: 'emp-fa-export-report-modal',
+  selector: 'emp-ng-export-report-modal',
   templateUrl: './export-report-modal.component.html',
   styles: [`
     .export-instruction-text {
-      padding-top: 16px;
       padding-bottom: 8px;
     }
 

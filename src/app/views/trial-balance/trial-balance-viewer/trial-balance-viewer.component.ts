@@ -24,11 +24,11 @@ import { ReportingAction, ReportingStateSelector } from '@app/presentation/expor
 
 import { sendEvent } from '@app/shared/utils';
 
-import { DataTableEventType } from '@app/views/reports-controls/data-table/data-table.component';
+import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
 import {
   ExportReportModalEventType
-} from '@app/views/reports-controls/export-report-modal/export-report-modal.component';
+} from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
 import { BalanceQuickFilterEventType } from './balance-quick-filter.component';
 

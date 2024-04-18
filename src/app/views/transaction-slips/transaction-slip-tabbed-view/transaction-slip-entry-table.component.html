@@ -111,10 +111,10 @@
 
 </div>
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   title="Exportar movimientos"
   message="Se generará la exportación a Excel de los movimientos del volante."
   [fileUrl]="fileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>

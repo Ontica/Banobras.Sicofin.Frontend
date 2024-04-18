@@ -10,10 +10,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
-import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
 
-import { ReportsControlsModule } from '../reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
 import { SecurityModule } from '../_security/security.module';
 
 import { AccessControlControlsComponent } from './access-control-viewer/access-control-controls.component';
@@ -42,7 +41,6 @@ import { OperationsLogFilterComponent } from './operations-log/operations-log-fi
     ReactiveFormsModule,
 
     AngularMaterialModule,
-    AngularFlexLayoutModule,
     SharedModule,
 
     ReportsControlsModule,

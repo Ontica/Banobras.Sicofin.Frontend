@@ -14,7 +14,7 @@ import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module'
 
 import { SharedModule } from '@app/shared/shared.module';
 
-import { ReportsControlsModule } from '@app/views/reports-controls/reports-controls.module';
+import { ReportsControlsModule } from '@app/views/_reports-controls/reports-controls.module';
 import { TransactionSlipsModule } from '@app/views/transaction-slips/transaction-slips.module';
 import { VouchersModule } from '@app/views/vouchers/vouchers.module';
 

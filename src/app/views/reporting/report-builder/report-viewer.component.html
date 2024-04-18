@@ -27,14 +27,14 @@
 
       </ng-content>
 
-      <emp-fa-data-table fxFlex
+      <emp-ng-data-table fxFlex
         [dataTable]="reportData"
         [executed]="queryExecuted"
         [selectedEntry]="selectedEntry?.financialReportEntry"
         [notQueryExecutedText]="isLoading ? 'Cargando...' : 'No se ha invocado la consulta.'"
         (dataTableEvent)="onDataTableEvent($event)">
 
-      </emp-fa-data-table>
+      </emp-ng-data-table>
 
     </div>
 
@@ -42,10 +42,10 @@
 
 </div>
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   [title]="'Exportar ' + selectedReportType?.name"
   [fileUrl]="fileUrl"
   [exportationTypes]="exportationTypesList"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>

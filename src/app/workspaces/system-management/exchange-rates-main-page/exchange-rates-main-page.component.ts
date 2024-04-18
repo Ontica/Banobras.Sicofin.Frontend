@@ -24,7 +24,7 @@ import { EmptyExchangeRateData, ExchangeRatesQuery, ExchangeRateData, ExecuteDat
 
 import {
   ImportedDataViewerEventType
-} from '@app/views/reports-controls/imported-data-viewer/imported-data-viewer.component';
+} from '@app/views/_reports-controls/imported-data-viewer/imported-data-viewer.component';
 
 import {
   ExchangeRatesEditorEventType

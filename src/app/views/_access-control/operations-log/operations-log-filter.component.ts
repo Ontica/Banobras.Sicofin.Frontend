@@ -38,7 +38,7 @@ interface OperationsLogFilterFormPartial {
 const EmptyOperationsLogFilter: OperationsLogFilterFormPartial = { type: '', period: EmptyDateRange };
 
 @Component({
-  selector: 'emp-fa-operations-log-filter',
+  selector: 'emp-ng-operations-log-filter',
   templateUrl: './operations-log-filter.component.html',
 })
 export class OperationsLogFilterComponent implements OnChanges {

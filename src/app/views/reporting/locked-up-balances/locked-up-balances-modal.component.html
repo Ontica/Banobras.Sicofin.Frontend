@@ -22,7 +22,7 @@
 
       </mat-divider>
 
-      <emp-fa-data-table fxFlex
+      <emp-ng-data-table fxFlex
         [dataTable]="data"
         [executed]="queryExecuted"
         [showExportButton]="false"
@@ -31,7 +31,7 @@
         [style.padding.px]="8"
         (dataTableEvent)="onDataTableEvent($event)">
 
-      </emp-fa-data-table>
+      </emp-ng-data-table>
 
     </div>
 
@@ -39,9 +39,9 @@
 
 </emp-ng-modal-window>
 
-<emp-fa-export-report-modal *ngIf="displayExportModal"
+<emp-ng-export-report-modal *ngIf="displayExportModal"
   title="Exportar saldos encerrados"
   [fileUrl]="fileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">
 
-</emp-fa-export-report-modal>
+</emp-ng-export-report-modal>

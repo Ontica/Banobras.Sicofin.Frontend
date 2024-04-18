@@ -5,31 +5,34 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges,
          ViewChild } from '@angular/core';
 
-import { EventInfo } from '@app/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType,
-         SummaryItemTypeList, GroupItemTypeList, TotalItemTypeList, EntryItemTypeList,
-         ClickeableItemTypeList } from '@app/models';
+import { SelectionModel } from '@angular/cdk/collections';
+
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+
+import { EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import { EmptyDataTable, DataTableColumn, DataTable, DataTableEntry, DataTableColumnType, SummaryItemTypeList,
+         GroupItemTypeList, TotalItemTypeList, EntryItemTypeList, ClickeableItemTypeList,
+         CheckBoxDataTableColumn } from '@app/models';
 
 import { DataTableControlsEventType } from './data-table-controls.component';
 
 export enum DataTableEventType {
   COUNT_FILTERED_ENTRIES = 'DataTableComponent.Event.CountFilteredEntries',
-  ENTRY_CLICKED          = 'DataTableComponent.Event.EntryClicked',
-  EXPORT_DATA            = 'DataTableComponent.Event.ExportData',
+  ENTRY_CLICKED = 'DataTableComponent.Event.EntryClicked',
+  EXPORT_DATA = 'DataTableComponent.Event.ExportData',
+  CHECKBOX_SELECTION_CHANGED = 'DataTableComponent.Event.CheckboxSelectionChanged',
 }
 
 @Component({
-  selector: 'emp-fa-data-table',
+  selector: 'emp-ng-data-table',
   templateUrl: './data-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -41,9 +44,15 @@ export class DataTableComponent implements OnChanges {
 
   @Input() selectedEntry: DataTableEntry = null;
 
+  @Input() selectedUID: string = null;
+
   @Input() executed = true;
 
   @Input() controlsAligned = false;
+
+  @Input() showControls = true;
+
+  @Input() showCheckboxSelection = false;
 
   @Input() showExportButton = true;
 
@@ -54,8 +63,6 @@ export class DataTableComponent implements OnChanges {
   @Input() formatFieldName = 'format';
 
   @Input() countOnlyEntries = false;
-
-  @Input() functionToSelect: (entry: DataTableEntry) => any;
 
   @Input() notQueryExecutedText = 'No se ha invocado la consulta.';
 
@@ -68,6 +75,8 @@ export class DataTableComponent implements OnChanges {
   dataSource: TableVirtualScrollDataSource<DataTableEntry>;
 
   filter = '';
+
+  selection = new SelectionModel<DataTableEntry>(true, []);
 
   dataTableColumnType = DataTableColumnType;
 
@@ -82,9 +91,19 @@ export class DataTableComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.dataTable) {
       this.filter = '';
+      this.clearSelection();
       this.initDataSource();
       this.scrollToTop();
     }
+
+    if (changes.showCheckboxSelection) {
+      this.suscribeToSelectionChanges();
+    }
+  }
+
+
+  get hasItems(): boolean {
+    return !!this.dataSource && this.dataSource?.data.length > 0;
   }
 
 
@@ -99,11 +118,6 @@ export class DataTableComponent implements OnChanges {
     return this.countOnlyEntries ?
       this.dataSource.filteredData.filter(x => EntryItemTypeList.includes(x.itemType)).length :
       this.dataSource.filteredData.length;
-  }
-
-
-  isSelectedEntry(entry: DataTableEntry): boolean {
-    return entry === this.selectedEntry || (!!this.functionToSelect && this.functionToSelect(entry));
   }
 
 
@@ -156,17 +170,17 @@ export class DataTableComponent implements OnChanges {
 
 
   private getValidatedColumns(): DataTableColumn[] {
-    const columns = this.dataTable.columns.filter((value, index, self) =>
+    const columns: DataTableColumn[] = this.dataTable.columns.filter((value, index, self) =>
       index === self.findIndex((t) => (!!value.field && t.field === value.field)));
 
-    return columns;
+    return this.showCheckboxSelection && columns.length > 0 ? [CheckBoxDataTableColumn, ...columns] : columns;
   }
 
 
   private getFilterPredicate() {
     return (row: DataTableEntry, filters: string) => (
       this.columns.filter(x => x.type !== DataTableColumnType.decimal && typeof row[x.field] === 'string' &&
-                               row[x.field].toLowerCase().includes(filters)).length > 0
+        row[x.field].toLowerCase().includes(filters)).length > 0
     );
   }
 
@@ -212,6 +226,21 @@ export class DataTableComponent implements OnChanges {
     if (window.getSelection().toString().length <= 0) {
       sendEvent(this.dataTableEvent, DataTableEventType.ENTRY_CLICKED, { entry });
     }
+  }
+
+
+  private suscribeToSelectionChanges() {
+    if (this.showCheckboxSelection) {
+      this.selection.changed.subscribe(x => {
+        const payload = { entries: this.selection.selected.map(x => x.uid) };
+        sendEvent(this.dataTableEvent, DataTableEventType.CHECKBOX_SELECTION_CHANGED, payload);
+      });
+    }
+  }
+
+
+  private clearSelection() {
+    this.selection.clear();
   }
 
 }
