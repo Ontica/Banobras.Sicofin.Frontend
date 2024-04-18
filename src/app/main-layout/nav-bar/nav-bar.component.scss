@@ -4,12 +4,14 @@
  *
  * See LICENSE.txt in the project root for complete license information.
  */
+
 @import '../../../styles/variables', '../../../styles/mixins';
 
 $margin-size: 16px;
-$margin-size-border: 36px;
+$margin-size-border: 16px;
 $margin-size-small: 8px;
-$min-width-sides: 225px;
+$min-width-left: 225px;
+$min-width-right: 225px;
 
 .nav-bar {
   @include row;
@@ -25,27 +27,10 @@ $min-width-sides: 225px;
     @include row;
 
     width: auto;
-    min-width: $min-width-sides;
+    min-width: $min-width-left;
     align-items: center;
     white-space: nowrap;
     margin: 0 $margin-size 0 $margin-size-border;
-  }
-
-  .logo {
-    max-height: 46px;
-  }
-
-  .header-container {
-    padding-left: 8px;
-  }
-
-  .header {
-    text-transform: uppercase;
-  }
-
-  .subheader {
-    font-size: 8pt;
-    margin-top: 4px;
   }
 
   .main-menu {
@@ -53,7 +38,7 @@ $min-width-sides: 225px;
   }
 
   .right-section {
-    min-width: $min-width-sides;
+    min-width: $min-width-right;
     margin: 0 $margin-size-border 0 $margin-size;
   }
 
@@ -61,10 +46,6 @@ $min-width-sides: 225px;
     .left-section {
       min-width: auto;
       margin: 0 $margin-size-small;
-    }
-
-    .header-container {
-      display: none;
     }
 
     .main-menu {

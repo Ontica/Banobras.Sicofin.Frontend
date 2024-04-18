@@ -38,7 +38,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.state.select<NavigationHeader>(MainUIStateSelector.NAVIGATION_HEADER)
-      .subscribe (
+      .subscribe(
         value => this.navigationHeader = value
       );
   }

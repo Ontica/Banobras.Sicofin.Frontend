@@ -11,8 +11,11 @@
   <mat-sidenav-container>
 
 
-    <mat-sidenav #sidenavLeft class="sidenav-left" mode="side" disableClose="true"
-      [opened]="appLayoutConfig.displayAsideLeft">
+    <mat-sidenav #sidenavLeft class="sidenav-left" mode="over" class="md-show">
+
+      <emp-ng-main-menu-left>
+
+      </emp-ng-main-menu-left>
 
     </mat-sidenav>
 
@@ -21,13 +24,14 @@
 
       <div class="fx-column-container-fill">
 
-        <emp-ng-nav-bar class="fx-item-none">
+        <emp-ng-navigation class="md-hide">
 
-        </emp-ng-nav-bar>
+        </emp-ng-navigation>
 
-        <emp-ng-header class="fx-item-none" (action)="onAction($event)">
+        <emp-ng-navigation-responsive class="md-show"
+          (openMenuEvent)="sidenavLeft.toggle()">
 
-        </emp-ng-header>
+        </emp-ng-navigation-responsive>
 
         <div class="workarea">
 
@@ -37,7 +41,7 @@
 
         </div>
 
-        <emp-ng-footer class="fx-item-none" *ngIf="appLayoutConfig.displayFooter">
+        <emp-ng-footer *ngIf="appLayoutConfig.displayFooter">
 
         </emp-ng-footer>
 

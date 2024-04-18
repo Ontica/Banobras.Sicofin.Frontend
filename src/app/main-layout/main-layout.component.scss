@@ -9,9 +9,7 @@
 
 @import 'top-bar/top-bar.component.scss';
 
-$breakpoint-width: 1600px;
 $margin-size: 16px;
-$margin-size-small: 8px;
 
 .main-layout {
   @include column;
@@ -46,7 +44,7 @@ $margin-size-small: 8px;
 }
 
 .sidenav-left {
-  width: 300px;
+  max-width: 90%;
 }
 
 .sidenav-right {

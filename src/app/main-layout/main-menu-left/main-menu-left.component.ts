@@ -14,22 +14,22 @@ import { Layout } from '../common-models';
 import { APP_CONFIG, APP_LAYOUTS } from '../config-data';
 
 @Component({
-  selector: 'emp-ng-main-menu',
-  templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss'],
+  selector: 'emp-ng-main-menu-left',
+  templateUrl: './main-menu-left.component.html',
+  styleUrls: ['./main-menu-left.component.scss'],
 })
-export class MainMenuComponent {
+export class MainMenuLeftComponent {
 
   appLayoutConfig = APP_CONFIG.layout;
 
   layouts: Layout[] = APP_LAYOUTS;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
 
   isLayoutSelected(layout: Layout) {
     return this.router.isActive(layout.url,
-      { paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored' });
+      {paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'});
   }
 
 }

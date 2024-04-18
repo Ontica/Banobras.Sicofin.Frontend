@@ -13,7 +13,7 @@ import { PresentationState } from '@app/core/presentation';
 
 import { MainUIStateAction } from '@app/presentation/exported.presentation.types';
 
-import { AuthenticationService, SessionService } from '@app/core';
+import { ApplicationStatusService, AuthenticationService, SessionService } from '@app/core';
 
 import { Principal } from '@app/core/security/principal';
 
@@ -32,7 +32,8 @@ export class UserSessionComponent implements OnInit {
   appLayoutConfig = APP_CONFIG.layout;
 
 
-  constructor(private store: PresentationState,
+  constructor(private appStatus: ApplicationStatusService,
+              private store: PresentationState,
               private session: SessionService,
               private authenticationService: AuthenticationService,
               private router: Router) {}
@@ -42,7 +43,15 @@ export class UserSessionComponent implements OnInit {
   }
 
 
-  logout() {
+  onLogoutClicked() {
+    this.appStatus.canUserContinue()
+      .subscribe(x =>
+        x ? this.logout() : null
+      );
+  }
+
+
+  private logout() {
     this.store.dispatch(MainUIStateAction.SET_IS_PROCESSING_FLAG, true);
 
     this.authenticationService.logout()
