@@ -66,7 +66,7 @@ export class MessageBoxService {
 
     const observable = this.openMessageBox(config, data);
 
-    observable.subscribe( () => of<void>() );
+    observable.subscribe(() => of<void>());
 
     return observable;
   }
@@ -84,7 +84,7 @@ export class MessageBoxService {
 
     const observable = this.openMessageBox(config, data);
 
-    observable.subscribe( () => of<void>() );
+    observable.subscribe(() => of<void>());
 
     return observable;
   }
@@ -137,7 +137,7 @@ export class MessageBoxService {
     } else if (error instanceof Error) {
       return (error as Error).message;
 
-    } else if (typeof(error) === 'string') {
+    } else if (typeof (error) === 'string') {
       return error;
     } else {
       return JSON.stringify(error).toString();
@@ -147,7 +147,7 @@ export class MessageBoxService {
 
   private getExceptionMessage(exception: Exception): string {
     if (exception.innerError &&
-        exception.innerError.message.localeCompare(exception.message) !== 0) {
+      exception.innerError.message.localeCompare(exception.message) !== 0) {
       return `${exception.message}<br/><br/>${exception.innerError.message}`;
     } else {
       return exception.message || 'Error desconocido';

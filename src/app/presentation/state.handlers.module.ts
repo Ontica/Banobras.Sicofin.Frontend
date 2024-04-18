@@ -11,6 +11,8 @@ import { STATE_HANDLERS } from '@app/core/presentation/presentation.state';
 
 import { MainLayoutPresentationHandler } from './main-layout/main-layout.presentation.handler';
 
+import { AppStatusPresentationHandler } from './app-data/app-status.presentation.handler';
+
 import { AccessControlPresentationHandler } from './security-management/access-control.presentation.handler';
 
 import { AccountChartPresentationHandler } from './financial-accounting/account-chart.presentation.handler';
@@ -31,6 +33,7 @@ import { VoucherPresentationHandler } from './financial-accounting/voucher.prese
 
   providers: [
     MainLayoutPresentationHandler,
+    AppStatusPresentationHandler,
     AccessControlPresentationHandler,
     AccountChartPresentationHandler,
     CataloguesPresentationHandler,
@@ -41,6 +44,7 @@ import { VoucherPresentationHandler } from './financial-accounting/voucher.prese
     VoucherPresentationHandler,
 
     { provide: STATE_HANDLERS, useExisting: MainLayoutPresentationHandler, multi: true },
+    { provide: STATE_HANDLERS, useExisting: AppStatusPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccessControlPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: AccountChartPresentationHandler, multi: true },
     { provide: STATE_HANDLERS, useExisting: CataloguesPresentationHandler, multi: true },

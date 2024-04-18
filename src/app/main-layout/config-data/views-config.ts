@@ -5,8 +5,6 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { PERMISSIONS } from './permissions-config';
-
 import { ROUTES } from './routes-config';
 
 import { View } from '../common-models/common';
@@ -18,10 +16,6 @@ export const AccountingOperationViews: View[] = [
     title: 'Mis pólizas pendientes',
     url: ROUTES.operacion_contable_mis_polizas_pendientes.fullpath,
     permission: ROUTES.operacion_contable_mis_polizas_pendientes.permission,
-    actions: [
-      { action: 'ActionImport', name: 'Importar pólizas', permission: PERMISSIONS.FEATURE_POLIZAS_IMPORTACION_DESDE_ARCHIVOS},
-      { action: 'ActionCreate', name: 'Nueva póliza', permission: PERMISSIONS.FEATURE_POLIZAS_EDICION_MANUAL},
-    ]
   },
   {
     name: 'AccountingOperation.ControlDesk',

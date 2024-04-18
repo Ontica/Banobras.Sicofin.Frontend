@@ -7,6 +7,7 @@
 
 import { MatDialogConfig } from '@angular/material/dialog';
 
+
 export type ConfirmMessageBoxType = 'Accept' | 'AcceptCancel' | 'DeleteCancel';
 
 

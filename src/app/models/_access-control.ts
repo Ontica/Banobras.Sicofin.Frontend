@@ -16,7 +16,7 @@ export enum AccessControlQueryType {
 
 
 export const AccessControlQueryTypeList: Identifiable[] = [
-  {uid: AccessControlQueryType.Subjects, name: 'Usuarios'},
+  { uid: AccessControlQueryType.Subjects, name: 'Cuentas de acceso' },
   // {uid: AccessControlQueryType.Roles,    name: 'Roles'},
   // {uid: AccessControlQueryType.Features, name: 'Permisos'},
 ];
@@ -33,7 +33,7 @@ export interface AccessControlQuery {
 }
 
 
-export interface SubjectsQuery  {
+export interface SubjectsQuery {
   contextUID: string;
   workareaUID: string;
   keywords: string;
@@ -58,7 +58,7 @@ export interface AccessControlSelectionData {
 export const EmptyAccessControlSelectionData: AccessControlSelectionData = {
   type: AccessControlQueryType.Subjects,
   item: Empty,
-}
+};
 
 
 export enum SecurityItemType {
@@ -121,16 +121,16 @@ export const EmptySubject: Subject = {
   credentialsLastUpdate: '',
   lastAccess: '',
   status: Empty,
-}
+};
 
 
 export const EmptyRole: Role = {
   uid: '',
   name: '',
-}
+};
 
 
 export const EmptyFeature: Feature = {
   uid: '',
   name: '',
-}
+};

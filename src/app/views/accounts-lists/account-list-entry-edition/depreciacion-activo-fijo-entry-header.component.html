@@ -116,7 +116,6 @@
       <div fxFlex *ngIf="isMontoRevaluacionRequired">
         <label>Monto revaluación:</label>
         <input type="text" class="text-box text-align-right" empNgCurrency
-          empNgCurrencyDisplaySymbol=""
           formControlName="montoRevaluacion"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.montoRevaluacion)">
       </div>

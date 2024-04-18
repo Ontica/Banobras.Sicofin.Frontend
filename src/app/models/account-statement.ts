@@ -7,7 +7,7 @@
 
 import { BalanceExplorerQuery, BalanceExplorerEntry } from './balance-explorer';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 import { getEmptyTrialBalanceQuery, TrialBalanceQuery, TrialBalanceEntry } from './trial-balances';
 

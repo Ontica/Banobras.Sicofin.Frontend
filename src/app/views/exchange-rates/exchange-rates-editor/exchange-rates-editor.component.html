@@ -65,7 +65,7 @@
 
               <div fxFlex="120px">
                 <input type="text" class="text-box text-align-right"
-                  empNgCurrency empNgCurrencyDisplaySymbol="" [empNgCurrencyFractionDigit]="6"
+                  empNgCurrency [empNgCurrencyFractionDigitMin]="6" [empNgCurrencyFractionDigitMax]="6"
                   [name]="value.toCurrencyUID" required
                   [(ngModel)]="value.valueEdited"
                   [class.invalid-control]="submitClicked && !value.valueEdited">

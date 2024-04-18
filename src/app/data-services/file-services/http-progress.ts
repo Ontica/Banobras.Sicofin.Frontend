@@ -5,10 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import {
-  HttpErrorResponse, HttpEvent,
-  HttpEventType, HttpProgressEvent,
-  HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpEventType, HttpProgressEvent,
+         HttpResponse } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 

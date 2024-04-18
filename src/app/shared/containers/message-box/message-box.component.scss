@@ -9,10 +9,13 @@
   padding: 0 24px 16px;
 }
 
-.mat-mdc-dialog-content {
+.mdc-dialog__content {
   font-size: 10pt;
   color: $secondary-color-dark;
-  padding: 16px 24px;
+}
+
+.mdc-dialog__content > :first-child {
+  padding-top: 16px;
 }
 
 .mat-mdc-dialog-actions {

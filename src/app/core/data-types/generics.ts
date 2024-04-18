@@ -22,7 +22,7 @@ export function toObservable<U>(value: Observable<U>): Observable<U> {
 }
 
 
-export function getFirstValueFrom<U>(value: Promise<U> | Observable<U>): Promise<U> {
+export function getFirstValueFrom<U>(value: Promise<U> | Observable<U> | EmpObservable<U>): Promise<U> {
   if (value instanceof Observable) {
     return firstValueFrom<U>(value);
 
@@ -38,7 +38,7 @@ export function getFirstValueFrom<U>(value: Promise<U> | Observable<U>): Promise
 export class EmpObservable<T> extends Observable<T> {
 
   // TODO: refactor to not use source
-  constructor(source?: Observable<T>){
+  constructor(source?: Observable<T>) {
     super();
     this.source = source;
   }

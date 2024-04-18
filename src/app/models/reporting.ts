@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 
 export const DefaultEndDate: DateString = '2049-12-31';
@@ -100,7 +100,7 @@ export interface DateRange {
 export const EmptyDateRange: DateRange = {
   fromDate: '',
   toDate: '',
-}
+};
 
 
 export const DefaultExportationType: ExportationType = {
@@ -112,7 +112,7 @@ export const DefaultExportationType: ExportationType = {
 
 export const EmptyReportTypeFlags: ReportTypeFlags = {
 
-}
+};
 
 
 export const EmptyReportType: ReportType<ReportTypeFlags> = {
@@ -120,17 +120,17 @@ export const EmptyReportType: ReportType<ReportTypeFlags> = {
   name: '',
   group: null,
   controller: null,
-}
+};
 
 
 export const EmptyReportQuery: ReportQuery = {
   reportType: '',
   accountsChartUID: '',
-}
+};
 
 
 export const EmptyReportData: ReportData = {
   query: EmptyReportQuery,
   columns: [],
   entries: [],
-}
+};

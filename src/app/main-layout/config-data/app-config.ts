@@ -19,8 +19,10 @@ export const APP_CONFIG: AppConfig = {
     fakeLogin: false,
     enablePermissions: true,
     encriptLocalStorageData: true,
+    protectUserWork: false,
   },
   layout: {
+    displayLogo: true,
     displayNavbarHeader: false,
     displayMenuUser: false,
     displayChangeLanguage: false,

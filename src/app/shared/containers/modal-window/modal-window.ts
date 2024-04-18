@@ -59,7 +59,7 @@ export class ModalWindowComponent {
   }
 
 
-  stopPropagation(event: Event)  {
+  stopPropagation(event: Event) {
     event.stopPropagation();
   }
 

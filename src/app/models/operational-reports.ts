@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTableColumn } from './data-table';
+import { DataTableColumn } from './_data-table';
 
 import { FileType, ReportData, ReportEntry, ReportQuery, ReportType, ReportTypeFlags } from './reporting';
 

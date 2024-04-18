@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { trigger, transition, animate, style, state} from '@angular/animations';
+import { trigger, transition, animate, style, state } from '@angular/animations';
 
 
 export const expandCollapse = trigger('expandCollapse', [

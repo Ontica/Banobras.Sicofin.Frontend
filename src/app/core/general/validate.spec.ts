@@ -47,7 +47,7 @@ fdescribe('function hasValue()', () => {
     });
 
     it('object with value should be true', () => {
-      const value = {value: 123};
+      const value = { value: 123 };
       expect(_.hasValue(value)).toBeTrue();
     });
 

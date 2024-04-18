@@ -25,7 +25,7 @@ export class Cryptography {
   static encryptAES2(plainText: string, secret: string) {
     Assertion.assertValue(plainText, 'plainText');
     Assertion.assertValue(secret, 'secret');
-    Assertion.assert(secret.length >= 32, 'secret must be at least 32 in length.')
+    Assertion.assert(secret.length >= 32, 'secret must be at least 32 in length.');
 
     const key = CryptoJS.enc.Utf8.parse(secret.substring(secret.length - 32));
     const iv = CryptoJS.enc.Utf8.parse(secret.substring(0, 16));

@@ -54,7 +54,7 @@ export class MonthPickerComponent implements OnInit {
 
   monthDataSlice: MonthData[];
 
-  rangeIndexes: RangeIndex = {startIndex: null, endIndex: null};
+  rangeIndexes: RangeIndex = { startIndex: null, endIndex: null };
 
   selectedYearIndex: number;
 
@@ -174,7 +174,7 @@ export class MonthPickerComponent implements OnInit {
 
 
   emitData(startMonthDate: moment.Moment, endMonthDate: moment.Moment) {
-    this.monthRangeSelected.emit({startMonthDate, endMonthDate} );
+    this.monthRangeSelected.emit({ startMonthDate, endMonthDate });
   }
 
 
@@ -220,7 +220,7 @@ export class MonthPickerComponent implements OnInit {
     this.years.forEach((year, index) => {
       if (index === 0) {
         this.monthViewSlicesIndexes.push(0);
-      } else if ( this.showMonthsPrevious && index === 1) {
+      } else if (this.showMonthsPrevious && index === 1) {
         this.monthViewSlicesIndexes.push(6);
       } else {
         this.monthViewSlicesIndexes.push(this.monthViewSlicesIndexes[index - 1] + 12);
@@ -252,7 +252,7 @@ export class MonthPickerComponent implements OnInit {
 
 
   private initRangeIndexes() {
-    this.rangeIndexes = {startIndex: null, endIndex: null};
+    this.rangeIndexes = { startIndex: null, endIndex: null };
   }
 
 

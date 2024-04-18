@@ -82,9 +82,9 @@ export class HttpHandler {
         requestOptions.headers = headers;
 
         return this.http.request(HttpMethod[method].toString(), url, requestOptions)
-                   .pipe(
-                      map(response => (payloadDataField ? response.body[payloadDataField] : response) as T)
-                    );
+          .pipe(
+            map(response => (payloadDataField ? response.body[payloadDataField] : response) as T)
+          );
       })
     );
 
@@ -155,6 +155,7 @@ export class HttpHandler {
       return 'data';
     }
   }
+
 
   private getRequestOptions(body: any, callerOptions: HttpClientOptions): HttpClientOptions {
     const requestOptions = DefaultHttpClientOptions();

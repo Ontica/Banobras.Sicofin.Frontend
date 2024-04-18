@@ -23,4 +23,37 @@ export class ArrayLibrary {
     return newArray;
   }
 
+
+  static getFirstItem<T>(array: T[]): T {
+    return array.length > 0 ?
+      array.find(e => typeof e !== 'undefined') :
+      null;
+  }
+
+
+  static getUniqueItems<T, K extends keyof T>(array: T[], key: K): T[] {
+    return array.reduce((acc, item) => {
+      if (!acc.find(x => x[key] === item[key])) {
+        acc.push(item);
+      }
+      return acc;
+    }, []);
+  }
+
+
+  static sortByArrayKeyLenght<T, K extends keyof T>(array: T[], key: K): T[] {
+    return array.sort((a, b) => this.compareArrayValuesLenght(a[key], b[key]));
+  }
+
+
+  static compareArrayValuesLenght(previus: any, current: any): number {
+    if (previus.length > current.length) {
+      return 1;
+    }
+    if (previus.length < current.length) {
+      return -1;
+    }
+    return 0;
+  }
+
 }

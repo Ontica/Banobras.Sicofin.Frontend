@@ -7,7 +7,7 @@
 
 import { DateString } from "@app/core";
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from "./data-table";
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from "./_data-table";
 
 
 export enum AccountsListType {

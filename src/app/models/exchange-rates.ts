@@ -8,7 +8,7 @@
 import { DateString, Identifiable } from '@app/core';
 
 import { DataTable, DataTableColumn, DataTableColumnType, DataTableQuery,
-         DataTableEntry } from './data-table';
+         DataTableEntry } from './_data-table';
 
 import { ExecuteDatasetsQuery } from './imported-data';
 

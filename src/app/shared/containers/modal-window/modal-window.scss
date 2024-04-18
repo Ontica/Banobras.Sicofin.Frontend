@@ -5,6 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
+@import '../../../../styles/variables';
+
 .backdrop {
   position: fixed;
   width: 100%;
@@ -14,7 +16,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(100, 100, 100, 0.5);
+  background-color: $backdrop-color;
   z-index: 200;
 }
 

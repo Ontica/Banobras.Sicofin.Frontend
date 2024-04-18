@@ -17,7 +17,7 @@ import { PresentationState } from '@app/core/presentation';
 
 import { MainUIStateAction, MainUIStateSelector } from '@app/core/presentation/presentation-types';
 
-import { APP_CONFIG, TOOL } from './config-data';
+import { APP_CONFIG, DefaultTool, TOOL_TYPES, Tool } from './config-data';
 
 
 @Component({
@@ -35,29 +35,14 @@ export class MainLayoutComponent implements OnDestroy {
 
   displayAsideRight = false;
 
-  toolSelected: TOOL = 'None';
+  toolSelected: TOOL_TYPES = 'None';
 
   private unsubscribe: Subject<void> = new Subject();
 
   constructor(private store: PresentationState, private router: Router) {
-
-    this.spinnerService = store.select<boolean>(MainUIStateSelector.IS_PROCESSING);
-
-    store.select<TOOL>(MainUIStateSelector.TOOL_SELECTED)
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(x => {
-        this.toolSelected = x;
-        this.displayAsideRight = this.toolSelected !== 'None';
-      });
-
-    this.router.events
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(val => {
-        if (val instanceof ActivationEnd) {
-          const url = this.router.routerState.snapshot.url.split(';')[0];
-          store.dispatch(MainUIStateAction.SET_CURRENT_VIEW_FROM_URL, { url });
-        }
-      });
+    this.setSpinnerService();
+    this.subscribeToRouterActivationEnd();
+    this.subscribeToToolSelected();
   }
 
 
@@ -68,12 +53,42 @@ export class MainLayoutComponent implements OnDestroy {
 
 
   onCloseAsideRight() {
-    this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, 'None' as TOOL);
+    this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, DefaultTool);
   }
 
 
   onAction(action: string) {
 
+  }
+
+
+  private setSpinnerService() {
+    this.spinnerService = this.store.select<boolean>(MainUIStateSelector.IS_PROCESSING);
+  }
+
+
+  private subscribeToRouterActivationEnd() {
+    this.router.events
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(val => {
+        if (val instanceof ActivationEnd) {
+          const url = this.router.routerState.snapshot.url.split(';')[0];
+          this.store.dispatch(MainUIStateAction.SET_CURRENT_VIEW_FROM_URL, { url });
+        }
+      });
+  }
+
+
+  private subscribeToToolSelected() {
+    this.store.select<Tool>(MainUIStateSelector.TOOL_SELECTED)
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(x => this.setToolSelected(x));
+  }
+
+
+  private setToolSelected(tool: Tool) {
+    this.toolSelected = tool.toolType;
+    this.displayAsideRight = this.toolSelected !== 'None';
   }
 
 }

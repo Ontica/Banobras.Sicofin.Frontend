@@ -44,9 +44,9 @@ export enum PositioningRule {
 
 
 export const PositioningRuleList: Identifiable[] = [
-  {uid: PositioningRule.AtStart,         name: 'Al principio'},
-  {uid: PositioningRule.BeforeOffset,    name: 'Antes de'},
-  {uid: PositioningRule.AfterOffset,     name: 'Despues de'},
-  {uid: PositioningRule.AtEnd,           name: 'Al final'},
-  {uid: PositioningRule.ByPositionValue, name: 'En posición'},
+  { uid: PositioningRule.AtStart,         name: 'Al principio' },
+  { uid: PositioningRule.BeforeOffset,    name: 'Antes de' },
+  { uid: PositioningRule.AfterOffset,     name: 'Despues de' },
+  { uid: PositioningRule.AtEnd,           name: 'Al final' },
+  { uid: PositioningRule.ByPositionValue, name: 'En posición' },
 ];

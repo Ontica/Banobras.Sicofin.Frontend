@@ -42,7 +42,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "sonar": "sonar-scanner"
   },
   "dependencies": {
     "@angular/animations": "^15.2.9",
@@ -60,6 +61,7 @@
     "@ng-select/ng-select": "^10.0.4",
     "@types/quill": "^1.3.10",
     "crypto-js": "^4.1.1",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "ng-table-virtual-scroll": "^1.6.0",
     "ngx-quill": "^21.0.0",
@@ -90,6 +92,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
+    "sonar-scanner": "^3.1.0",
     "ts-node": "~8.3.0",
     "typescript": "~4.8.2"
   }

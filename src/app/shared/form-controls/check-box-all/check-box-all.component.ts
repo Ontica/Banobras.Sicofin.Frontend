@@ -33,6 +33,7 @@ export class CheckboxAllComponent {
   @Input() values = [];
   @Input() text = '';
   @Input() disabled = false;
+  @Input() indeterminated = false;
   @Input() showWarning = false;
   @Output() selectionChange = new EventEmitter<SelectionModel<any>>();
 
@@ -41,20 +42,15 @@ export class CheckboxAllComponent {
   }
 
   isIndeterminate(): boolean {
-    return this.selection.hasValue() && this.selection.selected.length !== this.values.length;
+    return (this.selection.hasValue() && this.selection.selected.length !== this.values.length) ||
+      (this.disabled && this.indeterminated);
   }
 
   toggleSelection(change: MatCheckboxChange): void {
     if (change.checked) {
-
-      this.values.forEach(value => {
-        this.selection.select(value);
-      });
-
+      this.values.forEach(value => this.selection.select(value));
     } else {
-
       this.selection.clear();
-
     }
 
     this.selectionChange.emit(this.selection);

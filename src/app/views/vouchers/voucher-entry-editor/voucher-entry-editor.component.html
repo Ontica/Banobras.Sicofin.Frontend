@@ -162,7 +162,6 @@
                 <div [fxFlex]="100">
                   <label>Monto de la operación:</label>
                   <input type="text" class="text-box text-align-right" empNgCurrency
-                    empNgCurrencyDisplaySymbol=""
                     formControlName="amount"
                     [class.invalid-control]="formHelper.isControlInvalid(form.controls.amount)"
                     (change)="onCalculateBaseCurrencyAmount()">
@@ -175,8 +174,7 @@
                 <div [fxFlex]="100">
                   <label>Tipo de cambio:</label>
                   <input type="text" class="text-box" empNgCurrency
-                    empNgCurrencyDisplaySymbol=""
-                    [empNgCurrencyFractionDigit]="6"
+                    [empNgCurrencyFractionDigitMin]="6" [empNgCurrencyFractionDigitMax]="6"
                     formControlName="exchangeRate"
                     [placeholder]="!currencySelected ? 'Seleccionar la moneda' : ''"
                     [ngClass]="!currencySelected ? 'text-align-left' : 'text-align-right'"
@@ -191,7 +189,6 @@
                 <div [fxFlex]="100">
                   <label>Monto en moneda base:</label>
                   <input type="text" class="text-box text-align-right" empNgCurrency
-                    empNgCurrencyDisplaySymbol=""
                     formControlName="baseCurrencyAmount"
                     [class.invalid-control]="formHelper.isControlInvalid(form.controls.baseCurrencyAmount)">
                 </div>

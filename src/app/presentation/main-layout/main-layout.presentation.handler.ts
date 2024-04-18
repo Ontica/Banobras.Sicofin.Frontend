@@ -14,14 +14,15 @@ import { AbstractPresentationHandler, StateValues } from '@app/core/presentation
 import { NavigationHeader, DefaultNavigationHeader, buildNavigationHeader, Layout, View, DefaultView,
          ViewActionType } from '@app/main-layout/common-models';
 
-import { APP_LAYOUTS, APP_VIEWS, TOOL, TOOLS_LIST } from '@app/main-layout/config-data';
+import { APP_LAYOUTS, APP_VIEWS, DefaultTool, Tool, TOOLS_LIST } from '@app/main-layout/config-data';
 
 
 export enum ActionType {
   SET_CURRENT_VIEW_FROM_URL = 'Empiria.UI-Item.MainUserInterface.SetCurrentViewFromUrl',
   SET_VIEW_ACTION           = 'Empiria.UI-Item.MainUserInterface.SetViewAction',
+  SET_VIEW_ACTION_DEFAULT   =  'Empiria.UI-Item.MainUserInterface.SetViewActionDefault',
   SET_IS_PROCESSING_FLAG    = 'Empiria.UI-Item.MainUserInterface.SetIsProcessingFlag',
-  SET_TOOL_SELECTED         = 'Empiria.UI-Item.MainUserInterface.SetToolSelectedt',
+  SET_TOOL_SELECTED         = 'Empiria.UI-Item.MainUserInterface.SetToolSelected',
 }
 
 
@@ -41,7 +42,7 @@ export interface MainLayoutState {
   readonly currentView: View;
   readonly viewActionSelected: ViewActionType;
   readonly isProcessing: boolean;
-  readonly toolSelected: TOOL;
+  readonly toolSelected: Tool;
 }
 
 
@@ -51,7 +52,7 @@ const initialState: StateValues = [
   { key: SelectorType.CURRENT_VIEW, value: DefaultView },
   { key: SelectorType.VIEW_ACTION, value: 'None' },
   { key: SelectorType.IS_PROCESSING, value: false },
-  { key: SelectorType.TOOL_SELECTED, value: 'None' },
+  { key: SelectorType.TOOL_SELECTED, value: DefaultTool },
 ];
 
 
@@ -100,8 +101,13 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
         this.setValue(SelectorType.VIEW_ACTION, payload.action);
         return;
 
+      case ActionType.SET_VIEW_ACTION_DEFAULT:
+        this.setValue(SelectorType.VIEW_ACTION, 'None');
+        return;
+
       case ActionType.SET_TOOL_SELECTED:
-        Assertion.assert(TOOLS_LIST.includes(payload), `${actionType} payload must be a boolean value.`);
+        Assertion.assert(TOOLS_LIST.includes(payload?.toolType),
+          `${actionType} - ${payload?.toolType}: tool type must be valid.`);
 
         this.setValue(SelectorType.TOOL_SELECTED, payload);
         return;

@@ -9,6 +9,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DecimalPipe } from '@angular/common';
 
 import { SharedContainersModule } from './containers/shared-containers.module';
+import { SharedComponentsModule } from './components/shared-components.module';
 import { SharedDirectivesModule } from './directives/shared-directives.module';
 import { SharedFormControlsModule } from './form-controls/shared-form-controls.module';
 import { SharedIndicatorsModule } from './indicators/shared-indicators.module';
@@ -22,6 +23,7 @@ import { PrinterService } from './utils/printer.service';
     CommonModule,
 
     SharedContainersModule,
+    SharedComponentsModule,
     SharedDirectivesModule,
     SharedFormControlsModule,
     SharedIndicatorsModule,
@@ -32,6 +34,7 @@ import { PrinterService } from './utils/printer.service';
 
   exports: [
     SharedContainersModule,
+    SharedComponentsModule,
     SharedDirectivesModule,
     SharedFormControlsModule,
     SharedIndicatorsModule,

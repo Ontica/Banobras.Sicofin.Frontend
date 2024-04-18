@@ -143,7 +143,7 @@ export class SessionService {
     if (!!sessionToken) {
       Assertion.assertValue(sessionToken.accessToken, 'sessionToken.accessToken');
 
-      const identity =  this.localStorage.get<Identity>(StorageKeys.identity) ?? null;
+      const identity = this.localStorage.get<Identity>(StorageKeys.identity) ?? null;
       const permissions = this.localStorage.get<string[]>(StorageKeys.permissions) ?? null;
       const defaultRoute = this.localStorage.get<string>(StorageKeys.defaultRoute) ?? null;
 

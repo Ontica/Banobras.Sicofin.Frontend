@@ -51,8 +51,43 @@ table.mat-mdc-table tr.mat-mdc-row {
   &.row-selected {
     background-color: $grid-selected-background-color;
 
-    &.item-type-total  {
+    &.item-type-total {
       background-color: darken($grid-footer-background-color, 3%);
+    }
+  }
+
+  &.nested {
+    td:first-of-type {
+      padding: 10px 16px;
+    }
+
+    td:nth-child(2) {
+      padding-left: 10px;
+    }
+  }
+
+  &.parent {
+    background: $grid-nested-background-color;
+
+    td {
+      border-bottom: $grid-nested-border;
+    }
+
+    &:hover {
+      background-color: $grid-nested-hover-background-color;
+    }
+  }
+
+  &.child {
+    font-style: italic;
+
+    td:first-of-type {
+      padding-left: 32px;
+      border-right: $grid-nested-border;
+    }
+
+    td:nth-child(3) {
+      padding-left: 16px;
     }
   }
 
@@ -245,12 +280,12 @@ table.mat-mdc-table.emp-designer tr.mat-mdc-row.fixed-cells-type td.mat-mdc-cell
 table.mat-mdc-table tr.mat-mdc-row.row-selected {
 
   td:first-of-type {
-    padding-left: 7px;
+    padding-left: calc($grid-entry-padding-vertical-first - 3px); // 7px; //calc(1rem - 3px=;
     border-left: 3px solid darken($grid-selected-background-color, 50%);
 
     &.column-checkbox {
       width: calc($checkbox-size + $grid-entry-padding-horizontal + $grid-entry-padding-vertical);
-      padding-left: calc(1rem - 7px);
+      padding-left: calc(1rem - $grid-entry-padding-vertical-first);
     }
   }
 

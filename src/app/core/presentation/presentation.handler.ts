@@ -58,6 +58,7 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
 
   private stateItems = new Map<string, BehaviorSubject<any>>();
 
+
   constructor(config: StateHandlerConfig) {
     Assertion.assertValue(config, 'config');
     Assertion.assertValue(config.selectors, 'config.selectors');
@@ -89,13 +90,16 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
     throw this.unhandledCommandOrActionType(effectType);
   }
 
+
   dispatch(actionType: ActionType, payload?: any): void {
     throw this.unhandledCommandOrActionType(actionType);
   }
 
+
   execute<U>(command: Command): Promise<U> {
     throw this.unhandledCommand(command);
   }
+
 
   getValue<U>(selector: StateSelector): U {
     const stateItem = this.getStateMapItem(selector);
@@ -151,7 +155,7 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
     const subject = new BehaviorSubject<U>(value);
 
     cache.set(key, subject);
-   }
+  }
 
 
   selectFirst<U>(selector: StateSelector, funct: () => any): EmpObservable<U> {
@@ -209,8 +213,6 @@ export abstract class AbstractPresentationHandler implements PresentationHandler
 
     throw Assertion.assertNoReachThisCode(msg);
   }
-
-
 
   // private methods
 

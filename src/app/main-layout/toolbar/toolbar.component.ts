@@ -15,7 +15,7 @@ import { PresentationState } from '@app/core/presentation';
 
 import { MainUIStateAction, MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { PERMISSIONS, TOOL } from '../config-data';
+import { PERMISSIONS, TOOL_TYPES, Tool } from '../config-data';
 
 
 @Component({
@@ -29,14 +29,16 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   displayAsideRight = false;
 
-  toolSelected: TOOL = 'None';
+  toolSelected: TOOL_TYPES = 'None';
 
   private unsubscribe: Subject<void> = new Subject();
 
-  constructor(private store: PresentationState) {}
 
-  ngOnInit(): void {
-    this.store.select<TOOL>(MainUIStateSelector.TOOL_SELECTED)
+  constructor(private store: PresentationState) { }
+
+
+  ngOnInit() {
+    this.store.select<Tool>(MainUIStateSelector.TOOL_SELECTED)
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(x => this.setToolSelected(x));
   }
@@ -48,20 +50,26 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
 
-  onToolClicked(tool: TOOL) {
-    this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, tool);
+  onToolClicked(toolType: TOOL_TYPES) {
+
+    switch (toolType) {
+      case 'Balances':
+        const tool: Tool = {
+          toolType,
+        };
+
+        this.store.dispatch(MainUIStateAction.SET_TOOL_SELECTED, tool);
+        return;
+
+      default:
+        return;
+    }
+
   }
 
 
-  onSearchClicked(keywords: string) {
-    // if (keywords) {
-    //   this.router.navigate(['/search-services/all', { keywords } ]);
-    // }
-  }
-
-
-  private setToolSelected(tool: TOOL) {
-    this.toolSelected = tool;
+  private setToolSelected(tool: Tool) {
+    this.toolSelected = tool.toolType;
     this.displayAsideRight = this.toolSelected !== 'None';
   }
 

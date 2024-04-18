@@ -9,7 +9,7 @@ import { DateString, Identifiable } from '@app/core';
 
 import { AccountDescriptor } from './accounts-chart';
 
-import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './data-table';
+import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './_data-table';
 
 import { ReportType, ReportTypeFlags } from './reporting';
 

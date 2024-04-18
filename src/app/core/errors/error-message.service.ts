@@ -40,13 +40,12 @@ export class ErrorMessageService {
 
     switch (error.status) {
       case 401:
-
         this.handle401Error(error.error.message);
-
-        break;
+        return;
 
       default:
         this.showErrorMessage(error.error.message, error.status);
+        return;
     }
   }
 
@@ -66,13 +65,13 @@ export class ErrorMessageService {
   }
 
 
-  private handle401Error(message) {
+  private handle401Error(message: string) {
     if (!this.messageBox.isOpen()) {
-      const statusMessage = `<strong>(401)</strong>  ${message}`;
+      const statusMessage = `<strong>(401)</strong> ${message}`;
 
       this.messageBox.showError(statusMessage)
-          .firstValue()
-          .then(x => this.router.navigateByUrl(LOGIN_PATH))
+        .firstValue()
+        .then(x => this.router.navigateByUrl(LOGIN_PATH))
     }
   }
 

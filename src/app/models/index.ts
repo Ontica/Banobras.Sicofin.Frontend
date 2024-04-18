@@ -20,6 +20,10 @@
 
 export * from './_access-control';
 
+export * from './_data-table';
+
+export * from './_operations-log';
+
 export * from './accounting-calendar';
 
 export * from './account-statement';
@@ -34,7 +38,6 @@ export * from './balances-store';
 
 export * from './balance-explorer';
 
-export * from './data-table';
 
 export * from './exchange-rates';
 
@@ -60,7 +63,6 @@ export * from './locked-up-balances';
 
 export * from './operational-reports';
 
-export * from './operations-log';
 
 export * from './reconciliation';
 

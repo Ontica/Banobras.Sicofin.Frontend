@@ -7,7 +7,22 @@
 
 import { Directive } from '@angular/core';
 
-import { ShowHideDirective } from '@angular/flex-layout';
+import { BREAKPOINT, ShowHideDirective } from '@angular/flex-layout';
+
+
+const NOTEBOOK_BREAKPOINT = [{
+  alias: 'notebook',
+  suffix: 'notebook',
+  mediaQuery: '(max-width: 1439px)',
+  overlapping: false,
+  priority: 1001,
+}];
+
+export const EmpNotebookBreakPointsProvider = {
+  provide: BREAKPOINT,
+  useValue: NOTEBOOK_BREAKPOINT,
+  multi: true,
+};
 
 const selector = `[fxHide.notebook]`;
 

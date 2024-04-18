@@ -5,10 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import {
-  Component, ContentChild, TemplateRef, ViewChild, EventEmitter, forwardRef,
-  Input, Output, OnInit, OnChanges, OnDestroy, SimpleChanges
-} from '@angular/core';
+import { Component, ContentChild, TemplateRef, ViewChild, EventEmitter, forwardRef, Input, Output, OnInit,
+         OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 
 import { Subject } from 'rxjs';
 

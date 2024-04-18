@@ -14,6 +14,7 @@ export interface AppData {
 
 
 export interface AppLayout {
+  displayLogo: boolean;
   displayNavbarHeader: boolean;
   displayMenuUser: boolean;
   displayChangeLanguage: boolean;
@@ -29,6 +30,7 @@ export interface AppSecurity {
   fakeLogin: boolean;
   enablePermissions: boolean;
   encriptLocalStorageData: boolean;
+  protectUserWork: boolean;
 }
 
 

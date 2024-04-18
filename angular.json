@@ -29,7 +29,8 @@
             "allowedCommonJsDependencies": [
               "quill",
               "crypto-js",
-              "moment"
+              "moment",
+              "lodash/cloneDeep"
             ],
             "outputPath": "dist/financial-accounting-intranet",
             "index": "src/index.html",

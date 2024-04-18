@@ -6,7 +6,9 @@
  */
 
 import { Directive, ElementRef, OnChanges, Input, OnDestroy } from '@angular/core';
+
 import { interval, Subscription } from 'rxjs';
+
 import { tap } from 'rxjs/operators';
 
 
@@ -24,6 +26,7 @@ export class ProgressTextDirective implements OnChanges, OnDestroy {
   private originalInnerText: string = null;
 
   private subscription: Subscription;
+
 
   constructor(private el: ElementRef) { }
 

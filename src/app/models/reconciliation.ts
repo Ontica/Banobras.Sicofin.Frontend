@@ -7,7 +7,7 @@
 
 import { DateString, Identifiable } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableEntry } from './data-table';
+import { DataTable, DataTableColumn, DataTableEntry } from './_data-table';
 
 import { ExecuteDatasetsQuery, ImportDatasets, ImportInputDatasetCommand, InputDataset,
          InputDatasetsQuery, InputDatasetType } from './imported-data';

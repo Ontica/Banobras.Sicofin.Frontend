@@ -6,11 +6,14 @@
  */
 
 import { Injectable } from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
 
-import { ApplicationSettings } from './application-settings';
-import { KeyValue } from '../data-types/key-value';
 import { firstValueFrom } from 'rxjs';
+
+import { ApplicationSettings } from './application-settings';
+
+import { KeyValue } from '../data-types/key-value';
 
 
 @Injectable()

@@ -18,6 +18,7 @@ import { SessionService } from './general/session.service';
 import { LocalStorageService } from './general/local-storage.service';
 import { LoggerService } from './general/logger.service';
 import { ApplicationSettingsService } from './general/application-settings.service';
+import { ApplicationStatusService } from './general/application-status.service';
 
 import { DirectoryService } from './http/directory.service';
 import { HttpHandler } from './http/http-handler';
@@ -53,6 +54,7 @@ import { ErrorMessageService } from './errors/error-message.service';
     ErrorMessageService,
     SessionService,
     ApplicationSettingsService,
+    ApplicationStatusService,
     LocalStorageService,
     LoggerService,
     SecurityDataService,

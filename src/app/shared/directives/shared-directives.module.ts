@@ -8,18 +8,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { EmpBreakpointDirective } from './notebook-breakpoint.directive';
+import { EmpBreakpointDirective, EmpNotebookBreakPointsProvider } from './notebook-breakpoint.directive';
 import { EmpContextMenuDisabledDirective } from './context-menu-disabled.directive';
 import { EmpCurrencyDirective } from './currency.directive';
 import { EmpFormKeyDownEnterDirective } from './form-keydown-enter.directive';
+import { EmpFractionDirective } from './fraction.directive';
 import { EmpHasPermissionDirective } from './has-permission.directive';
 import { EmpInputKeysDirective } from './input-keys.directive';
 import { EmpIntegerDirective } from './integer.directive';
 import { EmpNumerationDirective } from './numeration.directive';
 import { EmpResizableDirective } from './resizable.directive';
 import { EmpTextareaAutoresizeDirective } from './text-area-autoresize.directive';
-
-import { EmpNotebookBreakPointsProvider } from './notebook-breakpoint';
 
 
 @NgModule({
@@ -33,6 +32,7 @@ import { EmpNotebookBreakPointsProvider } from './notebook-breakpoint';
     EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
+    EmpFractionDirective,
     EmpHasPermissionDirective,
     EmpInputKeysDirective,
     EmpIntegerDirective,
@@ -46,6 +46,7 @@ import { EmpNotebookBreakPointsProvider } from './notebook-breakpoint';
     EmpContextMenuDisabledDirective,
     EmpCurrencyDirective,
     EmpFormKeyDownEnterDirective,
+    EmpFractionDirective,
     EmpHasPermissionDirective,
     EmpInputKeysDirective,
     EmpIntegerDirective,

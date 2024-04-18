@@ -8,9 +8,6 @@
 @import 'mixins', 'variables';
 
 
-
-
-
 .card {
   @include column;
 
@@ -77,7 +74,7 @@
 }
 
 .card-body-padding {
-  padding: 0 16px 16px 16px !important;
+  padding: 16px !important;
 }
 
 .card-body-without-top {

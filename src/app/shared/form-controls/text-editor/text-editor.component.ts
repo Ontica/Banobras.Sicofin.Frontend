@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, forwardRef} from '@angular/core';
+import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 
@@ -29,7 +29,7 @@ export class TextEditorComponent implements ControlValueAccessor {
   editorModules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered'}, { list: 'bullet' }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
       ['link'],
       ['clean'],
     ]

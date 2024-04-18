@@ -7,7 +7,7 @@
 
 import { DateString, Empty, Identifiable } from '@app/core';
 
-import { DataTableColumn, DataTableQuery, DataTableColumnType } from './data-table';
+import { DataTableColumn, DataTableQuery, DataTableColumnType } from './_data-table';
 
 import { Positioning } from './edition-command';
 

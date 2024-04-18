@@ -50,13 +50,13 @@ export class SecurityDataService {
 
     const token = await
       this.httpHandler.post<string>('v3/security/login-token', credentials)
-        .firstValue();
+                      .firstValue();
 
     credentials.password = this.encryptUserPassword(userPassword, token);
 
     return this.httpHandler.post<ExternalSessionToken>('v3/security/login', credentials)
-      .firstValue()
-      .then(x => this.mapToSessionToken(x));
+                           .firstValue()
+                           .then(x => this.mapToSessionToken(x));
   }
 
 

@@ -19,9 +19,11 @@ export class EmpCurrencyDirective implements OnChanges {
 
   @Input() empNgCurrencyCode = 'MXN';
 
-  @Input() empNgCurrencyDisplaySymbol = 'symbol-narrow';
+  @Input() empNgCurrencyDisplaySymbol: 'symbol-narrow' | '' = '';
 
-  @Input() empNgCurrencyFractionDigit = 2;
+  @Input() empNgCurrencyFractionDigitMin = 2;
+
+  @Input() empNgCurrencyFractionDigitMax = 2;
 
   constructor(private el: ElementRef,
               private currencyPipe: CurrencyPipe,
@@ -62,7 +64,7 @@ export class EmpCurrencyDirective implements OnChanges {
 
     const numberValue = parseFloat(String(initalValue).replace(/[,$€]*/g, ''));
 
-    const digitsInfo = `1.${this.empNgCurrencyFractionDigit}-${this.empNgCurrencyFractionDigit}`;
+    const digitsInfo = `1.${this.empNgCurrencyFractionDigitMin}-${this.empNgCurrencyFractionDigitMax}`;
 
     const formattedValue = this.currencyPipe.transform(numberValue,
                                                        this.empNgCurrencyCode,

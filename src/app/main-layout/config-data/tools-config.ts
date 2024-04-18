@@ -6,7 +6,18 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-export type TOOL = 'None' | 'Balances' | 'SystemConfig' | 'Alerts' | 'InfoVault';
+export type TOOL_TYPES = 'None' | 'Balances' | 'SystemConfig' | 'Alerts' | 'InfoVault';
 
 
-export const TOOLS_LIST: TOOL[] = ['None', 'Balances', 'SystemConfig', 'Alerts', 'InfoVault'];
+export const TOOLS_LIST: TOOL_TYPES[] = ['None', 'Balances', 'SystemConfig', 'Alerts', 'InfoVault'];
+
+
+export interface Tool {
+  toolType: TOOL_TYPES;
+  params?: any;
+}
+
+
+export const DefaultTool: Tool = {
+  toolType: 'None',
+};

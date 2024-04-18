@@ -27,7 +27,7 @@ export const DefaultFieldConfig: FieldConfig = {
   list: [],
   required: true,
   multiple: false,
-}
+};
 
 
 export interface ExecuteDatasetsQuery {

@@ -7,6 +7,8 @@
 
 export * from './array-library';
 
+export * from './cloneDeep';
+
 export * from './event-emission';
 
 export * from './form-helper';

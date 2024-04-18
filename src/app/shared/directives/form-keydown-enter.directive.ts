@@ -11,7 +11,7 @@ import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 @Directive({
   selector: 'form[empNgFormKeyDownEnter]'
 })
-export class EmpFormKeyDownEnterDirective  {
+export class EmpFormKeyDownEnterDirective {
 
   @Output() public empNgFormKeyDownEnter = new EventEmitter<void>();
 
