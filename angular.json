@@ -85,19 +85,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "financial-accounting-intranet:build",
-            "port": 2021
+            "port": 2021,
+            "buildTarget": "financial-accounting-intranet:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "financial-accounting-intranet:build:production"
+              "buildTarget": "financial-accounting-intranet:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "financial-accounting-intranet:build"
+            "buildTarget": "financial-accounting-intranet:build"
           }
         },
         "test": {

@@ -10,13 +10,13 @@ If you are interested in the former version of this software based on ASP and Vi
 
 ## Quick start
 
-This project is being built with Angular 16 and TypeScript 4.9.
+This project is being built with Angular 17.3.5 and TypeScript 5.2.
 
-It uses [Angular CLI](https://github.com/angular/angular-cli), so both the CLI and generated project, have dependencies that require Node 16.14.2 or higher, together with NPM 8.5.0 or higher.
+It uses [Angular CLI](https://github.com/angular/angular-cli), so both the CLI and generated project, have dependencies that require Node 18.18.2 or higher, together with NPM 9.8.1 or higher.
 
-**Make sure you have Node version >= 16.14.2 and NPM >= 8.5.0**
+**Make sure you have Node version >= 18.18.2 and NPM >= 9.8.1**
 
-**Then install [Angular CLI](https://github.com/angular/angular-cli)** (globally if possible), ensuring that you have installed **version 16** or higher.
+**Then install [Angular CLI](https://github.com/angular/angular-cli)** (globally if possible), ensuring that you have installed **version 17.3** or higher.
 
 ```bash
 # install Angular CLI globally
