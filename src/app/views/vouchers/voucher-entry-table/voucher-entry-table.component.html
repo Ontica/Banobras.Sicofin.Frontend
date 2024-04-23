@@ -81,13 +81,13 @@
     <ng-container matColumnDef="status">
       <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length" class="column-no-padding">
 
-        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="0.5rem" style="padding: 5px 0;">
+        <div class="fx-row-container fx-end fx-items-center fx-gap-half" style="padding: 5px 0;">
 
           <mat-icon [ngClass]="canReviewVoucher ? 'icon-warning' : 'icon-success'">info</mat-icon>
           <span>
             {{canReviewVoucher ? 'La póliza no está balanceada o tiene inconsistencias.' : 'La póliza está balanceada y tiene datos correctos.'}}
           </span>
-          <div fxFlex></div>
+          <div class="fx-item"></div>
           <button *ngIf="canReviewVoucher" class="btn-action"
             (click)="onReviewVoucherButtonClicked()">
             Analizar póliza

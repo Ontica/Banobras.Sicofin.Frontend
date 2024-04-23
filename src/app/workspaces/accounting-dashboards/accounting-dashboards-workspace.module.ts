@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
-import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { AccountingDashboardsWorkspaceRoutingModule } from './accounting-dashboards-workspace-routing.module';
@@ -30,8 +29,8 @@ import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-b
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+
     AngularMaterialModule,
-    AngularFlexLayoutModule,
     SharedModule,
 
     AccountingDashboardsWorkspaceRoutingModule,
@@ -44,10 +43,6 @@ import { TrialBalanceMainPageComponent } from './trial-balance-main-page/trial-b
     BalanceReconciliationMainPageComponent,
     TrialBalanceMainPageComponent,
   ],
-
-  exports: [
-
-  ]
 
 })
 export class AccountingDashboardsWorkspaceModule { }

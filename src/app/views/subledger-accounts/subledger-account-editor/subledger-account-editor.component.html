@@ -1,4 +1,4 @@
-<div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
+<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
 
     <emp-ng-spinner #spinner [visible]="submitted">
 
@@ -6,7 +6,7 @@
 
     <div class="section-title"> Información general del auxiliar </div>
 
-    <emp-fa-subledger-account-header fxFlex="none"
+    <emp-fa-subledger-account-header class="fx-item-none"
       [subledgerAccount]="subledgerAccount"
       (subledgerAccountHeaderEvent)="onSubledgerAccountHeaderEvent($event)">
 

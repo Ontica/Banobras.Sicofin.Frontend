@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div fxFlex="50">
+      <div class="fx-item-half">
 
         <label>Catálogo de cuentas:</label>
 
@@ -18,11 +18,12 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="start end">
+      <div class="fx-item fx-items-end">
 
         <div class="input-search-container">
 
-          <input type="text" class="text-box" name="keywords"
+          <input type="text" name="keywords"
+            class="text-box"
             placeholder="Buscar pólizas..."
             [(ngModel)]="filter.keywords"
             (keyup.enter)="onSearchVoucherClicked()"
@@ -32,7 +33,7 @@
 
       </div>
 
-      <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
         <button title="Buscar"
           [class.btn-icon-action]="isFormValid"
@@ -51,12 +52,12 @@
 
         </mat-divider>
 
-        <div fxFlex="none" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+        <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
-          <button class="btn-base" fxFlex="100px"
+          <button class="btn-base"
+            [style.width.px]="100"
             (click)="onShowFiltersClicked()">
-            {{showFilters ? 'Ocultar' :'Mostrar'}}
-            <mat-icon>filter_list</mat-icon>
+            {{showFilters ? 'Ocultar' :'Mostrar'}} <mat-icon>filter_list</mat-icon>
           </button>
 
         </div>
@@ -68,179 +69,195 @@
 
     <div #filterSection *ngIf="showFilters" [@expandCollapse]>
 
-      <mat-divider [style.marginBottom.px]="8" [style.marginRight.px]="8">
+      <div class="fx-column-container fx-gap-half">
 
-      </mat-divider>
+        <mat-divider class="horizontal-slim">
 
-      <div fxLayout="row" [style.marginBottom.px]="8">
+        </mat-divider>
 
-        <div fxFlex="25">
+        <div class="fx-row-container">
 
-          <label>No. póliza:</label>
+          <div class="fx-item-quarter">
 
-          <input type="text" class="text-box" name="number"
-            [(ngModel)]="filter.number"
-            (keyup.escape)="filter.number = ''">
+            <label>No. póliza:</label>
 
-        </div>
-
-        <div fxFlex="25">
-
-          <label>Concepto:</label>
-
-          <input type="text" class="text-box" name="concept"
-            [(ngModel)]="filter.concept"
-            (keyup.escape)="filter.concept = ''">
-
-        </div>
-
-        <div fxFlex="50">
-
-          <label>Contabilidad:</label>
-
-          <emp-ng-select name="ledger"
-            [config]="{clearable: true}"
-            [(ngModel)]="filter.ledgerUID"
-            [items]="accountChartSelected?.ledgers"
-            bindLabel="fullName"
-            placeholder="Todas">
-          </emp-ng-select>
-
-        </div>
-
-      </div>
-
-      <div fxLayout="row" [style.marginBottom.px]="8">
-
-        <div fxFlex="25">
-
-          <label>Con la cuenta:</label>
-
-          <input type="text" class="text-box" name="accountKeywords"
-            [(ngModel)]="filter.accountKeywords"
-            (keyup.escape)="filter.accountKeywords = ''">
-
-        </div>
-
-        <div fxFlex="25">
-
-          <label>Con el auxiliar:</label>
-
-          <input type="text" class="text-box" name="subledgerAccountKeywords"
-            [(ngModel)]="filter.subledgerAccountKeywords"
-            (keyup.escape)="filter.subledgerAccountKeywords = ''">
-
-        </div>
-
-        <ng-container #periodSection>
-
-          <div fxFlex="none">
-
-            <label>Período:</label>
-
-            <emp-ng-date-range-picker name="period"
-              [(startDate)]="filter.fromDate"
-              [(endDate)]="filter.toDate"
-              [displaySelectionType]="false">
-
-            </emp-ng-date-range-picker>
+            <input type="text" name="number"
+              class="text-box"
+              [(ngModel)]="filter.number"
+              (keyup.escape)="filter.number = ''">
 
           </div>
 
-          <div fxFlex fxLayoutAlign="start end">
+          <div class="fx-item-quarter">
 
-            <emp-ng-select name="dateSearchField" [fxFlex]="100"
-              [(ngModel)]="filter.dateSearchField"
+            <label>Concepto:</label>
+
+            <input type="text" name="concept"
+              class="text-box"
+              [(ngModel)]="filter.concept"
+              (keyup.escape)="filter.concept = ''">
+
+          </div>
+
+          <div class="fx-item-half">
+
+            <label>Contabilidad:</label>
+
+            <emp-ng-select name="ledger"
               [config]="{clearable: true}"
-              [items]="dateSearchFieldList"
-              [required]="isDateSearchFieldRequired"
-              [showError]="!isDateSearchFieldValid">
+              [(ngModel)]="filter.ledgerUID"
+              [items]="accountChartSelected?.ledgers"
+              bindLabel="fullName"
+              placeholder="Todas">
             </emp-ng-select>
 
           </div>
 
-        </ng-container>
-
-      </div>
-
-      <div fxLayout="row" [style.marginBottom.px]="8">
-
-        <div fxFlex="50">
-
-          <label>Tipo de transacción:</label>
-
-          <emp-ng-select name="transactionTypeUID"
-            [config]="{clearable: true}"
-            [(ngModel)]="filter.transactionTypeUID"
-            [items]="transactionTypesList"
-            [loading]="isLoading"
-            placeholder="Todos">
-          </emp-ng-select>
-
         </div>
 
-        <div fxFlex="50">
+        <div class="fx-row-container sm-fx-column-container">
 
-          <label>Tipo de póliza:</label>
+          <div class="fx-item-half sm-fx-item fx-row-container">
 
-          <emp-ng-select  name="voucherTypeUID"
-            [config]="{clearable: true}"
-            [(ngModel)]="filter.voucherTypeUID"
-            [items]="voucherTypesList"
-            [loading]="isLoading"
-            placeholder="Todos">
-          </emp-ng-select>
+            <div class="fx-item-half">
 
-        </div>
+              <label>Con la cuenta:</label>
 
-      </div>
+              <input type="text" name="accountKeywords"
+                class="text-box"
+                [(ngModel)]="filter.accountKeywords"
+                (keyup.escape)="filter.accountKeywords = ''">
 
+            </div>
 
-      <div fxLayout="row" [style.marginBottom.px]="8">
+            <div class="fx-item-half">
 
-        <div fxFlex="25" fxLayoutAlign="start end">
+              <label>Con el auxiliar:</label>
 
-          <emp-ng-select name="editorType" [fxFlex]="100"
-            [(ngModel)]="filter.editorType"
-            [items]="editorTypeList">
-          </emp-ng-select>
+              <input type="text" name="subledgerAccountKeywords"
+                class="text-box"
+                [(ngModel)]="filter.subledgerAccountKeywords"
+                (keyup.escape)="filter.subledgerAccountKeywords = ''">
 
-        </div>
-
-        <div fxFlex="calc(75% - 145px)">
-
-          <label>Persona o cuenta de acceso:</label>
-
-          <emp-ng-select name="editorUID"
-            [config]="{clearable: true,
-                       minTermLength: minTermLength,
-                       typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
-            [(ngModel)]="filter.editorUID"
-            [items]="editorList$ | async"
-            [typeahead]="editorInput$"
-            [loading]="editorLoading"
-            (changes)="onEditorChanges($event)"
-            placeholder="Todos">
-
-          </emp-ng-select>
-
-        </div>
-
-        <ng-container #clearFilterSection>
-
-          <mat-divider vertical="true" class="vertical">
-
-          </mat-divider>
-
-          <div fxFlex="none" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
-
-            <button class="btn-base" (click)="onClearFilters()" fxFlex="100px">
-              Limpiar <mat-icon>filter_list</mat-icon>
-            </button>
+            </div>
 
           </div>
 
-        </ng-container>
+          <div class="fx-item-half sm-fx-item fx-row-container" #periodSection>
+
+            <div class="fx-item-none">
+
+              <label>Período:</label>
+
+              <emp-ng-date-range-picker name="period"
+                [(startDate)]="filter.fromDate"
+                [(endDate)]="filter.toDate"
+                [displaySelectionType]="false">
+
+              </emp-ng-date-range-picker>
+
+            </div>
+
+            <div class="fx-item-size fx-items-end" style="--size: calc(100% - 221px)">
+
+              <emp-ng-select name="dateSearchField"
+                [style.width.%]="100"
+                [(ngModel)]="filter.dateSearchField"
+                [config]="{clearable: true}"
+                [items]="dateSearchFieldList"
+                [required]="isDateSearchFieldRequired"
+                [showError]="!isDateSearchFieldValid">
+              </emp-ng-select>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="fx-row-container">
+
+          <div class="fx-item-half">
+
+            <label>Tipo de transacción:</label>
+
+            <emp-ng-select name="transactionTypeUID"
+              [config]="{clearable: true}"
+              [(ngModel)]="filter.transactionTypeUID"
+              [items]="transactionTypesList"
+              [loading]="isLoading"
+              placeholder="Todos">
+            </emp-ng-select>
+
+          </div>
+
+          <div class="fx-item-half">
+
+            <label>Tipo de póliza:</label>
+
+            <emp-ng-select  name="voucherTypeUID"
+              [config]="{clearable: true}"
+              [(ngModel)]="filter.voucherTypeUID"
+              [items]="voucherTypesList"
+              [loading]="isLoading"
+              placeholder="Todos">
+            </emp-ng-select>
+
+          </div>
+
+        </div>
+
+        <div class="fx-row-container">
+
+          <div class="fx-item-quarter fx-items-end">
+
+            <emp-ng-select name="editorType"
+              [style.width.%]="100"
+              [(ngModel)]="filter.editorType"
+              [items]="editorTypeList">
+            </emp-ng-select>
+
+          </div>
+
+          <div class="fx-item-size" style="--size: calc(75% - 117px)">
+
+            <label>Persona o cuenta de acceso:</label>
+
+            <emp-ng-select name="editorUID"
+              [config]="{clearable: true,
+                        minTermLength: minTermLength,
+                        typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
+              [(ngModel)]="filter.editorUID"
+              [items]="editorList$ | async"
+              [typeahead]="editorInput$"
+              [loading]="editorLoading"
+              (changes)="onEditorChanges($event)"
+              placeholder="Todos">
+
+            </emp-ng-select>
+
+          </div>
+
+          <ng-container #clearFilterSection>
+
+            <mat-divider vertical="true" class="vertical">
+
+            </mat-divider>
+
+            <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
+
+              <button
+                [style.width.px]="100"
+                class="btn-base"
+                (click)="onClearFilters()">
+                Limpiar <mat-icon>filter_list</mat-icon>
+              </button>
+
+            </div>
+
+          </ng-container>
+
+        </div>
 
       </div>
 

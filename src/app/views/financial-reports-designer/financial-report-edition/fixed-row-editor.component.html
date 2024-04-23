@@ -9,16 +9,16 @@
 
       <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-        <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+        <div class="fx-column-container fx-gap-half">
 
-          <div #typeSection fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+          <div #typeSection class="fx-row-container sm-fx-column-container" [style.marginBottom.rem]="0.75">
 
-            <div fxFlex="100">
+            <div class="fx-item-one">
               <label>Tipo de renglon:</label>
               <mat-radio-group formControlName="type"
                 (change)="onTypeChanged()">
                 <mat-radio-button *ngFor="let type of fixedRowTypeList" [value]="type.uid"
-                  [fxFlex]="100/3" [style.marginLeft]="0">
+                  class="fx-item-third">
                   {{type.name}}
                 </mat-radio-button>
               </mat-radio-group>
@@ -30,9 +30,9 @@
 
             <div class="section-title"> Información del concepto de referencia </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Agrupación:</label>
                 <emp-ng-select
                   formControlName="group"
@@ -41,7 +41,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="200/3">
+              <div class="fx-item-two-third">
                 <label>Concepto:</label>
                 <emp-ng-select
                   formControlName="concept"
@@ -67,9 +67,9 @@
 
             <div class="section-title"> Información de la etiqueta </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100">
+              <div class="fx-item-one">
                 <label>Etiqueta:</label>
                 <input type="text" class="text-box"
                   formControlName="label"
@@ -84,9 +84,9 @@
 
             <div class="section-title"> Información general </div>
 
-            <div #positionSection fxLayout="row">
+            <div #positionSection class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Posición:</label>
                 <emp-ng-select
                   formControlName="positioningRule"
@@ -96,8 +96,8 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffset">
-                <emp-ng-select [fxFlex]="100"
+              <div *ngIf="displayPositioningOffset" class="fx-item-two-third fx-items-end">
+                <emp-ng-select style="width: 100%;"
                   formControlName="positioningOffsetUID"
                   [items]="financialReportRowList"
                   [config]="{searchableFields: ['conceptCode', 'concept']}"
@@ -112,7 +112,7 @@
                 </emp-ng-select>
               </div>
 
-              <div fxFlex="120px" fxLayoutAlign="start end" *ngIf="displayPosition">
+              <div *ngIf="displayPosition" class="fx-item-size fx-items-end" style="--size: 126px">
 
                 <input type="text" class="text-box text-align-right" empNgInteger
                   formControlName="position"
@@ -122,9 +122,9 @@
 
             </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Formato:</label>
                 <emp-ng-select
                   formControlName="format"
@@ -140,7 +140,7 @@
                 </emp-ng-select>
               </div>
 
-              <div fxFlex="120px">
+              <div class="fx-item-none">
                 <label>Fecha inicial:</label>
                 <emp-ng-datepicker
                   formControlName="startDate"
@@ -148,7 +148,7 @@
                 </emp-ng-datepicker>
               </div>
 
-              <div fxFlex="120px">
+              <div class="fx-item-none">
                 <label>Fecha final:</label>
                 <emp-ng-datepicker
                   formControlName="endDate"
@@ -163,13 +163,13 @@
 
           <ng-container #rowFooter>
 
-            <mat-divider class="horizontal"></mat-divider>
+            <mat-divider class="horizontal-slim"></mat-divider>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div fxFlex fxLayoutAlign="end center">
+              <div class="fx-item fx-end fx-items-center">
 
-                <button
+                <button type="button"
                   [class.btn]="!formHelper.isFormReady(form)"
                   [class.btn-action]="formHelper.isFormReady(form)"
                   (click)="onSubmitDataClicked()">

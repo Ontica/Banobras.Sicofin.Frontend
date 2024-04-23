@@ -1,8 +1,8 @@
 <mat-divider class="horizontal"></mat-divider>
 
-<div fxLayout="row">
+<div class="fx-row-container">
 
-  <div fxFlex fxLayoutAlign="start center">
+  <div class="fx-item fx-items-center">
     <ng-container *ngIf="!editionMode">
       <button *ngIf="voucher.actions?.sendToLedger"
         class="btn-action"
@@ -23,7 +23,7 @@
     </button>
   </div>
 
-  <div fxFlex fxLayoutAlign="end center">
+  <div class="fx-item fx-end fx-items-center">
     <button *ngIf="!editionMode"
       class="btn-action"
       (click)="onToggleEditionMode()">

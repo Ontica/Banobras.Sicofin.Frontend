@@ -1,11 +1,11 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container"
   [style.padding.px]="0" [style.margin.px]="0">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-sm="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-      <div fxLayout="row" fxLayout.lt-sm="column">
+      <div class="fx-row-container sm-fx-column-container">
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter sm-fx-item">
 
           <label>Catálogo de cuentas:</label>
 
@@ -19,7 +19,7 @@
 
         </div>
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter sm-fx-item">
 
           <label>Tipo de consulta:</label>
 
@@ -33,7 +33,7 @@
 
         </div>
 
-        <div fxFlex>
+        <div class="fx-item sm-fx-item">
 
           <ng-container *ngIf="displayFromAccount">
 
@@ -59,7 +59,7 @@
 
         </div>
 
-        <div fxFlex="none">
+        <div class="fx-item-none">
 
           <label>Fecha:</label>
 
@@ -72,7 +72,7 @@
 
         </div>
 
-        <div fxFlex="28px" fxFlex.lt-sm="none" [style.paddingTop.px]="13">
+        <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
           <button [class.btn-icon-action]="form.valid"
             [class.btn-icon]="form.invalid"
@@ -88,9 +88,9 @@
 
       </div>
 
-      <div fxLayout="row" fxLayout.lt-sm="column">
+      <div class="fx-row-container sm-fx-column-container">
 
-        <div fxFlex="50">
+        <div class="fx-item-half sm-fx-item">
 
           <label>Contabilidad:</label>
 
@@ -104,7 +104,7 @@
 
         </div>
 
-        <div fxFlex fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
+        <div class="fx-item fx-space-between sm-fx-item fx-row-container" [style.paddingTop.px]="12">
 
           <mat-checkbox name="withSubledgerAccount" *ngIf="displayWithSubledgerAccount"
             [(ngModel)]="formData.withSubledgerAccount"
@@ -120,15 +120,17 @@
 
         </div>
 
-        <div fxFlex="none" #clearFilterSection>
+        <div #clearFilterSection class="fx-item-none fx-row-container" [style.paddingTop.px]="12">
 
-          <mat-divider vertical="true" class="vertical" [style.marginTop.px]="12">
+          <mat-divider vertical="true" class="vertical-inline">
 
           </mat-divider>
 
-          <div fxFlex="none" fxFlex.lt-sm="none" fxLayoutAlign="space-around start" [style.marginTop.px]="12">
+          <div class="fx-item-none fx-space-between">
 
-            <button class="btn-base" (click)="onClearFilters()" fxFlex="100px" [style.marginRight.px]="0">
+            <button class="btn-base"
+              [style.width.px]="100"
+              (click)="onClearFilters()" >
               Limpiar <mat-icon>filter_list</mat-icon>
             </button>
 

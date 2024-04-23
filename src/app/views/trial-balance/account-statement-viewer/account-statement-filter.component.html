@@ -1,11 +1,11 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container"
   [style.padding.px]="0" [style.margin.px]="0">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-      <div fxLayout="row wrap">
+      <div class="fx-row-container fx-wrap">
 
-        <div fxFlex="none">
+        <div class="fx-item-none">
 
           <label>{{periodsRequired ? 'Período inicial:': 'Período:'}}</label>
           <emp-ng-date-range-picker name="initialPeriod"
@@ -20,7 +20,8 @@
 
         </div>
 
-        <div fxFlex="none" *ngIf="periodsRequired">
+        <div *ngIf="periodsRequired"
+          class="fx-item-none">
 
           <label>Período final:</label>
           <emp-ng-date-range-picker name="finalPeriod" #finalPeriodRangePicker
@@ -35,7 +36,7 @@
 
         </div>
 
-        <div fxFlex="28px" [style.paddingTop.px]="13">
+        <div class="fx-item-none" [style.paddingTop.px]="13">
 
           <button [class.btn-icon-action]="form.valid"
             [class.btn-icon]="form.invalid"

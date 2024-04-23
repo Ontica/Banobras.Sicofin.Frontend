@@ -1,14 +1,14 @@
-<div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
+<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
 
   <emp-ng-spinner #spinner [visible]="submitted">
 
   </emp-ng-spinner>
 
-  <div fxLayout="row" fxLayoutAlign="space-between center">
+  <div class="fx-row-container fx-gap fx-space-between fx-items-center">
 
-    <div fxFlex="none">
+    <div class="fx-item-none">
 
-      <button
+      <button type="button"
         class="btn"
         (click)="onExportButtonClicked()">
         Exportar movimientos
@@ -16,26 +16,21 @@
 
     </div>
 
-    <ng-container *ngIf="canEditVoucher">
+    <div *ngIf="canEditVoucher" class="fx-item-none">
 
-      <div fxFlex="none">
+      <button type="button"
+        class="btn-action"
+        (click)="onAddVoucherEntryClicked()">
+        Agregar movimiento
+      </button>
 
-        <button
-          class="btn-action"
-          [style.marginLeft.px]="8"
-          (click)="onAddVoucherEntryClicked()">
-          Agregar movimiento
-        </button>
-
-      </div>
-
-    </ng-container>
+    </div>
 
   </div>
 
   <br>
 
-  <emp-fa-voucher-entry-table fxFlex
+  <emp-fa-voucher-entry-table class="fx-item"
     [voucherEntryList]="voucher.entries"
     [canDelete]="canEditVoucher"
     [canReviewVoucher]="voucher.actions?.reviewVoucher"

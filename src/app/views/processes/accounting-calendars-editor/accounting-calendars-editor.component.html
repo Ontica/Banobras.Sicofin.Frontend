@@ -14,11 +14,11 @@
       <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section"
         [style.paddingBottom.px]="4">
 
-        <div fxLayout="column" fxLayoutGap="0.5rem">
+        <div class="fx-column-container fx-gap-half">
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex="100">
+            <div class="fx-item">
 
               <label>Calendario:</label>
 
@@ -36,9 +36,9 @@
 
           </mat-divider>
 
-          <div fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="8">
+          <div class="fx-row-container fx-end fx-items-center">
 
-            <div fxFlex>
+            <div class="fx-item">
 
               <input type="text" class="text-box" name="period"
                 placeholder="Nombre del período"
@@ -47,7 +47,7 @@
             </div>
 
 
-            <div fxFlex="none">
+            <div class="fx-item-none">
 
               <emp-ng-date-range-picker name="period"
                 formControlName="period">
@@ -56,7 +56,7 @@
 
             </div>
 
-            <div fxFlex="none">
+            <div class="fx-item-none">
 
               <button title="Agregar"
                 [class.btn-icon-action]="accountingCalendarSelected && isFormValid"
@@ -84,22 +84,22 @@
 
           <div *ngIf="accountingCalendarSelected?.periods.length > 0" [style.paddingRight.px]="8">
 
-            <div fxLayout="column" fxLayoutGap="0.5rem" class="simple-list-container">
+            <div class="fx-column-container fx-gap-half simple-list-container">
 
               <div *ngFor="let period of accountingCalendarSelected.periods"
-                fxLayout="row" fxLayoutAlign="space-between center"
-                class="simple-list-item">
+                class="fx-row-container fx-space-between fx-items-center simple-list-item">
 
-                <div fxFlex>
+                <div class="fx-item">
                   <strong>{{period.period}}</strong>
                 </div>
 
-                <div fxFlex="180px" class="detail text-align-center">
+                <div class="fx-item-size detail text-align-center" style="--size: 180px">
                   {{period.fromDate | dateTimeFormat}} - {{period.toDate | dateTimeFormat}}
                 </div>
 
-                <button title="Eliminar fecha"
-                  fxFlex="none" mat-icon-button
+                <button mat-icon-button
+                  title="Eliminar fecha"
+                  class="fx-item-none"
                   (click)="onRemovePeriodClicked(period)">
                   <mat-icon> delete </mat-icon>
                 </button>

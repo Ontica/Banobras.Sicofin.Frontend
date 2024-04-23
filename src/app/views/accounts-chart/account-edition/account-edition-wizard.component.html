@@ -36,9 +36,9 @@
 
           <mat-divider class="divider-stepper-margin"></mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex fxLayoutAlign="start center">
+            <div class="fx-item fx-items-center">
 
               <button class="btn"
                 (click)="onDeleteAccountClicked()">
@@ -47,7 +47,7 @@
 
             </div>
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item fx-end fx-items-center">
 
               <button matStepperNext
                 [class.btn]="!isFormAccountEditionConfigValid"
@@ -87,9 +87,9 @@
 
           <mat-divider class="divider-stepper-margin"></mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item fx-end fx-items-center">
 
               <button matStepperPrevious *ngIf="stepper.selectedIndex > 0"
                 class="btn" [style.marginRight.px]="16" >
@@ -134,9 +134,9 @@
 
           <mat-divider class="divider-stepper-margin"></mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item fx-end fx-items-center">
 
               <button matStepperPrevious *ngIf="stepper.selectedIndex > 0"
                 class="btn" [style.marginRight.px]="16" >
@@ -182,9 +182,9 @@
 
           <mat-divider class="divider-stepper-margin"></mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item fx-end fx-items-center">
 
               <button matStepperPrevious *ngIf="stepper.selectedIndex > 0"
                 class="btn" [style.marginRight.px]="16" >
@@ -231,9 +231,9 @@
 
           <mat-divider class="divider-stepper-margin"></mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item fx-end fx-items-center">
 
               <button matStepperPrevious *ngIf="stepper.selectedIndex > 0"
                 class="btn" [style.marginRight.px]="16" >
@@ -366,9 +366,9 @@
 
           <mat-divider class="divider-stepper-margin"></mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item fx-end fx-items-center">
 
               <ng-container *ngIf="stepper.selectedIndex > 0">
 

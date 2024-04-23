@@ -16,7 +16,6 @@
     <div class="card-header-options" >
 
       <button *empNgHasPermission="permissions.FEATURE_EDICION_CONCEPTOS"
-        fxFlexOffset="1.5rem"
         [title]="!queryExecuted ? 'No se ha invocado la consulta' : ''"
         [disabled]="!queryExecuted"
         [class.btn]="!queryExecuted"
@@ -31,18 +30,18 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-fa-financial-concepts-filter fxFlex="none"
+      <emp-fa-financial-concepts-filter class="fx-item-none"
         (financialConceptsFilterEvent)="onFinancialConceptsFilterEvent($event)">
 
       </emp-fa-financial-concepts-filter>
 
-      <emp-fa-financial-concepts-table fxFlex
+      <emp-fa-financial-concepts-table class="fx-item"
         [financialConceptsList]="financialConceptsList"
         [selectedFinancialConcept]="selectedFinancialConcept"
         [queryExecuted]="queryExecuted"

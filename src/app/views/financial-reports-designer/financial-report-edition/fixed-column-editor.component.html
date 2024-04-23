@@ -9,16 +9,17 @@
 
       <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-        <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+        <div class="fx-column-container fx-gap-half">
 
-          <div #typeSection fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+          <div #typeSection class="fx-row-container sm-fx-column-container" [style.marginBottom.rem]="0.75">
 
-            <div fxFlex="100">
+            <div class="fx-item-one">
               <label>Tipo de columna:</label>
               <mat-radio-group formControlName="type"
                 (change)="onTypeChanged()">
-                <mat-radio-button *ngFor="let type of fixedColumnTypeList" [value]="type.uid"
-                  [fxFlex]="100/3" [style.marginLeft]="0">
+                <mat-radio-button *ngFor="let type of fixedColumnTypeList"
+                  class="fx-item-third"
+                  [value]="type.uid">
                   {{type.name}}
                 </mat-radio-button>
               </mat-radio-group>
@@ -28,16 +29,16 @@
 
           <div class="section-title"> Información general </div>
 
-          <div #generalFieldsSection fxLayout="row" fxLayout.lt-sm="column">
+          <div #generalFieldsSection class="fx-row-container sm-fx-column-container">
 
-            <div [fxFlex]="50">
+            <div class="fx-item-half">
               <label>Nombre:</label>
               <input type="text" class="text-box"
                 formControlName="name"
                 [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
             </div>
 
-            <div fxFlex="none">
+            <div class="fx-item-none">
               <label>Fecha inicial:</label>
               <emp-ng-datepicker
                 formControlName="startDate"
@@ -45,7 +46,7 @@
               </emp-ng-datepicker>
             </div>
 
-            <div fxFlex="none">
+            <div class="fx-item-none">
               <label>Fecha final:</label>
               <emp-ng-datepicker
                 formControlName="endDate"
@@ -53,7 +54,7 @@
               </emp-ng-datepicker>
             </div>
 
-            <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+            <div class="fx-item fx-items-end" [style.padding-bottom.px]="2">
 
               <mat-checkbox name="isHide"
                 formControlName="isHide"
@@ -68,9 +69,9 @@
 
           <ng-container #formulaSection *ngIf="isFormulaType">
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100">
+              <div class="fx-item-one">
                 <label>Fórmula:</label>
                 <input type="text" class="text-box"
                   formControlName="formula"
@@ -84,9 +85,9 @@
 
           <ng-container #positingFieldsSection *ngIf="displayPositingSection">
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Posición:</label>
                 <emp-ng-select
                   formControlName="positioningRule"
@@ -96,8 +97,8 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffset">
-                <emp-ng-select [fxFlex]="100"
+              <div *ngIf="displayPositioningOffset" class="fx-item-two-third fx-items-end">
+                <emp-ng-select class="fx-item-one"
                   formControlName="positioningOffsetUID"
                   bindValue="column"
                   [items]="financialReportColumnsList"
@@ -112,7 +113,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
+              <div *ngIf="displayPosition" class="fx-item-sixth fx-items-end">
 
                 <input type="text" class="text-box text-align-right"
                   formControlName="position"
@@ -127,13 +128,15 @@
 
           <ng-container #footerSection>
 
-            <mat-divider class="horizontal"></mat-divider>
+            <mat-divider class="horizontal-slim">
 
-            <div fxLayout="row">
+            </mat-divider>
 
-              <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-row-container">
 
-                <button
+              <div class="fx-item fx-end fx-items-center">
+
+                <button type="button"
                   [class.btn]="!formHelper.isFormReady(form)"
                   [class.btn-action]="formHelper.isFormReady(form)"
                   (click)="onSubmitDataClicked()">

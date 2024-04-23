@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="50">
+      <div class="fx-item-half">
 
         <label>Lista de cuentas:</label>
 
@@ -19,7 +19,7 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="start end">
+      <div class="fx-item fx-items-end">
 
         <div class="input-search-container">
 
@@ -34,7 +34,7 @@
 
       </div>
 
-      <div fxFlex="none" fxLayoutAlign="end end" [style.paddingBottom.px]="2">
+      <div class="fx-item-none fx-end fx-items-end" [style.paddingBottom.px]="2">
 
         <button title="Consultar cuentas"
           [class.btn-icon]="!isFormValid"

@@ -9,16 +9,16 @@
 
       <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-        <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+        <div class="fx-column-container fx-gap-half">
 
-          <div #typeSection fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+          <div #typeSection class="fx-row-container sm-fx-column-container" [style.marginBottom.rem]="0.75">
 
-            <div fxFlex="100">
+            <div class="fx-item-one">
               <label>Tipo de celda:</label>
-              <mat-radio-group formControlName="type"
-                (change)="onTypeChanged()">
-                <mat-radio-button *ngFor="let type of fixedCellTypeList" [value]="type.uid"
-                  [fxFlex]="100/3" [style.marginLeft]="0">
+              <mat-radio-group formControlName="type" (change)="onTypeChanged()">
+                <mat-radio-button *ngFor="let type of fixedCellTypeList"
+                  class="fx-item-third"
+                  [value]="type.uid">
                   {{type.name}}
                 </mat-radio-button>
               </mat-radio-group>
@@ -30,9 +30,9 @@
 
             <div class="section-title"> Información del concepto de referencia </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Agrupación:</label>
                 <emp-ng-select
                   formControlName="group"
@@ -41,7 +41,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="200/3">
+              <div class="fx-item-two-third">
                 <label>Concepto:</label>
                 <emp-ng-select
                   formControlName="concept"
@@ -61,9 +61,9 @@
 
             </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Campo:</label>
                 <emp-ng-select
                   formControlName="dataField"
@@ -81,9 +81,9 @@
 
             <div class="section-title"> Información de la etiqueta </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100">
+              <div class="fx-item-one">
                 <label>Etiqueta:</label>
                 <input type="text" class="text-box"
                   formControlName="label"
@@ -98,9 +98,9 @@
 
             <div class="section-title"> Información general </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Formato:</label>
                 <emp-ng-select
                   formControlName="format"
@@ -116,7 +116,7 @@
                 </emp-ng-select>
               </div>
 
-              <div fxFlex="120px">
+              <div class="fx-item-none">
                 <label>Fecha inicial:</label>
                 <emp-ng-datepicker
                   formControlName="startDate"
@@ -124,7 +124,7 @@
                 </emp-ng-datepicker>
               </div>
 
-              <div fxFlex="120px">
+              <div class="fx-item-none">
                 <label>Fecha final:</label>
                 <emp-ng-datepicker
                   formControlName="endDate"
@@ -138,23 +138,25 @@
 
           <ng-container #rowFooter>
 
-            <mat-divider class="horizontal"></mat-divider>
+            <mat-divider class="horizontal-slim">
 
-            <div fxLayout="row">
+            </mat-divider>
 
-              <div fxFlex fxLayoutAlign="start center" *ngIf="isSaved">
+            <div class="fx-row-container">
 
-                <button
-                  type="button" class="btn-warning"
+              <div class="fx-item fx-items-center" *ngIf="isSaved">
+
+                <button type="button"
+                  class="btn-warning"
                   (click)="onRemoveCellClicked()">
                   Eliminar
                 </button>
 
               </div>
 
-              <div fxFlex fxLayoutAlign="end center">
+              <div class="fx-item fx-end fx-items-center">
 
-                <button
+                <button type="button"
                   [class.btn]="!formHelper.isFormReady(form)"
                   [class.btn-action]="formHelper.isFormReady(form)"
                   (click)="onSubmitDataClicked()">

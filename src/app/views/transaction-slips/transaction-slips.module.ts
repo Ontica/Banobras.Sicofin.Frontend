@@ -9,7 +9,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 
@@ -32,7 +31,6 @@ import { TransactionSlipViewComponent } from './transaction-slip-tabbed-view/tra
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    AngularFlexLayoutModule,
     SharedModule,
 
     ReportsControlsModule,

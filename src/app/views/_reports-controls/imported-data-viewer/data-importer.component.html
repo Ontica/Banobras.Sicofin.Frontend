@@ -9,12 +9,11 @@
 
       <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-        <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
-          fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+        <div class="fx-column-container-fill fx-gap-half">
 
-          <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between">
+          <div class="fx-row-container fx-space-between">
 
-            <div [fxFlex]="200/3">
+            <div class="fx-item">
 
               <ng-container *ngIf="importTypeRequired">
 
@@ -32,7 +31,7 @@
 
             </div>
 
-            <div fxFlex="none" fxFlexAlign="end">
+            <div class="fx-item-none">
 
               <label>Fecha:</label>
               <emp-ng-datepicker name="fromDate"
@@ -46,9 +45,9 @@
 
           </div>
 
-          <div fxLayout="row" fxLayout.lt-md="column">
+          <div class="fx-row-container sm-fx-column-container">
 
-            <div fxFlex="100">
+            <div class="fx-item">
 
               <div class="section-title"> {{multiFiles ? 'Archivos:' : 'Archivo:'}} </div>
 

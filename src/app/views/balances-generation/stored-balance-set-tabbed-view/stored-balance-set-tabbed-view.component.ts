@@ -180,7 +180,7 @@ export class StoredBalanceSetTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
-    this.title = `Saldos acumulados <span class="tag tag-info tag-small">` +
+    this.title = `Saldos acumulados <span class="tag tag-success tag-small">` +
       `${this.storedBalanceSet.calculated ? 'Generados' : 'No generados'}</span>`;
     this.hint = `<strong>${this.storedBalanceSet.accountsChart.name}&nbsp; &nbsp; | &nbsp; &nbsp;</strong>` +
       `${this.storedBalanceSet.name}`;

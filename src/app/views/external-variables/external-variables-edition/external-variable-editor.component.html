@@ -1,9 +1,9 @@
 <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section"
   [style.paddingBottom.px]="isSaved ? 0 : 4">
 
-  <div fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="isSaved ? 0 : 8">
+  <div class="fx-row-container fx-end fx-items-center" [style.marginRight.px]="isSaved ? 0 : 8">
 
-    <div fxFlex="160px">
+    <div class="fx-item-size" style="--size: 160px">
 
       <input type="text" class="text-box" name="period"
         placeholder="Clave"
@@ -12,7 +12,7 @@
 
     </div>
 
-    <div fxFlex>
+    <div class="fx-item">
 
       <input type="text" class="text-box" name="period"
         placeholder="Nombre de la variable"
@@ -21,7 +21,7 @@
 
     </div>
 
-    <div fxFlex="none">
+    <div class="fx-item-none">
 
       <emp-ng-date-range-picker name="period"
         formControlName="period"
@@ -33,7 +33,6 @@
 
 
     <button *ngIf="!isSaved" title="Agregar"
-      fxFlex="none"
       [class.btn-icon-action]="canEdit && isFormValid"
       [class.btn-icon]="!canEdit || !isFormValid"
       (click)="onAddExternalVariableClicked()">
@@ -43,8 +42,8 @@
     </button>
 
 
-    <button *ngIf="isSaved" title="Cancelar"
-      fxFlex="none" mat-icon-button
+    <button *ngIf="isSaved" mat-icon-button
+      title="Cancelar"
       (click)="onCancelEditionClicked()">
 
       <mat-icon> close </mat-icon>
@@ -52,8 +51,8 @@
     </button>
 
 
-    <button *ngIf="isSaved" title="Guardar"
-      fxFlex="none" mat-icon-button
+    <button *ngIf="isSaved"  mat-icon-button
+      title="Guardar"
       [color]="isFormValid ? 'primary' : null"
       [style.marginRight]="0"
       (click)="onUpdateExternalVariableClicked()">

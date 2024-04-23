@@ -13,11 +13,12 @@
 
       <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-        <div fxLayout="column">
+        <div class="fx-column-container">
 
-          <div #ExchangeRatesFilter fxLayout="row" fxLayoutAlign="end center" [style.marginRight.px]="8">
+          <div #ExchangeRatesFilter class="fx-row-container fx-end fx-items-center"
+            [style.marginRight.px]="8">
 
-            <div fxFlex>
+            <div class="fx-item">
 
               <label>Tipo:</label>
 
@@ -30,7 +31,7 @@
 
             </div>
 
-            <div fxFlex="none">
+            <div class="fx-item-none">
 
                 <label>Fecha:</label>
                 <emp-ng-datepicker name="fromDate" required
@@ -53,17 +54,18 @@
             {{hintText}}
           </div>
 
-          <div fxLayout="column" fxLayoutGap="0.5rem" *ngIf="exchangeRateValuesSelected?.values.length > 0"
-            class="simple-list-container" [style.paddingRight.px]="8">
+          <div *ngIf="exchangeRateValuesSelected?.values.length > 0"
+            class="fx-column-container fx-gap-half simple-list-container"
+            [style.paddingRight.px]="8">
 
             <div *ngFor="let value of exchangeRateValuesSelected.values"
-              fxLayout="row" fxLayoutAlign="space-between center" class="simple-list-item">
+              class="fx-row-container fx-space-between fx-items-center simple-list-item">
 
-              <div fxFlex>
+              <div class="fx-item">
                 <strong>{{value.toCurrency}}</strong>
               </div>
 
-              <div fxFlex="120px">
+              <div class="fx-item-size" style="--size: 124px">
                 <input type="text" class="text-box text-align-right"
                   empNgCurrency [empNgCurrencyFractionDigitMin]="6" [empNgCurrencyFractionDigitMax]="6"
                   [name]="value.toCurrencyUID" required
@@ -75,11 +77,13 @@
 
           </div>
 
-          <mat-divider class="horizontal"></mat-divider>
+          <mat-divider class="horizontal">
 
-          <div fxLayout="row">
+          </mat-divider>
 
-            <div fxFlex fxLayoutAlign="end center">
+          <div class="fx-row-container fx-end">
+
+            <div class="fx-item-none">
 
               <button (click)="onUpdateExchangeRatesClicked()"
                 [class.btn]="!isDataValid"

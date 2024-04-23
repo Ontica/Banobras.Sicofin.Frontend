@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div fxFlex="calc((100% - 156px) / 2)">
+      <div class="fx-item-size sm-fx-item" style="--size: calc((100% - 156px) / 2)">
 
         <label>Catálogo de cuentas:</label>
 
@@ -19,7 +19,7 @@
 
       </div>
 
-      <div fxFlex="calc((100% - 156px) / 2)">
+      <div class="fx-item-size sm-fx-item" style="--size: calc((100% - 156px) / 2)">
 
         <label>Agrupación:</label>
 
@@ -33,7 +33,7 @@
 
       </div>
 
-      <div fxFlex="120px" fxFlex.lt-md="none" #date>
+      <div #date class="fx-item-none">
 
         <label>Fecha:</label>
 
@@ -45,7 +45,7 @@
 
       </div>
 
-      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
         <button title="Consultar agrupación"
           [class.btn-icon]="form.invalid"

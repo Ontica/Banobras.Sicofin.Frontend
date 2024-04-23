@@ -1,8 +1,8 @@
 <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="row" fxLayoutAlign="space-between">
+  <div class="fx-row-container fx-space-between">
 
-    <div fxFlex="none">
+    <div class="fx-item-none">
 
       <label >
         <span [class.warning-text]="formHelper.isControlInvalid(form.controls.dataToUpdate)">
@@ -12,7 +12,7 @@
 
       <br>
 
-      <div fxLayout="column" fxLayoutGap="0.75rem">
+      <div class="fx-column-container fx-gap-three-quarter">
 
         <mat-checkbox *ngFor="let data of accountDataToUpdateList;"
           [checked]="selection.isSelected(data)"
@@ -25,7 +25,7 @@
 
     </div>
 
-    <div fxFlex="none" fxFlex.lt-md="none">
+    <div class="fx-item-none">
 
       <label>Fecha de aplicación:</label>
       <emp-ng-datepicker

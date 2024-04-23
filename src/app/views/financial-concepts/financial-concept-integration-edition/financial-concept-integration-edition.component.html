@@ -1,10 +1,11 @@
-<div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
+<div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
 
     <emp-ng-spinner #spinner [visible]="isLoading || deleteSubmitted">
 
     </emp-ng-spinner>
 
-    <div fxFlex="none" fxLayoutAlign="end center" *ngIf="canEdit">
+    <div *ngIf="canEdit"
+      class="fx-item-none fx-end fx-items-center">
 
       <button
         class="btn-action"
@@ -16,7 +17,7 @@
 
     </div>
 
-    <emp-fa-financial-concept-entries-table fxFlex
+    <emp-fa-financial-concept-entries-table class="fx-item"
       [financialConceptEntryList]="financialConcept.integration"
       [canEdit]="canEdit"
       (financialConceptEntriesTableEvent)="onFinancialConceptEntriesTableEvent($event)">

@@ -2,25 +2,25 @@
 
   <div class="list-header-container">
 
-    <div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="8px">
+    <div class="fx-row-container fx-gap-size" style="--gap-size: 8px">
 
-      <div [fxFlex]="widthByMaxLevel + 'px'"> Cuenta </div>
+      <div class="fx-item-size" [ngStyle]="{'--size': widthByMaxLevel + 'px'}"> Cuenta </div>
 
-      <div *ngIf="showSectors" fxFlex="22px"> Sct </div>
+      <div *ngIf="showSectors" class="fx-item-size" style="--size: 22px"> Sct </div>
 
-      <div fxFlex class="list-header-column-border-shadow"> Descripción </div>
+      <div class="fx-item list-header-column-border-shadow"> Descripción </div>
 
-      <div fxFlex="7%"> Rol </div>
+      <div class="fx-item-size" style="--size: 7%"> Rol </div>
 
-      <div fxFlex="4%"> Sector </div>
+      <div class="fx-item-size" style="--size: 4%"> Sector </div>
 
-      <div fxFlex="4%"> Auxiliar </div>
+      <div class="fx-item-size" style="--size: 4%"> Auxiliar </div>
 
-      <div fxFlex="10%"> Tipo </div>
+      <div class="fx-item-size" style="--size: 10%"> Tipo </div>
 
-      <div fxFlex="7%"> Naturaleza </div>
+      <div class="fx-item-size" style="--size: 7%"> Naturaleza </div>
 
-      <div fxFlex="10%"> Alta / Baja </div>
+      <div class="fx-item-size" style="--size: 10%"> Alta / Baja </div>
 
     </div>
 
@@ -28,9 +28,9 @@
 
 </div>
 
-<div fxLayout="row" fxLayoutGap="8px" fxLayoutGap.gt-xs="8px" *ngIf="!displayHeader">
+<div class="fx-row-container fx-gap-size" style="--gap-size: 8px" *ngIf="!displayHeader">
 
-  <div [fxFlex]="widthByMaxLevel + 'px'">
+  <div class="fx-item-size" [ngStyle]="{'--size': widthByMaxLevel + 'px'}">
     <div class="list-item-name nowrap"
          (click)="onAccountClicked()">
       {{account.role === 'Sumaria' ? '&nbsp;' : '*'}}
@@ -38,37 +38,37 @@
     </div>
   </div>
 
-  <div *ngIf="showSectors" fxFlex="22px">
+  <div *ngIf="showSectors" class="fx-item-size" style="--size: 22px">
     <div>{{account.sector}}</div>
   </div>
 
-  <div fxFlex class="list-item-column-border-shadow">
+  <div class="fx-item list-item-column-border-shadow">
     <div class="border-left"></div>
     <div [style.marginLeft.px]="marginLeftByLevel"
          [ngClass]="{'list-item-deleted': account.obsolete}">{{account.name}}</div>
   </div>
 
-  <div fxFlex="7%">
+  <div class="fx-item-size" style="--size: 7%">
     <div class="nowrap">{{account.role}}</div>
   </div>
 
-  <div fxFlex="4%">
+  <div class="fx-item-size" style="--size: 4%">
     <div>{{account.usesSector ? "Sí": "No"}}</div>
   </div>
 
-  <div fxFlex="4%">
+  <div class="fx-item-size" style="--size: 4%">
     <div>{{account.usesSubledger ? "Sí": "No"}}</div>
   </div>
 
-  <div fxFlex="10%">
+  <div class="fx-item-size" style="--size: 10%">
     <div>{{account.type.name}}</div>
   </div>
 
-  <div fxFlex="7%">
+  <div class="fx-item-size" style="--size: 7%">
     <div class="nowrap">{{account.debtorCreditor}}</div>
   </div>
 
-  <div fxFlex="10%">
+  <div class="fx-item-size" style="--size: 10%">
     <div>{{account.startDate | dateTimeFormat}}</div>
     <div *ngIf="account.obsolete">{{account.endDate | dateTimeFormat}}</div>
   </div>

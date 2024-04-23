@@ -16,7 +16,7 @@
     <div class="card-header-options">
 
       <button *empNgHasPermission="permissions.FEATURE_EDICION_AUXILIARES"
-        class="btn-action" fxFlexOffset="1.5rem"
+        class="btn-action"
         (click)="onCreateSubledgerAccountClicked()">
         Agregar auxiliar
       </button>
@@ -27,18 +27,18 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-fa-subledger-accounts-filter fxFlex="none"
+      <emp-fa-subledger-accounts-filter class="fx-item-none"
         (subledgerAccountsFilterEvent)="onSubledgerAccountsFilterEvent($event)">
 
       </emp-fa-subledger-accounts-filter>
 
-      <emp-ng-data-table fxFlex
+      <emp-ng-data-table class="fx-item"
         [dataTable]="subledgerAccountData"
         [executed]="queryExecuted"
         (dataTableEvent)="onSubledgerAccountsTableEvent($event)">

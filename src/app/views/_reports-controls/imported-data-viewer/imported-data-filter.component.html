@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-sm="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="additionalFieldConfig.show ? null : (100/3)" *ngIf="typeFieldConfig.show">
+      <div [ngClass]="additionalFieldConfig.show ? 'fx-item' : 'fx-item-third sm-fx-item'" *ngIf="typeFieldConfig.show">
 
         <label>{{typeFieldConfig?.label ?? 'Tipo'}}:</label>
 
@@ -20,7 +20,7 @@
 
       </div>
 
-      <div [fxFlex]="typeFieldConfig.show ? null : (100/3)" *ngIf="additionalFieldConfig.show">
+      <div [ngClass]="typeFieldConfig.show ? 'fx-item' : 'fx-item-third sm-fx-item'" *ngIf="additionalFieldConfig.show">
 
         <label>{{additionalFieldConfig?.label ?? 'Filtro'}}:</label>
 
@@ -34,7 +34,7 @@
 
       </div>
 
-      <div fxFlex="none" *ngIf="!periodRequired">
+      <div class="fx-item-none" *ngIf="!periodRequired">
 
         <label>Fecha:</label>
         <emp-ng-datepicker name="fromDate" required
@@ -45,7 +45,7 @@
 
       </div>
 
-      <div fxFlex="225px" *ngIf="periodRequired">
+      <div class="fx-item-none" *ngIf="periodRequired">
 
         <label>Período:</label>
         <emp-ng-date-range-picker name="toDate" required
@@ -57,7 +57,7 @@
 
       </div>
 
-      <div fxFlex="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+      <div class="fx-item-none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
         <button *ngIf="!showIconButtonToSubmit"
           [class.btn]="form.invalid || !isPeriodValid"

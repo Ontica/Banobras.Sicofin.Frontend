@@ -3,9 +3,9 @@
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 
-  <div fxLayout="row">
+  <div class="fx-row-container">
 
-    <div fxFlex="50">
+    <div class="fx-item-half sm-fx-item">
 
       <label>Tipo:</label>
 
@@ -19,9 +19,9 @@
 
     </div>
 
-    <div fxFlex></div>
+    <div class="fx-item"></div>
 
-    <div fxFlex="none">
+    <div class="fx-item-none">
       <label>Fecha:</label>
       <emp-ng-datepicker name="date" required
         [(ngModel)]="formData.date"
@@ -34,6 +34,6 @@
 
 </form>
 
-<mat-divider class="horizontal-md">
+<mat-divider class="horizontal-slim">
 
 </mat-divider>

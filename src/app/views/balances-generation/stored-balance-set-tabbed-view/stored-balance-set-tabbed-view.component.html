@@ -9,21 +9,21 @@
 
       <ng-template matTabContent>
 
-        <div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
+        <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
 
           <emp-ng-spinner #spinner [visible]="isLoading">
 
           </emp-ng-spinner>
 
-          <form #filterForm="ngForm" empNgFormKeyDownEnter fxFlex="none"
-            autocomplete="off" class="form-section form-container"
+          <form #filterForm="ngForm" empNgFormKeyDownEnter
+            autocomplete="off" class="fx-item-none form-section form-container"
             [style.padding]="0" [style.margin]="0" [style.paddingBottom.px]="8">
 
-            <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+            <div class="fx-column-container fx-gap-half">
 
-              <div fxLayout="row" [style.padding.px]="2">
+              <div class="fx-row-container sm-fx-column-container">
 
-                <div fxFlex="50">
+                <div class="fx-item-half sm-fx-item">
 
                   <label>Contabilidad:</label>
 
@@ -37,7 +37,7 @@
 
                 </div>
 
-                <div fxFlex="none" fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+                <div class="fx-item-none fx-items-end" [style.padding-bottom.px]="4">
 
                   <mat-checkbox name="subledgerAccount"
                     [(ngModel)]="showSubledgerAccount"
@@ -47,7 +47,7 @@
 
                 </div>
 
-                <div fxFlex>
+                <div class="fx-item">
 
                   <label [style.height.px]="12">
                     {{ displayedItemsText }}
@@ -60,7 +60,7 @@
 
                 </div>
 
-                <div fxFlex="28px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+                <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
                   <button title="Buscar"
                     [class.btn-icon-action]="filterForm.valid && storedBalanceSet.calculated"
@@ -80,12 +80,11 @@
 
           </form>
 
-          <mat-divider [style.marginLeft.px]="2" [style.marginRight.px]="2">
+          <mat-divider>
 
           </mat-divider>
 
-          <div fxLayout="row" fxLayoutAlign="end end"
-            class="list-selection-header">
+          <div class="fx-row-container fx-end fx-items-end list-selection-header">
 
               <button class="btn"
                 [disabled]="!isDataLoaded"
@@ -96,7 +95,7 @@
 
           </div>
 
-          <div #tableContainer fxFlex [style.padding.px]="2">
+          <div #tableContainer class="fx-item">
 
             <cdk-virtual-scroll-viewport tvsItemSize="32" headerHeight="40" [bufferMultiplier]="0">
 
@@ -177,11 +176,11 @@
 
     <mat-tab label="Acciones">
 
-      <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+      <div class="fx-column-container fx-gap-half">
 
-        <div fxLayout="row">
+        <div class="fx-row-container">
 
-          <div fxFlex fxLayoutAlign="start center">
+          <div class="fx-item fx-items-center">
 
             <span *ngIf="storedBalanceSet.calculated">
               Saldos generados el:
@@ -196,16 +195,18 @@
 
         </div>
 
-        <mat-divider class="horizontal"></mat-divider>
+        <mat-divider>
 
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        </mat-divider>
 
-          <button type="submit" class="btn-warning" fxFlex="none"
+        <div class="fx-row-container fx-space-between fx-items-center">
+
+          <button type="submit" class="btn-warning"
             (click)="onDeleteStoreBalanceSetClicked()">
             Eliminar grupo de saldos
           </button>
 
-          <button type="submit" class="btn-action" fxFlex="none"
+          <button type="submit" class="btn-action"
             (click)="onCalculateStoredBalanceSetClicked()">
             {{storedBalanceSet.calculated ? 'Recalcular saldos' : 'Calcular saldos'}}
           </button>

@@ -16,18 +16,18 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-fa-transaction-slips-filter fxFlex="none"
+      <emp-fa-transaction-slips-filter class="fx-item-none"
         (transactionSlipsFilterEvent)="onTransactionSlipsFilterEvent($event)">
 
       </emp-fa-transaction-slips-filter>
 
-      <emp-fa-transaction-slips-list fxFlex
+      <emp-fa-transaction-slips-list class="fx-item"
         [transactionSlipsList]="transactionSlipsList"
         [selectedTransactionSlip]="selectedTransactionSlip.header"
         [textNotFound]="textNotFound"

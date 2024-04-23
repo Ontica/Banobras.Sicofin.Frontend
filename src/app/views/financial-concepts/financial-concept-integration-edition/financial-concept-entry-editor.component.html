@@ -12,16 +12,16 @@
 
         <emp-ng-spinner #spinner [visible]="isLoadingDataLists || submitted"></emp-ng-spinner>
 
-        <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+        <div class="fx-column-container fx-gap-half">
 
-          <div #typeSection fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+          <div #typeSection class="fx-row-container sm-fx-column-container">
 
-            <div fxFlex="100">
+            <div class="fx-item-one">
               <label>Tipo de agrupación:</label>
               <mat-radio-group formControlName="entryType"
                 (change)="onEntryTypeChanged()">
                 <mat-radio-button *ngFor="let type of financialConceptEntryTypeList" [value]="type.uid"
-                  [fxFlex]="100/3" [style.marginLeft]="0">
+                  class="fx-item-third">
                   {{type.name}}
                 </mat-radio-button>
               </mat-radio-group>
@@ -33,9 +33,9 @@
 
             <div class="section-title"> Información del concepto de referencia </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Agrupación:</label>
                 <emp-ng-select
                   formControlName="referencedGroup"
@@ -45,7 +45,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="200/3">
+              <div class="fx-item-two-third">
                 <label>Concepto:</label>
                 <emp-ng-select
                   formControlName="referencedFinancialConcept"
@@ -71,9 +71,9 @@
 
             <div class="section-title"> Información del valor externo </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Conjunto:</label>
                 <emp-ng-select
                   formControlName="externalVariableSet"
@@ -82,7 +82,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="200/3">
+              <div class="fx-item-two-third">
                 <label>Valor externo:</label>
                 <emp-ng-select
                   formControlName="externalVariable"
@@ -109,9 +109,9 @@
 
             <div class="section-title"> Información de la cuenta </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="200/3">
+                <div class="fx-item-two-third">
                   <label>Cuenta:</label>
                   <emp-ng-select
                     [config]="{ bindByValue: false,
@@ -139,7 +139,7 @@
                   </emp-ng-select>
                 </div>
 
-                <div [fxFlex]="100/3">
+                <div class="fx-item-third">
                   <label>Sector:</label>
                   <emp-ng-select
                     [config]="{clearable: true}"
@@ -153,9 +153,9 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="200/3">
+                <div class="fx-item-two-third">
                   <label>Auxiliar:</label>
                   <emp-ng-select #subledgerAccount
                     [config]="{ bindByValue: false,
@@ -176,7 +176,7 @@
 
                     <ng-template #optionTemplate let-item="item">
                       <div class="item">
-                        <div fxLayoutAlign="start center">
+                        <div class="fx-items-center">
                           <span class="item-highlight">{{item.number}}</span>
                           <span *ngIf="item.suspended" class="tag tag-error tag-small">Suspendido</span>
                         </div>
@@ -186,7 +186,7 @@
                   </emp-ng-select>
                 </div>
 
-                <div [fxFlex]="100/3">
+                <div class="fx-item-third">
                   <label>Moneda:</label>
                   <emp-ng-select
                     [config]="{clearable: true}"
@@ -206,9 +206,9 @@
 
             <div class="section-title"> Información general </div>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Operador:</label>
                 <emp-ng-select
                   formControlName="operator"
@@ -217,7 +217,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Regla de cálculo:</label>
                 <emp-ng-select
                   formControlName="calculationRule"
@@ -228,7 +228,7 @@
                 </emp-ng-select>
               </div>
 
-              <div [fxFlex]="100/3">
+              <div class="fx-item-third">
                 <label>Columna:</label>
                 <emp-ng-select
                   formControlName="dataColumn"
@@ -243,9 +243,9 @@
 
           </ng-container>
 
-          <div #positionSection fxLayout="row">
+          <div #positionSection class="fx-row-container">
 
-            <div [fxFlex]="100/3">
+            <div class="fx-item-third">
               <label>Posición:</label>
               <emp-ng-select
                 formControlName="positioningRule"
@@ -255,13 +255,14 @@
               </emp-ng-select>
             </div>
 
-            <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffsetConcept">
-              <emp-ng-select [fxFlex]="100"
+            <div class="fx-item-two-third fx-items-end" *ngIf="displayPositioningOffsetConcept">
+              <emp-ng-select
                 formControlName="positioningOffsetEntryUID"
                 [items]="financialConcept.integration"
                 [config]="{searchableFields: ['itemCode', 'itemName']}"
                 [showError]="formHelper.isControlInvalid(form.controls.positioningOffsetEntryUID)"
-                [placeholder]="!!form.controls.referencedGroup.value ? 'Seleccionar' : 'Seleccionar la agrupación'">
+                [placeholder]="!!form.controls.referencedGroup.value ? 'Seleccionar' : 'Seleccionar la agrupación'"
+                [style.width.%]="100">
                 <ng-template #labelTemplate let-item="item">
                   ({{item.itemCode}}) {{item.itemName}}
                 </ng-template>
@@ -271,7 +272,7 @@
               </emp-ng-select>
             </div>
 
-            <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
+            <div class="fx-item-sixth fx-items-end" *ngIf="displayPosition">
 
               <input type="text" class="text-box text-align-right" empNgInteger
                 formControlName="position">
@@ -282,11 +283,11 @@
 
           <ng-container #rowFooter *ngIf="!readonly">
 
-            <mat-divider class="horizontal"></mat-divider>
+            <mat-divider class="horizontal-slim"></mat-divider>
 
-            <div fxLayout="row">
+            <div class="fx-row-container">
 
-              <div fxFlex fxLayoutAlign="end center">
+              <div class="fx-item fx-end fx-items-center">
 
                 <button
                   [class.btn]="!formHelper.isFormReady(form)"

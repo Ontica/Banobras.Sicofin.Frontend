@@ -9,8 +9,6 @@ import { NgModule } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
-
 import { SharedModule } from '@app/shared/shared.module';
 
 import { BalancesToolComponent } from './balances-tool/balances-tool.component';
@@ -24,7 +22,6 @@ import { TrialBalanceModule } from '../trial-balance/trial-balance.module';
   ],
   imports: [
     CommonModule,
-    AngularFlexLayoutModule,
     SharedModule,
 
     TrialBalanceModule,

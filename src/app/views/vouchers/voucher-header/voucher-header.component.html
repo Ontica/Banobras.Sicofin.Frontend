@@ -1,10 +1,10 @@
 <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Tipo de póliza:</label>
         <emp-ng-select
           formControlName="voucherTypeUID"
@@ -15,7 +15,7 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Tipo de contabilidad:</label>
         <emp-ng-select
           formControlName="accountsChartUID"
@@ -26,7 +26,7 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Contabilidad:</label>
         <emp-ng-select
           [config]="{clearable: allowAllLedgersSelection}"
@@ -41,11 +41,12 @@
     </div>
 
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item-one">
         <label>Concepto de la póliza:</label>
-        <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
+        <textarea class="text-area"
+          empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
           formControlName="concept"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.concept)">
 
@@ -55,11 +56,12 @@
     </div>
 
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Origen de la transacción:</label>
         <emp-ng-select
+          [config]="{ virtualScroll: true }"
           formControlName="functionalAreaId"
           [items]="functionalAreasList"
           [showError]="formHelper.isControlInvalid(form.controls.functionalAreaId)">
@@ -68,7 +70,8 @@
 
       <ng-container #accountingDateField>
 
-        <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">
+        <div *ngIf="hasValueDate"
+          class="fx-item-none">
           <label>Fecha valor:</label>
           <emp-ng-datepicker
             formControlName="accountingDate"
@@ -77,7 +80,8 @@
           </emp-ng-datepicker>
         </div>
 
-        <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
+        <div *ngIf="!hasValueDate"
+          class="fx-item-size" style="--size: 126px">
           <label>Fecha de afectación:</label>
           <emp-ng-select
             formControlName="accountingDate"
@@ -88,8 +92,8 @@
           </emp-ng-select>
         </div>
 
-        <div fxFlex="none" fxLayoutAlign="end center"
-          [style.height.px]="28" [style.marginTop.px]="12" [style.paddingRight.px]="8">
+        <div class="fx-item-none fx-items-end"
+          [style.paddingBottom.px]="2" [style.paddingRight.px]="8">
           <mat-checkbox
             [(ngModel)]="hasValueDate" [ngModelOptions]="{standalone: true}"
             [disabled]="!editionMode"

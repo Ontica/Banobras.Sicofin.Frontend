@@ -1,12 +1,12 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
     <ng-container #generalFieldsContainer>
 
-      <div fxLayout="row" fxLayout.lt-sm="column">
+      <div class="fx-row-container sm-fx-column-container">
 
-        <div fxFlex="50">
+        <div class="fx-item-half sm-fx-item">
 
           <label>Tipo de consulta:</label>
 
@@ -21,11 +21,11 @@
 
         </div>
 
-        <div fxFlex="none" #periodSection>
+        <div #periodSection class="fx-item-none">
 
-          <div fxLayout="row" #initialPeriodSection>
+          <div #initialPeriodSection class="fx-row-container">
 
-            <div *ngIf="displayInitialPeriod" fxFlex="none">
+            <div *ngIf="displayInitialPeriod" class="fx-item-none">
 
               <label>Período inicial:</label>
 
@@ -39,7 +39,7 @@
 
             </div>
 
-            <div *ngIf="!displayInitialPeriod" fxFlex="none">
+            <div *ngIf="!displayInitialPeriod" class="fx-item-none">
 
               <label>Fecha:</label>
 
@@ -54,9 +54,10 @@
 
           </div>
 
-          <div fxLayout="row" #finalPeriodSection *ngIf="periodsRequired" [style.marginTop.rem]="0.25">
+          <div #finalPeriodSection *ngIf="periodsRequired"
+            class="fx-row-container" [style.marginTop.rem]="0.25">
 
-            <div fxFlex="none">
+            <div class="fx-item-none">
 
               <label>Período final:</label>
 
@@ -74,13 +75,14 @@
 
         </div>
 
-        <div fxFlex></div>
+        <div class="fx-item"></div>
 
-        <div fxFlex="none" #buttonsSection>
+        <div #buttonsSection class="fx-item-none">
 
-          <div fxLayout="row" #initialPeriodSection [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+          <div #initialPeriodSection class="fx-row-container"
+            [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
 
-            <div fxFlex="36px" fxFlex.lt-md="none">
+            <div class="fx-item-none">
 
               <button title="Generar balanza"
                 [class.btn-icon-action]="trialBalanceFormFieldsValid && exchangeRateFormFieldsValid"
@@ -98,9 +100,11 @@
 
             </mat-divider>
 
-            <div fxFlex="none" fxFlex.lt-md="none">
+            <div class="fx-item-none">
 
-              <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="100px">
+              <button class="btn-base"
+                [style.width.px]="100"
+                (click)="onShowFiltersClicked()">
                 {{showFilters ? 'Ocultar' :'Mostrar'}} <mat-icon>filter_list</mat-icon>
               </button>
 
@@ -112,9 +116,9 @@
 
       </div>
 
-      <div fxLayout="row" >
+      <div class="fx-row-container">
 
-        <div fxFlex="50">
+        <div class="fx-item-half">
 
           <label>Catálogo de cuentas:</label>
 
@@ -128,7 +132,7 @@
 
         </div>
 
-        <div fxFlex="50">
+        <div class="fx-item-half">
 
           <label>Contabilidad:</label>
 
@@ -144,9 +148,9 @@
 
       </div>
 
-      <div fxLayout="row" fxLayout.lt-sm="column" [style.marginBottom.px]="8">
+      <div class="fx-row-container">
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter">
 
           <mat-checkbox name="withSubledgerAccount" [disabled]="withSubledgerAccountDisabled"
             [(ngModel)]="query.withSubledgerAccount"
@@ -157,7 +161,7 @@
 
         </div>
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter">
 
           <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesDisabled"
             [(ngModel)]="query.showCascadeBalances"
@@ -168,7 +172,7 @@
 
         </div>
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter">
 
           <mat-checkbox name="useValuation" [disabled]="exchangeRatesDisabled"
             [(ngModel)]="query.useValuation"
@@ -180,7 +184,7 @@
 
         </div>
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter">
 
           <mat-checkbox name="useDefaultValuation" *ngIf="query.useValuation"
             [disabled]="useDefaultValuationDisabled"
@@ -197,31 +201,32 @@
 
     <div *ngIf="showFilters" [@expandCollapse]>
 
-      <mat-divider [style.marginBottom.px]="8" [style.marginRight.px]="8">
+      <mat-divider class="horizontal-md">
 
       </mat-divider>
 
+
       <ng-container #trialBalanceFieldsContainer>
 
-        <div fxLayout="row" [style.marginBottom.px]="8">
+        <div class="fx-row-container" [style.marginBottom.px]="8">
 
-          <div fxFlex="25">
+          <div class="fx-item-quarter">
 
             <label>{{displayToAccount ? 'De la cuenta:' : 'Con la cuenta:'}}</label>
 
-            <input type="text" class="text-box" name="fromAccount"
+            <input type="text" name="fromAccount" class="text-box"
               [(ngModel)]="query.fromAccount"
               (keyup.escape)="query.fromAccount = ''">
 
           </div>
 
-          <div fxFlex="25">
+          <div class="fx-item-quarter">
 
             <ng-container *ngIf="displaySubledgerAccount">
 
               <label>Con el auxiliar:</label>
 
-              <input type="text" class="text-box" name="subledgerAccount"
+              <input type="text" name="subledgerAccount" class="text-box"
                 [(ngModel)]="query.subledgerAccount"
                 (keyup.escape)="query.subledgerAccount = ''">
 
@@ -231,7 +236,7 @@
 
               <label>A la cuenta:</label>
 
-              <input type="text" class="text-box" name="toAccount"
+              <input type="text" name="toAccount" class="text-box"
                 [(ngModel)]="query.toAccount"
                 (keyup.escape)="query.toAccount = ''">
 
@@ -240,7 +245,7 @@
           </div>
 
 
-          <div fxFlex="50">
+          <div class="fx-item-half">
 
             <label>Incluir:</label>
 
@@ -254,10 +259,10 @@
 
         </div>
 
-        <div fxLayout="row" [style.marginBottom.px]="8"
+        <div class="fx-row-container" [style.marginBottom.px]="8"
           *ngIf="displayLevel || displayWithAverageBalance || displayWithSectorization">
 
-          <div fxFlex="50" *ngIf="displayLevel">
+          <div *ngIf="displayLevel" class="fx-item-half">
 
             <label>Nivel:</label>
 
@@ -270,7 +275,8 @@
 
           </div>
 
-          <div fxFlex="25" fxLayoutAlign="start center" *ngIf="displayWithAverageBalance"
+          <div *ngIf="displayWithAverageBalance"
+            class="fx-item-quarter fx-items-center"
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
             <mat-checkbox name="withAverageBalance"
@@ -281,7 +287,8 @@
 
           </div>
 
-          <div fxFlex="25" fxLayoutAlign="start center" *ngIf="displayWithSectorization"
+          <div *ngIf="displayWithSectorization"
+            class="fx-item-quarter fx-items-center"
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
             <mat-checkbox name="withSectorization"
@@ -300,13 +307,15 @@
       <div #exchangeRateFieldsContainer [@expandCollapse]
         *ngIf="query.useValuation && !query.useDefaultValuation">
 
-        <mat-divider class="horizontal"></mat-divider>
+        <mat-divider class="horizontal">
 
-        <div fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.px]="8">
+        </mat-divider>
 
-          <div fxFlex="50" fxFlex.lt-md="none" [style.width.%]="100">
+        <div class="fx-row-container sm-fx-column-container" [style.marginBottom.px]="8">
 
-            <div class="section-title" *ngIf="periodsRequired"> Período inicial </div>
+          <div class="fx-item-half sm-fx-item">
+
+            <div *ngIf="periodsRequired" class="section-title"> Período inicial </div>
 
             <emp-fa-exchange-rate-selector #initialPeriodExchangeRates
               [exchangeRatesList]="query.initialPeriod.exchangeRatesList"
@@ -321,7 +330,7 @@
 
           </div>
 
-          <div fxFlex="50" fxFlex.lt-md="none" [style.width.%]="100" *ngIf="periodsRequired">
+          <div *ngIf="periodsRequired" class="fx-item-half sm-fx-item">
 
             <div class="section-title"> Período final </div>
 
@@ -343,21 +352,23 @@
       </div>
 
 
-      <ng-container #clearFilterContainer>
+      <ng-container #clearFilterSection>
 
         <mat-divider class="horizontal">
 
         </mat-divider>
 
-        <div fxLayout="row" fxLayoutAlign="end end">
+        <div class="fx-row-container fx-end fx-items-end">
 
-          <mat-divider vertical="true" class="vertical" [style.marginTop.px]="0" [style.marginBottom.px]="2">
+          <mat-divider vertical="true" class="vertical-inline">
 
           </mat-divider>
 
-          <div fxFlex="none" [style.paddingBottom.px]="2">
+          <div class="fx-item-none">
 
-            <button class="btn-base" fxFlex="100px" (click)="onClearFilters()">
+            <button class="btn-base"
+              [style.width.px]="100"
+              (click)="onClearFilters()">
               Limpiar <mat-icon>filter_list</mat-icon>
             </button>
 

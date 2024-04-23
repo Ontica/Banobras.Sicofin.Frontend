@@ -13,13 +13,13 @@
 
       <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-        <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+        <div class="fx-column-container fx-gap-half">
 
           <ng-container *ngIf="isRentabilidadType">
 
-            <div fxLayout="row" fxLayout.lt-md="column">
+            <div class="fx-row-container sm-fx-column-container">
 
-              <div fxFlex>
+              <div class="fx-item">
                 <label>Año:</label>
                 <input type="text" class="text-box" empNgInteger
                   formControlName="year"
@@ -28,9 +28,9 @@
 
             </div>
 
-            <div fxLayout="row" fxLayout.lt-md="column">
+            <div class="fx-row-container sm-fx-column-container">
 
-              <div fxFlex>
+              <div class="fx-item">
                 <label>Mes:</label>
                 <input type="text" class="text-box" empNgInteger
                   formControlName="month"
@@ -39,9 +39,9 @@
 
             </div>
 
-            <div fxLayout="row" fxLayout.lt-md="column">
+            <div class="fx-row-container sm-fx-column-container">
 
-              <div fxFlex>
+              <div class="fx-item">
                 <label>Metodología:</label>
                 <input type="text" class="text-box" empNgInteger
                   formControlName="methodology"
@@ -54,9 +54,9 @@
 
           <ng-container *ngIf="isConciliacionSICType">
 
-            <div fxLayout="row" fxLayout.lt-md="column">
+            <div class="fx-row-container sm-fx-column-container">
 
-              <div fxFlex="225px">
+              <div class="fx-item-none">
 
                 <label>Período:</label>
 
@@ -75,9 +75,9 @@
 
           <ng-container *ngIf="isExportacionSaldosMensualesType || isExportacionSaldosDiariosType">
 
-            <div fxLayout="row" fxLayout.lt-md="column" *ngIf="isExportacionSaldosMensualesType">
+            <div class="fx-row-container sm-fx-column-container" *ngIf="isExportacionSaldosMensualesType">
 
-              <div fxFlex>
+              <div class="fx-item">
 
                 <label>Tipo de saldo:</label>
 
@@ -91,9 +91,9 @@
 
             </div>
 
-            <div fxLayout="row" fxLayout.lt-md="column">
+            <div class="fx-row-container sm-fx-column-container">
 
-              <div fxFlex="none">
+              <div class="fx-item-none">
 
                 <label>Fecha:</label>
 
@@ -109,13 +109,13 @@
 
           </ng-container>
 
-          <mat-divider class="horizontal-md">
+          <mat-divider class="horizontal-slim">
 
           </mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container fx-end">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item-none">
 
               <button (click)="onExecuteExternalProcessClicked()"
                 [class.btn]="!formHelper.isFormReady(form)"

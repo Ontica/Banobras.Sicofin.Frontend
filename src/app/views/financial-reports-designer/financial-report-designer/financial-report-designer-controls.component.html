@@ -1,10 +1,10 @@
-<div class="controls-container" [style.top.px]="53">
+<div class="controls-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="fx-row-container fx-space-between fx-items-center">
 
-      <!-- <div fxFlex="none">
+      <!-- <div class="fx-item-none">
         <button class="btn-base" (click)="onEditReportHeaderClicked()">
           Editar encabezado del reporte
         </button>
@@ -14,19 +14,23 @@
 
       </mat-divider> -->
 
-      <div fxFlex></div>
+      <div class="fx-item">
 
-      <div fxFlex="none">
+      </div>
+
+      <div class="fx-item-none">
+
         <button class="btn-base" (click)="onClearButtonClicked()">
           Limpiar selección
         </button>
+
       </div>
 
       <mat-divider vertical="true" class="vertical" [style.marginLeft.px]="8" [style.marginTop]="0">
 
       </mat-divider>
 
-      <div fxFlex="25">
+      <div class="fx-item-quarter sm-fx-item-third">
 
         <div class="input-icon-container">
 

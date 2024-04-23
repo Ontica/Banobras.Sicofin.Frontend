@@ -1,10 +1,10 @@
 <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div fxFlex="100">
+      <div class="fx-item" style="max-width: 100%">
         <label>Auxiliar:</label>
         <emp-ng-select
           [config]="{ minTermLength: subledgerAccountMinTermLength,
@@ -32,9 +32,9 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div fxFlex>
+      <div class="fx-item-size" style="--size: calc(100% - 252px)">
         <label>Clasificación:</label>
         <emp-ng-select
           formControlName="classification"
@@ -48,7 +48,7 @@
 
       </div>
 
-      <div fxFlex="120px">
+      <div class="fx-item-size" style="--size: 126px">
         <label>Fecha inicio:</label>
         <emp-ng-datepicker
           formControlName="startDate"
@@ -56,7 +56,7 @@
         </emp-ng-datepicker>
       </div>
 
-      <div fxFlex="120px">
+      <div class="fx-item-size" style="--size: 126px">
         <label>Fecha fin:</label>
         <emp-ng-datepicker
           formControlName="endDate"
@@ -74,15 +74,16 @@
   </mat-divider>
 
 
-  <div #rowFooter fxLayout="row">
+  <div #rowFooter class="fx-row-container">
 
     <ng-container *ngIf="!isSaved">
 
-      <div fxFlex fxLayoutAlign="end center">
+      <div class="fx-item fx-end fx-items-center">
 
-        <button (click)="onSubmitButtonClicked()"
+        <button type="button"
           [class.btn]="!formHelper.isFormReady(form)"
-          [class.btn-action]="formHelper.isFormReady(form)">
+          [class.btn-action]="formHelper.isFormReady(form)"
+          (click)="onSubmitButtonClicked()">
           Agregar
         </button>
 
@@ -92,27 +93,30 @@
 
     <ng-container *ngIf="isSaved">
 
-      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+      <div *ngIf="editionMode" class="fx-item fx-items-center">
 
-        <button type="button" class="btn-warning"
+        <button type="button"
+          class="btn-warning"
           (click)="onDeleteButtonClicked()">
           Eliminar
         </button>
 
       </div>
 
-      <div fxFlex fxLayoutAlign="end center">
+      <div class="fx-item fx-end fx-items-center">
 
         <ng-container *ngIf="editionMode">
 
-          <button (click)="onSubmitButtonClicked()"
+          <button type="button"
             [class.btn]="!formHelper.isFormReady(form)"
-            [class.btn-action]="formHelper.isFormReady(form)">
+            [class.btn-action]="formHelper.isFormReady(form)"
+            (click)="onSubmitButtonClicked()">
             Guardar
           </button>
 
-          <button (click)="enableEditor(false)"
-            class="btn-base uppercase">
+          <button type="button"
+            class="btn-base uppercase"
+            (click)="enableEditor(false)">
             Descartar Cambios
           </button>
 
@@ -120,7 +124,7 @@
 
         <ng-container *ngIf="!editionMode">
 
-          <button
+          <button type="button"
             class="btn-action"
             (click)="enableEditor(true)">
             Editar

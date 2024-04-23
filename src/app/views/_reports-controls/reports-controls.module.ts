@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
-import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import { DataImporterComponent } from './imported-data-viewer/data-importer.component';
@@ -35,7 +34,6 @@ import { ImportedDataViewerComponent } from './imported-data-viewer/imported-dat
     ReactiveFormsModule,
 
     AngularMaterialModule,
-    AngularFlexLayoutModule,
     SharedModule,
   ],
   exports: [

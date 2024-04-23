@@ -2,7 +2,7 @@
 
 <div class="explorer">
 
-  <div class="primary" [fxHide.lt-lg]="displayBalanceSetTabbedView">
+  <div class="primary" [class.md-hide]="displayBalanceSetTabbedView">
 
     <emp-fa-stored-balance-sets-table
       [storedBalanceSetList]="storedBalanceSetList"

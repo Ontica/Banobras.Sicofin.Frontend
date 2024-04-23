@@ -3,11 +3,11 @@
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 
-  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Catálogo de cuentas:</label>
           <emp-ng-select
             formControlName="accountsChart"
@@ -17,7 +17,7 @@
           </emp-ng-select>
         </div>
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Contabilidad:</label>
           <emp-ng-select
             formControlName="ledger"
@@ -28,7 +28,7 @@
           </emp-ng-select>
         </div>
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Libro auxiliar:</label>
           <emp-ng-select
             formControlName="subledgerType"
@@ -39,27 +39,29 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Número:</label>
-        <input type="text" class="text-box" empNgInteger
+        <input empNgInteger
+          type="text" class="text-box"
           formControlName="number"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.number)">
       </div>
 
-      <div fxFlex>
+      <div class="fx-item">
         <label>Nombre:</label>
-        <input type="text" class="text-box"
+        <input
+          type="text" class="text-box"
           formControlName="name"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.name)">
       </div>
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="82" rows="1"
           formControlName="description"
@@ -71,13 +73,15 @@
 
   </div>
 
-  <mat-divider class="horizontal"></mat-divider>
+  <mat-divider class="horizontal">
 
-  <div #rowFooter fxLayout="row">
+  </mat-divider>
+
+  <div #rowFooter class="fx-row-container">
 
     <ng-container *ngIf="!isSaved">
 
-      <div fxFlex fxLayoutAlign="end center">
+      <div class="fx-item fx-end fx-items-center">
 
         <button (click)="onSubmitForm()"
           [class.btn]="!formHelper.isFormReady(form)"
@@ -91,7 +95,7 @@
 
     <ng-container *ngIf="isSaved">
 
-      <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+      <div class="fx-item fx-items-center" *ngIf="editionMode">
 
         <button *ngIf="!subledgerAccount.suspended"
           type="button" class="btn-warning"
@@ -107,13 +111,14 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="end center">
+      <div class="fx-item fx-end fx-items-center">
 
         <ng-container *ngIf="editionMode">
 
-          <button (click)="onSubmitForm()"
+          <button
             [class.btn]="!formHelper.isFormReady(form)"
-            [class.btn-action]="formHelper.isFormReady(form)">
+            [class.btn-action]="formHelper.isFormReady(form)"
+            (click)="onSubmitForm()">
             Guardar
           </button>
 

@@ -12,12 +12,13 @@
 
         <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 
-        <div fxLayout="column">
+        <div class="fx-column-container">
 
-          <div #rowTopButtons fxLayout="row" fxLayoutAlign="end" *ngIf="!readonly"
+          <div #rowTopButtons *ngIf="!readonly"
+            class="fx-row-container fx-end"
             [style.marginBottom.rem]="1.25" [style.height.px]="28">
 
-            <div fxFlex="none" *ngIf="!cloneMode">
+            <div *ngIf="!cloneMode" class="fx-item-none" >
 
               <button *ngIf="!editionMode"
                 class="btn-base"
@@ -35,13 +36,13 @@
 
           </div>
 
-          <div #rowFields fxLayout="row" fxFlex="100" >
+          <div #rowFields class="fx-row-container fx-item-one">
 
-            <div #column1 fxLayout="column" fxFlex="55" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+            <div #column1 class="fx-column-container fx-gap-half fx-item-size" style="--size: 55%">
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Movimiento:</label>
                   <emp-ng-select
                     formControlName="voucherEntryType"
@@ -52,9 +53,9 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div fxFlex="calc(100% - 85px)">
+                <div class="fx-item-size" style="--size: calc(100% - 85px)">
                   <label>Cuenta:</label>
                   <emp-ng-select
                     [config]="{ bindByValue: false,
@@ -82,7 +83,7 @@
                   </emp-ng-select>
                 </div>
 
-                <div fxFlex="85px">
+                <div class="fx-item-size" style="--size: 85px">
                   <label>Sector:</label>
                   <emp-ng-select
                     formControlName="sector"
@@ -98,9 +99,9 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Auxiliar:</label>
                   <emp-ng-select #subledgerAccount
                     [config]="{ bindByValue: false,
@@ -123,7 +124,7 @@
 
                     <ng-template #optionTemplate let-item="item">
                       <div class="item">
-                        <div fxLayoutAlign="start center">
+                        <div class="fx-items-center">
                           <span class="item-highlight">{{item.number}}</span>
                           <span *ngIf="item.suspended" class="tag tag-error tag-small">Suspendido</span>
                         </div>
@@ -132,7 +133,8 @@
                     </ng-template>
 
                     <ng-template #footerTemplate>
-                      <button *ngIf="subledgerAccountRequired" class="btn"
+                      <button *ngIf="subledgerAccountRequired"
+                        class="btn"
                         (click)="subledgerAccount.select.close(); onCreateSubledgerAccountClicked()">
                         Agregar Auxiliar
                       </button>
@@ -142,9 +144,9 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Moneda:</label>
                   <emp-ng-select
                     formControlName="currency"
@@ -157,11 +159,12 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Monto de la operación:</label>
-                  <input type="text" class="text-box text-align-right" empNgCurrency
+                  <input type="text" empNgCurrency
+                    class="text-box text-align-right"
                     formControlName="amount"
                     [class.invalid-control]="formHelper.isControlInvalid(form.controls.amount)"
                     (change)="onCalculateBaseCurrencyAmount()">
@@ -169,11 +172,12 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Tipo de cambio:</label>
-                  <input type="text" class="text-box" empNgCurrency
+                  <input type="text" empNgCurrency
+                    class="text-box"
                     [empNgCurrencyFractionDigitMin]="6" [empNgCurrencyFractionDigitMax]="6"
                     formControlName="exchangeRate"
                     [placeholder]="!currencySelected ? 'Seleccionar la moneda' : ''"
@@ -184,11 +188,12 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Monto en moneda base:</label>
-                  <input type="text" class="text-box text-align-right" empNgCurrency
+                  <input type="text" empNgCurrency
+                    class="text-box text-align-right"
                     formControlName="baseCurrencyAmount"
                     [class.invalid-control]="formHelper.isControlInvalid(form.controls.baseCurrencyAmount)">
                 </div>
@@ -197,14 +202,14 @@
 
             </div>
 
-            <div #column2 fxLayout="column" fxFlex="45" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+            <div #column2 class="fx-column-container fx-gap-half fx-item-size" style="--size: 45%">
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Area de responsabilidad:</label>
                   <emp-ng-select
-                    [config]="{ clearable: true }"
+                    [config]="{ clearable: true, virtualScroll: true }"
                     formControlName="responsibilityArea"
                     [items]="functionalAreasList"
                     [showError]="formHelper.isControlInvalid(form.controls.responsibilityArea)">
@@ -213,9 +218,9 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>
                     Concepto presupuestal:
                     <span class="warning-text">
@@ -223,16 +228,17 @@
                       '(máximo 6 dígitos permitidos)' : ''}}
                     </span>
                   </label>
-                  <input type="text" class="text-box" empNgInteger
+                  <input type="text" empNgInteger
+                    class="text-box"
                     formControlName="budgetConcept"
                     [class.invalid-control]="formHelper.isControlInvalid(form.controls.budgetConcept)">
                 </div>
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>Tipo de evento:</label>
                   <emp-ng-select
                     [config]="{ clearable: true }"
@@ -244,9 +250,9 @@
 
               </div>
 
-              <div fxLayout="row">
+              <div class="fx-row-container">
 
-                <div fxFlex>
+                <div class="fx-item">
                   <label>
                     Número de verificación:
                     <span class="warning-text">
@@ -261,9 +267,9 @@
 
               </div>
 
-              <div fxLayout="row" fxLayoutAlign="space-between">
+              <div class="fx-row-container fx-space-between">
 
-                <div fxFlex="none">
+                <div class="fx-item-none">
                   <ng-container *ngIf="displayDateAndConcept">
                     <label>Fecha:</label>
                     <emp-ng-datepicker
@@ -273,8 +279,8 @@
                   </ng-container>
                 </div>
 
-                <div fxFlex="none" fxFlexAlign="center"
-                  [style.paddingTop.px]="12" [style.height.px]="42" [style.marginRight.px]="8">
+                <div class="fx-item-none fx-items-end"
+                  [style.paddingBottom.px]="2" [style.marginRight.px]="8">
                   <mat-checkbox
                     [(ngModel)]="displayDateAndConcept"
                     [disabled]="readonly"
@@ -287,9 +293,10 @@
 
               </div>
 
-              <div *ngIf="displayDateAndConcept" fxLayout="row" fxFlex="95px">
+              <div *ngIf="displayDateAndConcept"
+                class="fx-item-size fx-row-container" style="--size: 95px">
 
-                <div [fxFlex]="100">
+                <div class="fx-item-one">
                   <label>
                     Concepto:
                     <span class="warning-text">
@@ -311,15 +318,18 @@
 
           <ng-container *ngIf="!readonly">
 
-            <mat-divider class="horizontal"></mat-divider>
+            <mat-divider class="horizontal">
 
-            <div #rowFooter fxLayout="row">
+            </mat-divider>
 
-              <div fxFlex fxLayoutAlign="end center">
+            <div #rowFooter class="fx-row-container">
 
-                <button (click)="onSubmitForm()"
+              <div class="fx-item fx-end fx-items-center">
+
+                <button
                   [class.btn]="!formHelper.isFormReady(form)"
-                  [class.btn-action]="formHelper.isFormReady(form)">
+                  [class.btn-action]="formHelper.isFormReady(form)"
+                  (click)="onSubmitForm()">
                   {{editionMode ? 'Guardar' : 'Agregar'}}
                 </button>
 

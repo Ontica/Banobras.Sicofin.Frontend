@@ -1,18 +1,22 @@
 
-<div fxLayout="column" fxFlexFill>
+<div class="fx-column-container-fill">
 
-  <div #controlsContainer *ngIf="transactionSlipsList.length > 0" fxFlex="none">
+  <div #controlsContainer *ngIf="transactionSlipsList.length > 0"
+    class="fx-item-none">
 
       <mat-divider>
 
       </mat-divider>
 
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="list-selection-header"
+      <div class="fx-row-container fx-end fx-items-center list-selection-header"
         [style.minHeight.px]="42">
 
-        <div fxFlex fxLayoutAlign="end">
+        <div class="fx-item-none">
 
-          <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
+          <button class="btn"
+            (click)="onExportButtonClicked()">
+            Exportar
+          </button>
 
         </div>
 
@@ -20,7 +24,7 @@
 
   </div>
 
-  <div #headerContainer fxFlex="none">
+  <div #headerContainer class="fx-item-none">
 
     <emp-fa-transaction-slips-list-item
       [displayHeader]="true">
@@ -29,7 +33,7 @@
 
   </div>
 
-  <div #listContainer fxFlex>
+  <div #listContainer class="fx-item">
 
     <cdk-virtual-scroll-viewport itemSize="45">
 

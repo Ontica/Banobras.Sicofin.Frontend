@@ -15,19 +15,21 @@
 
     <div class="card-header-options">
 
-      <ng-container *empNgHasPermission="permissions.FEATURE_EDICION_CUENTAS">
+      <div *empNgHasPermission="permissions.FEATURE_EDICION_CUENTAS" class="fx-row-container fx-gap">
 
-        <button class="btn"
+        <button type="button"
+          class="btn"
           (click)="onImportAccountsClicked()">
           Importar cambios
         </button>
 
-        <button class="btn-action" fxFlexOffset="1.5rem"
+        <button type="button"
+          class="btn-action"
           (click)="onCreateAccountButtonClicked()">
           Agregar cuenta
         </button>
 
-      </ng-container>
+      </div>
 
     </div>
 
@@ -35,19 +37,19 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-fa-accounts-chart-filter fxFlex="none"
+      <emp-fa-accounts-chart-filter class="fx-item-none"
         [(showFilters)]="showFilters"
         (accountsChartFilterEvent)="onAccountsChartFilterEvent($event)">
 
       </emp-fa-accounts-chart-filter>
 
-      <emp-fa-accounts-chart-list fxFlex
+      <emp-fa-accounts-chart-list class="fx-item"
         [accountsChart]="accountsChart"
         [selectedAccount]="selectedAccount"
         (accountsChartListEvent)="onAccountsChartListEvent($event)">

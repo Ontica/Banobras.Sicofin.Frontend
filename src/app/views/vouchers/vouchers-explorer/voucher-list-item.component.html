@@ -2,8 +2,8 @@
 
   <div class="list-header-container">
 
-    <div fxLayout="row" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" fxLayoutAlign="start center">
-      <div fxFlex="20px">
+    <div class="fx-row-container fx-gap-size fx-items-center sm-fx-gap" style="--gap-size: 32px">
+      <div class="fx-item-size sm-fx-item-none" style="--size: 20px">
         <div *ngIf="voucherList.length > 0">
 
           <emp-ng-check-box-all
@@ -14,27 +14,27 @@
         </div>
       </div>
 
-      <div fxFlex="15%" class="nowrap">
+      <div class="fx-item-size sm-fx-item-none nowrap" style="--size: 15%">
         No. Póliza <br>
         Contabilidad <br>
         Origen
       </div>
 
-      <div fxFlex="15%">
+      <div class="fx-item-size sm-fx-item-none" style="--size: 15%">
         Transacción <br>
         <span class="nowrap">Fecha de elaboración</span> <br>
         Elaboró
       </div>
 
-      <div fxFlex="15%">
+      <div class="fx-item-size sm-fx-item-none" style="--size: 15%">
         Póliza <br>
         <span class="nowrap">Fecha de afectación</span> <br>
         Autorizó
       </div>
 
-      <div fxFlex> Concepto </div>
+      <div class="fx-item"> Concepto </div>
 
-      <div fxFlex="80px"> Estado </div>
+      <div class="fx-item-size sm-fx-item-none" style="--size: 80px"> Estado </div>
 
     </div>
 
@@ -42,9 +42,10 @@
 
 </div>
 
-<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" *ngIf="!displayHeader">
+<div *ngIf="!displayHeader"
+  class="fx-row-container sm-fx-column-container fx-gap-size sm-fx-gap" style="--gap-size: 32px">
 
-  <div fxFlex="20px">
+  <div class="fx-item-size sm-fx-item-none" style="--size: 20px">
     <mat-checkbox
       [checked]="selected"
       (click)="$event.stopPropagation()"
@@ -52,31 +53,32 @@
     </mat-checkbox>
   </div>
 
-  <div fxFlex="15%">
-    <div class="list-item-text-highlight nowrap" (click)="onVoucherClicked()">
+  <div class="fx-item-size sm-fx-item-none" style="--size: 15%">
+    <div class="list-item-text-highlight nowrap"
+      (click)="onVoucherClicked()">
       <strong><a>{{voucher.number}}</a></strong>
     </div>
     <div><strong>{{voucher.ledgerName}}</strong></div>
     <div>{{voucher.sourceName}}</div>
   </div>
 
-  <div fxFlex="15%">
+  <div class="fx-item-size sm-fx-item-none" style="--size: 15%">
     <div class="list-item-text-highlight">{{voucher?.transactionTypeName}}</div>
     <div><strong>{{voucher?.recordingDate | dateTimeFormat}}</strong></div>
     <div>{{voucher.elaboratedBy}}</div>
   </div>
 
-  <div fxFlex="15%">
+  <div class="fx-item-size sm-fx-item-none" style="--size: 15%">
     <div class="list-item-text-highlight">{{voucher.voucherTypeName}}</div>
     <div><strong>{{voucher?.accountingDate | dateTimeFormat}}</strong></div>
     <div>{{voucher.authorizedBy}}</div>
   </div>
 
-  <div fxFlex>
+  <div class="fx-item">
     <div>{{voucher.concept}}</div>
   </div>
 
-  <div fxFlex="80px">
+  <div class="fx-item-size sm-fx-item-none" style="--size: 80px">
     <div>{{voucher.status}}</div>
   </div>
 

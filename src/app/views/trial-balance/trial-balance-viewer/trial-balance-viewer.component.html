@@ -17,25 +17,27 @@
 
   <div class="card-body" [style.padding]="isQuickQuery ? '8px' : '0'">
 
-    <div fxLayout="column" fxFlexFill [empNgSpinnerHost]="spinner">
+    <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
 
       <emp-ng-spinner #spinner [visible]="isLoading" >
 
       </emp-ng-spinner>
 
-      <emp-fa-trial-balance-filter fxFlex="none" *ngIf="!isQuickQuery"
+      <emp-fa-trial-balance-filter *ngIf="!isQuickQuery"
+        class="fx-item-none"
         [(showFilters)]="showFilters"
         (trialBalanceFilterEvent)="onFilterEvent($event)">
 
       </emp-fa-trial-balance-filter>
 
-      <emp-fa-balance-quick-filter fxFlex="none" *ngIf="isQuickQuery"
+      <emp-fa-balance-quick-filter *ngIf="isQuickQuery"
+        class="fx-item-none"
         [balancesQuery]="balancesQuery"
         (balanceQuickFilterEvent)="onFilterEvent($event)">
 
       </emp-fa-balance-quick-filter>
 
-      <emp-ng-data-table fxFlex
+      <emp-ng-data-table class="fx-item"
         [dataTable]="data"
         [executed]="queryExecuted"
         [controlsAligned]="isQuickQuery"

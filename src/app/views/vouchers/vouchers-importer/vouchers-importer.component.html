@@ -12,12 +12,11 @@
 
       </emp-ng-spinner>
 
-      <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
-        fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+      <div class="fx-column-container-fill fx-gap-half">
 
-        <div fxLayout="row" fxLayout.lt-md="column">
+        <div class="fx-row-container sm-fx-column-container">
 
-          <div fxFlex="100">
+          <div class="fx-item-one">
             <label>Tipo de importación:</label>
             <mat-radio-group [(ngModel)]="selectedImportType" [ngModelOptions]="{standalone: true}"
               (change)="onImportTypeChange()">
@@ -48,9 +47,9 @@
 
           <div class="section-title"> Archivo a importar </div>
 
-          <div fxLayout="row" fxLayout.lt-md="column">
+          <div class="fx-row-container sm-fx-column-container">
 
-            <div fxFlex="100">
+            <div class="fx-item-one">
               <label>Archivo:</label>
               <emp-ng-file-control
                 [fileControl]="file"
@@ -66,14 +65,13 @@
 
           <div class="section-title"> Información sobre las pólizas y parámetros de importación </div>
 
-          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+          <div class="fx-row-container sm-fx-column-container fx-gap-half">
 
-            <div #column1 fxLayout="column" fxFlex fxFlex.lt-md="100"
-              fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+            <div #column1 class="fx-column-container fx-gap-half fx-item">
 
-              <div fxLayout="row" fxLayout.lt-md="column">
+              <div class="fx-row-container sm-fx-column-container">
 
-                <div fxFlex="363px" fxFlex.lt-md="none">
+                <div class="fx-item-size sm-fx-item" style="--size: 363px">
                   <label>Tipo de póliza:</label>
                   <emp-ng-select
                     formControlName="voucherTypeUID"
@@ -85,9 +83,9 @@
 
               </div>
 
-              <!-- <div fxLayout="row" fxLayout.lt-md="column">
+              <!-- <div class="fx-row-container sm-fx-column-container">
 
-                <div fxFlex="none" fxLayoutAlign="start center">
+                <div class="fx-item-none fx-items-center">
 
                   <mat-checkbox
                     formControlName="allowUnbalancedVouchers"
@@ -99,9 +97,9 @@
 
               </div>
 
-              <div fxLayout="row" fxLayout.lt-md="column">
+              <div class="fx-row-container sm-fx-column-container">
 
-                <div fxFlex="none" fxLayoutAlign="start center">
+                <div class="fx-item-none fx-items-center">
 
                   <mat-checkbox
                     formControlName="generateSubledgerAccount"
@@ -113,9 +111,9 @@
 
               </div>
 
-              <div fxLayout="row" fxLayout.lt-md="column">
+              <div class="fx-row-container sm-fx-column-container">
 
-                <div fxFlex="none" fxLayoutAlign="start center">
+                <div class="fx-item-none fx-items-center">
 
                   <mat-checkbox
                     formControlName="canEditVoucherEntries"
@@ -129,12 +127,11 @@
 
             </div>
 
-            <div #column2 fxLayout="column" fxFlex="none"
-              fxFlex.lt-md="100" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+            <div #column2 class="fx-column-container fx-gap-half fx-item-none sm-fx-item">
 
-              <div #accountsChartField fxLayout="row" fxLayout.lt-md="column">
+              <div #accountsChartField class="fx-row-container sm-fx-column-container">
 
-                <div fxFlex="265px" fxFlex.lt-md="none">
+                <div class="fx-item-size sm-fx-item" style="--size: 265px">
                   <label>Tipo de contabilidad:</label>
                   <emp-ng-select
                     formControlName="accountsChartUID"
@@ -147,9 +144,11 @@
 
               </div>
 
-              <div #accountingDateField *ngIf="isExcelImport" fxLayout="row" fxLayout.lt-md="column">
+              <div #accountingDateField *ngIf="isExcelImport"
+                class="fx-row-container sm-fx-column-container">
 
-                <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="hasValueDate">
+                <div *ngIf="hasValueDate"
+                  class="fx-item-none">
                   <label>Fecha valor:</label>
                   <emp-ng-datepicker
                     formControlName="accountingDate"
@@ -158,7 +157,8 @@
                   </emp-ng-datepicker>
                 </div>
 
-                <div fxFlex="120px" fxFlex.lt-md="none" *ngIf="!hasValueDate">
+                <div *ngIf="!hasValueDate"
+                  class="fx-item-size sm-fx-item" style="--size: 126px">
                   <label>Fecha de afectación:</label>
                   <emp-ng-select
                     formControlName="accountingDate"
@@ -169,8 +169,8 @@
                   </emp-ng-select>
                 </div>
 
-                <div fxFlex="none" fxLayoutAlign="end center"
-                  [style.height.px]="28" [style.marginTop.px]="12" [style.paddingRight.px]="8">
+                <div class="fx-item-none fx-items-end"
+                  [style.paddingBottom.px]="2" [style.paddingRight.px]="8">
                   <mat-checkbox
                     [(ngModel)]="hasValueDate" [ngModelOptions]="{standalone: true}"
                     (click)="$event.stopPropagation"
@@ -189,32 +189,39 @@
 
         <ng-container *ngIf="executedDryRun || isDataBaseImport">
 
-          <div class="section-title" *ngIf="isExcelImport || isTxtImport">
+          <div *ngIf="isExcelImport || isTxtImport"
+            class="section-title">
             Información del archivo a importar
           </div>
 
-          <div *ngIf="isDataBaseImport" class="section-title" fxLayout="row">
+          <div *ngIf="isDataBaseImport"
+            class="fx-row-container section-title">
 
             <ng-container *ngIf="importVouchersResult.isRunning">
               <span>Información de pólizas en proceso de importación</span>
-              <span *ngIf="executedDryRun" class="tag tag-info tag-small" [style.marginBottom.px]="1">
+              <span *ngIf="executedDryRun"
+                class="tag tag-success tag-small"
+                [style.marginBottom.px]="1">
                 En ejecución
               </span>
             </ng-container>
 
             <ng-container *ngIf="!importVouchersResult.isRunning">
               <span>Información a importar</span>
-              <span *ngIf="executedDryRun" class="tag tag-error tag-small" [style.marginBottom.px]="1">
+              <span *ngIf="executedDryRun"
+                class="tag tag-error tag-small"
+                [style.marginBottom.px]="1">
                 Detenido
               </span>
             </ng-container>
 
           </div>
 
-          <div fxLayout="row" [style.maxHeight]="isDataBaseImport ? '232px' : '200px'"
+          <div class="fx-row-container"
+            [style.maxHeight]="isDataBaseImport ? '232px' : '200px'"
             [style.minHeight]="isDataBaseImport ? '232px' : 'auto'">
 
-            <emp-fa-vouchers-importer-details-table fxFlex="100"
+            <emp-fa-vouchers-importer-details-table class="fx-item-one"
               [importVouchersResult]="importVouchersResult"
               [selectionType]="importerDetailsSelectionType"
               [commandExecuted]="executedDryRun"
@@ -229,11 +236,11 @@
 
         </ng-container>
 
-        <mat-divider class="horizontal"></mat-divider>
+        <mat-divider class="horizontal-slim"></mat-divider>
 
-        <div fxLayout="row">
+        <div class="fx-row-container">
 
-          <div fxFlex fxLayoutAlign="end center">
+          <div class="fx-item fx-end fx-items-center">
 
             <button *ngIf="isExcelImport || isTxtImport"
               [class.btn]="executedDryRun || !isFileFormValid"
@@ -242,7 +249,8 @@
               Analizar archivo
             </button>
 
-            <button *ngIf="isDataBaseImport" class="btn-action"
+            <button *ngIf="isDataBaseImport"
+              class="btn-action"
               (click)="onGetStatusImportVouchersFromDatabase()">
               Actualizar estado
             </button>

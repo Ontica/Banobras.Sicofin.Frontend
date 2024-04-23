@@ -3,13 +3,13 @@
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 
-  <div fxLayout="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+  <div class="fx-column-container fx-gap-half">
 
   <div class="section-title"> Información de la agrupación </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Catálogo de cuentas:</label>
           <emp-ng-select
             formControlName="accountsChartUID"
@@ -19,7 +19,7 @@
           </emp-ng-select>
         </div>
 
-        <div [fxFlex]="200/3">
+        <div class="fx-item-two-third">
           <label>Agrupación:</label>
           <emp-ng-select
             formControlName="groupUID"
@@ -32,9 +32,9 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Posición:</label>
         <emp-ng-select
           formControlName="positioningRule"
@@ -44,8 +44,9 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="200/3" fxLayoutAlign="start end" *ngIf="displayPositioningOffsetConcept">
-        <emp-ng-select [fxFlex]="100"
+      <div *ngIf="displayPositioningOffsetConcept"
+        class="fx-item-two-third fx-items-end">
+        <emp-ng-select class="fx-item-one"
           formControlName="positioningOffsetConceptUID"
           [items]="financialConceptsList"
           [loading]="isLoadingFinancialConcepts"
@@ -62,7 +63,8 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="100/6" fxLayoutAlign="start end" *ngIf="displayPosition">
+      <div *ngIf="displayPosition"
+        class="fx-item-sixth fx-items-end">
 
         <input type="text" class="text-box text-align-right" empNgInteger
           formControlName="position">
@@ -73,23 +75,23 @@
 
     <div class="section-title"> Información del concepto </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Clave:</label>
         <input type="text" class="text-box"
           formControlName="code"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.code)">
       </div>
 
-      <div fxFlex>
+      <div class="fx-item">
         <label>Identificador de variable:</label>
         <input type="text" class="text-box" empNgInputKeys
           formControlName="variableID"
           [class.invalid-control]="formHelper.isControlInvalid(form.controls.variableID)">
       </div>
 
-      <div fxFlex="none">
+      <div class="fx-item-none">
         <label>Fecha inicial:</label>
         <emp-ng-datepicker
           formControlName="startDate"
@@ -97,7 +99,7 @@
         </emp-ng-datepicker>
       </div>
 
-      <div fxFlex="none">
+      <div class="fx-item-none">
         <label>Fecha final:</label>
         <emp-ng-datepicker
           formControlName="endDate"
@@ -107,9 +109,9 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item">
         <label>Concepto:</label>
         <input type="text" class="text-box"
           formControlName="name"
@@ -118,9 +120,9 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item">
         <label>Script de cálculo:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
           formControlName="calculationScript"
@@ -134,13 +136,15 @@
 
   <ng-container #rowFooter *ngIf="canEdit">
 
-    <mat-divider class="horizontal"></mat-divider>
+    <mat-divider class="horizontal">
 
-    <div fxLayout="row">
+    </mat-divider>
+
+    <div class="fx-row-container">
 
       <ng-container *ngIf="!isSaved">
 
-        <div fxFlex fxLayoutAlign="end center">
+        <div class="fx-item fx-end fx-items-center">
 
           <button (click)="onSubmitForm()"
             [class.btn]="!formHelper.isFormReady(form)"
@@ -154,7 +158,8 @@
 
       <ng-container *ngIf="isSaved">
 
-        <div fxFlex fxLayoutAlign="start center" *ngIf="editionMode">
+        <div *ngIf="editionMode"
+          class="fx-item-none fx-items-center">
 
           <button type="button" class="btn-warning"
             (click)="onRemoveButtonClicked()">
@@ -163,18 +168,20 @@
 
         </div>
 
-        <div fxFlex fxLayoutAlign="end center">
+        <div class="fx-item fx-end fx-items-center">
 
           <ng-container *ngIf="editionMode">
 
-            <button (click)="onSubmitForm()"
+            <button
               [class.btn]="!formHelper.isFormReady(form)"
-              [class.btn-action]="formHelper.isFormReady(form)">
+              [class.btn-action]="formHelper.isFormReady(form)"
+              (click)="onSubmitForm()">
               Guardar
             </button>
 
-            <button (click)="enableEditor(false)"
-              class="btn-base uppercase">
+            <button
+              class="btn-base uppercase"
+              (click)="enableEditor(false)">
               Descartar Cambios
             </button>
 

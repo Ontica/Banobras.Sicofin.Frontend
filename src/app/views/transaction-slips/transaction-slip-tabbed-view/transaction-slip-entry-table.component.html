@@ -1,15 +1,15 @@
-<div fxLayout="column" fxFlexFill>
+<div class="fx-column-container-fill">
 
-  <div fxLayout="row" fxLayoutAlign="space-between center"
+  <div class="fx-row-container fx-space-between fx-items-center"
     [style.paddingLeft.px]="2" [style.paddingRight.px]="2" [style.paddingBottom.px]="8">
 
-    <div fxFlex fxLayoutAlign="start" class="text-small-text">
+    <div class="fx-item text-small-text">
 
       {{this.transactionSlipEntryList.length | number }} registros encontrados.
 
     </div>
 
-    <div fxFlex fxLayoutAlign="end">
+    <div class="fx-item-none fx-end">
 
       <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
 
@@ -17,7 +17,7 @@
 
   </div>
 
-  <div #tableContainer fxFlex [style.padding.px]="2">
+  <div #tableContainer class="fx-item" [style.padding.px]="2">
 
     <cdk-virtual-scroll-viewport tvsItemSize="32" headerHeight="40">
 

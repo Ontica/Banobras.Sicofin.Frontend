@@ -14,17 +14,21 @@
 
     <div class="card-header-options">
 
-      <button *empNgHasPermission="permissionsToImportVouchers"
-        class="btn"
-        (click)="onClickImportVouchers()">
-        Importar pólizas
-      </button>
+      <div class="fx-row-container fx-gap">
 
-      <button *empNgHasPermission="permissionToCreateVoucher"
-        class="btn-action" fxFlexOffset="1.5rem"
-        (click)="onClickCreateVoucher()">
-        Nueva póliza
-      </button>
+        <button *empNgHasPermission="permissionsToImportVouchers"
+          class="btn"
+          (click)="onClickImportVouchers()">
+          Importar pólizas
+        </button>
+
+        <button *empNgHasPermission="permissionToCreateVoucher"
+          class="btn-action"
+          (click)="onClickCreateVoucher()">
+          Nueva póliza
+        </button>
+
+      </div>
 
     </div>
 
@@ -32,21 +36,20 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-fa-voucher-filter fxFlex="none"
+      <emp-fa-voucher-filter class="fx-item-none"
         [voucherFilterData]="voucherFilterData"
         [(showFilters)]="showFilters"
         (voucherFilterEvent)="onChangeFilter($event)">
 
       </emp-fa-voucher-filter>
 
-
-      <emp-fa-voucher-list fxFlex
+      <emp-fa-voucher-list class="fx-item"
         [voucherList]="voucherList"
         [selectedVoucher]="selectedVoucher"
         [textNotFound]="textNotFound"

@@ -1,9 +1,9 @@
 
-<div fxLayout="column" fxFlexFill>
+<div class="fx-column-container-fill">
 
-  <div #controlsContainer *ngIf="displayAccountsChartList" fxFlex="none">
+  <div #controlsContainer *ngIf="displayAccountsChartList" class="fx-item-none">
 
-    <mat-divider [style.marginBottom.px]="8">
+    <mat-divider>
 
     </mat-divider>
 
@@ -15,7 +15,7 @@
 
   </div>
 
-  <div #headerContainer fxFlex="none">
+  <div #headerContainer class="fx-item-none">
 
     <emp-fa-accounts-chart-list-entry
       [displayHeader]="true"
@@ -26,7 +26,7 @@
 
   </div>
 
-  <div #listContainer fxFlex>
+  <div #listContainer class="fx-item">
 
     <cdk-virtual-scroll-viewport itemSize="35">
 

@@ -25,21 +25,21 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <form #filterForm="ngForm" fxFlex="none"
+      <form #filterForm="ngForm" class="fx-item-none"
         autocomplete="off" class="form-section form-container"
         empNgFormKeyDownEnter>
 
-        <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+        <div class="fx-column-container fx-gap-half">
 
-          <div fxLayout="row">
+          <div class="fx-row-container">
 
-            <div fxFlex="50">
+            <div class="fx-item-half sm-fx-item">
 
               <label>Catálogo de cuentas:</label>
 
@@ -53,7 +53,7 @@
 
             </div>
 
-            <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+            <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
               <button title="Buscar"
                 [class.btn-icon-action]="filterForm.valid"
@@ -72,7 +72,7 @@
 
       </form>
 
-      <div #tableContainer fxFlex class="fill-table-container" [style.width.%]="100">
+      <div #tableContainer class="fx-item fill-table-container" [style.width.%]="100">
 
         <table mat-table [dataSource]="dataSource">
           <ng-container matColumnDef="accountsChart">

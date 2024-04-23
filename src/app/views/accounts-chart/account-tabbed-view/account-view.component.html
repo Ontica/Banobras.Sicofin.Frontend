@@ -1,21 +1,21 @@
 <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container fx-space-between">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third sm-fx-item">
         <label>Catálogo de cuentas:</label>
         <input type="text" class="text-box" formControlName="accountsChart">
       </div>
 
-      <div fxFlex fxLayoutAlign="end">
-        <div fxFlex="100px">
+      <div class="fx-item-none fx-row-container">
+        <div class="fx-item-size" style="--size: 100px">
           <label>Fecha de alta:</label>
           <input type="text" class="text-box" formControlName="startDate">
         </div>
 
-        <div fxFlex="100px">
+        <div class="fx-item-size" style="--size: 100px">
           <label>Fecha de baja:</label>
           <input type="text" class="text-box" formControlName="endDate">
         </div>
@@ -24,18 +24,18 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item-one">
         <label>Cuenta:</label>
         <input type="text" class="text-box" formControlName="number">
       </div>
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item-one">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
           formControlName="name"
@@ -46,9 +46,9 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item-one">
         <label>Observaciones:</label>
         <textarea class="text-area" empNgTextareaAutoresize [maxHeightTextarea]="null" rows="1"
           formControlName="description"
@@ -59,32 +59,32 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container">
 
-      <div fxFlex>
+      <div class="fx-item-third">
         <label>Rol de la cuenta:</label>
         <input type="text" class="text-box" formControlName="role">
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Tipo de cuenta:</label>
         <input type="text" class="text-box" formControlName="type">
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third">
         <label>Naturaleza:</label>
         <input type="text" class="text-box" formControlName="debtorCreditor">
       </div>
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container">
 
-      <div fxFlex="none">
+      <div class="fx-item-none">
         <mat-checkbox formControlName="usesSector"> Maneja Sectores </mat-checkbox>
       </div>
 
-      <div fxFlex="none">
+      <div class="fx-item-none">
         <mat-checkbox formControlName="usesSubledger"> Maneja Auxiliares </mat-checkbox>
       </div>
 
@@ -92,19 +92,23 @@
 
     <ng-container *empNgHasPermission="permissions.FEATURE_EDICION_CUENTAS">
 
-      <mat-divider></mat-divider>
+      <mat-divider class="horizontal-slim">
 
-      <div fxLayout="row">
+      </mat-divider>
 
-        <div fxFlex fxLayoutAlign="end">
-          <button class="btn" (click)="onFixAccountNameButtonClicked()">
-            Corregir descripción
-          </button>
+      <div class="fx-row-container fx-end">
 
-          <button class="btn-action" (click)="onUnpdateAccountButtonClicked()">
-            Modificar cuenta
-          </button>
-        </div>
+        <button type="button"
+          class="btn"
+          (click)="onFixAccountNameButtonClicked()">
+          Corregir descripción
+        </button>
+
+        <button type="button"
+          class="btn-action"
+          (click)="onUnpdateAccountButtonClicked()">
+          Modificar cuenta
+        </button>
 
       </div>
 

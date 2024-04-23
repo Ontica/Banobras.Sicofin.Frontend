@@ -1,10 +1,10 @@
 <form [formGroup]="form" empNgFormKeyDownEnter autocomplete="off" class="form-section">
 
-  <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third sm-fx-item">
         <label>Catálogo de cuentas:</label>
         <emp-ng-select
           formControlName="accountsChartUID"
@@ -14,11 +14,11 @@
         </emp-ng-select>
       </div>
 
-      <div fxFlex>
+      <div class="fx-item sm-hide">
 
       </div>
 
-      <div fxFlex="none" fxFlex.lt-md="none" *ngIf="!isSaved">
+      <div class="fx-item-none" *ngIf="!isSaved">
 
         <label [style.line-height]="'normal'">Fecha de alta:</label>
         <emp-ng-datepicker
@@ -29,7 +29,7 @@
 
       </div>
 
-      <div fxFlex="none" fxFlex.lt-md="none" *ngIf="isSaved">
+      <div class="fx-item-none" *ngIf="isSaved">
 
         <label [style.line-height]="'normal'">Fecha de alta:</label>
         <emp-ng-datepicker
@@ -43,9 +43,9 @@
     </div>
 
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item-one">
         <label>Cuenta:</label>
         <input type="text" class="text-box"
           formControlName="accountNumber"
@@ -54,9 +54,9 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item-one">
         <label>Descripción:</label>
         <textarea class="text-area" empNgTextareaAutoresize rows="1"
           formControlName="name"
@@ -67,9 +67,9 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100">
+      <div class="fx-item-one">
         <label>Observaciones:</label>
         <textarea class="text-area" empNgTextareaAutoresize rows="1"
           formControlName="description"
@@ -80,9 +80,9 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third sm-fx-item">
         <label>Rol de la cuenta:</label>
         <emp-ng-select
           [config]="{bindByValue: false}"
@@ -95,7 +95,7 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third sm-fx-item">
         <label>Tipo de cuenta:</label>
         <emp-ng-select
           formControlName="accountTypeUID"
@@ -104,7 +104,7 @@
         </emp-ng-select>
       </div>
 
-      <div [fxFlex]="100/3">
+      <div class="fx-item-third sm-fx-item">
         <label>Naturaleza:</label>
         <emp-ng-select
           [config]="{bindByValue: false}"
@@ -117,9 +117,9 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-md="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div [fxFlex]="100/6">
+      <div class="fx-item-sixth sm-fx-item">
         <mat-checkbox
           formControlName="usesSector"
           (click)="$event.stopPropagation"
@@ -128,7 +128,7 @@
         </mat-checkbox>
       </div>
 
-      <div [fxFlex]="100/6">
+      <div class="fx-item-sixth sm-fx-item">
         <mat-checkbox
           formControlName="usesSubledger"
           (click)="$event.stopPropagation"

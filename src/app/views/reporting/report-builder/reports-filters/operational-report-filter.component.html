@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-sm="column">
+    <div class="fx-row-container sm-fx-column-container">
 
-      <div fxFlex="50">
+      <div class="fx-item-half sm-fx-item">
 
         <label>Catálogo de cuentas:</label>
 
@@ -18,7 +18,8 @@
 
       </div>
 
-      <div fxFlex="calc(50% - {{selectedReportType?.show.datePeriod ? '261px' : '156px'}})">
+      <div class="fx-item-size sm-fx-item"
+        [ngStyle]="{'--size': 'calc(50% - ' + (selectedReportType?.show.datePeriod ? '261px' : '156px') + ')' }">
 
         <label>Reporte:</label>
 
@@ -31,7 +32,8 @@
 
       </div>
 
-      <div [fxFlex]="showField.datePeriod ? '225px' : '120px'" fxFlex.lt-md="none">
+      <div class="fx-item-size sm-fx-item-none"
+        [ngStyle]="{'--size': showField.datePeriod ? '225px' : '120px'}">
 
         <ng-container *ngIf="showField.singleDate">
 
@@ -61,7 +63,7 @@
 
       </div>
 
-      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
         <button title="Generar reporte"
           [class.btn-icon]="form.invalid || !isPeriodValid"
@@ -77,10 +79,11 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.lt-sm="column"
-      *ngIf="showField.ledgers || showField.account || showField.withSubledgerAccount">
+    <div *ngIf="showField.ledgers || showField.account || showField.withSubledgerAccount"
+      class="fx-row-container sm-fx-column-container">
 
-        <div fxFlex="50" *ngIf="showField.ledgers">
+        <div *ngIf="showField.ledgers"
+          class="fx-item-half sm-fx-item">
 
           <label>Contabilidad:</label>
 
@@ -94,7 +97,8 @@
 
         </div>
 
-        <div fxFlex *ngIf="showField.account">
+        <div *ngIf="showField.account"
+          class="fx-item">
 
           <label>Cuenta:</label>
 
@@ -105,8 +109,8 @@
 
         </div>
 
-        <div fxFlex="261px" fxFlex.lt-md="none" *ngIf="showField.withSubledgerAccount"
-          fxLayoutAlign="space-between center" [style.height.px]="28" [style.marginTop.px]="12">
+        <div *ngIf="showField.withSubledgerAccount"
+          class="fx-item-size sm-fx-item fx-items-end" style="--size: 261px" [style.paddingBottom.px]="2">
 
           <mat-checkbox name="withSubledgerAccount"
             [(ngModel)]="query.withSubledgerAccount"
@@ -119,9 +123,11 @@
     </div>
 
 
-    <div fxLayout="row" fxLayout.lt-sm="column" *ngIf="showField.sendType || showField.outputType">
+    <div *ngIf="showField.sendType || showField.outputType"
+      class="fx-row-container sm-fx-column-container">
 
-      <div fxFlex="50" *ngIf="showField.sendType">
+      <div *ngIf="showField.sendType"
+        class="fx-item-half sm-fx-item">
 
         <label>Tipo de envío:</label>
 
@@ -134,7 +140,8 @@
 
       </div>
 
-      <div fxFlex="50" *ngIf="showField.outputType">
+      <div *ngIf="showField.outputType"
+        class="fx-item-half sm-fx-item">
 
         <label>Grupo de cuentas:</label>
 

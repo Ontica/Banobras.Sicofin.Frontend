@@ -1,11 +1,11 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container"
   style="margin: 0; padding: 0;">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container">
 
-      <div fxLayout="row">
+      <div class="fx-row-container">
 
-        <div fxFlex="120px">
+        <div class="fx-item-size" style="--size: 124px">
 
           <label>Fecha del TC:</label>
 
@@ -19,7 +19,7 @@
 
         </div>
 
-        <div fxFlex="calc((100% - 120px) / 2)">
+        <div class="fx-item-size" style="--size: calc((100% - 124px) / 2)">
 
           <label>Tipo de cambio:</label>
 
@@ -35,7 +35,7 @@
 
         </div>
 
-        <div fxFlex="calc((100% - 120px) / 2)">
+        <div class="fx-item-size" style="--size: calc((100% - 124px) / 2)">
 
           <label>Valorizar a:</label>
 
@@ -51,10 +51,13 @@
 
       </div>
 
-      <div fxLayout="row" *ngIf="showConsolidateBalancesToTargetCurrency">
+      <div class="fx-row-container" *ngIf="showConsolidateBalancesToTargetCurrency">
 
-        <div fxFlex="calc(100% - 120px)" fxLayoutAlign="start center"
-          fxFlexOffset="120px" fxFlexOffset.lt-md="0" >
+        <div class="fx-item-size sm-hide" style="--size: 124px">
+
+        </div>
+
+        <div class="fx-item-size fx-items-center" style="--size: calc(100% - 124px)">
 
           <mat-checkbox name="consolidateBalancesToTargetCurrency"
             [(ngModel)]="consolidateBalancesToTargetCurrency"

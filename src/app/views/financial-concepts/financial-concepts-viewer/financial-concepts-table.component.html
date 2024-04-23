@@ -1,14 +1,16 @@
-<div fxLayout="column" fxFlexFill>
+<div class="fx-column-container-fill">
 
-  <div #controlsContainer *ngIf="queryExecuted" fxFlex="none">
+  <div #controlsContainer *ngIf="queryExecuted"
+    class="fx-item-none">
 
     <mat-divider>
 
     </mat-divider>
 
-    <div fxLayout="row" fxLayoutAlign="space-between center" [style.padding.px]="5" [style.margin.px]="3">
+    <div class="fx-row-container fx-space-between fx-items-center"
+      [style.padding.px]="5" [style.margin.px]="3">
 
-      <div fxFlex="25">
+      <div class="fx-item-quarter">
 
         <div class="input-icon-container">
 
@@ -24,7 +26,7 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
+      <div class="fx-item-none fx-end" [style.marginRight.px]="8">
 
         <button class="btn"
           (click)="onExportButtonClicked()">
@@ -37,7 +39,7 @@
 
   </div>
 
-  <div #tableContainer fxFlex>
+  <div #tableContainer class="fx-item">
 
     <cdk-virtual-scroll-viewport tvsItemSize="32" headerHeight="40" [bufferMultiplier]="0">
 

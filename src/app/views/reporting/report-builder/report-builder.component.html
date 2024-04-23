@@ -2,7 +2,7 @@
 
   <div class="primary"
     [class.priority]="!displayReportBreakdown"
-    [fxHide.notebook]="displayReportBreakdown">
+    [class.std-hide]="displayReportBreakdown">
 
     <emp-fa-report-viewer
       [reportGroup]="reportGroup"
@@ -17,18 +17,18 @@
 
       <ng-container [ngSwitch]="reportGroup">
 
-        <emp-fa-financial-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesRegulatorios"
+        <emp-fa-financial-report-filter class="fx-item-none" *ngSwitchCase="ReportGroups.ReportesRegulatorios"
           (financialReportFilterEvent)="onReportFilterEvent($event)">
 
         </emp-fa-financial-report-filter>
 
-        <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesOperativos"
+        <emp-fa-operational-report-filter class="fx-item-none" *ngSwitchCase="ReportGroups.ReportesOperativos"
           [reportGroup]="reportGroup"
           (operationalReportFilterEvent)="onReportFilterEvent($event)">
 
         </emp-fa-operational-report-filter>
 
-        <emp-fa-operational-report-filter fxFlex="none" *ngSwitchCase="ReportGroups.ReportesFiscales"
+        <emp-fa-operational-report-filter class="fx-item-none" *ngSwitchCase="ReportGroups.ReportesFiscales"
           [reportGroup]="reportGroup"
           (operationalReportFilterEvent)="onReportFilterEvent($event)">
 

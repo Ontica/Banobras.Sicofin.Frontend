@@ -2,22 +2,23 @@
 
   <fieldset [disabled]="true">
 
-    <div fxLayout="column" fxLayoutGap="0.75rem">
+    <div class="fx-column-container fx-gap-half">
 
-      <div fxLayout="row">
+      <div class="fx-row-container">
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Número de volante:</label>
           <input type="text" name="slipNumber" class="text-box" [value]="transactionSlip.slipNumber">
         </div>
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Estado:</label>
           <input type="text" name="statusName" class="text-box" [value]="transactionSlip.statusName">
         </div>
 
-        <div fxFlex fxLayoutAlign="end">
-          <div fxFlex="120px">
+        <div class="fx-item-third fx-row-container fx-end">
+
+          <div class="fx-item-size" style="--size: 120px">
             <label>Fecha de afectación:</label>
             <input type="text" name="accountingDate" class="text-box"
               [value]="transactionSlip.accountingDate | dateTimeFormat">
@@ -27,9 +28,9 @@
 
       </div>
 
-      <div fxLayout="row">
+      <div class="fx-row-container">
 
-        <div [fxFlex]="100">
+        <div class="fx-item-one">
           <label>Concepto:</label>
           <textarea class="text-area" name="concept" empNgTextareaAutoresize rows="1"
             [value]="transactionSlip.concept">
@@ -39,45 +40,43 @@
 
       </div>
 
-      <div fxLayout="row">
+      <div class="fx-row-container">
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Área:</label>
           <input type="text" name="functionalArea" class="text-box"
             [value]="transactionSlip.functionalArea">
         </div>
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Elaboró:</label>
           <input type="text" name="elaboratedBy" class="text-box"
             [value]="transactionSlip.elaboratedBy">
         </div>
 
-        <div fxFlex>
+        <div class="fx-item">
           <label class="ellipsis">Número de operación:</label>
           <input type="text" name="verificationNumber" class="text-box"
             [value]="transactionSlip.verificationNumber">
         </div>
 
-        <div fxFlex="120px" fxLayoutAlign="end">
-          <div fxFlex="120px">
-            <label>Fecha de elaboración:</label>
-            <input type="text" name="recordingDate" class="text-box"
-              [value]="transactionSlip.recordingDate | dateTimeFormat">
-          </div>
+        <div class="fx-item-size fx-end" style="--size: 120px">
+          <label>Fecha de elaboración:</label>
+          <input type="text" name="recordingDate" class="text-box"
+            [value]="transactionSlip.recordingDate | dateTimeFormat">
         </div>
 
       </div>
 
-      <div fxLayout="row">
+      <div class="fx-row-container">
 
-        <div [fxFlex]="100/3">
+        <div class="fx-item-third">
           <label>Importe:</label>
           <input type="text" name="controlTotal" class="text-box"
             [value]="transactionSlip.controlTotal | number : '1.2-2'">
         </div>
 
-        <div [fxFlex]="100/3" *ngIf="displayVoucherData">
+        <div class="fx-item-third" *ngIf="displayVoucherData">
           <label>Póliza:</label>
           <input type="text" name="accountingVoucherId" class="text-box"
             [value]="transactionSlip.accountingVoucherId">

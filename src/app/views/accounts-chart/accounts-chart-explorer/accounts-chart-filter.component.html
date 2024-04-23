@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div fxFlex="50">
+      <div class="fx-item-half">
 
         <label>Catálogo de cuentas:</label>
 
@@ -19,11 +19,12 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="start end">
+      <div class="fx-item fx-items-end">
 
         <div class="input-search-container">
 
-          <input type="text" class="text-box" name="keywords"
+          <input type="text" name="keywords"
+            class="text-box"
             placeholder="Buscar cuentas..."
             [(ngModel)]="accountsSearch.keywords"
             (keyup.enter)="onSearchAccountsChartClicked()"
@@ -33,13 +34,14 @@
 
       </div>
 
-      <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
-        <button class="btn-icon-action" title="Buscar"
+        <button type="button"
+          title="Buscar"
+          class="btn-icon-action"
           [disabled]="form.invalid"
           (click)="onSearchAccountsChartClicked()">
           <mat-icon>search</mat-icon>
-
         </button>
 
       </div>
@@ -50,9 +52,11 @@
 
         </mat-divider>
 
-        <div fxFlex="none" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+        <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
-          <button class="btn-base" (click)="onShowFiltersClicked()" fxFlex="103px">
+          <button class="btn-base"
+            [style.width.px]="100"
+            (click)="onShowFiltersClicked()">
             {{showFilters ? 'Ocultar' :'Mostrar'}} <mat-icon>filter_list</mat-icon>
           </button>
 
@@ -64,13 +68,13 @@
 
     <div #filterSection *ngIf="showFilters" [@expandCollapse]>
 
-      <mat-divider [style.marginBottom.px]="8" [style.marginRight.px]="8">
+      <mat-divider class="horizontal-md">
 
       </mat-divider>
 
-      <div fxLayout="row" [style.marginBottom.px]="8">
+      <div class="fx-row-container" [style.marginBottom.px]="8">
 
-        <div fxFlex="50">
+        <div class="fx-item-half">
 
           <label>Grupo de contabilidades:</label>
 
@@ -84,7 +88,7 @@
 
         </div>
 
-        <div fxFlex>
+        <div class="fx-item">
 
           <label>Contabilidad:</label>
 
@@ -100,9 +104,9 @@
 
       </div>
 
-      <div fxLayout="row" [style.marginBottom.px]="8">
+      <div class="fx-row-container" [style.marginBottom.px]="8">
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter">
 
           <label>De la cuenta:</label>
 
@@ -110,7 +114,7 @@
 
         </div>
 
-        <div fxFlex="25">
+        <div class="fx-item-quarter">
 
           <label>A la cuenta:</label>
 
@@ -118,7 +122,7 @@
 
         </div>
 
-        <div fxFlex>
+        <div class="fx-item">
 
           <label>Nivel:</label>
 
@@ -131,7 +135,7 @@
 
         </div>
 
-        <div fxFlex="none">
+        <div class="fx-item-none">
 
           <label>Al día:</label>
 
@@ -144,9 +148,9 @@
 
       </div>
 
-      <div fxLayout="row" [style.marginBottom.px]="8">
+      <div class="fx-row-container" [style.marginBottom.px]="8">
 
-        <div fxFlex="50">
+        <div class="fx-item-half">
 
           <label>Tipo de cuenta:</label>
 
@@ -159,7 +163,7 @@
 
         </div>
 
-        <div fxFlex="50">
+        <div class="fx-item-half">
 
           <label>Moneda:</label>
 
@@ -175,9 +179,9 @@
 
       </div>
 
-      <div fxLayout="row">
+      <div class="fx-row-container">
 
-        <div fxFlex="50">
+        <div class="fx-item-half">
 
           <label>Sector:</label>
 
@@ -191,7 +195,7 @@
 
         </div>
 
-        <div fxFlex fxLayoutAlign="start center" [style.height.px]="28" [style.marginTop.px]="12">
+        <div class="fx-item fx-items-center" [style.height.px]="28" [style.marginTop.px]="12">
 
           <mat-checkbox name="withSectors"
             [(ngModel)]="accountsSearch.withSectors"
@@ -207,9 +211,12 @@
 
           </mat-divider>
 
-          <div fxFlex="none" [style.marginTop.px]="12" [style.marginBottom.px]="2">
+          <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
-            <button class="btn-base" (click)="onClearFilters()" fxFlex="103px">
+            <button
+              [style.width.px]="100"
+              class="btn-base"
+              (click)="onClearFilters()">
               Limpiar <mat-icon>filter_list</mat-icon>
             </button>
 

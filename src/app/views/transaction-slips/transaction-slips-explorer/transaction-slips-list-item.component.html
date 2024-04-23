@@ -2,26 +2,26 @@
 
   <div class="list-header-container">
 
-    <div fxLayout="row" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" fxLayoutAlign="start center">
+    <div class="fx-row-container fx-gap-two fx-items-center sm-fx-gap-half">
 
-      <div fxFlex="10%" class="nowrap">
+      <div class="fx-item-size nowrap" style="--size: 10%">
         No. volante<br>
         Área
       </div>
 
-      <div fxFlex="15%">
+      <div class="fx-item-size" style="--size: 15%">
         <span class="nowrap">Fecha de elaboración</span> <br>
         Elaboró
       </div>
 
-      <div fxFlex="15%">
+      <div class="fx-item-size" style="--size: 15%">
         <span class="nowrap">Fecha de afectación</span> <br>
         Importe
       </div>
 
-      <div fxFlex> Concepto </div>
+      <div class="fx-item"> Concepto </div>
 
-      <div fxFlex="80px"> Estado </div>
+      <div class="fx-item-size" style="--size: 80px"> Estado </div>
 
     </div>
 
@@ -29,30 +29,31 @@
 
 </div>
 
-<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px" fxLayoutGap.gt-xs="32px" *ngIf="!displayHeader">
+<div *ngIf="!displayHeader"
+  class="fx-row-container sm-fx-column-container fx-gap-two sm-fx-gap-half">
 
-  <div fxFlex="10%">
+  <div class="fx-item-size sm-fx-item" style="--size: 10%">
     <div class="list-item-text-highlight nowrap" (click)="onTransactionSlipClicked()">
       <strong><a>{{transactionSlip.slipNumber}}</a></strong>
     </div>
     <div>{{transactionSlip.functionalArea}}</div>
   </div>
 
-  <div fxFlex="15%">
+  <div class="fx-item-size sm-fx-item" style="--size: 15%">
     <div><strong>{{transactionSlip?.recordingDate | dateTimeFormat}}</strong></div>
     <div>{{transactionSlip.elaboratedBy}}</div>
   </div>
 
-  <div fxFlex="15%">
+  <div class="fx-item-size sm-fx-item" style="--size: 15%">
     <div><strong>{{transactionSlip?.accountingDate | dateTimeFormat}}</strong></div>
     <div>{{transactionSlip.controlTotal | number : '1.2-2'}}</div>
   </div>
 
-  <div fxFlex>
+  <div class="fx-item sm-fx-item">
     <div>{{transactionSlip.concept}}</div>
   </div>
 
-  <div fxFlex="80px">
+  <div class="fx-item-size sm-fx-item" style="--size: 80px">
     <div>{{transactionSlip.statusName}}</div>
   </div>
 

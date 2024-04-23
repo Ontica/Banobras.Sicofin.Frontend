@@ -15,7 +15,7 @@
 
     <div class="card-header-options">
 
-      <button fxFlexOffset="1.5rem"
+      <button
         [class.btn]="!queryExecuted"
         [class.btn-action]="queryExecuted"
         (click)="onCreateAccountClicked()">
@@ -28,18 +28,18 @@
 
   <div class="card-body" [empNgSpinnerHost]="spinner">
 
-    <div fxLayout="column" fxFlexFill>
+    <div class="fx-column-container-fill">
 
       <emp-ng-spinner #spinner [visible]="isLoading">
 
       </emp-ng-spinner>
 
-      <emp-fa-accounts-lists-filter fxFlex="none"
+      <emp-fa-accounts-lists-filter class="fx-item-none"
         (accountsListsFilterEvent)="onAccountsListsFilterEvent($event)">
 
       </emp-fa-accounts-lists-filter>
 
-      <emp-ng-data-table fxFlex
+      <emp-ng-data-table class="fx-item"
         [dataTable]="accountsListData"
         [executed]="queryExecuted"
         [selectedEntry]="selectedAccountsListEntry"

@@ -11,9 +11,9 @@
 
     <form autocomplete="off" class="form-section" empNgFormKeyDownEnter>
 
-      <div fxLayout="row" fxLayout.lt-md="column" [style.marginBottom.rem]="0.75">
+      <div class="fx-row-container sm-fx-column-container" [style.marginBottom.rem]="0.75">
 
-        <div fxFlex="100">
+        <div class="fx-item-one">
           <label>Modalidad:</label>
           <mat-radio-group [(ngModel)]="selectedCreatorCase" [ngModelOptions]="{standalone: true}"
             (change)="onCreatorTypeChange()">
@@ -44,11 +44,11 @@
 
     <mat-divider class="horizontal"></mat-divider>
 
-    <div fxLayout="row" [style.marginRight.px]="8">
+    <div class="fx-row-container" [style.marginRight.px]="8">
 
-      <div fxFlex fxLayoutAlign="end center">
+      <div class="fx-item fx-end fx-items-center">
 
-        <button
+        <button type="button"
           [class.btn]="!readyForSubmit"
           [class.btn-action]="readyForSubmit"
           (click)="onSubmitForm()">

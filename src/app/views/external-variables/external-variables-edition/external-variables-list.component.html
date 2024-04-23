@@ -19,8 +19,8 @@
   <cdk-virtual-scroll-viewport itemSize="48" [style.height.px]="472">
 
     <div *ngFor="let variable of externalVariablesList"
-      fxLayout="row" fxLayoutAlign="space-between center"
-      class="simple-list-item margin" [style.minHeight.px]="40">
+      class="fx-row-container fx-space-between fx-items-center simple-list-item margin"
+      [style.minHeight.px]="40">
 
       <ng-container
         *ngTemplateOutlet="externalVariablesSelected.uid === variable.uid ?
@@ -52,31 +52,37 @@
 
 <ng-template #itemReadOnly let-variable="variable">
 
-  <div fxFlex="150px" class="detail">
+  <div class="fx-item-size detail" style="--size: 150px">
     <strong>{{variable.code}}</strong>
   </div>
 
-  <div fxFlex>
+  <div class="fx-item">
     <strong>{{variable.name}}</strong>
   </div>
 
-  <div fxFlex="180px" class="detail text-align-center">
+  <div class="fx-item-size detail text-align-center" style="--size: 180px">
     {{variable.startDate | dateTimeFormat}} - {{variable.endDate | dateTimeFormat}}
   </div>
 
-  <div fxFlex="24px"></div>
+  <div class="fx-item-size" style="--size: 24px">
 
-  <button title="Editar"
-    fxFlex="none" mat-icon-button
+  </div>
+
+  <button mat-icon-button
+    title="Editar"
     [style.marginRight.px]="8"
     (click)="onEditExternalVariableClicked(variable)">
+
     <mat-icon> edit </mat-icon>
+
   </button>
 
-  <button title="Eliminar"
-    fxFlex="none" mat-icon-button
+  <button mat-icon-button
+    title="Eliminar"
     (click)="onRemoveExternalVariableClicked(variable)">
+
     <mat-icon> delete </mat-icon>
+
   </button>
 
 </ng-template>

@@ -9,7 +9,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
@@ -39,7 +38,6 @@ import { VoucherTabbedViewComponent } from './voucher-tabbed-view/voucher-tabbed
     FormsModule,
     ReactiveFormsModule,
     AngularMaterialModule,
-    AngularFlexLayoutModule,
     SharedModule,
     ReportsControlsModule,
     SubledgerAccountsModule,

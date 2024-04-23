@@ -74,12 +74,12 @@
 }
 
 .card-body-padding {
-  padding: 16px !important;
+  padding: 0 16px 16px 16px !important;
 }
 
-.card-body-without-top {
+.card-body-padding-with-top {
   margin-top: 0;
-  padding: 0 16px 16px 16px !important;
+  padding: 16px !important;
 }
 
 .card-header-raised {

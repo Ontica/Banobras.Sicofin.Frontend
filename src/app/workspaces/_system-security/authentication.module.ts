@@ -43,7 +43,7 @@ const routes: Routes = [
 
   declarations: [
     AuthenticationMainPageComponent,
-  ]
+  ],
 
 })
 export class AuthenticationModule { }

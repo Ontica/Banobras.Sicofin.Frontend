@@ -1,18 +1,19 @@
 
-<div fxLayout="column" fxFlexFill>
+<div class="fx-column-container-fill">
 
-  <div #controlsContainer *ngIf="voucherList.length > 0 && selection.selected.length > 0" fxFlex="none">
+  <div #controlsContainer *ngIf="voucherList.length > 0 && selection.selected.length > 0"
+    class="fx-item-none">
 
       <mat-divider>
 
       </mat-divider>
 
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="list-selection-header"
+      <div class="fx-row-container fx-space-between fx-items-center list-selection-header"
         [style.minHeight.px]="42">
 
         <ng-container *ngIf="selection.selected.length > 0">
 
-          <div fxFlex="none">
+          <div class="fx-item-none">
 
             <div class="text-small-text" [style.marginRight.px]="8">
 
@@ -24,7 +25,7 @@
 
           </div>
 
-          <div fxFlex="180px">
+          <div class="fx-item-size" style="--size: 180px">
 
             <emp-ng-select name="operation"
               [config]="{bindByValue: false, selectFirst: true}"
@@ -35,7 +36,8 @@
 
           </div>
 
-          <div fxFlex="calc(100% - 524px)" *ngIf="operationSelected?.assignToRequired">
+          <div *ngIf="operationSelected?.assignToRequired"
+            class="fx-item-size" style="--size: calc(100% - 524px)">
 
             <emp-ng-select name="editor"
               [config]="{bindByValue: false,
@@ -53,9 +55,11 @@
 
           </div>
 
-          <div fxFlex="98px">
+          <div class="fx-item-none">
 
-            <button class="btn" (click)="onExecuteOperationClicked()">
+            <button type="button"
+              class="btn"
+              (click)="onExecuteOperationClicked()">
               Ejecutar
             </button>
 
@@ -63,7 +67,7 @@
 
         </ng-container>
 
-        <div fxFlex>
+        <div class="fx-item sm-hide">
 
         </div>
 
@@ -71,7 +75,7 @@
 
   </div>
 
-  <div #headerContainer fxFlex="none">
+  <div #headerContainer class="fx-item-none">
 
     <emp-fa-voucher-list-item
       [displayHeader]="true"
@@ -82,7 +86,7 @@
 
   </div>
 
-  <div #listContainer fxFlex>
+  <div #listContainer class="fx-item">
 
     <cdk-virtual-scroll-viewport itemSize="75">
 

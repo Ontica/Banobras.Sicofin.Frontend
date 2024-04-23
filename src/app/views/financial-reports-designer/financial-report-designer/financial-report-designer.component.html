@@ -1,6 +1,6 @@
-<div fxLayout="column" fxFlexFill>
+<div class="fx-column-container-fill">
 
-  <div #controlsContainer fxFlex="none" *ngIf="queryExecuted">
+  <div #controlsContainer *ngIf="queryExecuted" class="fx-item-none">
 
     <emp-fa-financial-report-designer-controls
       [filter]="filter"
@@ -10,7 +10,7 @@
 
   </div>
 
-  <div #tableContainer fxFlex [empNgSpinnerHost]="spinner">
+  <div #tableContainer class="fx-item" [empNgSpinnerHost]="spinner">
 
     <emp-ng-spinner #spinner [visible]="submitted">
 

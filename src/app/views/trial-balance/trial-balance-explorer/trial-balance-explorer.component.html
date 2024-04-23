@@ -1,6 +1,6 @@
 <div class="explorer" [ngClass]="{'fluid': isQuickQuery}">
 
-  <div class="primary" [fxHide.notebook]="displayAccountStatementViewer">
+  <div class="primary" [class.std-hide]="displayAccountStatementViewer">
 
     <emp-fa-trial-balance-viewer
       [isQuickQuery]="isQuickQuery"

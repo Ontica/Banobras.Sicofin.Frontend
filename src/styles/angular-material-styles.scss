@@ -504,7 +504,7 @@ table.mat-mdc-table.emp-designer {
   }
 
   &.vertical-inline {
-    margin: 0 0.75rem;
+    margin: 0 6px;
     height: $control-height;
   }
 
@@ -787,14 +787,14 @@ table.mat-mdc-table.emp-designer {
   }
 
   .mdc-form-field > label {
-    font-size: 8.5pt;
+    font-size: 8pt;
+    line-height: 9pt;
     margin-right: 8px;
-    line-height: 16px;
   }
 
   &.no-label .mdc-form-field > label {
-    margin-right: 0;
     display: none;
+    margin-right: 0;
   }
 
   &.mat-warn.text-light .mdc-form-field > label,
@@ -814,7 +814,7 @@ table.mat-mdc-table.emp-designer {
 //
 
 .mat-mdc-radio-group {
-  height: $checkbox-size;
+  // height: $checkbox-size;
   display: flex;
   align-items: center;
   margin: 2px 0;

@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div fxFlex="50">
+      <div class="fx-item-half">
 
         <label>Catálogo de cuentas:</label>
 
@@ -18,7 +18,7 @@
 
       </div>
 
-      <div fxFlex>
+      <div class="fx-item">
 
         <label>Sistema:</label>
 
@@ -31,7 +31,7 @@
 
       </div>
 
-      <div fxFlex="36px" fxLayoutAlign="space-around end" [style.paddingBottom.px]="2">
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
         <button title="Buscar"
           [class.btn-icon-action]="form.valid && periodFieldsValid"
@@ -46,9 +46,9 @@
 
     </div>
 
-    <div fxLayout="row">
+    <div class="fx-row-container">
 
-      <div fxFlex="none">
+      <div class="fx-item-none">
 
         <label>Período:</label>
 
@@ -62,17 +62,18 @@
 
       </div>
 
-      <div fxFlex fxLayoutAlign="start end">
+      <div class="fx-item fx-items-end">
 
-        <emp-ng-select name="dateSearchField" #dateSearchField="ngModel" fxFlex="100" required
+        <emp-ng-select name="dateSearchField" #dateSearchField="ngModel" required
           [(ngModel)]="formData.dateSearchField"
           [items]="dateSearchFieldList"
-          [showError]="dateSearchField.invalid">
+          [showError]="dateSearchField.invalid"
+          [style.width.%]="100">
         </emp-ng-select>
 
       </div>
 
-      <div fxFlex="25">
+      <div class="fx-item-quarter">
 
         <label>Estado:</label>
 
@@ -86,7 +87,7 @@
 
       </div>
 
-      <div fxFlex="25">
+      <div class="fx-item-quarter sm-hide">
 
       </div>
 

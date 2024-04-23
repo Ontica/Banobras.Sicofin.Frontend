@@ -1,20 +1,24 @@
-<div class="list-selection-header" [style.top.px]="53">
+<div class="list-selection-header">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="fx-row-container fx-space-between fx-items-center">
 
-      <div fxFlex class="text-small-text">
+      <div class="text-small-text fx-item">
 
         {{accountsChart.accounts.length}} cuentas encontradas
 
       </div>
 
-      <div fxFlex="none">
+      <div class="fx-item-none">
 
-        <div fxFlex fxLayoutAlign="end" [style.marginRight.px]="8">
+        <div class="fx-item fx-end" [style.marginRight.px]="8">
 
-          <button class="btn" (click)="onExportButtonClicked()"> Exportar </button>
+          <button type="button"
+            class="btn"
+            (click)="onExportButtonClicked()">
+            Exportar
+          </button>
 
         </div>
 

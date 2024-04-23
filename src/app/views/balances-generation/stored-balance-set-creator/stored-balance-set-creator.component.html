@@ -1,4 +1,4 @@
-<emp-ng-modal-window [config]="{width:'920px'}">
+<emp-ng-modal-window [config]="{ width: '550px' }">
 
   <emp-ng-card
     title="Nuevo grupo de saldos"
@@ -10,11 +10,11 @@
       <form [formGroup]="form" empNgFormKeyDownEnter
         autocomplete="off" class="form-section">
 
-        <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0">
+        <div class="fx-column-container fx-gap-half">
 
-          <div fxLayout="row" fxLayout.lt-md="column">
+          <div class="fx-row-container">
 
-            <div fxFlex="50">
+            <div class="fx-item">
               <label>Catálogo de cuentas:</label>
               <emp-ng-select
                 [config]="{selectFirst: !accountsChartDefault?.uid}"
@@ -25,7 +25,7 @@
               </emp-ng-select>
             </div>
 
-            <div fxFlex="none" fxFlex.lt-md="none">
+            <div class="fx-item-none">
               <label>Saldos al día:</label>
               <emp-ng-datepicker
                 formControlName="balancesDate"
@@ -36,11 +36,11 @@
 
           </div>
 
-          <mat-divider class="horizontal"></mat-divider>
+          <mat-divider class="horizontal-slim"></mat-divider>
 
-          <div fxLayout="row">
+          <div class="fx-row-container fx-end">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div class="fx-item-none">
 
               <button (click)="onCreateStoredBalanceSetClicked()"
                 [class.btn]="!formHelper.isFormReady(form)"

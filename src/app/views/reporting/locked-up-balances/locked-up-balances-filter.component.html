@@ -1,10 +1,10 @@
 <form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container">
 
-  <div fxLayout="column" fxLayoutGap="0.5rem" fxLayoutGap.lt-md="0.5rem">
+  <div class="fx-column-container fx-gap-half">
 
-    <div fxLayout="row" fxLayout.lt-sm="column">
+    <div class="fx-row-container">
 
-      <div fxFlex="50">
+      <div class="fx-item-half sm-fx-item">
 
         <label>Catálogo de cuentas:</label>
 
@@ -18,11 +18,11 @@
 
       </div>
 
-      <div fxFlex>
+      <div class="fx-item sm-hide">
 
       </div>
 
-      <div fxFlex="none">
+      <div class="fx-item-none">
 
           <label>Período:</label>
 
@@ -37,7 +37,7 @@
       </div>
 
 
-      <div fxFlex="36px" fxFlex.lt-md="none" [style.paddingTop.px]="12" [style.paddingBottom.px]="2">
+      <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
         <button title="Buscar"
           [class.btn-icon]="form.invalid || !periodValid"

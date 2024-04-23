@@ -14,14 +14,13 @@
 
         </emp-ng-spinner>
 
-        <div fxLayout="column" fxLayout.lt-md="column" fxFlexFill
-          fxLayoutGap="0.75rem" fxLayoutGap.lt-md="0.75rem">
+        <div class="fx-column-container-fill fx-gap-half">
 
           <div class="section-title"> Archivo a importar </div>
 
-          <div fxLayout="row" fxLayout.lt-md="column">
+          <div class="fx-row-container">
 
-            <div fxFlex="100">
+            <div class="fx-item-one">
               <label>Archivo:</label>
               <emp-ng-file-control [disabled]="executedImported"
                 [fileControl]="file"
@@ -36,9 +35,9 @@
 
           <div class="section-title"> Información sobre las cuentas y parámetros de importación </div>
 
-          <div fxLayout="row" fxLayoutAlign="space-between">
+          <div class="fx-row-container fx-space-between">
 
-            <div fxFlex="50" fxFlex.lt-md>
+            <div class="fx-item-half sm-fx-item">
               <label>Tipo de contabilidad:</label>
               <emp-ng-select
                 [config]="{selectFirst: true}"
@@ -49,7 +48,7 @@
               </emp-ng-select>
             </div>
 
-            <div fxFlex="none" fxFlex.lt-md="none">
+            <div class="fx-item-none">
               <label>Fecha de aplicación:</label>
               <emp-ng-datepicker
                 formControlName="applicationDate"
@@ -66,9 +65,10 @@
               Información del archivo a importar
             </div>
 
-            <div fxLayout="row" fxLayout.lt-md="column" [style.maxHeight]="'200px'" [style.minHeight]="'auto'">
+            <div class="fx-row-container"
+              [style.maxHeight]="'200px'" [style.minHeight]="'auto'">
 
-              <emp-fa-accounts-importer-details-table fxFlex="100"
+              <emp-fa-accounts-importer-details-table class="fx-item-one"
                 [importResult]="importResult"
                 [commandExecuted]="executedDryRun">
 
@@ -78,21 +78,27 @@
 
           </ng-container>
 
-          <mat-divider class="horizontal"></mat-divider>
+          <mat-divider class="horizontal-slim">
 
-          <div fxLayout="row">
+          </mat-divider>
 
-            <div fxFlex fxLayoutAlign="end center">
+          <div class="fx-row-container">
 
-              <button (click)="onSubmitDryRunImportAccounts()" [disabled]="executedImported"
+            <div class="fx-item fx-end fx-items-center">
+
+              <button type="button"
+                [disabled]="executedImported"
                 [class.btn]="executedDryRun || !isFileFormValid"
-                [class.btn-action]="!executedDryRun && isFileFormValid">
+                [class.btn-action]="!executedDryRun && isFileFormValid"
+                (click)="onSubmitDryRunImportAccounts()" >
                 Analizar archivo
               </button>
 
-              <button (click)="onSubmitImportAccounts()" [disabled]="executedImported"
+              <button type="button"
+                [disabled]="executedImported"
                 [class.btn]="!isReadyForSubmit"
-                [class.btn-action]="isReadyForSubmit">
+                [class.btn-action]="isReadyForSubmit"
+                (click)="onSubmitImportAccounts()">
                 Importar cambios
               </button>
 
@@ -102,8 +108,9 @@
 
                 </mat-divider>
 
-                <button (click)="onClose()"
-                  class="btn-action">
+                <button type="button"
+                  class="btn-action"
+                  (click)="onClose()">
                   Cerrar
                 </button>
 

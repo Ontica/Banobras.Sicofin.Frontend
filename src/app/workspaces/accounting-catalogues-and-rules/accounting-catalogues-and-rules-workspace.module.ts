@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
-import { AngularFlexLayoutModule } from '@app/shared/angular-flex-layout.module';
 import { SharedModule } from '@app/shared/shared.module';
 
 import {
@@ -54,7 +53,6 @@ import {
     ReactiveFormsModule,
 
     AngularMaterialModule,
-    AngularFlexLayoutModule,
     SharedModule,
 
     AccountingCataloguesAndRulesWorkspaceRoutingModule,
@@ -75,10 +73,6 @@ import {
     ReportDesignerMainPageComponent,
     SubledgerAccountsMainPageComponent,
   ],
-
-  exports: [
-
-  ]
 
 })
 export class AccountingCataloguesAndRulesWorkplaceModule { }
