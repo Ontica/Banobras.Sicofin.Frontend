@@ -100,7 +100,7 @@
                 <emp-ng-select style="width: 100%;"
                   formControlName="positioningOffsetUID"
                   [items]="financialReportRowList"
-                  [config]="{searchableFields: ['conceptCode', 'concept']}"
+                  [config]="{virtualScroll: true, searchableFields: ['conceptCode', 'concept']}"
                   [showError]="formHelper.isControlInvalid(form.controls.positioningOffsetUID)"
                   [placeholder]="!!form.controls.group.value ? 'Seleccionar' : 'Seleccionar la agrupación'">
                   <ng-template #labelTemplate let-item="item">

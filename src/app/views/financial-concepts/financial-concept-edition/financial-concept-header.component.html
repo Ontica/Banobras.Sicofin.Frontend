@@ -46,7 +46,7 @@
 
       <div *ngIf="displayPositioningOffsetConcept"
         class="fx-item-two-third fx-items-end">
-        <emp-ng-select class="fx-item-one"
+        <emp-ng-select [style.width.%]="100"
           formControlName="positioningOffsetConceptUID"
           [items]="financialConceptsList"
           [loading]="isLoadingFinancialConcepts"
