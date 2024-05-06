@@ -28,6 +28,7 @@
           "options": {
             "allowedCommonJsDependencies": [
               "quill",
+              "quill-delta",
               "crypto-js",
               "moment",
               "lodash/cloneDeep"
