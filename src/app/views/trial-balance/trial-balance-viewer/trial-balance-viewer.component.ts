@@ -301,7 +301,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
-  private setDisplayExportModal(display) {
+  private setDisplayExportModal(display: boolean) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
   }

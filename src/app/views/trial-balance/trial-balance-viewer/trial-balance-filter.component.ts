@@ -69,7 +69,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadAccountsCharts();
     this.loadReportTypes();
     this.setBalancesTypeList();
@@ -87,7 +87,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get isBalanceSelected() {
+  get isBalanceSelected(): boolean {
     return [TrialBalanceTypes.SaldosPorCuenta,
             TrialBalanceTypes.SaldosPorAuxiliar].includes(this.query.trialBalanceType);
   }
@@ -96,7 +96,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get exchangeRatesDisabled(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.BalanzaDolarizada,
-            TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
@@ -151,18 +150,18 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get displayInitialPeriod() {
+  get displayInitialPeriod(): boolean {
     return !this.isBalanceSelected &&
            ![TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
 
-  get displaySubledgerAccount() {
+  get displaySubledgerAccount(): boolean {
     return this.isBalanceSelected;
   }
 
 
-  get displayToAccount() {
+  get displayToAccount(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.Balanza,
             TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
@@ -176,7 +175,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get displayLevel(): boolean {
     return ![TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
              TrialBalanceTypes.BalanzaDolarizada,
-             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
              TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
@@ -281,7 +279,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onUseDefaultValuationChange(checked) {
+  onUseDefaultValuationChange(checked: boolean) {
     if (!checked && !this.showFilters) {
       this.onShowFiltersClicked();
     }
