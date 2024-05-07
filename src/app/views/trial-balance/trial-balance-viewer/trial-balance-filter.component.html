@@ -323,6 +323,7 @@
               [(exchangeRateTypeUID)]="query.initialPeriod.exchangeRateTypeUID"
               [(valuateToCurrrencyUID)]="query.initialPeriod.valuateToCurrrencyUID"
               [(consolidateBalancesToTargetCurrency)]="query.consolidateBalancesToTargetCurrency"
+              [showConsolidateBalancesToTargetCurrency]="showConsolidateBalancesToTargetCurrency"
               (exchangeRateDateChange)="onExchangeRateDateChanged(query.initialPeriod, $event)"
               (exchangeRateSelectorEvent)="onExchangeRateSelectorEvent($event, query.initialPeriod)">
 

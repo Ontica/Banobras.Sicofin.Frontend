@@ -113,6 +113,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get showConsolidateBalancesToTargetCurrency(): boolean {
+    return ![TrialBalanceTypes.BalanzaEnColumnasPorMoneda].includes(this.query.trialBalanceType);
+  }
+
+
   get showCascadeBalancesDisabled(): boolean {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaDolarizada,
@@ -458,7 +463,9 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   private validateExchangeRatesFields(data: TrialBalanceQuery) {
     if (this.query.useValuation) {
-      data.consolidateBalancesToTargetCurrency = this.query.useDefaultValuation ? false :
+      data.consolidateBalancesToTargetCurrency =
+        this.query.useDefaultValuation || !this.showConsolidateBalancesToTargetCurrency ?
+        false :
         this.query.consolidateBalancesToTargetCurrency;
 
       if (!this.query.useDefaultValuation) {
