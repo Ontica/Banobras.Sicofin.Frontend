@@ -9,7 +9,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "financial-accounting-intranet": {
+    "banobras-sicofin-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -33,7 +33,7 @@
               "moment",
               "lodash/cloneDeep"
             ],
-            "outputPath": "dist/financial-accounting-intranet",
+            "outputPath": "dist/banobras-sicofin-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -87,18 +87,18 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "port": 2021,
-            "buildTarget": "financial-accounting-intranet:build"
+            "buildTarget": "banobras-sicofin-frontend:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "financial-accounting-intranet:build:production"
+              "buildTarget": "banobras-sicofin-frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "financial-accounting-intranet:build"
+            "buildTarget": "banobras-sicofin-frontend:build"
           }
         },
         "test": {
@@ -122,11 +122,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "financial-accounting-intranet:serve"
+            "devServerTarget": "banobras-sicofin-frontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "financial-accounting-intranet:serve:production"
+              "devServerTarget": "banobras-sicofin-frontend:serve:production"
             }
           }
         },

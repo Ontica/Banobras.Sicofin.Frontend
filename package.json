@@ -1,14 +1,14 @@
 {
-  "name": "empiria-financial-accounting-intranet",
+  "name": "banobras-sicofin-frontend",
   "author": "La Vía Óntica SC, Ontica LLC and contributors.",
   "version": "2.4.0",
-  "description": "Empiria Financial Accounting Intranet Application",
+  "description": "Banobras SICOFIN Frontend Application",
   "license": "AGPL-3.0",
   "homepage": "http://ontica.org",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ontica/Empiria.Financial.Accounting.Intranet"
+    "url": "https://github.com/Ontica/Banobras.Sicofin.Frontend"
   },
   "contributors": [
     "Janeth Montero <janeth.montero@ontica.org>",

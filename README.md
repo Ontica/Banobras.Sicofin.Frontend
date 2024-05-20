@@ -1,10 +1,10 @@
-# Empiria Financial Accounting Intranet Web Application
+# BANOBRAS - SICOFIN Frontend Web Application
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9b746ceddd9f45c0bcba7e7f434ba095)](https://www.codacy.com/gh/Ontica/Empiria.FinancialAccounting.Intranet/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Ontica/Empiria.FinancialAccounting.Intranet&amp;utm_campaign=Badge_Grade) &nbsp; &nbsp; [![Maintainability](https://api.codeclimate.com/v1/badges/7adf0aa9f29c28a33951/maintainability)](https://codeclimate.com/github/Ontica/Empiria.FinancialAccounting.Intranet/maintainability)
 
 ## Overview
 
-Angular-based front-end application for the Empiria Financial Accounting System.
+Angular-based front-end application for the Banobras SICOFIN System.
 
 If you are interested in the former version of this software based on ASP and Visual Basic 6.0, that was built twenty years ago by our organization, please [visit this GitHub repository](https://github.com/Ontica/Sicofin-2002).
 
@@ -30,10 +30,10 @@ After that, please download and install this repo:
 
 ```bash
 # clone (or fork) this repo
-git clone https://github.com/Ontica/Empiria.FinancialAccounting.Intranet
+git clone https://github.com/Ontica/Banobras.Sicofin.Frontend
 
 # change directory
-cd Empiria.FinancialAccounting.Intranet
+cd Banobras.Sicofin.Frontend
 
 
 # install the repo with npm
