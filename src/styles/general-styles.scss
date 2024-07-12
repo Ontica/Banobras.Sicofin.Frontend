@@ -384,6 +384,10 @@ textarea:focus {
   font-weight: 600;
 }
 
+.underline-text {
+  text-decoration: underline;
+}
+
 .error-indicator-text {
   color: $warning-color;
   text-decoration: underline;

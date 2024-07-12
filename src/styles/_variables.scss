@@ -181,21 +181,24 @@ $simple-list-background-color: $control-disabled-background !default;
 $grid-header-background-color: #f5efe7 !default;
 $grid-header-color: $primary-color !default;
 $grid-footer-background-color: $disabled-color;
-$grid-border: 0;
-$grid-even-background-color: $white;
 $grid-odd-background-color: #f4f4f4 !default;
-$grid-hover-background-color: #fafafa;
+$grid-even-background-color: $white;
+
 $grid-selected-background-color: #f7fcfb;
+$grid-nested-background-color: #e0e6eb;
+$grid-nested-border: 2px solid #859cad;
+
+$grid-hover-background-color: #fafafa;
 $grid-selected-hover-background-color: #f3fcfb;
+$grid-nested-hover-background-color: #d0dae1;
+
+$grid-border: 0;
 $grid-header-height: 40px;
 $grid-row-height: 32px;
 $grid-entry-padding-vertical: 8px;
 $grid-entry-padding-horizontal: 15px;
 $grid-entry-padding-vertical-first: 10px;
 $grid-entry-padding-vertical-default: 8px;
-$grid-nested-background-color: #e0e6eb;
-$grid-nested-hover-background-color: #d0dae1;
-$grid-nested-border: 2px solid #859cad;
 
 //
 // Designer

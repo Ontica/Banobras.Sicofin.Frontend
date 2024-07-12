@@ -128,6 +128,28 @@
   }
 }
 
+
+.card-floating-container-gt-md {
+
+  @include gt-medium() {
+    background-color: $white;
+    border: 1px solid $border-color-light;
+    height: calc(100% - 10px) !important;
+    margin-top: 10px;
+
+    .card-floating-primary-gt-md.card,
+    .card-floating-primary-gt-md > .card {
+      margin: -10px -10px 0 10px;
+    }
+
+    .card-floating-secondary-gt-md.card,
+    .card-floating-secondary-gt-md > .card {
+      margin: -10px 0 0 -10px;
+    }
+  }
+
+}
+
 //
 // Responsive
 //
