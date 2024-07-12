@@ -114,33 +114,33 @@ export interface VouchersOperationResult {
 
 
 export interface VouchersQuery {
+  stage: VoucherStage;
   accountsChartUID: string;
   keywords: string;
-  number?: string;
-  concept?: string;
+  status?: string;
   ledgerUID?: string;
-  fromDate?: string;
-  toDate?: string;
-  dateSearchField?: DateSearchField;
+  voucherTypeUID?: string;
+  transactionTypeUID?: string;
+  number?: string;
+  voucherID?: string;
+  concept?: string;
+  verificationNumber?: string;
   accountKeywords?: string;
   subledgerAccountKeywords?: string;
-  transactionTypeUID?: string;
-  voucherTypeUID?: string;
+  fromAccountingDate?: string;
+  toAccountingDate?: string;
+  fromRecordingDate?: string;
+  toRecordingDate?: string;
   editorType?: EditorType;
   editorUID?: string;
-  stage: VoucherStage;
-  status?: VoucherStatus;
-  orderBy?: string;
-  pageSize?: number;
-  page?: number;
 }
 
 
 export const EmptyVouchersQuery: VouchersQuery = {
   stage: VoucherStage.All,
   accountsChartUID: '',
-  keywords: '',
   ledgerUID: '',
+  keywords: '',
   editorType: EditorType.ElaboratedBy,
 };
 
@@ -412,6 +412,11 @@ export function mapVoucherStageFromViewName(viewName: string): VoucherStage {
     default:
       throw Assertion.assertNoReachThisCode(`Unhandled transaction stage for view '${viewName}'.`);
   }
+}
+
+
+export function isVoucherStageAll(viewName: string): boolean {
+  return 'AccountingOperation.All' === viewName;
 }
 
 

@@ -4,7 +4,7 @@
 
     <div class="fx-row-container">
 
-      <div class="fx-item-half">
+      <div [ngClass]="displayStatus ? 'fx-item-quarter' : 'fx-item-half'">
 
         <label>Catálogo de cuentas:</label>
 
@@ -12,8 +12,24 @@
           [(ngModel)]="filter.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
+          [title]="accountChartSelected?.name ?? null"
           [showError]="accountsChartUID.invalid"
           (changes)="onAccountChartChanges($event)">
+        </emp-ng-select>
+
+      </div>
+
+
+      <div class="fx-item-quarter" *ngIf="displayStatus">
+
+        <label>Estado:</label>
+
+        <emp-ng-select name="status"
+          [config]="{clearable: true}"
+          [(ngModel)]="filter.status"
+          [items]="voucherStatusList"
+          [loading]="isLoading"
+          placeholder="Todos">
         </emp-ng-select>
 
       </div>
@@ -36,9 +52,9 @@
       <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
 
         <button title="Buscar"
-          [class.btn-icon-action]="isFormValid"
-          [class.btn-icon]="!isFormValid"
-          [disabled]="!isFormValid"
+          [class.btn-icon-action]="form.valid"
+          [class.btn-icon]="!form.valid"
+          [disabled]="!form.valid"
           (click)="onSearchVoucherClicked()">
           <mat-icon>search</mat-icon>
 
@@ -77,28 +93,6 @@
 
         <div class="fx-row-container">
 
-          <div class="fx-item-quarter">
-
-            <label>No. póliza:</label>
-
-            <input type="text" name="number"
-              class="text-box"
-              [(ngModel)]="filter.number"
-              (keyup.escape)="filter.number = ''">
-
-          </div>
-
-          <div class="fx-item-quarter">
-
-            <label>Concepto:</label>
-
-            <input type="text" name="concept"
-              class="text-box"
-              [(ngModel)]="filter.concept"
-              (keyup.escape)="filter.concept = ''">
-
-          </div>
-
           <div class="fx-item-half">
 
             <label>Contabilidad:</label>
@@ -113,63 +107,117 @@
 
           </div>
 
-        </div>
+          <div class="fx-item-half">
 
-        <div class="fx-row-container sm-fx-column-container">
+            <label>Tipo de póliza:</label>
 
-          <div class="fx-item-half sm-fx-item fx-row-container">
-
-            <div class="fx-item-half">
-
-              <label>Con la cuenta:</label>
-
-              <input type="text" name="accountKeywords"
-                class="text-box"
-                [(ngModel)]="filter.accountKeywords"
-                (keyup.escape)="filter.accountKeywords = ''">
-
-            </div>
-
-            <div class="fx-item-half">
-
-              <label>Con el auxiliar:</label>
-
-              <input type="text" name="subledgerAccountKeywords"
-                class="text-box"
-                [(ngModel)]="filter.subledgerAccountKeywords"
-                (keyup.escape)="filter.subledgerAccountKeywords = ''">
-
-            </div>
+            <emp-ng-select  name="voucherTypeUID"
+              [config]="{clearable: true}"
+              [(ngModel)]="filter.voucherTypeUID"
+              [items]="voucherTypesList"
+              [loading]="isLoading"
+              placeholder="Todos">
+            </emp-ng-select>
 
           </div>
 
-          <div class="fx-item-half sm-fx-item fx-row-container" #periodSection>
+        </div>
 
-            <div class="fx-item-none">
+        <div class="fx-row-container sm-fx-wrap">
 
-              <label>Período:</label>
+          <div class="fx-item-quarter sm-fx-item-half">
 
-              <emp-ng-date-range-picker name="period"
-                [(startDate)]="filter.fromDate"
-                [(endDate)]="filter.toDate"
-                [displaySelectionType]="false">
+            <label>No. póliza:</label>
 
-              </emp-ng-date-range-picker>
+            <input type="text" name="number"
+              class="text-box"
+              [(ngModel)]="filter.number"
+              (keyup.escape)="filter.number = ''">
 
-            </div>
+          </div>
 
-            <div class="fx-item-size fx-items-end" style="--size: calc(100% - 221px)">
+          <div class="fx-item-quarter sm-fx-item-half">
 
-              <emp-ng-select name="dateSearchField"
-                [style.width.%]="100"
-                [(ngModel)]="filter.dateSearchField"
-                [config]="{clearable: true}"
-                [items]="dateSearchFieldList"
-                [required]="isDateSearchFieldRequired"
-                [showError]="!isDateSearchFieldValid">
-              </emp-ng-select>
+            <label>ID póliza:</label>
 
-            </div>
+            <input type="text" name="voucherID"
+              class="text-box"
+              [(ngModel)]="filter.voucherID"
+              (keyup.escape)="filter.voucherID = ''">
+
+          </div>
+
+          <div class="fx-item sm-fx-item-half">
+
+            <label class="ellipsis">Concepto:</label>
+
+            <input type="text" name="concept"
+              class="text-box"
+              [(ngModel)]="filter.concept"
+              (keyup.escape)="filter.concept = ''">
+
+          </div>
+
+          <div class="fx-item-none">
+
+            <label>Fechas de afectación:</label>
+
+            <emp-ng-date-range-picker name="accountingDate"
+              [(startDate)]="filter.fromAccountingDate"
+              [(endDate)]="filter.toAccountingDate"
+              [displaySelectionType]="false">
+
+            </emp-ng-date-range-picker>
+
+          </div>
+
+        </div>
+
+        <div class="fx-row-container sm-fx-wrap">
+
+          <div class="fx-item-quarter sm-fx-item-half">
+
+            <label>Con la cuenta:</label>
+
+            <input type="text" name="accountKeywords"
+              class="text-box"
+              [(ngModel)]="filter.accountKeywords"
+              (keyup.escape)="filter.accountKeywords = ''">
+
+          </div>
+
+          <div class="fx-item-quarter sm-fx-item-half">
+
+            <label>Con el auxiliar:</label>
+
+            <input type="text" name="subledgerAccountKeywords"
+              class="text-box"
+              [(ngModel)]="filter.subledgerAccountKeywords"
+              (keyup.escape)="filter.subledgerAccountKeywords = ''">
+
+          </div>
+
+          <div class="fx-item sm-fx-item-half">
+
+            <label class="ellipsis">No. de verificación:</label>
+
+            <input type="text" name="verificationNumber"
+              class="text-box"
+              [(ngModel)]="filter.verificationNumber"
+              (keyup.escape)="filter.verificationNumber = ''">
+
+          </div>
+
+          <div class="fx-item-none">
+
+            <label>Fechas de elaboración:</label>
+
+            <emp-ng-date-range-picker name="recordingDate"
+              [(startDate)]="filter.fromRecordingDate"
+              [(endDate)]="filter.toRecordingDate"
+              [displaySelectionType]="false">
+
+            </emp-ng-date-range-picker>
 
           </div>
 
@@ -185,20 +233,6 @@
               [config]="{clearable: true}"
               [(ngModel)]="filter.transactionTypeUID"
               [items]="transactionTypesList"
-              [loading]="isLoading"
-              placeholder="Todos">
-            </emp-ng-select>
-
-          </div>
-
-          <div class="fx-item-half">
-
-            <label>Tipo de póliza:</label>
-
-            <emp-ng-select  name="voucherTypeUID"
-              [config]="{clearable: true}"
-              [(ngModel)]="filter.voucherTypeUID"
-              [items]="voucherTypesList"
               [loading]="isLoading"
               placeholder="Todos">
             </emp-ng-select>

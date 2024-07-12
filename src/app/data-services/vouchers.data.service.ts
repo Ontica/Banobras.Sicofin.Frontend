@@ -58,6 +58,13 @@ export class VouchersDataService {
   }
 
 
+  getVoucherStatus(): EmpObservable<Identifiable[]> {
+    const path = `v2/financial-accounting/vouchers/status-list`;
+
+    return this.http.get<Identifiable[]>(path);
+  }
+
+
   getVoucherSpecialCaseTypes(): EmpObservable<VoucherSpecialCaseType[]> {
     const path = `v2/financial-accounting/vouchers/special-case-types`;
 

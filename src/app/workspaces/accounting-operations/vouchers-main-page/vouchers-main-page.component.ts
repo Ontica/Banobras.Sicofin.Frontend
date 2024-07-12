@@ -14,7 +14,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { MainUIStateSelector, VoucherAction,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { EmptyVoucher, EmptyVoucherFilterData, FileReport, mapVoucherDescriptorFromVoucher,
+import { EmptyVoucher, EmptyVoucherFilterData, FileReport, isVoucherStageAll, mapVoucherDescriptorFromVoucher,
          mapVoucherStageFromViewName, Voucher, VoucherDescriptor, VoucherFilterData,
          VouchersBulkOperationData, VouchersOperationCommand, VouchersOperationResult,
          VouchersOperationType } from '@app/models';
@@ -51,6 +51,8 @@ type VouchersMainPageModalOptions = 'VoucherCreator' | 'VouchersImporter';
 export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   currentView: View;
+
+  displayStatus = false;
 
   voucherFilterData: VoucherFilterData = Object.assign({}, EmptyVoucherFilterData);
 
@@ -235,6 +237,8 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   private onCurrentViewChanged(newView: View) {
     this.currentView = newView;
+
+    this.displayStatus = isVoucherStageAll(this.currentView.name);
 
     const currentFilterData =
       this.uiLayer.selectValue<VoucherFilterData>(VoucherStateSelector.LIST_FILTER_DATA);

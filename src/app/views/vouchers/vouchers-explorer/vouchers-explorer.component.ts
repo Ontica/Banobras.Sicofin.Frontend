@@ -36,6 +36,8 @@ export enum VouchersExplorerEventType {
 })
 export class VouchersExplorerComponent implements OnInit, OnChanges {
 
+  @Input() displayStatus = false;
+
   @Input() voucherFilterData: VoucherFilterData = Object.assign({}, EmptyVoucherFilterData);
 
   @Input() voucherList: VoucherDescriptor[] = [];

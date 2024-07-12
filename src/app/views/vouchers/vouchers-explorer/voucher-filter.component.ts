@@ -26,8 +26,8 @@ import { sendEvent } from '@app/shared/utils';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, DateSearchFieldList, VouchersQuery, VoucherStage, EditorTypeList,
-         EmptyVouchersQuery, VoucherFilterData, EmptyVoucherFilterData } from '@app/models';
+import { AccountsChartMasterData, VouchersQuery, VoucherStage, EditorTypeList, EmptyVouchersQuery,
+         VoucherFilterData, EmptyVoucherFilterData } from '@app/models';
 
 
 export enum VoucherFilterEventType {
@@ -43,6 +43,8 @@ export enum VoucherFilterEventType {
 })
 export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
 
+  @Input() displayStatus = false;
+
   @Input() voucherFilterData: VoucherFilterData = Object.assign({}, EmptyVoucherFilterData);
 
   @Input() showFilters = false;
@@ -52,10 +54,11 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
   @Output() voucherFilterEvent = new EventEmitter<EventInfo>();
 
   accountsChartMasterDataList: AccountsChartMasterData[] = [];
-  dateSearchFieldList: Identifiable[] = DateSearchFieldList;
-  editorTypeList: Identifiable[] = EditorTypeList;
-  transactionTypesList: Identifiable[] = [];
+
+  voucherStatusList: Identifiable[] = [];
   voucherTypesList: Identifiable[] = [];
+  transactionTypesList: Identifiable[] = [];
+  editorTypeList: Identifiable[] = EditorTypeList;
 
   filter: VouchersQuery = Object.assign({}, EmptyVouchersQuery);
   accountChartSelected: AccountsChartMasterData = null;
@@ -76,7 +79,7 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.voucherFilterData) {
       this.filter = Object.assign({}, this.voucherFilterData.query);
       this.accountChartSelected = this.voucherFilterData.accountChart ?? null;
@@ -85,7 +88,7 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.loadDataLists();
     this.subscribeEditorList();
   }
@@ -93,21 +96,6 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.helper.destroy();
-  }
-
-
-  get isDateSearchFieldRequired() {
-    return !!this.filter.toDate || !!this.filter.fromDate;
-  }
-
-
-  get isDateSearchFieldValid() {
-    return this.isDateSearchFieldRequired ? !!this.filter.dateSearchField : true;
-  }
-
-
-  get isFormValid() {
-    return !!this.filter.accountsChartUID && this.isDateSearchFieldValid;
   }
 
 
@@ -147,12 +135,14 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
       this.helper.select<AccountsChartMasterData[]>
         (AccountChartStateSelector.ACCOUNTS_CHARTS_MASTER_DATA_LIST),
       this.helper.select<Identifiable[]>(VoucherStateSelector.TRANSACTION_TYPES_LIST),
-      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST)
+      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_TYPES_LIST),
+      this.helper.select<Identifiable[]>(VoucherStateSelector.VOUCHER_STATUS_LIST),
     ])
-    .subscribe(([x, y, z]) => {
-      this.accountsChartMasterDataList = x;
-      this.transactionTypesList = y;
-      this.voucherTypesList = z;
+    .subscribe(([a, b, c, d]) => {
+      this.accountsChartMasterDataList = a;
+      this.transactionTypesList = b;
+      this.voucherTypesList = c;
+      this.voucherStatusList = d;
 
       this.validateEmitFirstFilter();
       this.isLoading = false;
@@ -181,7 +171,7 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
 
 
   private validateFieldToClear() {
-    this.filter.ledgerUID = this.accountChartSelected.ledgers
+    this.filter.ledgerUID = this.accountChartSelected?.ledgers
       .filter(x => this.filter.ledgerUID === x.uid).length > 0 ? this.filter.ledgerUID : '';
   }
 
@@ -227,15 +217,16 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
     const query: VouchersQuery = {
       stage: this.filter.stage ?? VoucherStage.All,
       accountsChartUID: this.filter.accountsChartUID ?? '',
-      keywords: this.filter.keywords ?? '',
-      number: this.filter.number ?? '',
-      concept: this.filter.concept ?? '',
       ledgerUID: this.filter.ledgerUID ?? '',
+      keywords: this.filter.keywords ?? '',
+      voucherTypeUID: this.filter.voucherTypeUID ?? '',
+      number: this.filter.number ?? '',
+      voucherID: this.filter.voucherID ?? '',
+      concept: this.filter.concept ?? '',
       accountKeywords: this.filter.accountKeywords ?? '',
       subledgerAccountKeywords: this.filter.subledgerAccountKeywords ?? '',
-      dateSearchField: this.filter.dateSearchField ?? null,
+      verificationNumber: this.filter.verificationNumber ?? '',
       transactionTypeUID: this.filter.transactionTypeUID ?? '',
-      voucherTypeUID: this.filter.voucherTypeUID ?? '',
       editorType: this.filter.editorType ?? null,
       editorUID: this.filter.editorUID ?? '',
     };
@@ -247,12 +238,24 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
 
 
   private validateVouchersQueryFieldsNoRequired(query: VouchersQuery) {
-    if (this.filter.fromDate) {
-      query.fromDate = this.filter.fromDate;
+    if (this.displayStatus && this.filter.status) {
+      query.status = this.filter.status;
     }
 
-    if (this.filter.toDate) {
-      query.toDate = this.filter.toDate;
+    if (this.filter.fromRecordingDate) {
+      query.fromRecordingDate = this.filter.fromRecordingDate;
+    }
+
+    if (this.filter.toRecordingDate) {
+      query.toRecordingDate = this.filter.toRecordingDate;
+    }
+
+    if (this.filter.fromAccountingDate) {
+      query.fromAccountingDate = this.filter.fromAccountingDate;
+    }
+
+    if (this.filter.toAccountingDate) {
+      query.toAccountingDate = this.filter.toAccountingDate;
     }
   }
 
