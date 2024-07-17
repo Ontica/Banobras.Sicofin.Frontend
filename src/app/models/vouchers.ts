@@ -112,7 +112,7 @@ export interface VouchersBulkOperationData {
 export interface VouchersOperationResult {
   message?: string;
   file?: FileReport;
-  vouchers?: Voucher[];
+  vouchers?: VoucherDescriptor[];
 }
 
 

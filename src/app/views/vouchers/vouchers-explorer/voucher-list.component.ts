@@ -89,6 +89,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
     if (changes.voucherList) {
       this.scrollToTop();
       this.selection.clear();
+      this.validateOperationList();
     }
   }
 
@@ -122,7 +123,6 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
 
   onVoucherListItemEvent(event: EventInfo) {
-
     switch (event.type as VoucherListItemEventType) {
       case VoucherListItemEventType.VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
@@ -132,6 +132,12 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
       case VoucherListItemEventType.CHECK_CLICKED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         this.selection.toggle(event.payload.voucher);
+        this.validateOperationList();
+        return;
+
+      case VoucherListItemEventType.CHECK_ALL_CLICKED:
+        Assertion.assertValue(event.payload.vouchers, 'event.payload.vouchers');
+        this.validateOperationList();
         return;
 
       default:
@@ -197,7 +203,26 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
       list.push(getVoucherOperation(VouchersOperationType.excel));
     }
 
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_CLONE)) {
+      list.push(getVoucherOperation(VouchersOperationType.clone));
+    }
+
     this.operationsList = list;
+  }
+
+
+  private validateOperationList() {
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_CLONE)) {
+      const defaultOperationList = this.operationsList.filter(x => x.uid !== VouchersOperationType.clone);
+      const showClone = this.selection.selected.length <= 1;
+
+      if (showClone) {
+        const cloneOperation = getVoucherOperation(VouchersOperationType.clone)
+        defaultOperationList.push(cloneOperation);
+      }
+
+      this.operationsList = [...defaultOperationList];
+    }
   }
 
 
@@ -257,14 +282,18 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private getConfirmTitle(): string {
+    const vouchersText = this.selection.selected.length === 1 ? 'la póliza' : `las pólizas`
+
     switch (this.operationSelected.uid as VouchersOperationType) {
       case VouchersOperationType.close:
       case VouchersOperationType.sendToSupervisor:
       case VouchersOperationType.delete:
       case VouchersOperationType.print:
-        return `${this.operationSelected.name} las pólizas`;
+        return `${this.operationSelected.name} ${vouchersText}`;
       case VouchersOperationType.reasign:
-        return 'Reasignar las pólizas';
+        return `Reasignar ${vouchersText}`;
+      case VouchersOperationType.clone:
+        return `Clonar ${vouchersText}`;
       default:
         return 'Confirmar operación';
     }
@@ -272,35 +301,43 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private getConfirmMessage(): string {
+    const vouchersCount = this.selection.selected.length;
+    const vouchers = vouchersCount === 1 ? 'la póliza' : `las ${vouchersCount} pólizas`
+    const selection = vouchersCount === 1 ? 'la póliza seleccionada.' :
+      `las <strong>${vouchersCount} pólizas</strong> seleccionadas.`
     let operation = 'modificará';
     let question = '¿Continuo con la operación?';
+
     switch (this.operationSelected.uid as VouchersOperationType) {
       case VouchersOperationType.close:
         operation = 'enviará al diario';
-        question = '¿Envío al diario las pólizas?';
+        question = `¿Envío al diario ${vouchers}?`;
         break;
       case VouchersOperationType.sendToSupervisor:
         operation = 'enviará al supervisor';
-        question = '¿Envío al supervisor las pólizas?';
+        question = `¿Envío al supervisor ${vouchers}?`;
         break;
       case VouchersOperationType.delete:
         operation = 'eliminará';
-        question = '¿Elimino la pólizas?';
+        question = `¿Elimino ${vouchers}?`;
         break;
       case VouchersOperationType.print:
         operation = 'imprimirá';
-        question = '¿Imprimo las pólizas?';
+        question = `¿Imprimo ${vouchers}?`;
         break;
       case VouchersOperationType.reasign:
         operation = `reasignará a <strong>${this.editorSelected.name}</strong>`;
-        question = '¿Reasigno las pólizas?';
+        question = `¿Reasigno ${vouchers}?`;
+        break;
+      case VouchersOperationType.clone:
+        operation = 'clonará';
+        question = `¿Clono ${vouchers}?`;
         break;
       default:
         break;
     }
-    return `Esta operación ${operation} las ` +
-           `<strong> ${this.selection.selected.length} pólizas</strong> seleccionadas.` +
-           `<br><br>${question}`;
+
+    return `Esta operación ${operation} ` + selection + `<br><br>${question}`;
   }
 
 

@@ -16,8 +16,9 @@ import { VoucherDescriptor } from '@app/models';
 import { sendEvent } from '@app/shared/utils';
 
 export enum VoucherListItemEventType {
-  VOUCHER_CLICKED = 'VoucherListItemComponent.Event.VoucherClicked',
-  CHECK_CLICKED = 'VoucherListItemComponent.Event.CheckClicked',
+  VOUCHER_CLICKED   = 'VoucherListItemComponent.Event.VoucherClicked',
+  CHECK_ALL_CLICKED = 'VoucherListItemComponent.Event.CheckAllClicked',
+  CHECK_CLICKED     = 'VoucherListItemComponent.Event.CheckClicked',
 }
 
 
@@ -46,6 +47,14 @@ export class VoucherListItemComponent {
 
   onVoucherClicked(){
     sendEvent(this.voucherListItemEvent, VoucherListItemEventType.VOUCHER_CLICKED, {voucher: this.voucher});
+  }
+
+
+  onClickVouchersCheckAll(selection: SelectionModel<VoucherDescriptor>) {
+    this.selection = selection;
+
+    sendEvent(this.voucherListItemEvent, VoucherListItemEventType.CHECK_ALL_CLICKED,
+      { vouchers: this.selection.selected });
   }
 
 

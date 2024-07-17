@@ -80,7 +80,8 @@
     <emp-fa-voucher-list-item
       [displayHeader]="true"
       [selection]="selection"
-      [voucherList]="voucherList">
+      [voucherList]="voucherList"
+      (voucherListItemEvent)="onVoucherListItemEvent($event)">
 
     </emp-fa-voucher-list-item>
 

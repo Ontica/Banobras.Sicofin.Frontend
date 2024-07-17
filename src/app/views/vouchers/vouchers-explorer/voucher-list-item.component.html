@@ -7,8 +7,9 @@
         <div *ngIf="voucherList.length > 0">
 
           <emp-ng-check-box-all
-            [(selection)]="selection"
-            [values]="voucherList">
+            [selection]="selection"
+            [values]="voucherList"
+            (selectionChange)="onClickVouchersCheckAll($event)">
           </emp-ng-check-box-all>
 
         </div>

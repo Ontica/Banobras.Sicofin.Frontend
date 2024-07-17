@@ -294,10 +294,23 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
 
   private validateBulkOperationVouchers(operation: VouchersOperationType, command: VouchersOperationCommand) {
-    if (operation === VouchersOperationType.excel) {
-      this.showExportVouchersEntries(operation, command);
-    } else {
-      this.bulkOperationVouchers(operation, command);
+    switch (operation) {
+      case VouchersOperationType.close:
+      case VouchersOperationType.delete:
+      case VouchersOperationType.print:
+      case VouchersOperationType.reasign:
+      case VouchersOperationType.sendToSupervisor:
+      case VouchersOperationType.clone:
+        this.bulkOperationVouchers(operation, command);
+        return;
+
+      case VouchersOperationType.excel:
+        this.showExportVouchersEntries(operation, command);
+        return;
+
+      default:
+        console.log(`Unhandled user interface event ${event.type}`);
+        return;
     }
   }
 
@@ -311,6 +324,10 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
       case VouchersOperationType.excel:
         this.resolveExportVouchersEntries(result);
+        return;
+
+      case VouchersOperationType.clone:
+        this.resolveCloneVouchers(result);
         return;
 
       default:
@@ -330,6 +347,15 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
     const voucherListNew = ArrayLibrary.insertItemTop(this.voucherList, voucherToInsert, 'id');
     this.setVoucherListData(voucherListNew);
     this.setSelectedVoucher(voucher);
+  }
+
+
+  private insertVouchersToList(vouchers: VoucherDescriptor[]) {
+    if (vouchers.length > 0) {
+      const voucherListNew = [...vouchers, ...this.voucherList];
+      this.setVoucherListData(voucherListNew);
+      this.setSelectedVoucher(EmptyVoucher);
+    }
   }
 
 
@@ -387,6 +413,12 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   private resolveExportVouchersEntries(result: VouchersOperationResult) {
     this.fileUrl = result.file.url;
     this.exportModalMessage = result.message;
+  }
+
+
+  private resolveCloneVouchers(result: VouchersOperationResult) {
+    this.insertVouchersToList(result.vouchers);
+    this.messageBox.show(result.message, 'Póliza clonada');
   }
 
 }
