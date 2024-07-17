@@ -23,6 +23,7 @@ import { VoucherSubmitterEventType } from './voucher-submitter.component';
 export enum VoucherEditorEventType {
   VOUCHER_UPDATED = 'VoucherEditorComponent.Event.VoucherUpdated',
   VOUCHER_DELETED = 'VoucherEditorComponent.Event.VoucherDeleted',
+  VOUCHER_CLONED  = 'VoucherEditorComponent.Event.VoucherCloned',
 }
 
 @Component({
@@ -102,7 +103,17 @@ export class VoucherEditorComponent implements OnChanges {
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
         this.deleteVoucher();
         return;
+      case VoucherSubmitterEventType.CLONE_VOUCHER_BUTTON_CLICKED:
+        Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
 
+        const voucherFields: VoucherUpdateFields = {
+          concept: this.voucher.concept,
+          accountingDate: this.voucher.accountingDate,
+          recordingDate: this.voucher.recordingDate,
+        };
+
+        this.cloneVoucher(voucherFields);
+        return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -163,6 +174,16 @@ export class VoucherEditorComponent implements OnChanges {
       .firstValue()
       .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_DELETED,
         {voucher: this.voucher}))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private cloneVoucher(voucherFields: VoucherUpdateFields) {
+    this.submitted = true;
+
+    this.vouchersData.cloneVoucher(this.voucher.id, voucherFields)
+      .firstValue()
+      .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_CLONED, { voucher: x }))
       .finally(() => this.submitted = false);
   }
 

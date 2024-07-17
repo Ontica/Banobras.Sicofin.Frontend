@@ -64,12 +64,13 @@ export const EditorTypeList: Identifiable[] = [
 
 
 export enum VouchersOperationType {
-  close = 'close',
+  close            = 'close',
   sendToSupervisor = 'send-to-supervisor',
-  reasign = 'reasign',
-  delete = 'delete',
-  print = 'print',
-  excel = 'excel',
+  reasign          = 'reasign',
+  delete           = 'delete',
+  clone            = 'clone',
+  print            = 'print',
+  excel            = 'excel',
 }
 
 
@@ -87,6 +88,7 @@ export const VouchersOperationList: VouchersOperation[] = [
   {uid: VouchersOperationType.delete,           name: 'Eliminar'},
   {uid: VouchersOperationType.print,            name: 'Imprimir'},
   {uid: VouchersOperationType.excel,            name: 'Exportar movimientos'},
+  {uid: VouchersOperationType.clone,            name: 'Clonar'}
 ];
 
 
@@ -110,6 +112,7 @@ export interface VouchersBulkOperationData {
 export interface VouchersOperationResult {
   message?: string;
   file?: FileReport;
+  vouchers?: Voucher[];
 }
 
 
@@ -216,6 +219,7 @@ export interface VoucherActions {
   sendToLedger?: boolean;
   sendToSupervisor?: boolean;
   changeConcept: boolean;
+  cloneVoucher: boolean;
 }
 
 
@@ -226,6 +230,7 @@ export const EmptyVoucherActions: VoucherActions = {
   sendToLedger: false,
   sendToSupervisor: false,
   changeConcept: false,
+  cloneVoucher: false,
 };
 
 

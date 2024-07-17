@@ -20,6 +20,7 @@ export enum VoucherSubmitterEventType {
   UPDATE_VOUCHER_CLICKED            = 'VoucherSubmitterComponent.Event.UpdateVoucherClicked',
   UPDATE_VOUCHER_CONCEPT_CLICKED    = 'VoucherSubmitterComponent.Event.UpdateVoucherConceptClicked',
   DELETE_VOUCHER_CLICKED            = 'VoucherSubmitterComponent.Event.DeleteVoucherClicked',
+  CLONE_VOUCHER_BUTTON_CLICKED      = 'VoucherSubmitterComponent.Event.CloneVoucherButtonClicked',
   SEND_TO_LEDGER_BUTTON_CLICKED     = 'VoucherSubmitterComponent.Event.SendToLedgerButtonClicked',
   SEND_TO_SUPERVISOR_BUTTON_CLICKED = 'VoucherSubmitterComponent.Event.SendToSupervisorButtonClicked',
 }
@@ -47,7 +48,7 @@ export class VoucherSubmitterComponent {
 
   get hasActions(): boolean {
     return this.voucher.actions.editVoucher || this.voucher.actions.deleteVoucher ||
-           this.voucher.actions.changeConcept ||
+           this.voucher.actions.changeConcept || this.voucher.actions.cloneVoucher ||
            this.voucher.actions.sendToSupervisor || this.voucher.actions.sendToLedger;
   }
 
@@ -75,6 +76,7 @@ export class VoucherSubmitterComponent {
 
   onEventButtonClicked(eventType: VoucherSubmitterEventType) {
     if ([VoucherSubmitterEventType.DELETE_VOUCHER_CLICKED,
+         VoucherSubmitterEventType.CLONE_VOUCHER_BUTTON_CLICKED,
          VoucherSubmitterEventType.SEND_TO_LEDGER_BUTTON_CLICKED,
          VoucherSubmitterEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED].includes(eventType)) {
       this.showConfirmMessage(eventType);
@@ -102,6 +104,8 @@ export class VoucherSubmitterComponent {
     switch (eventType) {
       case VoucherSubmitterEventType.DELETE_VOUCHER_CLICKED:
         return 'Eliminar póliza';
+      case VoucherSubmitterEventType.CLONE_VOUCHER_BUTTON_CLICKED:
+        return 'Clonar póliza';
       case VoucherSubmitterEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
         return 'Enviar al diario';
       case VoucherSubmitterEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
@@ -119,6 +123,10 @@ export class VoucherSubmitterComponent {
       case VoucherSubmitterEventType.DELETE_VOUCHER_CLICKED:
         operation = 'eliminará';
         question = '¿Elimino la póliza?';
+        break;
+      case VoucherSubmitterEventType.CLONE_VOUCHER_BUTTON_CLICKED:
+        operation = 'clonará';
+        question = '¿Clono la póliza?';
         break;
       case VoucherSubmitterEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
         operation = 'enviara al diario';

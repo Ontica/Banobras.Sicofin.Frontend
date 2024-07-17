@@ -22,6 +22,7 @@ export enum VoucherTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'VoucherTabbedViewComponent.Event.CloseButtonClicked',
   VOUCHER_UPDATED      = 'VoucherTabbedViewComponent.Event.VoucherUpdated',
   VOUCHER_DELETED      = 'VoucherTabbedViewComponent.Event.VoucherDeleted',
+  VOUCHER_CLONED       = 'VoucherTabbedViewComponent.Event.VoucherCloned',
 }
 
 @Component({
@@ -58,6 +59,9 @@ export class VoucherTabbedViewComponent implements OnChanges {
         return;
       case VoucherEditorEventType.VOUCHER_DELETED:
         sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_DELETED, event.payload);
+        return;
+      case VoucherEditorEventType.VOUCHER_CLONED:
+        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_CLONED, event.payload);
         return;
       default:
         console.log(`Unhandled user interface event ${event.type}`);

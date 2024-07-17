@@ -232,6 +232,15 @@ export class VouchersDataService {
   }
 
 
+  cloneVoucher(voucherId: number, voucherFields: VoucherUpdateFields): EmpObservable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/clone`;
+
+    return this.http.post<Voucher>(path, voucherFields);
+  }
+
+
   bulkOperationVouchers(operationType: VouchersOperationType,
                         command: VouchersOperationCommand): EmpObservable<VouchersOperationResult> {
     Assertion.assertValue(operationType, 'operationType');

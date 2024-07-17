@@ -103,7 +103,6 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   onVouchersExplorerEvent(event: EventInfo): void {
     switch (event.type as VouchersExplorerEventType) {
-
       case VouchersExplorerEventType.FILTER_CHANGED:
         this.applyVoucherFilter(event.payload);
         this.searchVouchers();
@@ -146,7 +145,6 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
-
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
         this.exportDataSelected = { operation: null, command: null };
         this.setDisplayExportModal(false);
@@ -170,7 +168,6 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   onVoucherCreatorEvent(event: EventInfo) {
     switch (event.type as VoucherCreatorEventType) {
-
       case VoucherCreatorEventType.CLOSE_MODAL_CLICKED:
         this.onOptionModalClosed();
         return;
@@ -194,12 +191,12 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   onVoucherTabbedViewEvent(event: EventInfo) {
     switch (event.type as VoucherTabbedViewEventType) {
-
       case VoucherTabbedViewEventType.CLOSE_BUTTON_CLICKED:
         this.setSelectedVoucher(EmptyVoucher);
         return;
 
       case VoucherTabbedViewEventType.VOUCHER_UPDATED:
+      case VoucherTabbedViewEventType.VOUCHER_CLONED:
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
         this.insertVoucherToList(event.payload.voucher);
         return;
@@ -218,7 +215,6 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   onVouchersImporterEvent(event: EventInfo) {
     switch (event.type as VouchersImporterEventType) {
-
       case VouchersImporterEventType.CLOSE_MODAL_CLICKED:
         this.onOptionModalClosed();
         return;
@@ -329,11 +325,11 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   }
 
 
-  private insertVoucherToList(voucherSelected: Voucher) {
-    const voucherToInsert = mapVoucherDescriptorFromVoucher(voucherSelected);
+  private insertVoucherToList(voucher: Voucher) {
+    const voucherToInsert = mapVoucherDescriptorFromVoucher(voucher);
     const voucherListNew = ArrayLibrary.insertItemTop(this.voucherList, voucherToInsert, 'id');
     this.setVoucherListData(voucherListNew);
-    this.setSelectedVoucher(voucherSelected);
+    this.setSelectedVoucher(voucher);
   }
 
 

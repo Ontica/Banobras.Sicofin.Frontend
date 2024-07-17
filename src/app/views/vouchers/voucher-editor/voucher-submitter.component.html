@@ -23,6 +23,21 @@
           Enviar a supervisión
         </button>
 
+        <ng-container *ngIf="voucher.actions.cloneVoucher">
+
+          <mat-divider *ngIf="voucher.actions.sendToLedger || voucher.actions.sendToSupervisor"
+            vertical="true" class="vertical" [style.marginTop.px]="0">
+
+          </mat-divider>
+
+          <button
+            class="btn"
+            (click)="onEventButtonClicked(eventType.CLONE_VOUCHER_BUTTON_CLICKED)">
+            Clonar póliza
+          </button>
+
+        </ng-container>
+
       </ng-container>
 
       <button *ngIf="editionMode && voucher.actions.deleteVoucher"
