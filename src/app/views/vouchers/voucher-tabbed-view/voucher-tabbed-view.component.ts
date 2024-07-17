@@ -17,10 +17,11 @@ import { VoucherEditorEventType } from '../voucher-editor/voucher-editor.compone
 
 import { VoucherEntriesEditorEventType } from '../voucher-entries-editor/voucher-entries-editor.component';
 
+
 export enum VoucherTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'VoucherTabbedViewComponent.Event.CloseButtonClicked',
-  VOUCHER_UPDATED = 'VoucherTabbedViewComponent.Event.VoucherUpdated',
-  VOUCHER_DELETED = 'VoucherTabbedViewComponent.Event.VoucherDeleted',
+  VOUCHER_UPDATED      = 'VoucherTabbedViewComponent.Event.VoucherUpdated',
+  VOUCHER_DELETED      = 'VoucherTabbedViewComponent.Event.VoucherDeleted',
 }
 
 @Component({
@@ -34,16 +35,14 @@ export class VoucherTabbedViewComponent implements OnChanges {
   @Output() voucherTabbedViewEvent = new EventEmitter<EventInfo>();
 
   title = '';
+
   hint = '';
+
   selectedTabIndex = 0;
+
 
   ngOnChanges() {
     this.setTitle();
-  }
-
-
-  get canEditVoucher(): boolean {
-    return this.voucher.actions.editVoucher;
   }
 
 
@@ -54,17 +53,12 @@ export class VoucherTabbedViewComponent implements OnChanges {
 
   onVoucherEditorEvent(event: EventInfo) {
     switch (event.type as VoucherEditorEventType) {
-
       case VoucherEditorEventType.VOUCHER_UPDATED:
-        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_UPDATED,
-          event.payload);
+        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_UPDATED, event.payload);
         return;
-
       case VoucherEditorEventType.VOUCHER_DELETED:
-        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_DELETED,
-          event.payload);
+        sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_DELETED, event.payload);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -74,12 +68,10 @@ export class VoucherTabbedViewComponent implements OnChanges {
 
   onVoucherEntriesEditorEvent(event: EventInfo) {
     switch (event.type as VoucherEntriesEditorEventType) {
-
       case VoucherEntriesEditorEventType.VOUCHER_UPDATED:
         sendEvent(this.voucherTabbedViewEvent, VoucherTabbedViewEventType.VOUCHER_UPDATED,
           event.payload);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -88,18 +80,15 @@ export class VoucherTabbedViewComponent implements OnChanges {
 
 
   private setTitle() {
-    if (this.voucher.status === 'Pendiente') {
-      this.title = this.voucher.concept;
-    } else {
-      this.title = `${this.voucher.number}: ${this.voucher.concept}`;
-    }
-
     const accountingDate = DateStringLibrary.format(this.voucher.accountingDate);
+
+    this.title = this.voucher.status === 'Pendiente' ?
+      this.voucher.concept : `${this.voucher.number}: ${this.voucher.concept}`;
 
     this.hint = `<strong>${this.voucher.ledger.name} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${this.voucher.voucherType.name}</strong> &nbsp; &nbsp; | &nbsp; &nbsp; ` +
       `${this.voucher.transactionType.name} &nbsp; &nbsp; | &nbsp; &nbsp; ` +
-      `${accountingDate}`;
+      `${accountingDate} <span class="tag tag-small">${this.voucher.status}</span>`;
   }
 
 }

@@ -12,7 +12,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { combineLatest } from 'rxjs';
 
-import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty } from '@app/core';
+import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty, Validate } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -124,6 +124,16 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
+  get canEditVoucher(): boolean {
+    return this.voucher.actions.editVoucher;
+  }
+
+
+  get canEditConcept(): boolean {
+    return this.voucher.actions.changeConcept;
+  }
+
+
   get ledgerPlaceholder(): string {
     if (this.allowAllLedgersSelection) {
       return 'Todas';
@@ -141,7 +151,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.disableForm(!this.editionMode);
-    this.validateDisabledFieldsByHasEntries();
+    this.validateDisabledFields();
   }
 
 
@@ -266,6 +276,16 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     this.setAccountChartSelected();
     this.getOpenedAccountingDates(this.voucher.accountsChart.uid, true);
+    this.setVoucherConceptValidator();
+  }
+
+
+  private setVoucherConceptValidator() {
+    const validators = this.canEditConcept ?
+      [Validators.required, Validate.changeRequired(this.voucher.concept)] :
+      [Validators.required];
+
+    FormHelper.setControlValidators(this.form.controls.concept, validators);
   }
 
 
@@ -283,10 +303,20 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  private validateDisabledFieldsByHasEntries() {
+  private validateDisabledFields() {
     if (this.editionMode) {
-      this.formHelper.setDisableControl(this.form.controls.accountsChartUID, this.hasEntries);
-      this.formHelper.setDisableControl(this.form.controls.ledgerUID, this.hasEntries);
+      if (this.canEditVoucher) {
+        this.formHelper.setDisableControl(this.form.controls.accountsChartUID, this.hasEntries);
+        this.formHelper.setDisableControl(this.form.controls.ledgerUID, this.hasEntries);
+      }
+
+      if (this.canEditConcept) {
+        this.formHelper.setDisableControl(this.form.controls.voucherTypeUID);
+        this.formHelper.setDisableControl(this.form.controls.accountsChartUID);
+        this.formHelper.setDisableControl(this.form.controls.ledgerUID);
+        this.formHelper.setDisableControl(this.form.controls.functionalAreaId);
+        this.formHelper.setDisableControl(this.form.controls.accountingDate);
+      }
     }
   }
 

@@ -38,8 +38,6 @@ export class VoucherEntriesEditorComponent {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
-  @Input() canEditVoucher = false;
-
   @Output() voucherEntriesEditorEvent = new EventEmitter<EventInfo>();
 
   submitted = false;
@@ -54,6 +52,11 @@ export class VoucherEntriesEditorComponent {
 
   constructor(private vouchersData: VouchersDataService,
               private messageBox: MessageBoxService) {}
+
+
+  get canEditEntries(): boolean {
+    return this.voucher.actions.editVoucher;
+  }
 
 
   onExportButtonClicked() {

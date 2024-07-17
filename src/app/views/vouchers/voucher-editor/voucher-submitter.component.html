@@ -1,48 +1,65 @@
-<mat-divider class="horizontal"></mat-divider>
+<ng-container *ngIf="hasActions">
 
-<div class="fx-row-container">
+  <mat-divider class="horizontal">
 
-  <div class="fx-item fx-items-center">
-    <ng-container *ngIf="!editionMode">
-      <button *ngIf="voucher.actions?.sendToLedger"
+  </mat-divider>
+
+
+  <div class="fx-row-container">
+
+    <div class="fx-item fx-items-center">
+
+      <ng-container *ngIf="!editionMode">
+
+        <button *ngIf="voucher.actions.sendToLedger"
+          class="btn-action"
+          (click)="onEventButtonClicked(eventType.SEND_TO_LEDGER_BUTTON_CLICKED)">
+          Enviar al diario
+        </button>
+
+        <button *ngIf="voucher.actions.sendToSupervisor"
+          class="btn-action"
+          (click)="onEventButtonClicked(eventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED)">
+          Enviar a supervisión
+        </button>
+
+      </ng-container>
+
+      <button *ngIf="editionMode && voucher.actions.deleteVoucher"
+        type="button" class="btn-warning"
+        (click)="onEventButtonClicked(eventType.DELETE_VOUCHER_CLICKED)">
+        Eliminar
+      </button>
+
+    </div>
+
+    <div class="fx-item fx-end fx-items-center">
+
+      <button *ngIf="!editionMode && canToggleEditionMode"
         class="btn-action"
-        (click)="onEventButtonClicked(eventType.SEND_TO_LEDGER_BUTTON_CLICKED)">
-        Enviar al diario
-      </button>
-      <button *ngIf="voucher.actions?.sendToSupervisor"
-        class="btn-action"
-        (click)="onEventButtonClicked(eventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED)">
-        Enviar a supervisión
-      </button>
-    </ng-container>
-
-    <button *ngIf="editionMode"
-      type="button" class="btn-warning"
-      (click)="onEventButtonClicked(eventType.DELETE_VOUCHER_CLICKED)">
-      Eliminar
-    </button>
-  </div>
-
-  <div class="fx-item fx-end fx-items-center">
-    <button *ngIf="!editionMode"
-      class="btn-action"
-      (click)="onToggleEditionMode()">
-      Editar
-    </button>
-
-    <ng-container *ngIf="editionMode">
-      <button
-        [class.btn]="!isValidForm"
-        [class.btn-action]="isValidForm"
-        (click)="onSubmitForm()">
-        Guardar
-      </button>
-      <button
-        class="btn-base uppercase"
         (click)="onToggleEditionMode()">
-        Descartar Cambios
+        {{voucher.actions.editVoucher ? 'Editar' : 'Editar concepto'}}
       </button>
-    </ng-container>
+
+      <ng-container *ngIf="editionMode">
+
+        <button *ngIf="voucher.actions.editVoucher || this.voucher.actions.changeConcept"
+          [class.btn]="!isValidForm"
+          [class.btn-action]="isValidForm"
+          (click)="onSubmitForm()">
+          {{voucher.actions.editVoucher ? 'Guardar' : 'Guardar concepto'}}
+        </button>
+
+        <button
+          class="btn-base uppercase"
+          (click)="onToggleEditionMode()">
+          Descartar Cambios
+        </button>
+
+      </ng-container>
+
+    </div>
+
   </div>
 
-</div>
+</ng-container>

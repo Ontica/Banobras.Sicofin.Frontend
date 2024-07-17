@@ -16,7 +16,7 @@
 
     </div>
 
-    <div *ngIf="canEditVoucher" class="fx-item-none">
+    <div *ngIf="canEditEntries" class="fx-item-none">
 
       <button type="button"
         class="btn-action"
@@ -32,7 +32,7 @@
 
   <emp-fa-voucher-entry-table class="fx-item"
     [voucherEntryList]="voucher.entries"
-    [canDelete]="canEditVoucher"
+    [canDelete]="canEditEntries"
     [canReviewVoucher]="voucher.actions?.reviewVoucher"
     (voucherEntryTableEvent)="onVoucherEntryTableEvent($event)">
 
@@ -43,7 +43,7 @@
 <emp-fa-voucher-entry-editor *ngIf="displayVoucherEntryEditor"
   [voucher]="voucher"
   [voucherEntry]="selectedVoucherEntry"
-  [readonly]="!canEditVoucher"
+  [readonly]="!canEditEntries"
   (voucherEntryEditorEvent)="onVoucherEntryEditorEvent($event)">
 
 </emp-fa-voucher-entry-editor>

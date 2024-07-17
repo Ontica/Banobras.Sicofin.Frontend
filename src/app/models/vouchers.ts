@@ -211,17 +211,21 @@ export const VoucherEntryTypeList: Identifiable[] = [
 
 export interface VoucherActions {
   editVoucher?: boolean;
+  deleteVoucher: boolean;
   reviewVoucher?: boolean;
   sendToLedger?: boolean;
   sendToSupervisor?: boolean;
+  changeConcept: boolean;
 }
 
 
 export const EmptyVoucherActions: VoucherActions = {
   editVoucher: false,
+  deleteVoucher: false,
   reviewVoucher: false,
   sendToLedger: false,
   sendToSupervisor: false,
+  changeConcept: false,
 };
 
 
@@ -312,10 +316,16 @@ export interface VoucherFields extends VoucherSpecialCaseFields {
   accountingDate: DateString;
   concept?: string;
   functionalAreaId?: number;
-
   calculationDate?: DateString;
   onVoucherNumber?: string;
   generateForAllChildrenLedgers?: boolean;
+}
+
+
+export interface VoucherUpdateFields {
+  concept: string;
+  accountingDate: DateString;
+  recordingDate: DateString;
 }
 
 

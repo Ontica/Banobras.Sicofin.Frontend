@@ -11,13 +11,14 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { VouchersDataService } from '@app/data-services';
 
-import { EmptyVoucher, Voucher, VoucherFields } from '@app/models';
+import { EmptyVoucher, Voucher, VoucherFields, VoucherUpdateFields } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
 import { VoucherHeaderComponent, VoucherHeaderEventType } from '../voucher-header/voucher-header.component';
 
 import { VoucherSubmitterEventType } from './voucher-submitter.component';
+
 
 export enum VoucherEditorEventType {
   VOUCHER_UPDATED = 'VoucherEditorComponent.Event.VoucherUpdated',
@@ -34,8 +35,6 @@ export class VoucherEditorComponent implements OnChanges {
 
   @Input() voucher: Voucher = EmptyVoucher;
 
-  @Input() canEditVoucher = false;
-
   @Output() voucherEditorEvent = new EventEmitter<EventInfo>();
 
   formEditionMode = false;
@@ -45,6 +44,7 @@ export class VoucherEditorComponent implements OnChanges {
   voucherFields: VoucherFields;
 
   submitted = false;
+
 
   constructor(private vouchersData: VouchersDataService) {}
 
@@ -64,16 +64,12 @@ export class VoucherEditorComponent implements OnChanges {
     }
 
     switch (event.type as VoucherHeaderEventType) {
-
       case VoucherHeaderEventType.FIELDS_CHANGED:
         Assertion.assertValue(event.payload.isFormValid, 'event.payload.isFormValid');
         Assertion.assertValue(event.payload.voucher, 'event.payload.voucher');
-
         this.voucherFieldsValid = event.payload.isFormValid;
         this.voucherFields = event.payload.voucher;
-
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -87,25 +83,21 @@ export class VoucherEditorComponent implements OnChanges {
     }
 
     switch (event.type as VoucherSubmitterEventType) {
-
       case VoucherSubmitterEventType.TOGGLE_EDITION_MODE_CLICKED:
         this.formEditionMode = !this.formEditionMode;
         return;
-
       case VoucherSubmitterEventType.UPDATE_VOUCHER_CLICKED:
+      case VoucherSubmitterEventType.UPDATE_VOUCHER_CONCEPT_CLICKED:
         this.validateUpdateVoucher();
         return;
-
       case VoucherSubmitterEventType.SEND_TO_SUPERVISOR_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
         this.sendVoucherToSupervision();
         return;
-
       case VoucherSubmitterEventType.SEND_TO_LEDGER_BUTTON_CLICKED:
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
         this.closeVoucher();
         return;
-
       case VoucherSubmitterEventType.DELETE_VOUCHER_CLICKED:
         Assertion.assertValue(event.payload.voucher.id, 'event.payload.voucher.id');
         this.deleteVoucher();
@@ -120,11 +112,26 @@ export class VoucherEditorComponent implements OnChanges {
 
   private validateUpdateVoucher() {
     if (this.formEditionMode) {
+
       if (!this.voucherFieldsValid) {
         this.voucherHeader.invalidateForm();
         return;
       }
-      this.updateVoucher(this.voucherFields);
+
+      if (this.voucher.actions.changeConcept) {
+        const voucherUpdateFields: VoucherUpdateFields = {
+          concept: this.voucherFields.concept,
+          accountingDate: this.voucher.accountingDate,
+          recordingDate: this.voucher.recordingDate,
+        };
+
+        this.updateVoucherConcept(voucherUpdateFields);
+      }
+
+      if (this.voucher.actions.editVoucher) {
+        this.updateVoucher(this.voucherFields);
+      }
+
     }
   }
 
@@ -135,6 +142,16 @@ export class VoucherEditorComponent implements OnChanges {
     this.vouchersData.updateVoucher(this.voucher.id, voucherFields)
       .firstValue()
       .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, {voucher: x}))
+      .finally(() => this.submitted = false);
+  }
+
+
+  private updateVoucherConcept(voucherFields: VoucherUpdateFields) {
+    this.submitted = true;
+
+    this.vouchersData.updateVoucherConcept(this.voucher.id, voucherFields)
+      .firstValue()
+      .then(x => sendEvent(this.voucherEditorEvent, VoucherEditorEventType.VOUCHER_UPDATED, { voucher: x }))
       .finally(() => this.submitted = false);
   }
 

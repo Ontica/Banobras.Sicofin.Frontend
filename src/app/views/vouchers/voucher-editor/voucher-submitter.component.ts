@@ -16,10 +16,11 @@ import { sendEvent } from '@app/shared/utils';
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
 export enum VoucherSubmitterEventType {
-  TOGGLE_EDITION_MODE_CLICKED = 'VoucherSubmitterComponent.Event.ToggleEditionModeClicked',
-  UPDATE_VOUCHER_CLICKED = 'VoucherSubmitterComponent.Event.UpdateVoucherClicked',
-  DELETE_VOUCHER_CLICKED = 'VoucherSubmitterComponent.Event.DeleteVoucherClicked',
-  SEND_TO_LEDGER_BUTTON_CLICKED = 'VoucherSubmitterComponent.Event.SendToLedgerButtonClicked',
+  TOGGLE_EDITION_MODE_CLICKED       = 'VoucherSubmitterComponent.Event.ToggleEditionModeClicked',
+  UPDATE_VOUCHER_CLICKED            = 'VoucherSubmitterComponent.Event.UpdateVoucherClicked',
+  UPDATE_VOUCHER_CONCEPT_CLICKED    = 'VoucherSubmitterComponent.Event.UpdateVoucherConceptClicked',
+  DELETE_VOUCHER_CLICKED            = 'VoucherSubmitterComponent.Event.DeleteVoucherClicked',
+  SEND_TO_LEDGER_BUTTON_CLICKED     = 'VoucherSubmitterComponent.Event.SendToLedgerButtonClicked',
   SEND_TO_SUPERVISOR_BUTTON_CLICKED = 'VoucherSubmitterComponent.Event.SendToSupervisorButtonClicked',
 }
 
@@ -40,7 +41,21 @@ export class VoucherSubmitterComponent {
 
   eventType = VoucherSubmitterEventType;
 
+
   constructor(private messageBox: MessageBoxService) { }
+
+
+  get hasActions(): boolean {
+    return this.voucher.actions.editVoucher || this.voucher.actions.deleteVoucher ||
+           this.voucher.actions.changeConcept ||
+           this.voucher.actions.sendToSupervisor || this.voucher.actions.sendToLedger;
+  }
+
+
+  get canToggleEditionMode(): boolean {
+    return this.voucher.actions.editVoucher || this.voucher.actions.deleteVoucher ||
+      this.voucher.actions.changeConcept;
+  }
 
 
   onToggleEditionMode() {
@@ -49,6 +64,11 @@ export class VoucherSubmitterComponent {
 
 
   onSubmitForm() {
+    if (this.voucher.actions.changeConcept) {
+      sendEvent(this.voucherSubmitterEvent, VoucherSubmitterEventType.UPDATE_VOUCHER_CONCEPT_CLICKED);
+      return;
+    }
+
     sendEvent(this.voucherSubmitterEvent, VoucherSubmitterEventType.UPDATE_VOUCHER_CLICKED);
   }
 

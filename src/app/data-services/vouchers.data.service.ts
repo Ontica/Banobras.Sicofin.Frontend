@@ -12,7 +12,7 @@ import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
 import { FileReport, LedgerAccount, VouchersQuery, SubledgerAccountDescriptor,
          Voucher, VoucherDescriptor, VoucherEntry, VoucherEntryFields, VoucherFields,
          VoucherSpecialCaseType, VouchersOperationCommand, VouchersOperationType,
-         VouchersOperationResult } from '@app/models';
+         VouchersOperationResult, VoucherUpdateFields } from '@app/models';
 
 
 @Injectable()
@@ -181,6 +181,16 @@ export class VouchersDataService {
     Assertion.assertValue(voucherFields, 'voucherFields');
 
     const path = `v2/financial-accounting/vouchers/${voucherId}`;
+
+    return this.http.put<Voucher>(path, voucherFields);
+  }
+
+
+  updateVoucherConcept(voucherId: number, voucherFields: VoucherUpdateFields): EmpObservable<Voucher> {
+    Assertion.assertValue(voucherId, 'voucherId');
+    Assertion.assertValue(voucherFields, 'voucherFields');
+
+    const path = `v2/financial-accounting/vouchers/${voucherId}/update-concept`;
 
     return this.http.put<Voucher>(path, voucherFields);
   }

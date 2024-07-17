@@ -58,7 +58,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   voucherList: VoucherDescriptor[] = [];
 
-  selectedVoucher: Voucher = EmptyVoucher;
+  selectedVoucher: Voucher = Object.assign({}, EmptyVoucher);
 
   displayVoucherTabbedView = false;
 
