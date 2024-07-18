@@ -7,7 +7,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { Assertion, EmpObservable, HttpService, Identifiable } from '@app/core';
+import { Assertion, DateString, EmpObservable, HttpService, Identifiable } from '@app/core';
 
 import { Account, AccountsChart, AccountsChartMasterData, AccountsQuery, FileReport } from '@app/models';
 
@@ -70,8 +70,13 @@ export class AccountsChartDataService {
 
 
   getAccount(accountsChartUID: string,
-             accountUID: string): EmpObservable<Account> {
-    const path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
+             accountUID: string,
+             date: DateString): EmpObservable<Account> {
+    let path = `v2/financial-accounting/accounts-charts/${accountsChartUID}/accounts/${accountUID}`;
+
+    if (date) {
+      path += `/?date=${date}`;
+    }
 
     return this.http.get<Account>(path);
   }

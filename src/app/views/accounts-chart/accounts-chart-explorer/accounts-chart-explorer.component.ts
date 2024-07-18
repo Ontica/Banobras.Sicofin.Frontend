@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Assertion, EventInfo } from '@app/core';
+import { Assertion, DateString, EventInfo } from '@app/core';
 
 import { AccountsChartDataService } from '@app/data-services';
 
@@ -154,7 +154,8 @@ export class AccountsChartExplorerComponent {
     switch (event.type as AccountsChartListEventType) {
       case AccountsChartListEventType.ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.account, 'event.payload.account');
-        this.getAccount(this.selectedAccountChartUID, event.payload.account.uid);
+        const date = !!this.accountsQuery.date ? this.accountsQuery.date : null;
+        this.getAccount(this.selectedAccountChartUID, event.payload.account.uid, date);
         break;
 
       case AccountsChartListEventType.EXPORT_ACCOUNTS:
@@ -220,10 +221,10 @@ export class AccountsChartExplorerComponent {
   }
 
 
-  private getAccount(accountsChartUID: string, accountUID: string) {
+  private getAccount(accountsChartUID: string, accountUID: string, date: DateString) {
     this.setSubmitted(true);
 
-    this.accountsChartData.getAccount(accountsChartUID, accountUID)
+    this.accountsChartData.getAccount(accountsChartUID, accountUID, date)
       .firstValue()
       .then(account => sendEvent(this.accountsChartExplorerEvent,
                          AccountsChartExplorerEventType.ACCOUNT_SELECTED, { account }))
