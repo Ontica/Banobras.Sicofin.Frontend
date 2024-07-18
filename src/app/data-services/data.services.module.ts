@@ -29,9 +29,6 @@ import { SubledgerDataService } from './subledgers.data.service';
 import { TransactionSlipsDataService } from './transaction-slips.data.service';
 import { VouchersDataService } from './vouchers.data.service';
 
-import { FileDownloadService } from './file-services/file-download.service';
-import { getSaver, SAVER } from './file-services/saver.provider';
-
 
 @NgModule({
 
@@ -48,7 +45,6 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     ExchangeRatesDataService,
     ExternalProcessDataService,
     ExternalVariablesDataService,
-    FileDownloadService,
     FinancialConceptsDataService,
     FinancialReportsEditionDataService,
     ImportVouchersDataService,
@@ -57,8 +53,6 @@ import { getSaver, SAVER } from './file-services/saver.provider';
     SubledgerDataService,
     TransactionSlipsDataService,
     VouchersDataService,
-
-    { provide: SAVER, useFactory: getSaver }
   ]
 
 })
