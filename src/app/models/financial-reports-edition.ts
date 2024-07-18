@@ -73,7 +73,7 @@ export interface FinancialReportColumn extends DataTableColumn {
   column: string;
   field: string;
   title: string;
-  type: string;
+  type: DataTableColumnType;
   formula: string;
   show: boolean;
   isCalculated: boolean;
