@@ -23,6 +23,7 @@ import { ButtonCopyToClipboardComponent } from './button-copy-to-clipboard/butto
 import { CheckboxAllComponent } from './check-box-all/check-box-all.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { DateRangePickerComponent } from './date-range-picker/date-range-picker.component';
+import { DynamicFormControlComponent } from './dynamic-form/dynamic-form-control.component';
 import { FileControlComponent } from './file-control/file-control.component';
 import { FilePrintPreviewComponent } from './file-print-preview/file-print-preview.component';
 import { InputNumericComponent } from './input-numeric/input-numeric.component';
@@ -30,6 +31,7 @@ import { MenuComponent } from './menu/menu.component';
 import { MonthPickerComponent } from './date-range-picker/month-picker/month-picker.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { SelectBoxComponent } from './select-box/select-box.component';
+import { SelectBoxTypeaheadComponent } from './select-box-typeahead/select-box-typeahead.component';
 import { TextEditorComponent } from './text-editor/text-editor.component';
 
 
@@ -55,6 +57,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     CheckboxAllComponent,
     DatePickerComponent,
     DateRangePickerComponent,
+    DynamicFormControlComponent,
     FileControlComponent,
     FilePrintPreviewComponent,
     InputNumericComponent,
@@ -62,6 +65,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     MonthPickerComponent,
     SearchBoxComponent,
     SelectBoxComponent,
+    SelectBoxTypeaheadComponent,
     TextEditorComponent,
   ],
 
@@ -70,12 +74,14 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     CheckboxAllComponent,
     DatePickerComponent,
     DateRangePickerComponent,
+    DynamicFormControlComponent,
     FileControlComponent,
     FilePrintPreviewComponent,
     InputNumericComponent,
     MenuComponent,
     SearchBoxComponent,
     SelectBoxComponent,
+    SelectBoxTypeaheadComponent,
     TextEditorComponent,
   ]
 

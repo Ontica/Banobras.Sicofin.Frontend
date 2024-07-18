@@ -8,6 +8,7 @@
 import { NgModule } from '@angular/core';
 
 import { AccessControlDataService } from './_access-control.data.service';
+import { SearcherDataService } from './_searcher.data.service';
 
 import { AccountingCalendarsDataService } from './accounting-calendars.data.service';
 import { AccountsChartDataService } from './accounts-chart.data.service';
@@ -36,6 +37,7 @@ import { getSaver, SAVER } from './file-services/saver.provider';
 
   providers: [
     AccessControlDataService,
+    SearcherDataService,
     AccountingCalendarsDataService,
     AccountsChartDataService,
     AccountsEditionDataService,

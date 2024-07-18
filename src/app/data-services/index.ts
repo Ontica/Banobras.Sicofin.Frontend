@@ -6,6 +6,7 @@
  */
 
 export * from './_access-control.data.service';
+export * from './_searcher.data.service';
 export * from './accounting-calendars.data.service';
 export * from './accounts-chart.data.service';
 export * from './accounts-edition.data.service';
