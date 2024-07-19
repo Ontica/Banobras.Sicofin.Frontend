@@ -27,6 +27,7 @@ import { DynamicFormControlComponent } from './dynamic-form/dynamic-form-control
 import { FileControlComponent } from './file-control/file-control.component';
 import { FilePrintPreviewComponent } from './file-print-preview/file-print-preview.component';
 import { InputNumericComponent } from './input-numeric/input-numeric.component';
+import { InputTagsComponent } from './input-tags/input-tags.component';
 import { MenuComponent } from './menu/menu.component';
 import { MonthPickerComponent } from './date-range-picker/month-picker/month-picker.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
@@ -61,6 +62,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     FileControlComponent,
     FilePrintPreviewComponent,
     InputNumericComponent,
+    InputTagsComponent,
     MenuComponent,
     MonthPickerComponent,
     SearchBoxComponent,
@@ -78,6 +80,7 @@ import { TextEditorComponent } from './text-editor/text-editor.component';
     FileControlComponent,
     FilePrintPreviewComponent,
     InputNumericComponent,
+    InputTagsComponent,
     MenuComponent,
     SearchBoxComponent,
     SelectBoxComponent,

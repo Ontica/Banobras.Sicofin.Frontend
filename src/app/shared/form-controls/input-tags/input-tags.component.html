@@ -1,0 +1,17 @@
+<ng-select
+  class="emp-input-tags"
+  [(ngModel)]="selectedTags"
+  [items]="tags"
+  [multiple]="true"
+  [hideSelected]="true"
+  [addTag]="true"
+  [isOpen]="false"
+  [selectOnTab]="true"
+  [disabled]="disabled"
+  [class.invalid-control]="showError"
+  (change)="onInputChange($event)"
+  (focus)="onTouched($event)"
+  (clear)="onInputClear()"
+  (blur)="onInputBlur($event)">
+
+</ng-select>
