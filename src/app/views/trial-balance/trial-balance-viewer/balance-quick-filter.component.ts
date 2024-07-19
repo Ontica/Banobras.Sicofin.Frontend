@@ -39,10 +39,10 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
     accountsChartUID: '',
     ledgers: [],
     balancesType: '',
-    fromAccount: '',
+    accounts: [],
+    subledgerAccounts: [],
     fromDate: null,
     toDate: null,
-    subledgerAccount: '',
     withSubledgerAccount: false,
     withAllAccounts: false,
   };
@@ -95,12 +95,12 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  get displayFromAccount(): boolean {
+  get displayAccounts(): boolean {
     return this.formData.trialBalanceType === BalanceExplorerTypes.SaldosPorCuentaConsultaRapida;
   }
 
 
-  get displaySubledgerAccount(): boolean {
+  get displaySubledgerAccounts(): boolean {
     return this.formData.trialBalanceType === BalanceExplorerTypes.SaldosPorAuxiliarConsultaRapida;
   }
 
@@ -116,9 +116,9 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
 
   onBalanceTypeChange() {
-    this.formData.fromAccount = '';
-    this.formData.subledgerAccount = '';
-    this.formData.withSubledgerAccount = this.displaySubledgerAccount;
+    this.formData.accounts = [];
+    this.formData.subledgerAccounts = [];
+    this.formData.withSubledgerAccount = this.displaySubledgerAccounts;
     this.formData.withAllAccounts = false;
   }
 
@@ -173,10 +173,10 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
       accountsChartUID: this.balancesQuery.accountsChartUID,
       ledgers: this.balancesQuery.ledgers,
       balancesType: this.balancesQuery.balancesType,
-      fromAccount: this.balancesQuery.fromAccount,
+      accounts: this.balancesQuery.accounts ?? [],
+      subledgerAccounts: this.balancesQuery.subledgerAccounts ?? [],
       fromDate: this.balancesQuery.initialPeriod.fromDate,
       toDate: this.balancesQuery.initialPeriod.toDate,
-      subledgerAccount: this.balancesQuery.subledgerAccount,
       withSubledgerAccount: this.balancesQuery.withSubledgerAccount,
       withAllAccounts: this.balancesQuery.withAllAccounts,
     };
@@ -224,12 +224,10 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
 
 
   private getBalancesQuery(): BalanceExplorerQuery {
-    const data: BalanceExplorerQuery = {
+    const query: BalanceExplorerQuery = {
       trialBalanceType: this.formData.trialBalanceType as BalanceExplorerTypes,
       accountsChartUID: this.formData.accountsChartUID,
       ledgers: this.formData.ledgers,
-      fromAccount: this.formData.fromAccount,
-      subledgerAccount: this.formData.subledgerAccount,
       initialPeriod: {
         fromDate: this.formData.fromDate,
         toDate: this.formData.toDate,
@@ -239,7 +237,20 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
       exportTo: FileReportVersion.V2,
     };
 
-    return data;
+    this.validateBalanceQueryFields(query);
+
+    return query;
+  }
+
+
+  private validateBalanceQueryFields(query: BalanceExplorerQuery) {
+    if (this.displayAccounts) {
+      query.accounts =this.formData.accounts;
+    }
+
+    if (this.displaySubledgerAccounts) {
+      query.subledgerAccounts = this.formData.subledgerAccounts;
+    }
   }
 
 }

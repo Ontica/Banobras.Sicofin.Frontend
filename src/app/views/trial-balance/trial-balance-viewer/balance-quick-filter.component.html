@@ -35,25 +35,27 @@
 
         <div class="fx-item sm-fx-item">
 
-          <ng-container *ngIf="displayFromAccount">
+          <ng-container *ngIf="displayAccounts">
 
-            <label>Cuenta:</label>
+            <label>Cuentas:</label>
 
-            <input type="text" class="text-box" name="fromAccount" required
-              [(ngModel)]="formData.fromAccount"
-              [class.invalid-control]="!formData.fromAccount"
-              (keyup.escape)="formData.fromAccount = ''">
+            <emp-ng-input-tags name="accounts" required
+              [(ngModel)]="formData.accounts"
+              [showError]="!formData.accounts || formData.accounts.length === 0">
+
+            </emp-ng-input-tags>
 
           </ng-container>
 
-          <ng-container *ngIf="displaySubledgerAccount">
+          <ng-container *ngIf="displaySubledgerAccounts">
 
-            <label>Auxiliar:</label>
+            <label>Auxiliares:</label>
 
-            <input type="text" class="text-box" name="subledgerAccount" required
-              [(ngModel)]="formData.subledgerAccount"
-              [class.invalid-control]="!formData.subledgerAccount"
-              (keyup.escape)="formData.subledgerAccount = ''">
+            <emp-ng-input-tags name="subledgerAccounts" required
+              [(ngModel)]="formData.subledgerAccounts"
+              [showError]="!formData.subledgerAccounts || formData.subledgerAccounts.length === 0">
+
+            </emp-ng-input-tags>
 
           </ng-container>
 
@@ -72,7 +74,7 @@
 
         </div>
 
-        <div class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
+        <div class="fx-item-none" [style.marginTop.px]="12">
 
           <button [class.btn-icon-action]="form.valid"
             [class.btn-icon]="form.invalid"

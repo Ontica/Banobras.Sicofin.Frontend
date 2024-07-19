@@ -57,14 +57,14 @@ export interface BalanceExplorerEntry extends DataTableEntry {
 export interface BalanceExplorerQuery extends DataTableQuery {
   accountsChartUID: string;
   trialBalanceType: BalanceExplorerTypes;
-  ledgers: string[];
   balancesType?: string;
-  fromAccount?: string;
+  ledgers: string[];
+  accounts?: string[];
+  subledgerAccounts?: string[];
   initialPeriod?: {
     fromDate?: DateString;
     toDate?: DateString;
   };
-  subledgerAccount?: string;
   withSubledgerAccount?: boolean;
   withAllAccounts?: boolean;
   exportTo?: FileReportVersion;
@@ -75,11 +75,14 @@ export function emptyBalanceExplorerQuery(): BalanceExplorerQuery {
   return {
     accountsChartUID: '',
     trialBalanceType: null,
-    ledgers: [],
     balancesType: '',
-    fromAccount: '',
-    initialPeriod: {fromDate: '', toDate: ''},
-    subledgerAccount: '',
+    ledgers: [],
+    accounts: [],
+    subledgerAccounts: [],
+    initialPeriod: {
+      fromDate: '',
+      toDate: ''
+    },
     withSubledgerAccount: false,
     withAllAccounts: false,
   };
