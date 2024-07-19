@@ -161,12 +161,12 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get displaySubledgerAccount(): boolean {
+  get displayAccountsLists(): boolean {
     return this.isBalanceSelected;
   }
 
 
-  get displayToAccount(): boolean {
+  get displayAccountRange(): boolean {
     return [TrialBalanceTypes.AnaliticoDeCuentas,
             TrialBalanceTypes.Balanza,
             TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
@@ -430,7 +430,6 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
         fromDate: this.query.initialPeriod.fromDate,
         toDate: this.query.initialPeriod.toDate,
       },
-      fromAccount: this.query.fromAccount,
       showCascadeBalances: this.query.showCascadeBalances,
       balancesType: this.query.balancesType,
       useValuation: this.query.useValuation,
@@ -447,12 +446,14 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   private validateQueryFields(data: TrialBalanceQuery) {
-    if (this.displayToAccount) {
+    if (this.displayAccountRange) {
+      data.fromAccount = this.query.fromAccount;
       data.toAccount = this.query.toAccount;
     }
 
-    if (this.displaySubledgerAccount) {
-      data.subledgerAccount = this.query.subledgerAccount;
+    if (this.displayAccountsLists) {
+      data.accounts = this.query.accounts;
+      data.subledgerAccounts = this.query.subledgerAccounts;
     }
 
     if (this.displayLevel) {

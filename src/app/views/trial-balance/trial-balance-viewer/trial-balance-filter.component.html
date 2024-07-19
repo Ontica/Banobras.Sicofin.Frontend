@@ -210,29 +210,19 @@
 
         <div class="fx-row-container" [style.marginBottom.px]="8">
 
-          <div class="fx-item-quarter">
+          <ng-container *ngIf="displayAccountRange">
 
-            <label>{{displayToAccount ? 'De la cuenta:' : 'Con la cuenta:'}}</label>
+            <div class="fx-item-quarter">
 
-            <input type="text" name="fromAccount" class="text-box"
-              [(ngModel)]="query.fromAccount"
-              (keyup.escape)="query.fromAccount = ''">
+              <label>De la cuenta:</label>
 
-          </div>
+              <input type="text" name="fromAccount" class="text-box"
+                [(ngModel)]="query.fromAccount"
+                (keyup.escape)="query.fromAccount = ''">
 
-          <div class="fx-item-quarter">
+            </div>
 
-            <ng-container *ngIf="displaySubledgerAccount">
-
-              <label>Con el auxiliar:</label>
-
-              <input type="text" name="subledgerAccount" class="text-box"
-                [(ngModel)]="query.subledgerAccount"
-                (keyup.escape)="query.subledgerAccount = ''">
-
-            </ng-container>
-
-            <ng-container *ngIf="displayToAccount">
+            <div class="fx-item-quarter">
 
               <label>A la cuenta:</label>
 
@@ -240,10 +230,35 @@
                 [(ngModel)]="query.toAccount"
                 (keyup.escape)="query.toAccount = ''">
 
-            </ng-container>
+            </div>
 
-          </div>
+          </ng-container>
 
+          <ng-container *ngIf="displayAccountsLists">
+
+            <div class="fx-item-quarter">
+
+              <label>Con las cuentas:</label>
+
+              <emp-ng-input-tags name="accounts"
+                [(ngModel)]="query.accounts">
+
+              </emp-ng-input-tags>
+
+            </div>
+
+            <div class="fx-item-quarter">
+
+              <label>Con los auxiliares:</label>
+
+              <emp-ng-input-tags name="subledgerAccounts"
+                [(ngModel)]="query.subledgerAccounts">
+
+              </emp-ng-input-tags>
+
+            </div>
+
+          </ng-container>
 
           <div class="fx-item-half">
 

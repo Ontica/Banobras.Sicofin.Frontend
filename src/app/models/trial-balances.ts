@@ -15,12 +15,12 @@ import { ExchangeRate } from './exchange-rates';
 export enum TrialBalanceTypes {
   AnaliticoDeCuentas                = 'AnaliticoDeCuentas',
   Balanza                           = 'Balanza',
-  BalanzaValorizadaComparativa      = 'BalanzaValorizadaComparativa',
-  BalanzaDolarizada                 = 'BalanzaDolarizada',
-  SaldosPorCuenta                   = 'SaldosPorCuenta',
-  SaldosPorAuxiliar                 = 'SaldosPorAuxiliar',
   BalanzaConContabilidadesEnCascada = 'BalanzaConContabilidadesEnCascada',
+  BalanzaDolarizada                 = 'BalanzaDolarizada',
   BalanzaEnColumnasPorMoneda        = 'BalanzaEnColumnasPorMoneda',
+  BalanzaValorizadaComparativa      = 'BalanzaValorizadaComparativa',
+  SaldosPorAuxiliar                 = 'SaldosPorAuxiliar',
+  SaldosPorCuenta                   = 'SaldosPorCuenta',
   ValorizacionEstimacionPreventiva  = 'ValorizacionEstimacionPreventiva',
 }
 
@@ -99,19 +99,20 @@ export interface TrialBalance extends DataTable {
 
 
 export interface TrialBalanceQuery extends DataTableQuery {
-  accountsChartUID: string;
   balancesType?: string;
-  consolidateBalancesToTargetCurrency?: boolean;
+  trialBalanceType: TrialBalanceTypes;
+  accountsChartUID: string;
+  ledgers?: string[];
+  initialPeriod?: BalancePeriod;
   finalPeriod?: BalancePeriod;
   fromAccount?: string;
-  initialPeriod?: BalancePeriod;
-  ledgers?: string[];
+  toAccount?: string;
+  accounts?: string[];
+  subledgerAccounts?: string[];
   level?: number;
   sectors?: string[];
+  consolidateBalancesToTargetCurrency?: boolean;
   showCascadeBalances?: boolean;
-  subledgerAccount?: string;
-  toAccount?: string;
-  trialBalanceType: TrialBalanceTypes;
   useDefaultValuation?: boolean;
   useValuation?: boolean;
   withAverageBalance?: boolean;
@@ -127,19 +128,20 @@ export interface TrialBalanceEntry extends DataTableEntry {
 
 export function getEmptyTrialBalanceQuery(): TrialBalanceQuery {
   return {
-    accountsChartUID: '',
     balancesType: '',
-    consolidateBalancesToTargetCurrency: false,
+    trialBalanceType: null,
+    accountsChartUID: '',
+    ledgers: [],
+    initialPeriod: Object.assign({}, EmptyBalancePeriod),
     finalPeriod: Object.assign({}, EmptyBalancePeriod),
     fromAccount: '',
-    initialPeriod: Object.assign({}, EmptyBalancePeriod),
-    ledgers: [],
+    toAccount: '',
+    accounts: [],
+    subledgerAccounts: [],
     level: 0,
     sectors: [],
+    consolidateBalancesToTargetCurrency: false,
     showCascadeBalances: false,
-    subledgerAccount: '',
-    toAccount: '',
-    trialBalanceType: null,
     useDefaultValuation: true,
     useValuation: false,
     withAverageBalance: false,
