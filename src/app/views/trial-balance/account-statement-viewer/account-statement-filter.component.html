@@ -36,13 +36,26 @@
 
         </div>
 
+        <div class="fx-item-quarter">
+
+          <label>Ordenar por:</label>
+
+          <emp-ng-select name="accountStatementOrder"
+            [(ngModel)]="formData.accountStatementOrder"
+            [items]="accountStatementOrderList"
+            [showError]="!formData.accountStatementOrder">
+
+          </emp-ng-select>
+
+        </div>
+
         <div class="fx-item-none" [style.paddingTop.px]="13">
 
-          <button [class.btn-icon-action]="form.valid"
+          <button title="Generar balanza"
+            [class.btn-icon-action]="form.valid"
             [class.btn-icon]="form.invalid"
             [disabled]="form.invalid"
-            (click)="onBuildAccountStatementClicked()"
-            title="Generar balanza">
+            (click)="onBuildAccountStatementClicked()">
 
             <mat-icon>search</mat-icon>
 

@@ -11,9 +11,9 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { BalancesDataService, VouchersDataService } from '@app/data-services';
 
-import { AccountStatement, AccountStatementQuery, AccountStatementEntry, BalanceExplorerQuery, BalanceExplorerEntry,
-         EmptyAccountStatement, EntryItemTypeList, FileReport, TrialBalanceQuery,
-         TrialBalanceEntry } from '@app/models';
+import { AccountStatement, AccountStatementQuery, AccountStatementEntry, BalanceExplorerQuery,
+         BalanceExplorerEntry, EmptyAccountStatement, EntryItemTypeList, FileReport, TrialBalanceQuery,
+         TrialBalanceEntry, DefaultAccountStatementOrder } from '@app/models';
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
@@ -185,6 +185,7 @@ export class AccountStatementViewerComponent implements OnChanges {
     this.accountStatementQuery = {
       query: this.query,
       entry: this.entry,
+      orderBy: DefaultAccountStatementOrder.uid,
     };
   }
 

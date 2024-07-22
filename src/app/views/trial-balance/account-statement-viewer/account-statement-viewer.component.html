@@ -11,8 +11,9 @@
       </emp-ng-spinner>
 
       <emp-fa-account-statement-filter class="fx-item-none"
-        [query]="query"
-        [entry]="entry"
+        [query]="accountStatementQuery.query"
+        [entry]="accountStatementQuery.entry"
+        [orderBy]="accountStatementQuery.orderBy"
         (accountStatementFilterEvent)="onFilterEvent($event)">
 
       </emp-fa-account-statement-filter>

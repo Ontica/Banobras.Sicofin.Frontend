@@ -9,10 +9,12 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 
 import { EventInfo } from '@app/core';
 
-import { AccountStatementQuery, BalanceExplorerQuery, BalanceExplorerEntry, BalanceExplorerTypes, TrialBalanceQuery,
-         TrialBalanceEntry, TrialBalanceTypes } from '@app/models';
-
 import { sendEvent } from '@app/shared/utils';
+
+import { AccountStatementQuery, BalanceExplorerQuery, BalanceExplorerEntry, BalanceExplorerTypes,
+         TrialBalanceQuery, TrialBalanceEntry, TrialBalanceTypes, AccountStatementOrderList,
+         DefaultAccountStatementOrder,
+         AccountStatementOrder} from '@app/models';
 
 export enum AccountStatementFilterEventType {
   BUILD_ACCOUNT_STATEMENT_CLICKED = 'AccountStatementFilterComponent.Event.BuildAccountStatementClicked',
@@ -28,21 +30,27 @@ export class AccountStatementFilterComponent implements OnChanges {
 
   @Input() query: BalanceExplorerQuery | TrialBalanceQuery;
 
+  @Input() orderBy: AccountStatementOrder = DefaultAccountStatementOrder.uid;
+
   @Output() accountStatementFilterEvent = new EventEmitter<EventInfo>();
 
   formData = {
     initialPeriod: {fromDate: null, toDate: null},
     finalPeriod: {fromDate: null, toDate: null},
+    accountStatementOrder: DefaultAccountStatementOrder.uid,
   };
 
   initialPeriodFixedDate = null;
 
   finalPeriodFixedDate = null;
 
+  accountStatementOrderList = AccountStatementOrderList;
+
 
   ngOnChanges() {
     this.setInitialPeriodData(this.query);
     this.setFinalPeriodData(this.query as TrialBalanceQuery);
+    this.setAccountStatementOrder(this.orderBy)
   }
 
 
@@ -81,12 +89,18 @@ export class AccountStatementFilterComponent implements OnChanges {
   }
 
 
+  private setAccountStatementOrder(order: AccountStatementOrder) {
+    this.formData.accountStatementOrder = order;
+  }
+
+
   private buildAccountStatementQuery(): AccountStatementQuery {
     const formData = this.getFormData();
 
     const query = Object.assign({}, this.query, formData);
 
-    const data: AccountStatementQuery = Object.assign({}, { query, entry: this.entry });
+    const data: AccountStatementQuery = Object.assign({},
+      { query, entry: this.entry, orderBy: this.formData.accountStatementOrder });
 
     return data;
   }
