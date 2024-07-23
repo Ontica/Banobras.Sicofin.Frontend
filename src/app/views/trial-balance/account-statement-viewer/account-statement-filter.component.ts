@@ -12,9 +12,9 @@ import { EventInfo } from '@app/core';
 import { sendEvent } from '@app/shared/utils';
 
 import { AccountStatementQuery, BalanceExplorerQuery, BalanceExplorerEntry, BalanceExplorerTypes,
-         TrialBalanceQuery, TrialBalanceEntry, TrialBalanceTypes, AccountStatementOrderList,
-         DefaultAccountStatementOrder,
-         AccountStatementOrder} from '@app/models';
+         TrialBalanceQuery, TrialBalanceEntry, TrialBalanceTypes, AccountStatementSortOrder,
+         DefaultAccountStatementSortOrder, AccountStatementOrderTypesList,
+         AccountStatementSortTypesList } from '@app/models';
 
 export enum AccountStatementFilterEventType {
   BUILD_ACCOUNT_STATEMENT_CLICKED = 'AccountStatementFilterComponent.Event.BuildAccountStatementClicked',
@@ -30,21 +30,24 @@ export class AccountStatementFilterComponent implements OnChanges {
 
   @Input() query: BalanceExplorerQuery | TrialBalanceQuery;
 
-  @Input() orderBy: AccountStatementOrder = DefaultAccountStatementOrder.uid;
+  @Input() orderBy: AccountStatementSortOrder = DefaultAccountStatementSortOrder;
 
   @Output() accountStatementFilterEvent = new EventEmitter<EventInfo>();
 
   formData = {
     initialPeriod: {fromDate: null, toDate: null},
     finalPeriod: {fromDate: null, toDate: null},
-    accountStatementOrder: DefaultAccountStatementOrder.uid,
+    orderType: DefaultAccountStatementSortOrder.orderType,
+    sortType: DefaultAccountStatementSortOrder.sortType,
   };
 
   initialPeriodFixedDate = null;
 
   finalPeriodFixedDate = null;
 
-  accountStatementOrderList = AccountStatementOrderList;
+  sortTypesList = AccountStatementSortTypesList;
+
+  orderTypesList = AccountStatementOrderTypesList;
 
 
   ngOnChanges() {
@@ -89,20 +92,17 @@ export class AccountStatementFilterComponent implements OnChanges {
   }
 
 
-  private setAccountStatementOrder(order: AccountStatementOrder) {
-    this.formData.accountStatementOrder = order;
+  private setAccountStatementOrder(sortOrder: AccountStatementSortOrder) {
+    this.formData.sortType = sortOrder.sortType;
+    this.formData.orderType = sortOrder.orderType;
   }
 
 
   private buildAccountStatementQuery(): AccountStatementQuery {
-    const formData = this.getFormData();
-
-    const query = Object.assign({}, this.query, formData);
-
-    const data: AccountStatementQuery = Object.assign({},
-      { query, entry: this.entry, orderBy: this.formData.accountStatementOrder });
-
-    return data;
+    const query = { ...{}, ...this.query, ...this.getFormData() };
+    const entry = { ...{}, ...this.entry };
+    const orderBy = { ...{}, ...this.getSortOrder() };
+    return { query, entry, orderBy };
   }
 
 
@@ -125,6 +125,14 @@ export class AccountStatementFilterComponent implements OnChanges {
 
   private getFinalPeriod(query: TrialBalanceQuery) {
     return Object.assign({}, query.finalPeriod, this.formData.finalPeriod);
+  }
+
+
+  private getSortOrder(): AccountStatementSortOrder {
+    return {
+      sortType: this.formData.sortType,
+      orderType: this.formData.orderType,
+    };
   }
 
 }

@@ -22,45 +22,64 @@ export interface AccountStatement extends DataTable {
 }
 
 
-export enum AccountStatementOrder {
-  ascending      = 'Ascending',
-  descending     = 'Descending',
-  accountingDate = 'AccountingDate',
-  recordingDate  = 'RecordingDate',
-  currentBalance = 'CurrentBalance',
-  voucherNumber  = 'VoucherNumber',
-}
-
-
-export const AccountStatementOrderList: Identifiable[] = [
-  { uid: AccountStatementOrder.ascending,      name: 'Menor a mayor' },
-  { uid: AccountStatementOrder.descending,     name: 'Mayor a menor' },
-  { uid: AccountStatementOrder.accountingDate, name: 'Fecha de afectación' },
-  { uid: AccountStatementOrder.recordingDate,  name: 'Fecha de registro' },
-  { uid: AccountStatementOrder.currentBalance, name: 'Saldo actual' },
-  { uid: AccountStatementOrder.voucherNumber,  name: 'Número de poliza' },
-];
-
-
-export const DefaultAccountStatementOrder = { uid: AccountStatementOrder.ascending, name: 'Menor a mayor' };
-
-
-export interface AccountStatementQuery extends DataTableQuery {
-  query: BalanceExplorerQuery | TrialBalanceQuery;
-  entry: BalanceExplorerEntry | TrialBalanceEntry;
-  orderBy: AccountStatementOrder;
-}
-
-
 export interface AccountStatementEntry extends DataTableEntry {
   voucherId: number;
 }
 
 
+export interface AccountStatementQuery extends DataTableQuery {
+  query: BalanceExplorerQuery | TrialBalanceQuery;
+  entry: BalanceExplorerEntry | TrialBalanceEntry;
+  orderBy: AccountStatementSortOrder;
+}
+
+
+export interface AccountStatementSortOrder {
+  sortType: AccountStatementSortType;
+  orderType: AccountStatementOrderType;
+}
+
+
+export enum AccountStatementSortType {
+  accountingDate   = 'AccountingDate',
+  amount           = 'Amount',
+  recordingDate    = 'RecordingDate',
+  subledgerAccount = 'SubledgerAccount',
+  voucherNumber    = 'VoucherNumber',
+}
+
+
+export enum AccountStatementOrderType {
+  ascending  = 'Ascending',
+  descending = 'Descending',
+}
+
+
+export const AccountStatementSortTypesList: Identifiable[] = [
+  { uid: AccountStatementSortType.accountingDate,   name: 'Fecha de afectación' },
+  { uid: AccountStatementSortType.recordingDate,    name: 'Fecha de registro' },
+  { uid: AccountStatementSortType.subledgerAccount, name: 'Auxiliar' },
+  { uid: AccountStatementSortType.voucherNumber,    name: 'Número de poliza' },
+  { uid: AccountStatementSortType.amount,           name: 'Importe' },
+];
+
+
+export const AccountStatementOrderTypesList: Identifiable[] = [
+  { uid: AccountStatementOrderType.ascending,  name: 'Ascendente' },
+  { uid: AccountStatementOrderType.descending, name: 'Descendente' },
+];
+
+
+export const DefaultAccountStatementSortOrder: AccountStatementSortOrder = {
+  sortType: AccountStatementSortType.accountingDate,
+  orderType: AccountStatementOrderType.ascending,
+};
+
+
 export const EmptyAccountStatementQuery: AccountStatementQuery = {
   query: getEmptyTrialBalanceQuery(),
   entry: null,
-  orderBy: AccountStatementOrder.ascending,
+  orderBy: DefaultAccountStatementSortOrder,
 };
 
 

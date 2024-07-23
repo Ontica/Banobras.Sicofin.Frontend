@@ -13,9 +13,7 @@ import { BalancesDataService, VouchersDataService } from '@app/data-services';
 
 import { AccountStatement, AccountStatementQuery, AccountStatementEntry, BalanceExplorerQuery,
          BalanceExplorerEntry, EmptyAccountStatement, EntryItemTypeList, FileReport, TrialBalanceQuery,
-         TrialBalanceEntry, DefaultAccountStatementOrder } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+         TrialBalanceEntry, DefaultAccountStatementSortOrder } from '@app/models';
 
 import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
@@ -54,8 +52,7 @@ export class AccountStatementViewerComponent implements OnChanges {
   voucherFile: FileReport;
 
   constructor(private balancesDataService: BalancesDataService,
-              private vouchersData: VouchersDataService,
-              private messageBox: MessageBoxService) {
+              private vouchersData: VouchersDataService) {
 
   }
 
@@ -185,7 +182,7 @@ export class AccountStatementViewerComponent implements OnChanges {
     this.accountStatementQuery = {
       query: this.query,
       entry: this.entry,
-      orderBy: DefaultAccountStatementOrder.uid,
+      orderBy: DefaultAccountStatementSortOrder,
     };
   }
 

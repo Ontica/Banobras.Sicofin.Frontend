@@ -40,10 +40,23 @@
 
           <label>Ordenar por:</label>
 
-          <emp-ng-select name="accountStatementOrder"
-            [(ngModel)]="formData.accountStatementOrder"
-            [items]="accountStatementOrderList"
-            [showError]="!formData.accountStatementOrder">
+          <emp-ng-select name="sortType"
+            [(ngModel)]="formData.sortType"
+            [items]="sortTypesList"
+            [showError]="!formData.sortType">
+
+          </emp-ng-select>
+
+        </div>
+
+        <div class="fx-item-quarter">
+
+          <label>Orden:</label>
+
+          <emp-ng-select name="orderType"
+            [(ngModel)]="formData.orderType"
+            [items]="orderTypesList"
+            [showError]="!formData.orderType">
 
           </emp-ng-select>
 
