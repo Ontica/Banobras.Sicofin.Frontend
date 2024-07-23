@@ -5,11 +5,14 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, Output, ViewChild } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgSelectComponent } from '@ng-select/ng-select';
+
 import { ArrayLibrary } from '@app/shared/utils';
+
 
 export interface InputTagsConfig {
   splittable?: boolean;
@@ -34,6 +37,8 @@ const DefaultInputTagsConfig: InputTagsConfig = {
   ]
 })
 export class InputTagsComponent implements ControlValueAccessor {
+
+  @ViewChild(NgSelectComponent) select: NgSelectComponent;
 
   @Input()
   get config() {
@@ -121,6 +126,7 @@ export class InputTagsComponent implements ControlValueAccessor {
 
 
   onInputBlur(event) {
+    this.select.searchTerm = '';
     this.unfocus.emit(event);
   }
 
