@@ -125,11 +125,11 @@ export interface VouchersQuery {
   voucherTypeUID?: string;
   transactionTypeUID?: string;
   number?: string;
-  voucherID?: string;
   concept?: string;
-  verificationNumber?: string;
-  accountKeywords?: string;
-  subledgerAccountKeywords?: string;
+  vouchersID?: string[];
+  accounts?: string[];
+  subledgerAccounts?: string[];
+  verificationNumbers?: string[];
   fromAccountingDate?: string;
   toAccountingDate?: string;
   fromRecordingDate?: string;

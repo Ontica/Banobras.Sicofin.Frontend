@@ -138,12 +138,12 @@
 
           <div class="fx-item-quarter sm-fx-item-half">
 
-            <label>ID póliza:</label>
+            <label>ID pólizas:</label>
 
-            <input type="text" name="voucherID"
-              class="text-box"
-              [(ngModel)]="filter.voucherID"
-              (keyup.escape)="filter.voucherID = ''">
+            <emp-ng-input-tags name="vouchersIDs"
+              [(ngModel)]="filter.vouchersID">
+
+            </emp-ng-input-tags>
 
           </div>
 
@@ -179,10 +179,10 @@
 
             <label>Con la cuenta:</label>
 
-            <input type="text" name="accountKeywords"
-              class="text-box"
-              [(ngModel)]="filter.accountKeywords"
-              (keyup.escape)="filter.accountKeywords = ''">
+            <emp-ng-input-tags name="accounts"
+              [(ngModel)]="filter.accounts">
+
+            </emp-ng-input-tags>
 
           </div>
 
@@ -190,10 +190,10 @@
 
             <label>Con el auxiliar:</label>
 
-            <input type="text" name="subledgerAccountKeywords"
-              class="text-box"
-              [(ngModel)]="filter.subledgerAccountKeywords"
-              (keyup.escape)="filter.subledgerAccountKeywords = ''">
+            <emp-ng-input-tags name="subledgerAccounts"
+              [(ngModel)]="filter.subledgerAccounts">
+
+            </emp-ng-input-tags>
 
           </div>
 
@@ -201,10 +201,10 @@
 
             <label class="ellipsis">No. de verificación:</label>
 
-            <input type="text" name="verificationNumber"
-              class="text-box"
-              [(ngModel)]="filter.verificationNumber"
-              (keyup.escape)="filter.verificationNumber = ''">
+            <emp-ng-input-tags name="verificationNumbers"
+              [(ngModel)]="filter.verificationNumbers">
+
+            </emp-ng-input-tags>
 
           </div>
 
