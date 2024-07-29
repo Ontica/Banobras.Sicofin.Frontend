@@ -18,6 +18,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { AccountChartStateSelector,
          ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
+import { SearcherAPIS } from '@app/data-services';
+
 import { AccountsChartMasterData, EmptyOperationalReportQuery, EmptyOperationalReportType,
          EmptyOperationalReportTypeFlags, EmtyAccountsChartMasterData, OperationalReportQuery,
          OperationalReportTypeFlags, ReportGroup, ReportType, SendTypesList } from '@app/models';
@@ -50,6 +52,10 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   selectedReportType: ReportType<OperationalReportTypeFlags> = EmptyOperationalReportType;
 
   sendTypesList: Identifiable[] = SendTypesList;
+
+  editorsAPI = SearcherAPIS.vouchersEditors;
+
+  selectedElaboratedBy: Identifiable = null;
 
   isLoading = false;
 
@@ -94,8 +100,13 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
 
   onReportTypeChanges(reportType: ReportType<OperationalReportTypeFlags>) {
-    this.selectedReportType = isEmpty(reportType) ? EmptyOperationalReportType: reportType;
+    this.selectedReportType = isEmpty(reportType) ? EmptyOperationalReportType : reportType;
     this.query.reportType = this.selectedReportType.uid ?? '';
+  }
+
+
+  onElaboratedByChanges(selected: Identifiable) {
+    this.selectedElaboratedBy = isEmpty(selected) ? null : selected;
   }
 
 
@@ -189,6 +200,10 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
     if (this.showField.outputType) {
       data.outputType = this.query.outputType;
+    }
+
+    if (this.showField.elaboratedBy) {
+      data.elaboratedBy = this.query.elaboratedBy;
     }
   }
 

@@ -20,6 +20,7 @@ export interface OperationalReportTypeFlags extends ReportTypeFlags {
   withSubledgerAccount: boolean;
   sendType: boolean;
   outputType: boolean;
+  elaboratedBy: boolean;
 }
 
 
@@ -40,6 +41,7 @@ export interface OperationalReportQuery extends ReportQuery {
   exportTo?: FileType;
   sendType?: SendTypes;
   outputType?: string;
+  elaboratedBy?: string;
 }
 
 
@@ -63,6 +65,7 @@ export const EmptyOperationalReportTypeFlags: OperationalReportTypeFlags = {
   withSubledgerAccount: false,
   sendType: false,
   outputType: false,
+  elaboratedBy: false,
 }
 
 

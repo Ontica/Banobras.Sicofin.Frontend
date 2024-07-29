@@ -80,45 +80,62 @@
     </div>
 
     <div *ngIf="showField.ledgers || showField.account || showField.withSubledgerAccount"
-      class="fx-row-container sm-fx-column-container">
+      class="fx-row-container fx-wrap">
 
-        <div *ngIf="showField.ledgers"
-          class="fx-item-half sm-fx-item">
+      <div *ngIf="showField.ledgers"
+        class="fx-item-half sm-fx-item">
 
-          <label>Contabilidad:</label>
+        <label>Contabilidad:</label>
 
-          <emp-ng-select name="ledger"
-            [config]="{clearable: true, multiple: true}"
-            [(ngModel)]="query.ledgers"
-            [items]="selectedAccountChart?.ledgers ?? []"
-            bindLabel="fullName"
-            [placeholder]="selectedAccountChart ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'">
-          </emp-ng-select>
+        <emp-ng-select name="ledger"
+          [config]="{clearable: true, multiple: true}"
+          [(ngModel)]="query.ledgers"
+          [items]="selectedAccountChart?.ledgers ?? []"
+          bindLabel="fullName"
+          [placeholder]="selectedAccountChart ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'">
+        </emp-ng-select>
 
-        </div>
+      </div>
 
-        <div *ngIf="showField.account"
-          class="fx-item">
+      <div *ngIf="showField.account"
+        class="fx-item">
 
-          <label>Cuenta:</label>
+        <label>Cuenta:</label>
 
-          <input type="text" class="text-box" name="fromAccount" required
-            [(ngModel)]="query.accountNumber"
-            [class.invalid-control]="!query.accountNumber"
-            (keyup.escape)="query.accountNumber = ''">
+        <input type="text" class="text-box" name="fromAccount" required
+          [(ngModel)]="query.accountNumber"
+          [class.invalid-control]="!query.accountNumber"
+          (keyup.escape)="query.accountNumber = ''">
 
-        </div>
+      </div>
 
-        <div *ngIf="showField.withSubledgerAccount"
-          class="fx-item-size sm-fx-item fx-items-end" style="--size: 261px" [style.paddingBottom.px]="2">
+      <div *ngIf="showField.withSubledgerAccount"
+        class="fx-item-size sm-fx-item fx-items-end" style="--size: 261px" [style.paddingBottom.px]="2">
 
-          <mat-checkbox name="withSubledgerAccount"
-            [(ngModel)]="query.withSubledgerAccount"
-            (click)="$event.stopPropagation">
-            Con Auxiliares
-          </mat-checkbox>
+        <mat-checkbox name="withSubledgerAccount"
+          [(ngModel)]="query.withSubledgerAccount"
+          (click)="$event.stopPropagation">
+          Con Auxiliares
+        </mat-checkbox>
 
-        </div>
+      </div>
+
+      <div *ngIf="showField.elaboratedBy"
+        class="fx-item-half sm-fx-item">
+
+        <label>Elaborado por:</label>
+
+        <emp-ng-select-typeahead name="elaboratedBy"
+          [(ngModel)]="query.elaboratedBy"
+          [config]="{ clearable: true }"
+          [searcherAPI]="editorsAPI"
+          [initialValue]="selectedElaboratedBy"
+          (changes)="onElaboratedByChanges($event)"
+          placeholder="Todos">
+
+        </emp-ng-select-typeahead>
+
+      </div>
 
     </div>
 
