@@ -31,7 +31,7 @@
               [config]="{bindByValue: false, selectFirst: true}"
               [(ngModel)]="operationSelected"
               [items]="operationsList"
-              (changes)="onOperationChanges($event)">
+              (changes)="onOperationChanges()">
             </emp-ng-select>
 
           </div>
@@ -39,19 +39,14 @@
           <div *ngIf="operationSelected?.assignToRequired"
             class="fx-item-size" style="--size: calc(100% - 524px)">
 
-            <emp-ng-select name="editor"
-              [config]="{bindByValue: false,
-                        clearable: true,
-                        minTermLength: minTermLength,
-                        typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
+            <emp-ng-select-typeahead name="editor"
               [(ngModel)]="editorSelected"
-              [items]="editorList$ | async"
-              [typeahead]="editorInput$"
-              [loading]="editorLoading"
+              [config]="{ bindByValue: false, clearable: true }"
+              [searcherAPI]="vouchersEditorsAPI"
               [showError]="!operationValid"
               placeholder="Buscar persona o cuenta de acceso">
 
-            </emp-ng-select>
+            </emp-ng-select-typeahead>
 
           </div>
 

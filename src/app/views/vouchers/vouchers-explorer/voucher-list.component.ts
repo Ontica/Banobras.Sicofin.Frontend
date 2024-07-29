@@ -10,12 +10,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild,
-         OnInit, OnDestroy} from '@angular/core';
-
-import { concat, Observable, of, Subject } from 'rxjs';
-
-import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
-         tap } from 'rxjs/operators';
+         OnInit, OnDestroy } from '@angular/core';
 
 import { Assertion, EventInfo, Identifiable, isEmpty, SessionService } from '@app/core';
 
@@ -27,15 +22,15 @@ import { MainUIStateSelector } from '@app/presentation/exported.presentation.typ
 
 import { MessageBoxService } from '@app/shared/containers/message-box';
 
-import { VouchersDataService } from '@app/data-services';
+import { SearcherAPIS } from '@app/data-services';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { expandCollapse } from '@app/shared/animations/animations';
 
 import { EmptyVoucher, getVoucherOperation, mapVoucherStageFromViewName, Voucher, VoucherDescriptor,
          VouchersOperation, VouchersOperationCommand, VouchersOperationType,
          VoucherStage } from '@app/models';
-
-import { expandCollapse } from '@app/shared/animations/animations';
 
 import { VoucherListItemEventType } from './voucher-list-item.component';
 
@@ -70,18 +65,15 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
   operationsList: VouchersOperation[] = [];
 
-  editorList$: Observable<Identifiable[]>;
-  editorInput$ = new Subject<string>();
-  editorLoading = false;
-  minTermLength = 4;
+  vouchersEditorsAPI = SearcherAPIS.vouchersEditors;
 
-  subscriptionHelper: SubscriptionHelper;
+  helper: SubscriptionHelper;
+
 
   constructor(private uiLayer: PresentationLayer,
-              private vouchersData: VouchersDataService,
               private session: SessionService,
               private messageBox: MessageBoxService) {
-    this.subscriptionHelper = uiLayer.createSubscriptionHelper();
+    this.helper = uiLayer.createSubscriptionHelper();
   }
 
 
@@ -100,7 +92,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
 
   ngOnDestroy() {
-    this.subscriptionHelper.destroy();
+    this.helper.destroy();
   }
 
 
@@ -144,16 +136,11 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
         console.log(`Unhandled user interface event ${event.type}`);
         return;
     }
-
   }
 
 
-  onOperationChanges(operation: VouchersOperation) {
+  onOperationChanges() {
     this.editorSelected = null;
-
-    if (operation.assignToRequired) {
-      this.subscribeEditorList();
-    }
   }
 
 
@@ -168,7 +155,7 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private setOperationListByCurrentView() {
-    this.subscriptionHelper.select<View>(MainUIStateSelector.CURRENT_VIEW)
+    this.helper.select<View>(MainUIStateSelector.CURRENT_VIEW)
       .subscribe(x => this.setVouchersOperationList(x.name));
   }
 
@@ -228,26 +215,6 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
   private hasPermission(permission: string): boolean {
     return this.session.hasPermission(permission);
-  }
-
-
-  private subscribeEditorList() {
-    this.editorList$ = concat(
-      of([]),
-      this.editorInput$.pipe(
-        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.editorLoading = true),
-        switchMap(keyword =>
-          this.vouchersData.searchEditors(keyword)
-          .pipe(
-            delay(2000),
-            catchError(() => of([])),
-            tap(() => this.editorLoading = false)
-        ))
-      )
-    );
   }
 
 

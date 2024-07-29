@@ -8,10 +8,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
          SimpleChanges } from '@angular/core';
 
-import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
-
-import { catchError, debounceTime, delay, distinctUntilChanged, filter, switchMap,
-         tap } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
@@ -24,7 +21,7 @@ import { expandCollapse } from '@app/shared/animations/animations';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { VouchersDataService } from '@app/data-services';
+import { SearcherAPIS } from '@app/data-services';
 
 import { AccountsChartMasterData, VouchersQuery, VoucherStage, EditorTypeList, EmptyVouchersQuery,
          VoucherFilterData, EmptyVoucherFilterData } from '@app/models';
@@ -60,21 +57,18 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
   transactionTypesList: Identifiable[] = [];
   editorTypeList: Identifiable[] = EditorTypeList;
 
+  vouchersEditorsAPI = SearcherAPIS.vouchersEditors;
+
   filter: VouchersQuery = Object.assign({}, EmptyVouchersQuery);
-  accountChartSelected: AccountsChartMasterData = null;
-  editorSelected: Identifiable = null;
+  selectedAccountChart: AccountsChartMasterData = null;
+  selectedEditor: Identifiable = null;
 
   isLoading = false;
 
-  editorList$: Observable<Identifiable[]>;
-  editorInput$ = new Subject<string>();
-  editorLoading = false;
-  minTermLength = 4;
-
   helper: SubscriptionHelper;
 
-  constructor(private uiLayer: PresentationLayer,
-              private vouchersData: VouchersDataService) {
+
+  constructor(private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -82,15 +76,14 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.voucherFilterData) {
       this.filter = Object.assign({}, this.voucherFilterData.query);
-      this.accountChartSelected = this.voucherFilterData.accountChart ?? null;
-      this.editorSelected = this.voucherFilterData.editor ?? null;
+      this.selectedAccountChart = this.voucherFilterData.accountChart ?? null;
+      this.selectedEditor = this.voucherFilterData.editor ?? null;
     }
   }
 
 
   ngOnInit() {
     this.loadDataLists();
-    this.subscribeEditorList();
   }
 
 
@@ -102,18 +95,17 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
   onShowFiltersClicked(){
     this.showFilters = !this.showFilters;
     this.showFiltersChange.emit(this.showFilters);
-    this.subscribeEditorList();
   }
 
 
   onAccountChartChanges(accountChart: AccountsChartMasterData) {
-    this.accountChartSelected = accountChart;
+    this.selectedAccountChart = accountChart;
     this.validateFieldToClear();
   }
 
 
   onEditorChanges(editor: Identifiable) {
-    this.editorSelected = editor;
+    this.selectedEditor = editor;
   }
 
 
@@ -150,28 +142,8 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  private subscribeEditorList() {
-    this.editorList$ = concat(
-      of(isEmpty(this.editorSelected) ? [] : [this.editorSelected]),
-      this.editorInput$.pipe(
-        filter(keyword => keyword !== null && keyword.length >= this.minTermLength),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.editorLoading = true),
-        switchMap(keyword =>
-          this.vouchersData.searchEditors(keyword)
-          .pipe(
-            delay(2000),
-            catchError(() => of([])),
-            tap(() => this.editorLoading = false)
-        ))
-      )
-    );
-  }
-
-
   private validateFieldToClear() {
-    this.filter.ledgerUID = this.accountChartSelected?.ledgers
+    this.filter.ledgerUID = this.selectedAccountChart?.ledgers
       .filter(x => this.filter.ledgerUID === x.uid).length > 0 ? this.filter.ledgerUID : '';
   }
 
@@ -195,18 +167,19 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
 
 
   private setDefaultFieldsSelected() {
-    this.accountChartSelected = this.accountsChartMasterDataList[0] ?? null;
-    this.editorSelected = null;
-    this.filter.accountsChartUID = this.accountChartSelected?.uid ?? '';
+    this.selectedAccountChart = this.accountsChartMasterDataList[0] ?? null;
+    this.selectedEditor = null;
+    this.filter.accountsChartUID = this.selectedAccountChart?.uid ?? '';
     this.filter.editorUID = '';
   }
+
 
 
   private getVoucherFilterData(): VoucherFilterData {
     const payload: VoucherFilterData = {
       query: this.getVouchersQuery(),
-      accountChart: this.accountChartSelected,
-      editor: this.editorSelected,
+      accountChart: this.selectedAccountChart,
+      editor: this.selectedEditor,
     };
 
     return payload;

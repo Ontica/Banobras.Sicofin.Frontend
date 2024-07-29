@@ -13,7 +13,7 @@ import { DataTableQuery } from '@app/models';
 
 
 export enum SearcherAPIS {
-  demo = 'v2/budgeting/demo/',
+  vouchersEditors = 'v2/financial-accounting/vouchers/editors/',
 }
 
 @Injectable()

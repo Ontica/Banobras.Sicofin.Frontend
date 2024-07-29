@@ -117,15 +117,6 @@ export class VouchersDataService {
   }
 
 
-  searchEditors(keywords: string): EmpObservable<Identifiable[]> {
-    Assertion.assertValue(keywords, 'keywords');
-
-    const path = `v2/financial-accounting/vouchers/editors?keywords=${keywords}`;
-
-    return this.http.get<Identifiable[]>(path);
-  }
-
-
   searchSubledgerAccountsForEdition(voucherId: number,
                                     accountId: number,
                                     keywords: string): EmpObservable<SubledgerAccountDescriptor[]> {

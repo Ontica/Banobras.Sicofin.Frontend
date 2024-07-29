@@ -12,7 +12,7 @@
           [(ngModel)]="filter.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [title]="accountChartSelected?.name ?? null"
+          [title]="selectedAccountChart?.name ?? null"
           [showError]="accountsChartUID.invalid"
           (changes)="onAccountChartChanges($event)">
         </emp-ng-select>
@@ -100,7 +100,7 @@
             <emp-ng-select name="ledger"
               [config]="{clearable: true}"
               [(ngModel)]="filter.ledgerUID"
-              [items]="accountChartSelected?.ledgers"
+              [items]="selectedAccountChart?.ledgers"
               bindLabel="fullName"
               placeholder="Todas">
             </emp-ng-select>
@@ -257,18 +257,15 @@
 
             <label>Persona o cuenta de acceso:</label>
 
-            <emp-ng-select name="editorUID"
-              [config]="{clearable: true,
-                        minTermLength: minTermLength,
-                        typeToSearchText: 'Ingresar ' + minTermLength +' o más caracteres'}"
+            <emp-ng-select-typeahead name="editorUID"
               [(ngModel)]="filter.editorUID"
-              [items]="editorList$ | async"
-              [typeahead]="editorInput$"
-              [loading]="editorLoading"
+              [config]="{ clearable: true }"
+              [searcherAPI]="vouchersEditorsAPI"
+              [initialValue]="selectedEditor"
               (changes)="onEditorChanges($event)"
               placeholder="Todos">
 
-            </emp-ng-select>
+            </emp-ng-select-typeahead>
 
           </div>
 
