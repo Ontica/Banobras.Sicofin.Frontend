@@ -109,7 +109,7 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.initialValue) {
+    if (changes.initialValue && !this.searcherList$) {
       this.subscribeSearcherList();
     }
   }
