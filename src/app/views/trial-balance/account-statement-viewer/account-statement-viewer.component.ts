@@ -34,6 +34,8 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   @Input() query: BalanceExplorerQuery | TrialBalanceQuery;
 
+  @Input() displayCard = false;
+
   @Output() closeEvent = new EventEmitter<void>();
 
   cardHint = 'Cargando...';
@@ -87,6 +89,10 @@ export class AccountStatementViewerComponent implements OnChanges {
         Assertion.assertValue(event.payload.accountStatementQuery, 'event.payload.accountStatementQuery');
         this.accountStatementQuery = Object.assign({}, event.payload.accountStatementQuery);
         this.getAccountStatement();
+        return;
+
+      case AccountStatementFilterEventType.CLOSE_BUTTON_CLICKED:
+        this.onCloseButtonClicked();
         return;
 
       default:

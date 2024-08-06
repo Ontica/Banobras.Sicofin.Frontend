@@ -18,6 +18,7 @@ import { AccountStatementQuery, BalanceExplorerQuery, BalanceExplorerEntry, Bala
 
 export enum AccountStatementFilterEventType {
   BUILD_ACCOUNT_STATEMENT_CLICKED = 'AccountStatementFilterComponent.Event.BuildAccountStatementClicked',
+  CLOSE_BUTTON_CLICKED            = 'AccountStatementFilterComponent.Event.CloseButtonClicked',
 }
 
 @Component({
@@ -31,6 +32,8 @@ export class AccountStatementFilterComponent implements OnChanges {
   @Input() query: BalanceExplorerQuery | TrialBalanceQuery;
 
   @Input() orderBy: AccountStatementSortOrder = DefaultAccountStatementSortOrder;
+
+  @Input() displayCard = false;
 
   @Output() accountStatementFilterEvent = new EventEmitter<EventInfo>();
 
@@ -65,6 +68,11 @@ export class AccountStatementFilterComponent implements OnChanges {
   get periodsRequired(): boolean {
     return [TrialBalanceTypes.BalanzaValorizadaComparativa]
       .includes(this.trialBalanceType as TrialBalanceTypes);
+  }
+
+
+  onCloseButtonClicked() {
+    sendEvent(this.accountStatementFilterEvent, AccountStatementFilterEventType.CLOSE_BUTTON_CLICKED);
   }
 
 

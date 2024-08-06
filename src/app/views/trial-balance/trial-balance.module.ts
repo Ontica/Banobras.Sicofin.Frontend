@@ -16,11 +16,13 @@ import { ReportsControlsModule } from '../_reports-controls/reports-controls.mod
 
 import { AccountStatementFilterComponent } from './account-statement-viewer/account-statement-filter.component';
 import { AccountStatementViewerComponent } from './account-statement-viewer/account-statement-viewer.component';
-import { BalanceQuickFilterComponent } from './trial-balance-viewer/balance-quick-filter.component';
+import { BalanceFilterComponent } from './trial-balance-viewer/balance-filter.component';
 import { ExchangeRateSelectorComponent } from './exchange-rate-selector/exchange-rate-selector.component';
+import { SubledgerAccountBalanceFilterComponent } from './trial-balance-viewer/subledger-account-balance-filter.component';
 import { TrialBalanceExplorerComponent } from './trial-balance-explorer/trial-balance-explorer.component';
 import { TrialBalanceFilterComponent } from './trial-balance-viewer/trial-balance-filter.component';
 import { TrialBalanceViewerComponent } from './trial-balance-viewer/trial-balance-viewer.component';
+
 
 @NgModule({
   imports: [
@@ -36,8 +38,9 @@ import { TrialBalanceViewerComponent } from './trial-balance-viewer/trial-balanc
   declarations: [
     AccountStatementFilterComponent,
     AccountStatementViewerComponent,
-    BalanceQuickFilterComponent,
+    BalanceFilterComponent,
     ExchangeRateSelectorComponent,
+    SubledgerAccountBalanceFilterComponent,
     TrialBalanceExplorerComponent,
     TrialBalanceFilterComponent,
     TrialBalanceViewerComponent,

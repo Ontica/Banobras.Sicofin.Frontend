@@ -11,19 +11,36 @@ import { Assertion, EventInfo } from '@app/core';
 
 import { TrialBalanceViewerEventType } from '../trial-balance-viewer/trial-balance-viewer.component';
 
+import { EmptySubledgerAccount, SubledgerAccount } from '@app/models';
+
+export type TrialBalanceQueryType = 'TrialBalance' | 'Balance' | 'SubledgerAccount';
+
+
 @Component({
   selector: 'emp-fa-trial-balance-explorer',
   templateUrl: './trial-balance-explorer.component.html',
 })
 export class TrialBalanceExplorerComponent {
 
-  @Input() isQuickQuery = false;
+  @Input() queryType: TrialBalanceQueryType = 'TrialBalance';
+
+  @Input() subledgerAccount: SubledgerAccount = EmptySubledgerAccount;
 
   displayAccountStatementViewer = false;
 
   query = null;
 
   selectedEntry = null;
+
+
+  get showFluid(): boolean {
+    return ['Balance'].includes(this.queryType);
+  }
+
+
+  get showExplorer(): boolean {
+    return ['Balance', 'TrialBalance'].includes(this.queryType);
+  }
 
 
   onTrialBalanceViewerEvent(event: EventInfo) {

@@ -7,7 +7,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { DateString, DateStringLibrary, EventInfo } from '@app/core';
+import { DateStringLibrary, EventInfo } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -19,20 +19,20 @@ import { AccountChartStateSelector,
 
 import { sendEvent } from '@app/shared/utils';
 
-export enum BalanceQuickFilterEventType {
-  BUILD_BALANCE_CLICKED = 'BalanceQuickFilterComponent.Event.BuildBalanceClicked',
-  CLEAR_BALANCE_CLICKED = 'BalanceQuickFilterComponent.Event.ClearBalanceClicked',
+export enum BalanceFilterEventType {
+  BUILD_BALANCE_CLICKED = 'BalanceFilterComponent.Event.BuildBalanceClicked',
+  CLEAR_BALANCE_CLICKED = 'BalanceFilterComponent.Event.ClearBalanceClicked',
 }
 
 @Component({
-  selector: 'emp-fa-balance-quick-filter',
-  templateUrl: './balance-quick-filter.component.html',
+  selector: 'emp-fa-balance-filter',
+  templateUrl: './balance-filter.component.html',
 })
-export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy {
+export class BalanceFilterComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() balancesQuery: BalanceExplorerQuery = emptyBalanceExplorerQuery();
 
-  @Output() balanceQuickFilterEvent = new EventEmitter<EventInfo>();
+  @Output() balanceFilterEvent = new EventEmitter<EventInfo>();
 
   formData = {
     trialBalanceType: '',
@@ -41,7 +41,6 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
     balancesType: '',
     accounts: [],
     subledgerAccounts: [],
-    fromDate: null,
     toDate: null,
     withSubledgerAccount: false,
     withAllAccounts: false,
@@ -56,6 +55,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   isLoadingReportTypes = false;
 
   helper: SubscriptionHelper;
+
 
   constructor(private uiLayer: PresentationLayer) {
     this.helper = uiLayer.createSubscriptionHelper();
@@ -123,23 +123,18 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   }
 
 
-  onDatepickerInitialPeriodToDateChange(toDate: DateString) {
-    this.validateValueOfInitPeriodFromDate(toDate);
-  }
-
-
   onBuildBalanceClicked() {
     const payload = {
       reportType: this.trialBalanceTypeSelected,
       query: this.getBalancesQuery(),
     };
 
-    sendEvent(this.balanceQuickFilterEvent, BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED, payload);
+    sendEvent(this.balanceFilterEvent, BalanceFilterEventType.BUILD_BALANCE_CLICKED, payload);
   }
 
 
   onClearFilters() {
-    sendEvent(this.balanceQuickFilterEvent, BalanceQuickFilterEventType.CLEAR_BALANCE_CLICKED);
+    sendEvent(this.balanceFilterEvent, BalanceFilterEventType.CLEAR_BALANCE_CLICKED);
   }
 
 
@@ -175,7 +170,6 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
       balancesType: this.balancesQuery.balancesType,
       accounts: this.balancesQuery.accounts ?? [],
       subledgerAccounts: this.balancesQuery.subledgerAccounts ?? [],
-      fromDate: this.balancesQuery.initialPeriod.fromDate,
       toDate: this.balancesQuery.initialPeriod.toDate,
       withSubledgerAccount: this.balancesQuery.withSubledgerAccount,
       withAllAccounts: this.balancesQuery.withAllAccounts,
@@ -206,13 +200,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
   private setDefaultDates() {
     if (!this.isQueryExecuted) {
       this.formData.toDate = DateStringLibrary.today();
-      this.validateValueOfInitPeriodFromDate(this.formData.toDate);
     }
-  }
-
-
-  private validateValueOfInitPeriodFromDate(toDate: DateString) {
-    this.formData.fromDate = DateStringLibrary.getFirstDayOfMonthFromDateString(toDate);
   }
 
 
@@ -229,7 +217,7 @@ export class BalanceQuickFilterComponent implements OnChanges, OnInit, OnDestroy
       accountsChartUID: this.formData.accountsChartUID,
       ledgers: this.formData.ledgers,
       initialPeriod: {
-        fromDate: this.formData.fromDate,
+        fromDate: DateStringLibrary.getFirstDayOfMonthFromDateString(this.formData.toDate),
         toDate: this.formData.toDate,
       },
       withSubledgerAccount: this.formData.withSubledgerAccount,

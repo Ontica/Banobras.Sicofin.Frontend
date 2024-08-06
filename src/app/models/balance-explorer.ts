@@ -5,13 +5,14 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString, Identifiable } from '@app/core';
+import { DateString, DateStringLibrary, Identifiable } from '@app/core';
 
 import { AccountDescriptor } from './accounts-chart';
 
 import { DataTable, DataTableColumn, DataTableQuery, DataTableEntry } from './_data-table';
 
-import { ReportType, ReportTypeFlags } from './reporting';
+import { DefaultExportationType, ReportController, ReportGroup, ReportType,
+         ReportTypeFlags } from './reporting';
 
 
 export interface AccountBalance {
@@ -26,6 +27,7 @@ export interface AccountBalance {
 export enum BalanceExplorerTypes {
   SaldosPorCuentaConsultaRapida   = 'SaldosPorCuentaConsultaRapida',
   SaldosPorAuxiliarConsultaRapida = 'SaldosPorAuxiliarConsultaRapida',
+  SaldosPorAuxiliarID             = 'SaldosPorAuxiliarID',
 }
 
 
@@ -56,11 +58,12 @@ export interface BalanceExplorerEntry extends DataTableEntry {
 
 export interface BalanceExplorerQuery extends DataTableQuery {
   accountsChartUID: string;
-  trialBalanceType: BalanceExplorerTypes;
+  trialBalanceType?: BalanceExplorerTypes;
   balancesType?: string;
   ledgers: string[];
   accounts?: string[];
   subledgerAccounts?: string[];
+  subledgerAccountID?: number;
   initialPeriod?: {
     fromDate?: DateString;
     toDate?: DateString;
@@ -79,6 +82,7 @@ export function emptyBalanceExplorerQuery(): BalanceExplorerQuery {
     ledgers: [],
     accounts: [],
     subledgerAccounts: [],
+    subledgerAccountID: null,
     initialPeriod: {
       fromDate: '',
       toDate: ''
@@ -101,3 +105,12 @@ export const EmptyBalanceExplorerData: BalanceExplorerData = {
   balanceType: null,
   queryExecuted: false,
 };
+
+
+export const SubledgerAccountBalanceType: ReportType<any> = {
+  uid: BalanceExplorerTypes.SaldosPorAuxiliarID,
+  name: 'Saldos del auxiliar',
+  group: ReportGroup.ExploradorSaldos,
+  controller: ReportController.Reporting,
+  exportTo: [DefaultExportationType],
+}

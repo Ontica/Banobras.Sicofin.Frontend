@@ -1,21 +1,31 @@
-<div class="explorer" [ngClass]="{'fluid': isQuickQuery}">
+<div [ngClass]="{'explorer': showExplorer,
+                 'container-full-size': !showExplorer,
+                 'fluid': showExplorer && showFluid}">
 
-  <div class="primary" [class.std-hide]="displayAccountStatementViewer">
+  <div [ngClass]="{'primary': showExplorer,
+                   'std-hide': showExplorer && displayAccountStatementViewer,
+                   'container-full-size': !showExplorer,
+                   'hidden': !showExplorer && displayAccountStatementViewer}">
 
     <emp-fa-trial-balance-viewer
-      [isQuickQuery]="isQuickQuery"
+      [queryType]="queryType"
       [selectedEntry]="selectedEntry"
+      [displayCard]="showExplorer"
+      [subledgerAccount]="subledgerAccount"
       (trialBalanceViewerEvent)="onTrialBalanceViewerEvent($event)">
 
     </emp-fa-trial-balance-viewer>
 
   </div>
 
-  <div class="secondary" *ngIf="displayAccountStatementViewer">
+  <div *ngIf="displayAccountStatementViewer"
+      [ngClass]="{'secondary': showExplorer,
+                  'container-full-size': !showExplorer}">
 
     <emp-fa-account-statement-viewer
       [query]="query"
       [entry]="selectedEntry"
+      [displayCard]="showExplorer"
       (closeEvent)="onCloseAccountStatementViewer()">
 
     </emp-fa-account-statement-viewer>

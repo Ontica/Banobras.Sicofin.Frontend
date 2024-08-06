@@ -1,0 +1,81 @@
+<form #form="ngForm" empNgFormKeyDownEnter autocomplete="off" class="form-section form-container"
+  [style.padding.px]="0" [style.margin]="'8px 0'">
+
+  <div class="fx-column-container fx-gap-half">
+
+      <div class="fx-row-container sm-fx-column-container">
+
+        <div class="fx-item-half sm-fx-item">
+
+          <label>Catálogo de cuentas:</label>
+
+          <emp-ng-select name="accountsChartUID" required
+            [(ngModel)]="formData.accountsChartUID"
+            [items]="accountsChartMasterDataList"
+            [loading]="isLoadingAccountsCharts"
+            [showError]="!formData.accountsChartUID"
+            (changes)="onAccountChartChanges()">
+          </emp-ng-select>
+
+        </div>
+
+
+        <div class="fx-item sm-fx-item" [style.paddingTop.px]="12">
+
+          <mat-checkbox name="withAllAccounts"
+            [(ngModel)]="formData.withAllAccounts"
+            (click)="$event.stopPropagation">
+            Incluir cuentas sin saldo
+          </mat-checkbox>
+
+        </div>
+
+        <div class="fx-item-none">
+
+          <label>Fecha:</label>
+
+          <emp-ng-datepicker name="date" required
+            [(ngModel)]="formData.toDate"
+            [showError]="!formData.toDate">
+
+          </emp-ng-datepicker>
+
+        </div>
+
+        <div class="fx-item-none" [style.marginTop.px]="12">
+
+          <button [class.btn-icon-action]="form.valid"
+            [class.btn-icon]="form.invalid"
+            [disabled]="form.invalid"
+            (click)="onBuildBalanceClicked()"
+            title="Generar balanza">
+
+            <mat-icon>search</mat-icon>
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="fx-row-container sm-fx-column-container">
+
+        <div class="fx-item-half sm-fx-item">
+
+          <label>Contabilidad:</label>
+
+          <emp-ng-select name="ledger"
+            [config]="{clearable: true, multiple: true}"
+            [(ngModel)]="formData.ledgers"
+            [items]="accountChartSelected?.ledgers"
+            bindLabel="fullName"
+            [placeholder]="accountChartSelected ? 'Todas las contabilidades para el grupo seleccionado' : 'Todas'">
+          </emp-ng-select>
+
+        </div>
+
+      </div>
+
+  </div>
+
+</form>

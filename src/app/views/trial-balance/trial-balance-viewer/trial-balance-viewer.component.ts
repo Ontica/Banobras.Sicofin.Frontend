@@ -16,9 +16,9 @@ import { PERMISSIONS } from '@app/main-layout';
 import { BalancesDataService } from '@app/data-services';
 
 import { BalanceExplorerData, BalanceExplorerEntry, BalanceExplorerQuery, BalanceExplorerResult,
-         emptyBalanceExplorerQuery, EmptyReportType, EmptyTrialBalance, FileReport,
-         getEmptyTrialBalanceQuery, ReportType, ReportTypeFlags, TrialBalance, TrialBalanceEntry,
-         TrialBalanceQuery } from '@app/models';
+         emptyBalanceExplorerQuery, EmptyReportType, EmptySubledgerAccount, EmptyTrialBalance, FileReport,
+         getEmptyTrialBalanceQuery, ReportType, ReportTypeFlags, SubledgerAccount, TrialBalance,
+         TrialBalanceEntry, TrialBalanceQuery } from '@app/models';
 
 import { ReportingAction, ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
@@ -30,9 +30,13 @@ import {
   ExportReportModalEventType
 } from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
-import { BalanceQuickFilterEventType } from './balance-quick-filter.component';
+import { BalanceFilterEventType } from './balance-filter.component';
 
 import { TrialBalanceFilterEventType } from './trial-balance-filter.component';
+
+import { SubledgerAccountBalanceFilterEventType } from './subledger-account-balance-filter.component';
+
+import { TrialBalanceQueryType } from '../trial-balance-explorer/trial-balance-explorer.component';
 
 
 export enum TrialBalanceViewerEventType {
@@ -46,9 +50,13 @@ export enum TrialBalanceViewerEventType {
 })
 export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
-  @Input() isQuickQuery = false;
+  @Input() queryType: TrialBalanceQueryType = 'TrialBalance';
 
   @Input() selectedEntry = null;
+
+  @Input() displayCard = false;
+
+  @Input() subledgerAccount: SubledgerAccount = EmptySubledgerAccount;
 
   @Output() trialBalanceViewerEvent = new EventEmitter<EventInfo>();
 
@@ -87,7 +95,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setPermissionToAccountStatement();
 
-    if (this.isQuickQuery) {
+    if (this.isBalanceQuery) {
       this.subscriptionHelper.select<BalanceExplorerData>(ReportingStateSelector.BALANCE_EXPLORER_DATA)
         .subscribe(x => this.setInitData(x));
     }
@@ -95,9 +103,23 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    if (this.isQuickQuery) {
+    if (this.isBalanceQuery) {
       this.subscriptionHelper.destroy();
     }
+  }
+
+  get isTrialBalanceQuery(): boolean {
+    return ['TrialBalance'].includes(this.queryType);;
+  }
+
+
+  get isBalanceQuery(): boolean {
+    return ['Balance'].includes(this.queryType);;
+  }
+
+
+  get isSubledgerQuery(): boolean {
+    return ['SubledgerAccount'].includes(this.queryType);;
   }
 
 
@@ -113,15 +135,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
     this.resetData();
 
-    switch (event.type as TrialBalanceFilterEventType | BalanceQuickFilterEventType) {
-      case BalanceQuickFilterEventType.BUILD_BALANCE_CLICKED:
-        Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
-        Assertion.assertValue(event.payload.query, 'event.payload.query');
-
-        this.setReportType(event.payload.reportType);
-        this.executeGetBalance(event.payload.query as BalanceExplorerQuery);
-        return;
-
+    switch (event.type as TrialBalanceFilterEventType | BalanceFilterEventType | SubledgerAccountBalanceFilterEventType) {
       case TrialBalanceFilterEventType.BUILD_TRIAL_BALANCE_CLICKED:
         Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
         Assertion.assertValue(event.payload.query, 'event.payload.query');
@@ -130,8 +144,17 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
         this.executeGetTrialBalance(event.payload.query as TrialBalanceQuery);
         return;
 
+      case BalanceFilterEventType.BUILD_BALANCE_CLICKED:
+      case SubledgerAccountBalanceFilterEventType.BUILD_BALANCE_CLICKED:
+        Assertion.assertValue(event.payload.reportType, 'event.payload.reportType');
+        Assertion.assertValue(event.payload.query, 'event.payload.query');
+
+        this.setReportType(event.payload.reportType);
+        this.executeGetBalance(event.payload.query as BalanceExplorerQuery);
+        return;
+
       case TrialBalanceFilterEventType.CLEAR_TRIAL_BALANCE_CLICKED:
-      case BalanceQuickFilterEventType.CLEAR_BALANCE_CLICKED:
+      case BalanceFilterEventType.CLEAR_BALANCE_CLICKED:
         this.setReportType(EmptyReportType);
         this.clearQuery();
         return;
@@ -145,7 +168,6 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   onDataTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
-
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
         Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
         this.setText(event.payload.displayedEntriesMessage as string);
@@ -169,21 +191,12 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
   onExportReportModalEvent(event: EventInfo) {
     switch (event.type as ExportReportModalEventType) {
-
       case ExportReportModalEventType.CLOSE_MODAL_CLICKED:
         this.setDisplayExportModal(false);
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-        if (this.submitted || !this.query.accountsChartUID ) {
-          return;
-        }
-
-        const observable = this.isQuickQuery ?
-          this.balancesDataService.exportBalanceExplorerBalancesToExcel(this.query as BalanceExplorerQuery) :
-          this.balancesDataService.exportTrialBalanceToExcel(this.query as TrialBalanceQuery);
-
-        this.exportDataToExcel(observable);
+        this.validateExportReportToExecute();
         return;
 
       default:
@@ -221,6 +234,30 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
+  private validateExportReportToExecute() {
+    if (this.submitted || !this.query.accountsChartUID) {
+      return;
+    }
+
+    let observable = null;
+
+    switch (this.queryType) {
+      case 'TrialBalance':
+        observable = this.balancesDataService.exportTrialBalanceToExcel(this.query as TrialBalanceQuery);
+        break;
+      case 'Balance':
+      case 'SubledgerAccount':
+        observable = this.balancesDataService.exportBalanceExplorerBalancesToExcel(this.query as BalanceExplorerQuery);
+        break;
+      default:
+        console.log(`Unhandled query type ${this.queryType}`);
+        return;
+    }
+
+    this.exportDataToExcel(observable);
+  }
+
+
   private exportDataToExcel(observable: EmpObservable<FileReport>) {
     observable
       .firstValue()
@@ -252,7 +289,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   private saveDataInState() {
-    if (this.isQuickQuery) {
+    if (this.isBalanceQuery) {
       const balanceData: BalanceExplorerData = {
         balance: this.data as BalanceExplorerResult,
         balanceType: this.reportType,
@@ -271,7 +308,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   private clearQuery() {
-    this.query = this.isQuickQuery ? emptyBalanceExplorerQuery() : getEmptyTrialBalanceQuery();
+    this.query = this.isBalanceQuery ? emptyBalanceExplorerQuery() : getEmptyTrialBalanceQuery();
   }
 
 

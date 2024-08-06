@@ -7,22 +7,22 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BalanceQuickFilterComponent } from './balance-quick-filter.component';
+import { SubledgerAccountBalanceFilterComponent } from './subledger-account-balance-filter.component';
 
 
-describe('BalanceQuickFilterComponent', () => {
-  let component: BalanceQuickFilterComponent;
-  let fixture: ComponentFixture<BalanceQuickFilterComponent>;
+describe('SubledgerAccountBalanceFilterComponent', () => {
+  let component: SubledgerAccountBalanceFilterComponent;
+  let fixture: ComponentFixture<SubledgerAccountBalanceFilterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BalanceQuickFilterComponent ]
+      declarations: [ SubledgerAccountBalanceFilterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BalanceQuickFilterComponent);
+    fixture = TestBed.createComponent(SubledgerAccountBalanceFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

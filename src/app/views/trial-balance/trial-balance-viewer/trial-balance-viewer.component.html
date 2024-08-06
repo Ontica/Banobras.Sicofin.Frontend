@@ -1,57 +1,88 @@
-<div class="card card-border">
+<ng-container *ngIf="displayCard">
 
-  <div class="card-header card-header-flat">
+  <div class="card card-border">
 
-    <div class="card-title">
-      {{ isQuickQuery ? 'Explorador de saldos' : 'Saldos y balanzas de comprobación' }}
+    <div class="card-header card-header-flat">
 
-      <div class="card-hint" empNgProgressText
-        loadingText="Cargando"
-        [finalText]="cardHint"
-        [isLoading]="isLoading">
+      <div class="card-title">
+        {{ isBalanceQuery ? 'Explorador de saldos' : 'Saldos y balanzas de comprobación' }}
+
+        <div class="card-hint" empNgProgressText
+          loadingText="Cargando"
+          [finalText]="cardHint"
+          [isLoading]="isLoading">
+        </div>
+
       </div>
 
     </div>
 
-  </div>
+    <div class="card-body" [style.padding]="isBalanceQuery ? '8px' : '0'">
 
-  <div class="card-body" [style.padding]="isQuickQuery ? '8px' : '0'">
+      <ng-container *ngTemplateOutlet="viewerContent">
 
-    <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
-
-      <emp-ng-spinner #spinner [visible]="isLoading" >
-
-      </emp-ng-spinner>
-
-      <emp-fa-trial-balance-filter *ngIf="!isQuickQuery"
-        class="fx-item-none"
-        [(showFilters)]="showFilters"
-        (trialBalanceFilterEvent)="onFilterEvent($event)">
-
-      </emp-fa-trial-balance-filter>
-
-      <emp-fa-balance-quick-filter *ngIf="isQuickQuery"
-        class="fx-item-none"
-        [balancesQuery]="balancesQuery"
-        (balanceQuickFilterEvent)="onFilterEvent($event)">
-
-      </emp-fa-balance-quick-filter>
-
-      <emp-ng-data-table class="fx-item"
-        [dataTable]="data"
-        [executed]="queryExecuted"
-        [controlsAligned]="isQuickQuery"
-        [selectedEntry]="selectedEntry"
-        [canClickRow]="hasPermissionToAccountStatement"
-        (dataTableEvent)="onDataTableEvent($event)">
-
-      </emp-ng-data-table>
+      </ng-container>
 
     </div>
 
   </div>
 
-</div>
+</ng-container>
+
+
+<ng-container *ngIf="!displayCard">
+
+  <ng-container *ngTemplateOutlet="viewerContent">
+
+  </ng-container>
+
+</ng-container>
+
+
+<ng-template #viewerContent>
+
+  <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+
+    <emp-ng-spinner #spinner [visible]="isLoading" >
+
+    </emp-ng-spinner>
+
+    <div class="section-title" *ngIf="!displayCard">Explorador de saldos</div>
+
+    <emp-fa-trial-balance-filter *ngIf="isTrialBalanceQuery"
+      class="fx-item-none"
+      [(showFilters)]="showFilters"
+      (trialBalanceFilterEvent)="onFilterEvent($event)">
+
+    </emp-fa-trial-balance-filter>
+
+    <emp-fa-balance-filter *ngIf="isBalanceQuery"
+      class="fx-item-none"
+      [balancesQuery]="balancesQuery"
+      (balanceFilterEvent)="onFilterEvent($event)">
+
+    </emp-fa-balance-filter>
+
+    <emp-fa-subledger-account-balance-filter *ngIf="isSubledgerQuery"
+      class="fx-item-none"
+      [subledgerAccount]="subledgerAccount"
+      (subledgerAccountBalanceFilterEvent)="onFilterEvent($event)">
+
+    </emp-fa-subledger-account-balance-filter>
+
+    <emp-ng-data-table class="fx-item"
+      [dataTable]="data"
+      [executed]="queryExecuted"
+      [controlsAligned]="isBalanceQuery"
+      [selectedEntry]="selectedEntry"
+      [canClickRow]="hasPermissionToAccountStatement"
+      (dataTableEvent)="onDataTableEvent($event)">
+
+    </emp-ng-data-table>
+
+  </div>
+
+</ng-template>
 
 
 <emp-ng-export-report-modal *ngIf="displayExportModal"

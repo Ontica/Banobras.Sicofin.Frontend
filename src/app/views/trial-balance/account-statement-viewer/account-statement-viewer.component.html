@@ -1,39 +1,62 @@
-<emp-ng-card title="Estado de cuenta"
-  [hint]="cardHint"
-  (cardClose)="onCloseButtonClicked()">
+<ng-container *ngIf="displayCard">
 
-  <div [style.height.%]="100" [style.width.%]="100" [style.padding.px]="8">
+  <emp-ng-card title="Estado de cuenta"
+    [hint]="cardHint"
+    (cardClose)="onCloseButtonClicked()">
 
-    <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+    <div [style.height.%]="100" [style.width.%]="100" [style.padding.px]="8">
 
-      <emp-ng-spinner #spinner [visible]="isLoading">
+      <ng-container *ngTemplateOutlet="viewerContent">
 
-      </emp-ng-spinner>
-
-      <emp-fa-account-statement-filter class="fx-item-none"
-        [query]="accountStatementQuery.query"
-        [entry]="accountStatementQuery.entry"
-        [orderBy]="accountStatementQuery.orderBy"
-        (accountStatementFilterEvent)="onFilterEvent($event)">
-
-      </emp-fa-account-statement-filter>
-
-      <emp-ng-data-table class="fx-item"
-        [dataTable]="accountStatement"
-        [executed]="queryExecuted"
-        [notQueryExecutedText]="'Cargando...'"
-        [controlsAligned]="true"
-        [clickableEntry]="true"
-        [countOnlyEntries]="true"
-        (dataTableEvent)="onDataTableEvent($event)">
-
-      </emp-ng-data-table>
+      </ng-container>
 
     </div>
 
+  </emp-ng-card>
+
+</ng-container>
+
+
+<ng-container *ngIf="!displayCard">
+
+  <ng-container *ngTemplateOutlet="viewerContent">
+
+  </ng-container>
+
+</ng-container>
+
+
+<ng-template #viewerContent>
+
+  <div class="fx-column-container-fill" [empNgSpinnerHost]="spinner">
+
+    <emp-ng-spinner #spinner [visible]="isLoading">
+
+    </emp-ng-spinner>
+
+    <emp-fa-account-statement-filter class="fx-item-none"
+      [query]="accountStatementQuery.query"
+      [entry]="accountStatementQuery.entry"
+      [orderBy]="accountStatementQuery.orderBy"
+      [displayCard]="displayCard"
+      (accountStatementFilterEvent)="onFilterEvent($event)">
+
+    </emp-fa-account-statement-filter>
+
+    <emp-ng-data-table class="fx-item"
+      [dataTable]="accountStatement"
+      [executed]="queryExecuted"
+      [notQueryExecutedText]="'Cargando...'"
+      [controlsAligned]="true"
+      [clickableEntry]="true"
+      [countOnlyEntries]="true"
+      (dataTableEvent)="onDataTableEvent($event)">
+
+    </emp-ng-data-table>
+
   </div>
 
-</emp-ng-card>
+</ng-template>
 
 
 <emp-ng-export-report-modal *ngIf="displayExportModal"
