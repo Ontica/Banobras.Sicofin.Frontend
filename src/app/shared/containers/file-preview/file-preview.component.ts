@@ -13,11 +13,11 @@ import { FileReport, FileType } from '@app/models';
 
 
 @Component({
-  selector: 'emp-ng-file-print-preview',
-  templateUrl: './file-print-preview.component.html',
-  styleUrls: ['./file-print-preview.component.scss']
+  selector: 'emp-ng-file-preview',
+  templateUrl: './file-preview.component.html',
+  styleUrls: ['./file-preview.component.scss']
 })
-export class FilePrintPreviewComponent implements OnChanges {
+export class FilePreviewComponent implements OnChanges {
 
   @Input() title: string;
 
@@ -25,58 +25,65 @@ export class FilePrintPreviewComponent implements OnChanges {
 
   @Input() file: FileReport;
 
-  display = false;
+  hasError = false;
 
-  url: string = null;
+  displayInModal = false;
 
-  fileError = false;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.file && !!this.file?.url) {
       this.open(this.file.url, this.file.type);
     }
   }
 
 
-  open(url, type) {
-    if (!this.validUrl(url)) {
+  open(url: string, type: string) {
+    if (!this.isValidUrl(url)) {
       return;
     }
 
-    if (type === MediaType.html || type === FileType.HTML) {
-      this.openWindowCenter(url);
+    if (this.canOpenWindow(type)) {
+      this.openWindow(url);
+      this.onClose();
       return;
     }
 
-    this.fileError = false;
-    this.url = url;
-    this.display = true;
+    this.openModal();
   }
 
 
   onFileError() {
-    this.fileError = true;
-    console.log('File Error: ', this.url);
+    this.hasError = true;
   }
 
 
   onClose() {
-    this.url = null;
-    this.display = false;
+    this.displayInModal = false;
   }
 
 
-  private validUrl(url: string) {
+  private isValidUrl(url: string): boolean {
     return url !== null && url !== undefined && url !== '';
   }
 
 
-  private openWindowCenter(url: string, width: number = 1100, height: number = 600) {
+  private canOpenWindow(type: string): boolean {
+    return type === MediaType.html || type === FileType.HTML;
+  }
+
+
+  private openWindow(url: string, width: number = 1100, height: number = 600) {
     const top = Math.floor((screen.height / 2) - (height / 2));
     const left = Math.floor((screen.width / 2) - (width / 2));
 
     return window.open(url, '_blank',
       `resizable=yes,width=${width},height=${height},top=${top},left=${left}`);
+  }
+
+
+  private openModal() {
+    this.hasError = false;
+    this.displayInModal = true;
   }
 
 }

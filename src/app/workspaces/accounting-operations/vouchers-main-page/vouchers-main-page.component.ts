@@ -406,6 +406,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
       this.vouchersToPrintFile = result.file;
       return;
     }
+
     this.messageBox.showError(result?.message || '');
   }
 

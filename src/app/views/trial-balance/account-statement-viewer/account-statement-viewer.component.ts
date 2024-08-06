@@ -48,8 +48,8 @@ export class AccountStatementViewerComponent implements OnChanges {
   displayExportModal = false;
   excelFileUrl = '';
 
-  displayVoucherModal = false;
   voucherFile: FileReport;
+
 
   constructor(private balancesDataService: BalancesDataService,
               private vouchersData: VouchersDataService) {

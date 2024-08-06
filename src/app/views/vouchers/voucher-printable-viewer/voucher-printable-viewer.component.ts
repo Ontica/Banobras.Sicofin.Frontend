@@ -12,23 +12,6 @@ import { VouchersDataService } from '@app/data-services';
 @Component({
   selector: 'emp-fa-voucher-printable-viewer',
   templateUrl: './voucher-printable-viewer.component.html',
-  styles: [`
-    .preview-container {
-      width: 100%;
-      height: 100%;
-    }
-
-    .object-preview-container {
-      width: 100%;
-      height: 100%;
-      padding: 3px;
-    }
-
-    .object-preview {
-      width: 100%;
-      height: 100%;
-    }`
-  ],
 })
 export class VoucherPrintableViewerComponent implements OnChanges {
 

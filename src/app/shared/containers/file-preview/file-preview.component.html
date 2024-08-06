@@ -1,4 +1,4 @@
-<emp-ng-modal-window *ngIf="display"
+<emp-ng-modal-window *ngIf="displayInModal"
   [config]="{width:'80%', height: '90%', maxWidth: '960px'}">
 
   <emp-ng-card
@@ -6,13 +6,13 @@
     [hint]="hint"
     (cardClose)="onClose()">
 
-    <div class="preview-container preview-padding" *ngIf="!fileError">
+    <div class="preview-container preview-padding" *ngIf="!hasError">
 
       <div class="object-preview-container">
 
-        <object *ngIf="url"
+        <object *ngIf="file.url"
           class="object-preview mat-elevation-z1"
-          [data]="url | safeUrl"
+          [data]="file.url | safeUrl"
           (error)="onFileError()">
 
         </object>
@@ -21,7 +21,7 @@
 
     </div>
 
-    <div class="text-not-found" *ngIf="fileError">
+    <div class="text-not-found" *ngIf="hasError">
       Error al cargar el archivo.
     </div>
 
