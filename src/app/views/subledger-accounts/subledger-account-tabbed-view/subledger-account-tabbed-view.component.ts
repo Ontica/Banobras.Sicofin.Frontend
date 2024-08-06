@@ -13,7 +13,10 @@ import { EmptySubledgerAccount, SubledgerAccount } from '@app/models';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { SubledgerAccountEditorEventType } from '../subledger-account-editor/subledger-account-editor.component';
+import {
+  SubledgerAccountEditorEventType
+} from '../subledger-account-editor/subledger-account-editor.component';
+
 
 export enum SubledgerAccountTabbedViewEventType {
   CLOSE_BUTTON_CLICKED = 'SubledgerAccountTabbedViewComponent.Event.CloseButtonClicked',
@@ -32,8 +35,11 @@ export class SubledgerAccountTabbedViewComponent implements OnChanges {
   @Output() subledgerAccountTabbedViewEvent = new EventEmitter<EventInfo>();
 
   title = '';
+
   hint = '';
+
   selectedTabIndex = 0;
+
 
   ngOnChanges() {
     this.setTitle();

@@ -76,7 +76,7 @@ export class SubledgerAccountsFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  onSearchSubledgerAccountsClicked() {
+  onSearchClicked() {
     const payload = {
       subledgerAccountQuery: this.getSubledgerAccountQuery(),
       accountChartName: this.subledgerAccountsForm.accountChart?.name,

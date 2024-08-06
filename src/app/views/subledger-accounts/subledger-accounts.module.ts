@@ -11,7 +11,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from '@app/shared/angular-material.module';
 import { SharedModule } from '@app/shared/shared.module';
+
 import { ReportsControlsModule } from '../_reports-controls/reports-controls.module';
+import { TrialBalanceModule } from '../trial-balance/trial-balance.module';
 
 import { SubledgerAccountCreatorComponent } from './subledger-account-creator/subledger-account-creator.component';
 import { SubledgerAccountEditorComponent } from './subledger-account-editor/subledger-account-editor.component';
@@ -26,9 +28,12 @@ import { SubledgerAccountTabbedViewComponent } from './subledger-account-tabbed-
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+
     AngularMaterialModule,
     SharedModule,
+
     ReportsControlsModule,
+    TrialBalanceModule,
   ],
   declarations: [
     SubledgerAccountCreatorComponent,

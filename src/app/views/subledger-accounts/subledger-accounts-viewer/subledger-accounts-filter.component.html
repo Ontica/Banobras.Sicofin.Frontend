@@ -1,5 +1,5 @@
 <form #form="ngForm" [empNgSpinnerHost]="spinner" empNgFormKeyDownEnter
-  autocomplete="off" class="form-section form-container">
+  autocomplete="off" class="form-section form-container low-z-index">
 
   <emp-ng-spinner #spinner [visible]="isLoading"></emp-ng-spinner>
 
@@ -30,7 +30,8 @@
             placeholder="Buscar auxiliares..."
             [(ngModel)]="subledgerAccountsForm.keywords"
             [class.invalid-control]="keywords.invalid"
-            (keyup.escape)="onClearKeyword()">
+            (keyup.escape)="onClearKeyword()"
+            (keyup.enter)="onSearchClicked()">
 
         </div>
 
@@ -42,7 +43,7 @@
           [class.btn-icon]="form.invalid"
           [class.btn-icon-action]="form.valid"
           [disabled]="form.invalid"
-          (click)="onSearchSubledgerAccountsClicked()">
+          (click)="onSearchClicked()">
 
           <mat-icon>search</mat-icon>
 

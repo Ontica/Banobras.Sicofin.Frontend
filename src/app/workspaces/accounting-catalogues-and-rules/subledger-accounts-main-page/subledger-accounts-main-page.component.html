@@ -1,8 +1,10 @@
-<emp-ng-spinner #spinner [visible]="isLoadingSubledgerAccount"></emp-ng-spinner>
+<emp-ng-spinner #spinner [visible]="isLoadingSubledgerAccount">
+
+</emp-ng-spinner>
 
 <div class="explorer">
 
-  <div class="primary priority" [class.md-hide]="displaySubledgerAccountTabbed">
+  <div class="primary" [class.std-hide]="displaySubledgerAccountTabbed">
 
     <emp-fa-subledger-accounts-viewer
       [subledgerAccountData]="subledgerAccountData"
@@ -14,7 +16,7 @@
 
   </div>
 
-  <div class="secondary" *ngIf="displaySubledgerAccountTabbed">
+  <div class="secondary priority" *ngIf="displaySubledgerAccountTabbed">
 
     <emp-fa-subledger-account-tabbed-view
       [subledgerAccount]="selectedSubledgerAccount"
