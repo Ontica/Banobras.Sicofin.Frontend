@@ -85,7 +85,7 @@
 
 .mat-mdc-tab:not(.mat-mdc-tab-disabled) .mdc-tab-indicator__content--underline,
 .mat-mdc-tab-link:not(.mat-mdc-tab-disabled) .mdc-tab-indicator__content--underline {
-  border-color: $title-color;
+  border-color: $accent-color;
 }
 
 //
@@ -185,7 +185,7 @@ table.mat-mdc-table {
     padding: $grid-entry-padding-vertical $grid-entry-padding-horizontal $grid-entry-padding-vertical 0;
 
     &.mat-mdc-header-cell {
-      border-bottom: 2pt solid $title-color;
+      border-bottom: 2pt solid $accent-color;
       font-size: $font-size-grid-header;
       line-height: 13px;
     }
@@ -503,8 +503,13 @@ table.mat-mdc-table.emp-designer {
     height: $control-height;
   }
 
+  &.vertical-slim {
+    margin: 0 8px 0 0;
+    height: $control-height;
+  }
+
   &.vertical-inline {
-    margin: 0 6px;
+    margin: 0 0.75rem;
     height: $control-height;
   }
 
@@ -787,14 +792,14 @@ table.mat-mdc-table.emp-designer {
   }
 
   .mdc-form-field > label {
-    font-size: 8pt;
-    line-height: 9pt;
+    font-size: 8.5pt;
     margin-right: 8px;
+    line-height: 16px;
   }
 
   &.no-label .mdc-form-field > label {
-    display: none;
     margin-right: 0;
+    display: none;
   }
 
   &.mat-warn.text-light .mdc-form-field > label,
@@ -814,7 +819,7 @@ table.mat-mdc-table.emp-designer {
 //
 
 .mat-mdc-radio-group {
-  // height: $checkbox-size;
+  height: $checkbox-size;
   display: flex;
   align-items: center;
   margin: 2px 0;

@@ -214,6 +214,10 @@ button.btn-margin-right {
   margin-right: 32px;
 }
 
+button.btn-filter-options {
+  width: 108px;
+}
+
 select.select-box {
   @include input-settings;
 }
@@ -380,6 +384,14 @@ textarea:focus {
   margin-right: 8px;
 }
 
+.instruction-text-slim {
+  font-size: 1em;
+  text-align: center;
+  padding: 0.5rem;
+  background: $control-disabled-background;
+  margin-right: 8px;
+}
+
 .bold-text {
   font-weight: 600;
 }
@@ -398,12 +410,12 @@ a.error-indicator-text:hover {
 }
 
 .warning-indicator-text {
-  color: $title-color;
+  color: $accent-color;
   text-decoration: underline;
 }
 
 a.warning-indicator-text:hover {
-  color: darken($title-color, 4%);
+  color: darken($accent-color, 4%);
 }
 
 .remove-min-width {

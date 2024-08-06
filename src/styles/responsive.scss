@@ -193,12 +193,12 @@
     }
 
     > .sm-fx-item-third {
-        @include small() {
-          flex: 1 1 33.33%;
-          max-height: 33.33%;
-          max-width: 100%;
-        }
-     }
+      @include small() {
+        flex: 1 1 33.33%;
+        max-height: 33.33%;
+        max-width: 100%;
+      }
+    }
   }
 
   > .sm-fx-item-size {

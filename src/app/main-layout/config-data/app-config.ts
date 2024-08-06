@@ -25,7 +25,7 @@ export const APP_CONFIG: AppConfig = {
   },
   layout: {
     displayLogo: true,
-    displayNavbarHeader: false,
+    displayNavbarHeader: true,
     displayNavbarHint: false,
     displayMenuUser: false,
     displayChangeLanguage: false,
