@@ -124,8 +124,8 @@ export interface VouchersQuery {
   ledgerUID?: string;
   voucherTypeUID?: string;
   transactionTypeUID?: string;
-  number?: string;
   concept?: string;
+  vouchersNumbers?: string[];
   vouchersID?: string[];
   accounts?: string[];
   subledgerAccounts?: string[];

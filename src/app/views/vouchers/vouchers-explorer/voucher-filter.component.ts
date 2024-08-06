@@ -193,7 +193,7 @@ export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
       ledgerUID: this.filter.ledgerUID ?? '',
       keywords: this.filter.keywords ?? '',
       voucherTypeUID: this.filter.voucherTypeUID ?? '',
-      number: this.filter.number ?? '',
+      vouchersNumbers: this.filter.vouchersNumbers ?? [],
       concept: this.filter.concept ?? '',
       vouchersID: this.filter.vouchersID ?? [],
       accounts: this.filter.accounts ?? [],

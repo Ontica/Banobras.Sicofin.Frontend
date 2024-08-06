@@ -127,12 +127,12 @@
 
           <div class="fx-item-quarter sm-fx-item-half">
 
-            <label>No. póliza:</label>
+            <label>No. de pólizas:</label>
 
-            <input type="text" name="number"
-              class="text-box"
-              [(ngModel)]="filter.number"
-              (keyup.escape)="filter.number = ''">
+            <emp-ng-input-tags name="vouchersNumbers"
+              [(ngModel)]="filter.vouchersNumbers">
+
+            </emp-ng-input-tags>
 
           </div>
 
@@ -177,7 +177,7 @@
 
           <div class="fx-item-quarter sm-fx-item-half">
 
-            <label>Con la cuenta:</label>
+            <label>Con las cuentas:</label>
 
             <emp-ng-input-tags name="accounts"
               [(ngModel)]="filter.accounts">
@@ -188,7 +188,7 @@
 
           <div class="fx-item-quarter sm-fx-item-half">
 
-            <label>Con el auxiliar:</label>
+            <label>Con los auxiliares:</label>
 
             <emp-ng-input-tags name="subledgerAccounts"
               [(ngModel)]="filter.subledgerAccounts">
@@ -199,7 +199,7 @@
 
           <div class="fx-item sm-fx-item-half">
 
-            <label class="ellipsis">No. de verificación:</label>
+            <label class="ellipsis">No. de verificaciones:</label>
 
             <emp-ng-input-tags name="verificationNumbers"
               [(ngModel)]="filter.verificationNumbers">
