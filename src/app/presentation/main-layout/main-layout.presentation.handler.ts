@@ -133,7 +133,9 @@ export class MainLayoutPresentationHandler extends AbstractPresentationHandler {
 
   private setCurrentViewFromUrl(url: string) {
     if (this.state.currentView.url !== url) {
-      const view = APP_VIEWS.find(x => x.url === url);
+      const cleanUrl = url.split('?')[0];
+
+      const view = APP_VIEWS.find(x => x.url === cleanUrl);
 
       if (!view) {
         throw new Exception(`Unregistered view with url '${url}'.`);

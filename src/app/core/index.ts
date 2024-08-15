@@ -19,7 +19,7 @@ export { Cryptography } from './security/cryptography';
 export { ApplicationStatusService } from './general/application-status.service';
 export { SessionService } from './general/session.service';
 export { LoggerService } from './general/logger.service';
-
+export { NavigationService } from './general/navigation.service';
 export { HttpService } from './http/http.service';
 export { AuthenticationService } from './security/authentication.service';
 export { ChildRouteGuard, ParentRouteGuard } from './security/security.guard';
