@@ -7,7 +7,8 @@
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
-import { Assertion, DateString, DateStringLibrary, EventInfo, Identifiable } from '@app/core';
+import { Assertion, DateString, DateStringLibrary, EventInfo, Identifiable,
+         NavigationService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -23,7 +24,7 @@ import { AccountChartStateSelector,
 
 import { expandCollapse } from '@app/shared/animations/animations';
 
-import { sendEvent } from '@app/shared/utils';
+import { ArrayLibrary, sendEvent } from '@app/shared/utils';
 
 import { ExchangeRateSelectorEventType } from '../exchange-rate-selector/exchange-rate-selector.component';
 
@@ -63,16 +64,19 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
   helper: SubscriptionHelper;
 
+
   constructor(private uiLayer: PresentationLayer,
-              private exchangeRatesData: ExchangeRatesDataService) {
+              private exchangeRatesData: ExchangeRatesDataService,
+              private navigationService: NavigationService) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
 
   ngOnInit() {
+    this.validateRouteParameters();
     this.loadAccountsCharts();
     this.loadReportTypes();
-    this.setBalancesTypeList();
+    this.loadBalancesTypeList();
   }
 
 
@@ -255,7 +259,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.query.useDefaultValuation = this.exchangeRatesRequired;
 
     this.validateValueOfInitPeriodFromDate(this.query.initialPeriod.toDate);
-    this.setBalancesTypeList();
+    this.resetBalancesTypeList();
   }
 
 
@@ -316,6 +320,11 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  onCloneFilters() {
+    this.navigationService.openNewWindowWithQueryParams<TrialBalanceQuery>(this.query);
+  }
+
+
   onClearFilters() {
     this.query = Object.assign({}, getEmptyTrialBalanceQuery(), {
       trialBalanceType: this.query.trialBalanceType,
@@ -349,6 +358,21 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  private validateRouteParameters() {
+    this.navigationService.getQueryParamsFromRoute<TrialBalanceQuery>()
+      .firstValue()
+      .then(query => this.initTrialBalanceQueryData(query));
+  }
+
+
+  private initTrialBalanceQueryData(query: TrialBalanceQuery) {
+    if (query) {
+      this.query = Object.assign({}, getEmptyTrialBalanceQuery(), query);
+      this.loadBalancesTypeList();
+    }
+  }
+
+
   private loadAccountsCharts() {
     this.isLoadingAccountsCharts = true;
 
@@ -366,25 +390,56 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     this.isLoadingReportTypes = true;
 
     this.helper.select<ReportType<ReportTypeFlags>[]>(ReportingStateSelector.REPORT_TYPES_LIST)
-    .subscribe(x => {
-      this.reportTypeList = x.filter(x => x.group === ReportGroup.SaldosYBalanzas);
-      this.isLoadingReportTypes = false;
-    });
-  }
-
-
-  private setBalancesTypeList() {
-    this.balancesTypeList = this.isBalanceSelected ?  BalancesTypeForBalanceList :
-      BalancesTypeForTrialBalanceList;
-
-    this.query.balancesType = this.balancesTypeList.length > 0 ? this.balancesTypeList[0].uid : '';
+      .subscribe(x => {
+        this.reportTypeList = x.filter(x => x.group === ReportGroup.SaldosYBalanzas);
+        this.setDefaultReportType();
+        this.isLoadingReportTypes = false;
+      });
   }
 
 
   private setDefaultAccountsChartUID() {
-    this.accountChartSelected = this.accountsChartMasterDataList.length > 0 ?
-      this.accountsChartMasterDataList[0] : EmtyAccountsChartMasterData;
-    this.query.accountsChartUID = this.accountChartSelected.uid;
+    if (!!this.query.accountsChartUID) {
+      this.accountChartSelected =
+        this.accountsChartMasterDataList.find(x => x.uid === this.query.accountsChartUID);
+    } else {
+      this.accountChartSelected = ArrayLibrary.getFirstItem(this.accountsChartMasterDataList) ??
+        EmtyAccountsChartMasterData;
+      this.query.accountsChartUID = this.accountChartSelected.uid;
+    }
+  }
+
+
+  private setDefaultReportType() {
+    const defaultReportType = ArrayLibrary.getFirstItem(this.reportTypeList)?.uid ?? null;
+
+    this.query.trialBalanceType = this.query.trialBalanceType ?
+      this.query.trialBalanceType : defaultReportType as TrialBalanceTypes;
+  }
+
+
+  private loadBalancesTypeList() {
+    this.setBalancesTypeList();
+    this.setBalancesType(this.query.balancesType ?? null);
+  }
+
+
+  private resetBalancesTypeList() {
+    this.setBalancesTypeList();
+    this.setBalancesType(null);
+  }
+
+
+  private setBalancesTypeList() {
+    this.balancesTypeList = this.isBalanceSelected ? BalancesTypeForBalanceList :
+      BalancesTypeForTrialBalanceList;
+  }
+
+
+  private setBalancesType(balancesType: string) {
+    this.query.balancesType = !balancesType ?
+      ArrayLibrary.getFirstItem(this.balancesTypeList)?.uid ?? null :
+      balancesType;
   }
 
 

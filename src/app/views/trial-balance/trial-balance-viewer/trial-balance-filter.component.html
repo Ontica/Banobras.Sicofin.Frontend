@@ -11,7 +11,6 @@
           <label>Tipo de consulta:</label>
 
           <emp-ng-select name="trialBalanceType" required
-            [config]="{selectFirst: true}"
             [(ngModel)]="query.trialBalanceType"
             [items]="reportTypeList"
             [showError]="!query.trialBalanceType"
@@ -374,21 +373,19 @@
 
         </mat-divider>
 
-        <div class="fx-row-container fx-end fx-items-end">
+        <div class="fx-row-container fx-space-between">
 
-          <mat-divider vertical="true" class="vertical-inline">
+          <button class="btn-base"
+            [style.width.px]="100"
+            (click)="onCloneFilters()">
+            Clonar <mat-icon>filter_list</mat-icon>
+          </button>
 
-          </mat-divider>
-
-          <div class="fx-item-none">
-
-            <button class="btn-base"
-              [style.width.px]="100"
-              (click)="onClearFilters()">
-              Limpiar <mat-icon>filter_list</mat-icon>
-            </button>
-
-          </div>
+          <button class="btn-base"
+            [style.width.px]="100"
+            (click)="onClearFilters()">
+            Limpiar <mat-icon>filter_list</mat-icon>
+          </button>
 
         </div>
 
