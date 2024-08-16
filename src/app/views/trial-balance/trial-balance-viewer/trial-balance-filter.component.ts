@@ -399,22 +399,23 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   private setDefaultAccountsChartUID() {
-    if (!!this.query.accountsChartUID) {
+    if (!this.query.accountsChartUID) {
+      this.accountChartSelected =
+        ArrayLibrary.getFirstItem(this.accountsChartMasterDataList) ?? EmtyAccountsChartMasterData;
+      this.query.accountsChartUID = this.accountChartSelected.uid;
+    } else {
       this.accountChartSelected =
         this.accountsChartMasterDataList.find(x => x.uid === this.query.accountsChartUID);
-    } else {
-      this.accountChartSelected = ArrayLibrary.getFirstItem(this.accountsChartMasterDataList) ??
-        EmtyAccountsChartMasterData;
-      this.query.accountsChartUID = this.accountChartSelected.uid;
     }
   }
 
 
   private setDefaultReportType() {
-    const defaultReportType = ArrayLibrary.getFirstItem(this.reportTypeList)?.uid ?? null;
-
-    this.query.trialBalanceType = this.query.trialBalanceType ?
-      this.query.trialBalanceType : defaultReportType as TrialBalanceTypes;
+    if (!this.query.trialBalanceType) {
+      this.query.trialBalanceType =
+        ArrayLibrary.getFirstItem(this.reportTypeList)?.uid as TrialBalanceTypes ?? null;
+      this.onTrialBalanceTypeChange();
+    }
   }
 
 
