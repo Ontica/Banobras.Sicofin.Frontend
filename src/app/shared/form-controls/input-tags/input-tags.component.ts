@@ -17,11 +17,13 @@ import { ArrayLibrary } from '@app/shared/utils';
 export interface InputTagsConfig {
   splittable?: boolean;
   splitChar?: string;
+  addOnBlur?: boolean;
 }
 
 const DefaultInputTagsConfig: InputTagsConfig = {
   splittable: true,
   splitChar: ',',
+  addOnBlur: true,
 };
 
 
@@ -96,7 +98,28 @@ export class InputTagsComponent implements ControlValueAccessor {
   }
 
 
+  onInputClear() {
+    this.clear.emit(true);
+  }
+
+
   onInputChange(value: string[]) {
+    this.validateInputChanges(value);
+  }
+
+
+  onInputBlur(event) {
+    if (this.inputTagsConfig.addOnBlur && this.select.searchTerm) {
+      let value = [...this.selectedTags, this.select.searchTerm];
+      this.validateInputChanges(value);
+    }
+
+    this.select.searchTerm = '';
+    this.unfocus.emit(event);
+  }
+
+
+  private validateInputChanges(value: string[]) {
     let tags = [];
 
     if (value && value.length > 0) {
@@ -117,17 +140,6 @@ export class InputTagsComponent implements ControlValueAccessor {
     this.selectedTags = ArrayLibrary.getUniqueItems(tags);
     this.onChange(this.selectedTags);
     this.changes.emit(this.selectedTags);
-  }
-
-
-  onInputClear() {
-    this.clear.emit(true);
-  }
-
-
-  onInputBlur(event) {
-    this.select.searchTerm = '';
-    this.unfocus.emit(event);
   }
 
 }
