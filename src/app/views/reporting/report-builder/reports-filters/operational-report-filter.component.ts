@@ -205,6 +205,10 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
     if (this.showField.elaboratedBy) {
       data.elaboratedBy = this.query.elaboratedBy;
     }
+
+    if (this.showField.verificationNumbers) {
+      data.verificationNumbers = this.query.verificationNumbers;
+    }
   }
 
 }

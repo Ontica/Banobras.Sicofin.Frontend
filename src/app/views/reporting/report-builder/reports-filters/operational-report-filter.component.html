@@ -79,7 +79,8 @@
 
     </div>
 
-    <div *ngIf="showField.ledgers || showField.account || showField.withSubledgerAccount"
+    <div *ngIf="showField.ledgers || showField.account || showField.withSubledgerAccount ||
+                showField.elaboratedBy || showField.verificationNumbers"
       class="fx-row-container fx-wrap">
 
       <div *ngIf="showField.ledgers"
@@ -134,6 +135,19 @@
           placeholder="Todos">
 
         </emp-ng-select-typeahead>
+
+      </div>
+
+      <div *ngIf="showField.verificationNumbers"
+        class="fx-item-half sm-fx-item">
+
+        <label class="ellipsis">No. de verificaciones:</label>
+
+        <emp-ng-input-tags name="verificationNumbers" required
+          [(ngModel)]="query.verificationNumbers"
+          [showError]="!query.verificationNumbers || query.verificationNumbers.length === 0">
+
+        </emp-ng-input-tags>
 
       </div>
 

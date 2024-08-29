@@ -21,6 +21,7 @@ export interface OperationalReportTypeFlags extends ReportTypeFlags {
   sendType: boolean;
   outputType: boolean;
   elaboratedBy: boolean;
+  verificationNumbers: boolean;
 }
 
 
@@ -42,6 +43,7 @@ export interface OperationalReportQuery extends ReportQuery {
   sendType?: SendTypes;
   outputType?: string;
   elaboratedBy?: string;
+  verificationNumbers?: string[];
 }
 
 
@@ -66,6 +68,7 @@ export const EmptyOperationalReportTypeFlags: OperationalReportTypeFlags = {
   sendType: false,
   outputType: false,
   elaboratedBy: false,
+  verificationNumbers: false,
 }
 
 
