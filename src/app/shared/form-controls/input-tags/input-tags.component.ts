@@ -15,15 +15,15 @@ import { ArrayLibrary } from '@app/shared/utils';
 
 
 export interface InputTagsConfig {
+  addOnBlur?: boolean;
   splittable?: boolean;
   splitChar?: string;
-  addOnBlur?: boolean;
 }
 
 const DefaultInputTagsConfig: InputTagsConfig = {
+  addOnBlur: true,
   splittable: true,
   splitChar: ',',
-  addOnBlur: true,
 };
 
 

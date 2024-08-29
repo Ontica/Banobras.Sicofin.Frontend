@@ -59,7 +59,7 @@ export class LockedUpBalancesFilterComponent implements OnInit, OnDestroy {
 
   onBuildOperationalReportClicked() {
     const payload = {
-      query: this.getOperationalReportQuery(),
+      query: this.getLockedUpBalancesQuery(),
     };
 
     sendEvent(this.lockedUpBalancesFilterEvent,
@@ -86,7 +86,7 @@ export class LockedUpBalancesFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  private getOperationalReportQuery(): LockedUpBalancesQuery {
+  private getLockedUpBalancesQuery(): LockedUpBalancesQuery {
     const data: LockedUpBalancesQuery = {
       accountsChartUID: this.query.accountsChartUID,
       fromDate: this.query.fromDate ?? '',
