@@ -91,6 +91,12 @@ export interface ReportEntry extends DataTableEntry {
 }
 
 
+export interface VoucherReportEntry extends ReportEntry {
+  isVoucher?: boolean;
+  voucherId?: number;
+}
+
+
 export interface DateRange {
   fromDate: DateString;
   toDate: DateString;

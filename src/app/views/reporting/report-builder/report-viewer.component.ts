@@ -23,7 +23,7 @@ import {
 
 export enum ReportViewerEventType {
   REPORT_ENTRY_CLICKED = 'ReportViewerComponent.Event.ReportEntryClicked',
-  EXPORT_DATA_CLICKED = 'ReportViewerComponent.Event.ExportDataClicked',
+  EXPORT_DATA_CLICKED  = 'ReportViewerComponent.Event.ExportDataClicked',
 }
 
 @Component({
@@ -83,7 +83,6 @@ export class ReportViewerComponent implements OnChanges {
         return;
 
       case DataTableEventType.ENTRY_CLICKED:
-        Assertion.assertValue(event.payload.entry.uid, 'event.payload.entry.uid');
         sendEvent(this.reportViewerEvent, ReportViewerEventType.REPORT_ENTRY_CLICKED,
           {reportEntry: event.payload.entry});
         return;
@@ -126,15 +125,12 @@ export class ReportViewerComponent implements OnChanges {
       case ReportGroup.ReportesRegulatorios:
         this.reportGroupName = 'regulatorios';
         return;
-
       case ReportGroup.ReportesOperativos:
         this.reportGroupName = 'operativos';
         return;
-
       case ReportGroup.ReportesFiscales:
         this.reportGroupName = 'fiscales';
         return;
-
       default:
         this.reportGroupName = '';
         return;

@@ -15,11 +15,11 @@ import { MainUIStateSelector } from '@app/presentation/exported.presentation.typ
 
 import { View } from '@app/main-layout';
 
-import { ReportingDataService } from '@app/data-services';
+import { ReportingDataService, VouchersDataService } from '@app/data-services';
 
-import { FileType, FinancialReportBreakdown, FinancialReportQuery, ReportGroup, ReportQuery, ReportType,
-         ReportData, EmptyReportData, ReportTypeFlags, EmptyReportType, ReportEntry, FinancialReportEntry,
-         ReportController, FileReport } from '@app/models';
+import { EmptyReportData, EmptyReportType, FileReport, FileType, FinancialReportBreakdown,
+         FinancialReportEntry, FinancialReportQuery, ReportController, ReportData, ReportEntry, ReportGroup,
+         ReportQuery, ReportType, ReportTypeFlags, VoucherReportEntry } from '@app/models';
 
 import { ReportViewerEventType } from './report-viewer.component';
 
@@ -51,19 +51,20 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   reportData: ReportData = Object.assign({}, EmptyReportData);
 
-  isLoadingBreakdown = false;
-
   displayReportBreakdown = false;
 
   selectedReportBreakdown: FinancialReportBreakdown = null;
 
   fileUrl = '';
 
+  previewFile: FileReport = null;
+
   subscriptionHelper: SubscriptionHelper;
 
 
   constructor(private uiLayer: PresentationLayer,
-              private reportingData: ReportingDataService) {
+              private reportingData: ReportingDataService,
+              private vouchersData: VouchersDataService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
   }
 
@@ -75,11 +76,6 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptionHelper.destroy();
-  }
-
-
-  get hasReportBreakdown(): boolean {
-    return this.selectedReportType.controller === ReportController.FinancialReport;
   }
 
 
@@ -111,7 +107,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
     switch (event.type as ReportViewerEventType) {
       case ReportViewerEventType.REPORT_ENTRY_CLICKED:
         Assertion.assertValue(event.payload.reportEntry, 'event.payload.reportEntry');
-        this.getReportBreakdown(event.payload.reportEntry);
+        this.validateReportEntry(event.payload.reportEntry as ReportEntry);
         return;
 
       case ReportViewerEventType.EXPORT_DATA_CLICKED:
@@ -169,6 +165,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   private validateGetReportData() {
     this.clearReportData();
+
     let observable: EmpObservable<ReportData> = null;
 
     switch (this.selectedReportType.controller) {
@@ -225,7 +222,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
 
   private getReportBreakdown(reportEntry: ReportEntry) {
-    this.isLoadingBreakdown = true;
+    this.isLoading = true;
 
     this.reportingData.getFinancialReportBreakdown(reportEntry.uid,
                                                    this.reportQuery as FinancialReportQuery)
@@ -237,7 +234,40 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
         };
         this.setReportBreakdown(reportBreakdown);
       })
-      .finally(() => this.isLoadingBreakdown = false);
+      .finally(() => this.isLoading = false);
+  }
+
+
+  private getVoucherForPrint(reportEntry: VoucherReportEntry) {
+    this.isLoading = true;
+
+    this.vouchersData.getVoucherForPrint(reportEntry.voucherId)
+      .firstValue()
+      .then(x => this.previewFile = x)
+      .finally(() => this.isLoading = false);
+  }
+
+
+  private validateReportEntry(reportEntry: ReportEntry) {
+    if (this.isVoucherReportEntry(reportEntry)) {
+      this.getVoucherForPrint(reportEntry);
+      return;
+    }
+
+    if (this.isReportBreakdown(reportEntry)) {
+      this.getReportBreakdown(reportEntry);
+      return;
+    }
+  }
+
+
+  private isReportBreakdown(reportEntry: ReportEntry): boolean {
+    return !!reportEntry.uid;
+  }
+
+
+  private isVoucherReportEntry(reportEntry: VoucherReportEntry): boolean {
+    return reportEntry.isVoucher && !!reportEntry.voucherId;
   }
 
 

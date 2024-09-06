@@ -12,7 +12,7 @@
       [queryExecuted]="queryExecuted"
       [selectedEntry]="selectedReportBreakdown"
       [fileUrl]="fileUrl"
-      [isLoading]="isLoading || isLoadingBreakdown"
+      [isLoading]="isLoading"
       (reportViewerEvent)="onReportViewerEvent($event)">
 
       <ng-container [ngSwitch]="reportGroup">
@@ -52,3 +52,11 @@
   </div>
 
 </div>
+
+
+<emp-ng-file-preview
+  title="Impresión de póliza"
+  hint="Información de la póliza"
+  [file]="previewFile">
+
+</emp-ng-file-preview>
