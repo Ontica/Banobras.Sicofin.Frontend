@@ -103,10 +103,23 @@
 
         <label>Cuenta:</label>
 
-        <input type="text" class="text-box" name="fromAccount" required
+        <input type="text" class="text-box" name="fromAccount" [required]="isAccountRequired"
           [(ngModel)]="query.accountNumber"
-          [class.invalid-control]="!query.accountNumber"
+          [class.invalid-control]="isAccountValid"
           (keyup.escape)="query.accountNumber = ''">
+
+      </div>
+
+      <div *ngIf="showField.verificationNumbers"
+        class="fx-item-half sm-fx-item">
+
+        <label class="ellipsis">No. de verificaciones:</label>
+
+        <emp-ng-input-tags name="verificationNumbers" [required]="isVerificationNumbersRequired"
+          [(ngModel)]="query.verificationNumbers"
+          [showError]="isVerificationNumbersValid">
+
+        </emp-ng-input-tags>
 
       </div>
 
@@ -135,19 +148,6 @@
           placeholder="Todos">
 
         </emp-ng-select-typeahead>
-
-      </div>
-
-      <div *ngIf="showField.verificationNumbers"
-        class="fx-item-half sm-fx-item">
-
-        <label class="ellipsis">No. de verificaciones:</label>
-
-        <emp-ng-input-tags name="verificationNumbers" required
-          [(ngModel)]="query.verificationNumbers"
-          [showError]="!query.verificationNumbers || query.verificationNumbers.length === 0">
-
-        </emp-ng-input-tags>
 
       </div>
 

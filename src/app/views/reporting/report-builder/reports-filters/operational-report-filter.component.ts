@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit,
+         Output } from '@angular/core';
 
 import { combineLatest } from 'rxjs';
 
@@ -32,6 +33,7 @@ export enum OperationalReportFilterEventType {
 @Component({
   selector: 'emp-fa-operational-report-filter',
   templateUrl: './operational-report-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperationalReportFilterComponent implements OnInit, OnDestroy {
 
@@ -62,7 +64,8 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   helper: SubscriptionHelper;
 
 
-  constructor(private uiLayer: PresentationLayer) {
+  constructor(private uiLayer: PresentationLayer,
+              private cdr: ChangeDetectorRef) {
     this.helper = uiLayer.createSubscriptionHelper();
   }
 
@@ -82,9 +85,54 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
   }
 
 
+  get isAccountRequired(): boolean {
+    if (!this.showField.account) {
+      return false;
+    }
+
+    if (this.showField.verificationNumbers) {
+      return !this.query.verificationNumbers || this.query.verificationNumbers?.length === 0;
+    }
+
+    return true;
+  }
+
+
+  get isVerificationNumbersRequired(): boolean {
+    if (!this.showField.verificationNumbers) {
+      return false;
+    }
+
+    if (this.showField.account) {
+      return !this.query.accountNumber;
+    }
+
+    return true;
+  }
+
+
   get isPeriodValid(): boolean {
     if (this.showField.datePeriod) {
       return !!this.query.fromDate && !!this.query.toDate;
+    }
+
+    return true;
+  }
+
+
+  get isAccountValid(): boolean {
+    if (this.showField.account) {
+      return this.isAccountRequired && !this.query.accountNumber;
+    }
+
+    return true;
+  }
+
+
+  get isVerificationNumbersValid(): boolean {
+    if (this.showField.verificationNumbers) {
+      return this.isVerificationNumbersRequired &&
+        (!this.query.verificationNumbers || this.query.verificationNumbers.length === 0);
     }
 
     return true;
@@ -136,6 +184,7 @@ export class OperationalReportFilterComponent implements OnInit, OnDestroy {
       this.setDefaultAccountsChart();
       this.setFilteredReportTypeList();
       this.isLoading = false;
+      this.cdr.detectChanges();
     });
   }
 
