@@ -198,7 +198,7 @@
 
     </ng-container>
 
-    <div *ngIf="showFilters" [@expandCollapse]>
+    <div *ngIf="showFilters" [@empExpandCollapse]>
 
       <mat-divider class="horizontal-md">
 
@@ -318,7 +318,7 @@
       </ng-container>
 
 
-      <div #exchangeRateFieldsContainer [@expandCollapse]
+      <div #exchangeRateFieldsContainer [@empExpandCollapse]
         *ngIf="query.useValuation && !query.useDefaultValuation">
 
         <mat-divider class="horizontal">

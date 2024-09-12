@@ -17,9 +17,7 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { expandCollapse } from '@app/shared/animations/animations';
-
-import { sendEvent } from '@app/shared/utils';
+import { empExpandCollapse, sendEvent } from '@app/shared/utils';
 
 import { SearcherAPIS } from '@app/data-services';
 
@@ -36,7 +34,7 @@ export enum VoucherFilterEventType {
 @Component({
   selector: 'emp-fa-voucher-filter',
   templateUrl: './voucher-filter.component.html',
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class VoucherFilterComponent implements OnChanges, OnInit, OnDestroy {
 

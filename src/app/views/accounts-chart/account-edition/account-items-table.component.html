@@ -43,12 +43,12 @@
 
         <ng-container matColumnDef="startDate">
           <th mat-header-cell *matHeaderCellDef> Fecha inicio </th>
-          <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.startDate | dateTimeFormat }}</td>
+          <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.startDate | empDateTimeFormat }}</td>
         </ng-container>
 
         <ng-container matColumnDef="endDate">
           <th mat-header-cell *matHeaderCellDef> Fecha fin </th>
-          <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.endDate | dateTimeFormat }}</td>
+          <td mat-cell *matCellDef="let row" [style.width.px]="100">{{ row.endDate | empDateTimeFormat }}</td>
         </ng-container>
 
 

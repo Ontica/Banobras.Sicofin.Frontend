@@ -184,7 +184,7 @@
 
             <span *ngIf="storedBalanceSet.calculated">
               Saldos generados el:
-              <strong>{{storedBalanceSet.calculationTime | dateTimeFormat: 'DMY HH:mm'}}</strong>
+              <strong>{{storedBalanceSet.calculationTime | empDateTimeFormat: 'DMY HH:mm'}}</strong>
             </span>
 
             <span *ngIf="!storedBalanceSet.calculated">

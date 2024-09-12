@@ -69,8 +69,8 @@
   </div>
 
   <div class="fx-item-size" style="--size: 10%">
-    <div>{{account.startDate | dateTimeFormat}}</div>
-    <div *ngIf="account.obsolete">{{account.endDate | dateTimeFormat}}</div>
+    <div>{{account.startDate | empDateTimeFormat}}</div>
+    <div *ngIf="account.obsolete">{{account.endDate | empDateTimeFormat}}</div>
   </div>
 
 </div>

@@ -21,7 +21,7 @@
           <div class="fx-item-size" style="--size: 120px">
             <label>Fecha de afectación:</label>
             <input type="text" name="accountingDate" class="text-box"
-              [value]="transactionSlip.accountingDate | dateTimeFormat">
+              [value]="transactionSlip.accountingDate | empDateTimeFormat">
           </div>
 
         </div>
@@ -63,7 +63,7 @@
         <div class="fx-item-size fx-end" style="--size: 120px">
           <label>Fecha de elaboración:</label>
           <input type="text" name="recordingDate" class="text-box"
-            [value]="transactionSlip.recordingDate | dateTimeFormat">
+            [value]="transactionSlip.recordingDate | empDateTimeFormat">
         </div>
 
       </div>

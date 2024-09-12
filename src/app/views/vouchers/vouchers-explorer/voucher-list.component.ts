@@ -24,9 +24,7 @@ import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import { SearcherAPIS } from '@app/data-services';
 
-import { sendEvent } from '@app/shared/utils';
-
-import { expandCollapse } from '@app/shared/animations/animations';
+import { empExpandCollapse, sendEvent } from '@app/shared/utils';
 
 import { EmptyVoucher, getVoucherOperation, mapVoucherStageFromViewName, Voucher, VoucherDescriptor,
          VouchersOperation, VouchersOperationCommand, VouchersOperationType,
@@ -43,7 +41,7 @@ export enum VoucherListEventType {
 @Component({
   selector: 'emp-fa-voucher-list',
   templateUrl: './voucher-list.component.html',
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 

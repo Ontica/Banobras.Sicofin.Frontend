@@ -89,12 +89,12 @@
           </ng-container>
           <ng-container matColumnDef="balancesDate">
             <th mat-header-cell *matHeaderCellDef> Al día </th>
-            <td mat-cell *matCellDef="let row">{{ row.balancesDate | dateTimeFormat }}</td>
+            <td mat-cell *matCellDef="let row">{{ row.balancesDate | empDateTimeFormat }}</td>
           </ng-container>
           <ng-container matColumnDef="calculationTime">
             <th mat-header-cell *matHeaderCellDef> Generados el </th>
             <td mat-cell *matCellDef="let row">
-              {{ row.calculated ? ( row.calculationTime | dateTimeFormat ) : 'No generados' }}
+              {{ row.calculated ? ( row.calculationTime | empDateTimeFormat ) : 'No generados' }}
             </td>
           </ng-container>
 

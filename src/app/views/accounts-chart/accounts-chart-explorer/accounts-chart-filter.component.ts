@@ -16,9 +16,7 @@ import { AccountsChartMasterData, AccountsQuery, EmptyAccountsQuery,
 
 import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { expandCollapse } from '@app/shared/animations/animations';
-
-import { sendEvent } from '@app/shared/utils';
+import { empExpandCollapse, sendEvent } from '@app/shared/utils';
 
 export enum AccountsChartFilterEventType {
   SEARCH_ACCOUNTS_CHART_CLICKED = 'AccountsChartFilterComponent.Event.SearchAccountsChartClicked',
@@ -29,7 +27,7 @@ export enum AccountsChartFilterEventType {
 @Component({
   selector: 'emp-fa-accounts-chart-filter',
   templateUrl: './accounts-chart-filter.component.html',
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class AccountsChartFilterComponent implements OnInit, OnDestroy {
 

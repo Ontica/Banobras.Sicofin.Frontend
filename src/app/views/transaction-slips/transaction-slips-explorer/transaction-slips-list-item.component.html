@@ -40,12 +40,12 @@
   </div>
 
   <div class="fx-item-size sm-fx-item" style="--size: 15%">
-    <div><strong>{{transactionSlip?.recordingDate | dateTimeFormat}}</strong></div>
+    <div><strong>{{transactionSlip?.recordingDate | empDateTimeFormat}}</strong></div>
     <div>{{transactionSlip.elaboratedBy}}</div>
   </div>
 
   <div class="fx-item-size sm-fx-item" style="--size: 15%">
-    <div><strong>{{transactionSlip?.accountingDate | dateTimeFormat}}</strong></div>
+    <div><strong>{{transactionSlip?.accountingDate | empDateTimeFormat}}</strong></div>
     <div>{{transactionSlip.controlTotal | number : '1.2-2'}}</div>
   </div>
 

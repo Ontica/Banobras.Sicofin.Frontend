@@ -65,13 +65,13 @@
 
   <div class="fx-item-size sm-fx-item-none" style="--size: 15%">
     <div class="list-item-text-highlight">{{voucher?.transactionTypeName}}</div>
-    <div><strong>{{voucher?.recordingDate | dateTimeFormat}}</strong></div>
+    <div><strong>{{voucher?.recordingDate | empDateTimeFormat}}</strong></div>
     <div>{{voucher.elaboratedBy}}</div>
   </div>
 
   <div class="fx-item-size sm-fx-item-none" style="--size: 15%">
     <div class="list-item-text-highlight">{{voucher.voucherTypeName}}</div>
-    <div><strong>{{voucher?.accountingDate | dateTimeFormat}}</strong></div>
+    <div><strong>{{voucher?.accountingDate | empDateTimeFormat}}</strong></div>
     <div>{{voucher.authorizedBy}}</div>
   </div>
 

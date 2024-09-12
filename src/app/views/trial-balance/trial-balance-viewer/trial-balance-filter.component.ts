@@ -22,9 +22,7 @@ import { AccountsChartMasterData, getEmptyTrialBalanceQuery, getLevelsListFromPa
 import { AccountChartStateSelector,
          ReportingStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { expandCollapse } from '@app/shared/animations/animations';
-
-import { ArrayLibrary, sendEvent } from '@app/shared/utils';
+import { ArrayLibrary, empExpandCollapse, sendEvent } from '@app/shared/utils';
 
 import { ExchangeRateSelectorEventType } from '../exchange-rate-selector/exchange-rate-selector.component';
 
@@ -36,7 +34,7 @@ export enum TrialBalanceFilterEventType {
 @Component({
   selector: 'emp-fa-trial-balance-filter',
   templateUrl: './trial-balance-filter.component.html',
-  animations: [expandCollapse],
+  animations: [empExpandCollapse],
 })
 export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
