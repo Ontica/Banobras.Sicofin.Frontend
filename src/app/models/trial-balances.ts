@@ -26,24 +26,27 @@ export enum TrialBalanceTypes {
 
 
 export enum BalancesType {
-  AllAccounts = 'AllAccounts',
-  WithCurrentBalance = 'WithCurrentBalance',
+  AllAccounts                   = 'AllAccounts',
+  AllAccountsInCatalog          = 'AllAccountsInCatalog',
+  WithCurrentBalance            = 'WithCurrentBalance',
   WithCurrentBalanceOrMovements = 'WithCurrentBalanceOrMovements',
-  WithMovements = 'WithMovements'
+  WithMovements                 = 'WithMovements',
 }
 
 
 export const BalancesTypeForTrialBalanceList: Identifiable[] = [
-  {uid: 'WithCurrentBalanceOrMovements', name: 'Cuentas con saldo actual o movimientos'},
-  {uid: 'WithCurrentBalance', name: 'Cuentas con saldo actual'},
-  {uid: 'WithMovements', name: 'Cuentas con movimientos'},
-  {uid: 'AllAccounts', name: 'Todas las cuentas'}
+  {uid: BalancesType.WithCurrentBalanceOrMovements, name: 'Cuentas con saldo actual o movimientos'},
+  {uid: BalancesType.WithCurrentBalance,            name: 'Cuentas con saldo actual'},
+  {uid: BalancesType.WithMovements,                 name: 'Cuentas con movimientos'},
+  {uid: BalancesType.AllAccounts,                   name: 'Todas las cuentas'},
+  {uid: BalancesType.AllAccountsInCatalog,          name: 'Todas las cuentas, incluyendo las no utilizadas'},
 ];
 
 
 export const BalancesTypeForBalanceList: Identifiable[] = [
-  {uid: 'WithCurrentBalance', name: 'Cuentas con saldo actual'},
-  {uid: 'AllAccounts', name: 'Todas las cuentas'}
+  {uid: BalancesType.WithCurrentBalance,   name: 'Cuentas con saldo actual'},
+  {uid: BalancesType.AllAccounts,          name: 'Todas las cuentas'},
+  {uid: BalancesType.AllAccountsInCatalog, name: 'Todas las cuentas, incluyendo las no utilizadas' },
 ];
 
 
