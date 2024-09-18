@@ -34,9 +34,8 @@
 
           <div *ngIf="voucherSpecialCaseType.allowAllChildrenLedgersSelection"
             class="fx-item-none fx-items-end" [style.paddingBottom.px]="2">
-            <mat-checkbox
-              formControlName="generateForAllChildrenLedgers"
-              (click)="$event.stopPropagation">
+            <mat-checkbox empNgStopPropagation
+              formControlName="generateForAllChildrenLedgers">
               Todas las contabilidades excepto Distrito Federal
             </mat-checkbox>
           </div>

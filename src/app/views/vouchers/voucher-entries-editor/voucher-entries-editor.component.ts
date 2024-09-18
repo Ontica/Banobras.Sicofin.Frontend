@@ -27,7 +27,6 @@ import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry
 
 export enum VoucherEntriesEditorEventType {
   VOUCHER_UPDATED = 'VoucherEntriesEditorComponent.Event.VoucherUpdated',
-  VOUCHER_DELETED = 'VoucherEntriesEditorComponent.Event.VoucherDeleted',
 }
 
 @Component({

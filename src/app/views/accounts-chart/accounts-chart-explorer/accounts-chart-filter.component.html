@@ -198,8 +198,8 @@
         <div class="fx-item fx-items-center" [style.height.px]="28" [style.marginTop.px]="12">
 
           <mat-checkbox name="withSectors"
-            [(ngModel)]="accountsSearch.withSectors"
-            (click)="$event.stopPropagation">
+            empNgStopPropagation
+            [(ngModel)]="accountsSearch.withSectors">
             Mostrar sectores
           </mat-checkbox>
 

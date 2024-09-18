@@ -65,9 +65,7 @@ export class VoucherEntryTableComponent implements OnChanges {
   }
 
 
-  onRemoveVoucherEntryClicked(event, voucherEntry: VoucherEntryDescriptor) {
-    event.stopPropagation();
-
+  onRemoveVoucherEntryClicked(voucherEntry: VoucherEntryDescriptor) {
     const message = this.getConfirmMessage(voucherEntry);
 
     this.messageBox.confirm(message, 'Eliminar movimiento', 'DeleteCancel')

@@ -87,9 +87,8 @@
 
                 <div class="fx-item-none fx-items-center">
 
-                  <mat-checkbox
-                    formControlName="allowUnbalancedVouchers"
-                    (click)="$event.stopPropagation">
+                  <mat-checkbox empNgStopPropagation
+                    formControlName="allowUnbalancedVouchers">
                     Permitir pólizas con diferencias entre cargos/abonos.
                   </mat-checkbox>
 
@@ -101,9 +100,8 @@
 
                 <div class="fx-item-none fx-items-center">
 
-                  <mat-checkbox
-                    formControlName="generateSubledgerAccount"
-                    (click)="$event.stopPropagation">
+                  <mat-checkbox empNgStopPropagation
+                    formControlName="generateSubledgerAccount">
                     Generar cuentas auxiliares que no existen.
                   </mat-checkbox>
 
@@ -115,9 +113,8 @@
 
                 <div class="fx-item-none fx-items-center">
 
-                  <mat-checkbox
-                    formControlName="canEditVoucherEntries"
-                    (click)="$event.stopPropagation">
+                  <mat-checkbox empNgStopPropagation
+                    formControlName="canEditVoucherEntries">
                     Habilitar edición de movimientos.
                   </mat-checkbox>
 
@@ -171,9 +168,8 @@
 
                 <div class="fx-item-none fx-items-end"
                   [style.paddingBottom.px]="2" [style.paddingRight.px]="8">
-                  <mat-checkbox
+                  <mat-checkbox empNgStopPropagation
                     [(ngModel)]="hasValueDate" [ngModelOptions]="{standalone: true}"
-                    (click)="$event.stopPropagation"
                     (change)="onHasValueDateChange()">
                     Tiene fecha valor
                   </mat-checkbox>

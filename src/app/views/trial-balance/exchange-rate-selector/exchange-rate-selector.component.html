@@ -60,8 +60,8 @@
         <div class="fx-item-size fx-items-center" style="--size: calc(100% - 124px)">
 
           <mat-checkbox name="consolidateBalancesToTargetCurrency"
+            empNgStopPropagation
             [(ngModel)]="consolidateBalancesToTargetCurrency"
-            (click)="$event.stopPropagation"
             (change)="emitConsolidateBalancesToTargetCurrency()">
             Consolidar saldos en la moneda del tipo de cambio
           </mat-checkbox>

@@ -16,11 +16,10 @@
             </emp-ng-check-box-all>
           </th>
           <td mat-cell *matCellDef="let row" class="column-checkbox" [style.width.px]="20">
-            <mat-checkbox
+            <mat-checkbox empNgStopPropagation
               [checked]="selection.isSelected(row.uid)"
               [disabled]="selectionDisabled"
               [title]="selectionDisabled ? 'No es posible cambiar la selección' : ''"
-              (click)="$event.stopPropagation()"
               (change)="selection.toggle(row.uid)">
             </mat-checkbox>
           </td>

@@ -94,10 +94,9 @@
 
         <div class="fx-item-none fx-items-end"
           [style.paddingBottom.px]="2" [style.paddingRight.px]="8">
-          <mat-checkbox
+          <mat-checkbox empNgStopPropagation
             [(ngModel)]="hasValueDate" [ngModelOptions]="{standalone: true}"
             [disabled]="!(editionMode && canEditVoucher)"
-            (click)="$event.stopPropagation"
             (change)="onHasValueDateChange()">
             Tiene fecha valor
           </mat-checkbox>

@@ -107,15 +107,17 @@
 
         <div class="fx-item fx-space-between sm-fx-item fx-row-container" [style.paddingTop.px]="12">
 
-          <mat-checkbox name="withSubledgerAccount" *ngIf="displayWithSubledgerAccount"
-            [(ngModel)]="formData.withSubledgerAccount"
-            (click)="$event.stopPropagation">
+          <mat-checkbox *ngIf="displayWithSubledgerAccount"
+            name="withSubledgerAccount"
+            empNgStopPropagation
+            [(ngModel)]="formData.withSubledgerAccount">
             Con Auxiliares
           </mat-checkbox>
 
-          <mat-checkbox name="withAllAccounts"
-            [(ngModel)]="formData.withAllAccounts"
-            (click)="$event.stopPropagation">
+          <mat-checkbox
+            name="withAllAccounts"
+            empNgStopPropagation
+            [(ngModel)]="formData.withAllAccounts">
             Incluir cuentas sin saldo
           </mat-checkbox>
 

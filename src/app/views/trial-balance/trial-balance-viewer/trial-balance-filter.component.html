@@ -151,10 +151,11 @@
 
         <div class="fx-item-quarter">
 
-          <mat-checkbox name="withSubledgerAccount" [disabled]="withSubledgerAccountDisabled"
+          <mat-checkbox name="withSubledgerAccount"
+            empNgStopPropagation
             [(ngModel)]="query.withSubledgerAccount"
-            [title]="withSubledgerAccountDisabled && !withSubledgerAccountRequired ? 'No aplica' : ''"
-            (click)="$event.stopPropagation">
+            [disabled]="withSubledgerAccountDisabled"
+            [title]="withSubledgerAccountDisabled && !withSubledgerAccountRequired ? 'No aplica' : ''">
             Con Auxiliares
           </mat-checkbox>
 
@@ -162,10 +163,11 @@
 
         <div class="fx-item-quarter">
 
-          <mat-checkbox name="showCascadeBalances" [disabled]="showCascadeBalancesDisabled"
+          <mat-checkbox name="showCascadeBalances"
+            empNgStopPropagation
             [(ngModel)]="query.showCascadeBalances"
-            [title]="showCascadeBalancesDisabled && !showCascadeBalancesRequired ? 'No aplica' : ''"
-            (click)="$event.stopPropagation">
+            [disabled]="showCascadeBalancesDisabled"
+            [title]="showCascadeBalancesDisabled && !showCascadeBalancesRequired ? 'No aplica' : ''">
             Imprimir en cascada
           </mat-checkbox>
 
@@ -173,10 +175,11 @@
 
         <div class="fx-item-quarter">
 
-          <mat-checkbox name="useValuation" [disabled]="exchangeRatesDisabled"
+          <mat-checkbox name="useValuation"
+            empNgStopPropagation
+            [disabled]="exchangeRatesDisabled"
             [(ngModel)]="query.useValuation"
             [title]="exchangeRatesDisabled && !exchangeRatesRequired ? 'No aplica' : ''"
-            (click)="$event.stopPropagation"
             (change)="onUseValuationChange()">
             Valorizar saldos
           </mat-checkbox>
@@ -185,10 +188,11 @@
 
         <div class="fx-item-quarter">
 
-          <mat-checkbox name="useDefaultValuation" *ngIf="query.useValuation"
-            [disabled]="useDefaultValuationDisabled"
+          <mat-checkbox *ngIf="query.useValuation"
+            name="useDefaultValuation"
+            empNgStopPropagation
             [(ngModel)]="query.useDefaultValuation"
-            (click)="$event.stopPropagation"
+            [disabled]="useDefaultValuationDisabled"
             (change)="onUseDefaultValuationChange($event.checked)">
             Valorización default
           </mat-checkbox>
@@ -294,8 +298,8 @@
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
             <mat-checkbox name="withAverageBalance"
-              [(ngModel)]="query.withAverageBalance"
-              (click)="$event.stopPropagation">
+              empNgStopPropagation
+              [(ngModel)]="query.withAverageBalance">
               Con saldo promedio
             </mat-checkbox>
 
@@ -306,8 +310,8 @@
             [style.height.px]="28" [style.marginTop.px]="displayLevel ? 12 : null">
 
             <mat-checkbox name="withSectorization"
-              [(ngModel)]="query.withSectorization"
-              (click)="$event.stopPropagation">
+              empNgStopPropagation
+              [(ngModel)]="query.withSectorization">
               Con sectorización
             </mat-checkbox>
 

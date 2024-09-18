@@ -120,18 +120,16 @@
     <div class="fx-row-container sm-fx-column-container">
 
       <div class="fx-item-sixth sm-fx-item">
-        <mat-checkbox
+        <mat-checkbox empNgStopPropagation
           formControlName="usesSector"
-          (click)="$event.stopPropagation"
           (change)="onChecksChanges()">
           Maneja Sectores
         </mat-checkbox>
       </div>
 
       <div class="fx-item-sixth sm-fx-item">
-        <mat-checkbox
+        <mat-checkbox empNgStopPropagation
           formControlName="usesSubledger"
-          (click)="$event.stopPropagation"
           (change)="onChecksChanges()">
           <span [class.warning-text]="formHelper.isControlInvalid(form.controls.usesSubledger)">
             Maneja Auxiliares

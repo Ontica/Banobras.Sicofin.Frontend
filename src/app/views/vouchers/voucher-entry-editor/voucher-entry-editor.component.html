@@ -281,11 +281,10 @@
 
                 <div class="fx-item-none fx-items-end"
                   [style.paddingBottom.px]="2" [style.marginRight.px]="8">
-                  <mat-checkbox
+                  <mat-checkbox empNgStopPropagation
                     [(ngModel)]="displayDateAndConcept"
                     [disabled]="readonly"
                     [ngModelOptions]="{standalone: true}"
-                    (click)="$event.stopPropagation"
                     (change)="onDisplayDateAndConceptClicked()">
                     Fecha y concepto
                   </mat-checkbox>

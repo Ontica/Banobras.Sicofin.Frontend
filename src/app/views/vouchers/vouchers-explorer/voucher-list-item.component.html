@@ -47,9 +47,8 @@
   class="fx-row-container sm-fx-column-container fx-gap-size sm-fx-gap" style="--gap-size: 32px">
 
   <div class="fx-item-size sm-fx-item-none" style="--size: 20px">
-    <mat-checkbox
+    <mat-checkbox empNgStopPropagation
       [checked]="selected"
-      (click)="$event.stopPropagation()"
       (change)="onClickVoucherCheck()">
     </mat-checkbox>
   </div>

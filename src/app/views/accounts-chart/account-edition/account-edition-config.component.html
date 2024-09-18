@@ -15,8 +15,8 @@
       <div class="fx-column-container fx-gap-three-quarter">
 
         <mat-checkbox *ngFor="let data of accountDataToUpdateList;"
+          empNgStopPropagation
           [checked]="selection.isSelected(data)"
-          (click)="$event.stopPropagation()"
           (change)="onDataToUpdateChanged(data)">
           {{data.name}}
         </mat-checkbox>

@@ -42,7 +42,8 @@
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let row" class="column-action">
         <button title="Eliminar regla"
-          mat-icon-button (click)="onRemoveButtonClicked($event, row)">
+          mat-icon-button empNgStopPropagation
+          (click)="onRemoveButtonClicked(row)">
           <mat-icon>
             delete
           </mat-icon>

@@ -23,8 +23,8 @@
         <div class="fx-item sm-fx-item" [style.paddingTop.px]="12">
 
           <mat-checkbox name="withAllAccounts"
-            [(ngModel)]="formData.withAllAccounts"
-            (click)="$event.stopPropagation">
+            empNgStopPropagation
+            [(ngModel)]="formData.withAllAccounts">
             Incluir cuentas sin saldo
           </mat-checkbox>
 

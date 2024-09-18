@@ -127,8 +127,8 @@
         class="fx-item-size sm-fx-item fx-items-end" style="--size: 261px" [style.paddingBottom.px]="2">
 
         <mat-checkbox name="withSubledgerAccount"
-          [(ngModel)]="query.withSubledgerAccount"
-          (click)="$event.stopPropagation">
+          empNgStopPropagation
+          [(ngModel)]="query.withSubledgerAccount">
           Con Auxiliares
         </mat-checkbox>
 

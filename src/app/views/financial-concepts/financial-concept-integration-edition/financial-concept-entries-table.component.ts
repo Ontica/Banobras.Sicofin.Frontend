@@ -61,9 +61,7 @@ export class FinancialConceptEntriesTableComponent implements OnChanges {
   }
 
 
-  onRemoveButtonClicked(event, financialConceptEntry: FinancialConceptEntryDescriptor) {
-    event.stopPropagation();
-
+  onRemoveButtonClicked(financialConceptEntry: FinancialConceptEntryDescriptor) {
     const message = this.getConfirmMessage(financialConceptEntry);
 
     this.messageBox.confirm(message, 'Eliminar la regla de la integración', 'DeleteCancel')
