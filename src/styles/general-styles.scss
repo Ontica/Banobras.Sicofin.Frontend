@@ -491,7 +491,7 @@ input[type="number"]:disabled {
 }
 
 .label {
-  opacity: 0.4;
+  opacity: 0.75;
 }
 
 .lowercase {
@@ -579,6 +579,12 @@ i.disabled {
     border: 1px solid $tag-error-background-color;
   }
 
+  &.tag-base-disabled {
+    background-color: $white;
+    color: darken($tag-disabled-background-color, 50%);
+    border: 1px solid darken($tag-disabled-background-color, 50%);
+  }
+
   &.tag-info {
     background-color: $tag-info-background-color;
     color: $white;
@@ -597,6 +603,11 @@ i.disabled {
   &.tag-error {
     background-color: $tag-error-background-color;
     color: $white;
+  }
+
+  &.tag-disabled {
+    background-color: $tag-disabled-background-color;
+    color: $tag-disabled-color;
   }
 
   &.tag-small {
@@ -643,6 +654,11 @@ a.tag {
     &.tag-error {
       background-color: darken($tag-error-background-color, 4%);
       color: $white;
+    }
+
+    &.tag-disabled {
+      background-color: darken($tag-disabled-background-color, 4%);
+      color: $tag-disabled-color;
     }
   }
 }
