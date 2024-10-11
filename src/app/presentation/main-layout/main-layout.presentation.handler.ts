@@ -20,7 +20,7 @@ import { APP_LAYOUTS, APP_VIEWS, DefaultTool, Tool, TOOLS_LIST } from '@app/main
 export enum ActionType {
   SET_CURRENT_VIEW_FROM_URL = 'Empiria.UI-Item.MainUserInterface.SetCurrentViewFromUrl',
   SET_VIEW_ACTION           = 'Empiria.UI-Item.MainUserInterface.SetViewAction',
-  SET_VIEW_ACTION_DEFAULT   =  'Empiria.UI-Item.MainUserInterface.SetViewActionDefault',
+  SET_VIEW_ACTION_DEFAULT   = 'Empiria.UI-Item.MainUserInterface.SetViewActionDefault',
   SET_IS_PROCESSING_FLAG    = 'Empiria.UI-Item.MainUserInterface.SetIsProcessingFlag',
   SET_TOOL_SELECTED         = 'Empiria.UI-Item.MainUserInterface.SetToolSelected',
 }

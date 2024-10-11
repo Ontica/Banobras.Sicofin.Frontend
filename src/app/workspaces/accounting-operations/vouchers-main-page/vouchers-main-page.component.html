@@ -48,7 +48,7 @@
 
 
 <emp-ng-export-report-modal *ngIf="displayExportModal"
-  title="Exportar movimientos de las pólizas"
+  [title]="exportModalTitle"
   [message]=" exportModalMessage"
   [fileUrl]="fileUrl"
   (exportReportModalEvent)="onExportReportModalEvent($event)">

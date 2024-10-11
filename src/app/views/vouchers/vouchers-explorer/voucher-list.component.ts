@@ -184,8 +184,12 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
       list.push(getVoucherOperation(VouchersOperationType.print));
     }
 
+    if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_EXPORTAR_POLIZAS)) {
+      list.push(getVoucherOperation(VouchersOperationType.excelVouchers));
+    }
+
     if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_EXPORTAR_MOVIMIENTOS)) {
-      list.push(getVoucherOperation(VouchersOperationType.excel));
+      list.push(getVoucherOperation(VouchersOperationType.excelVouchersEntries));
     }
 
     if (this.hasPermission(PERMISSIONS.FEATURE_POLIZAS_CLONE)) {
@@ -224,10 +228,14 @@ export class VoucherListComponent implements OnInit, OnChanges, OnDestroy {
 
 
   private validateShowConfirmMessage() {
-    if (this.operationSelected.uid === VouchersOperationType.excel) {
-      this.emitExecuteOperation();
-    } else {
-      this.showConfirmMessage();
+    switch (this.operationSelected.uid) {
+      case VouchersOperationType.excelVouchers:
+      case VouchersOperationType.excelVouchersEntries:
+        this.emitExecuteOperation();
+        break;
+      default:
+        this.showConfirmMessage();
+        break;
     }
   }
 

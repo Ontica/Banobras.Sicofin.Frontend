@@ -64,13 +64,14 @@ export const EditorTypeList: Identifiable[] = [
 
 
 export enum VouchersOperationType {
-  close            = 'close',
-  sendToSupervisor = 'send-to-supervisor',
-  reasign          = 'reasign',
-  delete           = 'delete',
-  clone            = 'clone',
-  print            = 'print',
-  excel            = 'excel',
+  close                = 'close',
+  sendToSupervisor     = 'send-to-supervisor',
+  reasign              = 'reasign',
+  delete               = 'delete',
+  clone                = 'clone',
+  print                = 'print',
+  excelVouchers        = 'excel-vouchers',
+  excelVouchersEntries = 'excel-vouchers-entries',
 }
 
 
@@ -82,13 +83,14 @@ export interface VouchersOperation extends Identifiable {
 
 
 export const VouchersOperationList: VouchersOperation[] = [
-  {uid: VouchersOperationType.close,            name: 'Enviar al diario'},
-  {uid: VouchersOperationType.sendToSupervisor, name: 'Enviar al supervisor'},
-  {uid: VouchersOperationType.reasign,          name: 'Reasignar a', assignToRequired: true},
-  {uid: VouchersOperationType.delete,           name: 'Eliminar'},
-  {uid: VouchersOperationType.print,            name: 'Imprimir'},
-  {uid: VouchersOperationType.excel,            name: 'Exportar movimientos'},
-  {uid: VouchersOperationType.clone,            name: 'Clonar'}
+  {uid: VouchersOperationType.close,                name: 'Enviar al diario'},
+  {uid: VouchersOperationType.sendToSupervisor,     name: 'Enviar al supervisor'},
+  {uid: VouchersOperationType.reasign,              name: 'Reasignar a', assignToRequired: true},
+  {uid: VouchersOperationType.delete,               name: 'Eliminar'},
+  {uid: VouchersOperationType.print,                name: 'Imprimir'},
+  {uid: VouchersOperationType.excelVouchers,        name: 'Exportar pólizas'},
+  {uid: VouchersOperationType.excelVouchersEntries, name: 'Exportar movimientos'},
+  {uid: VouchersOperationType.clone,                name: 'Clonar'}
 ];
 
 

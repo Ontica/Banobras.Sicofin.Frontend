@@ -66,7 +66,9 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   displayExportModal = false;
 
-  exportModalMessage = 'Esta operación exportará los movimientos de las pólizas.';
+  exportModalTitle = '';
+
+  exportModalMessage = '';
 
   exportDataSelected: VouchersBulkOperationData = { operation: null, command: null };
 
@@ -151,12 +153,11 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
         return;
 
       case ExportReportModalEventType.EXPORT_BUTTON_CLICKED:
-
-        if (this.exportDataSelected.operation === VouchersOperationType.excel) {
+        if ([VouchersOperationType.excelVouchers,
+             VouchersOperationType.excelVouchersEntries].includes(this.exportDataSelected.operation)) {
           this.bulkOperationVouchers(this.exportDataSelected.operation,
                                      this.exportDataSelected.command);
         }
-
         return;
 
       default:
@@ -303,11 +304,10 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
       case VouchersOperationType.clone:
         this.bulkOperationVouchers(operation, command);
         return;
-
-      case VouchersOperationType.excel:
+      case VouchersOperationType.excelVouchers:
+      case VouchersOperationType.excelVouchersEntries:
         this.showExportVouchersEntries(operation, command);
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -321,15 +321,13 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
       case VouchersOperationType.print:
         this.resolvePrintVouchers(result);
         return;
-
-      case VouchersOperationType.excel:
+      case VouchersOperationType.excelVouchers:
+      case VouchersOperationType.excelVouchersEntries:
         this.resolveExportVouchersEntries(result);
         return;
-
       case VouchersOperationType.clone:
         this.resolveCloneVouchers(result);
         return;
-
       default:
         this.resolveBulkOperation(result);
         return;
@@ -373,18 +371,35 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
 
   private showExportVouchersEntries(operation: VouchersOperationType, command: VouchersOperationCommand) {
-    this.exportDataSelected = {operation, command};
+    let title = '';
+    let message = '';
 
-    const message = `Esta operación exportará los movimientos de las ` +
-                    `<strong> ${command.vouchers.length} pólizas</strong> seleccionadas.` +
-                    `<br><br>¿Exporto los movimientos de las pólizas?`;
+    switch (operation) {
+      case VouchersOperationType.excelVouchers:
+        title = 'Exportar las pólizas';
+        message = `Esta operación exportará las ` +
+          `<strong> ${command.vouchers.length} pólizas</strong> seleccionadas.` +
+          `<br><br>¿Exporto las pólizas?`;
+        break;
+      case VouchersOperationType.excelVouchersEntries:
+        title = 'Exportar los movimientos de las pólizas';
+        message = `Esta operación exportará los movimientos de las ` +
+          `<strong> ${command.vouchers.length} pólizas</strong> seleccionadas.` +
+          `<br><br>¿Exporto los movimientos de las pólizas?`;
+        break;
+      default:
+        console.log(`Unhandled export vouchers operation type ${operation}`);
+        return;
+    }
 
-    this.setDisplayExportModal(true, message);
+    this.exportDataSelected = { operation, command };
+    this.setDisplayExportModal(true, title, message);
   }
 
 
-  private setDisplayExportModal(display: boolean, message?: string) {
+  private setDisplayExportModal(display: boolean, title?: string, message?: string) {
     this.displayExportModal = display;
+    this.exportModalTitle = title ?? '';
     this.exportModalMessage = message ?? '';
     this.fileUrl = '';
   }
