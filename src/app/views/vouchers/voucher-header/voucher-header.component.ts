@@ -134,6 +134,11 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
+  get hasValueDateEnabled(): boolean {
+    return !this.isSavedVoucher || (this.isSavedVoucher && this.editionMode && this.canEditVoucher);
+  }
+
+
   get ledgerPlaceholder(): string {
     if (this.allowAllLedgersSelection) {
       return 'Todas';
