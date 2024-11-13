@@ -83,6 +83,7 @@ export class SubledgerAccountsMainPageComponent {
       case SubledgerAccountsViewerEventType.SEARCH_SUBLEDGERS_ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.subledgerAccountQuery, 'event.payload.subledgerAccountQuery');
         this.subledgerAccountQuery = event.payload.subledgerAccountQuery;
+        this.setSelectedSubledgerAccount(EmptySubledgerAccount);
         this.searchSubledgerAccounts(event.payload.subledgerAccountQuery as SubledgerAccountQuery);
         return;
       case SubledgerAccountsViewerEventType.EXPORT_DATA_BUTTON_CLICKED:
@@ -91,7 +92,6 @@ export class SubledgerAccountsMainPageComponent {
       case SubledgerAccountsViewerEventType.SELECT_SUBLEDGER_ACCOUNT_CLICKED:
         Assertion.assertValue(event.payload.subledgerAccount, 'event.payload.subledgerAccount');
         Assertion.assertValue(event.payload.subledgerAccount.id, 'event.payload.subledgerAccount.id');
-
         this.getSubledgerAccount(event.payload.subledgerAccount.id);
         return;
       default:
