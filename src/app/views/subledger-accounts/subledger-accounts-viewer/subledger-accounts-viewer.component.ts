@@ -21,9 +21,9 @@ import { SubledgerAccountsFilterEventType} from './subledger-accounts-filter.com
 
 export enum SubledgerAccountsViewerEventType {
   CREATE_SUBLEDGER_ACCOUNT_BUTTON_CLICKED = 'SubledgerAccountsViewerComponent.Event.CreateSubledgerAccounButtonClicked',
-  SEARCH_SUBLEDGERS_ACCOUNT_CLICKED = 'SubledgerAccountsViewerComponent.Event.SearchSubledgersAccountClicked',
-  EXPORT_DATA_BUTTON_CLICKED = 'SubledgerAccountsViewerComponent.Event.ExportDataButtonClicked',
-  SELECT_SUBLEDGER_ACCOUNT_CLICKED = 'SubledgerAccountsViewerComponent.Event.SelectSubledgerAccountClicked',
+  SEARCH_SUBLEDGERS_ACCOUNT_CLICKED       = 'SubledgerAccountsViewerComponent.Event.SearchSubledgersAccountClicked',
+  EXPORT_DATA_BUTTON_CLICKED              = 'SubledgerAccountsViewerComponent.Event.ExportDataButtonClicked',
+  SELECT_SUBLEDGER_ACCOUNT_CLICKED        = 'SubledgerAccountsViewerComponent.Event.SelectSubledgerAccountClicked',
 }
 
 @Component({
@@ -34,6 +34,8 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
   @Input() subledgerAccountData: SubledgerAccountDataTable =
     Object.assign({}, EmptySubledgerAccountDataTable);
+
+  @Input() selectedSubledgerAccountID = null;
 
   @Input() queryExecuted = false;
 
@@ -48,7 +50,7 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
   permissions = PERMISSIONS;
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.subledgerAccountData) {
       this.setText();
     }
@@ -63,17 +65,14 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
   onSubledgerAccountsFilterEvent(event: EventInfo) {
     switch (event.type as SubledgerAccountsFilterEventType) {
-
       case SubledgerAccountsFilterEventType.SEARCH_SUBLEDGER_ACCOUNTS_CLICKED:
         Assertion.assertValue(event.payload.accountChartName, 'event.payload.accountChartName');
         Assertion.assertValue(event.payload.subledgerAccountQuery, 'event.payload.subledgerAccountQuery');
-
         this.accountChartName = event.payload.accountChartName;
         sendEvent(this.subledgerAccountsViewerEvent,
           SubledgerAccountsViewerEventType.SEARCH_SUBLEDGERS_ACCOUNT_CLICKED,
           {subledgerAccountQuery: event.payload.subledgerAccountQuery});
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;
@@ -83,24 +82,20 @@ export class SubledgerAccountsViewerComponent implements OnChanges {
 
   onSubledgerAccountsTableEvent(event: EventInfo) {
     switch (event.type as DataTableEventType) {
-
       case DataTableEventType.COUNT_FILTERED_ENTRIES:
         Assertion.assertValue(event.payload.displayedEntriesMessage, 'event.payload.displayedEntriesMessage');
         this.setText(event.payload.displayedEntriesMessage as string);
         return;
-
       case DataTableEventType.EXPORT_DATA:
         sendEvent(this.subledgerAccountsViewerEvent,
           SubledgerAccountsViewerEventType.EXPORT_DATA_BUTTON_CLICKED);
         return;
-
       case DataTableEventType.ENTRY_CLICKED:
         Assertion.assertValue(event.payload.entry, 'event.payload.entry');
         sendEvent(this.subledgerAccountsViewerEvent,
           SubledgerAccountsViewerEventType.SELECT_SUBLEDGER_ACCOUNT_CLICKED,
           {subledgerAccount: event.payload.entry});
         return;
-
       default:
         console.log(`Unhandled user interface event ${event.type}`);
         return;

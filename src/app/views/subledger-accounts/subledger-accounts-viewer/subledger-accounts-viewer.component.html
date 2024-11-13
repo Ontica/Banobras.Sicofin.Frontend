@@ -40,6 +40,7 @@
 
       <emp-ng-data-table class="fx-item"
         [dataTable]="subledgerAccountData"
+        [selectedFieldValue]="{field: 'id', value: selectedSubledgerAccountID}"
         [executed]="queryExecuted"
         (dataTableEvent)="onSubledgerAccountsTableEvent($event)">
 

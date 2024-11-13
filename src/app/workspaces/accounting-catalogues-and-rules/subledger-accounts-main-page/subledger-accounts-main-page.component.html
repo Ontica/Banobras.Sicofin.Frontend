@@ -7,6 +7,7 @@
   <div class="primary" [class.std-hide]="displaySubledgerAccountTabbed">
 
     <emp-fa-subledger-accounts-viewer
+      [selectedSubledgerAccountID]="selectedSubledgerAccount.id ?? null"
       [subledgerAccountData]="subledgerAccountData"
       [queryExecuted]="queryExecuted"
       [isLoading]="isLoading"
