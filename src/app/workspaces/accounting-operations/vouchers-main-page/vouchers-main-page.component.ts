@@ -309,7 +309,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
         this.showExportVouchersEntries(operation, command);
         return;
       default:
-        console.log(`Unhandled user interface event ${event.type}`);
+        console.log(`Unhandled user interface event ${operation}`);
         return;
     }
   }

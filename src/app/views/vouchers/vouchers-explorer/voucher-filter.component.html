@@ -12,7 +12,6 @@
           [(ngModel)]="filter.accountsChartUID"
           [items]="accountsChartMasterDataList"
           [loading]="isLoading"
-          [title]="selectedAccountChart?.name ?? null"
           [showError]="accountsChartUID.invalid"
           (changes)="onAccountChartChanges($event)">
         </emp-ng-select>
