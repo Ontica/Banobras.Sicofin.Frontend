@@ -5,7 +5,8 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+         SimpleChanges } from '@angular/core';
 
 import { Assertion, EmpObservable, EventInfo, SessionService } from '@app/core';
 
@@ -48,7 +49,7 @@ export enum TrialBalanceViewerEventType {
   selector: 'emp-fa-trial-balance-viewer',
   templateUrl: './trial-balance-viewer.component.html',
 })
-export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
+export class TrialBalanceViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() queryType: TrialBalanceQueryType = 'TrialBalance';
 
@@ -89,6 +90,13 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
               private session: SessionService,
               private balancesDataService: BalancesDataService) {
     this.subscriptionHelper = uiLayer.createSubscriptionHelper();
+  }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.subledgerAccount) {
+      this.resetSubledgerQueryData();
+    }
   }
 
 
@@ -279,6 +287,13 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
   }
 
 
+  private resetSubledgerQueryData() {
+    if (this.isSubledgerQuery) {
+      setTimeout(() => this.resetData());
+    }
+  }
+
+
   private setInitData(balanceData: BalanceExplorerData) {
     this.data = balanceData.balance;
     this.query = balanceData.balance.query;
@@ -308,7 +323,7 @@ export class TrialBalanceViewerComponent implements OnInit, OnDestroy {
 
 
   private clearQuery() {
-    this.query = this.isBalanceQuery ? emptyBalanceExplorerQuery() : getEmptyTrialBalanceQuery();
+    this.query = this.isTrialBalanceQuery ? getEmptyTrialBalanceQuery() : emptyBalanceExplorerQuery();
   }
 
 

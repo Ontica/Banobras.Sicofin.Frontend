@@ -53,7 +53,7 @@ export class SubledgerAccountBalanceFilterComponent implements OnChanges, OnInit
 
 
   ngOnChanges() {
-    this.setDefaultDates();
+    this.setDefaultFormData();
   }
 
 
@@ -110,8 +110,10 @@ export class SubledgerAccountBalanceFilterComponent implements OnChanges, OnInit
   }
 
 
-  private setDefaultDates() {
+  private setDefaultFormData() {
     this.formData.toDate = DateStringLibrary.today();
+    this.formData.ledgers = [];
+    this.formData.withAllAccounts = false;
   }
 
 

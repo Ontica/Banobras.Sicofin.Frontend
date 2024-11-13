@@ -193,6 +193,9 @@ export class SubledgerAccountsMainPageComponent {
 
 
   private setSelectedSubledgerAccount(subledgerAccount: SubledgerAccount) {
+    // The subledgerAccount applies to all account charts, so set query.accountsChartUID as the default.
+    subledgerAccount.accountsChartUID = this.subledgerAccountQuery.accountsChartUID;
+
     this.selectedSubledgerAccount = subledgerAccount;
     this.displaySubledgerAccountTabbed = !!this.selectedSubledgerAccount.id;
   }
