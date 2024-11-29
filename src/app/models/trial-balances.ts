@@ -16,6 +16,7 @@ export enum TrialBalanceTypes {
   AnaliticoDeCuentas                = 'AnaliticoDeCuentas',
   Balanza                           = 'Balanza',
   BalanzaConContabilidadesEnCascada = 'BalanzaConContabilidadesEnCascada',
+  BalanzaDiferenciaDiariaPorMoneda  = 'BalanzaDiferenciaDiariaPorMoneda',
   BalanzaDolarizada                 = 'BalanzaDolarizada',
   BalanzaEnColumnasPorMoneda        = 'BalanzaEnColumnasPorMoneda',
   BalanzaValorizadaComparativa      = 'BalanzaValorizadaComparativa',

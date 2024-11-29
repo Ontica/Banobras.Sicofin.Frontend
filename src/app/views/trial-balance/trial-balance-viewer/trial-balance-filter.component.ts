@@ -116,7 +116,8 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
 
 
   get showConsolidateBalancesToTargetCurrency(): boolean {
-    return ![TrialBalanceTypes.BalanzaEnColumnasPorMoneda].includes(this.query.trialBalanceType);
+    return ![TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+             TrialBalanceTypes.BalanzaDiferenciaDiariaPorMoneda].includes(this.query.trialBalanceType);
   }
 
 
@@ -124,6 +125,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.BalanzaDiferenciaDiariaPorMoneda,
             TrialBalanceTypes.SaldosPorAuxiliar,
             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
@@ -139,6 +141,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
     return [TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.BalanzaDiferenciaDiariaPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.SaldosPorAuxiliar,
             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
@@ -174,6 +177,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
             TrialBalanceTypes.BalanzaConContabilidadesEnCascada,
             TrialBalanceTypes.BalanzaDolarizada,
             TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+            TrialBalanceTypes.BalanzaDiferenciaDiariaPorMoneda,
             TrialBalanceTypes.BalanzaValorizadaComparativa,
             TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
@@ -189,6 +193,7 @@ export class TrialBalanceFilterComponent implements OnInit, OnDestroy {
   get displayWithAverageBalance(): boolean {
     return ![TrialBalanceTypes.BalanzaDolarizada,
              TrialBalanceTypes.BalanzaEnColumnasPorMoneda,
+             TrialBalanceTypes.BalanzaDiferenciaDiariaPorMoneda,
              TrialBalanceTypes.ValorizacionEstimacionPreventiva].includes(this.query.trialBalanceType);
   }
 
