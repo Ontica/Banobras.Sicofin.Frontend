@@ -58,10 +58,10 @@
 
     <div class="fx-row-container">
 
-      <div class="fx-item-third">
+      <div class="fx-item-two-third">
         <label>Origen de la transacción:</label>
         <emp-ng-select
-          [config]="{ virtualScroll: true }"
+          [config]="{ virtualScroll: true, showTooltip: true }"
           formControlName="functionalAreaId"
           [items]="functionalAreasList"
           [showError]="formHelper.isControlInvalid(form.controls.functionalAreaId)">
