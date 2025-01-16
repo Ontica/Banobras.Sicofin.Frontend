@@ -21,7 +21,7 @@ import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, Ledg
          ValuedCurrency, Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryType,
          VoucherEntryTypeList } from '@app/models';
 
-import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
+import { ArrayLibrary, FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
@@ -317,6 +317,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
     .subscribe(([x, y]) => {
       this.eventTypesList = x;
       this.functionalAreasList = y;
+      this.validateAreaInList(this.voucherEntry.responsibilityArea);
       this.isLoading = false;
     });
   }
@@ -343,6 +344,14 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
         this.ledgerAccountChange();
       })
       .finally(() => this.isLoading = false);
+  }
+
+
+  private validateAreaInList(area: Identifiable) {
+    if (!isEmpty(area)) {
+      this.functionalAreasList =
+        ArrayLibrary.insertIfNotExist(this.functionalAreasList ?? [], area, 'uid');
+    }
   }
 
 
@@ -417,6 +426,7 @@ export class VoucherEntryEditorComponent implements OnChanges, OnInit, OnDestroy
 
     this.formHelper.setDisableForm(this.form, false);
     this.displayDateAndConcept = !!voucherEntry.date || !!voucherEntry.concept;
+    this.validateAreaInList(voucherEntry.responsibilityArea);
   }
 
 

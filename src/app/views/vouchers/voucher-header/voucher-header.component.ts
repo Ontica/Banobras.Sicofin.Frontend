@@ -16,19 +16,20 @@ import { DateString, DateStringLibrary, EventInfo, Identifiable, isEmpty, Valida
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { AccountsChartMasterData, EmptyVoucher, Voucher, VoucherFields,
-         VoucherSpecialCaseType } from '@app/models';
-
 import { AccountChartStateSelector,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
+import { ArrayLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { VouchersDataService } from '@app/data-services';
 
+import { AccountsChartMasterData, EmptyVoucher, Voucher, VoucherFields,
+         VoucherSpecialCaseType } from '@app/models';
+
+
 export enum VoucherHeaderEventType {
   VOUCHER_TYPE_CHANGED = 'VoucherHeaderComponent.Event.VoucherTypeChanged',
-  FIELDS_CHANGED = 'VoucherHeaderComponent.Event.FieldsChanged',
+  FIELDS_CHANGED       = 'VoucherHeaderComponent.Event.FieldsChanged',
 }
 
 interface VoucherFormModel extends FormGroup<{
@@ -201,6 +202,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       this.accountsChartMasterDataList = d;
 
       this.setAccountChartSelected();
+      this.validateAreaInList(this.voucher.functionalArea);
       this.isLoading = false;
     });
   }
@@ -226,6 +228,14 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
         }
       })
       .finally(() => this.isLoadingAccountingDates = false);
+  }
+
+
+  private validateAreaInList(area: Identifiable) {
+    if (!isEmpty(area)) {
+      this.functionalAreasList =
+        ArrayLibrary.insertIfNotExist(this.functionalAreasList ?? [], area, 'uid');
+    }
   }
 
 
@@ -280,6 +290,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.setAccountChartSelected();
+    this.validateAreaInList(this.voucher.functionalArea);
     this.getOpenedAccountingDates(this.voucher.accountsChart.uid, true);
     this.setVoucherConceptValidator();
   }
@@ -348,7 +359,7 @@ export class VoucherHeaderComponent implements OnInit, OnChanges, OnDestroy {
       accountsChartUID: formModel.accountsChartUID ?? '',
       ledgerUID: formModel.ledgerUID ?? '',
       concept: formModel.concept ?? '',
-      functionalAreaId: +formModel.functionalAreaId ?? null,
+      functionalAreaId: formModel.functionalAreaId ? +formModel.functionalAreaId : null,
       accountingDate: formModel.accountingDate ?? null,
     };
 
