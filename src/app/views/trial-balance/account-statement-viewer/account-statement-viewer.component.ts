@@ -5,9 +5,11 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
+
+import { FilePreviewComponent } from '@app/shared/containers';
 
 import { BalancesDataService, VouchersDataService } from '@app/data-services';
 
@@ -30,6 +32,8 @@ import { AccountStatementFilterEventType } from './account-statement-filter.comp
 })
 export class AccountStatementViewerComponent implements OnChanges {
 
+  @ViewChild('filePreview', { static: true }) filePreview: FilePreviewComponent;
+
   @Input() entry: BalanceExplorerEntry | TrialBalanceEntry;
 
   @Input() query: BalanceExplorerQuery | TrialBalanceQuery;
@@ -49,8 +53,6 @@ export class AccountStatementViewerComponent implements OnChanges {
 
   displayExportModal = false;
   excelFileUrl = '';
-
-  voucherFile: FileReport;
 
 
   constructor(private balancesDataService: BalancesDataService,
@@ -179,7 +181,7 @@ export class AccountStatementViewerComponent implements OnChanges {
 
     this.vouchersData.getVoucherForPrint(accountStatementEntry.voucherId)
       .firstValue()
-      .then(x => this.voucherFile = x)
+      .then(x => this.openFilePreview(x))
       .finally(() => this.isLoading = false);
   }
 
@@ -229,6 +231,11 @@ export class AccountStatementViewerComponent implements OnChanges {
   private setDisplayExportModal(display) {
     this.displayExportModal = display;
     this.excelFileUrl = '';
+  }
+
+
+  private openFilePreview(file: FileReport) {
+    this.filePreview.open(file.url, file.type);
   }
 
 }

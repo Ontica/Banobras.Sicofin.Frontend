@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { Assertion, EmpObservable, EventInfo, isEmpty } from '@app/core';
 
@@ -14,6 +14,8 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
 import { View } from '@app/main-layout';
+
+import { FilePreviewComponent } from '@app/shared/containers';
 
 import { ReportingDataService, VouchersDataService } from '@app/data-services';
 
@@ -37,6 +39,8 @@ import {
 })
 export class ReportBuilderComponent implements OnInit, OnDestroy {
 
+  @ViewChild('filePreview', { static: true }) filePreview: FilePreviewComponent;
+
   reportGroup: ReportGroup;
 
   ReportGroups = ReportGroup;
@@ -56,8 +60,6 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
   selectedReportBreakdown: FinancialReportBreakdown = null;
 
   fileUrl = '';
-
-  previewFile: FileReport = null;
 
   subscriptionHelper: SubscriptionHelper;
 
@@ -243,7 +245,7 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
     this.vouchersData.getVoucherForPrint(reportEntry.voucherId)
       .firstValue()
-      .then(x => this.previewFile = x)
+      .then(x => this.openFilePreview(x))
       .finally(() => this.isLoading = false);
   }
 
@@ -301,6 +303,11 @@ export class ReportBuilderComponent implements OnInit, OnDestroy {
 
   private getReportQueryForExport(exportTo: FileType): ReportQuery {
     return Object.assign({}, this.reportQuery, { exportTo });
+  }
+
+
+  private openFilePreview(file: FileReport) {
+    this.filePreview.open(file.url, file.type);
   }
 
 }

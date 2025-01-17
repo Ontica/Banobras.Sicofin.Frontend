@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { Assertion, EventInfo, StringLibrary } from '@app/core';
 
@@ -17,6 +17,8 @@ import { MainUIStateSelector, VoucherAction,
 import { View } from '@app/main-layout';
 
 import { MessageBoxService } from '@app/shared/services';
+
+import { FilePreviewComponent } from '@app/shared/containers';
 
 import { ArrayLibrary } from '@app/shared/utils';
 
@@ -50,6 +52,8 @@ type VouchersMainPageModalOptions = 'VoucherCreator' | 'VouchersImporter';
 })
 export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
+  @ViewChild('filePreview', { static: true }) filePreview: FilePreviewComponent;
+
   currentView: View;
 
   displayStatus = false;
@@ -73,8 +77,6 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   exportDataSelected: VouchersBulkOperationData = { operation: null, command: null };
 
   fileUrl = '';
-
-  vouchersToPrintFile: FileReport;
 
   isLoading = false;
 
@@ -418,7 +420,7 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
 
   private resolvePrintVouchers(result: VouchersOperationResult) {
     if (StringLibrary.isValidHttpUrl(result?.file?.url || '')) {
-      this.vouchersToPrintFile = result.file;
+      this.openFilePreview(result.file);
       return;
     }
 
@@ -435,6 +437,11 @@ export class VouchersMainPageComponent implements OnInit, OnDestroy {
   private resolveCloneVouchers(result: VouchersOperationResult) {
     this.insertVouchersToList(result.vouchers);
     this.messageBox.show(result.message, 'Póliza clonada');
+  }
+
+
+  private openFilePreview(file: FileReport) {
+    this.filePreview.open(file.url, file.type);
   }
 
 }
