@@ -7,7 +7,9 @@
 
 import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { FileDownloadService, FormatLibrary } from '@app/shared/utils';
+import { FormatLibrary } from '@app/shared/utils';
+
+import { FileDownloadService } from '@app/shared/services';
 
 import { DefaultFileControlConfig, FileData, FileControlActions, FileControlConfig, FileControlMenuOptions,
          FileTypeAccepted, FileType, CsvFileTypeException, FileControlEventData } from './file-control-data';
@@ -144,13 +146,14 @@ export class FileControlComponent implements OnChanges {
       this.validateAndSetAcceptedFileType('csv', FileTypeAccepted.csv);
       this.validateAndSetAcceptedFileType('image', FileTypeAccepted.image);
       this.validateAndSetAcceptedFileType('txt', FileTypeAccepted.txt);
+      this.validateAndSetAcceptedFileType('xml', FileTypeAccepted.xml);
     }
 
     this.acceptedFileString = this.acceptedFilesTypes.toString();
   }
 
   private isFileTypeInConfig(type: FileType): boolean {
-    if (this.fileControlConfig.filesTypes.filter(x => x === type).length > 0) {
+    if (this.fileControlConfig.filesTypes.filter(x => x.toLowerCase() === type.toLowerCase()).length > 0) {
       return true;
     }
     return false;
@@ -222,6 +225,10 @@ export class FileControlComponent implements OnChanges {
       return 'emp-xls-file';
     }
 
+    if (FileTypeAccepted.xml.includes(type)) {
+      return 'emp-xml-file';
+    }
+
     if (type.startsWith('image/')) {
       return 'emp-image-file';
     }
@@ -252,6 +259,10 @@ export class FileControlComponent implements OnChanges {
 
     if (file.type === FileTypeAccepted.txt) {
       return this.isValidFileType('txt', file);
+    }
+
+    if (FileTypeAccepted.xml.includes(file.type)) {
+      return this.isValidFileType('xml', file);
     }
 
     return false;

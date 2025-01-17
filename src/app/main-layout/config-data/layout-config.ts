@@ -10,21 +10,25 @@ import { ROUTES } from './routes-config';
 import { View, Layout } from '../common-models/common';
 
 import {
+  UnauthorizedViews,
+  SystemManagementViews,
   AccountingOperationViews,
   AccountingDashboardsViews,
   AccountingCataloguesAndRulesViews,
-  AccountingSystemManagementViews,
-  UnauthorizedViews
 } from './views-config';
 
 
-export const APP_VIEWS: View[] = AccountingOperationViews.concat(AccountingDashboardsViews,
-                                                                 AccountingCataloguesAndRulesViews,
-                                                                 AccountingSystemManagementViews,
-                                                                 UnauthorizedViews);
+export type LAYOUT_TYPE = 'SystemManagement' | 'Unauthorized' |
+                          'AccountingOperation' | 'AccountingDashboards' | 'AccountingCataloguesAndRules';
 
 
-export const APP_LAYOUTS: Layout[] = [
+export const APP_VIEWS: View[] = UnauthorizedViews.concat(AccountingOperationViews,
+                                                          AccountingDashboardsViews,
+                                                          AccountingCataloguesAndRulesViews,
+                                                          SystemManagementViews);0
+
+
+export const APP_LAYOUTS: Layout<LAYOUT_TYPE>[] = [
   {
     name: 'AccountingOperation',
     views: AccountingOperationViews,
@@ -51,8 +55,8 @@ export const APP_LAYOUTS: Layout[] = [
     permission: ROUTES.reglas_y_catalogos.permission,
   },
   {
-    name: 'Management',
-    views: AccountingSystemManagementViews,
+    name: 'SystemManagement',
+    views: SystemManagementViews,
     hint: 'Herramientas de administración del sistema',
     defaultTitle: 'Administración',
     url: ROUTES.administracion.fullpath,

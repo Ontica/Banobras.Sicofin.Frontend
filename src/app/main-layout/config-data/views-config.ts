@@ -122,27 +122,27 @@ export const AccountingCataloguesAndRulesViews: View[] = [
 ];
 
 
-export const AccountingSystemManagementViews: View[] = [
+export const SystemManagementViews: View[] = [
   {
-    name: 'AccountingSystemManagementViews.ExchangeRates',
+    name: 'SystemManagementViews.ExchangeRates',
     title: 'Tipos de cambio',
     url: ROUTES.administracion_tipos_de_cambio.fullpath,
     permission: ROUTES.administracion_tipos_de_cambio.permission,
   },
   {
-    name: 'AccountingSystemManagementViews.BalanceGeneration',
+    name: 'SystemManagementViews.BalanceGeneration',
     title: 'Generación de saldos',
     url: ROUTES.administracion_generacion_de_saldos.fullpath,
     permission: ROUTES.administracion_generacion_de_saldos.permission,
   },
   {
-    name: 'AccountingSystemManagementViews.ControlPanel',
+    name: 'SystemManagementViews.ControlPanel',
     title: 'Panel de control',
     url: ROUTES.administracion_panel_de_control.fullpath,
     permission: ROUTES.administracion_panel_de_control.permission,
   },
   {
-    name: 'AccountingSystemManagementViews.AccessControl',
+    name: 'SystemManagementViews.AccessControl',
     title: 'Control de accesos',
     url: ROUTES.administracion_control_de_accesos.fullpath,
     permission: ROUTES.administracion_control_de_accesos.permission,

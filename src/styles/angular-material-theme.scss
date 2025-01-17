@@ -153,7 +153,8 @@ $emp-fa-app-warn: mat.define-palette($emp-fa-warn-palette, 500);
 // Create the theme object (a Sass map containing all of the palettes).
 $emp-fa-app-theme: mat.define-light-theme(
   (
-    color: (
+    color:
+    (
       primary: $emp-fa-app-primary,
       accent: $emp-fa-app-accent,
       warn: $emp-fa-app-warn,

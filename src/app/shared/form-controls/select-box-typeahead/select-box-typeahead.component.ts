@@ -23,20 +23,22 @@ import { DataTableQuery } from '@app/models';
 export interface SelectBoxTypeaheadConfig {
   bindByValue?: boolean;
   clearable?: boolean;
+  minTermLength?: number;
   multiple?: boolean;
   searchByQuery?: boolean;
-  virtualScroll?: boolean;
-  minTermLength?: number;
+  showTooltip?: boolean;
+  virtualScrollThreshold?: number;
 }
 
 
 const DefaultSelectBoxTypeaheadConfig: SelectBoxTypeaheadConfig = {
   bindByValue: true,
   clearable: false,
+  minTermLength: 4,
   multiple: false,
   searchByQuery: false,
-  virtualScroll: false,
-  minTermLength: 4,
+  showTooltip: false,
+  virtualScrollThreshold: 50,
 };
 
 @Component({
@@ -98,6 +100,8 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
   searcherTerm$ = new Subject<string>();
 
   isLoading = false;
+
+  enableVirtualScroll = false;
 
   onChange: any = () => { };
 
@@ -166,6 +170,11 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
   }
 
 
+  clearSearcherData(withInitialValue: boolean = false) {
+    this.subscribeSearcherList(withInitialValue);
+  }
+
+
   resetValue() {
     this.formControl.reset(null);
   }
@@ -181,8 +190,9 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
   }
 
 
-  private subscribeSearcherList() {
-    let initialList$: Observable<any[]> = of(isEmpty(this.initialValue) ? [] : [this.initialValue]);
+  private subscribeSearcherList(withInitialValue: boolean = true) {
+    const setInitialValue = withInitialValue && !isEmpty(this.initialValue);
+    let initialList$: Observable<any[]> = of(setInitialValue ? [this.initialValue] : []);
 
     this.searcherList$ = concat(
       initialList$,
@@ -197,7 +207,10 @@ export class SelectBoxTypeaheadComponent implements ControlValueAccessor, OnInit
             .pipe(
               delay(2000),
               catchError(() => of([])),
-              tap(() => this.setIsLoading(false))
+              tap(x => {
+                this.setIsLoading(false)
+                this.enableVirtualScroll = x.length > this.config.virtualScrollThreshold;
+              })
             ))
       )
     );

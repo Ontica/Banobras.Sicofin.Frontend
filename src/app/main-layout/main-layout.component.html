@@ -59,7 +59,7 @@
         <mat-icon>last_page</mat-icon>
       </button>
 
-      <container-element [ngSwitch]="toolSelected">
+      <container-element [ngSwitch]="toolSelected" #tools_section>
 
         <emp-fa-balances-tool *ngSwitchCase="'Balances'">
 

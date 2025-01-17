@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
- /* Actions */
+/* Actions */
 import { ActionType as MainUIStateAction } from './main-layout.presentation.handler';
 export { ActionType as MainUIStateAction } from './main-layout.presentation.handler';
 

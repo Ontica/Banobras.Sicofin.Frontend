@@ -6,12 +6,12 @@
  */
 
 
-export interface Entity {
-  readonly uid: string;
+export interface Entity<T = string> {
+  readonly uid: T;
 }
 
 
-export interface Identifiable extends Entity {
+export interface Identifiable<T = string> extends Entity {
   name: string;
 }
 
@@ -87,4 +87,9 @@ export function isTypeOf(instance: PartitionedType, typeName: string) {
     return false;
   }
   return (instance.type === typeName);
+}
+
+
+export function isValidMediaBase(media: MediaBase): boolean {
+  return (!media || !media.url || !media.mediaType);
 }

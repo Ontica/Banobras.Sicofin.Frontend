@@ -5,7 +5,7 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
- /* Actions */
+/* Actions */
 import { ActionType as AppStatusStateAction } from './app-status.presentation.handler';
 export { ActionType as AppStatusStateAction } from './app-status.presentation.handler';
 
