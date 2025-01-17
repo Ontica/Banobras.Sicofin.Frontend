@@ -55,12 +55,12 @@ const routes: Routes = [
     path: ROUTES.unauthorized.path,
     canActivate: [ParentRouteGuard],
     component: MainLayoutComponent,
-    loadChildren: () => import('./workspaces/_system-security/unauthorized.module')
+    loadChildren: () => import('./workspaces/system-security/unauthorized.module')
                               .then(m => m.UnauthorizedModule)
   },
   {
     path: ROUTES.security.path,
-    loadChildren: () => import('./workspaces/_system-security/authentication.module')
+    loadChildren: () => import('./workspaces/system-security/authentication.module')
                               .then(m => m.AuthenticationModule)
   },
   { path: '', redirectTo: DEFAULT_PATH, pathMatch: 'full' },
