@@ -9,9 +9,10 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
 
+import { MessageBoxService } from '@app/shared/services';
+
 import { ImportAccountsResult } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 @Component({
   selector: 'emp-fa-accounts-importer-details-table',

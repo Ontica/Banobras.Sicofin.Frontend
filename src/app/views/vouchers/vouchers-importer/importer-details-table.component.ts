@@ -13,11 +13,11 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals } from '@app/models';
 
 
 export enum VouchersImporterDetailsTableEventType {
@@ -25,9 +25,9 @@ export enum VouchersImporterDetailsTableEventType {
 }
 
 export enum ImporterDetailsSelectionType {
-  NONE = 'NONE',
+  NONE   = 'NONE',
   UNIQUE = 'UNIQUE',
-  MULTI = 'MULTI',
+  MULTI  = 'MULTI',
 }
 
 @Component({

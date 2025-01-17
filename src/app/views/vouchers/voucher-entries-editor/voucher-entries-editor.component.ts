@@ -9,13 +9,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { sendEvent } from '@app/shared/utils';
+
 import { VouchersDataService } from '@app/data-services';
 
 import { EmptyVoucher, EmptyVoucherEntry, Voucher, VoucherEntry, VoucherEntryFields } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
 
 import {
   ExportReportModalEventType
@@ -24,6 +24,7 @@ import {
 import { VoucherEntryEditorEventType } from '../voucher-entry-editor/voucher-entry-editor.component';
 
 import { VoucherEntryTableEventType } from '../voucher-entry-table/voucher-entry-table.component';
+
 
 export enum VoucherEntriesEditorEventType {
   VOUCHER_UPDATED = 'VoucherEntriesEditorComponent.Event.VoucherUpdated',

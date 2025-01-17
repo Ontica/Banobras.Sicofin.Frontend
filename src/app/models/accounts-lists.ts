@@ -5,9 +5,9 @@
  * See LICENSE.txt in the project root for complete license information.
  */
 
-import { DateString } from "@app/core";
+import { DateString } from '@app/core';
 
-import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from "./_data-table";
+import { DataTable, DataTableColumn, DataTableEntry, DataTableQuery } from './_data-table';
 
 
 export enum AccountsListType {

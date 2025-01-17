@@ -9,11 +9,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { EventInfo } from '@app/core';
 
-import { EmptyVoucher, Voucher } from '@app/models';
-
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
+
+import { EmptyVoucher, Voucher } from '@app/models';
+
 
 export enum VoucherSubmitterEventType {
   TOGGLE_EDITION_MODE_CLICKED       = 'VoucherSubmitterComponent.Event.ToggleEditionModeClicked',

@@ -14,18 +14,18 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 import { MainUIStateSelector, VoucherAction,
          VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
+import { View } from '@app/main-layout';
+
+import { MessageBoxService } from '@app/shared/services';
+
+import { ArrayLibrary } from '@app/shared/utils';
+
+import { VouchersDataService } from '@app/data-services';
+
 import { EmptyVoucher, EmptyVoucherFilterData, FileReport, isVoucherStageAll, mapVoucherDescriptorFromVoucher,
          mapVoucherStageFromViewName, Voucher, VoucherDescriptor, VoucherFilterData,
          VouchersBulkOperationData, VouchersOperationCommand, VouchersOperationResult,
          VouchersOperationType } from '@app/models';
-
-import { View } from '@app/main-layout';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { VouchersDataService } from '@app/data-services';
-
-import { ArrayLibrary } from '@app/shared/utils';
 
 import {
   ExportReportModalEventType

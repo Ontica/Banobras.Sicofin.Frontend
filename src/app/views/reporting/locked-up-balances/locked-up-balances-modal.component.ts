@@ -11,14 +11,14 @@ import { Assertion, EventInfo, SessionService } from '@app/core';
 
 import { PERMISSIONS } from '@app/main-layout';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { sendEvent } from '@app/shared/utils';
+
 import { ReportingDataService, VouchersDataService } from '@app/data-services';
 
 import { DataTableColumnType, EmptyLockedUpBalancesData, EmptyLockedUpBalancesQuery, LockedUpBalancesData,
          LockedUpBalancesEntry, LockedUpBalancesQuery, VoucherFields } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
 
 import { DataTableEventType } from '@app/views/_reports-controls/data-table/data-table.component';
 
@@ -27,6 +27,7 @@ import {
 } from '@app/views/_reports-controls/export-report-modal/export-report-modal.component';
 
 import { LockedUpBalancesFilterEventType } from './locked-up-balances-filter.component';
+
 
 export enum LockedUpBalancesModalEventType {
   CLOSE_MODAL_CLICKED = 'LockedUpBalancesModalComponent.Event.CloseModalClicked',

@@ -11,14 +11,15 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { Assertion } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { FormHelper } from '@app/shared/utils';
+
 import { AccountingCalendarsDataService } from '@app/data-services';
 
 import { AccountingCalendar, AccountingCalendarPeriod, AccountingCalendarPeriodFields,
          DateRange } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FormHelper } from '@app/shared/utils';
 
 interface AccountingCalendarsFormModel extends FormGroup<{
   periodName: FormControl<string>;

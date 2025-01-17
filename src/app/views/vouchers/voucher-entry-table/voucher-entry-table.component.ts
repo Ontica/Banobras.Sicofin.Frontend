@@ -11,11 +11,12 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
-import { VoucherEntryDescriptor } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { VoucherEntryDescriptor } from '@app/models';
+
 
 export enum VoucherEntryTableEventType {
   UPDATE_VOUCHER_ENTRY_CLICKED  = 'VoucherEntryTableComponent.Event.UpdateVoucherEntryClicked',

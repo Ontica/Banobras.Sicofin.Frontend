@@ -15,11 +15,12 @@ import { EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { BalancesStoreDataService } from '@app/data-services';
 
 import { EmptyStoredBalanceSet, StoredBalance, StoredBalanceSet } from '@app/models';
+
 
 export enum StoredBalanceSetTabbedViewEventType {
   CLOSE_MODAL_CLICKED          = 'StoredBalanceSetTabbedViewComponent.Event.CloseModalClicked',

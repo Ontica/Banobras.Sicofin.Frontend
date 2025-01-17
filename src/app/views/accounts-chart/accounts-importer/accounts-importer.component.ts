@@ -13,21 +13,22 @@ import { Assertion, DateString, EventInfo, Identifiable } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { PERMISSIONS } from '@app/main-layout';
+
+import { MessageBoxService } from '@app/shared/services';
+
+import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
+
 import { AccountsEditionDataService } from '@app/data-services';
 
 import { ImportAccountsResult, ImportAccountsCommand, AccountsChartMasterData} from '@app/models';
 
-import { AccountChartStateSelector } from '@app/presentation/exported.presentation.types';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
-
-import { PERMISSIONS } from '@app/main-layout';
 
 export enum AccountsImporterEventType {
   CLOSE_MODAL_CLICKED  = 'AccountsImporterComponent.Event.CloseModalClicked',
-  ACCOUNTS_IMPORTED = 'AccountsImporterComponent.Event.AccountsImported',
+  ACCOUNTS_IMPORTED    = 'AccountsImporterComponent.Event.AccountsImported',
 }
 
 interface AccountsImporterFormModel extends FormGroup<{

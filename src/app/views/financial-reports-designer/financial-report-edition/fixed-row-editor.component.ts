@@ -9,15 +9,13 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleCha
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { of, Subject } from 'rxjs';
-
-import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { of, Subject, catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs';
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
-
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 

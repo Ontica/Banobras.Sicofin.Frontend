@@ -14,14 +14,15 @@ import { Observable, Subject, catchError, concat, debounceTime, distinctUntilCha
 
 import { Assertion, DateString, EventInfo, FlexibleIdentifiable } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { FormHelper, sendEvent } from '@app/shared/utils';
+
 import { AccountsListsDataService, SubledgerDataService } from '@app/data-services';
 
 import { AccountsListEntry, SwapsCoberturaEntry, SwapsCoberturaFields,
          SubledgerAccountIFRSQuery, DefaultEndDate } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum SwapsCoberturaEntryHeaderEventType {
   CREATE_ENTRY = 'SwapsCoberturaEntryHeaderComponent.Event.CreateEntry',

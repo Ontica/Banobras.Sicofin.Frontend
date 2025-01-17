@@ -11,12 +11,13 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EventInfo } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { sendEvent } from '@app/shared/utils';
+
 import { FinancialConceptEntryDescriptor, FinancialConceptEntryType,
          getFinancialConceptEntryTypeName } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
 
 export enum FinancialConceptEntriesTableEventType {
   UPDATE_BUTTON_CLICKED = 'FinancialConceptEntriesTableComponent.Event.UpdateButtonClicked',

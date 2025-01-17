@@ -9,17 +9,15 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleCha
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { of, Subject } from 'rxjs';
-
-import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { of, Subject, catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs';
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
-
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { FormHelper, sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/services';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
@@ -27,6 +25,7 @@ import { EmptyFinancialReportCell, EmptyFinancialReportConfig, FinancialConceptD
          FinancialReportCell, FinancialReportConfig, FinancialReportEditionCommand,
          FinancialReportEditionFields, FinancialReportEditionItemType, FinancialReportEditionItemTypeList,
          FinancialReportEditionType, FormatType, FormatTypeList } from '@app/models';
+
 
 export enum FixedCellEditorEventType {
   CLOSE_MODAL_CLICKED = 'FixedCellEditorComponent.Event.CloseModalClicked',

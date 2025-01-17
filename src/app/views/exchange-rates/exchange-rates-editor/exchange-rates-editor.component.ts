@@ -9,13 +9,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo, Identifiable } from '@app/core';
 
-import { ExchangeRatesDataService } from '@app/data-services';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { ExchangeRateValue, ExchangeRateValues } from '@app/models';
+import { MessageBoxService } from '@app/shared/services';
 
 import { FormatLibrary, sendEvent } from '@app/shared/utils';
+
+import { ExchangeRatesDataService } from '@app/data-services';
+
+import { ExchangeRateValue, ExchangeRateValues } from '@app/models';
 
 
 export enum ExchangeRatesEditorEventType {

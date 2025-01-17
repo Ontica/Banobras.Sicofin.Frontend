@@ -9,11 +9,12 @@ import { Component } from '@angular/core';
 
 import { Assertion, DateStringLibrary, EventInfo, isEmpty } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
 import { BalancesStoreDataService } from '@app/data-services';
 
-import { AccountsChartMasterData, BalanceStorageCommand, EmptyStoredBalanceSet, StoredBalanceSet } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { AccountsChartMasterData, BalanceStorageCommand, EmptyStoredBalanceSet,
+         StoredBalanceSet } from '@app/models';
 
 import {
   StoredBalanceSetCreatorEventType

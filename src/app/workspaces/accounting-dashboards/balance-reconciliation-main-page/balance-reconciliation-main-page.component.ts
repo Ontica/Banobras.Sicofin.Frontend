@@ -11,15 +11,15 @@ import { Assertion, EventInfo, SessionService } from '@app/core';
 
 import { PERMISSIONS } from '@app/main-layout';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { ReconciliationDataService } from '@app/data-services';
+
 import { ReconciliationType, InputDatasetsQuery, ReconciliationDatasets, ImportInputDatasetCommand,
          InputDataset, mapToReconciliationImportInputDatasetCommand, mapToReconciliationInputDatasetsCommand,
          ReconciliationImportInputDatasetCommand, ReconciliationData, EmptyReconciliationData,
          ReconciliationInputDatasetsCommand, mapToReconciliationCommand, ExecuteDatasetsQuery,
          ReconciliationCommand } from '@app/models';
-
-import { ReconciliationDataService } from '@app/data-services';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import {
   ImportedDataViewerEventType

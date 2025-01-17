@@ -19,14 +19,14 @@ import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { CataloguesStateSelector } from '@app/presentation/exported.presentation.types';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { FormHelper, sendEvent } from '@app/shared/utils';
+
 import { AccountsListsDataService, SubledgerDataService } from '@app/data-services';
 
 import { AccountsListEntry, PrestamosInterbancariosEntry, PrestamosInterbancariosFields,
          SubledgerAccountIFRSQuery } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FormHelper, sendEvent } from '@app/shared/utils';
 
 
 export enum PrestamosInterbancariosEntryHeaderEventType {

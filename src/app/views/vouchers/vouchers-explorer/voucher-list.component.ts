@@ -14,17 +14,17 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewC
 
 import { Assertion, EventInfo, Identifiable, isEmpty, SessionService } from '@app/core';
 
-import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
-
 import { PERMISSIONS, View } from '@app/main-layout';
+
+import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { MainUIStateSelector } from '@app/presentation/exported.presentation.types';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { SearcherAPIS } from '@app/data-services';
+import { MessageBoxService } from '@app/shared/services';
 
 import { empExpandCollapse, sendEvent } from '@app/shared/utils';
+
+import { SearcherAPIS } from '@app/data-services';
 
 import { EmptyVoucher, getVoucherOperation, mapVoucherStageFromViewName, Voucher, VoucherDescriptor,
          VouchersOperation, VouchersOperationCommand, VouchersOperationType,
@@ -32,11 +32,11 @@ import { EmptyVoucher, getVoucherOperation, mapVoucherStageFromViewName, Voucher
 
 import { VoucherListItemEventType } from './voucher-list-item.component';
 
+
 export enum VoucherListEventType {
   VOUCHER_CLICKED                    = 'VoucherListComponent.Event.VoucherClicked',
   EXECUTE_VOUCHERS_OPERATION_CLICKED = 'VoucherListComponent.Event.ExecuteVouchersOperationClicked',
 }
-
 
 @Component({
   selector: 'emp-fa-voucher-list',

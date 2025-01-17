@@ -11,11 +11,11 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewC
 
 import { Assertion, Empty, EventInfo } from '@app/core';
 
-import { EmptyExternalVariable, ExternalVariable, ExternalVariableSet } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { EmptyExternalVariable, ExternalVariable, ExternalVariableSet } from '@app/models';
 
 import { ExternalVariableEditorEventType } from './external-variable-editor.component';
 
@@ -23,6 +23,7 @@ export enum ExternalVariablesListEventType {
   UPDATE_BUTTON_CLICKED = 'ExternalVariablesListComponent.Event.UpdateButtonClicked',
   REMOVE_BUTTON_CLICKED = 'ExternalVariablesListComponent.Event.RemoveButtonClicked',
 }
+
 
 @Component({
   selector: 'emp-fa-external-variables-list',

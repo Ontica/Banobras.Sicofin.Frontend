@@ -11,19 +11,19 @@ import { Assertion, EventInfo, Identifiable, SessionService } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { ExternalVariablesStateSelector } from '@app/presentation/exported.presentation.types';
+
 import { PERMISSIONS } from '@app/main-layout';
 
-import { ExternalVariablesStateSelector } from '@app/presentation/exported.presentation.types';
+import { MessageBoxService } from '@app/shared/services';
+
+import { ExternalVariablesDataService } from '@app/data-services';
 
 import { DatasetModes, DatasetModesList, EmptyExternalValuesData, ExecuteDatasetsQuery, ExternalValuesData,
          ExternalValuesDatasetsQuery, ExternalValuesImportDatasetCommand, ExternalValuesQuery,
          ExternalVariableSet, ImportDatasets, ImportInputDatasetCommand, InputDataset, InputDatasetsQuery,
          mapToExternalValuesDatasetsQuery, mapToExternalValuesImportDatasetCommand,
          mapToExternalValuesQuery } from '@app/models';
-
-import { ExternalVariablesDataService } from '@app/data-services';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import {
   ImportedDataViewerEventType

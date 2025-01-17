@@ -11,13 +11,14 @@ import { Assertion, DateString, EventInfo } from '@app/core';
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
 import { EmptyFinancialConcept, FinancialConcept, FinancialConceptEditionCommand } from '@app/models';
 
 import { FinancialConceptHeaderEventType } from './financial-concept-header.component';
+
 
 export enum FinancialConceptEditorEventType {
   FINANCIAL_CONCEPT_UPDATED = 'FinancialConceptEditorComponent.Event.FinancialConceptUpdated',

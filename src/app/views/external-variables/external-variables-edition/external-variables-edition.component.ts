@@ -9,21 +9,20 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 
 import { Assertion, Empty, EventInfo } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
 import { ExternalVariablesDataService } from '@app/data-services';
 
 import { EmptyExternalVariablesDatasetsQuery, ExternalVariable, ExternalVariableFields,
          ExternalVariablesDatasetsQuery, ExternalVariableSet } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import {
-  ExternalVariableEditorComponent,
-  ExternalVariableEditorEventType
-} from './external-variable-editor.component';
+import { ExternalVariableEditorComponent,
+         ExternalVariableEditorEventType } from './external-variable-editor.component';
 
 import { ExternalVariableSetSelectorEventType } from './external-variable-set-selector.component';
 
 import { ExternalVariablesListEventType } from './external-variables-list.component';
+
 
 @Component({
   selector: 'emp-fa-external-variables-edition',

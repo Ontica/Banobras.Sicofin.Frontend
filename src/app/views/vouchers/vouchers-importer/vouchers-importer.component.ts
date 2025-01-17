@@ -15,28 +15,29 @@ import { Assertion, DateStringLibrary, EmpObservable, EventInfo, Identifiable } 
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
+import { AccountChartStateSelector,
+         VoucherStateSelector } from '@app/presentation/exported.presentation.types';
+
 import { PERMISSIONS } from '@app/main-layout';
+
+import { MessageBoxService } from '@app/shared/services';
+
+import { FileType } from '@app/shared/form-controls';
+
+import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { ImportVouchersDataService, VouchersDataService } from '@app/data-services';
 
 import { EmptyImportVouchersResult, ImportVouchersResult, ImportVouchersTotals,
          ImportVouchersCommand } from '@app/models';
 
-import { AccountChartStateSelector,
-         VoucherStateSelector } from '@app/presentation/exported.presentation.types';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FileType } from '@app/shared/form-controls/file-control/file-control-data';
-
-import { FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
-
 import { ImporterDetailsSelectionType,
          VouchersImporterDetailsTableEventType } from './importer-details-table.component';
 
+
 export enum VouchersImporterEventType {
   CLOSE_MODAL_CLICKED  = 'VouchersImporterComponent.Event.CloseModalClicked',
-  VOUCHERS_IMPORTED = 'VouchersImporterComponent.Event.VouchersImported',
+  VOUCHERS_IMPORTED    = 'VouchersImporterComponent.Event.VouchersImported',
 }
 
 interface VouchersImporterFormModel extends FormGroup<{
@@ -50,8 +51,8 @@ interface VouchersImporterFormModel extends FormGroup<{
 
 enum ImportTypes {
   excelFile = 'excelFile',
-  txtFile = 'txtFile',
-  dataBase = 'dataBase',
+  txtFile   = 'txtFile',
+  dataBase  = 'dataBase',
 }
 
 @Component({

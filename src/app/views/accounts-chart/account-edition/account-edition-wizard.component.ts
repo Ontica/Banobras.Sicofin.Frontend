@@ -15,7 +15,7 @@ import { AccountChartStateSelector } from '@app/presentation/exported.presentati
 
 import { sendEvent } from '@app/shared/utils';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { MessageBoxService } from '@app/shared/services';
 
 import { AccountsEditionDataService } from '@app/data-services';
 

@@ -10,26 +10,25 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
-
-import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, concat, Observable, of, Subject,
+         catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs';
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty, Validate } from '@app/core';
-
-import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
-         mapSubledgerAccountDescriptorFromSubledgerAccount, SubledgerAccount, SubledgerAccountDescriptor,
-         ValuedCurrency, Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryType,
-         VoucherEntryTypeList } from '@app/models';
-
-import { ArrayLibrary, FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
 
 import { VoucherStateSelector } from '@app/presentation/exported.presentation.types';
 
+import { ArrayLibrary, FormatLibrary, FormHelper, sendEvent } from '@app/shared/utils';
+
+import { MessageBoxService } from '@app/shared/services';
+
 import { VouchersDataService } from '@app/data-services';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { AccountRole, EmptyLedgerAccount, EmptyVoucherEntry, LedgerAccount, LedgerAccountSectorRule,
+         mapSubledgerAccountDescriptorFromSubledgerAccount, SubledgerAccount, SubledgerAccountDescriptor,
+         ValuedCurrency, Voucher, VoucherEntry, VoucherEntryFields, VoucherEntryType,
+         VoucherEntryTypeList } from '@app/models';
 
 import {
   SubledgerAccountCreatorEventType

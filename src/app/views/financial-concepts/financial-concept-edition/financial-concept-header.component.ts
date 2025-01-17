@@ -10,13 +10,19 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { combineLatest, of, Subject } from 'rxjs';
-
-import { catchError, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, of, Subject, catchError, distinctUntilChanged, filter, switchMap, takeUntil,
+         tap } from 'rxjs';
 
 import { Assertion, DateString, EventInfo, Identifiable, isEmpty } from '@app/core';
 
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { AccountChartStateSelector,
+         FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { MessageBoxService } from '@app/shared/services';
+
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { FinancialConceptsDataService } from '@app/data-services';
 
@@ -24,12 +30,6 @@ import { AccountsChartMasterData, DefaultEndDate, EmptyFinancialConcept, Financi
          FinancialConceptDescriptor, FinancialConceptEditionCommand, FinancialConceptsGroup, PositioningRule,
          PositioningRuleList } from '@app/models';
 
-import { AccountChartStateSelector,
-         FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum FinancialConceptHeaderEventType {
   CREATE_FINANCIAL_CONCEPT = 'FinancialConceptHeaderComponent.Event.CreateFinancialConcept',

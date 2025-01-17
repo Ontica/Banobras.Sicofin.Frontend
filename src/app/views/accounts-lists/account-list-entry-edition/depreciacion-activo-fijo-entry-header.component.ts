@@ -14,14 +14,15 @@ import { Observable, Subject, catchError, combineLatest, concat, debounceTime, d
 
 import { Assertion, DateString, EventInfo, FlexibleIdentifiable, Identifiable, Validate } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { FormHelper, sendEvent } from '@app/shared/utils';
+
 import { AccountsChartDataService, AccountsListsDataService, SubledgerDataService } from '@app/data-services';
 
 import { AccountsListEntry, DepreciacionActivoFijoEntry, DepreciacionActivoFijoFields,
          SubledgerAccountIFRSQuery } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FormHelper, sendEvent } from '@app/shared/utils';
 
 export enum DepreciacionActivoFijoEntryHeaderEventType {
   CREATE_ENTRY = 'DepreciacionActivoFijoEntryHeaderComponent.Event.CreateEntry',

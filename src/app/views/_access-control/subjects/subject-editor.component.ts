@@ -9,15 +9,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { sendEvent } from '@app/shared/utils';
+
 import { AccessControlDataService } from '@app/data-services';
 
 import { EmptySubject, Subject, SubjectFields } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
-
 import { SubjectHeaderEventType } from './subject-header.component';
+
 
 export enum SubjectEditorEventType {
   SUBJECT_UPDATED = 'SubjectEditorComponent.Event.SubjectUpdated',
@@ -59,7 +60,7 @@ export class SubjectEditorComponent {
     switch (event.type as SubjectHeaderEventType) {
       case SubjectHeaderEventType.UPDATE_SUBJECT:
         Assertion.assertValue(event.payload.subject, 'event.payload.subject');
-        this.updateSubject(this.subject.uid,  event.payload.subject as SubjectFields);
+        this.updateSubject(this.subject.uid, event.payload.subject as SubjectFields);
         return;
       case SubjectHeaderEventType.GENERATE_PASSWORD:
         this.generatePasswordToSubject();

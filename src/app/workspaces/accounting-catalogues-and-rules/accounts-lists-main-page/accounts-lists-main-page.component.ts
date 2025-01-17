@@ -9,11 +9,11 @@ import { Component } from '@angular/core';
 
 import { Assertion, EventInfo, Identifiable, isEmpty } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
 import { AccountsListsDataService } from '@app/data-services';
 
 import { AccountsListData, AccountsListEntry, AccountsListQuery, EmptyAccountsListData } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 import {
   ExportReportModalEventType

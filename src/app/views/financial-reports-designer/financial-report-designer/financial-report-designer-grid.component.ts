@@ -14,15 +14,16 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
 import { EventInfo, isEmpty } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { sendEvent } from '@app/shared/utils';
+
 import { EmptyFinancialReportDesign, FinancialReportDesign, FinancialReportColumn, FinancialReportRow,
          EmptyFinancialReportRow, DataTableColumnType, FinancialReportCell, EmptyFinancialReportCell,
          FinancialReportDesignType, EmptyFinancialReportColumn } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
-
 import { ItemMenuEventType } from '../financial-report-edition/item-menu.component';
+
 
 export enum FinancialReportDesignerGridEventType {
   SELECT_ITEM   = 'FinancialReportDesignerGridComponent.Event.SelectItem',
@@ -34,7 +35,6 @@ export enum FinancialReportDesignerGridEventType {
   REMOVE_COLUMN = 'FinancialReportDesignerGridComponent.Event.RemoveColumn',
   EDIT_CELL     = 'FinancialReportDesignerGridComponent.Event.EditCell',
 }
-
 
 @Component({
   selector: 'emp-fa-financial-report-designer-grid',
@@ -306,10 +306,10 @@ export class FinancialReportDesignerGridComponent implements OnChanges {
 
   // TODO: 1) validate for more of 27 columns.... 2) assess if move this method to another generic class
   private nextLetterInAlphabet(letter) {
-    if (letter == "z") {
-      return "a";
-    } else if (letter == "Z") {
-      return "A";
+    if (letter == 'z') {
+      return 'a';
+    } else if (letter == 'Z') {
+      return 'A';
     } else {
       return String.fromCharCode(letter.charCodeAt(0) + 1);
     }

@@ -14,11 +14,11 @@ import { Assertion, DateString, EventInfo, isEmpty, SessionService } from '@app/
 
 import { PERMISSIONS } from '@app/main-layout';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { FinancialReportsEditionDataService } from '@app/data-services';
+import { MessageBoxService } from '@app/shared/services';
 
 import { sendEvent } from '@app/shared/utils';
+
+import { FinancialReportsEditionDataService } from '@app/data-services';
 
 import { EmptyFinancialReportDesign, FinancialReportDesign, FinancialReportRow, EmptyFinancialReportRow,
          FinancialReportCell, EmptyFinancialReportCell, FinancialReportEditionCommand,
@@ -38,7 +38,6 @@ import { FixedColumnEditorEventType } from '../financial-report-edition/fixed-co
 export enum FinancialReportDesignerEventType {
   REPORT_UPDATED = 'FinancialReportDesignerComponent.Event.ReportUpdated',
 }
-
 
 @Component({
   selector: 'emp-fa-financial-report-designer',

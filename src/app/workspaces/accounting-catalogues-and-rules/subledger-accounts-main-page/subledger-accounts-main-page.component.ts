@@ -9,15 +9,15 @@ import { Component } from '@angular/core';
 
 import { Assertion, EventInfo } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { ArrayLibrary } from '@app/shared/utils';
+
 import { SubledgerDataService } from '@app/data-services';
 
 import { EmptySubledgerAccount, EmptySubledgerAccountQuery, EmptySubledgerAccountDataTable,
          SubledgerAccountDescriptor, SubledgerAccountQuery, SubledgerAccountDataTable,
-         SubledgerAccount, mapSubledgerAccountDescriptorFromSubledgerAccount} from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { ArrayLibrary } from '@app/shared/utils';
+         SubledgerAccount, mapSubledgerAccountDescriptorFromSubledgerAccount } from '@app/models';
 
 import {
   ExportReportModalEventType
@@ -34,6 +34,7 @@ import {
 import {
   SubledgerAccountsViewerEventType
 } from '@app/views/subledger-accounts/subledger-accounts-viewer/subledger-accounts-viewer.component';
+
 
 @Component({
   selector: 'emp-fa-subledger-accounts-main-page',

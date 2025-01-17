@@ -10,16 +10,17 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { combineLatest, concat, Observable, of, Subject } from 'rxjs';
-
-import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil,
-         tap } from 'rxjs/operators';
+import { combineLatest, concat, Observable, of, Subject, catchError, debounceTime, distinctUntilChanged,
+         filter, map, switchMap, takeUntil, tap } from 'rxjs';
 
 import { Assertion, DateString, EventInfo, FlexibleIdentifiable, Identifiable, isEmpty } from '@app/core';
 
-import { FormHelper, sendEvent } from '@app/shared/utils';
-
 import { PresentationLayer, SubscriptionHelper } from '@app/core/presentation';
+
+import { AccountChartStateSelector,
+         FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
+
+import { FormHelper, sendEvent } from '@app/shared/utils';
 
 import { AccountsChartDataService, ExternalVariablesDataService, FinancialConceptsDataService,
          SubledgerDataService } from '@app/data-services';
@@ -30,9 +31,6 @@ import { AccountsChartMasterData, AccountsQuery, EmptyFinancialConcept, EmptyFin
          FinancialConceptsGroup, OperatorTypeList, Positioning, PositioningRule, PositioningRuleList,
          SubledgerAccountQuery, FinancialConceptEntryEditionType, FinancialConceptEntry, OperatorType,
          mapToFinancialConceptDescriptor } from '@app/models';
-
-import { AccountChartStateSelector,
-         FinancialConceptsStateSelector } from '@app/presentation/exported.presentation.types';
 
 
 export enum FinancialConceptEntryEditorEventType {

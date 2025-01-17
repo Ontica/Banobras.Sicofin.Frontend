@@ -13,9 +13,9 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 
 import { EventInfo } from '@app/core';
 
-import { TransactionSlipEntry, TransactionSlipIssue } from '@app/models';
+import { MessageBoxService } from '@app/shared/services';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
+import { TransactionSlipEntry, TransactionSlipIssue } from '@app/models';
 
 import {
   ExportReportModalEventType

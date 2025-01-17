@@ -9,15 +9,15 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 
 import { Assertion, DateString, EventInfo, isEmpty } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
+import { sendEvent } from '@app/shared/utils';
+
 import { FinancialConceptsDataService } from '@app/data-services';
 
 import { EmptyFinancialConceptEntry, FinancialConcept, EmptyFinancialConcept,
          FinancialConceptEntryEditionResult, FinancialConceptEntryEditionCommand,
          FinancialConceptEntry } from '@app/models';
-
-import { MessageBoxService } from '@app/shared/containers/message-box';
-
-import { sendEvent } from '@app/shared/utils';
 
 import { ConfirmEditionResultModalComponent } from './confirm-edition-result-modal.component';
 
@@ -25,10 +25,10 @@ import { FinancialConceptEntriesTableEventType } from './financial-concept-entri
 
 import { FinancialConceptEntryEditorEventType } from './financial-concept-entry-editor.component';
 
+
 export enum FinancialConceptIntegrationEditionEventType {
   INTEGRATION_UPDATED = 'FinancialConceptIntegrationEditionComponent.Event.IntegrationUpdated',
 }
-
 
 @Component({
   selector: 'emp-fa-financial-concept-integration-edition',

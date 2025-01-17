@@ -11,9 +11,10 @@ import { of } from 'rxjs';
 
 import { EmpObservable } from '@app/core';
 
+import { MessageBoxService } from '@app/shared/services';
+
 import { EditionResult } from '@app/models';
 
-import { MessageBoxService } from '@app/shared/containers/message-box';
 
 @Component({
   selector: 'emp-fa-confirm-edition-result-modal',
