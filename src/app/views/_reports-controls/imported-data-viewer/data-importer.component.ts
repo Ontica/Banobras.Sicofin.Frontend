@@ -9,19 +9,19 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 
 import { EventInfo, Identifiable } from '@app/core';
 
-import { EmptyImportDatasets, ImportDatasets, ImportInputDatasetCommand, InputDatasetsQuery, InputDatasetType,
-         mapToFileDataFromInputDataset } from '@app/models';
-
-import { FileControlActions, FileControlEventData, FileData,
-         FileType } from '@app/shared/form-controls/file-control/file-control-data';
+import { FileControlActions, FileControlEventData, FileData, FileType } from '@app/shared/form-controls';
 
 import { sendEvent } from '@app/shared/utils';
 
+import { EmptyImportDatasets, ImportDatasets, ImportInputDatasetCommand, InputDatasetsQuery, InputDatasetType,
+         mapToFileDataFromInputDataset } from '@app/models';
+
+
 export enum DataImporterEventType {
-  CLOSE_MODAL_CLICKED  = 'DataImporterComponent.Event.CloseModalClicked',
+  CLOSE_MODAL_CLICKED         = 'DataImporterComponent.Event.CloseModalClicked',
   INPUT_DATASET_QUERY_CHANGED = 'DataImporterComponent.Event.InputDatasetQueryChanged',
-  IMPORT_DATASET_CLICKED = 'DataImporterComponent.Event.ImportDataSetClicked',
-  DELETE_DATASET_CLICKED = 'DataImporterComponent.Event.DeleteDataSetClicked',
+  IMPORT_DATASET_CLICKED      = 'DataImporterComponent.Event.ImportDataSetClicked',
+  DELETE_DATASET_CLICKED      = 'DataImporterComponent.Event.DeleteDataSetClicked',
 }
 
 @Component({

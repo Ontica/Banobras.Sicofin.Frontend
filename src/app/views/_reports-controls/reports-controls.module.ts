@@ -18,16 +18,10 @@ import { DataTableControlsComponent } from './data-table/data-table-controls.com
 import { ExportReportModalComponent } from './export-report-modal/export-report-modal.component';
 import { ImportedDataFilterComponent } from './imported-data-viewer/imported-data-filter.component';
 import { ImportedDataViewerComponent } from './imported-data-viewer/imported-data-viewer.component';
+import { ListControlsComponent } from './explorer/list-controls.component';
+
 
 @NgModule({
-  declarations: [
-    DataImporterComponent,
-    DataTableComponent,
-    DataTableControlsComponent,
-    ExportReportModalComponent,
-    ImportedDataFilterComponent,
-    ImportedDataViewerComponent,
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -36,11 +30,21 @@ import { ImportedDataViewerComponent } from './imported-data-viewer/imported-dat
     AngularMaterialModule,
     SharedModule,
   ],
+  declarations: [
+    DataImporterComponent,
+    DataTableComponent,
+    DataTableControlsComponent,
+    ExportReportModalComponent,
+    ImportedDataFilterComponent,
+    ImportedDataViewerComponent,
+    ListControlsComponent,
+  ],
   exports: [
     DataTableComponent,
     DataTableControlsComponent,
     ExportReportModalComponent,
     ImportedDataViewerComponent,
+    ListControlsComponent,
   ]
 })
 export class ReportsControlsModule { }
